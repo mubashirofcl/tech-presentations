@@ -1,0 +1,2874 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MongoDB Week — MongoDB Fundamentals, Setup, CRUD & Query Operators</title>
+  <meta name="description" content="A comprehensive, professional teaching presentation for beginner MERN Stack developers covering MongoDB fundamentals, mongosh, Compass, Atlas, CRUD operations, and query operators.">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="presentation-container">
+    
+    <!-- Top Header Toolbar -->
+    <header class="top-header">
+      <div class="header-left">
+        <div class="brand-badge">
+          <svg viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 2C12 2 4.5 9.5 4.5 15.5C4.5 19.64 7.86 23 12 23C16.14 23 19.5 19.64 19.5 15.5C19.5 9.5 12 2 12 2ZM12 21C9.24 21 7 18.76 7 16C7 12.38 10.38 7.37 12 5.08C13.62 7.37 17 12.38 17 16C17 18.76 14.76 21 12 21ZM11 9H13V15H11V9ZM11 17H13V19H11V17Z"/>
+          </svg>
+          <span>MongoDB Week</span>
+        </div>
+        <div class="header-title-wrap">
+          <span class="header-day-title" id="header-day-title">Module 1: Database Basics</span>
+          <span class="header-section-badge" id="header-section-badge">Databases & NoSQL</span>
+        </div>
+      </div>
+
+      <div class="header-controls">
+        <div class="search-input-wrap">
+          <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="11" cy="11" r="8"/>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+          </svg>
+          <input type="text" id="search-input" placeholder="Search topics (e.g. CRUD, $set, Atlas)...">
+        </div>
+
+        <button class="icon-btn" id="toc-btn" title="Table of Contents (T)">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="8" y1="6" x2="21" y2="6"/>
+            <line x1="8" y1="12" x2="21" y2="12"/>
+            <line x1="8" y1="18" x2="21" y2="18"/>
+            <line x1="3" y1="6" x2="3.01" y2="6"/>
+            <line x1="3" y1="12" x2="3.01" y2="12"/>
+            <line x1="3" y1="18" x2="3.01" y2="18"/>
+          </svg>
+          <span>Syllabus</span>
+        </button>
+
+        <button class="icon-btn teacher-btn" id="teacher-notes-btn" title="Toggle Teacher Speaker Notes (S)">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+          </svg>
+          <span>Speaker Notes</span>
+        </button>
+
+        <button class="icon-btn" id="fullscreen-btn" title="Toggle Fullscreen (F)">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/>
+          </svg>
+        </button>
+      </div>
+    </header>
+
+    <!-- Progress Bar -->
+    <div class="progress-bar-container">
+      <div class="progress-bar-fill" id="progress-bar-fill"></div>
+    </div>
+
+    <!-- Main Content Area: Slides -->
+    <main class="slides-wrapper" id="slides-wrapper">
+
+      <!-- ====================================================================
+           PART 1 — DATABASE BASICS
+           ==================================================================== -->
+
+      <!-- SLIDE 1: Module Overview -->
+      <section class="slide active" data-section="Part 1: Database Basics" data-title="MongoDB Week Overview & Goals">
+        <div class="slide-content-container">
+          <div class="breadcrumb-wrap">
+            <span>MongoDB Week</span> &rsaquo; <span class="active">Module Overview</span>
+          </div>
+
+          <div class="slide-title-block">
+            <span class="slide-tag">MERN Stack • Database Layer</span>
+            <h1 class="slide-main-title">MongoDB Fundamentals, Setup, CRUD & Query Operators</h1>
+            <p class="slide-subtitle">Master modern document databases from core concepts and local installation up to practical shell commands, Compass, Atlas, and query operators.</p>
+          </div>
+
+          <div class="grid-2">
+            <div class="card">
+              <div class="card-header">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                Weekly Learning Objectives
+              </div>
+              <ul class="point-list check-list">
+                <li><strong>Database Foundations:</strong> Explain databases, NoSQL concepts, and document-oriented models.</li>
+                <li><strong>MongoDB Architecture:</strong> Master the Server &rarr; Database &rarr; Collection &rarr; Document &rarr; Field hierarchy.</li>
+                <li><strong>Tooling Ecosystem:</strong> Install and use <code>mongod</code>, <code>mongosh</code>, MongoDB Compass GUI, and MongoDB Atlas cloud.</li>
+                <li><strong>BSON Data Types:</strong> Work with Strings, Numbers, Booleans, Arrays, Embedded Documents, and <code>ObjectId</code>.</li>
+                <li><strong>Complete CRUD:</strong> Master <code>insertOne</code>, <code>insertMany</code>, <code>find</code>, <code>findOne</code>, <code>updateOne</code>, <code>updateMany</code>, <code>deleteOne</code>, and <code>deleteMany</code>.</li>
+                <li><strong>Query &amp; Update Operators:</strong> Filter and update data using <code>$set</code>, <code>$inc</code>, <code>$gt</code>, <code>$gte</code>, <code>$lt</code>, <code>$in</code>, <code>$and</code>, <code>$or</code>, and <code>$exists</code>.</li>
+              </ul>
+            </div>
+
+            <div class="card">
+              <div class="card-header">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg>
+                Sequential Curriculum Path
+              </div>
+              <div style="font-size: 0.84rem; line-height: 1.6; color: var(--text-muted); margin-bottom: 0.8rem;">
+                This module follows a strict foundation progression: theory &rarr; environment &rarr; tools &rarr; data modeling &rarr; shell CRUD &rarr; query filters &rarr; practical labs.
+              </div>
+              <div class="flow-pipeline" style="gap: 0.4rem;">
+                <div class="flow-step" style="min-width: 90px; padding: 0.4rem 0.6rem;"><span class="step-badge">01</span><span class="step-title">DB Basics</span></div>
+                <div class="flow-arrow">&rarr;</div>
+                <div class="flow-step" style="min-width: 90px; padding: 0.4rem 0.6rem;"><span class="step-badge">02</span><span class="step-title">MongoDB</span></div>
+                <div class="flow-arrow">&rarr;</div>
+                <div class="flow-step" style="min-width: 90px; padding: 0.4rem 0.6rem;"><span class="step-badge">03</span><span class="step-title">Install</span></div>
+                <div class="flow-arrow">&rarr;</div>
+                <div class="flow-step" style="min-width: 90px; padding: 0.4rem 0.6rem;"><span class="step-badge">04</span><span class="step-title">mongosh</span></div>
+              </div>
+              <div class="flow-pipeline" style="gap: 0.4rem; margin-top: 0.5rem;">
+                <div class="flow-step" style="min-width: 90px; padding: 0.4rem 0.6rem;"><span class="step-badge">05</span><span class="step-title">Compass</span></div>
+                <div class="flow-arrow">&rarr;</div>
+                <div class="flow-step" style="min-width: 90px; padding: 0.4rem 0.6rem;"><span class="step-badge">06</span><span class="step-title">Atlas Cloud</span></div>
+                <div class="flow-arrow">&rarr;</div>
+                <div class="flow-step" style="min-width: 90px; padding: 0.4rem 0.6rem;"><span class="step-badge">07</span><span class="step-title">Structure</span></div>
+                <div class="flow-arrow">&rarr;</div>
+                <div class="flow-step" style="min-width: 90px; padding: 0.4rem 0.6rem;"><span class="step-badge">08</span><span class="step-title">Data Types</span></div>
+              </div>
+              <div class="flow-pipeline" style="gap: 0.4rem; margin-top: 0.5rem;">
+                <div class="flow-step" style="min-width: 90px; padding: 0.4rem 0.6rem;"><span class="step-badge">09</span><span class="step-title">CRUD Ops</span></div>
+                <div class="flow-arrow">&rarr;</div>
+                <div class="flow-step" style="min-width: 90px; padding: 0.4rem 0.6rem;"><span class="step-badge">10</span><span class="step-title">Operators</span></div>
+                <div class="flow-arrow">&rarr;</div>
+                <div class="flow-step" style="min-width: 90px; padding: 0.4rem 0.6rem;"><span class="step-badge">11</span><span class="step-title">Practicals</span></div>
+                <div class="flow-arrow">&rarr;</div>
+                <div class="flow-step" style="min-width: 90px; padding: 0.4rem 0.6rem;"><span class="step-badge">12</span><span class="step-title">Revision</span></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="callout tip">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+            <div><strong>Teacher Guidance:</strong> Press <kbd class="keyboard-hint">S</kbd> anytime during your lecture to open the <strong>Teacher Speaker Notes Drawer</strong> with introduction prompts, analogies, and classroom questions. Use arrow keys or space to advance slides.</div>
+          </div>
+
+          <div class="speaker-notes-data" style="display:none;">
+            <div data-intro="Welcome students to MongoDB Week. Emphasize that MongoDB is the 'M' in the MERN stack and represents the persistent storage foundation of modern web apps."></div>
+            <div data-analogy="Think of a database like a digital filing cabinet. Without it, when you turn off your server, all user data disappears into thin air."></div>
+            <div data-misunderstand="Students often think frontend React connects directly to MongoDB. Remind them early that React talks to Node/Express, and only the backend talks to MongoDB."></div>
+            <div data-example="Give the example of sign-up: when you register on Instagram, where does your password and username live tomorrow morning? In a database!"></div>
+            <div data-question="What happens to variables in JavaScript when you restart your computer or stop your Node server? (Answer: They disappear from RAM!)"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SLIDE 2: What is a Database? -->
+      <section class="slide" data-section="Part 1: Database Basics" data-title="What is a Database?">
+        <div class="slide-content-container">
+          <div class="breadcrumb-wrap">
+            <span>MongoDB Week</span> &rsaquo; <span>Database Basics</span> &rsaquo; <span class="active">Definition</span>
+          </div>
+
+          <div class="slide-title-block">
+            <span class="slide-tag">01 • Concept</span>
+            <h1 class="slide-main-title">What is a Database?</h1>
+            <p class="slide-subtitle">An organized, permanent system for storing, managing, and retrieving data efficiently.</p>
+          </div>
+
+          <div class="grid-split-60-40">
+            <div class="card">
+              <div class="card-header">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 2a10 10 0 0 1 10 10"/><path d="M12 22a10 10 0 0 1-10-10"/></svg>
+                Formal Definition for Students
+              </div>
+              <p style="font-size: 0.95rem; line-height: 1.6; color: var(--text-main);">
+                <strong>A database is an organized collection of structured or semi-structured data that can be stored securely, searched rapidly, updated reliably, and retrieved efficiently.</strong>
+              </p>
+              <div style="margin-top: 0.75rem; font-size: 0.88rem; color: var(--text-muted); line-height: 1.6;">
+                Real-world College Example: A college needs to track and link:
+                <ul class="point-list" style="margin-top: 0.3rem;">
+                  <li><strong>Students:</strong> Names, roll numbers, emails, phone numbers.</li>
+                  <li><strong>Teachers:</strong> Staff ID, departments, qualifications.</li>
+                  <li><strong>Courses:</strong> Course codes, syllabus, credits.</li>
+                  <li><strong>Attendance &amp; Marks:</strong> Exam grades and semester percentages.</li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-header">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><alert-triangle/><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+                Why Not Just Text Files?
+              </div>
+              <p style="font-size: 0.84rem; color: var(--text-muted); line-height: 1.55;">
+                Without a database, developers tried saving data into simple text files:
+              </p>
+              <div style="margin-top: 0.5rem; font-family: var(--font-mono); font-size: 0.78rem; background: var(--bg-secondary); padding: 0.6rem; border-radius: 6px; border: 1px solid var(--border);">
+                📄 students.txt<br>
+                📄 students2.txt<br>
+                📄 students-final.txt<br>
+                📄 students-final-new(1).txt
+              </div>
+              <div style="margin-top: 0.6rem; font-size: 0.8rem; color: var(--error);">
+                ❌ Corrupts easily, cannot search 100,000 records quickly, zero concurrent user safety, no data security!
+              </div>
+            </div>
+          </div>
+
+          <div class="speaker-notes-data" style="display:none;">
+            <div data-intro="Introduce the concept of persistent storage before diving into MongoDB specifically."></div>
+            <div data-analogy="A text file is like keeping receipts in a shoebox under your bed. A database is like a professional bank vault with organized safety deposit boxes and an instant search ledger."></div>
+            <div data-misunderstand="Students ask: 'Why can't I just use fs.writeFileSync in Node.js to save JSON files?'. Explain file locking and corruption when 1,000 users visit simultaneously."></div>
+            <div data-example="Imagine searching a 500MB text file for one student's phone number: Node.js would have to read line by line from disk, taking seconds instead of milliseconds."></div>
+            <div data-question="If two students submit a quiz at the exact same millisecond, what happens if both write to the same text file at once?"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SLIDE 3: Why Do We Need Databases? -->
+      <section class="slide" data-section="Part 1: Database Basics" data-title="Why Do We Need Databases?">
+        <div class="slide-content-container">
+          <div class="breadcrumb-wrap">
+            <span>MongoDB Week</span> &rsaquo; <span>Database Basics</span> &rsaquo; <span class="active">Core Benefits</span>
+          </div>
+
+          <div class="slide-title-block">
+            <span class="slide-tag">02 • Motivation</span>
+            <h1 class="slide-main-title">Why Do We Need Databases?</h1>
+            <p class="slide-subtitle">The 7 fundamental engineering reasons why professional software relies on database management systems.</p>
+          </div>
+
+          <div class="grid-4">
+            <div class="card" style="padding: 1rem;">
+              <strong style="color: var(--mongo-green); font-size: 0.9rem;">1. Organized Storage</strong>
+              <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 0.3rem;">Structured into logical databases and collections rather than scattered disk files.</p>
+            </div>
+            <div class="card" style="padding: 1rem;">
+              <strong style="color: var(--mongo-green); font-size: 0.9rem;">2. Rapid Searching</strong>
+              <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 0.3rem;">Find 1 record out of 10 million in less than 5 milliseconds using indexing.</p>
+            </div>
+            <div class="card" style="padding: 1rem;">
+              <strong style="color: var(--mongo-green); font-size: 0.9rem;">3. Safe Updates &amp; Deletions</strong>
+              <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 0.3rem;">Modify specific fields without rewriting the entire file or risking corruption.</p>
+            </div>
+            <div class="card" style="padding: 1rem;">
+              <strong style="color: var(--mongo-green); font-size: 0.9rem;">4. Data Consistency</strong>
+              <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 0.3rem;">Enforce schema rules, correct data types, and unique constraints (e.g. unique email).</p>
+            </div>
+          </div>
+
+          <div class="grid-3" style="margin-top: 0.5rem;">
+            <div class="card" style="padding: 1rem;">
+              <strong style="color: var(--mongo-green); font-size: 0.9rem;">5. Security &amp; Access Control</strong>
+              <p style="font-size: 0.82rem; color: var(--text-muted); margin-top: 0.3rem;">User authentication, encrypted connections (TLS), and granular read/write permissions.</p>
+            </div>
+            <div class="card" style="padding: 1rem;">
+              <strong style="color: var(--mongo-green); font-size: 0.9rem;">6. High Scalability</strong>
+              <p style="font-size: 0.82rem; color: var(--text-muted); margin-top: 0.3rem;">Handle gigabytes, terabytes, or petabytes of data across multiple cluster nodes.</p>
+            </div>
+            <div class="card" style="padding: 1rem;">
+              <strong style="color: var(--mongo-green); font-size: 0.9rem;">7. Concurrency</strong>
+              <p style="font-size: 0.82rem; color: var(--text-muted); margin-top: 0.3rem;">Tens of thousands of simultaneous users reading and writing without data collision.</p>
+            </div>
+          </div>
+
+          <div class="speaker-notes-data" style="display:none;">
+            <div data-intro="Highlight that databases were invented to solve scalability, concurrency, and searching bottlenecks."></div>
+            <div data-analogy="Without a database, searching for a book in a 1-million-book library would mean walking through every aisle shelf by shelf. With an index, you look up the catalog card and walk directly to shelf 42."></div>
+            <div data-misunderstand="Students often think databases are just for 'saving'. Emphasize that efficient 'retrieval' and 'filtering' are where 80% of database power lies."></div>
+            <div data-example="Instagram has 2 billion users. Searching for @username takes 2 milliseconds because of database indexing."></div>
+            <div data-question="Why does updating a user's address in a text file require rewriting the whole file, while in a database it takes 1 millisecond?"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SLIDE 4: Types of Databases: SQL vs NoSQL -->
+      <section class="slide" data-section="Part 1: Database Basics" data-title="Types of Databases: SQL vs NoSQL">
+        <div class="slide-content-container">
+          <div class="breadcrumb-wrap">
+            <span>MongoDB Week</span> &rsaquo; <span>Database Basics</span> &rsaquo; <span class="active">SQL vs NoSQL</span>
+          </div>
+
+          <div class="slide-title-block">
+            <span class="slide-tag tag-blue">03 • Categories</span>
+            <h1 class="slide-main-title">Types of Databases: SQL vs NoSQL</h1>
+            <p class="slide-subtitle">Comparing the traditional relational model with the modern document-oriented paradigm.</p>
+          </div>
+
+          <div class="grid-2">
+            <!-- SQL Card -->
+            <div class="card">
+              <div class="card-header">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><grid/><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="3" y1="15" x2="21" y2="15"/><line x1="9" y1="3" x2="9" y2="21"/><line x1="15" y1="3" x2="15" y2="21"/></svg>
+                SQL / Relational Databases
+              </div>
+              <p style="font-size: 0.88rem; color: var(--text-muted); line-height: 1.55;">
+                Data is organized into rigid, tabular grids with predefined schemas:
+              </p>
+              <div class="diagram-container" style="background: var(--bg-main); padding: 0.75rem; margin-top: 0.5rem;">
+                <div style="font-family: var(--font-mono); font-size: 0.82rem; font-weight: bold; color: var(--blue);">
+                  Database &rarr; Tables &rarr; Rows &rarr; Columns
+                </div>
+              </div>
+              <div style="margin-top: 0.6rem; font-size: 0.84rem; color: var(--text-main);">
+                • Examples: <strong>MySQL, PostgreSQL, Oracle, SQL Server</strong>.<br>
+                • Enforces strict tabular schema (every row must fit column definitions).<br>
+                • Connected through complex relational JOINs.
+              </div>
+            </div>
+
+            <!-- NoSQL Card -->
+            <div class="card">
+              <div class="card-header">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><file-text/><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+                NoSQL (Document / Non-Relational)
+              </div>
+              <p style="font-size: 0.88rem; color: var(--text-muted); line-height: 1.55;">
+                Data is stored as independent, flexible, JSON-like documents:
+              </p>
+              <div class="diagram-container" style="background: var(--bg-main); padding: 0.75rem; margin-top: 0.5rem;">
+                <div style="font-family: var(--font-mono); font-size: 0.82rem; font-weight: bold; color: var(--mongo-green);">
+                  Database &rarr; Collections &rarr; Documents &rarr; Fields
+                </div>
+              </div>
+              <div style="margin-top: 0.6rem; font-size: 0.84rem; color: var(--text-main);">
+                • Examples: <strong>MongoDB, Redis, Cassandra, DynamoDB</strong>.<br>
+                • Flexible schema (documents in the same collection can have varied fields).<br>
+                • <strong>NoSQL means "Not Only SQL"</strong> &mdash; modern distributed systems.
+              </div>
+            </div>
+          </div>
+
+          <div class="callout tip" style="margin-top: 0.4rem;">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><check/><polyline points="20 6 9 17 4 12"/></svg>
+            <div><strong>Key Terminology Translation:</strong> An SQL <em>Table</em> corresponds to a MongoDB <strong>Collection</strong>. An SQL <em>Row</em> corresponds to a MongoDB <strong>Document</strong>. An SQL <em>Column</em> corresponds to a MongoDB <strong>Field</strong>.</div>
+          </div>
+
+          <div class="speaker-notes-data" style="display:none;">
+            <div data-intro="Introduce the two major database paradigms. Reassure students that neither is 'better' overall, but MongoDB is tailor-made for JavaScript/MERN development."></div>
+            <div data-analogy="An SQL database is like an Excel spreadsheet: every row must have the exact same columns. A MongoDB collection is like a folder of index cards: each card can contain different fields depending on the item."></div>
+            <div data-misunderstand="Students often think NoSQL literally means 'No SQL allowed'. Clarify that it stands for 'Not Only SQL', indicating non-relational architectures."></div>
+            <div data-example="In SQL, adding an optional 'twitterHandle' column requires running an ALTER TABLE migration on 10 million rows. In MongoDB, you simply add 'twitterHandle' to that one document!"></div>
+            <div data-question="If an SQL table has 5 columns, can one row have 6 columns? Can a MongoDB document have unique fields?"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           PART 2 — WHAT IS MONGODB?
+           ==================================================================== -->
+
+      <!-- SLIDE 5: What is MongoDB & BSON? -->
+      <section class="slide" data-section="Part 2: What is MongoDB?" data-title="What is MongoDB & BSON?">
+        <div class="slide-content-container">
+          <div class="breadcrumb-wrap">
+            <span>MongoDB Week</span> &rsaquo; <span>What is MongoDB?</span> &rsaquo; <span class="active">Definition & BSON</span>
+          </div>
+
+          <div class="slide-title-block">
+            <span class="slide-tag">04 • Core Definition</span>
+            <h1 class="slide-main-title">What is MongoDB &amp; What is BSON?</h1>
+            <p class="slide-subtitle">A document-oriented database that stores flexible, high-speed BSON data.</p>
+          </div>
+
+          <div class="grid-split-60-40">
+            <div class="card">
+              <div class="card-header">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 2a10 10 0 0 1 10 10"/><path d="M12 22a10 10 0 0 1-10-10"/></svg>
+                Core Definition
+              </div>
+              <p style="font-size: 0.95rem; line-height: 1.6; color: var(--text-main);">
+                <strong>MongoDB is an open-source, NoSQL, document-oriented database management system.</strong>
+              </p>
+              <div class="code-block" style="margin-top: 0.75rem;">
+                <div class="code-header"><span class="code-filename">Sample MongoDB Document</span></div>
+                <pre class="code-content">{
+  <span class="key">"_id"</span>: <span class="fn">ObjectId</span>(<span class="str">"6501a2b3c4d5e6f7a8b9c0d1"</span>),
+  <span class="key">"name"</span>: <span class="str">"Mubashir"</span>,
+  <span class="key">"age"</span>: <span class="num">23</span>,
+  <span class="key">"course"</span>: <span class="str">"MERN"</span>,
+  <span class="key">"isActive"</span>: <span class="num">true</span>
+}</pre>
+              </div>
+              <div style="font-size: 0.85rem; color: var(--text-muted); margin-top: 0.6rem;">
+                Every document contains <strong>fields</strong> (keys) and <strong>values</strong>, represented in a JSON-like format.
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-header">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><binary/><rect x="14" y="14" width="4" height="6" rx="2"/><rect x="6" y="4" width="4" height="6" rx="2"/><path d="M6 20h4"/><path d="M14 10h4"/><path d="M6 14h2v6"/><path d="M14 4h2v6"/></svg>
+                What is BSON? (Crucial Detail)
+              </div>
+              <div class="callout warning">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><alert-circle/><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                <div><strong>Do NOT say MongoDB stores JSON!</strong><br>MongoDB represents data in JSON-like format to developers, but internally stores it as <strong>BSON (Binary JSON)</strong>.</div>
+              </div>
+              <p style="font-size: 0.84rem; color: var(--text-main); line-height: 1.55; margin-top: 0.6rem;">
+                <strong>Why BSON over raw JSON?</strong>
+                <br>• <strong>Speed:</strong> Binary encoding allows blazing-fast traversal and indexing.
+                <br>• <strong>Rich Data Types:</strong> JSON only supports strings, numbers, booleans, arrays, objects, and null. BSON adds <strong>Date, ObjectId, Binary Data, and 64-bit Integers</strong>!
+              </p>
+            </div>
+          </div>
+
+          <div class="speaker-notes-data" style="display:none;">
+            <div data-intro="Introduce MongoDB by highlighting that it speaks the exact same data language as JavaScript (objects and arrays)."></div>
+            <div data-analogy="JSON is like plain English text written in a book. BSON is like Morse code or binary machine code: it contains the exact same words, but is compressed for computers to read at lightning speed."></div>
+            <div data-misunderstand="Students frequently say on interviews: 'MongoDB stores JSON'. Correct them immediately: it stores BSON."></div>
+            <div data-example="In pure JSON, there is no Date type; dates are just strings like '2026-09-21'. In BSON, Date is a native timestamp object!"></div>
+            <div data-question="What does BSON stand for, and why can't raw JSON store dates or ObjectIds natively?"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SLIDE 6: Why MongoDB? -->
+      <section class="slide" data-section="Part 2: What is MongoDB?" data-title="Why MongoDB? Key Advantages">
+        <div class="slide-content-container">
+          <div class="breadcrumb-wrap">
+            <span>MongoDB Week</span> &rsaquo; <span>Why MongoDB?</span> &rsaquo; <span class="active">Advantages</span>
+          </div>
+
+          <div class="slide-title-block">
+            <span class="slide-tag">05 • Advantages</span>
+            <h1 class="slide-main-title">Why MongoDB? Key Characteristics</h1>
+            <p class="slide-subtitle">Why MongoDB is the world's most widely adopted document database for web developers.</p>
+          </div>
+
+          <div class="grid-3">
+            <div class="card">
+              <strong style="color: var(--mongo-green); font-size: 0.95rem;">1. Document-Oriented</strong>
+              <p style="font-size: 0.82rem; color: var(--text-muted); margin-top: 0.3rem;">
+                Maps naturally to modern object-oriented code. A document in MongoDB looks identical to a JavaScript object in your app.
+              </p>
+            </div>
+            <div class="card">
+              <strong style="color: var(--mongo-green); font-size: 0.95rem;">2. Flexible Schema (Polymorphism)</strong>
+              <p style="font-size: 0.82rem; color: var(--text-muted); margin-top: 0.3rem;">
+                No strict database migrations required. You can add new fields to new documents without breaking existing records.
+              </p>
+            </div>
+            <div class="card">
+              <strong style="color: var(--mongo-green); font-size: 0.95rem;">3. Rich &amp; Powerful Querying</strong>
+              <p style="font-size: 0.82rem; color: var(--text-muted); margin-top: 0.3rem;">
+                Filter deeply nested fields, search arrays, match regular expressions, and execute complex comparisons easily.
+              </p>
+            </div>
+            <div class="card">
+              <strong style="color: var(--mongo-green); font-size: 0.95rem;">4. High Performance Indexing</strong>
+              <p style="font-size: 0.82rem; color: var(--text-muted); margin-top: 0.3rem;">
+                Create secondary B-Tree indexes on any field, compound indexes, text indexes, and geospatial location coordinates.
+              </p>
+            </div>
+            <div class="card">
+              <strong style="color: var(--mongo-green); font-size: 0.95rem;">5. Horizontal Scalability (Sharding)</strong>
+              <p style="font-size: 0.82rem; color: var(--text-muted); margin-top: 0.3rem;">
+                Built from day one to scale out across clusters of servers rather than requiring one monstrously expensive mainframe.
+              </p>
+            </div>
+            <div class="card">
+              <strong style="color: var(--mongo-green); font-size: 0.95rem;">6. The JavaScript / MERN Synergy</strong>
+              <p style="font-size: 0.82rem; color: var(--text-muted); margin-top: 0.3rem;">
+                One language across the entire stack! JavaScript in React, JavaScript in Node/Express, and JSON/BSON in MongoDB.
+              </p>
+            </div>
+          </div>
+
+          <div class="speaker-notes-data" style="display:none;">
+            <div data-intro="Explain why modern startups and tech giants pick MongoDB: speed of development and seamless JSON synergy."></div>
+            <div data-analogy="Using SQL with JavaScript is like traveling to France and needing an English-French translator for every sentence. Using MongoDB with JavaScript is like both people speaking the same native mother tongue."></div>
+            <div data-misunderstand="Students sometimes think 'flexible schema' means 'no rules at all'. Later, Mongoose can enforce schemas when needed, but the database itself never gets locked."></div>
+            <div data-example="Show that an e-commerce catalog with shirts (has sizes S/M/L) and laptops (has RAM/CPU) can live in the SAME products collection easily."></div>
+            <div data-question="Why is it convenient for a MERN developer that MongoDB documents use JSON-like syntax?"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SLIDE 7: MongoDB and MERN Architecture -->
+      <section class="slide" data-section="Part 2: What is MongoDB?" data-title="MongoDB and the MERN Stack">
+        <div class="slide-content-container">
+          <div class="breadcrumb-wrap">
+            <span>MongoDB Week</span> &rsaquo; <span>MERN Architecture</span> &rsaquo; <span class="active">Data Flow</span>
+          </div>
+
+          <div class="slide-title-block">
+            <span class="slide-tag tag-purple">06 • Full-Stack Architecture</span>
+            <h1 class="slide-main-title">MongoDB in the MERN Stack Architecture</h1>
+            <p class="slide-subtitle">Understanding the complete request-response cycle and why React never touches MongoDB directly.</p>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><layers/><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>
+              The Full-Stack MERN Request Lifecycle
+            </div>
+            <div class="flow-pipeline" style="padding: 0.5rem 0;">
+              <div class="flow-step">
+                <span class="step-badge">Client UI</span>
+                <span class="step-title">React.js</span>
+                <span class="step-desc">Browser interface</span>
+              </div>
+              <div class="flow-arrow">&rarr; <span style="font-size: 0.65rem; color: var(--text-subtle);">HTTP Request</span> &rarr;</div>
+              <div class="flow-step">
+                <span class="step-badge">Backend API</span>
+                <span class="step-title">Express / Node.js</span>
+                <span class="step-desc">Server routes &amp; logic</span>
+              </div>
+              <div class="flow-arrow">&rarr; <span style="font-size: 0.65rem; color: var(--text-subtle);">Driver Query</span> &rarr;</div>
+              <div class="flow-step">
+                <span class="step-badge">Database</span>
+                <span class="step-title">MongoDB</span>
+                <span class="step-desc">BSON Storage Engine</span>
+              </div>
+            </div>
+            <div style="text-align: center; color: var(--mongo-green); font-size: 0.82rem; font-weight: bold; margin-top: 0.5rem;">
+              &larr; Database Result returns to Node.js &rarr; Node.js formats JSON &rarr; React updates UI &larr;
+            </div>
+          </div>
+
+          <div class="grid-2" style="margin-top: 0.5rem;">
+            <div class="card">
+              <div class="card-header">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><shield/><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                Why Can't React Connect Directly to MongoDB?
+              </div>
+              <ul class="point-list cross-list" style="font-size: 0.85rem;">
+                <li><strong>Security Disaster:</strong> Connecting directly from the browser would expose your database credentials and secret password in public client JavaScript!</li>
+                <li><strong>Zero Permission Control:</strong> Any clever user could open Chrome DevTools and run <code>db.users.deleteMany({})</code>!</li>
+                <li><strong>Protocol Mismatch:</strong> Browsers speak HTTP/WebSocket; MongoDB speaks its own internal TCP wire protocol.</li>
+              </ul>
+            </div>
+
+            <div class="card">
+              <div class="card-header">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><server/><rect x="2" y="2" width="20" height="8" rx="2" ry="2"/><rect x="2" y="14" width="20" height="8" rx="2" ry="2"/><line x1="6" y1="6" x2="6.01" y2="6"/><line x1="6" y1="18" x2="6.01" y2="18"/></svg>
+                The Backend's Role as the Trusted Guardian
+              </div>
+              <p style="font-size: 0.85rem; color: var(--text-main); line-height: 1.6;">
+                The <strong>Express / Node.js backend</strong> acts as the secure middleman:
+                <br>1. Authenticates the incoming user request (JSON Web Tokens / Sessions).
+                <br>2. Validates incoming payload data.
+                <br>3. Executes authorized queries against MongoDB.
+                <br>4. Returns safe, sanitized JSON responses to the React frontend.
+              </p>
+            </div>
+          </div>
+
+          <div class="speaker-notes-data" style="display:none;">
+            <div data-intro="Drill this into students' heads: frontend never talks to the database directly."></div>
+            <div data-analogy="React is like the restaurant customer at the table. MongoDB is like the chef cooking in the kitchen. Express/Node.js is the waiter. Customers do not walk into the kitchen and grab raw meat; they order through the waiter!"></div>
+            <div data-misunderstand="Beginners often search Google: 'How to connect React to MongoDB'. Emphasize that such tutorials are flawed or use insecure third-party hacks."></div>
+            <div data-example="Show what would happen if React connected directly: inspect element -> view source -> database password exposed to anyone on the internet."></div>
+            <div data-question="Why must database queries always run inside a secure server environment like Node.js instead of inside the browser?"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           PART 3 — MONGODB ARCHITECTURE
+           ==================================================================== -->
+
+      <!-- SLIDE 8: The Hierarchy Tree -->
+      <section class="slide" data-section="Part 3: Architecture" data-title="MongoDB Hierarchy Tree">
+        <div class="slide-content-container">
+          <div class="breadcrumb-wrap">
+            <span>MongoDB Week</span> &rsaquo; <span>Architecture</span> &rsaquo; <span class="active">Hierarchy Tree</span>
+          </div>
+
+          <div class="slide-title-block">
+            <span class="slide-tag">07 • Architecture</span>
+            <h1 class="slide-main-title">The MongoDB Architecture Hierarchy</h1>
+            <p class="slide-subtitle">Server &rarr; Database &rarr; Collection &rarr; Document &rarr; Field.</p>
+          </div>
+
+          <div class="card" style="padding: 1.25rem;">
+            <div class="diagram-container" style="background: var(--bg-main);">
+              <div class="tree-node server-node" style="font-size: 1rem; padding: 0.6rem 2rem;">
+                🖥️ MongoDB Server (Instance)
+              </div>
+              <div style="color: var(--mongo-green); font-size: 1.2rem; font-weight: bold;">↓</div>
+
+              <div class="tree-node db-node" style="font-size: 0.95rem;">
+                📁 Database (e.g. "ecommerce" or "school")
+              </div>
+              <div style="color: var(--mongo-green); font-size: 1.2rem; font-weight: bold;">↓</div>
+
+              <div style="display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center;">
+                <div class="tree-node coll-node">📂 users (Collection)</div>
+                <div class="tree-node coll-node">📂 products (Collection)</div>
+                <div class="tree-node coll-node">📂 orders (Collection)</div>
+              </div>
+              <div style="color: var(--mongo-green); font-size: 1.2rem; font-weight: bold;">↓</div>
+
+              <div style="display: flex; gap: 0.75rem; flex-wrap: wrap; justify-content: center;">
+                <div class="tree-node doc-node">📄 Document 1</div>
+                <div class="tree-node doc-node">📄 Document 2</div>
+                <div class="tree-node doc-node">📄 Document 3</div>
+              </div>
+              <div style="color: var(--mongo-green); font-size: 1.2rem; font-weight: bold;">↓</div>
+
+              <div class="tree-node field-node">
+                🏷️ Fields: { name: "John", age: 25, email: "john@example.com" }
+              </div>
+            </div>
+          </div>
+
+          <div class="speaker-notes-data" style="display:none;">
+            <div data-intro="Walk students down the 5 steps of the hierarchy ladder."></div>
+            <div data-analogy="Server is the building. Database is the room. Collection is the file cabinet. Document is the file folder. Field is the specific line of text written on the sheet."></div>
+            <div data-misunderstand="Students confuse collection with document. Drill it: Collection = plural (books, users). Document = singular (one specific book, one user)."></div>
+            <div data-example="Show the ecommerce example: ecommerce has collections for users, products, orders."></div>
+            <div data-question="If you have 500 students in a school, how many collections do you have, and how many documents? (Answer: 1 collection, 500 documents!)"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SLIDE 9: Database, Collection, Document, Field Details -->
+      <section class="slide" data-section="Part 3: Architecture" data-title="Database, Collection, Document, Field">
+        <div class="slide-content-container">
+          <div class="breadcrumb-wrap">
+            <span>MongoDB Week</span> &rsaquo; <span>Architecture</span> &rsaquo; <span class="active">Core Terms</span>
+          </div>
+
+          <div class="slide-title-block">
+            <span class="slide-tag">08 • Core Terminology</span>
+            <h1 class="slide-main-title">Database, Collection, Document &amp; Field</h1>
+            <p class="slide-subtitle">Clear definitions and practical breakdowns of each architectural layer.</p>
+          </div>
+
+          <div class="grid-2">
+            <div class="card">
+              <div class="card-header">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><database/><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg>
+                1. Database &amp; 2. Collection
+              </div>
+              <p style="font-size: 0.88rem; line-height: 1.6; color: var(--text-main);">
+                <strong>Database:</strong> The high-level physical container on disk that holds one or more collections. A single MongoDB server can host hundreds of independent databases.
+              </p>
+              <p style="font-size: 0.88rem; line-height: 1.6; color: var(--text-main); margin-top: 0.5rem;">
+                <strong>Collection:</strong> A group of related MongoDB documents (the direct equivalent of an SQL table). Does not enforce identical schemas across documents by default.
+              </p>
+            </div>
+
+            <div class="card">
+              <div class="card-header">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><file-text/><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+                3. Document &amp; 4. Field
+              </div>
+              <p style="font-size: 0.88rem; line-height: 1.6; color: var(--text-main);">
+                <strong>Document:</strong> An individual record stored inside a collection (equivalent to an SQL row). Written in JSON-like syntax and persisted as BSON. Maximum size: <strong>16 MB</strong>.
+              </p>
+              <p style="font-size: 0.88rem; line-height: 1.6; color: var(--text-main); margin-top: 0.5rem;">
+                <strong>Field:</strong> A key-value pair inside a document (equivalent to an SQL column). In <code>{ age: 23 }</code>, <code>age</code> is the field name and <code>23</code> is the field value.
+              </p>
+            </div>
+          </div>
+
+          <div class="speaker-notes-data" style="display:none;">
+            <div data-intro="Summarize the four vocabulary words that students will use every day in backend development."></div>
+            <div data-analogy="Database = Warehouse. Collection = Shelf. Document = Package on the shelf. Field = Label on the package."></div>
+            <div data-misunderstand="Mention the 16MB document size limit: students sometimes worry this is small, but a 16MB text document is larger than the entire text of War and Peace!"></div>
+            <div data-example="In the 'ecommerce' database, 'users' is the collection, '{ _id: 1, name: 'John' }' is the document, and 'name' is the field."></div>
+            <div data-question="What is the maximum allowed size of a single MongoDB document? (Answer: 16 Megabytes)."></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SLIDE 10: Document _id and ObjectId -->
+      <section class="slide" data-section="Part 3: Architecture" data-title="_id and ObjectId">
+        <div class="slide-content-container">
+          <div class="breadcrumb-wrap">
+            <span>MongoDB Week</span> &rsaquo; <span>Architecture</span> &rsaquo; <span class="active">_id & ObjectId</span>
+          </div>
+
+          <div class="slide-title-block">
+            <span class="slide-tag tag-orange">12 • Primary Key</span>
+            <h1 class="slide-main-title">The _id Field &amp; ObjectId</h1>
+            <p class="slide-subtitle">How MongoDB guarantees globally unique document identification across distributed systems.</p>
+          </div>
+
+          <div class="grid-split-60-40">
+            <div class="card">
+              <div class="card-header">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><key/><path d="M21 2l-2 2m-1.5 1.5L16 7l-1.5-1.5L13 7l-1.5-1.5L10 7l-1.5-1.5L7 7l-1.5-1.5L4 7l-2-2"/><circle cx="7.5" cy="15.5" r="5.5"/></svg>
+                The Role of _id
+              </div>
+              <p style="font-size: 0.92rem; line-height: 1.6; color: var(--text-main);">
+                Every single document in a MongoDB collection <strong>MUST have a unique <code>_id</code> field</strong> that acts as its primary key.
+              </p>
+              <ul class="point-list" style="margin-top: 0.75rem; font-size: 0.85rem;">
+                <li>If you do not provide an <code>_id</code> when inserting, <strong>MongoDB generates one automatically</strong>.</li>
+                <li>The default generated type is an <strong><code>ObjectId</code></strong>.</li>
+                <li>Guarantees uniqueness within that collection across any cluster.</li>
+              </ul>
+              <div class="code-block" style="margin-top: 0.75rem;">
+                <pre class="code-content">{
+  <span class="key">"_id"</span>: <span class="fn">ObjectId</span>(<span class="str">"65f1a2b3c4d5e6f7a8b9c0d1"</span>),
+  <span class="key">"name"</span>: <span class="str">"John Doe"</span>
+}</pre>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-header">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><cpu/><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><line x1="9" y1="1" x2="9" y2="4"/><line x1="15" y1="1" x2="15" y2="4"/><line x1="9" y1="20" x2="9" y2="23"/><line x1="15" y1="20" x2="15" y2="23"/><line x1="20" y1="9" x2="23" y2="9"/><line x1="20" y1="14" x2="23" y2="14"/><line x1="1" y1="9" x2="4" y2="9"/><line x1="1" y1="14" x2="4" y2="14"/></svg>
+                Anatomy of a 12-Byte ObjectId
+              </div>
+              <p style="font-size: 0.82rem; color: var(--text-muted); line-height: 1.5;">
+                An ObjectId is NOT a random string! It is a packed 12-byte binary BSON value made of:
+              </p>
+              <div style="display: flex; flex-direction: column; gap: 0.5rem; margin-top: 0.6rem; font-size: 0.78rem;">
+                <div style="background: #ECFDF5; border: 1px solid var(--mongo-green-border); padding: 0.4rem; border-radius: 4px;">
+                  <strong>First 4 Bytes:</strong> Unix timestamp (seconds since 1970). You can extract the exact creation date directly from the ID!
+                </div>
+                <div style="background: var(--bg-secondary); border: 1px solid var(--border); padding: 0.4rem; border-radius: 4px;">
+                  <strong>Next 5 Bytes:</strong> Random machine identifier + process ID.
+                </div>
+                <div style="background: var(--bg-secondary); border: 1px solid var(--border); padding: 0.4rem; border-radius: 4px;">
+                  <strong>Final 3 Bytes:</strong> Incrementing counter initialized to a random value.
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="speaker-notes-data" style="display:none;">
+            <div data-intro="Explain why an auto-incrementing integer (like ID: 1, 2, 3 in SQL) doesn't work well in cloud distributed databases: two servers might both try to assign ID 4 simultaneously."></div>
+            <div data-analogy="An ObjectId is like a passport number with an embedded timestamp: no matter which hospital on Earth you were born in, your ID is mathematically guaranteed never to collide with anyone else's."></div>
+            <div data-misunderstand="Students treat ObjectId('...') as a plain string in queries and wonder why find({ _id: '65f1...' }) returns null. Explain that ObjectId is a specific BSON object type!"></div>
+            <div data-example="Show ObjectId('65f1a2b3...').getTimestamp() in the shell returning the exact second the document was created."></div>
+            <div data-question="Can you manually provide your own custom _id (like _id: 'EMP101') instead of letting MongoDB generate an ObjectId? (Answer: Yes, as long as it is unique!)"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           PART 4 — INSTALLATION & LOCAL ENVIRONMENT
+           ==================================================================== -->
+
+      <!-- SLIDE 11: Installing MongoDB Locally -->
+      <section class="slide" data-section="Part 4: Installation" data-title="Installing MongoDB Locally">
+        <div class="slide-content-container">
+          <div class="breadcrumb-wrap">
+            <span>MongoDB Week</span> &rsaquo; <span>Installation</span> &rsaquo; <span class="active">Local Setup</span>
+          </div>
+
+          <div class="slide-title-block">
+            <span class="slide-tag">13 • Setup</span>
+            <h1 class="slide-main-title">Installing MongoDB Locally</h1>
+            <p class="slide-subtitle">Understanding the 3 distinct software packages required on your development machine.</p>
+          </div>
+
+          <div class="grid-3">
+            <div class="card" style="text-align: center;">
+              <div style="font-size: 2.2rem; margin-bottom: 0.4rem;">🖥️</div>
+              <h3 style="font-size: 1rem; color: var(--dark-navy);">1. MongoDB Community Server</h3>
+              <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 0.4rem;">
+                The actual database engine. Runs in the background as a daemon process (<code>mongod</code>) and writes files to disk.
+              </p>
+              <div style="margin-top: 0.6rem; font-family: var(--font-mono); font-size: 0.74rem; background: var(--bg-secondary); padding: 0.35rem; border-radius: 4px;">
+                mongod --version
+              </div>
+            </div>
+
+            <div class="card" style="text-align: center;">
+              <div style="font-size: 2.2rem; margin-bottom: 0.4rem;">💻</div>
+              <h3 style="font-size: 1rem; color: var(--dark-navy);">2. MongoDB Shell (mongosh)</h3>
+              <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 0.4rem;">
+                Command-line interface client. Used by developers to type interactive database queries, insert data, and manage collections.
+              </p>
+              <div style="margin-top: 0.6rem; font-family: var(--font-mono); font-size: 0.74rem; background: var(--bg-secondary); padding: 0.35rem; border-radius: 4px;">
+                mongosh --version
+              </div>
+            </div>
+
+            <div class="card" style="text-align: center;">
+              <div style="font-size: 2.2rem; margin-bottom: 0.4rem;">🧭</div>
+              <h3 style="font-size: 1rem; color: var(--dark-navy);">3. MongoDB Compass</h3>
+              <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 0.4rem;">
+                Official Graphical User Interface (GUI). Lets you click, explore collections, visualize schemas, and query visually.
+              </p>
+              <div style="margin-top: 0.6rem; font-size: 0.78rem; color: var(--mongo-green); font-weight: 600;">
+                Desktop App (GUI)
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><terminal/><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg>
+              Verify Your Local Installation
+            </div>
+            <div class="code-block">
+              <div class="code-header">
+                <span class="code-filename">Terminal / Command Prompt</span>
+                <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+              </div>
+              <pre class="code-content"><span class="com"># Check server daemon installation</span>
+mongod --version
+<span class="str">db version v7.0.x</span>
+
+<span class="com"># Check shell client installation</span>
+mongosh --version
+<span class="str">2.x.x</span></pre>
+            </div>
+          </div>
+
+          <div class="speaker-notes-data" style="display:none;">
+            <div data-intro="Guide students through checking their installations on their machines."></div>
+            <div data-analogy="Community Server (mongod) is the engine inside the car under the hood. mongosh is the steering wheel and pedals. Compass is the fancy touch-screen dashboard."></div>
+            <div data-misunderstand="Students often download mongosh without installing MongoDB Community Server, then wonder why mongosh fails to connect. Emphasize that the server is mandatory!"></div>
+            <div data-example="Run mongod --version and mongosh --version live on screen."></div>
+            <div data-question="If MongoDB Community Server is not running, can MongoDB Compass connect to localhost:27017?"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SLIDE 12: mongod vs mongosh -->
+      <section class="slide" data-section="Part 4: Installation" data-title="mongod vs mongosh">
+        <div class="slide-content-container">
+          <div class="breadcrumb-wrap">
+            <span>MongoDB Week</span> &rsaquo; <span>Tools</span> &rsaquo; <span class="active">Server vs Client</span>
+          </div>
+
+          <div class="slide-title-block">
+            <span class="slide-tag tag-orange">15 • Distinction</span>
+            <h1 class="slide-main-title">mongod vs mongosh: The Critical Distinction</h1>
+            <p class="slide-subtitle">Understanding the difference between the background server daemon and the foreground client.</p>
+          </div>
+
+          <div class="compare-container">
+            <div class="compare-box bad" style="border-color: #93C5FD;">
+              <div class="compare-header" style="background: var(--blue-bg); color: var(--blue); border-color: var(--blue-border);">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><server/><rect x="2" y="2" width="20" height="8" rx="2" ry="2"/><rect x="2" y="14" width="20" height="8" rx="2" ry="2"/><line x1="6" y1="6" x2="6.01" y2="6"/><line x1="6" y1="18" x2="6.01" y2="18"/></svg>
+                mongod (MongoDB Daemon / Server)
+              </div>
+              <div style="padding: 1rem; font-size: 0.88rem; line-height: 1.6;">
+                • The <strong>'d'</strong> stands for <em>Daemon</em> (a background process).<br>
+                • It is the <strong>database server itself</strong>.<br>
+                • Listens for network connections on default port <code>27017</code>.<br>
+                • Manages data storage, memory cache, reads, and writes to disk.<br>
+                <div style="margin-top: 0.5rem; color: var(--blue); font-weight: bold; font-size: 0.8rem;">
+                  ⚙️ Runs as a background service on Windows/Mac/Linux.
+                </div>
+              </div>
+            </div>
+
+            <div class="compare-box good">
+              <div class="compare-header">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><terminal/><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg>
+                mongosh (MongoDB Shell / Client)
+              </div>
+              <div style="padding: 1rem; font-size: 0.88rem; line-height: 1.6;">
+                • The <strong>'sh'</strong> stands for <em>Shell</em>.<br>
+                • It is an interactive <strong>client tool</strong> you open in the terminal.<br>
+                • Connects to the running <code>mongod</code> server.<br>
+                • Provides an interactive Node.js REPL environment to execute database queries.<br>
+                <div style="margin-top: 0.5rem; color: var(--success); font-weight: bold; font-size: 0.8rem;">
+                  💻 This is where YOU type commands like db.students.find()!
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="speaker-notes-data" style="display:none;">
+            <div data-intro="Clarify this common point of confusion for beginners: mongod vs mongosh."></div>
+            <div data-analogy="mongod is like the kitchen chef. mongosh is like the intercom on the counter you talk into to place orders."></div>
+            <div data-misunderstand="Students often type queries directly into a terminal running mongod. Explain that mongod is just logs; mongosh is the interactive command shell."></div>
+            <div data-example="Open task manager or terminal: show mongod service running in background, and open mongosh to connect to it."></div>
+            <div data-question="If you close mongosh, does the MongoDB database shut down? (Answer: No, mongod continues running in the background!)"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           PART 5 — MONGODB SHELL (mongosh)
+           ==================================================================== -->
+
+      <!-- SLIDE 13: Starting MongoDB Shell & Connection Strings -->
+      <section class="slide" data-section="Part 5: MongoDB Shell" data-title="Starting mongosh & Connection Strings">
+        <div class="slide-content-container">
+          <div class="breadcrumb-wrap">
+            <span>MongoDB Week</span> &rsaquo; <span>mongosh</span> &rsaquo; <span class="active">Starting the Shell</span>
+          </div>
+
+          <div class="slide-title-block">
+            <span class="slide-tag">18 • Shell Connection</span>
+            <h1 class="slide-main-title">Starting mongosh &amp; Understanding Connection Strings</h1>
+            <p class="slide-subtitle">Connecting your interactive command-line interface to the database instance.</p>
+          </div>
+
+          <div class="grid-2">
+            <div class="card">
+              <div class="card-header">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><terminal/><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg>
+                Starting the Shell
+              </div>
+              <p style="font-size: 0.86rem; color: var(--text-muted); margin-bottom: 0.5rem;">
+                Simply open your terminal (Git Bash, Command Prompt, or PowerShell) and run:
+              </p>
+              <div class="code-block">
+                <div class="code-header"><span class="code-filename">Terminal</span></div>
+                <pre class="code-content"><span class="com"># Connects to default local instance</span>
+mongosh</pre>
+              </div>
+              <p style="font-size: 0.86rem; color: var(--text-muted); margin-top: 0.6rem;">
+                Or explicitly pass the connection URI:
+              </p>
+              <div class="code-block" style="margin-top: 0.3rem;">
+                <pre class="code-content">mongosh <span class="str">"mongodb://localhost:27017"</span></pre>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-header">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><link/><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+                Connection String Anatomy
+              </div>
+              <div class="diagram-container" style="background: var(--term-bg); padding: 0.9rem; color: #FFFFFF; font-family: var(--font-mono); font-size: 0.85rem;">
+                <span style="color: var(--term-prompt);">mongodb://</span><span style="color: #60A5FA;">localhost</span><span style="color: var(--term-prompt);">:</span><span style="color: #FBBF24;">27017</span>
+              </div>
+              <div style="margin-top: 0.75rem; font-size: 0.84rem; display: flex; flex-direction: column; gap: 0.4rem;">
+                <div>• <code style="color: var(--mongo-green);">mongodb://</code> &rarr; Protocol identifier (like <code>http://</code> for the web).</div>
+                <div>• <code style="color: #2563EB;">localhost</code> &rarr; Host machine (the local computer you are typing on; IP <code>127.0.0.1</code>).</div>
+                <div>• <code style="color: #D97706;">27017</code> &rarr; Default TCP port MongoDB listens on.</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="speaker-notes-data" style="display:none;">
+            <div data-intro="Show students how to open their terminal and type 'mongosh'."></div>
+            <div data-analogy="A connection string is like dialing a phone number: the country code is mongodb://, the area code is localhost, and the 5-digit extension is 27017."></div>
+            <div data-misunderstand="Students sometimes forget the port number (27017). Mention that 27017 is to MongoDB what port 80 is to HTTP or port 3000 is to React."></div>
+            <div data-example="Type mongosh in terminal and show the welcome banner: 'Connecting to: mongodb://127.0.0.1:27017/ ... Using MongoDB: 7.0.x'."></div>
+            <div data-question="What is the default port number used by MongoDB? (Answer: 27017)."></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SLIDE 14: Basic Shell Commands (show dbs, use, db) -->
+      <section class="slide" data-section="Part 5: MongoDB Shell" data-title="Basic Shell Commands">
+        <div class="slide-content-container">
+          <div class="breadcrumb-wrap">
+            <span>MongoDB Week</span> &rsaquo; <span>mongosh</span> &rsaquo; <span class="active">Basic Commands</span>
+          </div>
+
+          <div class="slide-title-block">
+            <span class="slide-tag">19 • Shell Basics</span>
+            <h1 class="slide-main-title">Basic MongoDB Shell Commands</h1>
+            <p class="slide-subtitle">Navigating, selecting database context, and inspecting collections.</p>
+          </div>
+
+          <div class="grid-2">
+            <div class="card">
+              <div class="card-header">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><terminal/><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg>
+                The 4 Fundamental Shell Commands
+              </div>
+              <div class="code-block">
+                <pre class="code-content"><span class="com">// 1. List all existing databases on the server</span>
+<span class="prompt">test&gt;</span> <span class="cmd">show dbs</span>
+<span class="str">admin   40.00 KiB</span>
+<span class="str">config  12.00 KiB</span>
+<span class="str">local   72.00 KiB</span>
+
+<span class="com">// 2. Check which database you are currently working in</span>
+<span class="prompt">test&gt;</span> <span class="cmd">db</span>
+<span class="str">test</span>
+
+<span class="com">// 3. Switch database context (or prepare a new one)</span>
+<span class="prompt">test&gt;</span> <span class="cmd">use school</span>
+<span class="str">switched to db school</span>
+
+<span class="com">// 4. List all collections in current database</span>
+<span class="prompt">school&gt;</span> <span class="cmd">show collections</span></pre>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-header">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><alert-circle/><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                Crucial Concept: Lazy Persistence!
+              </div>
+              <div class="callout warning">
+                <div>
+                  <strong>Why does <code>show dbs</code> NOT show my new database?</strong>
+                  <br>When you run <code>use school</code>, MongoDB does <strong>NOT</strong> create physical files on your hard drive immediately!
+                </div>
+              </div>
+              <p style="font-size: 0.86rem; color: var(--text-main); line-height: 1.6; margin-top: 0.6rem;">
+                MongoDB uses <strong>lazy creation</strong>:
+                <br>• The database only physically exists once you <strong>insert at least one document</strong> into a collection.
+                <br>• As soon as you run <code>db.students.insertOne({ name: "John" })</code>, MongoDB persists both the <code>school</code> database and the <code>students</code> collection!
+              </p>
+            </div>
+          </div>
+
+          <div class="speaker-notes-data" style="display:none;">
+            <div data-intro="Demonstrate running show dbs, use school, and show dbs again. Watch students look confused when 'school' is missing from the list."></div>
+            <div data-analogy="Creating a database in MongoDB is like creating an empty folder on Google Drive: until you drag a file inside it, MongoDB doesn't allocate physical disk blocks."></div>
+            <div data-misunderstand="Every single beginner panics when use school doesn't show up in show dbs. Explain lazy persistence clearly."></div>
+            <div data-example="Show the terminal prompt change from test> to school> when running use school."></div>
+            <div data-question="What command do you type to see which database you are currently inside? (Answer: db)."></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           PART 6 — MONGODB COMPASS
+           ==================================================================== -->
+
+      <!-- SLIDE 15: MongoDB Compass GUI -->
+      <section class="slide" data-section="Part 6: MongoDB Compass" data-title="MongoDB Compass GUI">
+        <div class="slide-content-container">
+          <div class="breadcrumb-wrap">
+            <span>MongoDB Week</span> &rsaquo; <span>Compass</span> &rsaquo; <span class="active">Visual Interface</span>
+          </div>
+
+          <div class="slide-title-block">
+            <span class="slide-tag">21 • Visual Tool</span>
+            <h1 class="slide-main-title">MongoDB Compass: The Official GUI</h1>
+            <p class="slide-subtitle">Visual database exploration, document browsing, query filtering, and schema inspection.</p>
+          </div>
+
+          <div class="grid-split-60-40">
+            <div class="card">
+              <div class="card-header">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><compass/><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></svg>
+                What is MongoDB Compass?
+              </div>
+              <p style="font-size: 0.95rem; line-height: 1.6; color: var(--text-main);">
+                <strong>MongoDB Compass is the official Graphical User Interface (GUI) desktop application for MongoDB.</strong>
+              </p>
+              <p style="font-size: 0.88rem; color: var(--text-muted); line-height: 1.6; margin-top: 0.6rem;">
+                Instead of typing shell commands, Compass lets you visually click to browse databases, search documents, insert records, view performance metrics, and analyze indexes.
+              </p>
+              <div class="callout tip" style="margin-top: 0.75rem;">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><check/><polyline points="20 6 9 17 4 12"/></svg>
+                <div><strong>Connecting Compass:</strong> Simply open Compass, paste <code>mongodb://localhost:27017</code>, and click <strong>Connect</strong>!</div>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-header">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><list/><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+                What You Can Do in Compass
+              </div>
+              <ul class="point-list" style="font-size: 0.85rem;">
+                <li>Browse all databases and collections visually.</li>
+                <li>Filter documents with visual query builders.</li>
+                <li>Edit or delete documents with 1 click.</li>
+                <li>Inspect data types and field distributions.</li>
+                <li>Test aggregation pipelines visually.</li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- Compass vs mongosh Table -->
+          <div class="table-container">
+            <table class="comp-table">
+              <thead>
+                <tr>
+                  <th>Dimension</th>
+                  <th>MongoDB Shell (mongosh)</th>
+                  <th>MongoDB Compass (GUI)</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Interface</strong></td>
+                  <td>Terminal / Command-Line Interface</td>
+                  <td>Desktop Graphical Application</td>
+                </tr>
+                <tr>
+                  <td><strong>Workflow Speed</strong></td>
+                  <td><span class="tag-good">Fastest for Developers</span> &amp; scriptable</td>
+                  <td><span class="tag-good">Beginner-Friendly</span> &amp; visual</td>
+                </tr>
+                <tr>
+                  <td><strong>Best Used For</strong></td>
+                  <td>Quick CRUD operations, migrations, scripting</td>
+                  <td>Visual data exploration, debugging, inspecting schemas</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="speaker-notes-data" style="display:none;">
+            <div data-intro="Introduce Compass as the friendly visual tool students can use side-by-side with the shell."></div>
+            <div data-analogy="mongosh is like using Git in the terminal; Compass is like using GitHub Desktop. Both perform the exact same actions on the exact same database."></div>
+            <div data-misunderstand="Students sometimes think Compass is the database. Reiterate: Compass is just a visual viewer; the database is mongod."></div>
+            <div data-example="Insert a document in mongosh, switch to Compass, hit refresh, and watch that document appear visually in real time."></div>
+            <div data-question="If you insert a document in Compass, will it show up when you run db.find() in the terminal shell?"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           PART 7 — MONGODB ATLAS (CLOUD)
+           ==================================================================== -->
+
+      <!-- SLIDE 16: What is MongoDB Atlas? -->
+      <section class="slide" data-section="Part 7: MongoDB Atlas" data-title="MongoDB Atlas Cloud">
+        <div class="slide-content-container">
+          <div class="breadcrumb-wrap">
+            <span>MongoDB Week</span> &rsaquo; <span>Atlas</span> &rsaquo; <span class="active">Cloud Database</span>
+          </div>
+
+          <div class="slide-title-block">
+            <span class="slide-tag tag-blue">24 • Cloud Service</span>
+            <h1 class="slide-main-title">MongoDB Atlas: Fully Managed Cloud Database</h1>
+            <p class="slide-subtitle">Hosting production-ready MongoDB databases in the cloud on AWS, Google Cloud, or Azure.</p>
+          </div>
+
+          <div class="compare-container">
+            <div class="compare-box good" style="border-color: #93C5FD;">
+              <div class="compare-header" style="background: var(--blue-bg); color: var(--blue); border-color: var(--blue-border);">
+                🖥️ Local MongoDB (Your Laptop)
+              </div>
+              <div style="padding: 1rem; font-size: 0.85rem; line-height: 1.6;">
+                • Runs on your local machine hard drive.<br>
+                • You are responsible for starting, stopping, and backing up.<br>
+                • Perfect for offline practice and learning.<br>
+                • Cannot be accessed by mobile apps or public websites.
+              </div>
+            </div>
+
+            <div class="compare-box good">
+              <div class="compare-header">
+                ☁️ MongoDB Atlas (Managed Cloud Database)
+              </div>
+              <div style="padding: 1rem; font-size: 0.85rem; line-height: 1.6;">
+                • Hosted on cloud infrastructure (AWS / Google Cloud / Azure).<br>
+                • MongoDB handles backups, patches, scaling, and high availability.<br>
+                • Generates a cloud connection string (<code>mongodb+srv://...</code>).<br>
+                • Accessible from anywhere on the internet (deployed web apps).
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><shield/><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+              The 6 Steps to Setup MongoDB Atlas
+            </div>
+            <div class="flow-pipeline" style="font-size: 0.78rem;">
+              <div class="flow-step"><span class="step-badge">1</span><span class="step-title">Create Account</span><span class="step-desc">mongodb.com</span></div>
+              <div class="flow-arrow">&rarr;</div>
+              <div class="flow-step"><span class="step-badge">2</span><span class="step-title">Free Cluster (M0)</span><span class="step-desc">Pick cloud provider</span></div>
+              <div class="flow-arrow">&rarr;</div>
+              <div class="flow-step"><span class="step-badge">3</span><span class="step-title">Create DB User</span><span class="step-desc">Username &amp; Password</span></div>
+              <div class="flow-arrow">&rarr;</div>
+              <div class="flow-step"><span class="step-badge">4</span><span class="step-title">Network Access</span><span class="step-desc">Whitelist IP (0.0.0.0/0)</span></div>
+              <div class="flow-arrow">&rarr;</div>
+              <div class="flow-step"><span class="step-badge">5</span><span class="step-title">Copy URI</span><span class="step-desc">Connection string</span></div>
+            </div>
+          </div>
+
+          <div class="callout danger" style="margin-top: 0.4rem;">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><alert-triangle/><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+            <div><strong>CRITICAL SECURITY WARNING:</strong> Never commit your Atlas connection string with your raw password to GitHub! Bots scan public repositories 24/7 to compromise cloud databases. Always store connection strings in a secure <code>.env</code> file!</div>
+          </div>
+
+          <div class="speaker-notes-data" style="display:none;">
+            <div data-intro="Introduce Atlas as the platform students will use when they deploy their final full-stack MERN project online to Render or Vercel."></div>
+            <div data-analogy="Local MongoDB is like saving music files to your laptop's hard drive. Atlas is like Spotify: stored in the cloud, accessible from any device anywhere in the world."></div>
+            <div data-misunderstand="Students often confuse database username/password with their Atlas website login. Explain that database users are created specifically inside the Atlas Security tab."></div>
+            <div data-example="Show the IP whitelist step: if you don't add your current IP address (or 0.0.0.0/0), Atlas will block all incoming connections."></div>
+            <div data-question="Why should you never commit your MongoDB Atlas connection string to a public GitHub repository?"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           PART 8 — DATABASE & COLLECTION MANAGEMENT
+           ==================================================================== -->
+
+      <!-- SLIDE 17: Creating & Dropping Databases & Collections -->
+      <section class="slide" data-section="Part 8: DB Management" data-title="Creating & Dropping DBs and Collections">
+        <div class="slide-content-container">
+          <div class="breadcrumb-wrap">
+            <span>MongoDB Week</span> &rsaquo; <span>Management</span> &rsaquo; <span class="active">Create & Drop</span>
+          </div>
+
+          <div class="slide-title-block">
+            <span class="slide-tag tag-orange">28 • DB Operations</span>
+            <h1 class="slide-main-title">Database &amp; Collection Management</h1>
+            <p class="slide-subtitle">Creating, inspecting, and dropping collections and databases.</p>
+          </div>
+
+          <div class="grid-2">
+            <!-- Creation -->
+            <div class="card">
+              <div class="card-header">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><plus-circle/><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+                Creating Databases &amp; Collections
+              </div>
+              <div class="code-block">
+                <pre class="code-content"><span class="com">// Switch or prepare database</span>
+<span class="prompt">test&gt;</span> <span class="cmd">use school</span>
+
+<span class="com">// Option A: Explicit Collection Creation</span>
+<span class="prompt">school&gt;</span> <span class="cmd">db.createCollection</span>(<span class="str">"students"</span>)
+<span class="str">{ ok: 1 }</span>
+
+<span class="com">// Option B: Implicit Creation on First Insert</span>
+<span class="prompt">school&gt;</span> <span class="cmd">db.courses.insertOne</span>({ <span class="key">title</span>: <span class="str">"MERN"</span> })
+<span class="str">{ acknowledged: true, insertedId: ObjectId(...) }</span>
+
+<span class="com">// Verify collections</span>
+<span class="prompt">school&gt;</span> <span class="cmd">show collections</span>
+<span class="str">courses</span>
+<span class="str">students</span></pre>
+              </div>
+            </div>
+
+            <!-- Dropping / Destruction -->
+            <div class="card">
+              <div class="card-header">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><trash-2/><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/></svg>
+                Dropping Collections &amp; Databases
+              </div>
+              <div class="code-block">
+                <pre class="code-content"><span class="com">// Drop a specific collection (and all its documents)</span>
+<span class="prompt">school&gt;</span> <span class="cmd">db.students.drop</span>()
+<span class="num">true</span>
+
+<span class="com">// Drop the entire active database</span>
+<span class="prompt">school&gt;</span> <span class="cmd">db.dropDatabase</span>()
+<span class="str">{ ok: 1, dropped: "school" }</span></pre>
+              </div>
+
+              <div class="callout danger" style="margin-top: 0.6rem;">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><alert-circle/><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                <div><strong>DESTRUCTIVE OPERATION WARNING:</strong><br>Dropping a database or collection is <strong>permanent and irreversible</strong>. There is no Recycle Bin or Undo button! Always double-check <code>db</code> before dropping.</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="speaker-notes-data" style="display:none;">
+            <div data-intro="Teach students how to clean up their test databases using drop() and dropDatabase()."></div>
+            <div data-analogy="Dropping a collection is like throwing an entire filing cabinet folder into an incinerator."></div>
+            <div data-misunderstand="Students sometimes think dropDatabase() requires passing the database name inside the parentheses. Clarify that it drops whatever database you are currently inside (use db)."></div>
+            <div data-example="Create a temporary db use tempdb, insert 1 record, verify with show dbs, drop it with db.dropDatabase(), and show it disappeared."></div>
+            <div data-question="What does db.students.drop() return if the collection existed and was deleted? (Answer: true)."></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           PART 9 — MONGODB DATA TYPES
+           ==================================================================== -->
+
+      <!-- SLIDE 18: Common MongoDB BSON Data Types -->
+      <section class="slide" data-section="Part 9: Data Types" data-title="MongoDB Data Types">
+        <div class="slide-content-container">
+          <div class="breadcrumb-wrap">
+            <span>MongoDB Week</span> &rsaquo; <span>Data Types</span> &rsaquo; <span class="active">BSON Types</span>
+          </div>
+
+          <div class="slide-title-block">
+            <span class="slide-tag">34 • Data Types</span>
+            <h1 class="slide-main-title">MongoDB BSON Data Types</h1>
+            <p class="slide-subtitle">The primary data types supported in MongoDB documents for MERN developers.</p>
+          </div>
+
+          <div class="grid-3" style="font-size: 0.84rem;">
+            <div class="card">
+              <strong style="color: var(--mongo-green);">1. String</strong>
+              <p style="color: var(--text-muted); font-size: 0.78rem; margin: 0.2rem 0;">UTF-8 text values.</p>
+              <pre class="code-content" style="background: var(--bg-main); padding: 0.4rem; border-radius: 4px; font-size: 0.75rem;"><span class="key">"name"</span>: <span class="str">"Mubashir"</span></pre>
+            </div>
+
+            <div class="card">
+              <strong style="color: var(--mongo-green);">2. Number (Integer / Double)</strong>
+              <p style="color: var(--text-muted); font-size: 0.78rem; margin: 0.2rem 0;">Whole integers &amp; floating points.</p>
+              <pre class="code-content" style="background: var(--bg-main); padding: 0.4rem; border-radius: 4px; font-size: 0.75rem;"><span class="key">"age"</span>: <span class="num">23</span>, <span class="key">"price"</span>: <span class="num">999.99</span></pre>
+            </div>
+
+            <div class="card">
+              <strong style="color: var(--mongo-green);">3. Boolean</strong>
+              <p style="color: var(--text-muted); font-size: 0.78rem; margin: 0.2rem 0;">True or false flags.</p>
+              <pre class="code-content" style="background: var(--bg-main); padding: 0.4rem; border-radius: 4px; font-size: 0.75rem;"><span class="key">"isActive"</span>: <span class="num">true</span></pre>
+            </div>
+
+            <div class="card">
+              <strong style="color: var(--mongo-green);">4. Null</strong>
+              <p style="color: var(--text-muted); font-size: 0.78rem; margin: 0.2rem 0;">Intentionally empty value.</p>
+              <pre class="code-content" style="background: var(--bg-main); padding: 0.4rem; border-radius: 4px; font-size: 0.75rem;"><span class="key">"middleName"</span>: <span class="num">null</span></pre>
+            </div>
+
+            <div class="card">
+              <strong style="color: var(--mongo-green);">5. Array</strong>
+              <p style="color: var(--text-muted); font-size: 0.78rem; margin: 0.2rem 0;">Ordered list of elements.</p>
+              <pre class="code-content" style="background: var(--bg-main); padding: 0.4rem; border-radius: 4px; font-size: 0.75rem;"><span class="key">"skills"</span>: [<span class="str">"React"</span>, <span class="str">"Node"</span>]</pre>
+            </div>
+
+            <div class="card">
+              <strong style="color: var(--mongo-green);">6. Embedded Document (Object)</strong>
+              <p style="color: var(--text-muted); font-size: 0.78rem; margin: 0.2rem 0;">Nested document object.</p>
+              <pre class="code-content" style="background: var(--bg-main); padding: 0.4rem; border-radius: 4px; font-size: 0.75rem;"><span class="key">"address"</span>: { <span class="key">"city"</span>: <span class="str">"Calicut"</span> }</pre>
+            </div>
+
+            <div class="card">
+              <strong style="color: var(--mongo-green);">7. ObjectId</strong>
+              <p style="color: var(--text-muted); font-size: 0.78rem; margin: 0.2rem 0;">12-byte unique primary key.</p>
+              <pre class="code-content" style="background: var(--bg-main); padding: 0.4rem; border-radius: 4px; font-size: 0.75rem;"><span class="key">"_id"</span>: <span class="fn">ObjectId</span>(<span class="str">"65f..."</span>)</pre>
+            </div>
+
+            <div class="card">
+              <strong style="color: var(--mongo-green);">8. Date</strong>
+              <p style="color: var(--text-muted); font-size: 0.78rem; margin: 0.2rem 0;">64-bit integer timestamp.</p>
+              <pre class="code-content" style="background: var(--bg-main); padding: 0.4rem; border-radius: 4px; font-size: 0.75rem;"><span class="key">"createdAt"</span>: <span class="kw">new</span> <span class="fn">Date</span>()</pre>
+            </div>
+
+            <div class="card" style="background: var(--bg-highlight); border-color: var(--mongo-green-border);">
+              <strong style="color: var(--mongo-green);">Document Embedding</strong>
+              <p style="font-size: 0.78rem; color: var(--text-muted); margin-top: 0.2rem;">
+                MongoDB allows nesting objects and arrays inside documents up to <strong>100 levels deep</strong>!
+              </p>
+            </div>
+          </div>
+
+          <div class="speaker-notes-data" style="display:none;">
+            <div data-intro="Walk through the common BSON data types students will use daily."></div>
+            <div data-analogy="Embedded documents are like Russian nesting dolls (matryoshka): you open one document, and another fully formed document lives inside it."></div>
+            <div data-misunderstand="Students often store dates as strings like 'March 15'. Show them that storing as new Date() lets MongoDB sort and filter by year, month, or range."></div>
+            <div data-example="Show { address: { city: 'Calicut', state: 'Kerala' } } and how we will query it using dot notation address.city later."></div>
+            <div data-question="Can an array in a MongoDB document hold different data types, like ['React', 2026, true]? (Answer: Yes, MongoDB arrays are flexible!)"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           PART 10 — CRUD OPERATIONS (THE HEART OF MONGODB)
+           ==================================================================== -->
+
+      <!-- SLIDE 19: What is CRUD? -->
+      <section class="slide" data-section="Part 10: CRUD Operations" data-title="What is CRUD?">
+        <div class="slide-content-container">
+          <div class="breadcrumb-wrap">
+            <span>MongoDB Week</span> &rsaquo; <span>CRUD</span> &rsaquo; <span class="active">Overview</span>
+          </div>
+
+          <div class="slide-title-block">
+            <span class="slide-tag tag-green">43 • Core Operations</span>
+            <h1 class="slide-main-title">What is CRUD? (The Heart of Databases)</h1>
+            <p class="slide-subtitle">The four foundational operations that power every web application on the internet.</p>
+          </div>
+
+          <div class="table-container">
+            <table class="comp-table">
+              <thead>
+                <tr>
+                  <th style="width: 100px;">Operation</th>
+                  <th>Action</th>
+                  <th>MongoDB Shell Methods</th>
+                  <th>Real-World Everyday Example</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong style="color: var(--mongo-green); font-size: 1rem;">C &rarr; Create</strong></td>
+                  <td>Insert new documents</td>
+                  <td><code>insertOne()</code><br><code>insertMany()</code></td>
+                  <td>User registers a new account / Posts a photo</td>
+                </tr>
+                <tr>
+                  <td><strong style="color: #0284C7; font-size: 1rem;">R &rarr; Read</strong></td>
+                  <td>Query and fetch documents</td>
+                  <td><code>find()</code><br><code>findOne()</code></td>
+                  <td>Browsing products on Amazon / Reading a blog</td>
+                </tr>
+                <tr>
+                  <td><strong style="color: #D97706; font-size: 1rem;">U &rarr; Update</strong></td>
+                  <td>Modify existing documents</td>
+                  <td><code>updateOne()</code><br><code>updateMany()</code></td>
+                  <td>Changing your profile picture / Increasing item quantity</td>
+                </tr>
+                <tr>
+                  <td><strong style="color: #DC2626; font-size: 1rem;">D &rarr; Delete</strong></td>
+                  <td>Remove documents permanently</td>
+                  <td><code>deleteOne()</code><br><code>deleteMany()</code></td>
+                  <td>Deleting a comment / Canceling an order</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="speaker-notes-data" style="display:none;">
+            <div data-intro="Introduce CRUD as the universal acronym of software engineering. Every app (Instagram, Netflix, Uber) is essentially a CRUD app over a database."></div>
+            <div data-analogy="CRUD is like managing your contacts list on your phone: Create a contact, Read/search a contact, Update their phone number, Delete old contacts."></div>
+            <div data-misunderstand="Students sometimes think there are 50 different primary database operations. Reassure them that everything boils down to these 4."></div>
+            <div data-example="Instagram: Register (Create), View Feed (Read), Edit Bio (Update), Delete Post (Delete)."></div>
+            <div data-question="What does the letter 'U' stand for in CRUD, and which MongoDB shell methods perform it?"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SLIDE 20: Insert Operations (insertOne & insertMany) -->
+      <section class="slide" data-section="Part 10: CRUD Operations" data-title="Insert Operations">
+        <div class="slide-content-container">
+          <div class="breadcrumb-wrap">
+            <span>MongoDB Week</span> &rsaquo; <span>CRUD</span> &rsaquo; <span class="active">Create (Insert)</span>
+          </div>
+
+          <div class="slide-title-block">
+            <span class="slide-tag tag-green">44 • Insert</span>
+            <h1 class="slide-main-title">Insert Operations: insertOne() &amp; insertMany()</h1>
+            <p class="slide-subtitle">Inserting individual records and batch inserting arrays of documents.</p>
+          </div>
+
+          <div class="grid-2">
+            <!-- insertOne -->
+            <div class="card">
+              <div class="card-header">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><plus/><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                1. insertOne(document)
+              </div>
+              <p style="font-size: 0.84rem; color: var(--text-muted); margin-bottom: 0.4rem;">
+                Inserts a single document object into the collection:
+              </p>
+              <div class="code-block">
+                <pre class="code-content"><span class="prompt">school&gt;</span> <span class="cmd">db.students.insertOne</span>({
+  <span class="key">name</span>: <span class="str">"Mubashir"</span>,
+  <span class="key">age</span>: <span class="num">23</span>,
+  <span class="key">course</span>: <span class="str">"MERN"</span>
+})
+
+<span class="str">{</span>
+  <span class="key">acknowledged</span>: <span class="num">true</span>,
+  <span class="key">insertedId</span>: <span class="fn">ObjectId</span>(<span class="str">"65f1c4e9a8b7c6d5e4f3a2b1"</span>)
+<span class="str">}</span></pre>
+              </div>
+              <div style="font-size: 0.78rem; color: var(--success); margin-top: 0.4rem;">
+                ✓ MongoDB automatically returns the newly generated <code>insertedId</code>!
+              </div>
+            </div>
+
+            <!-- insertMany -->
+            <div class="card">
+              <div class="card-header">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><layers/><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>
+                2. insertMany([ doc1, doc2, ... ])
+              </div>
+              <p style="font-size: 0.84rem; color: var(--text-muted); margin-bottom: 0.4rem;">
+                Inserts an array of multiple documents in one round-trip:
+              </p>
+              <div class="code-block">
+                <pre class="code-content"><span class="prompt">school&gt;</span> <span class="cmd">db.students.insertMany</span>([
+  { <span class="key">name</span>: <span class="str">"John"</span>, <span class="key">age</span>: <span class="num">22</span>, <span class="key">course</span>: <span class="str">"MERN"</span> },
+  { <span class="key">name</span>: <span class="str">"Sarah"</span>, <span class="key">age</span>: <span class="num">24</span>, <span class="key">course</span>: <span class="str">"Python"</span> },
+  { <span class="key">name</span>: <span class="str">"Alex"</span>, <span class="key">age</span>: <span class="num">21</span>, <span class="key">course</span>: <span class="str">"MERN"</span> }
+])
+
+<span class="str">{</span>
+  <span class="key">acknowledged</span>: <span class="num">true</span>,
+  <span class="key">insertedIds</span>: {
+    <span class="str">'0'</span>: <span class="fn">ObjectId</span>(<span class="str">"..."</span>),
+    <span class="str">'1'</span>: <span class="fn">ObjectId</span>(<span class="str">"..."</span>),
+    <span class="str">'2'</span>: <span class="fn">ObjectId</span>(<span class="str">"..."</span>)
+  }
+<span class="str">}</span></pre>
+              </div>
+            </div>
+          </div>
+
+          <div class="speaker-notes-data" style="display:none;">
+            <div data-intro="Teach insertOne and insertMany syntax. Emphasize square brackets [] for insertMany."></div>
+            <div data-analogy="insertOne is buying 1 ticket at the movie counter. insertMany is buying a group pass for 10 friends with 1 payment transaction."></div>
+            <div data-misunderstand="Students often forget the array brackets in insertMany: db.students.insertMany({ a: 1 }, { b: 2 }) throws an error because it expects an array [{}, {}]!"></div>
+            <div data-example="Show the output acknowledging the insert and displaying the generated ObjectIds."></div>
+            <div data-question="Why is running insertMany([doc1, doc2, doc3]) faster than running insertOne() three separate times? (Answer: Only 1 network round-trip!)"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SLIDE 21: Read Operations (find & findOne) -->
+      <section class="slide" data-section="Part 10: CRUD Operations" data-title="Read Operations">
+        <div class="slide-content-container">
+          <div class="breadcrumb-wrap">
+            <span>MongoDB Week</span> &rsaquo; <span>CRUD</span> &rsaquo; <span class="active">Read (Query)</span>
+          </div>
+
+          <div class="slide-title-block">
+            <span class="slide-tag tag-blue">46 • Read</span>
+            <h1 class="slide-main-title">Read Operations: find() &amp; findOne()</h1>
+            <p class="slide-subtitle">Retrieving multiple matching documents or a single document from a collection.</p>
+          </div>
+
+          <div class="grid-2">
+            <!-- find() -->
+            <div class="card">
+              <div class="card-header">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><search/><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                find(filter) &rarr; Returns All Matches
+              </div>
+              <p style="font-size: 0.84rem; color: var(--text-muted); margin-bottom: 0.4rem;">
+                Returns a cursor to <strong>all documents</strong> that match the criteria:
+              </p>
+              <div class="code-block">
+                <pre class="code-content"><span class="com">// Empty filter {} returns ALL documents</span>
+<span class="prompt">school&gt;</span> <span class="cmd">db.students.find</span>()
+
+<span class="com">// Filter by exact field match</span>
+<span class="prompt">school&gt;</span> <span class="cmd">db.students.find</span>({ <span class="key">course</span>: <span class="str">"MERN"</span> })
+
+<span class="com">// Filter by number</span>
+<span class="prompt">school&gt;</span> <span class="cmd">db.students.find</span>({ <span class="key">age</span>: <span class="num">23</span> })</pre>
+              </div>
+              <div style="font-size: 0.78rem; color: var(--text-muted); margin-top: 0.4rem;">
+                If multiple documents match, <code>find()</code> returns all of them.
+              </div>
+            </div>
+
+            <!-- findOne() -->
+            <div class="card">
+              <div class="card-header">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><file-text/><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+                findOne(filter) &rarr; Returns ONE Document
+              </div>
+              <p style="font-size: 0.84rem; color: var(--text-muted); margin-bottom: 0.4rem;">
+                Returns only the <strong>first matching document object</strong> (not a cursor):
+              </p>
+              <div class="code-block">
+                <pre class="code-content"><span class="com">// Finds single student by unique name or email</span>
+<span class="prompt">school&gt;</span> <span class="cmd">db.students.findOne</span>({ <span class="key">name</span>: <span class="str">"Mubashir"</span> })
+
+<span class="str">{</span>
+  <span class="key">"_id"</span>: <span class="fn">ObjectId</span>(<span class="str">"..."</span>),
+  <span class="key">"name"</span>: <span class="str">"Mubashir"</span>,
+  <span class="key">"age"</span>: <span class="num">23</span>,
+  <span class="key">"course"</span>: <span class="str">"MERN"</span>
+<span class="str">}</span></pre>
+              </div>
+              <div style="font-size: 0.78rem; color: var(--primary); margin-top: 0.4rem;">
+                If no match is found, <code>findOne()</code> returns <code>null</code>.
+              </div>
+            </div>
+          </div>
+
+          <div class="speaker-notes-data" style="display:none;">
+            <div data-intro="Explain the difference between find() (returns a list/cursor) and findOne() (returns one document object)."></div>
+            <div data-analogy="find() is like searching Google for 'pizza': you get a list of 50 pizza shops. findOne() is like asking for the specific address of Domino's Pizza on 5th Street."></div>
+            <div data-misunderstand="Students often expect find() to return null when empty. Explain that find() returns an empty cursor/array [], while findOne() returns null."></div>
+            <div data-example="Run db.students.findOne({ name: 'NonExistent' }) and show that it outputs null."></div>
+            <div data-question="When verifying if an email already exists during user signup, should you use find() or findOne()? Why?"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SLIDE 22: Update Operations (updateOne, updateMany, $set) -->
+      <section class="slide" data-section="Part 10: CRUD Operations" data-title="Update Operations">
+        <div class="slide-content-container">
+          <div class="breadcrumb-wrap">
+            <span>MongoDB Week</span> &rsaquo; <span>CRUD</span> &rsaquo; <span class="active">Update</span>
+          </div>
+
+          <div class="slide-title-block">
+            <span class="slide-tag tag-orange">50 • Update</span>
+            <h1 class="slide-main-title">Update Operations: updateOne() &amp; updateMany()</h1>
+            <p class="slide-subtitle">Modifying existing document fields using atomic update operators.</p>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><edit-3/><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+              The 2-Argument Update Formula
+            </div>
+            <p style="font-size: 0.9rem; color: var(--text-main); line-height: 1.6;">
+              Every update method requires two essential arguments: <code>db.collection.updateOne(<strong>filter</strong>, <strong>updatePayload</strong>)</code>
+            </p>
+            <div class="diagram-container" style="background: var(--bg-main); padding: 0.75rem;">
+              <div style="font-size: 0.85rem; font-weight: bold; font-family: var(--font-mono);">
+                <span style="color: var(--blue);">1. Filter: Which document(s)?</span> &nbsp; &rarr; &nbsp; <span style="color: var(--mongo-green);">2. Operator ($set): What should change?</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="grid-2" style="margin-top: 0.5rem;">
+            <!-- updateOne -->
+            <div class="card">
+              <div class="card-header">updateOne({ filter }, { $set: { ... } })</div>
+              <div class="code-block">
+                <pre class="code-content"><span class="com">// Updates age of ONE student named Mubashir</span>
+<span class="prompt">school&gt;</span> <span class="cmd">db.students.updateOne</span>(
+  { <span class="key">name</span>: <span class="str">"Mubashir"</span> }, <span class="com">// 1. Filter</span>
+  { <span class="op">$set</span>: { <span class="key">age</span>: <span class="num">24</span> } }  <span class="com">// 2. Update</span>
+)
+
+<span class="str">{ acknowledged: true, matchedCount: 1, modifiedCount: 1 }</span></pre>
+              </div>
+            </div>
+
+            <!-- updateMany -->
+            <div class="card">
+              <div class="card-header">updateMany({ filter }, { $set: { ... } })</div>
+              <div class="code-block">
+                <pre class="code-content"><span class="com">// Updates status of ALL MERN students</span>
+<span class="prompt">school&gt;</span> <span class="cmd">db.students.updateMany</span>(
+  { <span class="key">course</span>: <span class="str">"MERN"</span> },
+  { <span class="op">$set</span>: { <span class="key">status</span>: <span class="str">"active"</span> } }
+)
+
+<span class="str">{ acknowledged: true, matchedCount: 3, modifiedCount: 3 }</span></pre>
+              </div>
+            </div>
+          </div>
+
+          <div class="callout danger" style="margin-top: 0.4rem;">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><alert-triangle/><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+            <div><strong>WARNING: Never forget the update operator!</strong> Writing <code>db.students.updateOne({ name: "John" }, { age: 24 })</code> without <code>$set</code> will throw an error in modern MongoDB to prevent accidental document overwrite!</div>
+          </div>
+
+          <div class="speaker-notes-data" style="display:none;">
+            <div data-intro="Walk through the 2 arguments of update: filter first, update payload second."></div>
+            <div data-analogy="Filter is like the address on an envelope (where to deliver). $set is like the letter inside (what to do)."></div>
+            <div data-misunderstand="Students constantly forget $set: db.users.updateOne({ name: 'John' }, { age: 25 }). Emphasize that $set is mandatory to tell MongoDB you are updating a specific field."></div>
+            <div data-example="Show matchedCount vs modifiedCount: if age was already 24, matchedCount is 1, but modifiedCount is 0 because no change was needed!"></div>
+            <div data-question="If matchedCount is 1 but modifiedCount is 0, did MongoDB find the document? Why wasn't it modified?"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SLIDE 23: Basic Update Operators ($set, $inc, $unset) -->
+      <section class="slide" data-section="Part 10: CRUD Operations" data-title="Update Operators: $set, $inc, $unset">
+        <div class="slide-content-container">
+          <div class="breadcrumb-wrap">
+            <span>MongoDB Week</span> &rsaquo; <span>CRUD</span> &rsaquo; <span class="active">Update Operators</span>
+          </div>
+
+          <div class="slide-title-block">
+            <span class="slide-tag tag-orange">52 • Operators</span>
+            <h1 class="slide-main-title">Core Update Operators: $set, $inc &amp; $unset</h1>
+            <p class="slide-subtitle">Modifying, incrementing numbers, and removing specific fields atomically.</p>
+          </div>
+
+          <div class="grid-3">
+            <!-- $set -->
+            <div class="card">
+              <div class="card-header">
+                <span class="state-badge" style="border-color: var(--mongo-green); color: var(--mongo-green);">$set</span>
+                Modify or Add Field
+              </div>
+              <p style="font-size: 0.82rem; color: var(--text-muted); margin-bottom: 0.4rem;">
+                Updates an existing field value, or <strong>adds the field</strong> if it doesn't exist yet:
+              </p>
+              <div class="code-block" style="font-size: 0.74rem;">
+                <pre class="code-content"><span class="prompt">db.users.updateOne</span>(
+  { <span class="key">_id</span>: <span class="num">1</span> },
+  {
+    <span class="op">$set</span>: {
+      <span class="key">age</span>: <span class="num">25</span>,
+      <span class="key">city</span>: <span class="str">"Calicut"</span>
+    }
+  }
+)</pre>
+              </div>
+            </div>
+
+            <!-- $inc -->
+            <div class="card">
+              <div class="card-header">
+                <span class="state-badge" style="border-color: #2563EB; color: #2563EB;">$inc</span>
+                Increment / Decrement
+              </div>
+              <p style="font-size: 0.82rem; color: var(--text-muted); margin-bottom: 0.4rem;">
+                Increments a number by a positive or negative amount atomically:
+              </p>
+              <div class="code-block" style="font-size: 0.74rem;">
+                <pre class="code-content"><span class="com">// Increase stock by 5</span>
+<span class="prompt">db.products.updateOne</span>(
+  { <span class="key">name</span>: <span class="str">"T-Shirt"</span> },
+  { <span class="op">$inc</span>: { <span class="key">stock</span>: <span class="num">5</span> } }
+)
+
+<span class="com">// Decrease stock by 1: use -1</span>
+{ <span class="op">$inc</span>: { <span class="key">stock</span>: <span class="num">-1</span> } }</pre>
+              </div>
+            </div>
+
+            <!-- $unset -->
+            <div class="card">
+              <div class="card-header">
+                <span class="state-badge" style="border-color: #DC2626; color: #DC2626;">$unset</span>
+                Remove Field Entirely
+              </div>
+              <p style="font-size: 0.82rem; color: var(--text-muted); margin-bottom: 0.4rem;">
+                Deletes a specific field key-value pair from the document:
+              </p>
+              <div class="code-block" style="font-size: 0.74rem;">
+                <pre class="code-content"><span class="com">// Deletes the temporaryCode field</span>
+<span class="prompt">db.users.updateOne</span>(
+  { <span class="key">name</span>: <span class="str">"John"</span> },
+  {
+    <span class="op">$unset</span>: {
+      <span class="key">temporaryCode</span>: <span class="str">""</span>
+    }
+  }
+)</pre>
+              </div>
+            </div>
+          </div>
+
+          <div class="speaker-notes-data" style="display:none;">
+            <div data-intro="Introduce $set, $inc, and $unset. Highlight $inc as essential for e-commerce inventory and view counters."></div>
+            <div data-analogy="$set is changing your phone number. $inc is like a tally counter adding 1 passenger to a bus. $unset is taking an eraser and erasing your middle name off the form."></div>
+            <div data-misunderstand="Students often think they have to read the stock from the DB in JavaScript, do stock = stock + 1 in Node, and save it. Explain that $inc does it directly in the database without race conditions!"></div>
+            <div data-example="E-commerce: when a customer buys a shirt, run db.products.updateOne({ name: 'Shirt' }, { $inc: { stock: -1 } })."></div>
+            <div data-question="How do you decrease a number field by 2 using $inc? (Answer: { $inc: { score: -2 } })."></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SLIDE 24: Delete Operations (deleteOne & deleteMany) -->
+      <section class="slide" data-section="Part 10: CRUD Operations" data-title="Delete Operations">
+        <div class="slide-content-container">
+          <div class="breadcrumb-wrap">
+            <span>MongoDB Week</span> &rsaquo; <span>CRUD</span> &rsaquo; <span class="active">Delete</span>
+          </div>
+
+          <div class="slide-title-block">
+            <span class="slide-tag tag-orange">55 • Delete</span>
+            <h1 class="slide-main-title">Delete Operations: deleteOne() &amp; deleteMany()</h1>
+            <p class="slide-subtitle">Removing records permanently from your MongoDB collections.</p>
+          </div>
+
+          <div class="grid-2">
+            <!-- deleteOne -->
+            <div class="card">
+              <div class="card-header">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><trash-2/><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+                1. deleteOne(filter)
+              </div>
+              <p style="font-size: 0.84rem; color: var(--text-muted); margin-bottom: 0.4rem;">
+                Deletes the <strong>first matching document</strong> found:
+              </p>
+              <div class="code-block">
+                <pre class="code-content"><span class="com">// Deletes only one student named Alex</span>
+<span class="prompt">school&gt;</span> <span class="cmd">db.students.deleteOne</span>({ <span class="key">name</span>: <span class="str">"Alex"</span> })
+
+<span class="str">{ acknowledged: true, deletedCount: 1 }</span></pre>
+              </div>
+            </div>
+
+            <!-- deleteMany -->
+            <div class="card">
+              <div class="card-header">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><trash/><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/></svg>
+                2. deleteMany(filter)
+              </div>
+              <p style="font-size: 0.84rem; color: var(--text-muted); margin-bottom: 0.4rem;">
+                Deletes <strong>all documents</strong> that match the criteria:
+              </p>
+              <div class="code-block">
+                <pre class="code-content"><span class="com">// Deletes all students whose status is inactive</span>
+<span class="prompt">school&gt;</span> <span class="cmd">db.students.deleteMany</span>({ <span class="key">status</span>: <span class="str">"inactive"</span> })
+
+<span class="str">{ acknowledged: true, deletedCount: 4 }</span></pre>
+              </div>
+            </div>
+          </div>
+
+          <!-- Severe Warning for deleteMany({}) -->
+          <div class="callout danger" style="margin-top: 0.5rem; border-width: 2px;">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><alert-octagon/><polygon points="7.86 2 16.14 2 22 7.86 22 16.14 16.14 22 7.86 22 2 16.14 2 7.86 7.86 2"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+            <div>
+              <strong style="font-size: 1rem;">CRITICAL DANGER: Accidental Total Collection Wipeout!</strong>
+              <br>Running <code>db.students.deleteMany({})</code> with an empty filter object will <strong>DELETE EVERY SINGLE DOCUMENT IN THE COLLECTION!</strong>
+              <br>Never run <code>deleteMany({})</code> in production without strict confirmation.
+            </div>
+          </div>
+
+          <div class="speaker-notes-data" style="display:none;">
+            <div data-intro="Teach delete operations with strong emphasis on safety."></div>
+            <div data-analogy="deleteOne is like shredding one specific paper bill. deleteMany({}) with empty braces is like throwing the entire filing cabinet into the incinerator."></div>
+            <div data-misunderstand="Students accidentally run deleteMany({}) thinking it requires confirmation. MongoDB does NOT ask 'Are you sure?'—it executes instantly!"></div>
+            <div data-example="Show deletedCount: 1 in the terminal return value."></div>
+            <div data-question="What happens if you run db.users.deleteMany({}) with empty braces?"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           PART 11 — QUERY OPERATORS
+           ==================================================================== -->
+
+      <!-- SLIDE 25: Query Operators Overview -->
+      <section class="slide" data-section="Part 11: Query Operators" data-title="Query Operators Categories">
+        <div class="slide-content-container">
+          <div class="breadcrumb-wrap">
+            <span>MongoDB Week</span> &rsaquo; <span>Query Operators</span> &rsaquo; <span class="active">Categories</span>
+          </div>
+
+          <div class="slide-title-block">
+            <span class="slide-tag">57 • Operators Overview</span>
+            <h1 class="slide-main-title">Introduction to MongoDB Query Operators</h1>
+            <p class="slide-subtitle">Using <code>$</code> operator syntax to filter data beyond simple exact equality matches.</p>
+          </div>
+
+          <div class="grid-4">
+            <div class="card" style="border-top: 4px solid var(--mongo-green);">
+              <h3 style="font-size: 0.95rem; color: var(--dark-navy);">1. Comparison</h3>
+              <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 0.3rem;">Compare field values against criteria.</p>
+              <div style="margin-top: 0.5rem; font-family: var(--font-mono); font-size: 0.78rem; color: var(--mongo-green);">
+                $eq, $ne, $gt, $gte, $lt, $lte, $in, $nin
+              </div>
+            </div>
+
+            <div class="card" style="border-top: 4px solid #2563EB;">
+              <h3 style="font-size: 0.95rem; color: var(--dark-navy);">2. Logical</h3>
+              <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 0.3rem;">Combine multiple query clauses.</p>
+              <div style="margin-top: 0.5rem; font-family: var(--font-mono); font-size: 0.78rem; color: #2563EB;">
+                $and, $or, $not, $nor
+              </div>
+            </div>
+
+            <div class="card" style="border-top: 4px solid #7C3AED;">
+              <h3 style="font-size: 0.95rem; color: var(--dark-navy);">3. Element</h3>
+              <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 0.3rem;">Test field existence or BSON types.</p>
+              <div style="margin-top: 0.5rem; font-family: var(--font-mono); font-size: 0.78rem; color: #7C3AED;">
+                $exists, $type
+              </div>
+            </div>
+
+            <div class="card" style="border-top: 4px solid #D97706;">
+              <h3 style="font-size: 0.95rem; color: var(--dark-navy);">4. Array</h3>
+              <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 0.3rem;">Filter lists and array sizes.</p>
+              <div style="margin-top: 0.5rem; font-family: var(--font-mono); font-size: 0.78rem; color: #D97706;">
+                exact match, $size, $all
+              </div>
+            </div>
+          </div>
+
+          <div class="callout tip" style="margin-top: 0.5rem;">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><info/><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+            <div><strong>The Dollar Sign ($) Rule:</strong> In MongoDB, every built-in operator starts with a dollar sign (e.g. <code>$gt</code>, <code>$set</code>, <code>$in</code>). Forgetting the <code>$</code> is the #1 syntax mistake beginners make!</div>
+          </div>
+
+          <div class="speaker-notes-data" style="display:none;">
+            <div data-intro="Introduce query operators: up until now, we only matched exact equalities ({ age: 23 }). Operators let us do ranges, lists, and logic."></div>
+            <div data-analogy="Operators are like comparison symbols in math: >, <, >=, <=, but written in JSON syntax using $gt, $lt, $gte, $lte."></div>
+            <div data-misunderstand="Students write { age: { gt: 18 } } and wonder why it fails. Remind them: always prefix operators with $!"></div>
+            <div data-example="Products priced over $500: { price: { $gt: 500 } }."></div>
+            <div data-question="Why do all MongoDB operators start with a dollar sign ($)?"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SLIDE 26: Comparison Operators -->
+      <section class="slide" data-section="Part 11: Query Operators" data-title="Comparison Operators">
+        <div class="slide-content-container">
+          <div class="breadcrumb-wrap">
+            <span>MongoDB Week</span> &rsaquo; <span>Operators</span> &rsaquo; <span class="active">Comparison</span>
+          </div>
+
+          <div class="slide-title-block">
+            <span class="slide-tag">57 • Comparison</span>
+            <h1 class="slide-main-title">Comparison Operators: $gt, $gte, $lt, $lte, $ne</h1>
+            <p class="slide-subtitle">Filtering numerical ranges, dates, and inequality conditions.</p>
+          </div>
+
+          <div class="grid-2">
+            <div class="card">
+              <div class="card-header">Comparison Operators Syntax</div>
+              <div class="table-container">
+                <table class="comp-table" style="font-size: 0.82rem;">
+                  <thead>
+                    <tr><th>Operator</th><th>Meaning</th><th>Example</th></tr>
+                  </thead>
+                  <tbody>
+                    <tr><td><code>$eq</code></td><td>Equal to</td><td><code>{ age: { $eq: 23 } }</code></td></tr>
+                    <tr><td><code>$ne</code></td><td>Not equal to</td><td><code>{ age: { $ne: 23 } }</code></td></tr>
+                    <tr><td><code>$gt</code></td><td>Greater than (&gt;)</td><td><code>{ age: { $gt: 18 } }</code></td></tr>
+                    <tr><td><code>$gte</code></td><td>Greater than or equal (&ge;)</td><td><code>{ age: { $gte: 18 } }</code></td></tr>
+                    <tr><td><code>$lt</code></td><td>Less than (&lt;)</td><td><code>{ age: { $lt: 30 } }</code></td></tr>
+                    <tr><td><code>$lte</code></td><td>Less than or equal (&le;)</td><td><code>{ age: { $lte: 30 } }</code></td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-header">Practical Query Examples</div>
+              <div class="code-block" style="font-size: 0.78rem;">
+                <pre class="code-content"><span class="com">// Students strictly older than 21</span>
+<span class="prompt">db.students.find</span>({
+  <span class="key">age</span>: { <span class="op">$gt</span>: <span class="num">21</span> }
+})
+
+<span class="com">// Products with price &lt;= 500</span>
+<span class="prompt">db.products.find</span>({
+  <span class="key">price</span>: { <span class="op">$lte</span>: <span class="num">500</span> }
+})
+
+<span class="com">// Range Query: Price between 100 AND 500</span>
+<span class="prompt">db.products.find</span>({
+  <span class="key">price</span>: { <span class="op">$gte</span>: <span class="num">100</span>, <span class="op">$lte</span>: <span class="num">500</span> }
+})</pre>
+              </div>
+              <div style="font-size: 0.8rem; color: var(--success); margin-top: 0.5rem;">
+                ✓ Notice how range queries combine <code>$gte</code> and <code>$lte</code> inside the same field object!
+              </div>
+            </div>
+          </div>
+
+          <div class="speaker-notes-data" style="display:none;">
+            <div data-intro="Cover the 6 standard comparison operators."></div>
+            <div data-analogy="$gt is like an adult height requirement for a roller coaster: 'You must be > 4 feet tall to ride'."></div>
+            <div data-misunderstand="Students often confuse $gt (strictly greater than) with $gte (greater than or equal). If age is 18, $gt: 18 excludes them, while $gte: 18 includes them."></div>
+            <div data-example="Show the range query: { price: { $gte: 100, $lte: 500 } }. This is how Amazon price filters work."></div>
+            <div data-question="How do you write a query to find all products whose stock is 0 or less?"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SLIDE 27: $in and $nin Operators -->
+      <section class="slide" data-section="Part 11: Query Operators" data-title="$in & $nin Operators">
+        <div class="slide-content-container">
+          <div class="breadcrumb-wrap">
+            <span>MongoDB Week</span> &rsaquo; <span>Operators</span> &rsaquo; <span class="active">$in &amp; $nin</span>
+          </div>
+
+          <div class="slide-title-block">
+            <span class="slide-tag">58 • List Matching</span>
+            <h1 class="slide-main-title">List Matching: $in and $nin</h1>
+            <p class="slide-subtitle">Matching field values against an array of multiple potential choices.</p>
+          </div>
+
+          <div class="grid-2">
+            <!-- $in -->
+            <div class="card">
+              <div class="card-header">
+                <span class="state-badge" style="color: var(--mongo-green); border-color: var(--mongo-green);">$in</span>
+                Matches ANY Value in the List
+              </div>
+              <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.4rem;">
+                Matches documents where the field value matches <strong>at least one</strong> value in the array (OR logic):
+              </p>
+              <div class="code-block" style="font-size: 0.78rem;">
+                <pre class="code-content"><span class="com">// Students whose age is 20 OR 22 OR 24</span>
+<span class="prompt">db.students.find</span>({
+  <span class="key">age</span>: {
+    <span class="op">$in</span>: [<span class="num">20</span>, <span class="num">22</span>, <span class="num">24</span>]
+  }
+})
+
+<span class="com">// Products in Clothing OR Shoes</span>
+<span class="prompt">db.products.find</span>({
+  <span class="key">category</span>: {
+    <span class="op">$in</span>: [<span class="str">"Clothing"</span>, <span class="str">"Shoes"</span>]
+  }
+})</pre>
+              </div>
+            </div>
+
+            <!-- $nin -->
+            <div class="card">
+              <div class="card-header">
+                <span class="state-badge" style="color: #DC2626; border-color: #DC2626;">$nin</span>
+                NOT in the Given List
+              </div>
+              <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.4rem;">
+                Matches documents where the field value does <strong>NOT</strong> match any value in the array:
+              </p>
+              <div class="code-block" style="font-size: 0.78rem;">
+                <pre class="code-content"><span class="com">// Students NOT enrolled in Python or Java</span>
+<span class="prompt">db.students.find</span>({
+  <span class="key">course</span>: {
+    <span class="op">$nin</span>: [<span class="str">"Python"</span>, <span class="str">"Java"</span>]
+  }
+})</pre>
+              </div>
+              <div style="font-size: 0.78rem; color: var(--text-muted); margin-top: 0.5rem;">
+                Documents that don't have the field at all are also matched by <code>$nin</code>.
+              </div>
+            </div>
+          </div>
+
+          <div class="speaker-notes-data" style="display:none;">
+            <div data-intro="Introduce $in as the clean shorthand that saves you from writing 10 different OR statements."></div>
+            <div data-analogy="$in is like checking multiple checkboxes on a shopping filter: [x] Nike [x] Adidas [x] Puma."></div>
+            <div data-misunderstand="Students sometimes pass a single value instead of an array to $in. Always use an array: $in: [1, 2, 3]."></div>
+            <div data-example="Compare writing { $or: [{ status: 'A' }, { status: 'B' }] } vs { status: { $in: ['A', 'B'] } }. $in is much cleaner!"></div>
+            <div data-question="If a student is enrolled in 'MERN', will they be returned by { course: { $nin: ['Python', 'Java'] } }?"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SLIDE 28: Logical Operators ($and, $or, $not) -->
+      <section class="slide" data-section="Part 11: Query Operators" data-title="Logical Operators">
+        <div class="slide-content-container">
+          <div class="breadcrumb-wrap">
+            <span>MongoDB Week</span> &rsaquo; <span>Operators</span> &rsaquo; <span class="active">Logical</span>
+          </div>
+
+          <div class="slide-title-block">
+            <span class="slide-tag tag-blue">60 • Logical</span>
+            <h1 class="slide-main-title">Logical Operators: $and, $or &amp; $not</h1>
+            <p class="slide-subtitle">Combining multiple search conditions using Boolean logic.</p>
+          </div>
+
+          <div class="grid-2">
+            <!-- $and -->
+            <div class="card">
+              <div class="card-header">
+                <span class="state-badge" style="color: #2563EB; border-color: #2563EB;">$and</span>
+                ALL Conditions Must Match
+              </div>
+              <div class="code-block" style="font-size: 0.78rem;">
+                <pre class="code-content"><span class="com">// Must be age > 18 AND course == "MERN"</span>
+<span class="prompt">db.students.find</span>({
+  <span class="op">$and</span>: [
+    { <span class="key">age</span>: { <span class="op">$gt</span>: <span class="num">18</span> } },
+    { <span class="key">course</span>: <span class="str">"MERN"</span> }
+  ]
+})</pre>
+              </div>
+              <div style="font-size: 0.78rem; color: var(--text-muted); margin-top: 0.3rem;">
+                Note: In MongoDB, multiple comma-separated fields in a query already use implicit <code>$and</code>!
+              </div>
+            </div>
+
+            <!-- $or -->
+            <div class="card">
+              <div class="card-header">
+                <span class="state-badge" style="color: var(--mongo-green); border-color: var(--mongo-green);">$or</span>
+                At Least ONE Condition Must Match
+              </div>
+              <div class="code-block" style="font-size: 0.78rem;">
+                <pre class="code-content"><span class="com">// Matches if age == 20 OR age == 25</span>
+<span class="prompt">db.students.find</span>({
+  <span class="op">$or</span>: [
+    { <span class="key">age</span>: <span class="num">20</span> },
+    { <span class="key">age</span>: <span class="num">25</span> }
+  ]
+})</pre>
+              </div>
+              <div style="font-size: 0.78rem; color: var(--text-muted); margin-top: 0.3rem;">
+                Takes an array of condition objects: <code>[ { cond1 }, { cond2 } ]</code>.
+              </div>
+            </div>
+          </div>
+
+          <div class="card" style="margin-top: 0.5rem;">
+            <div class="card-header">
+              <span class="state-badge" style="color: #7C3AED; border-color: #7C3AED;">$not</span>
+              Negates a Condition Expression
+            </div>
+            <div class="code-block" style="font-size: 0.78rem;">
+              <pre class="code-content"><span class="com">// Finds students whose age is NOT greater than 25 (i.e. age <= 25 or age field missing)</span>
+<span class="prompt">db.students.find</span>({
+  <span class="key">age</span>: {
+    <span class="op">$not</span>: { <span class="op">$gt</span>: <span class="num">25</span> }
+  }
+})</pre>
+            </div>
+          </div>
+
+          <div class="speaker-notes-data" style="display:none;">
+            <div data-intro="Introduce $and and $or. Emphasize that both take an array of condition objects."></div>
+            <div data-analogy="$and is like entering a bank vault: you need BOTH the manager's key AND the guard's key. $or is like entering a building: you can use your student ID OR your driver's license."></div>
+            <div data-misunderstand="Students often write { $or: { age: 20, age: 25 } } with an object instead of an array. Remind them: $or and $and MUST be arrays of objects: [{...}, {...}]."></div>
+            <div data-example="Query students who are either in MERN course or are older than 23: db.students.find({ $or: [{ course: 'MERN' }, { age: { $gt: 23 } }] })."></div>
+            <div data-question="If a document matches condition 1 but fails condition 2, will it be returned by an $or query? What about an $and query?"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SLIDE 29: Element ($exists) and Array Queries ($size) -->
+      <section class="slide" data-section="Part 11: Query Operators" data-title="Element & Array Queries">
+        <div class="slide-content-container">
+          <div class="breadcrumb-wrap">
+            <span>MongoDB Week</span> &rsaquo; <span>Operators</span> &rsaquo; <span class="active">Element &amp; Array</span>
+          </div>
+
+          <div class="slide-title-block">
+            <span class="slide-tag">62 • Element & Array</span>
+            <h1 class="slide-main-title">Element &amp; Array Queries: $exists &amp; $size</h1>
+            <p class="slide-subtitle">Verifying field existence and querying inside array lists.</p>
+          </div>
+
+          <div class="grid-2">
+            <!-- $exists -->
+            <div class="card">
+              <div class="card-header">
+                <span class="state-badge" style="color: #7C3AED; border-color: #7C3AED;">$exists</span>
+                Checks Whether a Field Exists
+              </div>
+              <p style="font-size: 0.84rem; color: var(--text-muted); margin-bottom: 0.4rem;">
+                Because MongoDB has a flexible schema, not all documents have the same fields:
+              </p>
+              <div class="code-block" style="font-size: 0.78rem;">
+                <pre class="code-content"><span class="com">// Find users who have a phone field</span>
+<span class="prompt">db.users.find</span>({
+  <span class="key">phone</span>: { <span class="op">$exists</span>: <span class="num">true</span> }
+})
+
+<span class="com">// Find users who do NOT have a phone field</span>
+<span class="prompt">db.users.find</span>({
+  <span class="key">phone</span>: { <span class="op">$exists</span>: <span class="num">false</span> }
+})</pre>
+              </div>
+            </div>
+
+            <!-- Array Query -->
+            <div class="card">
+              <div class="card-header">
+                <span class="state-badge" style="color: var(--mongo-green); border-color: var(--mongo-green);">Array Query</span>
+                Querying Inside Arrays
+              </div>
+              <p style="font-size: 0.84rem; color: var(--text-muted); margin-bottom: 0.4rem;">
+                If a document contains <code>skills: ["React", "Node", "MongoDB"]</code>:
+              </p>
+              <div class="code-block" style="font-size: 0.78rem;">
+                <pre class="code-content"><span class="com">// Matches if "React" is ANY element in skills array</span>
+<span class="prompt">db.users.find</span>({
+  <span class="key">skills</span>: <span class="str">"React"</span>
+})
+
+<span class="com">// $size: Matches array length exact count</span>
+<span class="prompt">db.users.find</span>({
+  <span class="key">skills</span>: { <span class="op">$size</span>: <span class="num">2</span> }
+})</pre>
+              </div>
+              <div style="font-size: 0.78rem; color: var(--success); margin-top: 0.3rem;">
+                ✓ MongoDB automatically unrolls and inspects array contents without needing loops!
+              </div>
+            </div>
+          </div>
+
+          <div class="speaker-notes-data" style="display:none;">
+            <div data-intro="Show how easy it is to query arrays in MongoDB compared to SQL (which requires a separate junction table!)."></div>
+            <div data-analogy="$exists is like checking a job application form to see if the applicant wrote anything in the 'Emergency Contact' box."></div>
+            <div data-misunderstand="Students often think querying an array requires special syntax. Show them that db.users.find({ skills: 'React' }) works immediately!"></div>
+            <div data-example="In SQL, finding users with a skill requires 3 tables and 2 JOINs. In MongoDB, it is 1 simple find query."></div>
+            <div data-question="If a document has skills: ['HTML', 'CSS', 'JS'], does db.users.find({ skills: 'CSS' }) match? (Answer: Yes!)"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SLIDE 30: Query Operators Summary Table -->
+      <section class="slide" data-section="Part 11: Query Operators" data-title="Query Operators Cheat Sheet">
+        <div class="slide-content-container">
+          <div class="breadcrumb-wrap">
+            <span>MongoDB Week</span> &rsaquo; <span>Reference</span> &rsaquo; <span class="active">Summary Cheat Sheet</span>
+          </div>
+
+          <div class="slide-title-block">
+            <span class="slide-tag">64 • Quick Reference</span>
+            <h1 class="slide-main-title">Query Operators Master Reference Table</h1>
+            <p class="slide-subtitle">A comprehensive cheat sheet of all essential query operators for your projects and interviews.</p>
+          </div>
+
+          <div class="table-container">
+            <table class="comp-table" style="font-size: 0.82rem;">
+              <thead>
+                <tr>
+                  <th>Operator</th>
+                  <th>Category</th>
+                  <th>Meaning / Purpose</th>
+                  <th>Code Example</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><code>$eq</code></td>
+                  <td>Comparison</td>
+                  <td>Matches values that are equal to a specified value</td>
+                  <td><code>{ age: { $eq: 23 } }</code></td>
+                </tr>
+                <tr>
+                  <td><code>$ne</code></td>
+                  <td>Comparison</td>
+                  <td>Matches all values that are NOT equal</td>
+                  <td><code>{ status: { $ne: "banned" } }</code></td>
+                </tr>
+                <tr>
+                  <td><code>$gt</code> / <code>$gte</code></td>
+                  <td>Comparison</td>
+                  <td>Greater than (&gt;) / Greater than or equal (&ge;)</td>
+                  <td><code>{ price: { $gte: 100 } }</code></td>
+                </tr>
+                <tr>
+                  <td><code>$lt</code> / <code>$lte</code></td>
+                  <td>Comparison</td>
+                  <td>Less than (&lt;) / Less than or equal (&le;)</td>
+                  <td><code>{ stock: { $lt: 10 } }</code></td>
+                </tr>
+                <tr>
+                  <td><code>$in</code></td>
+                  <td>Comparison</td>
+                  <td>Matches any value specified in an array list</td>
+                  <td><code>{ role: { $in: ["admin", "editor"] } }</code></td>
+                </tr>
+                <tr>
+                  <td><code>$nin</code></td>
+                  <td>Comparison</td>
+                  <td>Matches none of the values specified in an array list</td>
+                  <td><code>{ course: { $nin: ["Java", "C++"] } }</code></td>
+                </tr>
+                <tr>
+                  <td><code>$and</code></td>
+                  <td>Logical</td>
+                  <td>Joins query clauses with a logical AND (all must match)</td>
+                  <td><code>{ $and: [{ a: 1 }, { b: 2 }] }</code></td>
+                </tr>
+                <tr>
+                  <td><code>$or</code></td>
+                  <td>Logical</td>
+                  <td>Joins query clauses with a logical OR (any can match)</td>
+                  <td><code>{ $or: [{ role: "admin" }, { age: { $gt: 30 } }] }</code></td>
+                </tr>
+                <tr>
+                  <td><code>$not</code></td>
+                  <td>Logical</td>
+                  <td>Inverts the effect of a query expression</td>
+                  <td><code>{ age: { $not: { $gt: 25 } } }</code></td>
+                </tr>
+                <tr>
+                  <td><code>$exists</code></td>
+                  <td>Element</td>
+                  <td>Matches documents that possess the specified field</td>
+                  <td><code>{ phone: { $exists: true } }</code></td>
+                </tr>
+                <tr>
+                  <td><code>$size</code></td>
+                  <td>Array</td>
+                  <td>Matches any array field with the specified number of elements</td>
+                  <td><code>{ skills: { $size: 3 } }</code></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="speaker-notes-data" style="display:none;">
+            <div data-intro="Tell students to bookmark or screenshot this cheat sheet. It contains 95% of the operators they will use in their backend careers."></div>
+            <div data-analogy="This table is like the periodic table of MongoDB querying elements."></div>
+            <div data-misunderstand="Remind them not to memorize blindly; understand the categories: comparison, logical, element, array."></div>
+            <div data-example="Point to $in and $or: show that $in is just a cleaner shorthand for an $or on the same field."></div>
+            <div data-question="Which operator would you use to find products whose category is in a list of 5 options? (Answer: $in)."></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           PART 12 — COMPLETE CRUD & WORKFLOW DIAGRAMS
+           ==================================================================== -->
+
+      <!-- SLIDE 31: Complete CRUD & Workflow Architecture -->
+      <section class="slide" data-section="Part 12: Workflows" data-title="Complete CRUD & Workflow Architecture">
+        <div class="slide-content-container">
+          <div class="breadcrumb-wrap">
+            <span>MongoDB Week</span> &rsaquo; <span>Workflows</span> &rsaquo; <span class="active">Complete Flow</span>
+          </div>
+
+          <div class="slide-title-block">
+            <span class="slide-tag tag-green">65 • Master Flow</span>
+            <h1 class="slide-main-title">Complete MongoDB CRUD &amp; Development Workflow</h1>
+            <p class="slide-subtitle">Visualizing the full development lifecycle from local installation to cloud deployment.</p>
+          </div>
+
+          <div class="grid-2">
+            <!-- CRUD Flowchart -->
+            <div class="card">
+              <div class="card-header">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><database/><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg>
+                The 4 Pillars of MongoDB CRUD
+              </div>
+              <div class="diagram-container" style="background: var(--bg-main); padding: 0.75rem;">
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.6rem; width: 100%;">
+                  <div style="background: #ECFDF5; border: 1px solid var(--mongo-green-border); padding: 0.6rem; border-radius: 6px; text-align: center;">
+                    <strong style="color: var(--mongo-green);">CREATE</strong>
+                    <div style="font-size: 0.75rem; font-family: var(--font-mono); margin-top: 0.2rem;">
+                      insertOne()<br>insertMany()
+                    </div>
+                  </div>
+                  <div style="background: #EFF6FF; border: 1px solid #BFDBFE; padding: 0.6rem; border-radius: 6px; text-align: center;">
+                    <strong style="color: #2563EB;">READ</strong>
+                    <div style="font-size: 0.75rem; font-family: var(--font-mono); margin-top: 0.2rem;">
+                      find()<br>findOne()
+                    </div>
+                  </div>
+                  <div style="background: #FFFBEB; border: 1px solid #FDE68A; padding: 0.6rem; border-radius: 6px; text-align: center;">
+                    <strong style="color: #D97706;">UPDATE</strong>
+                    <div style="font-size: 0.75rem; font-family: var(--font-mono); margin-top: 0.2rem;">
+                      updateOne()<br>updateMany() ($set)
+                    </div>
+                  </div>
+                  <div style="background: #FEF2F2; border: 1px solid #FECACA; padding: 0.6rem; border-radius: 6px; text-align: center;">
+                    <strong style="color: #DC2626;">DELETE</strong>
+                    <div style="font-size: 0.75rem; font-family: var(--font-mono); margin-top: 0.2rem;">
+                      deleteOne()<br>deleteMany()
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Complete Workflow Pipeline -->
+            <div class="card">
+              <div class="card-header">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><activity/><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+                The 8-Step Developer Lifecycle
+              </div>
+              <div style="display: flex; flex-direction: column; gap: 0.35rem; font-size: 0.8rem;">
+                <div style="background: var(--bg-main); padding: 0.35rem 0.6rem; border-radius: 4px; border: 1px solid var(--border);">
+                  <strong>1. Install:</strong> Install Community Server &amp; mongosh.
+                </div>
+                <div style="background: var(--bg-main); padding: 0.35rem 0.6rem; border-radius: 4px; border: 1px solid var(--border);">
+                  <strong>2. Start:</strong> Launch local <code>mongod</code> daemon on port 27017.
+                </div>
+                <div style="background: var(--bg-main); padding: 0.35rem 0.6rem; border-radius: 4px; border: 1px solid var(--border);">
+                  <strong>3. Connect:</strong> Open terminal client with <code>mongosh</code> or Compass GUI.
+                </div>
+                <div style="background: var(--bg-main); padding: 0.35rem 0.6rem; border-radius: 4px; border: 1px solid var(--border);">
+                  <strong>4. Context:</strong> Switch database context with <code>use mydatabase</code>.
+                </div>
+                <div style="background: var(--bg-main); padding: 0.35rem 0.6rem; border-radius: 4px; border: 1px solid var(--border);">
+                  <strong>5. Populate:</strong> Execute <code>insertOne()</code> or <code>insertMany()</code>.
+                </div>
+                <div style="background: var(--bg-main); padding: 0.35rem 0.6rem; border-radius: 4px; border: 1px solid var(--border);">
+                  <strong>6. Query:</strong> Filter data using comparison &amp; logical operators.
+                </div>
+                <div style="background: var(--bg-main); padding: 0.35rem 0.6rem; border-radius: 4px; border: 1px solid var(--border);">
+                  <strong>7. Mutate:</strong> Update fields with <code>$set</code> and delete safely.
+                </div>
+                <div style="background: #F0FDF4; padding: 0.35rem 0.6rem; border-radius: 4px; border: 1px solid var(--mongo-green-border); color: var(--mongo-green); font-weight: 600;">
+                  <strong>8. Cloud Deploy:</strong> Connect Node/Express backend to MongoDB Atlas URI!
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="speaker-notes-data" style="display:none;">
+            <div data-intro="Synthesize the entire week into this 8-step pipeline before transitioning into practical coding exercises."></div>
+            <div data-analogy="This is the complete recipe book of database engineering: prep ingredients (setup), cook (CRUD), serve to users (cloud Atlas)."></div>
+            <div data-misunderstand="Remind students that mastering the shell first makes Mongoose and Node.js backend development effortless next week."></div>
+            <div data-example="Walk through the steps verbally from mongosh on their laptop to production deployment."></div>
+            <div data-question="Can anyone summarize the 4 letters of CRUD and name at least 1 method for each?"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           PART 13 — INTERACTIVE SANDBOX & PRACTICAL EXERCISES
+           ==================================================================== -->
+
+      <!-- SLIDE 32: Interactive mongosh CRUD Simulator Sandbox -->
+      <section class="slide" data-section="Part 13: Practicals & Labs" data-title="Live CRUD Simulator Sandbox">
+        <div class="slide-content-container">
+          <div class="breadcrumb-wrap">
+            <span>MongoDB Week</span> &rsaquo; <span>Sandbox</span> &rsaquo; <span class="active">Interactive Simulator</span>
+          </div>
+
+          <div class="slide-title-block">
+            <span class="slide-tag tag-green">Interactive Widget</span>
+            <h1 class="slide-main-title">Interactive mongosh CRUD Simulator</h1>
+            <p class="slide-subtitle">Click the action buttons below to simulate running shell commands and watch live database responses!</p>
+          </div>
+
+          <div class="widget-box">
+            <div class="widget-title-bar">
+              <div class="widget-title">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><terminal/><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg>
+                <span>Interactive Terminal (school database &gt; students collection)</span>
+              </div>
+              <span class="widget-badge">Live Simulator</span>
+            </div>
+
+            <div class="crud-simulator-wrap">
+              <div class="crud-toolbar">
+                <button class="btn-mongo" id="sim-insert-btn">1. insertOne(Mubashir)</button>
+                <button class="btn-mongo" id="sim-insertmany-btn">2. insertMany(John, Sarah, Alex)</button>
+                <button class="btn-outline" id="sim-find-btn">3. find() All</button>
+                <button class="btn-outline" id="sim-findone-btn">4. findOne({ name: "Mubashir" })</button>
+                <button class="btn-outline" id="sim-filter-btn">5. find({ age: { $gt: 21 } })</button>
+                <button class="btn-outline" id="sim-update-btn">6. updateOne({ age: 24 })</button>
+                <button class="btn-outline" id="sim-delete-btn">7. deleteOne(Alex)</button>
+                <button class="btn-outline" style="color: #DC2626; border-color: #FECACA;" id="sim-reset-btn">Reset Database</button>
+              </div>
+
+              <!-- Terminal Window Output -->
+              <div class="terminal-window" id="sim-terminal">
+                <div style="color: #00ED64;">Current database: school</div>
+                <div style="color: var(--term-comment);">// Click any button above to execute simulated mongosh operations...</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="speaker-notes-data" style="display:none;">
+            <div data-intro="Demonstrate this live interactive simulator on the projector. Have students call out which button to click."></div>
+            <div data-analogy="This is a flight simulator for MongoDB commands: you can test inserts, queries, updates, and deletes with zero fear of breaking anything."></div>
+            <div data-misunderstand="Ensure students notice the JSON output formatting returned by MongoDB after every command."></div>
+            <div data-example="Click insertOne, then click find() All to show the document now lives inside the collection. Click updateOne and watch age change from 23 to 24."></div>
+            <div data-question="When you run updateOne with $set, does the document's _id change? (Answer: No, the _id is permanent and immutable!)"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SLIDE 33: Practical Exercises 1, 2 & 3 -->
+      <section class="slide" data-section="Part 13: Practicals & Labs" data-title="Practical Exercises 1–3">
+        <div class="slide-content-container">
+          <div class="breadcrumb-wrap">
+            <span>MongoDB Week</span> &rsaquo; <span>Lab Exercises</span> &rsaquo; <span class="active">Exercises 1–3</span>
+          </div>
+
+          <div class="slide-title-block">
+            <span class="slide-tag tag-green">67 • Classroom Lab</span>
+            <h1 class="slide-main-title">Hands-on Practicals: Exercises 1, 2 &amp; 3</h1>
+            <p class="slide-subtitle">Open mongosh on your laptop and complete the following database challenges.</p>
+          </div>
+
+          <div class="grid-3">
+            <!-- Exercise 1 -->
+            <div class="card">
+              <div class="card-header">
+                <span class="state-badge">Exercise 1</span>
+                Create DB &amp; Insert
+              </div>
+              <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.4rem;">
+                <strong>Goal:</strong> Switch to <code>school</code> database and insert 1 student record.
+              </p>
+              <div class="code-block" style="font-size: 0.72rem;">
+                <pre class="code-content"><span class="prompt">test&gt;</span> <span class="cmd">use school</span>
+
+<span class="prompt">school&gt;</span> <span class="cmd">db.students.insertOne</span>({
+  <span class="key">name</span>: <span class="str">"Mubashir"</span>,
+  <span class="key">age</span>: <span class="num">23</span>,
+  <span class="key">course</span>: <span class="str">"MERN"</span>,
+  <span class="key">isActive</span>: <span class="num">true</span>
+})</pre>
+              </div>
+            </div>
+
+            <!-- Exercise 2 -->
+            <div class="card">
+              <div class="card-header">
+                <span class="state-badge">Exercise 2</span>
+                Batch insertMany
+              </div>
+              <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.4rem;">
+                <strong>Goal:</strong> Insert 3 students in one batch operation.
+              </p>
+              <div class="code-block" style="font-size: 0.72rem;">
+                <pre class="code-content"><span class="prompt">school&gt;</span> <span class="cmd">db.students.insertMany</span>([
+  { <span class="key">name</span>: <span class="str">"John"</span>, <span class="key">age</span>: <span class="num">22</span>, <span class="key">course</span>: <span class="str">"MERN"</span> },
+  { <span class="key">name</span>: <span class="str">"Sarah"</span>, <span class="key">age</span>: <span class="num">24</span>, <span class="key">course</span>: <span class="str">"Python"</span> },
+  { <span class="key">name</span>: <span class="str">"Alex"</span>, <span class="key">age</span>: <span class="num">21</span>, <span class="key">course</span>: <span class="str">"MERN"</span> }
+])</pre>
+              </div>
+            </div>
+
+            <!-- Exercise 3 -->
+            <div class="card">
+              <div class="card-header">
+                <span class="state-badge">Exercise 3</span>
+                Read &amp; Filter Queries
+              </div>
+              <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.4rem;">
+                <strong>Goal:</strong> Write queries for all, single, and age criteria.
+              </p>
+              <div class="code-block" style="font-size: 0.72rem;">
+                <pre class="code-content"><span class="com">// All students</span>
+<span class="prompt">db.students.find</span>()
+
+<span class="com">// Single student</span>
+<span class="prompt">db.students.findOne</span>({ <span class="key">name</span>: <span class="str">"John"</span> })
+
+<span class="com">// Students older than 21</span>
+<span class="prompt">db.students.find</span>({
+  <span class="key">age</span>: { <span class="op">$gt</span>: <span class="num">21</span> }
+})</pre>
+              </div>
+            </div>
+          </div>
+
+          <div class="speaker-notes-data" style="display:none;">
+            <div data-intro="Pause lecture mode and give students 10 minutes to run Exercises 1, 2, and 3 in their terminals."></div>
+            <div data-analogy="Typing queries in the terminal builds muscle memory so you never hesitate during technical coding interviews."></div>
+            <div data-misunderstand="Check that students don't forget curly braces inside insertOne: db.students.insertOne({ ... })."></div>
+            <div data-example="Walk around and inspect student terminal outputs."></div>
+            <div data-question="How many total documents should be inside your students collection after running Exercise 1 and Exercise 2? (Answer: 4 documents)."></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SLIDE 34: Practical Exercises 4, 5 & 6 (Update, Delete, Products Challenge) -->
+      <section class="slide" data-section="Part 13: Practicals & Labs" data-title="Practical Exercises 4–6">
+        <div class="slide-content-container">
+          <div class="breadcrumb-wrap">
+            <span>MongoDB Week</span> &rsaquo; <span>Lab Exercises</span> &rsaquo; <span class="active">Exercises 4–6</span>
+          </div>
+
+          <div class="slide-title-block">
+            <span class="slide-tag tag-green">70 • Lab Challenge</span>
+            <h1 class="slide-main-title">Hands-on Practicals: Exercises 4, 5 &amp; 6</h1>
+            <p class="slide-subtitle">Mastering updates, deletions, and the e-commerce product query challenge.</p>
+          </div>
+
+          <div class="grid-2">
+            <!-- Exercise 4 & 5 -->
+            <div class="card">
+              <div class="card-header">Exercises 4 &amp; 5: Update &amp; Delete</div>
+              <div class="code-block" style="font-size: 0.76rem;">
+                <pre class="code-content"><span class="com">// Exercise 4: Update John's age to 23</span>
+<span class="prompt">school&gt;</span> <span class="cmd">db.students.updateOne</span>(
+  { <span class="key">name</span>: <span class="str">"John"</span> },
+  { <span class="op">$set</span>: { <span class="key">age</span>: <span class="num">23</span> } }
+)
+
+<span class="com">// Update all MERN students to active</span>
+<span class="prompt">school&gt;</span> <span class="cmd">db.students.updateMany</span>(
+  { <span class="key">course</span>: <span class="str">"MERN"</span> },
+  { <span class="op">$set</span>: { <span class="key">status</span>: <span class="str">"active"</span> } }
+)
+
+<span class="com">// Exercise 5: Delete student Alex</span>
+<span class="prompt">school&gt;</span> <span class="cmd">db.students.deleteOne</span>({ <span class="key">name</span>: <span class="str">"Alex"</span> })</pre>
+              </div>
+            </div>
+
+            <!-- Exercise 6: Products Challenge -->
+            <div class="card">
+              <div class="card-header">Exercise 6: E-Commerce Product Challenge</div>
+              <p style="font-size: 0.82rem; color: var(--text-muted); margin-bottom: 0.3rem;">
+                Create <code>products</code> collection with T-Shirt (799, Clothing, stock 20), Jeans (1499, Clothing, stock 10), Cap (399, Accessories, stock 50):
+              </p>
+              <div class="code-block" style="font-size: 0.74rem;">
+                <pre class="code-content"><span class="com">// 1. Products with price &gt; 500:</span>
+<span class="prompt">db.products.find</span>({ <span class="key">price</span>: { <span class="op">$gt</span>: <span class="num">500</span> } })
+
+<span class="com">// 2. Products with stock &lt; 20:</span>
+<span class="prompt">db.products.find</span>({ <span class="key">stock</span>: { <span class="op">$lt</span>: <span class="num">20</span> } })
+
+<span class="com">// 3. Price between 500 and 1500:</span>
+<span class="prompt">db.products.find</span>({ <span class="key">price</span>: { <span class="op">$gte</span>: <span class="num">500</span>, <span class="op">$lte</span>: <span class="num">1500</span> } })
+
+<span class="com">// 4. Category is Clothing OR Accessories:</span>
+<span class="prompt">db.products.find</span>({ <span class="key">category</span>: { <span class="op">$in</span>: [<span class="str">"Clothing"</span>, <span class="str">"Accessories"</span>] } })
+
+<span class="com">// 5. Increment T-Shirt stock by 5:</span>
+<span class="prompt">db.products.updateOne</span>({ <span class="key">name</span>: <span class="str">"T-Shirt"</span> }, { <span class="op">$inc</span>: { <span class="key">stock</span>: <span class="num">5</span> } })</pre>
+              </div>
+            </div>
+          </div>
+
+          <div class="speaker-notes-data" style="display:none;">
+            <div data-intro="Guide students through completing the Product Challenge. This reflects the real queries an e-commerce backend executes."></div>
+            <div data-analogy="This exercise is the exact backend logic behind Amazon's search bar, filter sidebar, and warehouse stock decrement on purchase."></div>
+            <div data-misunderstand="Students sometimes write { price: { $gt: 500 } && { price: { $lt: 1500 } } } using JS syntax. Show that range queries are clean: { price: { $gte: 500, $lte: 1500 } }."></div>
+            <div data-example="Have a volunteer student share their terminal screen to demonstrate solving Challenge 3."></div>
+            <div data-question="How would you write a query to delete 'Cap' from the products collection? (Answer: db.products.deleteOne({ name: 'Cap' }))."></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           PART 14 — COMMON BEGINNER MISTAKES
+           ==================================================================== -->
+
+      <!-- SLIDE 35: Top 10 Common Beginner Mistakes -->
+      <section class="slide" data-section="Part 14: Debugging & Mistakes" data-title="Top 10 Beginner Mistakes">
+        <div class="slide-content-container">
+          <div class="breadcrumb-wrap">
+            <span>MongoDB Week</span> &rsaquo; <span>Debugging</span> &rsaquo; <span class="active">Common Mistakes</span>
+          </div>
+
+          <div class="slide-title-block">
+            <span class="slide-tag tag-orange">73 • Common Pitfalls</span>
+            <h1 class="slide-main-title">Top 10 Common Beginner Mistakes &amp; Fixes</h1>
+            <p class="slide-subtitle">Avoid these critical pitfalls to write professional, bug-free database code.</p>
+          </div>
+
+          <div class="table-container">
+            <table class="comp-table" style="font-size: 0.82rem;">
+              <thead>
+                <tr>
+                  <th style="width: 25px;">#</th>
+                  <th>Mistake</th>
+                  <th>What Goes Wrong?</th>
+                  <th>The Correct Fix</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>1</strong></td>
+                  <td>Confusing Server, mongosh, Compass &amp; Atlas</td>
+                  <td>Trying to type queries into mongod or thinking Compass is the database.</td>
+                  <td><strong>mongod</strong> = Server daemon; <strong>mongosh</strong> = CLI client; <strong>Compass</strong> = GUI viewer; <strong>Atlas</strong> = Cloud service.</td>
+                </tr>
+                <tr>
+                  <td><strong>2</strong></td>
+                  <td>Thinking <code>use school</code> creates persistent disk files</td>
+                  <td>Panicking when <code>show dbs</code> doesn't show the new database.</td>
+                  <td>MongoDB uses <strong>lazy persistence</strong>: DB is created only when the first document is inserted!</td>
+                </tr>
+                <tr>
+                  <td><strong>3</strong></td>
+                  <td>Forgetting the <code>$</code> in Operators</td>
+                  <td>Writing <code>{ age: { gt: 18 } }</code> &rarr; treated as literal field search.</td>
+                  <td>Always prefix operators with <code>$</code>: <code>{ age: { $gt: 18 } }</code>.</td>
+                </tr>
+                <tr>
+                  <td><strong>4</strong></td>
+                  <td>Forgetting <code>$set</code> in Updates</td>
+                  <td>Writing <code>db.users.updateOne({ name: "John" }, { age: 25 })</code>.</td>
+                  <td>Always wrap modifications in an update operator: <code>{ $set: { age: 25 } }</code>!</td>
+                </tr>
+                <tr>
+                  <td><strong>5</strong></td>
+                  <td>Accidental <code>deleteMany({})</code> Total Wipeout</td>
+                  <td>Passing empty filter wipes out every single document in the collection!</td>
+                  <td>Always provide a strict filter condition (e.g. <code>{ status: "archived" }</code>).</td>
+                </tr>
+                <tr>
+                  <td><strong>6</strong></td>
+                  <td>Thinking MongoDB Stores Plain JSON</td>
+                  <td>Believing dates, ObjectIds, and binary data are saved as raw text strings.</td>
+                  <td>MongoDB stores <strong>BSON (Binary JSON)</strong> which supports native timestamps and ObjectIds.</td>
+                </tr>
+                <tr>
+                  <td><strong>7</strong></td>
+                  <td>Treating <code>_id</code> as a Plain String in Queries</td>
+                  <td><code>db.find({ _id: "65f..." })</code> returns <code>null</code>.</td>
+                  <td>Wrap the hex string in the BSON constructor: <code>{ _id: ObjectId("65f...") }</code>.</td>
+                </tr>
+                <tr>
+                  <td><strong>8</strong></td>
+                  <td>Exposing Atlas Connection Strings to GitHub</td>
+                  <td>Cloud database passwords leaked publicly; bots compromise cluster.</td>
+                  <td>Never commit passwords to Git! Always use a local <code>.env</code> file added to <code>.gitignore</code>.</td>
+                </tr>
+                <tr>
+                  <td><strong>9</strong></td>
+                  <td>Believing React Connects Directly to MongoDB</td>
+                  <td>Trying to import MongoDB drivers inside client-side browser files.</td>
+                  <td><strong>React &rarr; Express/Node.js &rarr; MongoDB</strong>. Only the backend touches the database!</td>
+                </tr>
+                <tr>
+                  <td><strong>10</strong></td>
+                  <td>Forgetting Array Brackets in <code>insertMany</code></td>
+                  <td>Writing <code>insertMany({ a: 1 }, { b: 2 })</code> throws a syntax error.</td>
+                  <td>Pass documents inside an array: <code>insertMany([ { a: 1 }, { b: 2 } ])</code>.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="speaker-notes-data" style="display:none;">
+            <div data-intro="Go through each of the 10 mistakes. Ask students to raise hands if they made any during today's lab."></div>
+            <div data-analogy="Mistakes 3, 4, and 7 are the 'grammar mistakes' of MongoDB. Once you know them, your brain spots them instantly."></div>
+            <div data-misunderstand="Highlight Mistake #7 in detail: explain that MongoDB's _id is a 12-byte binary object, so querying it as a raw string will never match."></div>
+            <div data-example="Show the ObjectId('...') conversion error live in the shell."></div>
+            <div data-question="If a document in MongoDB has _id: ObjectId('6501a2...'), why does db.find({ _id: '6501a2...' }) return null?"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           PART 15 — FINAL REVISION & CONCEPT MAP
+           ==================================================================== -->
+
+      <!-- SLIDE 36: Comprehensive Revision Bank -->
+      <section class="slide" data-section="Part 15: Revision & Assessment" data-title="Final Revision Questions">
+        <div class="slide-content-container">
+          <div class="breadcrumb-wrap">
+            <span>MongoDB Week</span> &rsaquo; <span>Assessment</span> &rsaquo; <span class="active">Revision Q&amp;A</span>
+          </div>
+
+          <div class="slide-title-block">
+            <span class="slide-tag tag-green">Assessment</span>
+            <h1 class="slide-main-title">Comprehensive MongoDB Revision Bank</h1>
+            <p class="slide-subtitle">Click any question below to reveal the model answer for classroom review.</p>
+          </div>
+
+          <div class="accordion-list">
+            <!-- Q1 -->
+            <div class="accordion-item">
+              <button class="accordion-trigger">
+                <span>1. What is MongoDB and how does BSON differ from standard JSON?</span>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+              </button>
+              <div class="accordion-content">
+                <strong>Model Answer:</strong> MongoDB is an open-source, NoSQL, document-oriented database system. Unlike plain JSON (which only supports strings, numbers, booleans, arrays, objects, and null), MongoDB internally stores documents in <strong>BSON (Binary JSON)</strong>. BSON provides binary compression for lightning-fast scanning and adds native data types like <strong>Date, ObjectId, Binary data, and 64-bit Integers</strong>.
+              </div>
+            </div>
+
+            <!-- Q2 -->
+            <div class="accordion-item">
+              <button class="accordion-trigger">
+                <span>2. Explain the MongoDB hierarchy: Server &rarr; Database &rarr; Collection &rarr; Document &rarr; Field.</span>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+              </button>
+              <div class="accordion-content">
+                <strong>Model Answer:</strong> A <strong>Server (mongod)</strong> hosts multiple <strong>Databases</strong>. A Database is a container that holds multiple <strong>Collections</strong> (equivalent to SQL tables). A Collection contains multiple <strong>Documents</strong> (individual records up to 16MB, equivalent to SQL rows). A Document contains key-value pairs called <strong>Fields</strong> (equivalent to SQL columns).
+              </div>
+            </div>
+
+            <!-- Q3 -->
+            <div class="accordion-item">
+              <button class="accordion-trigger">
+                <span>3. What is the difference between mongod, mongosh, and MongoDB Compass?</span>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+              </button>
+              <div class="accordion-content">
+                <strong>Model Answer:</strong> <strong>mongod</strong> is the background database daemon server process that manages disk writes and listens on port 27017. <strong>mongosh</strong> is the command-line shell client where developers type interactive queries. <strong>MongoDB Compass</strong> is the official desktop graphical user interface (GUI) for visual data exploration.
+              </div>
+            </div>
+
+            <!-- Q4 -->
+            <div class="accordion-item">
+              <button class="accordion-trigger">
+                <span>4. What is the difference between find() and findOne()? What do they return when empty?</span>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+              </button>
+              <div class="accordion-content">
+                <strong>Model Answer:</strong> <code>find()</code> returns a <strong>cursor</strong> referencing all documents that match the filter; if no documents match, it returns an empty cursor <code>[]</code>. <code>findOne()</code> returns the <strong>first single document object</strong> directly; if no document matches, it returns <code>null</code>.
+              </div>
+            </div>
+
+            <!-- Q5 -->
+            <div class="accordion-item">
+              <button class="accordion-trigger">
+                <span>5. Why must you use $set when updating a document in MongoDB?</span>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+              </button>
+              <div class="accordion-content">
+                <strong>Model Answer:</strong> The <code>$set</code> operator tells MongoDB to update or add specific field key-value pairs without altering the rest of the document. Without <code>$set</code>, modern MongoDB throws an error to prevent accidentally wiping out all other fields in the record.
+              </div>
+            </div>
+
+            <!-- Q6 -->
+            <div class="accordion-item">
+              <button class="accordion-trigger">
+                <span>6. How does MongoDB's _id work and what are the 4 components of an ObjectId?</span>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+              </button>
+              <div class="accordion-content">
+                <strong>Model Answer:</strong> The <code>_id</code> field is the mandatory primary key of every document. The default generated <strong>ObjectId</strong> is a 12-byte binary BSON value composed of: (1) a 4-byte Unix timestamp, (2) a 5-byte random machine and process identifier, and (3) a 3-byte incrementing counter. It guarantees globally unique identification across distributed cloud servers.
+              </div>
+            </div>
+          </div>
+
+          <div class="speaker-notes-data" style="display:none;">
+            <div data-intro="Conduct an oral review with the classroom. Call on different students to answer each question before revealing the model answer."></div>
+            <div data-analogy="Retrieving answers during revision cements the neural pathways needed for technical interview phone screens."></div>
+            <div data-misunderstand="Encourage students to explain concepts in their own plain English words rather than memorizing verbatim."></div>
+            <div data-example="Demonstrate answering Question 1 and Question 5 as if speaking to a hiring manager."></div>
+            <div data-question="Who can answer Question 4 without looking at the screen?"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SLIDE 37: Final Concept Map & Next Steps -->
+      <section class="slide" data-section="Part 15: Revision & Assessment" data-title="Final Concept Map & Next Steps">
+        <div class="slide-content-container" style="text-align: center; justify-content: center; min-height: 80vh;">
+          <div class="slide-title-block">
+            <span class="slide-tag tag-green">Module Complete!</span>
+            <h1 class="slide-main-title" style="font-size: 2.3rem;">MongoDB Fundamentals Mastery Complete</h1>
+            <p class="slide-subtitle" style="font-size: 1.1rem; max-width: 800px; margin: 0.5rem auto 1.5rem auto;">
+              You now understand database architecture, local and cloud tools, BSON types, complete CRUD operations, and advanced query operators.
+            </p>
+          </div>
+
+          <div class="card" style="max-width: 900px; margin: 0 auto; text-align: left; padding: 1.5rem;">
+            <div class="card-header">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><check-circle/><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+              The Grand MongoDB Architecture Map
+            </div>
+            <div class="diagram-container" style="background: var(--bg-main); padding: 1rem; margin-top: 0.5rem;">
+              <div style="font-family: var(--font-mono); font-size: 0.85rem; line-height: 1.8; color: var(--dark-navy);">
+                <strong>MONGODB ECOSYSTEM</strong><br>
+                ├── <strong>Storage:</strong> Database &rarr; Collections &rarr; BSON Documents &rarr; Fields<br>
+                ├── <strong>Tools:</strong> mongod (Server) &bull; mongosh (CLI) &bull; Compass (GUI) &bull; Atlas (Cloud)<br>
+                └── <strong>Operations:</strong> CRUD (<code>insert</code>, <code>find</code>, <code>update</code>, <code>delete</code>) + Operators (<code>$set</code>, <code>$gt</code>, <code>$in</code>, <code>$and</code>)
+              </div>
+            </div>
+
+            <div style="margin-top: 1.25rem; padding: 1rem; background: var(--bg-highlight); border-radius: var(--radius-md); border: 1px solid var(--mongo-green-border);">
+              <h3 style="color: var(--mongo-green); font-size: 0.95rem; font-weight: 700; margin-bottom: 0.25rem;">
+                🚀 Coming Up Next Week in MongoDB &amp; MERN:
+              </h3>
+              <p style="font-size: 0.86rem; color: var(--text-main); line-height: 1.6;">
+                • <strong>Mongoose ODM:</strong> Schemas, strict model validation, pre/post middleware hooks.<br>
+                • <strong>Data Relationships:</strong> Embedding vs Referencing (normalized vs denormalized data).<br>
+                • <strong>Aggregation Pipelines:</strong> Advanced multi-stage analytics (<code>$match</code>, <code>$group</code>, <code>$project</code>, <code>$lookup</code>).<br>
+                • <strong>Express REST API Integration:</strong> Connecting MongoDB to complete Node.js backend routes!
+              </p>
+            </div>
+          </div>
+
+          <div class="speaker-notes-data" style="display:none;">
+            <div data-intro="Congratulate students on completing MongoDB Week! Reiterate that mastering shell CRUD gives them a huge advantage when they learn Mongoose next week."></div>
+            <div data-analogy="They have learned how the database engine works with raw tools (mongosh). Next week, Mongoose will give them automatic power steering and cruise control."></div>
+            <div data-misunderstand="Remind them that Mongoose is just an abstraction over the exact same CRUD methods (find, create, update, delete) they mastered today."></div>
+            <div data-example="Give a quick sneak peek into Mongoose: const user = await User.create({ name: 'John' })."></div>
+            <div data-question="What was the most exciting or surprising concept you learned about MongoDB this week?"></div>
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- Bottom Footer Navigation Bar -->
+    <footer class="bottom-footer">
+      <div class="footer-left">
+        <span class="keyboard-hint"><kbd>&larr;</kbd> <kbd>&rarr;</kbd> Navigate</span>
+        <span class="keyboard-hint"><kbd>Space</kbd> Next</span>
+        <span class="keyboard-hint"><kbd>S</kbd> Teacher Notes</span>
+        <span class="keyboard-hint"><kbd>F</kbd> Fullscreen</span>
+      </div>
+
+      <div class="footer-nav">
+        <button class="nav-btn" id="prev-btn" title="Previous Slide (Left Arrow)">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+          <span>Previous</span>
+        </button>
+
+        <span class="slide-counter" id="slide-counter">Slide 1 of 37</span>
+
+        <button class="nav-btn" id="next-btn" title="Next Slide (Right Arrow or Space)">
+          <span>Next</span>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+        </button>
+      </div>
+
+      <div class="footer-right">
+        <button class="icon-btn" id="first-slide-btn" title="First Slide (Home)">⏮ First</button>
+        <button class="icon-btn" id="last-slide-btn" title="Last Slide (End)">⏭ Last</button>
+      </div>
+    </footer>
+
+    <!-- Overlay for Drawers -->
+    <div class="drawer-overlay" id="drawer-overlay"></div>
+
+    <!-- Table of Contents Drawer (Left) -->
+    <aside class="slide-drawer" id="toc-drawer">
+      <div class="drawer-header">
+        <div class="drawer-title">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+          <span>MongoDB Week Syllabus</span>
+        </div>
+        <button class="drawer-close-btn" id="close-toc-btn" title="Close Drawer (Esc)">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+      <div class="drawer-body" id="toc-list">
+        <!-- Dynamically populated by script.js -->
+      </div>
+    </aside>
+
+    <!-- Teacher Speaker Notes Drawer (Right) -->
+    <aside class="slide-drawer" id="speaker-notes-drawer">
+      <div class="drawer-header">
+        <div class="drawer-title" style="color: #B45309;">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+          <span>Teacher Speaker Notes</span>
+        </div>
+        <button class="drawer-close-btn" id="close-notes-btn" title="Close Drawer (Esc / S)">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+      <div class="drawer-body" id="speaker-notes-content">
+        <!-- Dynamically populated by script.js based on active slide -->
+      </div>
+    </aside>
+
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
