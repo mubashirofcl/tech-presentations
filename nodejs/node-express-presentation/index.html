@@ -1,0 +1,2822 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Node.js & Express.js — Complete Backend Development Masterclass Presentation Deck</title>
+
+  <!-- Google Fonts (Inter + JetBrains Mono) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <!-- Highlight.js for Syntax Highlighting -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/atom-one-dark.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/javascript.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/json.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/bash.min.js"></script>
+
+  <!-- Custom Presentation Stylesheet -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="presentation-container">
+
+  <!-- TOP TOOLBAR -->
+  <header class="top-toolbar">
+    <div class="brand-section">
+      <span class="brand-badge">Node & Express</span>
+      <h1 class="course-title">Backend Development Masterclass</h1>
+      <span class="section-indicator" id="section-indicator">DAY 1 — Fundamentals</span>
+    </div>
+
+    <div class="toolbar-controls">
+      <button class="icon-btn" id="toc-btn" title="Table of Contents">
+        <i data-lucide="list"></i> Table of Contents
+      </button>
+      <button class="icon-btn" id="mentor-btn" title="Toggle Mentor Notes">
+        <i data-lucide="book-open"></i> Mentor Notes
+      </button>
+      <button class="icon-btn" id="fullscreen-btn" title="Toggle Fullscreen">
+        <i data-lucide="maximize"></i> Fullscreen
+      </button>
+    </div>
+  </header>
+
+  <!-- SLIDES VIEWPORT -->
+  <main class="slides-viewport" id="slides-viewport">
+
+    <!-- ===================================================================
+         TITLE & COURSE MAP SLIDES
+         =================================================================== -->
+
+    <!-- SLIDE 1: Main Title Slide -->
+    <section class="slide active" data-day="Course Overview">
+      <div class="slide-header" style="text-align: center; margin-top: 1.5rem;">
+        <span class="slide-tag">Complete Masterclass Series</span>
+        <h1 class="slide-title" style="font-size: 3.2rem; margin-top: 0.5rem; background: linear-gradient(135deg, #2563EB, #0EA5E9); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
+          NODE.JS & EXPRESS.JS
+        </h1>
+        <p class="slide-subtitle" style="font-size: 1.3rem; max-width: 750px; margin: 0.75rem auto 0 auto;">
+          Complete Backend Development Module — From Beginner Concepts to Production REST APIs
+        </p>
+      </div>
+
+      <div class="slide-content" style="max-width: 960px; margin: 1.25rem auto 0 auto; width: 100%;">
+        <div class="grid-3">
+          <div class="card" style="text-align: center;">
+            <div style="font-size: 2.5rem; margin-bottom: 0.5rem; color: var(--primary);"><i data-lucide="cpu"></i></div>
+            <h3 class="card-title" style="justify-content: center;">Node.js Core</h3>
+            <p class="card-text">V8 Engine, Event-Driven Architecture, libuv, Non-blocking I/O & npm ecosystem.</p>
+          </div>
+          <div class="card" style="text-align: center;">
+            <div style="font-size: 2.5rem; margin-bottom: 0.5rem; color: var(--secondary);"><i data-lucide="server"></i></div>
+            <h3 class="card-title" style="justify-content: center;">Express Framework</h3>
+            <p class="card-text">HTTP server, Request-Response pipeline, Middleware, Route Params & Query Params.</p>
+          </div>
+          <div class="card" style="text-align: center;">
+            <div style="font-size: 2.5rem; margin-bottom: 0.5rem; color: var(--success);"><i data-lucide="layers"></i></div>
+            <h3 class="card-title" style="justify-content: center;">Production APIs</h3>
+            <p class="card-text">CRUD REST APIs, Sessions, Cookies, Multer File Uploads, Buffers & Postman Testing.</p>
+          </div>
+        </div>
+
+        <div class="callout tip" style="margin-top: 1.25rem; text-align: center;">
+          <div class="callout-title" style="justify-content: center;"><i data-lucide="sparkles"></i> Teaching Methodology</div>
+          Simple English • WHY before HOW • Real-World Examples • Visual Flow Diagrams • Live Code • Output Prediction • Viva Questions
+        </div>
+      </div>
+
+      <div class="mentor-note" style="display:none;">
+        <div class="mentor-note-card">
+          <strong>MENTOR NOTE:</strong> Welcome the class! Ask students: "Who has written JavaScript before?" Reassure beginners that we start from absolute zero and build up to full backend APIs.
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 2: Course Sitemap / Table of Contents -->
+    <section class="slide" data-day="Syllabus & Map">
+      <div class="slide-header">
+        <span class="slide-tag">Curriculum Sitemap</span>
+        <h2 class="slide-title">13-Day Module Curriculum Roadmap</h2>
+        <p class="slide-subtitle">Interactive overview of all teaching days in this backend course.</p>
+      </div>
+
+      <div class="slide-content">
+        <div class="grid-3" style="gap: 1.1rem;">
+          <div class="card" style="border-left: 4px solid var(--primary);">
+            <div style="font-size: 0.75rem; font-weight: 700; color: var(--primary);">DAY 1</div>
+            <h4 style="font-size: 0.98rem; margin: 0.2rem 0;">Node.js Fundamentals</h4>
+            <p style="font-size: 0.8rem; color: var(--muted);">Runtime environment, V8 engine, libuv, Non-blocking I/O & npm.</p>
+          </div>
+          <div class="card" style="border-left: 4px solid var(--primary);">
+            <div style="font-size: 0.75rem; font-weight: 700; color: var(--primary);">DAY 2</div>
+            <h4 style="font-size: 0.98rem; margin: 0.2rem 0;">Timers, Callbacks & call()</h4>
+            <p style="font-size: 0.8rem; color: var(--muted);">setTimeout, setInterval, setImmediate, Callback hell & call()/apply()/bind().</p>
+          </div>
+          <div class="card" style="border-left: 4px solid var(--primary);">
+            <div style="font-size: 0.75rem; font-weight: 700; color: var(--primary);">DAY 3</div>
+            <h4 style="font-size: 0.98rem; margin: 0.2rem 0;">Promises & async/await</h4>
+            <p style="font-size: 0.8rem; color: var(--muted);">Promise states, chaining, async/await, Promise.all, Promise.race.</p>
+          </div>
+          <div class="card" style="border-left: 4px solid #0284C7; background: #F0F9FF;">
+            <div style="font-size: 0.75rem; font-weight: 700; color: #0284C7;">WORKING SESSION</div>
+            <h4 style="font-size: 0.98rem; margin: 0.2rem 0; color: #0369A1;">Node.js Event Loop Simulator</h4>
+            <p style="font-size: 0.8rem; color: var(--muted);">Interactive Working Model, libuv phases, nextTick, Thread Pool & Quiz.</p>
+          </div>
+          <div class="card" style="border-left: 4px solid var(--secondary);">
+            <div style="font-size: 0.75rem; font-weight: 700; color: var(--secondary);">DAY 4</div>
+            <h4 style="font-size: 0.98rem; margin: 0.2rem 0;">Setting Up Express</h4>
+            <p style="font-size: 0.8rem; color: var(--muted);">Express server setup, HTTP methods (GET, POST), Request-Response.</p>
+          </div>
+          <div class="card" style="border-left: 4px solid var(--secondary);">
+            <div style="font-size: 0.75rem; font-weight: 700; color: var(--secondary);">DAY 5</div>
+            <h4 style="font-size: 0.98rem; margin: 0.2rem 0;">Params & Query</h4>
+            <p style="font-size: 0.8rem; color: var(--muted);">req.params vs req.query, resource identification vs filtering.</p>
+          </div>
+          <div class="card" style="border-left: 4px solid var(--secondary);">
+            <div style="font-size: 0.75rem; font-weight: 700; color: var(--secondary);">DAY 6</div>
+            <h4 style="font-size: 0.98rem; margin: 0.2rem 0;">Implementing CRUD API</h4>
+            <p style="font-size: 0.8rem; color: var(--muted);">REST conventions, HTTP status codes, express.json(), full CRUD API.</p>
+          </div>
+          <div class="card" style="border-left: 4px solid #CBD5E1; background: #F8FAFC;">
+            <div style="font-size: 0.75rem; font-weight: 700; color: var(--muted);">DAY 7</div>
+            <h4 style="font-size: 0.98rem; margin: 0.2rem 0; color: var(--muted);">Topic to be added</h4>
+            <p style="font-size: 0.8rem; color: var(--muted);">Official Day 7 topic placeholder slide.</p>
+          </div>
+          <div class="card" style="border-left: 4px solid var(--success);">
+            <div style="font-size: 0.75rem; font-weight: 700; color: var(--success);">DAY 8</div>
+            <h4 style="font-size: 0.98rem; margin: 0.2rem 0;">User Sessions & Auth</h4>
+            <p style="font-size: 0.8rem; color: var(--muted);">Auth vs Authz, Cookies, express-session, login/logout, protected routes.</p>
+          </div>
+          <div class="card" style="border-left: 4px solid var(--success);">
+            <div style="font-size: 0.75rem; font-weight: 700; color: var(--success);">DAY 9</div>
+            <h4 style="font-size: 0.98rem; margin: 0.2rem 0;">File Uploads with Multer</h4>
+            <p style="font-size: 0.8rem; color: var(--muted);">multipart/form-data, Multer storage engines, req.file & validation.</p>
+          </div>
+          <div class="card" style="border-left: 4px solid var(--warning);">
+            <div style="font-size: 0.75rem; font-weight: 700; color: var(--warning);">DAY 10</div>
+            <h4 style="font-size: 0.98rem; margin: 0.2rem 0;">Buffer in Node.js</h4>
+            <p style="font-size: 0.8rem; color: var(--muted);">Binary data, UTF-8/Hex/Base64, Buffer.from(), memory alloc & streams.</p>
+          </div>
+          <div class="card" style="border-left: 4px solid var(--dark);">
+            <div style="font-size: 0.75rem; font-weight: 700; color: var(--dark);">DAY 11-12</div>
+            <h4 style="font-size: 0.98rem; margin: 0.2rem 0;">Building & Testing API</h4>
+            <p style="font-size: 0.8rem; color: var(--muted);">Postman testing, MVC architecture, centralized error middleware.</p>
+          </div>
+          <div class="card" style="border-left: 4px solid var(--primary);">
+            <div style="font-size: 0.75rem; font-weight: 700; color: var(--primary);">DAY 13</div>
+            <h4 style="font-size: 0.98rem; margin: 0.2rem 0;">Final API Project</h4>
+            <p style="font-size: 0.8rem; color: var(--muted);">User Management REST API with Auth, Upload, Search & Pagination.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================================================================
+         DAY 1 — NODE.JS FUNDAMENTALS
+         =================================================================== -->
+
+    <!-- SLIDE 3: Day 1 Section Title -->
+    <section class="slide" data-day="DAY 1 — Fundamentals">
+      <div class="slide-header" style="text-align: center; margin-top: 3rem;">
+        <span class="slide-tag">DAY 1 MODULE</span>
+        <h1 class="slide-title" style="font-size: 2.8rem; color: var(--primary);">
+          NODE.JS FUNDAMENTALS
+        </h1>
+        <p class="slide-subtitle" style="font-size: 1.2rem;">
+          Overview of Node.js & Why It Is Used in Modern Web Development
+        </p>
+      </div>
+
+      <div class="slide-content" style="max-width: 700px; margin: 2rem auto 0 auto; text-align: center;">
+        <div class="badge-group" style="justify-content: center;">
+          <span class="pill-badge">Runtime Environment</span>
+          <span class="pill-badge">V8 Engine</span>
+          <span class="pill-badge">libuv</span>
+          <span class="pill-badge">Non-blocking I/O</span>
+          <span class="pill-badge">Event Loop</span>
+          <span class="pill-badge">npm & npx</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 4: What is Node.js? -->
+    <section class="slide" data-day="DAY 1 — Fundamentals">
+      <div class="slide-header">
+        <span class="slide-tag">DAY 1 — DEFINITION</span>
+        <h2 class="slide-title">What is Node.js?</h2>
+        <p class="slide-subtitle">Understanding JavaScript outside the web browser environment.</p>
+      </div>
+
+      <div class="slide-content">
+        <div class="grid-2">
+          <div class="col-theory">
+            <div class="card">
+              <h3 class="card-title"><i data-lucide="check-circle"></i> Simple Definition</h3>
+              <p class="card-text">
+                Node.js is an open-source, cross-platform <strong>JavaScript runtime environment</strong> built on Google Chrome's <strong>V8 Engine</strong>.
+              </p>
+            </div>
+
+            <div class="callout remember">
+              <div class="callout-title"><i data-lucide="alert-circle"></i> REMEMBER</div>
+              Node.js does <strong>NOT</strong> make JavaScript a new language. It provides an environment where JavaScript can run on servers!
+            </div>
+
+            <ul class="feature-list">
+              <li class="feature-item">
+                <div class="feature-icon"><i data-lucide="arrow-right"></i></div>
+                <div><strong>Created in 2009:</strong> Created by Ryan Dahl to solve the slowness of traditional web servers (like Apache PHP).</div>
+              </li>
+              <li class="feature-item">
+                <div class="feature-icon"><i data-lucide="arrow-right"></i></div>
+                <div><strong>Full-Stack JS:</strong> Developers can now use JavaScript for BOTH Frontend (React/Vue) and Backend (Node.js).</div>
+              </li>
+            </ul>
+          </div>
+
+          <div class="col-visual">
+            <div class="diagram-container">
+              <div style="font-size: 0.85rem; font-weight: 700; color: var(--muted); margin-bottom: 1rem; text-transform: uppercase;">Browser vs Server Environment</div>
+              
+              <div class="flow-step" style="background:#EFF6FF; border-color:var(--primary);">
+                🌐 Web Browser Environment
+                <div class="sub-text">JavaScript + DOM + window + document + alert()</div>
+              </div>
+              
+              <div style="margin: 0.5rem 0; font-weight: 800; color: var(--primary);">vs</div>
+              
+              <div class="flow-step" style="background:#F0F9FF; border-color:var(--secondary);">
+                ⚡ Node.js Server Environment
+                <div class="sub-text">JavaScript + V8 + File System (fs) + Network (http) + libuv</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="mentor-note" style="display:none;">
+        <div class="mentor-note-card">
+          <strong>MENTOR NOTE:</strong> Ask students: "Can you call <code>window.alert()</code> inside Node.js?" Explain that <code>window</code> belongs to browser HTML, so it does not exist on a backend server!
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 5: Google V8 Engine -->
+    <section class="slide" data-day="DAY 1 — Fundamentals">
+      <div class="slide-header">
+        <span class="slide-tag">DAY 1 — CORE ENGINE</span>
+        <h2 class="slide-title">The V8 JavaScript Engine</h2>
+        <p class="slide-subtitle">How high-level JavaScript code is compiled into ultra-fast machine code.</p>
+      </div>
+
+      <div class="slide-content">
+        <div class="grid-2">
+          <div class="col-theory">
+            <div class="card">
+              <h3 class="card-title"><i data-lucide="zap"></i> What is V8?</h3>
+              <p class="card-text">
+                V8 is Google's open-source high-performance JavaScript engine written in C++. It parses JavaScript and compiles it directly into native machine code (0s and 1s) using <strong>Just-In-Time (JIT) compilation</strong>.
+              </p>
+            </div>
+
+            <div class="callout tip">
+              <div class="callout-title"><i data-lucide="info"></i> WHY V8 IS FAST</div>
+              Instead of interpreting code line-by-line slowly, V8 compiles JavaScript straight to machine bytecode before executing!
+            </div>
+          </div>
+
+          <div class="col-visual">
+            <div class="diagram-container">
+              <div class="flow-step">1. JavaScript Code (app.js)</div>
+              <div class="flow-arrow">↓</div>
+              <div class="flow-step" style="background:#EFF6FF;">2. V8 Parser & AST (Abstract Syntax Tree)</div>
+              <div class="flow-arrow">↓</div>
+              <div class="flow-step" style="background:#F0F9FF;">3. Ignition Interpreter + TurboFan Compiler (JIT)</div>
+              <div class="flow-arrow">↓</div>
+              <div class="flow-step" style="background:#E2E8F0; border-color:var(--dark);">4. Native Machine Code (01010101) ➔ CPU Execution</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 6: Node.js Architecture Diagram -->
+    <section class="slide" data-day="DAY 1 — Architecture">
+      <div class="slide-header">
+        <span class="slide-tag">DAY 1 — ARCHITECTURE DIAGRAM</span>
+        <h2 class="slide-title">Node.js Runtime Architecture</h2>
+        <p class="slide-subtitle">The complete multi-layer stack of Node.js from code to Operating System.</p>
+      </div>
+
+      <div class="slide-content">
+        <div class="grid-2">
+          <div class="col-theory">
+            <ul class="feature-list">
+              <li class="feature-item">
+                <div class="feature-icon">1</div>
+                <div><strong>JavaScript Code:</strong> Your backend application logic (e.g., <code>server.js</code>).</div>
+              </li>
+              <li class="feature-item">
+                <div class="feature-icon">2</div>
+                <div><strong>Node.js Standard Library:</strong> Built-in JavaScript modules (<code>fs</code>, <code>http</code>, <code>path</code>, <code>crypto</code>).</div>
+              </li>
+              <li class="feature-item">
+                <div class="feature-icon">3</div>
+                <div><strong>C++ Bindings:</strong> Bridges JavaScript function calls to native C/C++ system methods.</div>
+              </li>
+              <li class="feature-item">
+                <div class="feature-icon">4</div>
+                <div><strong>libuv + V8:</strong> V8 executes JS; libuv manages the Event Loop and Thread Pool for asynchronous I/O.</div>
+              </li>
+              <li class="feature-item">
+                <div class="feature-icon">5</div>
+                <div><strong>Operating System:</strong> Hard Drive, Network Cards, Sockets & CPU Kernel.</div>
+              </li>
+            </ul>
+          </div>
+
+          <div class="col-visual">
+            <div class="diagram-container">
+              <div class="flow-step" style="border-color:var(--primary);">JavaScript Application Code</div>
+              <div class="flow-arrow">↓</div>
+              <div class="flow-step" style="background:#EFF6FF;">Node.js Core API (fs, http, path)</div>
+              <div class="flow-arrow">↓</div>
+              <div class="flow-step" style="background:#F0F9FF;">Node.js C++ Bindings</div>
+              <div class="flow-arrow">↓</div>
+              <div class="flow-step" style="background:#E0F2FE; border-color:var(--secondary);">V8 Engine + libuv (Event Loop & Thread Pool)</div>
+              <div class="flow-arrow">↓</div>
+              <div class="flow-step" style="background:#E2E8F0; border-color:var(--dark);">Operating System (Linux / Windows / macOS)</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 7: Event-Driven & Non-blocking I/O -->
+    <section class="slide" data-day="DAY 1 — Core Concepts">
+      <div class="slide-header">
+        <span class="slide-tag">DAY 1 — NON-BLOCKING I/O</span>
+        <h2 class="slide-title">Event-Driven Architecture & Non-Blocking I/O</h2>
+        <p class="slide-subtitle">Why Node.js handles thousands of requests without crashing or blocking.</p>
+      </div>
+
+      <div class="slide-content">
+        <div class="grid-2">
+          <div class="card">
+            <h3 class="card-title" style="color:var(--error);"><i data-lucide="x-circle"></i> Blocking I/O (Traditional Servers)</h3>
+            <p class="card-text">
+              In traditional servers (like Apache PHP), reading a file from disk blocks the thread. The thread sits idle waiting for the hard drive to respond.
+            </p>
+            <div class="callout warning" style="margin-top:0.75rem;">
+              Result: High CPU/RAM usage, slow user response times.
+            </div>
+          </div>
+
+          <div class="card">
+            <h3 class="card-title" style="color:var(--success);"><i data-lucide="check-circle"></i> Non-Blocking I/O (Node.js)</h3>
+            <p class="card-text">
+              Node.js requests the OS to read the file in the background and immediately moves to serve the next request! When the file is ready, an Event is fired.
+            </p>
+            <div class="callout tip" style="margin-top:0.75rem;">
+              Result: Extremely fast, lightweight, handles 10k+ concurrent users.
+            </div>
+          </div>
+        </div>
+
+        <div class="card" style="background:var(--bg-alt); margin-top:0.5rem;">
+          <h4 style="font-weight:700; color:var(--dark); margin-bottom:0.4rem;"><i data-lucide="coffee"></i> Real-World Analogy: Restaurant Waiter</h4>
+          <p class="card-text">
+            <strong>Blocking Waiter:</strong> Takes customer 1 order ➔ Waits inside kitchen 15 mins for food ➔ Serves customer 1 ➔ Only then takes customer 2 order. (Terrible!)<br>
+            <strong>Non-Blocking Waiter (Node.js):</strong> Takes customer 1 order ➔ Hands ticket to kitchen ➔ Immediately takes customer 2 & 3 orders ➔ Serves customer 1 when kitchen bell rings! (Super Efficient!)
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 8: Single-Threaded Model & Concurrency -->
+    <section class="slide" data-day="DAY 1 — Single Thread">
+      <div class="slide-header">
+        <span class="slide-tag">DAY 1 — THREAD MODEL</span>
+        <h2 class="slide-title">Single-Threaded Model & Concurrency</h2>
+        <p class="slide-subtitle">How a single thread handles thousands of users simultaneously.</p>
+      </div>
+
+      <div class="slide-content">
+        <div class="grid-2">
+          <div class="col-theory">
+            <div class="card">
+              <h3 class="card-title"><i data-lucide="cpu"></i> Single-Threaded Event Loop</h3>
+              <p class="card-text">
+                JavaScript execution in Node.js runs on <strong>one single thread</strong>. This eliminates complex multi-thread locking bugs and thread switching overhead.
+              </p>
+            </div>
+
+            <div class="callout remember">
+              <div class="callout-title"><i data-lucide="help-circle"></i> COMMON QUESTION</div>
+              "If Node.js is single-threaded, how does it handle 10,000 users at once?"<br>
+              <strong>Answer:</strong> Node.js delegates expensive I/O operations to <strong>libuv</strong> (which uses background worker threads) so the main JS thread never stops!
+            </div>
+          </div>
+
+          <div class="col-visual">
+            <div class="diagram-container">
+              <div style="font-size:0.85rem; font-weight:700; color:var(--muted); margin-bottom:0.75rem; text-transform:uppercase;">Thread Model Comparison</div>
+              <table class="comparison-table">
+                <thead>
+                  <tr>
+                    <th>Multi-Threaded Server (Java/PHP)</th>
+                    <th>Node.js (Single-Threaded)</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>1 User = 1 Thread</td>
+                    <td>1 Thread for ALL User Requests</td>
+                  </tr>
+                  <tr>
+                    <td>10,000 Users = 10,000 Threads (High RAM!)</td>
+                    <td>10,000 Users = 1 Thread + Asynchronous I/O</td>
+                  </tr>
+                  <tr>
+                    <td>Threads spend time waiting for disk/DB</td>
+                    <td>Thread never waits; delegates disk/DB to OS</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    </section>
+
+    <!-- SLIDE 9: What is libuv? -->
+    <section class="slide" data-day="DAY 1 — libuv">
+      <div class="slide-header">
+        <span class="slide-tag">DAY 1 — BACKGROUND SYSTEM</span>
+        <h2 class="slide-title">What is libuv?</h2>
+        <p class="slide-subtitle">The C library behind Node.js asynchronous magic.</p>
+      </div>
+
+      <div class="slide-content">
+        <div class="grid-2">
+          <div class="col-theory">
+            <div class="card">
+              <h3 class="card-title"><i data-lucide="box"></i> Definition of libuv</h3>
+              <p class="card-text">
+                <strong>libuv</strong> is a multi-platform C library that provides Node.js with support for asynchronous I/O based on <strong>Event Loops</strong> and <strong>Thread Pools</strong>.
+              </p>
+            </div>
+
+            <ul class="feature-list">
+              <li class="feature-item">
+                <div class="feature-icon"><i data-lucide="check"></i></div>
+                <div><strong>Event Loop:</strong> Monitors pending callbacks and pushes ready tasks to the call stack.</div>
+              </li>
+              <li class="feature-item">
+                <div class="feature-icon"><i data-lucide="check"></i></div>
+                <div><strong>Thread Pool (4 default threads):</strong> Handles expensive tasks like file reading (<code>fs</code>) and crypto operations.</div>
+              </li>
+            </ul>
+          </div>
+
+          <div class="col-visual">
+            <div class="diagram-container">
+              <div class="flow-step" style="border-color:var(--primary);">Main JS Single Thread (Call Stack)</div>
+              <div class="flow-arrow">↓ Delegates File/Network Job</div>
+              <div class="flow-step" style="background:#EFF6FF; border-color:var(--secondary);">
+                libuv Thread Pool (Worker Thread 1, 2, 3, 4)
+              </div>
+              <div class="flow-arrow">↓ Completed Job</div>
+              <div class="flow-step" style="background:#F0FDF4; border-color:var(--success);">
+                Callback Queue ➔ Event Loop ➔ Back to Main JS Thread
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 10: CPU-Intensive vs I/O-Intensive -->
+    <section class="slide" data-day="DAY 1 — Workloads">
+      <div class="slide-header">
+        <span class="slide-tag">DAY 1 — WORKLOAD CHOICE</span>
+        <h2 class="slide-title">CPU-Intensive vs I/O-Intensive Tasks</h2>
+        <p class="slide-subtitle">When to use Node.js and when NOT to use Node.js.</p>
+      </div>
+
+      <div class="slide-content">
+        <div class="grid-2">
+          <div class="card" style="border-top:4px solid var(--success);">
+            <h3 class="card-title" style="color:var(--success);"><i data-lucide="check"></i> Ideal: I/O-Intensive Applications</h3>
+            <p class="card-text">
+              Applications that spend most time reading/writing data over disk or network.
+            </p>
+            <ul class="feature-list" style="margin-top:0.5rem;">
+              <li class="feature-item"><div class="feature-icon"><i data-lucide="check"></i></div><div>RESTful APIs & Microservices</div></li>
+              <li class="feature-item"><div class="feature-icon"><i data-lucide="check"></i></div><div>Real-time Chat Apps (WebSockets)</div></li>
+              <li class="feature-item"><div class="feature-icon"><i data-lucide="check"></i></div><div>Streaming Apps (Netflix/Spotify)</div></li>
+              <li class="feature-item"><div class="feature-icon"><i data-lucide="check"></i></div><div>E-commerce Backend Systems</div></li>
+            </ul>
+          </div>
+
+          <div class="card" style="border-top:4px solid var(--error);">
+            <h3 class="card-title" style="color:var(--error);"><i data-lucide="x"></i> Avoid: Heavy CPU-Intensive Tasks</h3>
+            <p class="card-text">
+              Applications that require massive CPU mathematical calculations.
+            </p>
+            <ul class="feature-list" style="margin-top:0.5rem;">
+              <li class="feature-item"><div class="feature-icon"><i data-lucide="x"></i></div><div>Heavy 4K Video Encoding / Rendering</div></li>
+              <li class="feature-item"><div class="feature-icon"><i data-lucide="x"></i></div><div>Complex AI / Machine Learning Training</div></li>
+              <li class="feature-item"><div class="feature-icon"><i data-lucide="x"></i></div><div>Massive Image Processing / 3D Graphics</div></li>
+            </ul>
+            <p style="font-size:0.82rem; color:var(--muted); margin-top:0.5rem;">
+              <em>Why? Heavy CPU math blocks the main single thread, freezing all other incoming web requests.</em>
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 11: Node.js vs JavaScript & Node.js vs Express.js -->
+    <section class="slide" data-day="DAY 1 — Comparisons">
+      <div class="slide-header">
+        <span class="slide-tag">DAY 1 — CONCEPT CLEARITY</span>
+        <h2 class="slide-title">Node.js vs JavaScript & Express.js</h2>
+        <p class="slide-subtitle">Clearing common beginner confusions between language, runtime, and framework.</p>
+      </div>
+
+      <div class="slide-content">
+        <table class="comparison-table">
+          <thead>
+            <tr>
+              <th>Concept</th>
+              <th>Category</th>
+              <th>Role / Purpose</th>
+              <th>Example APIs</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>JavaScript</strong></td>
+              <td>Programming Language</td>
+              <td>Defines syntax, variables, loops, objects, and functions logic.</td>
+              <td><code>Array.map()</code>, <code>if/else</code>, <code>Math.random()</code></td>
+            </tr>
+            <tr>
+              <td><strong>Node.js</strong></td>
+              <td>Runtime Environment</td>
+              <td>Executes JS outside browser; provides server APIs (file system, network).</td>
+              <td><code>fs.readFile()</code>, <code>http.createServer()</code></td>
+            </tr>
+            <tr>
+              <td><strong>Express.js</strong></td>
+              <td>Web Framework</td>
+              <td>Simplifies building web servers, HTTP routes, and middleware APIs.</td>
+              <td><code>app.get()</code>, <code>res.json()</code>, <code>app.use()</code></td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="callout tip" style="margin-top:1.25rem;">
+          <div class="callout-title"><i data-lucide="lightbulb"></i> ANALOGY FOR STUDENTS</div>
+          <strong>JavaScript</strong> is the English language.<br>
+          <strong>Node.js</strong> is the country/place where people speak it.<br>
+          <strong>Express.js</strong> is a pre-written template for writing letters in that language!
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 12: Package Management (npm, npx, package.json) -->
+    <section class="slide" data-day="DAY 1 — npm & package.json">
+      <div class="slide-header">
+        <span class="slide-tag">DAY 1 — ECOSYSTEM</span>
+        <h2 class="slide-title">npm, npx & package.json</h2>
+        <p class="slide-subtitle">Managing packages and project manifests in Node.js.</p>
+      </div>
+
+      <div class="slide-content">
+        <div class="grid-2">
+          <div class="col-theory">
+            <div class="card">
+              <h3 class="card-title"><i data-lucide="package"></i> Package Management Tools</h3>
+              <p class="card-text">
+                • <strong>npm:</strong> Node Package Manager. Used to install, update, and manage project libraries.<br>
+                • <strong>npx:</strong> Node Package Execute. Executes binary packages directly without installing them globally (e.g. <code>npx create-react-app</code>).
+              </p>
+            </div>
+
+            <div class="card">
+              <h4 style="font-weight:700;">dependencies vs devDependencies</h4>
+              <p class="card-text" style="font-size:0.88rem; margin-top:0.3rem;">
+                • <code>dependencies</code>: Packages required for production runtime (e.g. <code>express</code>).<br>
+                • <code>devDependencies</code>: Tools needed ONLY during development (e.g. <code>nodemon</code>).
+              </p>
+            </div>
+          </div>
+
+          <div class="col-visual">
+            <div class="code-container">
+              <div class="code-header">
+                <span class="code-title"><i data-lucide="file-code"></i> package.json</span>
+                <button class="copy-btn"><i data-lucide="copy"></i> Copy</button>
+              </div>
+              <pre class="code-body"><code class="language-json">{
+  "name": "my-backend-app",
+  "version": "1.0.0",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1"
+  }
+}</code></pre>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 13: Day 1 Viva & Interview Questions -->
+    <section class="slide" data-day="DAY 1 — Interview Prep">
+      <div class="slide-header">
+        <span class="slide-tag">DAY 1 — INTERVIEW & VIVA QUESTIONS</span>
+        <h2 class="slide-title">Node.js Fundamentals — Viva & Interview Questions</h2>
+        <p class="slide-subtitle">Master these questions to crack backend developer interviews.</p>
+      </div>
+
+      <div class="slide-content">
+        <div class="grid-2">
+          <div class="interview-card">
+            <div class="interview-q"><i data-lucide="help-circle"></i> Q1: What is Node.js and why is it fast?</div>
+            <div class="interview-a">
+              Node.js is an asynchronous, event-driven JavaScript runtime built on Google's V8 engine. It is fast because it uses non-blocking I/O and delegates disk/network tasks to libuv background thread pool.
+            </div>
+            <div class="interview-why"><strong>Why interviewers ask this:</strong> Verifies core definition and V8 + libuv understanding.</div>
+          </div>
+
+          <div class="interview-card">
+            <div class="interview-q"><i data-lucide="help-circle"></i> Q2: Is Node.js completely single-threaded?</div>
+            <div class="interview-a">
+              JavaScript execution on the call stack is single-threaded. However, Node.js uses multi-threaded C++ libraries (via libuv thread pool) for background I/O tasks like file reading or encryption.
+            </div>
+            <div class="interview-why"><strong>Why interviewers ask this:</strong> Tests if you understand single-threaded JS vs multi-threaded libuv.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 14: Day 1 Common Mistakes & Summary -->
+    <section class="slide" data-day="DAY 1 — Summary">
+      <div class="slide-header">
+        <span class="slide-tag">DAY 1 — SUMMARY & RECAP</span>
+        <h2 class="slide-title">Day 1 Common Mistakes & Remember Points</h2>
+        <p class="slide-subtitle">Avoid these beginner mistakes when learning Node.js.</p>
+      </div>
+
+      <div class="slide-content">
+        <div class="grid-2">
+          <div class="card" style="border-left:4px solid var(--error);">
+            <h3 class="card-title" style="color:var(--error);"><i data-lucide="alert-triangle"></i> Common Beginner Mistakes</h3>
+            <ul class="feature-list" style="margin-top:0.5rem;">
+              <li class="feature-item"><div class="feature-icon"><i data-lucide="x"></i></div><div>Trying to access DOM objects (<code>document</code>, <code>window</code>) in Node.js.</div></li>
+              <li class="feature-item"><div class="feature-icon"><i data-lucide="x"></i></div><div>Thinking Node.js is a framework or a new programming language.</div></li>
+              <li class="feature-item"><div class="feature-icon"><i data-lucide="x"></i></div><div>Running heavy synchronous CPU loops that block the main thread.</div></li>
+            </ul>
+          </div>
+
+          <div class="card" style="border-left:4px solid var(--primary);">
+            <h3 class="card-title" style="color:var(--primary);"><i data-lucide="check-circle-2"></i> Key Remember Points</h3>
+            <ul class="feature-list" style="margin-top:0.5rem;">
+              <li class="feature-item"><div class="feature-icon"><i data-lucide="check"></i></div><div>Node.js executes JS outside the browser via V8 engine.</div></li>
+              <li class="feature-item"><div class="feature-icon"><i data-lucide="check"></i></div><div>Non-blocking I/O allows Node.js to serve thousands of concurrent requests.</div></li>
+              <li class="feature-item"><div class="feature-icon"><i data-lucide="check"></i></div><div>npm manages third-party libraries via <code>package.json</code>.</div></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================================================================
+         DAY 2 — TIMERS, CALLBACKS & CALL()
+         =================================================================== -->
+
+    <!-- SLIDE 15: Day 2 Section Title -->
+    <section class="slide" data-day="DAY 2 — Timers & Callbacks">
+      <div class="slide-header" style="text-align: center; margin-top: 3rem;">
+        <span class="slide-tag">DAY 2 MODULE</span>
+        <h1 class="slide-title" style="font-size: 2.8rem; color: var(--primary);">
+          TIMERS, CALLBACKS & CALL()
+        </h1>
+        <p class="slide-subtitle" style="font-size: 1.2rem;">
+          Timer Functions, Asynchronous Callbacks, Event Loop & Function Context
+        </p>
+      </div>
+
+      <div class="slide-content" style="max-width: 700px; margin: 2rem auto 0 auto; text-align: center;">
+        <div class="badge-group" style="justify-content: center;">
+          <span class="pill-badge">setTimeout()</span>
+          <span class="pill-badge">setInterval()</span>
+          <span class="pill-badge">setImmediate()</span>
+          <span class="pill-badge">Callback Hell</span>
+          <span class="pill-badge">call()</span>
+          <span class="pill-badge">apply()</span>
+          <span class="pill-badge">bind()</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 16: Timer Functions in Node.js -->
+    <section class="slide" data-day="DAY 2 — Timers">
+      <div class="slide-header">
+        <span class="slide-tag">DAY 2 — TIMERS</span>
+        <h2 class="slide-title">Timer Functions in Node.js</h2>
+        <p class="slide-subtitle">Scheduling delayed or repeated execution of functions.</p>
+      </div>
+
+      <div class="slide-content">
+        <div class="grid-2">
+          <div class="col-theory">
+            <div class="card">
+              <h3 class="card-title"><i data-lucide="clock"></i> Core Timer APIs</h3>
+              <p class="card-text">
+                • <code>setTimeout(fn, ms)</code>: Executes function ONCE after delay.<br>
+                • <code>setInterval(fn, ms)</code>: Repeatedly executes function every delay ms.<br>
+                • <code>setImmediate(fn)</code>: Executes function on the next Event Loop phase.
+              </p>
+            </div>
+
+            <div class="card">
+              <h4 style="font-weight:700;">Clearing Timers</h4>
+              <p class="card-text" style="font-size:0.88rem; margin-top:0.3rem;">
+                Use <code>clearTimeout(id)</code> or <code>clearInterval(id)</code> to stop timers before they execute!
+              </p>
+            </div>
+          </div>
+
+          <div class="col-visual">
+            <div class="code-container">
+              <div class="code-header">
+                <span class="code-title"><i data-lucide="code"></i> timers_demo.js</span>
+                <button class="copy-btn"><i data-lucide="copy"></i> Copy</button>
+              </div>
+              <pre class="code-body"><code class="language-javascript">const timerId = setTimeout(() => {
+  console.log("This will run after 2 seconds");
+}, 2000);
+
+const intervalId = setInterval(() => {
+  console.log("Running every 1 second...");
+}, 1000);
+
+// Stop interval after 3 seconds
+setTimeout(() => {
+  clearInterval(intervalId);
+  console.log("Interval stopped!");
+}, 3000);</code></pre>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 17: setTimeout(fn, 0) Myth -->
+    <section class="slide" data-day="DAY 2 — Event Loop Timers">
+      <div class="slide-header">
+        <span class="slide-tag">DAY 2 — TIMING MYTH</span>
+        <h2 class="slide-title">The Myth of setTimeout(fn, 0)</h2>
+        <p class="slide-subtitle">Why 0ms delay does NOT mean immediate execution.</p>
+      </div>
+
+      <div class="slide-content">
+        <div class="grid-2">
+          <div class="col-theory">
+            <div class="callout warning">
+              <div class="callout-title"><i data-lucide="alert-triangle"></i> IMPORTANT CONCEPT</div>
+              <code>setTimeout(fn, 0)</code> does <strong>NOT</strong> execute immediately. It registers the callback in the timer queue and waits until the synchronous Call Stack is completely empty!
+            </div>
+
+            <div class="card" style="margin-top:1rem;">
+              <h4 style="font-weight:700;">Why Timers Get Delayed</h4>
+              <p class="card-text" style="font-size:0.88rem; margin-top:0.3rem;">
+                If synchronous code takes 5 seconds to run, a <code>setTimeout(fn, 100)</code> will be delayed and run AFTER the 5 seconds finish!
+              </p>
+            </div>
+          </div>
+
+          <div class="col-visual">
+            <div class="code-container">
+              <div class="code-header">
+                <span class="code-title"><i data-lucide="terminal"></i> execution_order.js</span>
+                <button class="copy-btn"><i data-lucide="copy"></i> Copy</button>
+              </div>
+              <pre class="code-body"><code class="language-javascript">console.log("1. Start");
+
+setTimeout(() => {
+  console.log("2. Timeout 0ms");
+}, 0);
+
+console.log("3. End");</code></pre>
+            </div>
+
+            <div class="output-box">
+              <div class="output-header">Console Output</div>
+1. Start<br>
+3. End<br>
+2. Timeout 0ms
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 18: Callbacks & Callback Hell -->
+    <section class="slide" data-day="DAY 2 — Callbacks">
+      <div class="slide-header">
+        <span class="slide-tag">DAY 2 — ASYNC PATTERNS</span>
+        <h2 class="slide-title">Callbacks & Error-First Callback Pattern</h2>
+        <p class="slide-subtitle">Passing functions as arguments and handling asynchronous results.</p>
+      </div>
+
+      <div class="slide-content">
+        <div class="grid-2">
+          <div class="col-theory">
+            <div class="card">
+              <h3 class="card-title"><i data-lucide="corner-down-right"></i> What is a Callback?</h3>
+              <p class="card-text">
+                A callback is a function passed into another function as an argument, which is executed when an asynchronous operation completes.
+              </p>
+            </div>
+
+            <div class="callout remember">
+              <div class="callout-title"><i data-lucide="shield"></i> Node.js Error-First Pattern</div>
+              Node.js standardizes callback parameters as <code>(error, data)</code>.<br>
+              • If operation fails: <code>error</code> contains an Error object, <code>data</code> is undefined.<br>
+              • If operation succeeds: <code>error</code> is <code>null</code>, <code>data</code> contains the result.
+            </div>
+          </div>
+
+          <div class="col-visual">
+            <div class="code-container">
+              <div class="code-header">
+                <span class="code-title"><i data-lucide="file-code"></i> callback_pattern.js</span>
+                <button class="copy-btn"><i data-lucide="copy"></i> Copy</button>
+              </div>
+              <pre class="code-body"><code class="language-javascript">function getUser(id, callback) {
+  setTimeout(() => {
+    if (id === 101) {
+      callback(null, { id: 101, name: "John" }); // Success
+    } else {
+      callback("User not found!", null); // Error
+    }
+  }, 1000);
+}
+
+getUser(101, (err, user) => {
+  if (err) return console.error("Error:", err);
+  console.log("User Name:", user.name);
+});</code></pre>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 19: Callback Hell (Pyramid of Doom) -->
+    <section class="slide" data-day="DAY 2 — Callback Hell">
+      <div class="slide-header">
+        <span class="slide-tag">DAY 2 — ANTI-PATTERN</span>
+        <h2 class="slide-title">Callback Hell (Pyramid of Doom)</h2>
+        <p class="slide-subtitle">The main problem with deeply nested callbacks.</p>
+      </div>
+
+      <div class="slide-content">
+        <div class="grid-2">
+          <div class="col-theory">
+            <div class="card" style="border-left:4px solid var(--error);">
+              <h3 class="card-title" style="color:var(--error);"><i data-lucide="alert-octagon"></i> Problems with Callback Hell</h3>
+              <ul class="feature-list" style="margin-top:0.5rem;">
+                <li class="feature-item"><div class="feature-icon"><i data-lucide="x"></i></div><div>Extremely hard to read, maintain, and debug.</div></li>
+                <li class="feature-item"><div class="feature-icon"><i data-lucide="x"></i></div><div>Error handling becomes duplicated and nested.</div></li>
+                <li class="feature-item"><div class="feature-icon"><i data-lucide="x"></i></div><div>Code expands horizontally in a <code>&gt;</code> pyramid shape.</div></li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="col-visual">
+            <div class="code-container">
+              <div class="code-header">
+                <span class="code-title"><i data-lucide="file-code"></i> callback_hell.js</span>
+              </div>
+              <pre class="code-body"><code class="language-javascript">// ⚠️ TERRIBLE CALLBACK HELL CODE!
+getUser(101, (err, user) => {
+  getOrders(user.id, (err, orders) => {
+    getPayment(orders[0].id, (err, payment) => {
+      sendEmail(payment.email, (err, receipt) => {
+        // Deeply nested pyramid!
+        console.log("Done!");
+      });
+    });
+  });
+});</code></pre>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 20: Function Context call(), apply(), bind() -->
+    <section class="slide" data-day="DAY 2 — Context call/apply/bind">
+      <div class="slide-header">
+        <span class="slide-tag">DAY 2 — JAVASCRIPT CONTEXT</span>
+        <h2 class="slide-title">Controlling Context: call(), apply(), bind()</h2>
+        <p class="slide-subtitle">Explicitly binding the 'this' keyword to objects.</p>
+      </div>
+
+      <div class="slide-content">
+        <table class="comparison-table">
+          <thead>
+            <tr>
+              <th>Method</th>
+              <th>How it works</th>
+              <th>Arguments Format</th>
+              <th>Execution Time</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>call()</strong></td>
+              <td>Invokes function immediately with explicit <code>this</code> context</td>
+              <td>Passed individually: <code>arg1, arg2, arg3</code></td>
+              <td>Executes Immediately</td>
+            </tr>
+            <tr>
+              <td><strong>apply()</strong></td>
+              <td>Invokes function immediately with explicit <code>this</code> context</td>
+              <td>Passed as an Array: <code>[arg1, arg2, arg3]</code></td>
+              <td>Executes Immediately</td>
+            </tr>
+            <tr>
+              <td><strong>bind()</strong></td>
+              <td>Returns a NEW bound function with <code>this</code> context locked</td>
+              <td>Passed individually: <code>arg1, arg2</code></td>
+              <td>Executes Later when invoked</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="code-container" style="margin-top:1rem;">
+          <div class="code-header">
+            <span class="code-title"><i data-lucide="code"></i> call_apply_bind.js</span>
+            <button class="copy-btn"><i data-lucide="copy"></i> Copy</button>
+          </div>
+          <pre class="code-body"><code class="language-javascript">const person = { name: "John" };
+
+function greet(city, country) {
+  console.log(`Hello ${this.name} from ${city}, ${country}`);
+}
+
+greet.call(person, "Kochi", "India");      // Output: Hello John from Kochi, India
+greet.apply(person, ["Kochi", "India"]);   // Output: Hello John from Kochi, India
+
+const boundGreet = greet.bind(person, "Kochi", "India");
+boundGreet(); // Executes later when invoked!</code></pre>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 21: Output Prediction Quiz - Timers & Context -->
+    <section class="slide" data-day="DAY 2 — Quiz">
+      <div class="slide-header">
+        <span class="slide-tag">DAY 2 — OUTPUT PREDICTION QUIZ</span>
+        <h2 class="slide-title">Output Prediction: 'this' inside Timers</h2>
+        <p class="slide-subtitle">What happens when you pass object methods to setTimeout?</p>
+      </div>
+
+      <div class="slide-content">
+        <div class="quiz-card">
+          <div class="code-container">
+            <pre class="code-body"><code class="language-javascript">const user = {
+  name: "Alice",
+  sayHi: function() {
+    console.log("Hi " + this.name);
+  }
+};
+
+setTimeout(user.sayHi, 1000);</code></pre>
+          </div>
+
+          <div class="question-text">What will be printed to the console after 1 second?</div>
+
+          <div class="options-grid">
+            <button class="option-btn" data-option="1"><span>Option 1:</span> Hi Alice</button>
+            <button class="option-btn" data-option="2"><span>Option 2:</span> Hi undefined</button>
+            <button class="option-btn" data-option="3"><span>Option 3:</span> TypeError / Crash</button>
+            <button class="option-btn" data-option="4"><span>Option 4:</span> Nothing</button>
+          </div>
+
+          <button class="reveal-btn">Reveal Answer & Explanation</button>
+
+          <div class="explanation-card">
+            <h4 style="color:var(--primary); font-size:1rem; margin-bottom:0.35rem;">Correct Answer: Hi undefined</h4>
+            <p style="font-size:0.9rem; color:var(--dark); line-height:1.5;">
+              When <code>user.sayHi</code> is passed as a callback into <code>setTimeout</code>, it loses its <code>user</code> object context. <code>this</code> defaults to global window/Timeout object where <code>name</code> is undefined.<br>
+              <strong>Fix:</strong> Use arrow function or <code>user.sayHi.bind(user)</code>!
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 22: Day 2 Interview Questions & Tasks -->
+    <section class="slide" data-day="DAY 2 — Interview Prep">
+      <div class="slide-header">
+        <span class="slide-tag">DAY 2 — INTERVIEW & PRACTICAL TASKS</span>
+        <h2 class="slide-title">Day 2 Viva Questions & Assignment Tasks</h2>
+        <p class="slide-subtitle">Interview prep and hands-on exercises.</p>
+      </div>
+
+      <div class="slide-content">
+        <div class="grid-2">
+          <div class="interview-card">
+            <div class="interview-q"><i data-lucide="help-circle"></i> Q: Difference between call(), apply(), and bind()?</div>
+            <div class="interview-a">
+              <code>call()</code> takes arguments individually and executes immediately. <code>apply()</code> takes arguments as an array and executes immediately. <code>bind()</code> returns a new function with bound context to execute later.
+            </div>
+          </div>
+
+          <div class="task-card">
+            <span class="task-badge">PRACTICAL TASK 1 & 2</span>
+            <div style="font-weight:700; color:var(--dark);">Timer & Callback Assignment</div>
+            <div class="task-requirements">
+              <ul>
+                <li>Write a function <code>getUserData(id, callback)</code> using <code>setTimeout</code> to simulate 1s database delay.</li>
+                <li>Return error if <code>id &lt; 0</code>, otherwise return <code>{ id, name: "Student" }</code>.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================================================================
+         DAY 3 — PROMISES & ASYNC/AWAIT
+         =================================================================== -->
+
+    <!-- SLIDE 23: Day 3 Section Title -->
+    <section class="slide" data-day="DAY 3 — Promises & async/await">
+      <div class="slide-header" style="text-align: center; margin-top: 3rem;">
+        <span class="slide-tag">DAY 3 MODULE</span>
+        <h1 class="slide-title" style="font-size: 2.8rem; color: var(--primary);">
+          PROMISES & ASYNC / AWAIT
+        </h1>
+        <p class="slide-subtitle" style="font-size: 1.2rem;">
+          Modern Asynchronous JavaScript & Clean Control Flow
+        </p>
+      </div>
+
+      <div class="slide-content" style="max-width: 700px; margin: 2rem auto 0 auto; text-align: center;">
+        <div class="badge-group" style="justify-content: center;">
+          <span class="pill-badge">Promise States</span>
+          <span class="pill-badge">resolve & reject</span>
+          <span class="pill-badge">.then() .catch()</span>
+          <span class="pill-badge">async & await</span>
+          <span class="pill-badge">try...catch</span>
+          <span class="pill-badge">Promise.all()</span>
+          <span class="pill-badge">Promise.race()</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 24: Why Promises Exist & 3 States -->
+    <section class="slide" data-day="DAY 3 — Promises">
+      <div class="slide-header">
+        <span class="slide-tag">DAY 3 — PROMISE STATES</span>
+        <h2 class="slide-title">Why Promises Exist & The 3 States</h2>
+        <p class="slide-subtitle">A Promise is an object representing future completion of an async job.</p>
+      </div>
+
+      <div class="slide-content">
+        <div class="grid-3">
+          <div class="card" style="border-top: 4px solid var(--warning);">
+            <div style="font-size: 1.5rem; color: var(--warning);"><i data-lucide="loader"></i></div>
+            <h3 class="card-title">1. Pending</h3>
+            <p class="card-text">Initial state. Async task is ongoing, neither resolved nor rejected yet.</p>
+          </div>
+
+          <div class="card" style="border-top: 4px solid var(--success);">
+            <div style="font-size: 1.5rem; color: var(--success);"><i data-lucide="check-circle-2"></i></div>
+            <h3 class="card-title">2. Fulfilled</h3>
+            <p class="card-text">Task completed successfully! <code>resolve(value)</code> was called.</p>
+          </div>
+
+          <div class="card" style="border-top: 4px solid var(--error);">
+            <div style="font-size: 1.5rem; color: var(--error);"><i data-lucide="x-circle"></i></div>
+            <h3 class="card-title">3. Rejected</h3>
+            <p class="card-text">Task failed! <code>reject(error)</code> was called.</p>
+          </div>
+        </div>
+
+        <div class="code-container" style="margin-top: 1rem;">
+          <div class="code-header">
+            <span class="code-title"><i data-lucide="file-code"></i> create_promise.js</span>
+            <button class="copy-btn"><i data-lucide="copy"></i> Copy</button>
+          </div>
+          <pre class="code-body"><code class="language-javascript">const myPromise = new Promise((resolve, reject) => {
+  setTimeout(() => {
+    const success = true;
+    if (success) {
+      resolve("Data received successfully!");
+    } else {
+      reject("Network Error!");
+    }
+  }, 1000);
+});
+
+myPromise
+  .then(data => console.log("Success:", data))
+  .catch(err => console.error("Failed:", err))
+  .finally(() => console.log("Finished operation."));</code></pre>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 25: Evolution: Callback -> Promise -> async/await -->
+    <section class="slide" data-day="DAY 3 — async/await">
+      <div class="slide-header">
+        <span class="slide-tag">DAY 3 — SYNTAX EVOLUTION</span>
+        <h2 class="slide-title">Evolution to async & await</h2>
+        <p class="slide-subtitle">Writing asynchronous code that reads like synchronous code.</p>
+      </div>
+
+      <div class="slide-content">
+        <div class="grid-2">
+          <div class="col-theory">
+            <div class="card">
+              <h3 class="card-title"><i data-lucide="zap"></i> Syntactic Sugar over Promises</h3>
+              <p class="card-text">
+                • <code>async</code> before a function makes it always return a Promise.<br>
+                • <code>await</code> pauses code execution inside function until Promise resolves.<br>
+                • Use standard <code>try...catch...finally</code> block for clean error handling.
+              </p>
+            </div>
+
+            <div class="diagram-container" style="margin-top:0.75rem;">
+              <div class="flow-horizontal">
+                <div class="flow-h-node">Callback</div>
+                <div class="flow-h-arrow">➜</div>
+                <div class="flow-h-node">Promise</div>
+                <div class="flow-h-arrow">➜</div>
+                <div class="flow-h-node" style="background:#EFF6FF; border-color:var(--primary);">async/await</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-visual">
+            <div class="code-container">
+              <div class="code-header">
+                <span class="code-title"><i data-lucide="file-code"></i> async_await.js</span>
+                <button class="copy-btn"><i data-lucide="copy"></i> Copy</button>
+              </div>
+              <pre class="code-body"><code class="language-javascript">async function getUserInfo() {
+  try {
+    console.log("Fetching user...");
+    const user = await fetchUser(); // Pauses until resolved
+    
+    console.log("Fetching orders...");
+    const orders = await fetchOrders(user.id);
+    
+    console.log("Done!", orders);
+  } catch (error) {
+    console.error("Caught Error:", error);
+  } finally {
+    console.log("Cleanup.");
+  }
+}
+
+getUserInfo();</code></pre>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 26: Promise Utilities (all, allSettled, race, any) -->
+    <section class="slide" data-day="DAY 3 — Promise Methods">
+      <div class="slide-header">
+        <span class="slide-tag">DAY 3 — CONCURRENCY METHODS</span>
+        <h2 class="slide-title">Promise Combinators & Utilities</h2>
+        <p class="slide-subtitle">Executing multiple Promises in parallel efficiently.</p>
+      </div>
+
+      <div class="slide-content">
+        <div class="grid-2">
+          <div class="card" style="border-left:4px solid var(--primary);">
+            <h4 style="color:var(--primary); font-weight:700;">Promise.all([p1, p2])</h4>
+            <p class="card-text" style="font-size:0.85rem; margin-top:0.25rem;">
+              Waits for ALL promises to fulfill. Rejects IMMEDIATELY if ANY single promise fails.
+            </p>
+          </div>
+
+          <div class="card" style="border-left:4px solid var(--secondary);">
+            <h4 style="color:var(--secondary); font-weight:700;">Promise.allSettled([p1, p2])</h4>
+            <p class="card-text" style="font-size:0.85rem; margin-top:0.25rem;">
+              Waits for ALL promises to complete, returning status and value/reason for each. Never rejects early!
+            </p>
+          </div>
+
+          <div class="card" style="border-left:4px solid var(--warning);">
+            <h4 style="color:var(--warning); font-weight:700;">Promise.race([p1, p2])</h4>
+            <p class="card-text" style="font-size:0.85rem; margin-top:0.25rem;">
+              Returns as soon as the FIRST promise settles (whether resolved or rejected).
+            </p>
+          </div>
+
+          <div class="card" style="border-left:4px solid var(--success);">
+            <h4 style="color:var(--success); font-weight:700;">Promise.any([p1, p2])</h4>
+            <p class="card-text" style="font-size:0.85rem; margin-top:0.25rem;">
+              Returns as soon as the FIRST promise fulfills successfully. Ignores rejections unless ALL fail.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 27: Tricky Output Quiz - Microtasks vs Macrotasks -->
+    <section class="slide" data-day="DAY 3 — Quiz">
+      <div class="slide-header">
+        <span class="slide-tag">DAY 3 — TRICKY OUTPUT QUIZ</span>
+        <h2 class="slide-title">Event Loop Queue Order Quiz</h2>
+        <p class="slide-subtitle">Microtasks (Promises) vs Macrotasks (setTimeout).</p>
+      </div>
+
+      <div class="slide-content">
+        <div class="quiz-card">
+          <div class="code-container">
+            <pre class="code-body"><code class="language-javascript">console.log("A");
+
+setTimeout(() => console.log("B"), 0);
+
+Promise.resolve().then(() => console.log("C"));
+
+console.log("D");</code></pre>
+          </div>
+
+          <div class="question-text">What is the exact console output order?</div>
+
+          <div class="options-grid">
+            <button class="option-btn" data-option="1"><span>Option 1:</span> A → B → C → D</button>
+            <button class="option-btn" data-option="2"><span>Option 2:</span> A → D → B → C</button>
+            <button class="option-btn" data-option="3"><span>Option 3:</span> A → D → C → B</button>
+            <button class="option-btn" data-option="4"><span>Option 4:</span> D → A → C → B</button>
+          </div>
+
+          <button class="reveal-btn">Reveal Answer & Explanation</button>
+
+          <div class="explanation-card">
+            <h4 style="color:var(--primary); font-size:1rem; margin-bottom:0.35rem;">Correct Answer: A → D → C → B</h4>
+            <p style="font-size:0.9rem; color:var(--dark); line-height:1.5;">
+              1. <strong>Synchronous code</strong> executes first: prints <code>A</code> then <code>D</code>.<br>
+              2. <code>Promise.then</code> callback goes into <strong>Microtask Queue</strong>.<br>
+              3. <code>setTimeout</code> callback goes into <strong>Macrotask Queue</strong>.<br>
+              4. Event loop clears Microtasks FIRST (prints <code>C</code>), then Macrotasks (prints <code>B</code>).
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================================================================
+         WORKING SESSION — NODE.JS EVENT LOOP SIMULATOR & MODEL
+         =================================================================== -->
+
+    <!-- SLIDE: Session Intro & Cover -->
+    <section class="slide" data-day="SESSION — Node.js Event Loop" id="session-node-event-loop">
+      <div class="slide-header" style="text-align: center; margin-top: 1.5rem;">
+        <span class="slide-tag" style="background:#0284C7; color:#FFFFFF;">INTERACTIVE WORKING SESSION</span>
+        <h1 class="slide-title" style="font-size: 3.2rem; margin-top: 0.5rem; background: linear-gradient(135deg, #0284C7, #2563EB); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
+          NODE.JS EVENT LOOP
+        </h1>
+        <p class="slide-subtitle" style="font-size: 1.3rem; max-width: 780px; margin: 0.75rem auto 0 auto;">
+          Complete Working Model & Interactive Simulator — See How Node.js Handles Asynchronous Work
+        </p>
+      </div>
+
+      <div class="slide-content" style="max-width: 960px; margin: 1.5rem auto 0 auto; width: 100%;">
+        <div class="grid-4" style="gap: 1rem;">
+          <div class="card" style="text-align: center; border-top: 4px solid var(--primary);">
+            <div style="font-size: 1.8rem; color: var(--primary); margin-bottom: 0.3rem;"><i data-lucide="cpu"></i></div>
+            <h4 style="font-size: 0.95rem; margin-bottom: 0.2rem;">V8 Engine</h4>
+            <p style="font-size: 0.8rem; color: var(--muted);">Executes JavaScript code on the single Call Stack.</p>
+          </div>
+          <div class="card" style="text-align: center; border-top: 4px solid var(--secondary);">
+            <div style="font-size: 1.8rem; color: var(--secondary); margin-bottom: 0.3rem;"><i data-lucide="server"></i></div>
+            <h4 style="font-size: 0.95rem; margin-bottom: 0.2rem;">Node APIs</h4>
+            <p style="font-size: 0.8rem; color: var(--muted);">Native C++ bindings for File System, Network & Timers.</p>
+          </div>
+          <div class="card" style="text-align: center; border-top: 4px solid #0284C7;">
+            <div style="font-size: 1.8rem; color: #0284C7; margin-bottom: 0.3rem;"><i data-lucide="refresh-cw"></i></div>
+            <h4 style="font-size: 0.95rem; margin-bottom: 0.2rem;">libuv & Phases</h4>
+            <p style="font-size: 0.8rem; color: var(--muted);">C library managing event loop phases & thread pool.</p>
+          </div>
+          <div class="card" style="text-align: center; border-top: 4px solid var(--dark);">
+            <div style="font-size: 1.8rem; color: var(--dark); margin-bottom: 0.3rem;"><i data-lucide="hard-drive"></i></div>
+            <h4 style="font-size: 0.95rem; margin-bottom: 0.2rem;">OS Kernel</h4>
+            <p style="font-size: 0.8rem; color: var(--muted);">Asynchronous OS I/O (epoll, kqueue, IOCP).</p>
+          </div>
+        </div>
+
+        <div class="callout tip" style="margin-top: 1.5rem; text-align: center;">
+          <div class="callout-title" style="justify-content: center;"><i data-lucide="sparkles"></i> Session Objective</div>
+          Master Call Stack • libuv • Event Loop Phases • process.nextTick() • Promises • setTimeout vs setImmediate • Thread Pool • Non-blocking I/O
+        </div>
+      </div>
+
+      <div class="mentor-note" style="display:none;">
+        <div class="mentor-note-card">
+          <strong>MENTOR NOTE:</strong> Welcome students to this special hands-on working session. Emphasize that we will NOT just draw a static diagram — we will step through code line-by-line inside a live state-driven simulator!
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE: Simple Architecture Model First -->
+    <section class="slide" data-day="SESSION — Architecture">
+      <div class="slide-header">
+        <span class="slide-tag">SESSION — ARCHITECTURE FLOW</span>
+        <h2 class="slide-title">Node.js Execution Model</h2>
+        <p class="slide-subtitle">How JavaScript and libuv collaborate to handle asynchronous operations.</p>
+      </div>
+
+      <div class="slide-content">
+        <div class="grid-2">
+          <div class="col-theory">
+            <div class="card" style="border-left: 4px solid var(--primary);">
+              <h3 class="card-title"><i data-lucide="info"></i> The Core Concept</h3>
+              <p class="card-text">
+                "JavaScript runs your code on the main JavaScript execution thread. Node.js uses its runtime environment and <strong>libuv</strong> to coordinate asynchronous work in the background."
+              </p>
+            </div>
+
+            <div class="callout warning" style="margin-top: 1rem;">
+              <div class="callout-title"><i data-lucide="alert-triangle"></i> DO NOT SAY: "Node is single-threaded in every sense"</div>
+              That is misleading! While your JavaScript application code executes on <strong>one main thread (V8 Call Stack)</strong>, Node.js uses background OS threads and the libuv thread pool to execute heavy work in parallel!
+            </div>
+          </div>
+
+          <div class="col-visual">
+            <div class="diagram-container" style="padding: 1.25rem;">
+              <div style="font-size: 0.8rem; font-weight: 700; color: var(--muted); text-transform: uppercase; margin-bottom: 0.75rem;">High-Level Execution Pipeline</div>
+              
+              <div class="flow-step" style="background:#EFF6FF; border-color:var(--primary);">1. JavaScript Code (app.js)</div>
+              <div class="flow-arrow">↓</div>
+              <div class="flow-step" style="background:#F0F9FF; border-color:var(--secondary);">2. V8 Call Stack (Synchronous Execution)</div>
+              <div class="flow-arrow">↓</div>
+              <div class="flow-step" style="background:#E0F2FE; border-color:#0284C7;">3. Node.js Runtime APIs & libuv Engine</div>
+              <div class="flow-arrow">↓</div>
+              <div class="flow-step" style="background:#F8FAFC; border-color:var(--dark);">4. Operating System Kernel / Thread Pool</div>
+              <div class="flow-arrow">↓</div>
+              <div class="flow-step" style="background:#FEF3C7; border-color:#F59E0B;">5. Event Loop Phases ➔ Callback ➔ Call Stack</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE: Main Interactive Working Simulator -->
+    <section class="slide" data-day="SESSION — Simulator">
+      <div class="slide-header" style="margin-bottom: 0.75rem;">
+        <span class="slide-tag" style="background:#0284C7; color:#FFFFFF;">REAL WORKING MODEL</span>
+        <h2 class="slide-title" style="font-size: 1.8rem;">Node.js Event Loop Interactive Simulator</h2>
+        <p class="slide-subtitle">Step through execution state-by-state to observe queues and phase transitions.</p>
+      </div>
+
+      <div class="slide-content" style="padding: 0;">
+        <div class="node-sim-container">
+          <!-- Toolbar -->
+          <div class="node-sim-toolbar">
+            <div class="scenario-select-group">
+              <label for="node-sim-scenario-select" style="font-size: 0.85rem; font-weight: 700; color: var(--dark);">Scenario:</label>
+              <select id="node-sim-scenario-select" class="sim-select">
+                <option value="sim-1">1. Basic Timers (setTimeout)</option>
+                <option value="sim-2">2. nextTick vs Promise vs Timers</option>
+                <option value="sim-3">3. setTimeout(0) vs setImmediate</option>
+                <option value="sim-4">4. I/O Context (fs.readFile)</option>
+                <option value="sim-5">5. async / await Continuation</option>
+              </select>
+            </div>
+
+            <div class="sim-controls-group">
+              <span id="sim-step-badge" class="sim-badge-step">STEP 01 / 08</span>
+              <button id="sim-btn-prev" class="sim-btn"><i data-lucide="chevron-left"></i> Prev</button>
+              <button id="sim-btn-next" class="sim-btn primary-sim"><i data-lucide="chevron-right"></i> Next</button>
+              <button id="sim-btn-play" class="sim-btn"><i data-lucide="play"></i> Play</button>
+              <button id="sim-btn-reset" class="sim-btn"><i data-lucide="rotate-ccw"></i> Reset</button>
+              
+              <select id="sim-speed-select" class="sim-select" style="font-size: 0.8rem; padding: 0.35rem 0.5rem;">
+                <option value="2000">Slow (2s)</option>
+                <option value="1200" selected>Normal (1.2s)</option>
+                <option value="600">Fast (0.6s)</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Dashboard Grid -->
+          <div class="node-sim-grid">
+            <!-- Col 1: Code & Stack -->
+            <div style="display: flex; flex-direction: column; gap: 1rem;">
+              <div class="sim-card">
+                <div class="sim-card-header">
+                  <span class="sim-card-title"><i data-lucide="code"></i> Code Editor</span>
+                </div>
+                <div id="sim-code-display" class="sim-code-box"></div>
+              </div>
+
+              <div class="sim-card">
+                <div class="sim-card-header">
+                  <span class="sim-card-title"><i data-lucide="layers"></i> V8 Call Stack</span>
+                </div>
+                <div id="sim-stack-display" class="stack-display"></div>
+              </div>
+            </div>
+
+            <!-- Col 2: Event Loop Phases & Priority Queues -->
+            <div style="display: flex; flex-direction: column; gap: 1rem;">
+              <div class="node-loop-vis">
+                <div style="font-size: 0.8rem; font-weight: 800; color: var(--primary); text-transform: uppercase; margin-bottom: 0.75rem;">
+                  libuv Event Loop Phase Ring
+                </div>
+
+                <div class="phase-ring-container">
+                  <div id="phase-timers" class="phase-node">
+                    <span class="phase-name">1. TIMERS</span>
+                    <span class="phase-desc">setTimeout / setInterval callbacks</span>
+                  </div>
+                  <div class="phase-arrow">↓</div>
+
+                  <div id="phase-pending" class="phase-node">
+                    <span class="phase-name">2. PENDING CALLBACKS</span>
+                    <span class="phase-desc">Deferred system I/O callbacks</span>
+                  </div>
+                  <div class="phase-arrow">↓</div>
+
+                  <div id="phase-poll" class="phase-node">
+                    <span class="phase-name">3. POLL</span>
+                    <span class="phase-desc">Retrieve I/O events & run I/O callbacks</span>
+                  </div>
+                  <div class="phase-arrow">↓</div>
+
+                  <div id="phase-check" class="phase-node">
+                    <span class="phase-name">4. CHECK</span>
+                    <span class="phase-desc">setImmediate() callbacks</span>
+                  </div>
+                  <div class="phase-arrow">↓</div>
+
+                  <div id="phase-close" class="phase-node">
+                    <span class="phase-name">5. CLOSE CALLBACKS</span>
+                    <span class="phase-desc">socket.on('close') handlers</span>
+                  </div>
+                  <div class="phase-arrow" style="color:var(--primary);">↺ REPEAT LOOP</div>
+                </div>
+              </div>
+
+              <div class="grid-2" style="gap: 0.75rem;">
+                <div class="sim-card">
+                  <div class="sim-card-header">
+                    <span class="sim-card-title" style="color:#D97706;"><i data-lucide="zap"></i> nextTick Queue</span>
+                  </div>
+                  <div id="sim-nexttick-display" class="queue-display"></div>
+                </div>
+
+                <div class="sim-card">
+                  <div class="sim-card-header">
+                    <span class="sim-card-title" style="color:#7C3AED;"><i data-lucide="corner-down-right"></i> Microtasks (Promise)</span>
+                  </div>
+                  <div id="sim-microtask-display" class="queue-display"></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Col 3: Phase Queues, Output & Audit Log -->
+            <div style="display: flex; flex-direction: column; gap: 1rem;">
+              <div class="sim-card">
+                <div class="sim-card-header">
+                  <span class="sim-card-title"><i data-lucide="list"></i> Phase Queues Monitor</span>
+                </div>
+                <div style="display:flex; flex-direction:column; gap:0.5rem;">
+                  <div style="font-size:0.75rem; font-weight:700; color:var(--muted);">TIMERS QUEUE:</div>
+                  <div id="sim-timers-display" class="queue-display" style="min-height:50px;"></div>
+                  <div style="font-size:0.75rem; font-weight:700; color:var(--muted);">POLL QUEUE:</div>
+                  <div id="sim-poll-display" class="queue-display" style="min-height:50px;"></div>
+                  <div style="font-size:0.75rem; font-weight:700; color:var(--muted);">CHECK QUEUE:</div>
+                  <div id="sim-check-display" class="queue-display" style="min-height:50px;"></div>
+                </div>
+              </div>
+
+              <div class="sim-card">
+                <div class="sim-card-header">
+                  <span class="sim-card-title"><i data-lucide="terminal"></i> Node Console Output</span>
+                </div>
+                <div id="sim-console-output" class="sim-console-out"></div>
+              </div>
+
+              <div class="sim-card">
+                <div class="sim-card-header">
+                  <span class="sim-card-title"><i data-lucide="file-text"></i> Execution Audit Log</span>
+                </div>
+                <div id="sim-log-output" class="sim-log-out"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE: Phase Explorer -->
+    <section class="slide" data-day="SESSION — Phase Explorer">
+      <div class="slide-header">
+        <span class="slide-tag">SESSION — EVENT LOOP PHASES</span>
+        <h2 class="slide-title">Interactive Phase Explorer</h2>
+        <p class="slide-subtitle">Understand the 6 distinct phases of the libuv event loop in Node.js.</p>
+      </div>
+
+      <div class="slide-content">
+        <div class="phase-explorer-cards">
+          <div class="phase-card" style="border-top: 4px solid var(--primary);">
+            <div class="phase-card-header">
+              <span class="phase-badge-pill">Phase 1</span>
+              <h3 style="font-size:1.1rem; font-weight:700; color:var(--dark);">TIMERS</h3>
+            </div>
+            <p style="font-size:0.85rem; color:var(--muted); line-height:1.5;">
+              Executes callbacks scheduled by <code>setTimeout()</code> and <code>setInterval()</code> whose threshold time has elapsed.
+            </p>
+          </div>
+
+          <div class="phase-card" style="border-top: 4px solid var(--secondary);">
+            <div class="phase-card-header">
+              <span class="phase-badge-pill">Phase 2</span>
+              <h3 style="font-size:1.1rem; font-weight:700; color:var(--dark);">PENDING CALLBACKS</h3>
+            </div>
+            <p style="font-size:0.85rem; color:var(--muted); line-height:1.5;">
+              Executes I/O callbacks deferred to the next loop iteration (e.g. certain TCP errors like ECONNREFUSED).
+            </p>
+          </div>
+
+          <div class="phase-card" style="border-top: 4px solid #64748B;">
+            <div class="phase-card-header">
+              <span class="phase-badge-pill" style="background:#E2E8F0; color:#475569;">Phase 3</span>
+              <h3 style="font-size:1.1rem; font-weight:700; color:var(--dark);">IDLE, PREPARE</h3>
+            </div>
+            <p style="font-size:0.85rem; color:var(--muted); line-height:1.5;">
+              Used internally by Node.js and libuv for housekeeping prior to the Poll phase.
+            </p>
+          </div>
+
+          <div class="phase-card" style="border-top: 4px solid #0284C7;">
+            <div class="phase-card-header">
+              <span class="phase-badge-pill" style="background:#E0F2FE; color:#0284C7;">Phase 4</span>
+              <h3 style="font-size:1.1rem; font-weight:700; color:var(--dark);">POLL</h3>
+            </div>
+            <p style="font-size:0.85rem; color:var(--muted); line-height:1.5;">
+              Retrieves new I/O events (file disk read, incoming HTTP sockets) and executes I/O-related callbacks. Node can block here waiting for I/O!
+            </p>
+          </div>
+
+          <div class="phase-card" style="border-top: 4px solid var(--success);">
+            <div class="phase-card-header">
+              <span class="phase-badge-pill" style="background:#DCFCE7; color:var(--success);">Phase 5</span>
+              <h3 style="font-size:1.1rem; font-weight:700; color:var(--dark);">CHECK</h3>
+            </div>
+            <p style="font-size:0.85rem; color:var(--muted); line-height:1.5;">
+              Executes callbacks scheduled by <code>setImmediate()</code>. Runs immediately after the Poll phase completes.
+            </p>
+          </div>
+
+          <div class="phase-card" style="border-top: 4px solid var(--dark);">
+            <div class="phase-card-header">
+              <span class="phase-badge-pill" style="background:#F1F5F9; color:var(--dark);">Phase 6</span>
+              <h3 style="font-size:1.1rem; font-weight:700; color:var(--dark);">CLOSE CALLBACKS</h3>
+            </div>
+            <p style="font-size:0.85rem; color:var(--muted); line-height:1.5;">
+              Executes close handlers when sockets or handles close abruptly (e.g., <code>socket.on('close', ...)</code>).
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE: libuv Thread Pool Visual -->
+    <section class="slide" data-day="SESSION — libuv & Thread Pool">
+      <div class="slide-header">
+        <span class="slide-tag">SESSION — LIBUV ARCHITECTURE</span>
+        <h2 class="slide-title">libuv & The Thread Pool</h2>
+        <p class="slide-subtitle">How Node.js offloads synchronous OS tasks without blocking JavaScript.</p>
+      </div>
+
+      <div class="slide-content">
+        <div class="grid-2">
+          <div class="col-theory">
+            <div class="card">
+              <h3 class="card-title"><i data-lucide="cpu"></i> What is libuv?</h3>
+              <p class="card-text">
+                libuv is an open-source C library built for Node.js. It provides the event loop engine, asynchronous I/O primitives, and a default <strong>4-thread Worker Pool</strong> (configurable via <code>UV_THREADPOOL_SIZE</code>).
+              </p>
+            </div>
+
+            <div class="card" style="margin-top:1rem;">
+              <h4 style="font-weight:700;">What Uses the Thread Pool?</h4>
+              <ul class="feature-list" style="margin-top:0.35rem; font-size:0.85rem;">
+                <li class="feature-item"><div class="feature-icon"><i data-lucide="check"></i></div><div><strong>File System (fs):</strong> <code>fs.readFile()</code>, <code>fs.writeFile()</code></div></li>
+                <li class="feature-item"><div class="feature-icon"><i data-lucide="check"></i></div><div><strong>Cryptography (crypto):</strong> <code>crypto.pbkdf2()</code>, <code>crypto.randomBytes()</code></div></li>
+                <li class="feature-item"><div class="feature-icon"><i data-lucide="check"></i></div><div><strong>DNS Lookups:</strong> <code>dns.lookup()</code></div></li>
+                <li class="feature-item"><div class="feature-icon"><i data-lucide="check"></i></div><div><strong>Compression (zlib):</strong> <code>zlib.gzip()</code></div></li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="col-visual">
+            <div class="diagram-container">
+              <div style="font-size:0.8rem; font-weight:700; color:var(--muted); text-transform:uppercase; margin-bottom:0.75rem;">Network I/O vs Thread Pool</div>
+              
+              <div class="flow-step" style="background:#EFF6FF; border-color:var(--primary);">
+                🌐 Network Sockets (http/https/net)
+                <div class="sub-text">Handled directly by OS Async Kernel (epoll / kqueue / IOCP) — No Thread Pool needed!</div>
+              </div>
+
+              <div style="margin:0.5rem 0; font-weight:800; color:var(--secondary);">vs</div>
+
+              <div class="flow-step" style="background:#F0F9FF; border-color:#0284C7;">
+                📁 File System & CPU Crypto Tasks
+                <div class="sub-text">Offloaded to libuv Worker Thread Pool (Threads #1 to #4)</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE: process.nextTick() vs Promises -->
+    <section class="slide" data-day="SESSION — process.nextTick vs Promises">
+      <div class="slide-header">
+        <span class="slide-tag">SESSION — PRIORITY QUEUES</span>
+        <h2 class="slide-title">process.nextTick() vs Promises (Microtasks)</h2>
+        <p class="slide-subtitle">Node.js high-priority queues that run before event-loop phase transitions.</p>
+      </div>
+
+      <div class="slide-content">
+        <div class="grid-2">
+          <div class="col-theory">
+            <div class="card" style="border-left: 4px solid #D97706;">
+              <h3 class="card-title" style="color:#D97706;"><i data-lucide="alert-circle"></i> process.nextTick()</h3>
+              <p class="card-text" style="font-size:0.88rem;">
+                • Node.js specific priority queue.<br>
+                • Processed <strong>IMMEDIATELY</strong> after current operation finishes, before moving to ANY event loop phase or microtask queue!<br>
+                • ⚠️ Recursively calling <code>nextTick()</code> will starve the Event Loop!
+              </p>
+            </div>
+
+            <div class="card" style="border-left: 4px solid #7C3AED; margin-top:1rem;">
+              <h3 class="card-title" style="color:#7C3AED;"><i data-lucide="corner-down-right"></i> Promise Microtasks</h3>
+              <p class="card-text" style="font-size:0.88rem;">
+                • Standard V8 Microtask queue.<br>
+                • Processed right after the <code>nextTick</code> queue is completely drained.<br>
+                • Used by <code>Promise.then()</code>, <code>await</code>, and <code>queueMicrotask()</code>.
+              </p>
+            </div>
+          </div>
+
+          <div class="col-visual">
+            <div class="code-container">
+              <div class="code-header">
+                <span class="code-title"><i data-lucide="code"></i> priority_order.js</span>
+              </div>
+              <pre class="code-body"><code class="language-javascript">console.log("A");
+
+process.nextTick(() => {
+  console.log("B");
+});
+
+Promise.resolve().then(() => {
+  console.log("C");
+});
+
+console.log("D");</code></pre>
+            </div>
+
+            <div class="output-box" style="margin-top:0.75rem;">
+              <div class="output-header">Console Output</div>
+A<br>
+D<br>
+B  <span style="color:#D97706; font-size:0.78rem;">← process.nextTick runs first!</span><br>
+C  <span style="color:#7C3AED; font-size:0.78rem;">← Promise.then runs second!</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE: setTimeout vs setImmediate in I/O Context -->
+    <section class="slide" data-day="SESSION — Timers vs Immediate">
+      <div class="slide-header">
+        <span class="slide-tag">SESSION — CONTEXT MATTERS</span>
+        <h2 class="slide-title">setTimeout(0) vs setImmediate() in I/O</h2>
+        <p class="slide-subtitle">Why execution order is guaranteed inside I/O callbacks.</p>
+      </div>
+
+      <div class="slide-content">
+        <div class="grid-2">
+          <div class="col-theory">
+            <div class="card" style="border-top:4px solid var(--primary);">
+              <h4 style="font-weight:700;">In Main Module Context</h4>
+              <p class="card-text" style="font-size:0.85rem; margin-top:0.3rem;">
+                The execution order of <code>setTimeout(0)</code> vs <code>setImmediate()</code> in the main script is non-deterministic and depends on process startup performance.
+              </p>
+            </div>
+
+            <div class="card" style="border-top:4px solid var(--success); margin-top:1rem;">
+              <h4 style="font-weight:700; color:var(--success);">Inside an I/O Callback (fs.readFile)</h4>
+              <p class="card-text" style="font-size:0.85rem; margin-top:0.3rem;">
+                Inside an I/O callback, <strong>setImmediate ALWAYS executes before setTimeout(0)</strong>! Because the I/O callback executes during the <strong>POLL phase</strong>, and POLL always moves to <strong>CHECK phase (setImmediate)</strong> next!
+              </p>
+            </div>
+          </div>
+
+          <div class="col-visual">
+            <div class="code-container">
+              <div class="code-header">
+                <span class="code-title"><i data-lucide="file-code"></i> io_context_demo.js</span>
+              </div>
+              <pre class="code-body"><code class="language-javascript">const fs = require("fs");
+
+fs.readFile(__filename, () => {
+  setTimeout(() => {
+    console.log("timeout");
+  }, 0);
+
+  setImmediate(() => {
+    console.log("immediate");
+  });
+});</code></pre>
+            </div>
+
+            <div class="output-box" style="margin-top:0.75rem;">
+              <div class="output-header">Console Output in I/O Context</div>
+immediate <span style="color:var(--success); font-size:0.78rem;">← POLL phase moves to CHECK phase first!</span><br>
+timeout   <span style="color:var(--primary); font-size:0.78rem;">← Timers phase reached on next loop turn</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE: Blocking the Event Loop Demo -->
+    <section class="slide" data-day="SESSION — Blocking Demo">
+      <div class="slide-header">
+        <span class="slide-tag">SESSION — PERFORMANCE HAZARD</span>
+        <h2 class="slide-title">Why Blocking the Event Loop is Dangerous</h2>
+        <p class="slide-subtitle">What happens when synchronous CPU work hogs the JavaScript main thread.</p>
+      </div>
+
+      <div class="slide-content">
+        <div class="grid-2">
+          <div class="col-theory">
+            <div class="callout error">
+              <div class="callout-title"><i data-lucide="alert-octagon"></i> THE DANGER OF BLOCKING</div>
+              Node.js runs JavaScript on <strong>ONE main thread</strong>. If a request executes a heavy synchronous loop or CPU calculation, the Call Stack stays full, freezing ALL other incoming HTTP requests!
+            </div>
+
+            <div class="card" style="margin-top:1rem;">
+              <h4 style="font-weight:700;">How to Avoid Blocking</h4>
+              <ul class="feature-list" style="margin-top:0.35rem; font-size:0.85rem;">
+                <li class="feature-item"><div class="feature-icon"><i data-lucide="check"></i></div><div>Use asynchronous non-blocking APIs (<code>fs.readFile</code> instead of <code>fs.readFileSync</code>).</div></li>
+                <li class="feature-item"><div class="feature-icon"><i data-lucide="check"></i></div><div>Offload heavy CPU math to <strong>Worker Threads</strong> (<code>worker_threads</code> module).</div></li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="col-visual">
+            <div class="code-container">
+              <div class="code-header">
+                <span class="code-title"><i data-lucide="zap-off"></i> blocking_server.js</span>
+              </div>
+              <pre class="code-body"><code class="language-javascript">app.get("/block", (req, res) => {
+  console.log("Start heavy CPU calculation...");
+  
+  // ⚠️ SYNCHRONOUS CPU BLOCKING LOOP!
+  for (let i = 0; i < 1e9; i++) {
+    // Hogs thread for 3-5 seconds
+  }
+  
+  res.send("Finished!");
+});</code></pre>
+            </div>
+
+            <div class="diagram-container" style="margin-top:0.75rem; padding:0.75rem;">
+              <div style="font-size:0.78rem; font-weight:700; color:var(--error); text-transform:uppercase;">Thread Saturation Effect</div>
+              <div style="font-size:0.82rem; color:var(--dark); margin-top:0.3rem;">
+                Request A ➔ [ HOGGING MAIN CALL STACK ]<br>
+                Request B ➔ ⏳ WAITING (TIMEOUT ERROR)<br>
+                Request C ➔ ⏳ WAITING (TIMEOUT ERROR)
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE: Common Misconceptions -->
+    <section class="slide" data-day="SESSION — Misconceptions">
+      <div class="slide-header">
+        <span class="slide-tag">SESSION — MYTH BUSTING</span>
+        <h2 class="slide-title">Common Node.js Event Loop Misconceptions</h2>
+        <p class="slide-subtitle">Clearing up the top 7 myths taught in traditional tutorials.</p>
+      </div>
+
+      <div class="slide-content">
+        <div class="grid-2">
+          <div class="misconception-card">
+            <div class="myth-header"><i data-lucide="x-circle"></i> Myth 1: Node.js is completely single-threaded</div>
+            <div class="truth-header"><i data-lucide="check-circle"></i> Truth</div>
+            <p style="font-size:0.85rem; color:var(--dark);">JS execution is single-threaded, but libuv uses background threads and kernel async APIs.</p>
+          </div>
+
+          <div class="misconception-card">
+            <div class="myth-header"><i data-lucide="x-circle"></i> Myth 2: Every async operation uses the thread pool</div>
+            <div class="truth-header"><i data-lucide="check-circle"></i> Truth</div>
+            <p style="font-size:0.85rem; color:var(--dark);">Network sockets (HTTP/TCP) use non-blocking OS kernel polling directly.</p>
+          </div>
+
+          <div class="misconception-card">
+            <div class="myth-header"><i data-lucide="x-circle"></i> Myth 3: setTimeout(fn, 0) executes in exactly 0ms</div>
+            <div class="truth-header"><i data-lucide="check-circle"></i> Truth</div>
+            <p style="font-size:0.85rem; color:var(--dark);">0ms is a minimum delay threshold. It must wait for Call Stack and phase queues.</p>
+          </div>
+
+          <div class="misconception-card">
+            <div class="myth-header"><i data-lucide="x-circle"></i> Myth 4: process.nextTick() is an event loop phase</div>
+            <div class="truth-header"><i data-lucide="check-circle"></i> Truth</div>
+            <p style="font-size:0.85rem; color:var(--dark);">nextTick is a Node priority queue processed immediately after current operation.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE: Cheat Sheet -->
+    <section class="slide" data-day="SESSION — Cheat Sheet">
+      <div class="slide-header">
+        <span class="slide-tag">SESSION — QUICK REFERENCE</span>
+        <h2 class="slide-title">Node.js Event Loop Cheat Sheet</h2>
+        <p class="slide-subtitle">Summary reference guide for interviews and architecture design.</p>
+      </div>
+
+      <div class="slide-content">
+        <table class="comparison-table">
+          <thead>
+            <tr>
+              <th>Component / Queue</th>
+              <th>Primary Role</th>
+              <th>Priority Level</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Call Stack (V8)</strong></td>
+              <td>Executes synchronous JavaScript code</td>
+              <td><span class="pill-badge" style="background:#FEE2E2; color:#DC2626;">HIGHEST (Immediate)</span></td>
+            </tr>
+            <tr>
+              <td><strong>process.nextTick()</strong></td>
+              <td>Node-specific microtask queue</td>
+              <td><span class="pill-badge" style="background:#FEF3C7; color:#D97706;">HIGH (Drains after operation)</span></td>
+            </tr>
+            <tr>
+              <td><strong>Promise Microtasks</strong></td>
+              <td>V8 Promise reaction callbacks</td>
+              <td><span class="pill-badge" style="background:#F3E8FF; color:#7C3AED;">HIGH (Drains after nextTick)</span></td>
+            </tr>
+            <tr>
+              <td><strong>Timers Phase</strong></td>
+              <td>setTimeout() & setInterval() callbacks</td>
+              <td><span class="pill-badge" style="background:#EFF6FF; color:#2563EB;">Phase 1</span></td>
+            </tr>
+            <tr>
+              <td><strong>Poll Phase</strong></td>
+              <td>I/O callbacks & retrieving I/O events</td>
+              <td><span class="pill-badge" style="background:#E0F2FE; color:#0284C7;">Phase 4 (Core I/O)</span></td>
+            </tr>
+            <tr>
+              <td><strong>Check Phase</strong></td>
+              <td>setImmediate() callbacks</td>
+              <td><span class="pill-badge" style="background:#DCFCE7; color:#16A34A;">Phase 5</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- SLIDE: Interactive 15-Question Quiz -->
+    <section class="slide" data-day="SESSION — Quiz">
+      <div class="slide-header">
+        <span class="slide-tag">SESSION — KNOWLEDGE CHECK</span>
+        <h2 class="slide-title">Node.js Event Loop 15-Question Master Quiz</h2>
+        <p class="slide-subtitle">Test your understanding of Node.js asynchronous architecture.</p>
+      </div>
+
+      <div class="slide-content" style="max-height: calc(100vh - 180px); overflow-y: auto;">
+        <div id="quiz-score-display" style="font-size:1.1rem; font-weight:700; margin-bottom:1rem; color:var(--primary);">
+          Score: <strong>0 / 15</strong> (0%)
+        </div>
+
+        <!-- Question 1 -->
+        <div class="quiz-question-card mcq-item" data-question-id="q1" data-correct-option="2">
+          <div style="font-weight:700; color:var(--dark);">Q1: Which C library provides the Event Loop engine and thread pool in Node.js?</div>
+          <div class="options-grid">
+            <button class="option-btn" data-option="1">A) V8 Engine</button>
+            <button class="option-btn" data-option="2">B) libuv</button>
+            <button class="option-btn" data-option="3">C) Web APIs</button>
+            <button class="option-btn" data-option="4">D) OpenSSL</button>
+          </div>
+        </div>
+
+        <!-- Question 2 -->
+        <div class="quiz-question-card mcq-item" data-question-id="q2" data-correct-option="3">
+          <div style="font-weight:700; color:var(--dark);">Q2: Which phase of the Node.js event loop executes setImmediate() callbacks?</div>
+          <div class="options-grid">
+            <button class="option-btn" data-option="1">A) Timers Phase</button>
+            <button class="option-btn" data-option="2">B) Poll Phase</button>
+            <button class="option-btn" data-option="3">C) Check Phase</button>
+            <button class="option-btn" data-option="4">D) Pending Callbacks Phase</button>
+          </div>
+        </div>
+
+        <!-- Question 3 -->
+        <div class="quiz-question-card mcq-item" data-question-id="q3" data-correct-option="1">
+          <div style="font-weight:700; color:var(--dark);">Q3: Between process.nextTick() and Promise.then(), which queue has higher priority?</div>
+          <div class="options-grid">
+            <button class="option-btn" data-option="1">A) process.nextTick()</button>
+            <button class="option-btn" data-option="2">B) Promise.then()</button>
+            <button class="option-btn" data-option="3">C) Both execute in random order</button>
+            <button class="option-btn" data-option="4">D) Neither runs until timers complete</button>
+          </div>
+        </div>
+
+        <!-- Question 4 -->
+        <div class="quiz-question-card mcq-item" data-question-id="q4" data-correct-option="2">
+          <div style="font-weight:700; color:var(--dark);">Q4: Inside an I/O callback (e.g. fs.readFile), which executes first: setImmediate() or setTimeout(0)?</div>
+          <div class="options-grid">
+            <button class="option-btn" data-option="1">A) setTimeout(0)</button>
+            <button class="option-btn" data-option="2">B) setImmediate()</button>
+            <button class="option-btn" data-option="3">C) They execute simultaneously</button>
+            <button class="option-btn" data-option="4">D) Rejects with Error</button>
+          </div>
+        </div>
+
+        <!-- Question 5 -->
+        <div class="quiz-question-card mcq-item" data-question-id="q5" data-correct-option="4">
+          <div style="font-weight:700; color:var(--dark);">Q5: Which of the following operations uses the libuv thread pool by default?</div>
+          <div class="options-grid">
+            <button class="option-btn" data-option="1">A) HTTP GET requests</button>
+            <button class="option-btn" data-option="2">B) TCP Socket connections</button>
+            <button class="option-btn" data-option="3">C) setTimeout() timer scheduling</button>
+            <button class="option-btn" data-option="4">D) fs.readFile() file disk operations</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE: Final Master Challenge -->
+    <section class="slide" data-day="SESSION — Challenge">
+      <div class="slide-header">
+        <span class="slide-tag">SESSION — MASTER CHALLENGE</span>
+        <h2 class="slide-title">Node.js Event Loop Code Challenge</h2>
+        <p class="slide-subtitle">Predict the exact output of this complex multi-queue snippet.</p>
+      </div>
+
+      <div class="slide-content">
+        <div class="quiz-card">
+          <div class="code-container">
+            <pre class="code-body"><code class="language-javascript">console.log("1");
+
+setTimeout(() => console.log("2"), 0);
+
+setImmediate(() => console.log("3"));
+
+Promise.resolve().then(() => console.log("4"));
+
+process.nextTick(() => console.log("5"));
+
+console.log("6");</code></pre>
+          </div>
+
+          <div class="question-text">What output sequence is printed in Node.js?</div>
+
+          <button class="reveal-btn" style="margin-top:0.75rem;">Reveal Output & Step-by-Step Breakdown</button>
+
+          <div class="explanation-card">
+            <h4 style="color:var(--primary); font-size:1rem; margin-bottom:0.35rem;">Expected Output: 1 ➔ 6 ➔ 5 ➔ 4 ➔ 2 (or 3)</h4>
+            <p style="font-size:0.88rem; color:var(--dark); line-height:1.6;">
+              1. <strong>Synchronous code:</strong> prints <code>1</code> then <code>6</code>.<br>
+              2. <strong>nextTick Queue:</strong> drains first ➔ prints <code>5</code>.<br>
+              3. <strong>Microtask Queue:</strong> drains second ➔ prints <code>4</code>.<br>
+              4. <strong>Timers vs Check:</strong> In main module script, <code>2</code> and <code>3</code> execution order depends on process start time!
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+
+    <!-- SLIDE 28: Day 4 Section Title -->
+    <section class="slide" data-day="DAY 4 — Express Basics">
+      <div class="slide-header" style="text-align: center; margin-top: 3rem;">
+        <span class="slide-tag">DAY 4 MODULE</span>
+        <h1 class="slide-title" style="font-size: 2.8rem; color: var(--primary);">
+          EXPRESS.JS BASICS
+        </h1>
+        <p class="slide-subtitle" style="font-size: 1.2rem;">
+          Setting Up Express & Creating Your First Web Server
+        </p>
+      </div>
+
+      <div class="slide-content" style="max-width: 700px; margin: 2rem auto 0 auto; text-align: center;">
+        <div class="badge-group" style="justify-content: center;">
+          <span class="pill-badge">Express Web Framework</span>
+          <span class="pill-badge">app.listen()</span>
+          <span class="pill-badge">HTTP Methods</span>
+          <span class="pill-badge">req & res</span>
+          <span class="pill-badge">res.send()</span>
+          <span class="pill-badge">res.json()</span>
+          <span class="pill-badge">nodemon</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 29: Express Setup & First Server -->
+    <section class="slide" data-day="DAY 4 — Express Basics">
+      <div class="slide-header">
+        <span class="slide-tag">DAY 4 — FIRST SERVER</span>
+        <h2 class="slide-title">Setting Up Express & Creating a Server</h2>
+        <p class="slide-subtitle">Installing dependencies and creating server.js line by line.</p>
+      </div>
+
+      <div class="slide-content">
+        <div class="grid-2">
+          <div class="col-theory">
+            <div class="card">
+              <h3 class="card-title"><i data-lucide="terminal"></i> Terminal Commands</h3>
+              <div class="code-container" style="margin-top:0.4rem;">
+                <pre class="code-body"><code class="language-bash">npm init -y
+npm install express
+npm install --save-dev nodemon</code></pre>
+              </div>
+            </div>
+
+            <div class="callout tip" style="margin-top:0.75rem;">
+              <div class="callout-title"><i data-lucide="refresh-cw"></i> WHY NODEMON?</div>
+              <code>nodemon</code> automatically restarts your Node.js server every time you save changes to your code!
+            </div>
+          </div>
+
+          <div class="col-visual">
+            <div class="code-container">
+              <div class="code-header">
+                <span class="code-title"><i data-lucide="file-code"></i> server.js</span>
+                <button class="copy-btn"><i data-lucide="copy"></i> Copy</button>
+              </div>
+              <pre class="code-body"><code class="language-javascript">const express = require("express");
+
+const app = express();
+const PORT = 3000;
+
+// Define GET route for home page
+app.get("/", (req, res) => {
+  res.send("Hello World from Express Server!");
+});
+
+// Start server on port 3000
+app.listen(PORT, () => {
+  console.log(`Server running on http://localhost:${PORT}`);
+});</code></pre>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 30: HTTP Methods & Request Response -->
+    <section class="slide" data-day="DAY 4 — HTTP">
+      <div class="slide-header">
+        <span class="slide-tag">DAY 4 — HTTP PIPELINE</span>
+        <h2 class="slide-title">HTTP Verbs & Express Response Methods</h2>
+        <p class="slide-subtitle">Handling GET, POST requests and formatting responses.</p>
+      </div>
+
+      <div class="slide-content">
+        <div class="grid-3" style="margin-bottom:1rem;">
+          <div class="card">
+            <h4 style="color:var(--primary); font-weight:700;">res.send("text")</h4>
+            <p style="font-size:0.82rem; color:var(--muted); margin-top:0.25rem;">Sends plain text or HTML string response.</p>
+          </div>
+          <div class="card">
+            <h4 style="color:var(--secondary); font-weight:700;">res.json({ key: "val" })</h4>
+            <p style="font-size:0.82rem; color:var(--muted); margin-top:0.25rem;">Sends JSON formatted data (sets Content-Type to application/json).</p>
+          </div>
+          <div class="card">
+            <h4 style="color:var(--success); font-weight:700;">res.status(201).json()</h4>
+            <p style="font-size:0.82rem; color:var(--muted); margin-top:0.25rem;">Sets explicit HTTP status code before sending JSON payload.</p>
+          </div>
+        </div>
+
+        <div class="diagram-container">
+          <div style="font-size:0.85rem; font-weight:700; color:var(--muted); margin-bottom:0.75rem; text-transform:uppercase;">Express Request-Response Pipeline</div>
+          <div class="flow-horizontal">
+            <div class="flow-h-node">Client (Browser / Postman)</div>
+            <div class="flow-h-arrow">➜ GET /api/users ➜</div>
+            <div class="flow-h-node" style="background:#EFF6FF;">Express App Router</div>
+            <div class="flow-h-arrow">➜ Route Handler ➜</div>
+            <div class="flow-h-node" style="background:#F0FDF4;">res.status(200).json()</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================================================================
+         DAY 5 — PARAMS & QUERY
+         =================================================================== -->
+
+    <!-- SLIDE 31: Day 5 Section Title -->
+    <section class="slide" data-day="DAY 5 — Params & Query">
+      <div class="slide-header" style="text-align: center; margin-top: 3rem;">
+        <span class="slide-tag">DAY 5 MODULE</span>
+        <h1 class="slide-title" style="font-size: 2.8rem; color: var(--primary);">
+          QUERY PARAMS & ROUTE PARAMS
+        </h1>
+        <p class="slide-subtitle" style="font-size: 1.2rem;">
+          Extracting Dynamic Parameters from URL Endpoints in Express
+        </p>
+      </div>
+
+      <div class="slide-content" style="max-width: 700px; margin: 2rem auto 0 auto; text-align: center;">
+        <div class="badge-group" style="justify-content: center;">
+          <span class="pill-badge">req.params</span>
+          <span class="pill-badge">req.query</span>
+          <span class="pill-badge">/users/:id</span>
+          <span class="pill-badge">?category=shoes</span>
+          <span class="pill-badge">Filtering & Sorting</span>
+          <span class="pill-badge">Pagination</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 32: Route Params vs Query Params -->
+    <section class="slide" data-day="DAY 5 — Params & Query">
+      <div class="slide-header">
+        <span class="slide-tag">DAY 5 — COMPARISON</span>
+        <h2 class="slide-title">Route Parameters vs Query Parameters</h2>
+        <p class="slide-subtitle">When to use req.params versus req.query in web APIs.</p>
+      </div>
+
+      <div class="slide-content">
+        <table class="comparison-table">
+          <thead>
+            <tr>
+              <th>Feature</th>
+              <th>Route Parameters (req.params)</th>
+              <th>Query Parameters (req.query)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>URL Format</strong></td>
+              <td><code>/users/:id</code> ➔ <code>/users/101</code></td>
+              <td><code>/products?category=shoes&page=2</code></td>
+            </tr>
+            <tr>
+              <td><strong>Primary Purpose</strong></td>
+              <td>Identify a specific, unique resource item</td>
+              <td>Filter, search, sort, or paginate data lists</td>
+            </tr>
+            <tr>
+              <td><strong>Express Property</strong></td>
+              <td><code>req.params.id</code></td>
+              <td><code>req.query.category</code>, <code>req.query.page</code></td>
+            </tr>
+            <tr>
+              <td><strong>Mandatory?</strong></td>
+              <td>Required part of the route URL path</td>
+              <td>Optional parameters after <code>?</code></td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="grid-2" style="margin-top:1rem;">
+          <div class="code-container">
+            <div class="code-header">
+              <span class="code-title"><i data-lucide="code"></i> route_params.js</span>
+            </div>
+            <pre class="code-body"><code class="language-javascript">app.get("/users/:id", (req, res) => {
+  const userId = req.params.id; // "101"
+  res.json({ id: userId, name: "John Doe" });
+});</code></pre>
+          </div>
+
+          <div class="code-container">
+            <div class="code-header">
+              <span class="code-title"><i data-lucide="code"></i> query_params.js</span>
+            </div>
+            <pre class="code-body"><code class="language-javascript">app.get("/products", (req, res) => {
+  const { category, page } = req.query;
+  res.send(`Category: ${category}, Page: ${page}`);
+});</code></pre>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================================================================
+         DAY 6 — IMPLEMENTING CRUD API
+         =================================================================== -->
+
+    <!-- SLIDE 33: Day 6 Section Title -->
+    <section class="slide" data-day="DAY 6 — CRUD API">
+      <div class="slide-header" style="text-align: center; margin-top: 3rem;">
+        <span class="slide-tag">DAY 6 MODULE</span>
+        <h1 class="slide-title" style="font-size: 2.8rem; color: var(--primary);">
+          IMPLEMENTING CRUD API
+        </h1>
+        <p class="slide-subtitle" style="font-size: 1.2rem;">
+          Building a RESTful In-Memory User API with HTTP Methods & Status Codes
+        </p>
+      </div>
+
+      <div class="slide-content" style="max-width: 700px; margin: 2rem auto 0 auto; text-align: center;">
+        <div class="badge-group" style="justify-content: center;">
+          <span class="pill-badge">REST API</span>
+          <span class="pill-badge">CRUD Operations</span>
+          <span class="pill-badge">express.json()</span>
+          <span class="pill-badge">HTTP Status Codes</span>
+          <span class="pill-badge">In-Memory Array</span>
+          <span class="pill-badge">Mongoose Preview</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 34: Complete CRUD Code Walkthrough -->
+    <section class="slide" data-day="DAY 6 — CRUD API">
+      <div class="slide-header">
+        <span class="slide-tag">DAY 6 — CODE IMPLEMENTATION</span>
+        <h2 class="slide-title">Complete User CRUD API Implementation</h2>
+        <p class="slide-subtitle">Full working Express in-memory CRUD server.</p>
+      </div>
+
+      <div class="slide-content">
+        <div class="code-container">
+          <div class="code-header">
+            <span class="code-title"><i data-lucide="file-code"></i> crud_api.js</span>
+            <button class="copy-btn"><i data-lucide="copy"></i> Copy</button>
+          </div>
+          <pre class="code-body"><code class="language-javascript">const express = require("express");
+const app = express();
+
+app.use(express.json()); // Body parser middleware for req.body!
+
+let users = [
+  { id: 1, name: "Alice", email: "alice@example.com" },
+  { id: 2, name: "Bob", email: "bob@example.com" }
+];
+
+// GET All Users (READ)
+app.get("/api/users", (req, res) => res.status(200).json(users));
+
+// POST Create User (CREATE)
+app.post("/api/users", (req, res) => {
+  const newUser = { id: Date.now(), name: req.body.name, email: req.body.email };
+  users.push(newUser);
+  res.status(201).json(newUser); // 201 Created
+});
+
+// DELETE User (DELETE)
+app.delete("/api/users/:id", (req, res) => {
+  users = users.filter(u => u.id !== parseInt(req.params.id));
+  res.status(200).json({ message: "User deleted successfully" });
+});
+
+app.listen(3000, () => console.log("CRUD Server running on port 3000"));</code></pre>
+        </div>
+
+        <div class="callout tip">
+          <div class="callout-title"><i data-lucide="check"></i> HTTP STATUS CODES CHEAT SHEET</div>
+          <strong>200 OK</strong> (Success) • <strong>201 Created</strong> (POST) • <strong>400 Bad Request</strong> (Invalid data) • <strong>404 Not Found</strong> (Resource missing) • <strong>500 Error</strong>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================================================================
+         DAY 7 — PLACEHOLDER (EXPLICIT REQUIREMENT)
+         =================================================================== -->
+
+    <!-- SLIDE 35: Day 7 Placeholder -->
+    <section class="slide" data-day="DAY 7 — Placeholder">
+      <div class="slide-header" style="text-align: center; margin-top: 3rem;">
+        <span class="slide-tag" style="background:#F3F4F6; color:#6B7280; border-color:#E5E7EB;">DAY 7 — SYLLABUS PLACEHOLDER</span>
+        <h1 class="slide-title" style="font-size: 2.8rem; margin-top: 1rem; color: var(--muted);">Day 7</h1>
+        <h2 style="font-size: 1.6rem; color: var(--primary); font-weight: 600; margin-top: 0.5rem;">Topic to be added</h2>
+      </div>
+
+      <div class="slide-content" style="max-width: 650px; margin: 2rem auto 0 auto; text-align: center;">
+        <div class="card" style="border: 2px dashed var(--border); padding: 3rem; background: var(--bg-surface);">
+          <div style="font-size: 3.5rem; color: var(--secondary); margin-bottom: 1rem;"><i data-lucide="calendar"></i></div>
+          <p class="card-text" style="font-size: 1.15rem; color: var(--muted); line-height: 1.6;">
+            The official Day 7 topic is not available yet.<br>
+            Add the topic here when the syllabus is provided.
+          </p>
+        </div>
+      </div>
+
+      <div class="mentor-note" style="display:none;">
+        <div class="mentor-note-card">
+          <strong>MENTOR NOTE:</strong> This is an explicit placeholder slide per project specification. DO NOT invent topics for Day 7. Update when syllabus update arrives.
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================================================================
+         DAY 8 — USER SESSIONS & AUTHENTICATION
+         =================================================================== -->
+
+    <!-- SLIDE 36: Day 8 Section Title -->
+    <section class="slide" data-day="DAY 8 — User Sessions">
+      <div class="slide-header" style="text-align: center; margin-top: 3rem;">
+        <span class="slide-tag">DAY 8 MODULE</span>
+        <h1 class="slide-title" style="font-size: 2.8rem; color: var(--primary);">
+          IMPLEMENTING USER SESSIONS
+        </h1>
+        <p class="slide-subtitle" style="font-size: 1.2rem;">
+          Authentication, Session Storage, Cookies & Protected Routes
+        </p>
+      </div>
+
+      <div class="slide-content" style="max-width: 700px; margin: 2rem auto 0 auto; text-align: center;">
+        <div class="badge-group" style="justify-content: center;">
+          <span class="pill-badge">Auth vs Authz</span>
+          <span class="pill-badge">Session ID</span>
+          <span class="pill-badge">HttpOnly Cookies</span>
+          <span class="pill-badge">express-session</span>
+          <span class="pill-badge">Protected Routes</span>
+          <span class="pill-badge">Sessions vs JWT</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 37: Session Authentication Architecture -->
+    <section class="slide" data-day="DAY 8 — Sessions">
+      <div class="slide-header">
+        <span class="slide-tag">DAY 8 — AUTH ARCHITECTURE</span>
+        <h2 class="slide-title">Session & Cookie Authentication Flow</h2>
+        <p class="slide-subtitle">How servers maintain logged-in state over stateless HTTP.</p>
+      </div>
+
+      <div class="slide-content">
+        <div class="grid-2">
+          <div class="col-theory">
+            <div class="card">
+              <h3 class="card-title"><i data-lucide="shield"></i> Session Concept</h3>
+              <p class="card-text">
+                When a user logs in, the server creates a Session object in memory/DB and sends a unique <strong>Session ID</strong> back to the browser inside a <strong>Cookie header</strong>.
+              </p>
+            </div>
+
+            <div class="callout warning">
+              <div class="callout-title"><i data-lucide="lock"></i> Cookie Security Flags</div>
+              • <code>HttpOnly</code>: Prevents XSS scripts from reading session cookies.<br>
+              • <code>Secure</code>: Transmits cookie over HTTPS only.<br>
+              • <code>SameSite=Strict</code>: Protects against Cross-Site Request Forgery (CSRF).
+            </div>
+          </div>
+
+          <div class="col-visual">
+            <div class="diagram-container">
+              <div class="flow-step">1. User sends POST /login (email, password)</div>
+              <div class="flow-arrow">↓</div>
+              <div class="flow-step" style="background:#EFF6FF;">2. Server verifies credentials & creates Session</div>
+              <div class="flow-arrow">↓</div>
+              <div class="flow-step" style="background:#F0F9FF;">3. Server sets Header: Set-Cookie: connect.sid=ABC123</div>
+              <div class="flow-arrow">↓</div>
+              <div class="flow-step">4. Browser automatically sends Cookie on future requests!</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================================================================
+         DAY 9 — FILE UPLOADS WITH MULTER
+         =================================================================== -->
+
+    <!-- SLIDE 38: Day 9 Section Title -->
+    <section class="slide" data-day="DAY 9 — Multer Uploads">
+      <div class="slide-header" style="text-align: center; margin-top: 3rem;">
+        <span class="slide-tag">DAY 9 MODULE</span>
+        <h1 class="slide-title" style="font-size: 2.8rem; color: var(--primary);">
+          HANDLING FILE UPLOADS WITH MULTER
+        </h1>
+        <p class="slide-subtitle" style="font-size: 1.2rem;">
+          Parsing multipart/form-data, Disk Storage & File Validation
+        </p>
+      </div>
+
+      <div class="slide-content" style="max-width: 700px; margin: 2rem auto 0 auto; text-align: center;">
+        <div class="badge-group" style="justify-content: center;">
+          <span class="pill-badge">multipart/form-data</span>
+          <span class="pill-badge">Multer</span>
+          <span class="pill-badge">diskStorage()</span>
+          <span class="pill-badge">upload.single()</span>
+          <span class="pill-badge">req.file</span>
+          <span class="pill-badge">MIME Validation</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 39: Multer Code Walkthrough -->
+    <section class="slide" data-day="DAY 9 — Multer Uploads">
+      <div class="slide-header">
+        <span class="slide-tag">DAY 9 — CODE WALKTHROUGH</span>
+        <h2 class="slide-title">Multer Single File Upload Example</h2>
+        <p class="slide-subtitle">Configuring storage destination and route middleware.</p>
+      </div>
+
+      <div class="slide-content">
+        <div class="grid-2">
+          <div class="col-theory">
+            <div class="card">
+              <h3 class="card-title"><i data-lucide="upload"></i> Why Multer?</h3>
+              <p class="card-text">
+                Standard <code>express.json()</code> cannot parse raw binary files. Multer handles incoming <code>multipart/form-data</code> requests.
+              </p>
+            </div>
+
+            <div class="callout tip">
+              <div class="callout-title"><i data-lucide="file"></i> Accessing Uploaded Files</div>
+              • Single Upload: <code>req.file</code> contains file object.<br>
+              • Multiple Uploads: <code>req.files</code> contains array of files.
+            </div>
+          </div>
+
+          <div class="col-visual">
+            <div class="code-container">
+              <div class="code-header">
+                <span class="code-title"><i data-lucide="file-code"></i> multer_config.js</span>
+                <button class="copy-btn"><i data-lucide="copy"></i> Copy</button>
+              </div>
+              <pre class="code-body"><code class="language-javascript">const multer = require("multer");
+
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => cb(null, "uploads/"),
+  filename: (req, file, cb) => cb(null, Date.now() + "-" + file.originalname)
+});
+
+const upload = multer({ 
+  storage: storage, 
+  limits: { fileSize: 2 * 1024 * 1024 } // 2MB limit
+});
+
+app.post("/upload", upload.single("image"), (req, res) => {
+  res.json({ message: "File uploaded!", file: req.file });
+});</code></pre>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================================================================
+         DAY 10 — BUFFER IN NODE.JS
+         =================================================================== -->
+
+    <!-- SLIDE 40: Day 10 Section Title -->
+    <section class="slide" data-day="DAY 10 — Buffer">
+      <div class="slide-header" style="text-align: center; margin-top: 3rem;">
+        <span class="slide-tag">DAY 10 MODULE</span>
+        <h1 class="slide-title" style="font-size: 2.8rem; color: var(--primary);">
+          BUFFER IN NODE.JS
+        </h1>
+        <p class="slide-subtitle" style="font-size: 1.2rem;">
+          Binary Data Handling, Memory Allocation & Encodings
+        </p>
+      </div>
+
+      <div class="slide-content" style="max-width: 700px; margin: 2rem auto 0 auto; text-align: center;">
+        <div class="badge-group" style="justify-content: center;">
+          <span class="pill-badge">Binary Data</span>
+          <span class="pill-badge">Buffer.from()</span>
+          <span class="pill-badge">Buffer.alloc()</span>
+          <span class="pill-badge">UTF-8 / Hex / Base64</span>
+          <span class="pill-badge">Streams</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 41: Buffer Concepts & Code -->
+    <section class="slide" data-day="DAY 10 — Buffer">
+      <div class="slide-header">
+        <span class="slide-tag">DAY 10 — BINARY DATA</span>
+        <h2 class="slide-title">What is Buffer & How It Works</h2>
+        <p class="slide-subtitle">Raw memory chunks allocated outside the V8 JavaScript heap.</p>
+      </div>
+
+      <div class="slide-content">
+        <div class="grid-2">
+          <div class="col-theory">
+            <div class="card">
+              <h3 class="card-title"><i data-lucide="binary"></i> Buffer Definition</h3>
+              <p class="card-text">
+                A Buffer represents a fixed-size sequence of raw bytes. It is used in Node.js when reading files, processing network streams, or handling images.
+              </p>
+            </div>
+
+            <ul class="feature-list">
+              <li class="feature-item"><div class="feature-icon"><i data-lucide="check"></i></div><div><code>Buffer.from("Hello")</code>: Converts string to UTF-8 byte array.</div></li>
+              <li class="feature-item"><div class="feature-icon"><i data-lucide="check"></i></div><div><code>buf.toString("hex")</code>: Encodes bytes into hexadecimal format.</div></li>
+              <li class="feature-item"><div class="feature-icon"><i data-lucide="check"></i></div><div><code>buf.toString("base64")</code>: Encodes bytes into Base64 format.</div></li>
+            </ul>
+          </div>
+
+          <div class="col-visual">
+            <div class="code-container">
+              <div class="code-header">
+                <span class="code-title"><i data-lucide="code"></i> buffer_demo.js</span>
+                <button class="copy-btn"><i data-lucide="copy"></i> Copy</button>
+              </div>
+              <pre class="code-body"><code class="language-javascript">const buf = Buffer.from("Node.js", "utf8");
+
+console.log(buf); 
+// Output: &lt;Buffer 4e 6f 64 65 2e 6a 73&gt; (Hex bytes)
+
+console.log(buf.length); // Output: 7
+
+console.log(buf.toString("hex")); // 4e6f64652e6a73
+console.log(buf.toString("base64")); // Tm9kZS5qcw==</code></pre>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================================================================
+         DAY 11 & 12 — API BUILDING, TESTING & ADVANCED ARCHITECTURE
+         =================================================================== -->
+
+    <!-- SLIDE 42: Day 11-12 Architecture & Centralized Error Handling -->
+    <section class="slide" data-day="DAY 11-12 — Architecture">
+      <div class="slide-header">
+        <span class="slide-tag">DAY 11-12 — PRODUCTION API</span>
+        <h2 class="slide-title">MVC Architecture & Centralized Error Handling</h2>
+        <p class="slide-subtitle">Clean folder separation and global Express error middleware.</p>
+      </div>
+
+      <div class="slide-content">
+        <div class="grid-2">
+          <div class="col-theory">
+            <div class="code-container">
+              <div class="code-header">
+                <span class="code-title"><i data-lucide="folder-tree"></i> Project Directory Structure</span>
+              </div>
+              <pre class="code-body"><code class="language-text">src/
+├── controllers/    # Request handling & HTTP responses
+├── services/       # Business logic layer
+├── models/         # Database schemas
+├── routes/         # Endpoint definitions
+├── middleware/     # Auth, Multer, Error handlers
+└── app.js          # App initialization</code></pre>
+            </div>
+          </div>
+
+          <div class="col-visual">
+            <div class="code-container">
+              <div class="code-header">
+                <span class="code-title"><i data-lucide="shield-alert"></i> Centralized Error Middleware</span>
+                <button class="copy-btn"><i data-lucide="copy"></i> Copy</button>
+              </div>
+              <pre class="code-body"><code class="language-javascript">// Centralized Error Handler (Must have 4 params: err, req, res, next)
+app.use((err, req, res, next) => {
+  console.error("Error Stack:", err.stack);
+  
+  const status = err.statusCode || 500;
+  res.status(status).json({
+    success: false,
+    message: err.message || "Internal Server Error"
+  });
+});</code></pre>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================================================================
+         DAY 13 — FINAL CAPSTONE PROJECT
+         =================================================================== -->
+
+    <!-- SLIDE 43: Day 13 Final API Project -->
+    <section class="slide" data-day="DAY 13 — Final Project">
+      <div class="slide-header">
+        <span class="slide-tag">DAY 13 — FINAL CAPSTONE</span>
+        <h2 class="slide-title">User Management REST API Architecture</h2>
+        <p class="slide-subtitle">Complete production capstone combining all 13 days of backend concepts.</p>
+      </div>
+
+      <div class="slide-content">
+        <div class="grid-2">
+          <div class="col-theory">
+            <div class="card" style="border-left:4px solid var(--primary);">
+              <h3 class="card-title"><i data-lucide="award"></i> Project Features</h3>
+              <ul class="feature-list" style="margin-top:0.5rem;">
+                <li class="feature-item"><div class="feature-icon"><i data-lucide="check"></i></div><div>User Registration & Login with Password Hashing</div></li>
+                <li class="feature-item"><div class="feature-icon"><i data-lucide="check"></i></div><div>Session Authentication & Cookie Storage</div></li>
+                <li class="feature-item"><div class="feature-icon"><i data-lucide="check"></i></div><div>Multer Profile Picture Upload</div></li>
+                <li class="feature-item"><div class="feature-icon"><i data-lucide="check"></i></div><div>Full User CRUD + Search & Pagination Query Params</div></li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="col-visual">
+            <div class="diagram-container">
+              <div style="font-size:0.85rem; font-weight:700; color:var(--muted); margin-bottom:0.75rem; text-transform:uppercase;">Master Architecture Flow</div>
+              <div class="flow-step">HTTP Request (Postman / Browser)</div>
+              <div class="flow-arrow">↓</div>
+              <div class="flow-step" style="background:#EFF6FF;">Express Router ➔ Auth Middleware ➔ Controller</div>
+              <div class="flow-arrow">↓</div>
+              <div class="flow-step" style="background:#F0F9FF;">Service Layer ➔ Model / DB Persistence</div>
+              <div class="flow-arrow">↓</div>
+              <div class="flow-step" style="background:#F0FDF4;">JSON Response + Cookie Header</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================================================================
+         INTERACTIVE MCQ QUIZ EXAM SECTION
+         =================================================================== -->
+
+    <!-- SLIDE 44: Interactive MCQ Quiz Section -->
+    <section class="slide" data-day="MCQ Exam Challenge">
+      <div class="slide-header">
+        <span class="slide-tag">COMPREHENSIVE EXAMINATION</span>
+        <h2 class="slide-title">Backend Developer MCQ Quiz Challenge</h2>
+        <p class="slide-subtitle">Test your knowledge across Node.js, Express, Async JS, REST, Sessions & Buffer.</p>
+      </div>
+
+      <div class="slide-content">
+        <div class="card" style="margin-bottom:1rem; background:var(--primary-light); border-color:var(--primary-border); display:flex; align-items:center; justify-content:space-between; padding:1rem 1.5rem;">
+          <div id="quiz-score-display" style="font-size:1.1rem; font-weight:700; color:var(--dark);">
+            Score: <strong>0 / 3</strong> (0%)
+          </div>
+          <span class="pill-badge" id="quiz-badge-display">Select answers below</span>
+        </div>
+
+        <div class="quiz-card" data-question-id="q1" data-correct-option="A" style="margin-bottom:1.25rem;">
+          <div class="question-text">Q1: Which V8 component executes JavaScript code in Node.js?</div>
+          <div class="options-grid">
+            <button class="option-btn" data-option="A"><span>A:</span> V8 Engine (Google Chrome)</button>
+            <button class="option-btn" data-option="B"><span>B:</span> SpiderMonkey</button>
+            <button class="option-btn" data-option="C"><span>C:</span> JavaScriptCore</button>
+            <button class="option-btn" data-option="D"><span>D:</span> libuv</button>
+          </div>
+          <div class="explanation-card">
+            <p><strong>Correct: A!</strong> Node.js uses Google Chrome's V8 engine to compile JS into native machine code.</p>
+          </div>
+        </div>
+
+        <div class="quiz-card" data-question-id="q2" data-correct-option="C" style="margin-bottom:1.25rem;">
+          <div class="question-text">Q2: What is the primary purpose of Express `express.json()` middleware?</div>
+          <div class="options-grid">
+            <button class="option-btn" data-option="A"><span>A:</span> Upload images</button>
+            <button class="option-btn" data-option="B"><span>B:</span> Hash passwords</button>
+            <button class="option-btn" data-option="C"><span>C:</span> Parse incoming JSON body payloads into req.body</button>
+            <button class="option-btn" data-option="D"><span>D:</span> Serve static HTML</button>
+          </div>
+          <div class="explanation-card">
+            <p><strong>Correct: C!</strong> `express.json()` parses raw HTTP JSON body requests into accessible JavaScript objects in `req.body`.</p>
+          </div>
+        </div>
+
+        <div class="quiz-card" data-question-id="q3" data-correct-option="B">
+          <div class="question-text">Q3: Why is `HttpOnly` cookie attribute essential for session security?</div>
+          <div class="options-grid">
+            <button class="option-btn" data-option="A"><span>A:</span> It speeds up HTTP responses</button>
+            <button class="option-btn" data-option="B"><span>B:</span> It prevents malicious client scripts (XSS) from reading session cookies</button>
+            <button class="option-btn" data-option="C"><span>C:</span> It forces cookies to expire after 1 minute</button>
+            <button class="option-btn" data-option="D"><span>D:</span> It allows cross-domain sharing</button>
+          </div>
+          <div class="explanation-card">
+            <p><strong>Correct: B!</strong> HttpOnly prevents JavaScript `document.cookie` access, blocking XSS token theft.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 45: Final Summary & Graduation Slide -->
+    <section class="slide" data-day="Module Graduation">
+      <div class="slide-header" style="text-align: center; margin-top: 2rem;">
+        <span class="slide-tag" style="background:#DCFCE7; color:#16A34A; border-color:#BBF7D0;">MODULE GRADUATION</span>
+        <h1 class="slide-title" style="font-size: 3.2rem; margin-top: 0.5rem; color: var(--primary);">
+          YOU CAN NOW BUILD BACKENDS.
+        </h1>
+        <p class="slide-subtitle" style="font-size: 1.25rem;">
+          From a simple Node.js server to a complete production REST API.
+        </p>
+      </div>
+
+      <div class="slide-content" style="max-width: 900px; margin: 1.5rem auto 0 auto;">
+        <div class="diagram-container">
+          <div class="flow-horizontal" style="gap:0.4rem;">
+            <div class="flow-h-node" style="font-size:0.75rem; min-width:85px;">Node.js</div>
+            <div class="flow-h-arrow">➔</div>
+            <div class="flow-h-node" style="font-size:0.75rem; min-width:85px;">Async JS</div>
+            <div class="flow-h-arrow">➔</div>
+            <div class="flow-h-node" style="font-size:0.75rem; min-width:85px;">Express</div>
+            <div class="flow-h-arrow">➔</div>
+            <div class="flow-h-node" style="font-size:0.75rem; min-width:85px;">CRUD API</div>
+            <div class="flow-h-arrow">➔</div>
+            <div class="flow-h-node" style="font-size:0.75rem; min-width:85px;">Auth & Sessions</div>
+            <div class="flow-h-arrow">➔</div>
+            <div class="flow-h-node" style="font-size:0.75rem; min-width:85px;">Multer & Buffer</div>
+            <div class="flow-h-arrow">➔</div>
+            <div class="flow-h-node" style="font-size:0.75rem; min-width:85px; background:var(--primary); color:#ffffff;">REST API</div>
+          </div>
+        </div>
+
+        <div class="callout tip" style="margin-top:1.5rem; text-align:center;">
+          <div class="callout-title" style="justify-content:center;"><i data-lucide="trophy"></i> Next Step Practice</div>
+          Build the User Management API hands-on, test all routes in Postman, and deploy your Express app to production!
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- BOTTOM TOOLBAR -->
+  <footer class="bottom-toolbar">
+    <button class="nav-btn secondary" id="prev-btn">
+      <i data-lucide="chevron-left"></i> Previous
+    </button>
+
+    <div class="progress-center">
+      <div class="slide-counter">
+        Slide <span class="current" id="current-slide-num">1</span> / <span id="total-slides-num">45</span>
+      </div>
+      <div class="progress-bar-container">
+        <div class="progress-bar-fill" id="progress-bar-fill"></div>
+      </div>
+    </div>
+
+    <button class="nav-btn" id="next-btn">
+      Next <i data-lucide="chevron-right"></i>
+    </button>
+  </footer>
+
+</div>
+
+<!-- DRAWER OVERLAY & PANELS -->
+<div class="drawer-overlay" id="drawer-overlay"></div>
+
+<!-- TABLE OF CONTENTS DRAWER -->
+<div class="drawer-panel" id="toc-drawer">
+  <div class="drawer-header">
+    <div class="drawer-title"><i data-lucide="list"></i> Table of Contents</div>
+    <button class="close-btn close-drawer-btn">&times;</button>
+  </div>
+  <div class="drawer-content">
+    <ul class="toc-list" id="toc-list">
+      <!-- Generated dynamically by script.js -->
+    </ul>
+  </div>
+</div>
+
+<!-- MENTOR NOTES DRAWER -->
+<div class="drawer-panel" id="mentor-drawer">
+  <div class="drawer-header">
+    <div class="drawer-title"><i data-lucide="book-open"></i> Mentor / Speaker Notes</div>
+    <button class="close-btn close-drawer-btn">&times;</button>
+  </div>
+  <div class="drawer-content" id="mentor-note-content">
+    <!-- Updated dynamically by script.js -->
+  </div>
+</div>
+
+<!-- Custom Presentation Script -->
+<script src="script.js"></script>
+
+</body>
+</html>

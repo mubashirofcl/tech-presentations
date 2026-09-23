@@ -1,0 +1,2702 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JavaScript — Complete Frontend & Core Module Masterclass Presentation Deck</title>
+
+  <!-- Google Fonts (Inter + JetBrains Mono) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <!-- Highlight.js Syntax Highlighting -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/atom-one-light.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/javascript.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/json.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/xml.min.js"></script>
+
+  <!-- Custom Presentation Stylesheet -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="presentation-container">
+
+  <!-- TOP HEADER TOOLBAR -->
+  <header class="top-header">
+    <div class="header-meta">
+      <span class="module-tag">MODULE 3 | JAVASCRIPT</span>
+      <h1 class="header-day-title" id="header-day-title">DAY 1 — Overview of JavaScript</h1>
+      <span class="header-section-badge" id="header-section-badge">Core Foundation</span>
+    </div>
+
+    <div class="header-controls">
+      <button class="icon-btn" id="toc-btn" title="Table of Contents">
+        <i data-lucide="list"></i> Table of Contents
+      </button>
+      <button class="icon-btn" id="mentor-btn" title="Toggle Mentor Notes">
+        <i data-lucide="book-open"></i> Mentor Notes
+      </button>
+      <button class="icon-btn" id="fullscreen-btn" title="Toggle Fullscreen">
+        <i data-lucide="maximize"></i> Fullscreen
+      </button>
+    </div>
+  </header>
+
+  <!-- SLIDES VIEWPORT -->
+  <main class="slides-viewport" id="slides-viewport">
+
+    <!-- ===================================================================
+         TITLE SLIDE & LEARNING ROADMAP
+         =================================================================== -->
+
+    <!-- SLIDE 1: Master Title Slide -->
+    <section class="slide active" data-day="Course Introduction">
+      <div class="slide-header" style="text-align: center; margin-top: 1.5rem;">
+        <span class="slide-tag">Complete Frontend & Core JavaScript Module</span>
+        <h1 class="slide-title" style="font-size: 3.5rem; margin-top: 0.5rem; background: linear-gradient(135deg, #2563EB, #0EA5E9); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
+          JAVASCRIPT
+        </h1>
+        <p class="slide-subtitle" style="font-size: 1.4rem; max-width: 800px; margin: 0.75rem auto 0 auto;">
+          "From Core Concepts to Real Applications" — Practical Web Development & API Integration
+        </p>
+      </div>
+
+      <div class="slide-content" style="max-width: 960px; margin: 1.25rem auto 0 auto; width: 100%;">
+        <div class="diagram-container" style="background:var(--bg-highlight); border-color:var(--primary-border); padding:1.75rem;">
+          <div style="font-weight:800; font-size:0.9rem; color:var(--text-muted); margin-bottom:0.75rem; text-transform:uppercase;">Web Development Tech Stack Triad</div>
+          <div class="flow-horizontal">
+            <div class="flow-h-node">HTML5<div class="sub-text">Structure</div></div>
+            <div class="flow-h-arrow">+</div>
+            <div class="flow-h-node">CSS3<div class="sub-text">Appearance</div></div>
+            <div class="flow-h-arrow">+</div>
+            <div class="flow-h-node" style="background:var(--primary-light); border-color:var(--primary); color:var(--primary);">JavaScript<div class="sub-text">Behavior & Logic</div></div>
+            <div class="flow-h-arrow">➜</div>
+            <div class="flow-h-node" style="background:var(--success-bg); border-color:var(--success); color:var(--success);">Interactive Web Application</div>
+          </div>
+        </div>
+
+        <div class="callout tip" style="margin-top: 1.25rem; text-align: center;">
+          <div class="callout-title" style="justify-content: center;"><i data-lucide="sparkles"></i> Teaching Methodology</div>
+          Simple English • WHAT? ➔ WHY? ➔ HOW? ➔ SYNTAX ➔ CODE ➔ OUTPUT ➔ PRACTICE ➔ INTERVIEW PREP
+        </div>
+      </div>
+
+      <div class="mentor-note" style="display:none;">
+        <div class="mentor-note-card">
+          <strong>MENTOR NOTE:</strong> Welcome students! Ask: "You already know HTML and CSS. If HTML is the skeleton and CSS is the skin/clothes, what is JavaScript?" (Answer: The brain & muscles!).
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 2: Learning Roadmap -->
+    <section class="slide" data-day="Course Sitemap">
+      <div class="slide-header">
+        <span class="slide-tag">Curriculum Sitemap</span>
+        <h2 class="slide-title">Where We Are Going — 14-Day Roadmap</h2>
+        <p class="slide-subtitle">Mastering core JavaScript from fundamentals to React.js and Node.js readiness.</p>
+      </div>
+
+      <div class="slide-content">
+        <div class="diagram-container">
+          <div class="flow-horizontal" style="flex-wrap:wrap; gap:0.5rem; justify-content:center;">
+            <div class="flow-h-node" style="font-size:0.75rem; min-width:100px;">Day 1: JS Overview</div>
+            <div class="flow-h-arrow">➜</div>
+            <div class="flow-h-node" style="font-size:0.75rem; min-width:100px;">Day 2: Operators & If</div>
+            <div class="flow-h-arrow">➜</div>
+            <div class="flow-h-node" style="font-size:0.75rem; min-width:100px;">Day 3: Loops</div>
+            <div class="flow-h-arrow">➜</div>
+            <div class="flow-h-node" style="font-size:0.75rem; min-width:100px;">Day 4: Functions</div>
+            <div class="flow-h-arrow">➜</div>
+            <div class="flow-h-node" style="font-size:0.75rem; min-width:100px;">Day 5: Arrays</div>
+            <div class="flow-h-arrow">➜</div>
+            <div class="flow-h-node" style="font-size:0.75rem; min-width:100px;">Day 6: map/filter/reduce</div>
+            <div class="flow-h-arrow">➜</div>
+            <div class="flow-h-node" style="font-size:0.75rem; min-width:100px;">Day 7: ES6+ Features</div>
+            <div class="flow-h-arrow">➜</div>
+            <div class="flow-h-node" style="font-size:0.75rem; min-width:100px;">Day 8: DOM</div>
+            <div class="flow-h-arrow">➜</div>
+            <div class="flow-h-node" style="font-size:0.75rem; min-width:100px;">Day 9: Events & Storage</div>
+            <div class="flow-h-arrow">➜</div>
+            <div class="flow-h-node" style="font-size:0.75rem; min-width:100px;">Day 10: Fetch API</div>
+            <div class="flow-h-arrow">➜</div>
+            <div class="flow-h-node" style="font-size:0.75rem; min-width:100px; background:#EFF6FF; border-color:var(--primary); color:var(--primary);">Core & Buffer</div>
+            <div class="flow-h-arrow">➜</div>
+            <div class="flow-h-node" style="font-size:0.75rem; min-width:100px; background:var(--primary); color:#fff;">Event Loop Session</div>
+            <div class="flow-h-arrow">➜</div>
+            <div class="flow-h-node" style="font-size:0.75rem; min-width:100px; background:var(--success-bg); border-color:var(--success); color:var(--success);">Days 11-13: To-Do App</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- DAY 1 to DAY 10 SLIDES -->
+    <section class="slide" data-day="DAY 1 — Overview">
+      <div class="slide-header" style="text-align: center; margin-top: 3rem;">
+        <span class="slide-tag">DAY 1 MODULE</span>
+        <h1 class="slide-title" style="font-size: 2.8rem; color: var(--primary);">OVERVIEW OF JAVASCRIPT</h1>
+        <p class="slide-subtitle" style="font-size: 1.2rem;">What is JavaScript, How V8 Executes Code, and JavaScript vs HTML/CSS/Java</p>
+      </div>
+      <div class="slide-content" style="max-width: 700px; margin: 2rem auto 0 auto; text-align: center;">
+        <div class="badge-group" style="justify-content: center;">
+          <span class="pill-badge">Programming Language</span>
+          <span class="pill-badge">V8 Engine</span>
+          <span class="pill-badge">ECMAScript / ES6</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 4: What is JavaScript? -->
+    <section class="slide" data-day="DAY 1 — Overview">
+      <div class="slide-header">
+        <span class="slide-tag">DAY 1 — DEFINITION</span>
+        <h2 class="slide-title">What is JavaScript?</h2>
+        <p class="slide-subtitle">The programming language that brings web pages to life.</p>
+      </div>
+
+      <div class="slide-content">
+        <div class="grid-2">
+          <div class="col-theory">
+            <div class="card">
+              <h3 class="card-title"><i data-lucide="check-circle"></i> Simple Explanation</h3>
+              <p class="card-text">
+                JavaScript is a programming language used to make web pages interactive and to build modern web, mobile, and server applications.
+              </p>
+            </div>
+            <ul class="feature-list">
+              <li class="feature-item"><div class="feature-icon"><i data-lucide="arrow-right"></i></div><div><strong>Runs in Browsers:</strong> Every web browser has a built-in JS Engine.</div></li>
+              <li class="feature-item"><div class="feature-icon"><i data-lucide="arrow-right"></i></div><div><strong>Runs on Servers:</strong> Thanks to <strong>Node.js</strong>.</div></li>
+            </ul>
+          </div>
+          <div class="col-visual">
+            <table class="comparison-table">
+              <thead><tr><th>Tech</th><th>Role</th><th>Analogy</th></tr></thead>
+              <tbody>
+                <tr><td><strong>HTML5</strong></td><td>Structure</td><td>Skeleton</td></tr>
+                <tr><td><strong>CSS3</strong></td><td>Appearance</td><td>Paint</td></tr>
+                <tr><td><strong>JavaScript</strong></td><td>Behavior</td><td>Engine & Steering Wheel</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 5: How JavaScript Executes -->
+    <section class="slide" data-day="DAY 1 — Execution">
+      <div class="slide-header">
+        <span class="slide-tag">DAY 1 — HOW IT WORKS</span>
+        <h2 class="slide-title">How JavaScript Executes (V8 Engine)</h2>
+        <p class="slide-subtitle">How human-readable code transforms into computer actions.</p>
+      </div>
+      <div class="slide-content">
+        <div class="grid-2">
+          <div class="col-theory">
+            <div class="card">
+              <h3 class="card-title"><i data-lucide="cpu"></i> What is a JavaScript Engine?</h3>
+              <p class="card-text">A JavaScript Engine reads JavaScript code and executes it. Google Chrome uses <strong>V8</strong>.</p>
+            </div>
+          </div>
+          <div class="col-visual">
+            <div class="diagram-container">
+              <div class="flow-step">1. JavaScript Code (.js)</div>
+              <div class="flow-arrow">↓</div>
+              <div class="flow-step" style="background:var(--primary-light);">2. Browser V8 Engine</div>
+              <div class="flow-arrow">↓</div>
+              <div class="flow-step" style="background:var(--success-bg);">3. Output on Screen!</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 5B: Setting Up the Development Environment -->
+    <section class="slide" data-day="DAY 1 — Setup">
+      <div class="slide-header">
+        <span class="slide-tag">DAY 1 — ENVIRONMENT SETUP</span>
+        <h2 class="slide-title">Setting Up Your JavaScript Environment</h2>
+        <p class="slide-subtitle">How to write, run, and debug JavaScript in your browser and local machine.</p>
+      </div>
+      <div class="slide-content">
+        <div class="grid-2">
+          <div class="col-theory">
+            <div class="card" style="border-top:4px solid var(--primary);">
+              <h4 style="color:var(--primary);"><i data-lucide="terminal"></i> 3 Ways to Run JavaScript</h4>
+              <ul class="feature-list" style="margin-top:0.4rem; font-size:0.85rem;">
+                <li class="feature-item"><div class="feature-icon"><i data-lucide="check"></i></div><div><strong>Browser Console:</strong> Press <code>F12</code> ➔ Console tab. Great for quick testing!</div></li>
+                <li class="feature-item"><div class="feature-icon"><i data-lucide="check"></i></div><div><strong>HTML Script Tag:</strong> Embed via <code>&lt;script src="app.js"&gt;&lt;/script&gt;</code> before <code>&lt;/body&gt;</code>.</div></li>
+                <li class="feature-item"><div class="feature-icon"><i data-lucide="check"></i></div><div><strong>Node.js CLI:</strong> Execute JavaScript outside the browser using <code>node app.js</code>.</div></li>
+              </ul>
+            </div>
+            <div class="callout tip" style="margin-top:0.85rem;">
+              <div class="callout-title"><i data-lucide="lightbulb"></i> Recommended Developer Setup</div>
+              VS Code Editor + Live Server extension + Google Chrome Developer Tools.
+            </div>
+          </div>
+          <div class="col-visual">
+            <div class="code-container">
+              <div class="code-header"><span class="code-title"><i data-lucide="file-code"></i> index.html & app.js</span></div>
+              <pre class="code-body"><code class="language-xml">&lt;!-- Connecting JavaScript to HTML --&gt;
+&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+  &lt;title&gt;My First JS App&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;h1&gt;Hello JavaScript!&lt;/h1&gt;
+
+  &lt;!-- Include script at the bottom of body --&gt;
+  &lt;script src="app.js"&gt;&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================================================================
+         PART A: JAVASCRIPT CORE FOUNDATIONS (EXPANSION)
+         =================================================================== -->
+
+    <!-- SLIDE: Variables (var, let, const) -->
+    <section class="slide" data-day="CORE — Variables">
+      <div class="slide-header">
+        <span class="slide-tag">CORE FOUNDATIONS — VARIABLES</span>
+        <h2 class="slide-title">Variables: var, let, and const</h2>
+        <p class="slide-subtitle">Understanding declaration, scope, reassignment, and redeclaration.</p>
+      </div>
+      <div class="slide-content">
+        <div class="def-mode-container">
+          <div class="def-toggle-bar">
+            <span style="font-weight:700; font-size:0.85rem; color:var(--dark-navy);">VARIABLE DEFINITION</span>
+            <div>
+              <button class="def-toggle-btn active" data-mode="simple">Simple Mode</button>
+              <button class="def-toggle-btn" data-mode="deep">Deep Dive</button>
+            </div>
+          </div>
+          <div class="def-card-body">
+            <p class="def-simple-text">"A variable is a named box used to store a value in memory."</p>
+            <p class="def-deep-text">Variables create bindings between identifiers and values within a specific lexical environment. <code>var</code> creates function-scoped bindings, while <code>let</code> and <code>const</code> create block-scoped environment records.</p>
+          </div>
+        </div>
+
+        <table class="comparison-table">
+          <thead>
+            <tr><th>Keyword</th><th>Reassign?</th><th>Redeclare?</th><th>Block Scoped?</th><th>Hoisted & TDZ?</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><strong>var</strong></td><td><span style="color:var(--success); font-weight:800;">YES</span></td><td><span style="color:var(--success); font-weight:800;">YES</span></td><td><span style="color:var(--error); font-weight:800;">NO (Function)</span></td><td>Hoisted to <code>undefined</code></td></tr>
+            <tr><td><strong>let</strong></td><td><span style="color:var(--success); font-weight:800;">YES</span></td><td><span style="color:var(--error); font-weight:800;">NO</span></td><td><span style="color:var(--success); font-weight:800;">YES</span></td><td>Hoisted in <strong>Temporal Dead Zone</strong></td></tr>
+            <tr><td><strong>const</strong></td><td><span style="color:var(--error); font-weight:800;">NO</span></td><td><span style="color:var(--error); font-weight:800;">NO</span></td><td><span style="color:var(--success); font-weight:800;">YES</span></td><td>Hoisted in <strong>Temporal Dead Zone</strong></td></tr>
+          </tbody>
+        </table>
+
+        <div class="code-container" style="margin-top:1rem;">
+          <pre class="code-body"><code class="language-javascript">let age = 25;
+age = 26; // Reassignment OK!
+
+const COUNTRY = "India";
+// COUNTRY = "USA"; // ❌ TypeError: Assignment to constant variable!</code></pre>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE: Data Types & typeof -->
+    <section class="slide" data-day="CORE — Data Types">
+      <div class="slide-header">
+        <span class="slide-tag">CORE FOUNDATIONS — DATA TYPES</span>
+        <h2 class="slide-title">Data Types & typeof Operator</h2>
+        <p class="slide-subtitle">Primitive vs Non-primitive types in JavaScript.</p>
+      </div>
+      <div class="slide-content">
+        <div class="grid-2">
+          <div class="card" style="border-top:4px solid var(--primary);">
+            <h4 style="color:var(--primary);">7 Primitive Types (Passed by Value)</h4>
+            <ul class="feature-list" style="margin-top:0.4rem; font-size:0.85rem;">
+              <li class="feature-item"><div class="feature-icon"><i data-lucide="check"></i></div><div><code>string</code> — Text data (<code>"Hello"</code>)</div></li>
+              <li class="feature-item"><div class="feature-icon"><i data-lucide="check"></i></div><div><code>number</code> — Integers & Decimals (<code>42</code>, <code>3.14</code>)</div></li>
+              <li class="feature-item"><div class="feature-icon"><i data-lucide="check"></i></div><div><code>boolean</code> — Logical (<code>true</code> / <code>false</code>)</div></li>
+              <li class="feature-item"><div class="feature-icon"><i data-lucide="check"></i></div><div><code>undefined</code> — Uninitialized variable</div></li>
+              <li class="feature-item"><div class="feature-icon"><i data-lucide="check"></i></div><div><code>null</code> — Intentional absence of object value</div></li>
+              <li class="feature-item"><div class="feature-icon"><i data-lucide="check"></i></div><div><code>bigint</code> — Large integers (<code>9007199254740991n</code>)</div></li>
+              <li class="feature-item"><div class="feature-icon"><i data-lucide="check"></i></div><div><code>symbol</code> — Unique identifier (<code>Symbol("id")</code>)</div></li>
+            </ul>
+          </div>
+
+          <div class="card" style="border-top:4px solid var(--secondary);">
+            <h4 style="color:var(--secondary);">Non-Primitive Types (Passed by Reference)</h4>
+            <p style="font-size:0.85rem; color:var(--text-muted); margin-top:0.4rem;">
+              Objects, Arrays, and Functions. Store references to memory locations!
+            </p>
+
+            <div class="callout warning" style="margin-top:0.85rem;">
+              <div class="callout-title"><i data-lucide="alert-triangle"></i> HISTORICAL JS BUG</div>
+              <code>typeof null</code> returns <code>"object"</code>! This is a well-known legacy bug from 1995 that cannot be fixed without breaking existing websites.
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE: Special Numbers & Coercion -->
+    <section class="slide" data-day="CORE — Coercion & Special Numbers">
+      <div class="slide-header">
+        <span class="slide-tag">CORE FOUNDATIONS — COERCION</span>
+        <h2 class="slide-title">Special Numbers & Type Coercion</h2>
+        <p class="slide-subtitle">NaN, Infinity, and implicit vs explicit type conversion.</p>
+      </div>
+      <div class="slide-content">
+        <div class="grid-2">
+          <div class="col-theory">
+            <div class="card">
+              <h4 style="font-weight:700;">Special Number Values</h4>
+              <p style="font-size:0.85rem; color:var(--text-muted); margin-top:0.3rem;">
+                • <code>NaN</code>: "Not a Number" (Result of invalid math like <code>0/0</code> or <code>Number("abc")</code>). Note: <code>typeof NaN === "number"</code>!<br>
+                • <code>Infinity</code> / <code>-Infinity</code>: Result of dividing non-zero by 0 (<code>10 / 0</code>).<br>
+                • Use <code>Number.isNaN(val)</code> and <code>Number.isFinite(val)</code> to test safely.
+              </p>
+            </div>
+          </div>
+
+          <div class="col-visual">
+            <div class="code-container">
+              <div class="code-header"><span class="code-title"><i data-lucide="code"></i> coercion_examples.js</span></div>
+              <pre class="code-body"><code class="language-javascript">console.log(5 + "5");   // "55"  (String concatenation)
+console.log(5 - "2");   // 3     (Numeric conversion)
+console.log(true + 1);  // 2     (true converts to 1)
+console.log("10" * 2);  // 20    (Numeric conversion)
+
+// Explicit Conversions:
+console.log(Number("100")); // 100
+console.log(String(100));   // "100"
+console.log(Boolean(1));    // true</code></pre>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE: Truthy & Falsy + Conditions -->
+    <section class="slide" data-day="CORE — Truthy & Falsy">
+      <div class="slide-header">
+        <span class="slide-tag">CORE FOUNDATIONS — LOGIC</span>
+        <h2 class="slide-title">Truthy / Falsy Values & Conditions</h2>
+        <p class="slide-subtitle">The 6 falsy values, short-circuit evaluation, and control flow.</p>
+      </div>
+      <div class="slide-content">
+        <div class="grid-2">
+          <div class="card" style="border-left:4px solid var(--error);">
+            <h4 style="color:var(--error); font-weight:700;">The 6 Falsy Values in JavaScript</h4>
+            <p style="font-size:0.88rem; color:var(--text-muted); margin-top:0.35rem;">
+              1. <code>false</code><br>
+              2. <code>0</code> (and <code>-0</code>, <code>0n</code>)<br>
+              3. <code>""</code> (empty string)<br>
+              4. <code>null</code><br>
+              5. <code>undefined</code><br>
+              6. <code>NaN</code><br>
+              <em>Everything else in JavaScript is Truthy! (including <code>[]</code> and <code>{}</code>)</em>
+            </p>
+          </div>
+
+          <div class="code-container">
+            <div class="code-header"><span class="code-title"><i data-lucide="zap"></i> short_circuit.js</span></div>
+            <pre class="code-body"><code class="language-javascript">// Short-circuit evaluation with || (Fallback default)
+const username = inputName || "Guest";
+
+// Short-circuit with && (Guard execution)
+isLoggedIn && showDashboard();
+
+// Ternary operator
+const status = age >= 18 ? "Adult" : "Minor";</code></pre>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE: Execution Context & Call Stack LIFO -->
+    <section class="slide" data-day="CORE — Execution Context">
+      <div class="slide-header">
+        <span class="slide-tag">CORE FOUNDATIONS — ENGINE INTERNALS</span>
+        <h2 class="slide-title">Execution Context & The Call Stack (LIFO)</h2>
+        <p class="slide-subtitle">How JavaScript manages function calls and memory frames.</p>
+      </div>
+      <div class="slide-content">
+        <div class="grid-2">
+          <div class="col-theory">
+            <div class="def-mode-container">
+              <div class="def-toggle-bar">
+                <span style="font-weight:700; font-size:0.85rem; color:var(--dark-navy);">EXECUTION CONTEXT</span>
+                <div>
+                  <button class="def-toggle-btn active" data-mode="simple">Simple</button>
+                  <button class="def-toggle-btn" data-mode="deep">Deep</button>
+                </div>
+              </div>
+              <div class="def-card-body">
+                <p class="def-simple-text">"An Execution Context is an environment created by JavaScript to store variables and run code."</p>
+                <p class="def-deep-text">An Execution Context contains a Variable Environment, Lexical Environment, and <code>this</code> binding. Created during creation phase (parsing/hoisting) and executed line-by-line during execution phase.</p>
+              </div>
+            </div>
+
+            <div class="callout warning">
+              <div class="callout-title"><i data-lucide="alert-octagon"></i> STACK OVERFLOW</div>
+              If a function calls itself infinitely without a base case (e.g. <code>function test() { test(); }</code>), the Call Stack runs out of memory and crashes with a <code>RangeError: Maximum call stack size exceeded</code>!
+            </div>
+          </div>
+
+          <div class="col-visual">
+            <div class="diagram-container" style="padding:1.25rem;">
+              <div style="font-size:0.8rem; font-weight:700; color:var(--muted); text-transform:uppercase; margin-bottom:0.75rem;">Call Stack LIFO (Last In, First Out)</div>
+              <div class="flow-step" style="background:#EFF6FF; border-color:var(--primary);">3. console.log("Hello")  ➔ [POPPED FIRST]</div>
+              <div class="flow-arrow">↑</div>
+              <div class="flow-step" style="background:#F0F9FF; border-color:var(--secondary);">2. two()</div>
+              <div class="flow-arrow">↑</div>
+              <div class="flow-step" style="background:#F8FAFC; border-color:var(--dark-navy);">1. one()  ➔ [PUSHED FIRST]</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE: Hoisting & Temporal Dead Zone (TDZ) -->
+    <section class="slide" data-day="CORE — Hoisting & TDZ">
+      <div class="slide-header">
+        <span class="slide-tag">CORE FOUNDATIONS — HOISTING</span>
+        <h2 class="slide-title">Hoisting & The Temporal Dead Zone (TDZ)</h2>
+        <p class="slide-subtitle">Why var returns undefined while let and const throw ReferenceError.</p>
+      </div>
+      <div class="slide-content">
+        <div class="grid-2">
+          <div class="col-theory">
+            <div class="card" style="border-left:4px solid var(--primary);">
+              <h4 style="color:var(--primary);">What is Hoisting?</h4>
+              <p style="font-size:0.88rem; color:var(--text-muted); margin-top:0.35rem;">
+                During the creation phase, JavaScript allocates memory for variable and function declarations before executing code.
+              </p>
+            </div>
+
+            <div class="tdz-timeline" style="margin-top:1rem;">
+              <div style="font-size:0.78rem; font-weight:800; color:var(--muted); text-transform:uppercase;">Temporal Dead Zone Timeline</div>
+              <div class="tdz-step scope-enter">1. Scope Entered ➔ let/const declared in memory</div>
+              <div class="tdz-step tdz-active">2. TEMPORAL DEAD ZONE (TDZ) ➔ Accessing variable throws ReferenceError!</div>
+              <div class="tdz-step initialized">3. let x = 10; ➔ Variable initialized & usable!</div>
+            </div>
+          </div>
+
+          <div class="col-visual">
+            <div class="code-container">
+              <div class="code-header"><span class="code-title"><i data-lucide="code"></i> hoisting_tdz_demo.js</span></div>
+              <pre class="code-body"><code class="language-javascript">console.log(a); // Output: undefined (var hoisted & initialized)
+var a = 10;
+
+console.log(b); // ❌ ReferenceError: Cannot access 'b' before initialization
+let b = 20;
+
+greet(); // Output: "Hello!" (Function declaration fully hoisted)
+function greet() { console.log("Hello!"); }
+
+sayHi(); // ❌ TypeError: sayHi is not a function
+var sayHi = function() {};</code></pre>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE: Scope, Lexical Scope & Scope Chain -->
+    <section class="slide" data-day="CORE — Scope Chain">
+      <div class="slide-header">
+        <span class="slide-tag">CORE FOUNDATIONS — SCOPE</span>
+        <h2 class="slide-title">Scope, Lexical Scope & Scope Chain</h2>
+        <p class="slide-subtitle">How JavaScript searches for variables across nested environments.</p>
+      </div>
+      <div class="slide-content">
+        <div class="grid-2">
+          <div class="col-theory">
+            <div class="card">
+              <h4 style="font-weight:700;">3 Levels of Scope</h4>
+              <p style="font-size:0.85rem; color:var(--text-muted); margin-top:0.3rem;">
+                • <strong>Global Scope:</strong> Accessible everywhere.<br>
+                • <strong>Function Scope:</strong> Accessible only inside function (var, let, const).<br>
+                • <strong>Block Scope:</strong> Accessible only inside <code>{ }</code> block (let, const).
+              </p>
+            </div>
+
+            <div class="card" style="margin-top:1rem; border-left:4px solid var(--secondary);">
+              <h4 style="color:var(--secondary);">Scope Chain Lookup Rule</h4>
+              <p style="font-size:0.85rem; color:var(--text-muted); margin-top:0.3rem;">
+                When a variable is accessed: Local Scope ➔ Outer Parent Scope ➔ Global Scope ➔ If not found ➔ <code>ReferenceError</code>!
+              </p>
+            </div>
+          </div>
+
+          <div class="col-visual">
+            <div class="code-container">
+              <div class="code-header"><span class="code-title"><i data-lucide="layers"></i> scope_chain.js</span></div>
+              <pre class="code-body"><code class="language-javascript">const globalVar = "Global";
+
+function outer() {
+  const outerVar = "Outer";
+
+  function inner() {
+    const innerVar = "Inner";
+    console.log(innerVar, outerVar, globalVar); // All 3 accessible!
+  }
+
+  inner();
+}
+
+outer();</code></pre>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE: Closures & Memory Box Visualizer -->
+    <section class="slide" data-day="CORE — Closures">
+      <div class="slide-header">
+        <span class="slide-tag">CORE FOUNDATIONS — CLOSURES</span>
+        <h2 class="slide-title">Closures & Memory Retention</h2>
+        <p class="slide-subtitle">Functions remembering variables from their parent scope after execution.</p>
+      </div>
+      <div class="slide-content">
+        <div class="grid-2">
+          <div class="col-theory">
+            <div class="def-mode-container">
+              <div class="def-toggle-bar">
+                <span style="font-weight:700; font-size:0.85rem; color:var(--dark-navy);">CLOSURE DEFINITION</span>
+                <div>
+                  <button class="def-toggle-btn active" data-mode="simple">Simple</button>
+                  <button class="def-toggle-btn" data-mode="deep">Deep</button>
+                </div>
+              </div>
+              <div class="def-card-body">
+                <p class="def-simple-text">"A closure happens when an inner function remembers variables from its outer scope even after the outer function has finished running."</p>
+                <p class="def-deep-text">A closure is the combination of a function bundled together with references to its surrounding lexical state (the lexical environment). Closures allow data encapsulation and private variable state in JavaScript.</p>
+              </div>
+            </div>
+
+            <div class="closure-vis-container">
+              <div class="closure-scope-title">Closure Memory Box [Retained Environment]</div>
+              <div><span class="closure-var-badge">let count = 0</span></div>
+              <p style="font-size:0.82rem; color:var(--text-muted); margin-top:0.35rem;">
+                Even though <code>createCounter()</code> finished running and left the Call Stack, <code>count</code> remains allocated in Closure memory!
+              </p>
+            </div>
+          </div>
+
+          <div class="col-visual">
+            <div class="code-container">
+              <div class="code-header"><span class="code-title"><i data-lucide="lock"></i> closure_counter.js</span></div>
+              <pre class="code-body"><code class="language-javascript">function createCounter() {
+  let count = 0; // Private variable
+
+  return function increment() {
+    count++;
+    return count;
+  };
+}
+
+const counter = createCounter();
+console.log(counter()); // 1
+console.log(counter()); // 2
+console.log(counter()); // 3</code></pre>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE: Objects, References & Mutation -->
+    <section class="slide" data-day="CORE — Objects & References">
+      <div class="slide-header">
+        <span class="slide-tag">CORE FOUNDATIONS — OBJECT REFERENCES</span>
+        <h2 class="slide-title">Objects, References & Mutation</h2>
+        <p class="slide-subtitle">Understanding memory references, const variable protection, and cloning.</p>
+      </div>
+      <div class="slide-content">
+        <div class="grid-2">
+          <div class="col-theory">
+            <div class="card" style="border-left:4px solid var(--primary);">
+              <h4 style="color:var(--primary);">Primitives vs Object References</h4>
+              <p style="font-size:0.88rem; color:var(--text-muted); margin-top:0.35rem;">
+                Primitives copy by value. Objects copy by <strong>memory reference address</strong>! Mutating an object property via one variable affects all variables holding that reference.
+              </p>
+            </div>
+
+            <div class="card" style="margin-top:1rem;">
+              <h4 style="font-weight:700;">Shallow Copy vs Deep Copy</h4>
+              <p style="font-size:0.85rem; color:var(--text-muted); margin-top:0.35rem;">
+                • <strong>Shallow Copy:</strong> <code>{ ...obj }</code> or <code>Object.assign({}, obj)</code> (Copies 1 level deep).<br>
+                • <strong>Deep Copy:</strong> <code>structuredClone(obj)</code> or <code>JSON.parse(JSON.stringify(obj))</code>.
+              </p>
+            </div>
+          </div>
+
+          <div class="col-visual">
+            <div class="code-container">
+              <div class="code-header"><span class="code-title"><i data-lucide="file-code"></i> reference_mutation.js</span></div>
+              <pre class="code-body"><code class="language-javascript">const user1 = { name: "John" };
+const user2 = user1; // Copy reference!
+
+user2.name = "Alex";
+console.log(user1.name); // Output: "Alex" (Mutated!)
+
+// Safe Shallow Copy using Spread operator:
+const user3 = { ...user1 };
+user3.name = "Sarah";
+console.log(user1.name); // Still "Alex" (Protected!)</code></pre>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE: Optional Chaining ?. & Nullish Coalescing ?? -->
+    <section class="slide" data-day="CORE — ?. and ??">
+      <div class="slide-header">
+        <span class="slide-tag">CORE FOUNDATIONS — MODERN SYNTAX</span>
+        <h2 class="slide-title">Optional Chaining (?.) & Nullish Coalescing (??)</h2>
+        <p class="slide-subtitle">Safely navigating nested properties and handling null/undefined defaults.</p>
+      </div>
+      <div class="slide-content">
+        <div class="grid-2">
+          <div class="card" style="border-top:4px solid var(--primary);">
+            <h4 style="color:var(--primary);">Optional Chaining (<code>?.</code>)</h4>
+            <p style="font-size:0.88rem; color:var(--text-muted); margin-top:0.35rem;">
+              Prevents <code>TypeError: Cannot read properties of undefined</code> when accessing nested object properties. Short-circuits to <code>undefined</code> if nullish.
+            </p>
+            <div class="code-container" style="margin-top:0.5rem;">
+              <pre class="code-body"><code class="language-javascript">const city = user?.profile?.address?.city;</code></pre>
+            </div>
+          </div>
+
+          <div class="card" style="border-top:4px solid var(--secondary);">
+            <h4 style="color:var(--secondary);">Nullish Coalescing (<code>??</code>) vs <code>||</code></h4>
+            <p style="font-size:0.88rem; color:var(--text-muted); margin-top:0.35rem;">
+              • <code>||</code> checks for ANY falsy value (<code>0</code>, <code>""</code>, <code>false</code> trigger default).<br>
+              • <code>??</code> checks specifically for <code>null</code> or <code>undefined</code> ONLY!
+            </p>
+            <div class="code-container" style="margin-top:0.5rem;">
+              <pre class="code-body"><code class="language-javascript">const count = 0;
+console.log(count || 10); // 10 (0 is falsy)
+console.log(count ?? 10); // 0  (0 is not null/undefined)</code></pre>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE: Error Handling (try, catch, finally, throw) -->
+    <section class="slide" data-day="CORE — Error Handling">
+      <div class="slide-header">
+        <span class="slide-tag">CORE FOUNDATIONS — ERROR HANDLING</span>
+        <h2 class="slide-title">Error Handling & Exception Control</h2>
+        <p class="slide-subtitle">Handling runtime errors gracefully using try, catch, finally, and throw.</p>
+      </div>
+      <div class="slide-content">
+        <div class="grid-2">
+          <div class="col-theory">
+            <div class="card">
+              <h4 style="font-weight:700;">Standard JS Error Objects</h4>
+              <p style="font-size:0.85rem; color:var(--text-muted); margin-top:0.3rem;">
+                • <code>ReferenceError</code>: Accessing undeclared variable.<br>
+                • <code>TypeError</code>: Performing operation on invalid type.<br>
+                • <code>SyntaxError</code>: Invalid JavaScript syntax.<br>
+                • <code>RangeError</code>: Numeric value out of range (e.g. Call Stack overflow).
+              </p>
+            </div>
+          </div>
+
+          <div class="col-visual">
+            <div class="code-container">
+              <div class="code-header"><span class="code-title"><i data-lucide="shield-alert"></i> try_catch_demo.js</span></div>
+              <pre class="code-body"><code class="language-javascript">function divide(a, b) {
+  if (b === 0) {
+    throw new Error("Division by zero is not allowed!");
+  }
+  return a / b;
+}
+
+try {
+  const result = divide(10, 0);
+  console.log(result);
+} catch (error) {
+  console.error("Caught Error:", error.message);
+} finally {
+  console.log("Cleanup completed.");
+}</code></pre>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE: 100+ Master Revision Questions Bank -->
+    <section class="slide" data-day="CORE — Master Revision">
+      <div class="slide-header">
+        <span class="slide-tag">CORE FOUNDATIONS — REVISION BANK</span>
+        <h2 class="slide-title">JavaScript Master Revision Bank</h2>
+        <p class="slide-subtitle">Comprehensive question bank covering Beginner, Intermediate, and Advanced topics.</p>
+      </div>
+      <div class="slide-content" style="max-height:calc(100vh - 180px); overflow-y:auto;">
+        <div class="revision-grid">
+          <div class="revision-card">
+            <span class="difficulty-pill beginner">Beginner</span>
+            <h4 style="font-size:0.95rem; margin-bottom:0.3rem;">Q: Difference between var, let, and const?</h4>
+            <p style="font-size:0.85rem; color:var(--text-muted);">
+              <code>var</code> is function-scoped and redeclarable. <code>let</code> is block-scoped and reassignable. <code>const</code> is block-scoped and cannot be reassigned.
+            </p>
+          </div>
+
+          <div class="revision-card">
+            <span class="difficulty-pill intermediate">Intermediate</span>
+            <h4 style="font-size:0.95rem; margin-bottom:0.3rem;">Q: What is the Temporal Dead Zone (TDZ)?</h4>
+            <p style="font-size:0.85rem; color:var(--text-muted);">
+              The period between scope entry and <code>let</code>/<code>const</code> initialization where accessing the variable throws a ReferenceError.
+            </p>
+          </div>
+
+          <div class="revision-card">
+            <span class="difficulty-pill advanced">Advanced</span>
+            <h4 style="font-size:0.95rem; margin-bottom:0.3rem;">Q: How do closures retain variable references in memory?</h4>
+            <p style="font-size:0.85rem; color:var(--text-muted);">
+              The inner function retains a reference to its parent Lexical Environment record, preventing garbage collection of outer variables.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================================================================
+         PART B: DAY 2 TO DAY 10 SPECIFIC CURRICULUM MODULES
+         =================================================================== -->
+
+    <!-- DAY 2: Operators & Expressions -->
+    <section class="slide" data-day="DAY 2 — Operators">
+      <div class="slide-header">
+        <span class="slide-tag">DAY 2 MODULE — OPERATORS</span>
+        <h2 class="slide-title">Operators & Expressions</h2>
+        <p class="slide-subtitle">Building mathematical, logical, and relational expressions in JavaScript.</p>
+      </div>
+      <div class="slide-content">
+        <div class="grid-2">
+          <div class="col-theory">
+            <table class="comparison-table">
+              <thead><tr><th>Category</th><th>Operators</th><th>Example</th></tr></thead>
+              <tbody>
+                <tr><td><strong>Arithmetic</strong></td><td><code>+</code>, <code>-</code>, <code>*</code>, <code>/</code>, <code>%</code>, <code>**</code></td><td><code>10 % 3 ➔ 1</code>, <code>2 ** 3 ➔ 8</code></td></tr>
+                <tr><td><strong>Assignment</strong></td><td><code>=</code>, <code>+=</code>, <code>-=</code>, <code>*=</code></td><td><code>x += 5</code> (x = x + 5)</td></tr>
+                <tr><td><strong>Comparison</strong></td><td><code>==</code>, <code>===</code>, <code>!=</code>, <code>!==</code>, <code>&gt;</code>, <code>&lt;</code></td><td><code>5 === "5" ➔ false</code> (Strict)</td></tr>
+                <tr><td><strong>Logical</strong></td><td><code>&amp;&amp;</code> (AND), <code>||</code> (OR), <code>!</code> (NOT)</td><td><code>isAdult &amp;&amp; hasID</code></td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="col-visual">
+            <div class="code-container">
+              <div class="code-header"><span class="code-title"><i data-lucide="code"></i> operators_demo.js</span></div>
+              <pre class="code-body"><code class="language-javascript">// Loose vs Strict Equality
+console.log(5 == "5");  // true  (Type coercion converts string)
+console.log(5 === "5"); // false (Strict check: number !== string)
+
+// Logical Operators
+const score = 85;
+const passed = score >= 50 && score <= 100; // true
+
+// Ternary Operator (Inline condition)
+const result = score >= 70 ? "Pass" : "Fail";</code></pre>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- DAY 2: Control Structures -->
+    <section class="slide" data-day="DAY 2 — Control Structures">
+      <div class="slide-header">
+        <span class="slide-tag">DAY 2 MODULE — CONTROL FLOW</span>
+        <h2 class="slide-title">Control Structures: if, else & switch</h2>
+        <p class="slide-subtitle">Directing program execution paths based on conditions.</p>
+      </div>
+      <div class="slide-content">
+        <div class="grid-2">
+          <div class="col-theory">
+            <div class="card" style="border-left:4px solid var(--primary);">
+              <h4 style="color:var(--primary);">Conditional Decision Making</h4>
+              <p style="font-size:0.88rem; color:var(--text-muted); margin-top:0.35rem;">
+                Use <code>if / else if / else</code> for range and boolean conditions. Use <code>switch / case</code> when evaluating a single variable against multiple discrete values.
+              </p>
+            </div>
+            <div class="callout warning" style="margin-top:0.85rem;">
+              <div class="callout-title"><i data-lucide="alert-triangle"></i> Don't forget break in switch!</div>
+              Without a <code>break</code> statement, execution falls through to subsequent case blocks!
+            </div>
+          </div>
+          <div class="col-visual">
+            <div class="code-container">
+              <div class="code-header"><span class="code-title"><i data-lucide="git-branch"></i> control_structures.js</span></div>
+              <pre class="code-body"><code class="language-javascript">// if ... else if ... else
+const hour = 14;
+if (hour < 12) {
+  console.log("Good morning!");
+} else if (hour < 18) {
+  console.log("Good afternoon!");
+} else {
+  console.log("Good evening!");
+}
+
+// switch / case
+const role = "admin";
+switch (role) {
+  case "admin":
+    console.log("Full access Granted");
+    break;
+  case "editor":
+    console.log("Edit access Granted");
+    break;
+  default:
+    console.log("Read-only access");
+}</code></pre>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- DAY 3: Loops (for, while, do-while) -->
+    <section class="slide" data-day="DAY 3 — Loops">
+      <div class="slide-header">
+        <span class="slide-tag">DAY 3 MODULE — LOOPS</span>
+        <h2 class="slide-title">Loops & Iteration (for, while, do-while)</h2>
+        <p class="slide-subtitle">Executing block statements repeatedly until conditions are met.</p>
+      </div>
+      <div class="slide-content">
+        <div class="grid-3" style="gap:1rem;">
+          <div class="card" style="border-top:4px solid var(--primary);">
+            <h4 style="color:var(--primary);">1. for Loop</h4>
+            <p style="font-size:0.82rem; color:var(--text-muted); margin-top:0.25rem;">Used when the exact number of iterations is known in advance.</p>
+            <div class="code-container" style="margin-top:0.5rem;">
+              <pre class="code-body"><code class="language-javascript">for (let i = 0; i < 5; i++) {
+  console.log(i); // 0, 1, 2, 3, 4
+}</code></pre>
+            </div>
+          </div>
+
+          <div class="card" style="border-top:4px solid var(--secondary);">
+            <h4 style="color:var(--secondary);">2. while Loop</h4>
+            <p style="font-size:0.82rem; color:var(--text-muted); margin-top:0.25rem;">Runs as long as the test condition remains true.</p>
+            <div class="code-container" style="margin-top:0.5rem;">
+              <pre class="code-body"><code class="language-javascript">let count = 0;
+while (count < 3) {
+  count++;
+}</code></pre>
+            </div>
+          </div>
+
+          <div class="card" style="border-top:4px solid var(--dark-navy);">
+            <h4 style="color:var(--dark-navy);">3. do-while Loop</h4>
+            <p style="font-size:0.82rem; color:var(--text-muted); margin-top:0.25rem;">Always executes at least ONCE before checking condition.</p>
+            <div class="code-container" style="margin-top:0.5rem;">
+              <pre class="code-body"><code class="language-javascript">let num = 10;
+do {
+  console.log(num); // Prints 10
+} while (num < 5);</code></pre>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- DAY 3: Loop Control & Array Iteration -->
+    <section class="slide" data-day="DAY 3 — Loop Control">
+      <div class="slide-header">
+        <span class="slide-tag">DAY 3 MODULE — LOOP CONTROL</span>
+        <h2 class="slide-title">Loop Control Statements & Array Iteration</h2>
+        <p class="slide-subtitle">Using break, continue, and for...of to traverse array elements.</p>
+      </div>
+      <div class="slide-content">
+        <div class="grid-2">
+          <div class="col-theory">
+            <div class="card">
+              <h4 style="font-weight:700;">break vs continue</h4>
+              <p style="font-size:0.85rem; color:var(--text-muted); margin-top:0.3rem;">
+                • <code>break</code>: Exits the loop immediately.<br>
+                • <code>continue</code>: Skips the rest of current iteration and moves to next loop cycle.
+              </p>
+            </div>
+            <div class="card" style="margin-top:1rem; border-left:4px solid var(--primary);">
+              <h4 style="color:var(--primary);">Modern for...of Loop</h4>
+              <p style="font-size:0.85rem; color:var(--text-muted); margin-top:0.3rem;">
+                Clean syntax for iterating over iterable values like Arrays and Strings.
+              </p>
+            </div>
+          </div>
+          <div class="col-visual">
+            <div class="code-container">
+              <div class="code-header"><span class="code-title"><i data-lucide="repeat"></i> loop_control_demo.js</span></div>
+              <pre class="code-body"><code class="language-javascript">// Skip odd numbers using continue
+for (let i = 1; i <= 6; i++) {
+  if (i % 2 !== 0) continue;
+  console.log("Even:", i); // 2, 4, 6
+}
+
+// Iterating Array with for...of
+const fruits = ["Apple", "Banana", "Mango"];
+for (const fruit of fruits) {
+  console.log("Fruit:", fruit);
+}</code></pre>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- DAY 4: Functions & Scope -->
+    <section class="slide" data-day="DAY 4 — Functions">
+      <div class="slide-header">
+        <span class="slide-tag">DAY 4 MODULE — FUNCTIONS</span>
+        <h2 class="slide-title">Functions & Parameter Passing</h2>
+        <p class="slide-subtitle">Reusable code blocks, function expressions, and default arguments.</p>
+      </div>
+      <div class="slide-content">
+        <div class="grid-2">
+          <div class="col-theory">
+            <div class="card" style="border-left:4px solid var(--primary);">
+              <h4 style="color:var(--primary);">Function Declaration vs Expression</h4>
+              <p style="font-size:0.85rem; color:var(--text-muted); margin-top:0.3rem;">
+                • <strong>Declaration:</strong> Hoisted completely. Can be called before definition.<br>
+                • <strong>Expression:</strong> Stored in variable. Hoisted as variable (in TDZ if let/const).
+              </p>
+            </div>
+            <div class="callout tip" style="margin-top:1rem;">
+              <div class="callout-title"><i data-lucide="sparkles"></i> Pure Functions</div>
+              Functions that return the same output for the same inputs with zero side-effects.
+            </div>
+          </div>
+          <div class="col-visual">
+            <div class="code-container">
+              <div class="code-header"><span class="code-title"><i data-lucide="code"></i> functions_demo.js</span></div>
+              <pre class="code-body"><code class="language-javascript">// 1. Function Declaration
+function add(a, b) {
+  return a + b;
+}
+
+// 2. Function Expression
+const multiply = function(a, b) {
+  return a * b;
+};
+
+// 3. Default Parameters
+function greet(name = "Guest") {
+  return `Hello, ${name}!`;
+}
+console.log(greet()); // "Hello, Guest!"</code></pre>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- DAY 4: Template Literals -->
+    <section class="slide" data-day="DAY 4 — Template Literals">
+      <div class="slide-header">
+        <span class="slide-tag">DAY 4 MODULE — STRINGS</span>
+        <h2 class="slide-title">Template Literals & String Interpolation</h2>
+        <p class="slide-subtitle">Modern ES6 string formatting using backtick syntax (` `).</p>
+      </div>
+      <div class="slide-content">
+        <div class="grid-2">
+          <div class="card" style="border-top:4px solid var(--secondary);">
+            <h4 style="color:var(--secondary);">Features of Template Literals</h4>
+            <ul class="feature-list" style="margin-top:0.4rem; font-size:0.85rem;">
+              <li class="feature-item"><div class="feature-icon"><i data-lucide="check"></i></div><div><strong>Expression Interpolation:</strong> Embed any JS expression inside <code>${expression}</code>.</div></li>
+              <li class="feature-item"><div class="feature-icon"><i data-lucide="check"></i></div><div><strong>Multiline Strings:</strong> Write multiline strings without <code>\n</code> concatenation.</div></li>
+              <li class="feature-item"><div class="feature-icon"><i data-lucide="check"></i></div><div><strong>HTML Templating:</strong> Build dynamic HTML templates easily.</div></li>
+            </ul>
+          </div>
+          <div class="code-container">
+            <div class="code-header"><span class="code-title"><i data-lucide="file-text"></i> template_literals.js</span></div>
+            <pre class="code-body"><code class="language-javascript">const user = "Alex";
+const items = 3;
+const price = 49.99;
+
+// Interpolation & expressions inside ${}
+const summary = `Customer ${user} bought ${items} items for $${(items * price).toFixed(2)}.`;
+
+// Multiline HTML Template string
+const cardHTML = `
+  <div class="user-card">
+    <h2>${user}</h2>
+    <p>Status: ${items > 0 ? "Active" : "Inactive"}</p>
+  </div>
+`;</code></pre>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- DAY 5: Arrays & Basic Methods -->
+    <section class="slide" data-day="DAY 5 — Arrays">
+      <div class="slide-header">
+        <span class="slide-tag">DAY 5 MODULE — ARRAYS</span>
+        <h2 class="slide-title">Arrays & Core Array Mutation Methods</h2>
+        <p class="slide-subtitle">Ordered collections of values, indexing, and stack/queue methods.</p>
+      </div>
+      <div class="slide-content">
+        <div class="grid-2">
+          <div class="col-theory">
+            <table class="comparison-table">
+              <thead><tr><th>Method</th><th>Action</th><th>Modifies Original?</th></tr></thead>
+              <tbody>
+                <tr><td><code>push(item)</code></td><td>Add item to END</td><td><span style="color:var(--success); font-weight:800;">YES</span></td></tr>
+                <tr><td><code>pop()</code></td><td>Remove item from END</td><td><span style="color:var(--success); font-weight:800;">YES</span></td></tr>
+                <tr><td><code>unshift(item)</code></td><td>Add item to START</td><td><span style="color:var(--success); font-weight:800;">YES</span></td></tr>
+                <tr><td><code>shift()</code></td><td>Remove item from START</td><td><span style="color:var(--success); font-weight:800;">YES</span></td></tr>
+                <tr><td><code>slice(start, end)</code></td><td>Extract sub-array section</td><td><span style="color:var(--error); font-weight:800;">NO (Returns Copy)</span></td></tr>
+                <tr><td><code>splice(index, count)</code></td><td>Remove / Replace items</td><td><span style="color:var(--success); font-weight:800;">YES</span></td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="col-visual">
+            <div class="code-container">
+              <div class="code-header"><span class="code-title"><i data-lucide="list"></i> array_methods.js</span></div>
+              <pre class="code-body"><code class="language-javascript">const colors = ["Red", "Green"];
+
+colors.push("Blue");    // ["Red", "Green", "Blue"]
+colors.unshift("Gold"); // ["Gold", "Red", "Green", "Blue"]
+
+const lastColor = colors.pop(); // "Blue"
+console.log(colors); // ["Gold", "Red", "Green"]
+
+// Slice (non-mutating) vs Splice (mutating)
+const sliced = colors.slice(0, 2); // ["Gold", "Red"]
+colors.splice(1, 1, "Purple");     // Removes "Red", inserts "Purple"</code></pre>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- DAY 6: Advanced Array Methods (map, filter, reduce, forEach) -->
+    <section class="slide" data-day="DAY 6 — map/filter/reduce">
+      <div class="slide-header">
+        <span class="slide-tag">DAY 6 MODULE — ADVANCED ARRAYS</span>
+        <h2 class="slide-title">Advanced Array Iteration (map, filter, reduce)</h2>
+        <p class="slide-subtitle">Functional data transformation and method chaining.</p>
+      </div>
+      <div class="slide-content">
+        <div class="grid-2">
+          <div class="col-theory">
+            <div class="card" style="border-left:4px solid var(--primary);">
+              <h4 style="color:var(--primary);">Core Higher-Order Methods</h4>
+              <p style="font-size:0.85rem; color:var(--text-muted); margin-top:0.3rem;">
+                • <code>forEach(fn)</code>: Runs function for each element (No return value).<br>
+                • <code>map(fn)</code>: Transforms each item and returns a NEW array.<br>
+                • <code>filter(fn)</code>: Returns a NEW array with elements matching condition.<br>
+                • <code>reduce(fn, init)</code>: Accumulates array elements into a single value.
+              </p>
+            </div>
+            <div class="diagram-container" style="margin-top:0.85rem; padding:1rem;">
+              <div style="font-size:0.75rem; font-weight:800; color:var(--muted); text-transform:uppercase;">Method Chaining Pipeline</div>
+              <div class="flow-horizontal" style="gap:0.3rem; margin-top:0.4rem;">
+                <div class="flow-h-node" style="font-size:0.75rem;">[1, 2, 3, 4]</div>
+                <div class="flow-h-arrow">➔</div>
+                <div class="flow-h-node" style="font-size:0.75rem; background:#EFF6FF;">filter(even)</div>
+                <div class="flow-h-arrow">➔</div>
+                <div class="flow-h-node" style="font-size:0.75rem; background:#F0F9FF;">map(x * 10)</div>
+                <div class="flow-h-arrow">➔</div>
+                <div class="flow-h-node" style="font-size:0.75rem; background:var(--success-bg); color:var(--success);">[20, 40]</div>
+              </div>
+            </div>
+          </div>
+          <div class="col-visual">
+            <div class="code-container">
+              <div class="code-header"><span class="code-title"><i data-lucide="sliders"></i> array_advance.js</span></div>
+              <pre class="code-body"><code class="language-javascript">const nums = [1, 2, 3, 4, 5];
+
+// 1. map() -> Double numbers
+const doubled = nums.map(n => n * 2); // [2, 4, 6, 8, 10]
+
+// 2. filter() -> Evens only
+const evens = nums.filter(n => n % 2 === 0); // [2, 4]
+
+// 3. reduce() -> Sum of array
+const sum = nums.reduce((acc, curr) => acc + curr, 0); // 15
+
+// Method Chaining Example
+const totalEvenSquares = nums
+  .filter(n => n % 2 === 0)
+  .map(n => n ** 2)
+  .reduce((a, b) => a + b, 0); // 4 + 16 = 20</code></pre>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- DAY 7: ES6+ Arrow Functions & Destructuring -->
+    <section class="slide" data-day="DAY 7 — ES6+ Features">
+      <div class="slide-header">
+        <span class="slide-tag">DAY 7 MODULE — ES6+</span>
+        <h2 class="slide-title">Arrow Functions & Destructuring</h2>
+        <p class="slide-subtitle">Concise syntax for functions and extracting object/array values.</p>
+      </div>
+      <div class="slide-content">
+        <div class="grid-2">
+          <div class="card" style="border-top:4px solid var(--primary);">
+            <h4 style="color:var(--primary);">Arrow Functions (<code>=&gt;</code>)</h4>
+            <p style="font-size:0.85rem; color:var(--text-muted); margin-top:0.3rem;">
+              Shorter syntax with implicit return for one-liners. Note: Arrow functions do NOT have their own <code>this</code> binding (they inherit <code>this</code> lexically).
+            </p>
+            <div class="code-container" style="margin-top:0.5rem;">
+              <pre class="code-body"><code class="language-javascript">const square = x => x * x; // Implicit return!</code></pre>
+            </div>
+          </div>
+
+          <div class="card" style="border-top:4px solid var(--secondary);">
+            <h4 style="color:var(--secondary);">Object & Array Destructuring</h4>
+            <p style="font-size:0.85rem; color:var(--text-muted); margin-top:0.3rem;">
+              Unpack values from arrays or properties from objects into distinct variables.
+            </p>
+            <div class="code-container" style="margin-top:0.5rem;">
+              <pre class="code-body"><code class="language-javascript">const user = { name: "Alice", age: 22 };
+const { name, age } = user; // Extract properties!
+
+const rgb = [255, 128, 0];
+const [red, green, blue] = rgb;</code></pre>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- DAY 7: Spread & Rest Operators -->
+    <section class="slide" data-day="DAY 7 — Spread & Rest">
+      <div class="slide-header">
+        <span class="slide-tag">DAY 7 MODULE — SPREAD / REST</span>
+        <h2 class="slide-title">Spread Operator (...) vs Rest Parameter (...)</h2>
+        <p class="slide-subtitle">Expanding iterables vs gathering multiple elements into arrays.</p>
+      </div>
+      <div class="slide-content">
+        <div class="grid-2">
+          <div class="card" style="border-left:4px solid var(--primary);">
+            <h4 style="color:var(--primary);">Spread Operator (Unpacks)</h4>
+            <p style="font-size:0.85rem; color:var(--text-muted); margin-top:0.3rem;">
+              Expands elements of an array or object into individual elements. Used for merging arrays and cloning objects.
+            </p>
+          </div>
+
+          <div class="card" style="border-left:4px solid var(--secondary);">
+            <h4 style="color:var(--secondary);">Rest Parameter (Packs)</h4>
+            <p style="font-size:0.85rem; color:var(--text-muted); margin-top:0.3rem;">
+              Collects multiple remaining arguments into a single array parameter inside function definitions.
+            </p>
+          </div>
+        </div>
+
+        <div class="code-container" style="margin-top:1rem;">
+          <div class="code-header"><span class="code-title"><i data-lucide="code"></i> spread_rest_demo.js</span></div>
+          <pre class="code-body"><code class="language-javascript">// Spread: Merging Arrays & Objects
+const arr1 = [1, 2];
+const arr2 = [...arr1, 3, 4]; // [1, 2, 3, 4]
+
+const profile = { name: "John", age: 30 };
+const updatedProfile = { ...profile, city: "Delhi" };
+
+// Rest: Gathering Function Arguments
+function sumAll(...numbers) { // numbers is an Array
+  return numbers.reduce((total, n) => total + n, 0);
+}
+console.log(sumAll(10, 20, 30)); // 60</code></pre>
+        </div>
+      </div>
+    </section>
+
+    <!-- DAY 8: DOM Tree & Element Selection -->
+    <section class="slide" data-day="DAY 8 — DOM Manipulation">
+      <div class="slide-header">
+        <span class="slide-tag">DAY 8 MODULE — DOM</span>
+        <h2 class="slide-title">DOM Manipulation & Element Selection</h2>
+        <p class="slide-subtitle">Accessing and traversing the Document Object Model tree.</p>
+      </div>
+      <div class="slide-content">
+        <div class="grid-2">
+          <div class="col-theory">
+            <div class="card">
+              <h4 style="font-weight:700;"><i data-lucide="network"></i> What is the DOM?</h4>
+              <p style="font-size:0.85rem; color:var(--text-muted); margin-top:0.3rem;">
+                The Document Object Model (DOM) is an object-oriented tree representation of your HTML webpage created by the browser.
+              </p>
+            </div>
+            <table class="comparison-table" style="margin-top:0.85rem;">
+              <thead><tr><th>Selector Method</th><th>Returns</th></tr></thead>
+              <tbody>
+                <tr><td><code>document.querySelector(css)</code></td><td>First matching Element</td></tr>
+                <tr><td><code>document.querySelectorAll(css)</code></td><td>NodeList (All matches)</td></tr>
+                <tr><td><code>document.getElementById(id)</code></td><td>Single Element by ID</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="col-visual">
+            <div class="code-container">
+              <div class="code-header"><span class="code-title"><i data-lucide="file-text"></i> dom_selection.js</span></div>
+              <pre class="code-body"><code class="language-javascript">// Select single element by CSS selector
+const title = document.querySelector("#main-title");
+const submitBtn = document.querySelector(".btn-submit");
+
+// Select multiple elements
+const listItems = document.querySelectorAll(".item");
+
+listItems.forEach(item => {
+  item.style.color = "#2563EB";
+});</code></pre>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- DAY 8: Modifying DOM Content & Attributes -->
+    <section class="slide" data-day="DAY 8 — DOM Modification">
+      <div class="slide-header">
+        <span class="slide-tag">DAY 8 MODULE — DOM MODIFICATION</span>
+        <h2 class="slide-title">Modifying Elements, Content & Classes</h2>
+        <p class="slide-subtitle">Updating text, inner HTML, CSS classes, and creating new elements dynamically.</p>
+      </div>
+      <div class="slide-content">
+        <div class="grid-2">
+          <div class="col-theory">
+            <div class="card" style="border-left:4px solid var(--primary);">
+              <h4 style="color:var(--primary);">textContent vs innerHTML</h4>
+              <p style="font-size:0.85rem; color:var(--text-muted); margin-top:0.3rem;">
+                • <code>textContent</code>: Sets plain text safely (prevents XSS attacks).<br>
+                • <code>innerHTML</code>: Parses and renders HTML tags inside elements.
+              </p>
+            </div>
+            <div class="card" style="margin-top:1rem; border-left:4px solid var(--secondary);">
+              <h4 style="color:var(--secondary);">classList API</h4>
+              <p style="font-size:0.85rem; color:var(--text-muted); margin-top:0.3rem;">
+                <code>classList.add('active')</code>, <code>remove('hidden')</code>, <code>toggle('dark-mode')</code>.
+              </p>
+            </div>
+          </div>
+          <div class="col-visual">
+            <div class="code-container">
+              <div class="code-header"><span class="code-title"><i data-lucide="edit"></i> dom_modify.js</span></div>
+              <pre class="code-body"><code class="language-javascript">const header = document.querySelector("h1");
+header.textContent = "Welcome to JavaScript!";
+
+// Toggle CSS Class
+header.classList.toggle("highlight");
+
+// Create & Append New Element dynamically
+const newDiv = document.createElement("div");
+newDiv.className = "card";
+newDiv.innerHTML = "<h3>New Dynamic Card</h3>";
+
+document.body.appendChild(newDiv);</code></pre>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- DAY 9: Handling Events -->
+    <section class="slide" data-day="DAY 9 — Handling Events">
+      <div class="slide-header">
+        <span class="slide-tag">DAY 9 MODULE — EVENTS</span>
+        <h2 class="slide-title">Handling Events & User Interactions</h2>
+        <p class="slide-subtitle">Attaching event listeners for click, form submit, keyboard, and mouse inputs.</p>
+      </div>
+      <div class="slide-content">
+        <div class="grid-2">
+          <div class="col-theory">
+            <div class="card" style="border-top:4px solid var(--primary);">
+              <h4 style="color:var(--primary);"><i data-lucide="mouse-pointer"></i> addEventListener Syntax</h4>
+              <div class="code-container" style="margin-top:0.4rem;">
+                <pre class="code-body"><code class="language-javascript">element.addEventListener(eventType, handlerFunction);</code></pre>
+              </div>
+            </div>
+            <ul class="feature-list" style="margin-top:0.85rem; font-size:0.85rem;">
+              <li class="feature-item"><div class="feature-icon"><i data-lucide="check"></i></div><div><code>click</code> / <code>dblclick</code> — Button presses & taps</div></li>
+              <li class="feature-item"><div class="feature-icon"><i data-lucide="check"></i></div><div><code>submit</code> — Form submissions (Use <code>e.preventDefault()</code>!)</div></li>
+              <li class="feature-item"><div class="feature-icon"><i data-lucide="check"></i></div><div><code>keyup</code> / <code>keydown</code> — Keyboard input tracking</div></li>
+            </ul>
+          </div>
+          <div class="col-visual">
+            <div class="code-container">
+              <div class="code-header"><span class="code-title"><i data-lucide="zap"></i> events_demo.js</span></div>
+              <pre class="code-body"><code class="language-javascript">const btn = document.querySelector("#my-btn");
+btn.addEventListener("click", (event) => {
+  console.log("Button clicked!", event.target);
+});
+
+// Form Handling
+const form = document.querySelector("#todo-form");
+form.addEventListener("submit", (e) => {
+  e.preventDefault(); // Stop page refresh!
+  const input = document.querySelector("#todo-input");
+  console.log("New task:", input.value);
+});</code></pre>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- DAY 9: LocalStorage & Web Storage API -->
+    <section class="slide" data-day="DAY 9 — LocalStorage">
+      <div class="slide-header">
+        <span class="slide-tag">DAY 9 MODULE — WEB STORAGE</span>
+        <h2 class="slide-title">LocalStorage & Data Persistence</h2>
+        <p class="slide-subtitle">Saving key-value pairs in the browser that persist across page reloads.</p>
+      </div>
+      <div class="slide-content">
+        <div class="grid-2">
+          <div class="col-theory">
+            <table class="comparison-table">
+              <thead><tr><th>Method</th><th>Description</th></tr></thead>
+              <tbody>
+                <tr><td><code>localStorage.setItem(key, val)</code></td><td>Save item (Strings only)</td></tr>
+                <tr><td><code>localStorage.getItem(key)</code></td><td>Retrieve item by key</td></tr>
+                <tr><td><code>localStorage.removeItem(key)</code></td><td>Delete specific key</td></tr>
+                <tr><td><code>localStorage.clear()</code></td><td>Clear all local storage</td></tr>
+              </tbody>
+            </table>
+            <div class="callout tip" style="margin-top:0.85rem;">
+              <div class="callout-title"><i data-lucide="database"></i> JSON Serialization Rule</div>
+              LocalStorage ONLY stores strings! Always use <code>JSON.stringify()</code> to store objects/arrays and <code>JSON.parse()</code> to retrieve them.
+            </div>
+          </div>
+          <div class="col-visual">
+            <div class="code-container">
+              <div class="code-header"><span class="code-title"><i data-lucide="hard-drive"></i> storage_demo.js</span></div>
+              <pre class="code-body"><code class="language-javascript">const todos = ["Buy Milk", "Code JS"];
+
+// 1. Save Array as JSON string
+localStorage.setItem("myTodos", JSON.stringify(todos));
+
+// 2. Retrieve & Parse back to JS Array
+const saved = localStorage.getItem("myTodos");
+const parsedTodos = saved ? JSON.parse(saved) : [];
+
+console.log(parsedTodos[0]); // "Buy Milk"</code></pre>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- DAY 10: Fetch API & Asynchronous Data -->
+    <section class="slide" data-day="DAY 10 — Fetch API">
+      <div class="slide-header">
+        <span class="slide-tag">DAY 10 MODULE — FETCH API</span>
+        <h2 class="slide-title">APIs, Fetch API & Async / Await</h2>
+        <p class="slide-subtitle">Fetching data from external servers using Promises and HTTP requests.</p>
+      </div>
+      <div class="slide-content">
+        <div class="grid-2">
+          <div class="col-theory">
+            <div class="card" style="border-top:4px solid var(--primary);">
+              <h4 style="color:var(--primary);"><i data-lucide="cloud"></i> HTTP Workflow</h4>
+              <p style="font-size:0.85rem; color:var(--text-muted); margin-top:0.3rem;">
+                1. Call <code>fetch(url)</code> ➔ Returns a Promise.<br>
+                2. Call <code>response.json()</code> ➔ Parses JSON stream.<br>
+                3. Handle data or catch network errors.
+              </p>
+            </div>
+            <div class="callout warning" style="margin-top:0.85rem;">
+              <div class="callout-title"><i data-lucide="alert-triangle"></i> Always Check response.ok</div>
+              <code>fetch()</code> only rejects on network failures, NOT on HTTP errors like 404 or 500! Always check <code>response.ok</code>.
+            </div>
+          </div>
+          <div class="col-visual">
+            <div class="code-container">
+              <div class="code-header"><span class="code-title"><i data-lucide="download-cloud"></i> fetch_async_await.js</span></div>
+              <pre class="code-body"><code class="language-javascript">// Modern Async / Await Pattern
+async function fetchUserData() {
+  try {
+    const res = await fetch("https://api.github.com/users/octocat");
+    if (!res.ok) throw new Error(`HTTP Error: ${res.status}`);
+    
+    const user = await res.json();
+    console.log(user.name, user.public_repos);
+  } catch (error) {
+    console.error("Fetch Failed:", error.message);
+  }
+}
+fetchUserData();</code></pre>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CORE: Buffer Topic -->
+    <section class="slide" data-day="CORE — Buffer">
+      <div class="slide-header">
+        <span class="slide-tag">CORE FOUNDATIONS — BINARY DATA</span>
+        <h2 class="slide-title">Buffer & Binary Data Handling</h2>
+        <p class="slide-subtitle">Understanding raw binary data structures and memory buffers in JavaScript.</p>
+      </div>
+      <div class="slide-content">
+        <div class="grid-2">
+          <div class="col-theory">
+            <div class="card" style="border-left:4px solid var(--primary);">
+              <h4 style="color:var(--primary);"><i data-lucide="binary"></i> What is a Buffer?</h4>
+              <p style="font-size:0.85rem; color:var(--text-muted); margin-top:0.3rem;">
+                A <code>Buffer</code> is a fixed-size chunk of memory allocated outside the V8 heap used to handle raw binary data streams (files, network packets, audio/video).
+              </p>
+            </div>
+            <div class="card" style="margin-top:1rem;">
+              <h4 style="font-weight:700;">Browser vs Node.js Buffer</h4>
+              <p style="font-size:0.85rem; color:var(--text-muted); margin-top:0.3rem;">
+                • <strong>Browser:</strong> Uses <code>ArrayBuffer</code> & TypedArrays (e.g. <code>Uint8Array</code>).<br>
+                • <strong>Node.js:</strong> Uses built-in <code>Buffer</code> class.
+              </p>
+            </div>
+          </div>
+          <div class="col-visual">
+            <div class="code-container">
+              <div class="code-header"><span class="code-title"><i data-lucide="cpu"></i> buffer_demo.js</span></div>
+              <pre class="code-body"><code class="language-javascript">// Create Buffer from String
+const buf = Buffer.from("Hello JS", "utf-8");
+
+console.log(buf); // &lt;Buffer 48 65 6c 6c 6f 20 4a 53&gt; (Hex representation)
+console.log(buf.toString()); // "Hello JS"
+
+// Allocate 10 bytes zero-filled buffer
+const blankBuf = Buffer.alloc(10);
+console.log(blankBuf.length); // 10 bytes</code></pre>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================================================================
+         ADD-ON FEATURE — JAVASCRIPT EVENT LOOP WORKING SESSION
+         =================================================================== -->
+
+    <!-- SLIDE 6: Event Loop Session Cover Slide -->
+    <section class="slide" data-day="EVENT LOOP SESSION">
+      <div class="slide-header" style="text-align: center; margin-top: 2rem;">
+        <span class="slide-tag" style="background:var(--primary); color:#ffffff; border:none;">INTERACTIVE WORKING SESSION</span>
+        <h1 class="slide-title" style="font-size: 3.2rem; margin-top: 0.5rem; background: linear-gradient(135deg, #2563EB, #0EA5E9); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
+          JAVASCRIPT EVENT LOOP
+        </h1>
+        <p class="slide-subtitle" style="font-size: 1.3rem;">
+          "See how JavaScript handles asynchronous work in real time"
+        </p>
+      </div>
+
+      <div class="slide-content" style="max-width: 900px; margin: 1.25rem auto 0 auto;">
+        <div class="diagram-container" style="background:var(--bg-highlight); border-color:var(--primary-border);">
+          <div class="flow-horizontal" style="gap:0.4rem;">
+            <div class="flow-h-node">Call Stack</div>
+            <div class="flow-h-arrow">➜</div>
+            <div class="flow-h-node">Web APIs</div>
+            <div class="flow-h-arrow">➜</div>
+            <div class="flow-h-node" style="background:#F0F9FF; border-color:#0EA5E9; color:#0EA5E9;">Microtask Queue</div>
+            <div class="flow-h-arrow">➜</div>
+            <div class="flow-h-node" style="background:#FFFBEB; border-color:#F59E0B; color:#D97706;">Task Queue</div>
+            <div class="flow-h-arrow">➜</div>
+            <div class="flow-h-node" style="background:var(--primary); color:#fff;">Event Loop</div>
+          </div>
+        </div>
+
+        <div class="callout tip" style="margin-top:1.5rem; text-align:center;">
+          <div class="callout-title" style="justify-content:center;"><i data-lucide="play-circle"></i> Session Objective</div>
+          Step through live JavaScript execution, observe card movements between queues, and predict output with 100% technical precision!
+        </div>
+      </div>
+
+      <div class="mentor-note" style="display:none;">
+        <div class="mentor-note-card">
+          <strong>MENTOR NOTE:</strong> Explain to students: "JavaScript executes code one step at a time. When it needs to wait for a timer or network response, the browser handles that waiting outside the Call Stack!"
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 7: Runtime Component Overview -->
+    <section class="slide" data-day="EVENT LOOP SESSION">
+      <div class="slide-header">
+        <span class="slide-tag">RUNTIME COMPONENTS</span>
+        <h2 class="slide-title">The 5 Pillars of Asynchronous JavaScript</h2>
+        <p class="slide-subtitle">Understanding the Call Stack, Web APIs, Queues & Event Loop.</p>
+      </div>
+
+      <div class="slide-content">
+        <div class="grid-3" style="gap:1.25rem;">
+          <div class="card" style="border-top:4px solid var(--primary);">
+            <h4 style="color:var(--primary);"><i data-lucide="layers"></i> 1. Call Stack</h4>
+            <p style="font-size:0.88rem; color:var(--text-muted); margin-top:0.25rem;">LIFO (Last In, First Out) stack executing synchronous JavaScript code one line at a time.</p>
+          </div>
+          <div class="card" style="border-top:4px solid var(--secondary);">
+            <h4 style="color:var(--secondary);"><i data-lucide="globe"></i> 2. Web APIs</h4>
+            <p style="font-size:0.88rem; color:var(--text-muted); margin-top:0.25rem;">Browser background threads handling timers (<code>setTimeout</code>), DOM events, and HTTP requests.</p>
+          </div>
+          <div class="card" style="border-top:4px solid #0EA5E9;">
+            <h4 style="color:#0EA5E9;"><i data-lucide="zap"></i> 3. Microtask Queue</h4>
+            <p style="font-size:0.88rem; color:var(--text-muted); margin-top:0.25rem;">High priority queue for <code>Promise.then()</code>, <code>catch()</code>, <code>finally()</code> & <code>queueMicrotask()</code> callbacks.</p>
+          </div>
+          <div class="card" style="border-top:4px solid #F59E0B;">
+            <h4 style="color:#D97706;"><i data-lucide="clock"></i> 4. Task Queue</h4>
+            <p style="font-size:0.88rem; color:var(--text-muted); margin-top:0.25rem;">Standard callback queue for <code>setTimeout()</code> and <code>setInterval()</code> timer callbacks.</p>
+          </div>
+          <div class="card" style="border-top:4px solid var(--dark-navy);">
+            <h4 style="color:var(--dark-navy);"><i data-lucide="refresh-cw"></i> 5. Event Loop</h4>
+            <p style="font-size:0.88rem; color:var(--text-muted); margin-top:0.25rem;">Monitors Call Stack. When empty, clears ALL Microtasks first, then processes ONE Task!</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 8: MAIN INTERACTIVE EVENT LOOP SIMULATOR (CENTERPIECE) -->
+    <section class="slide" data-day="EVENT LOOP SESSION">
+      <div class="slide-header" style="margin-bottom:0.75rem;">
+        <span class="slide-tag">INTERACTIVE SIMULATOR</span>
+        <h2 class="slide-title" style="font-size:1.8rem;">Live Event Loop Working Model</h2>
+      </div>
+
+      <div class="slide-content">
+        <div class="sim-container">
+          <!-- Control Bar -->
+          <div class="sim-toolbar">
+            <div class="sim-control-group">
+              <span style="font-weight:800; font-size:0.85rem; color:var(--dark-navy);">Example:</span>
+              <select class="sim-select" id="sim-example-select">
+                <!-- Examples populated dynamically -->
+              </select>
+            </div>
+
+            <div class="sim-control-group">
+              <button class="sim-btn secondary" id="sim-step-prev-btn"><i data-lucide="chevron-left"></i> Step Prev</button>
+              <button class="sim-btn" id="sim-play-btn"><i data-lucide="play"></i> Run</button>
+              <button class="sim-btn secondary" id="sim-pause-btn" disabled><i data-lucide="pause"></i> Pause</button>
+              <button class="sim-btn secondary" id="sim-step-next-btn">Step Next <i data-lucide="chevron-right"></i></button>
+              <button class="sim-btn danger" id="sim-reset-btn"><i data-lucide="rotate-ccw"></i> Reset</button>
+            </div>
+
+            <div class="sim-control-group">
+              <span style="font-weight:800; font-size:0.85rem; color:var(--dark-navy);">Speed:</span>
+              <select class="sim-select" id="sim-speed-select">
+                <option value="1500">Slow (1.5s)</option>
+                <option value="800" selected>Normal (0.8s)</option>
+                <option value="350">Fast (0.35s)</option>
+              </select>
+              <span class="sim-step-badge" id="sim-step-badge">STEP 0 / 15</span>
+            </div>
+          </div>
+
+          <!-- Runtime Component Grid -->
+          <div class="sim-grid">
+            <!-- Code Editor Box -->
+            <div class="sim-code-box">
+              <div class="code-header">
+                <span class="code-title"><i data-lucide="file-code"></i> Code Editor</span>
+              </div>
+              <ul class="sim-code-lines" id="sim-code-lines">
+                <!-- Populated dynamically -->
+              </ul>
+            </div>
+
+            <!-- Call Stack Box -->
+            <div class="sim-box call-stack-box">
+              <div class="sim-box-title">
+                <span><i data-lucide="layers" style="width:16px;height:16px;"></i> Call Stack</span>
+              </div>
+              <div class="sim-box-content" id="sim-call-stack-content">
+                <!-- Cards render dynamically -->
+              </div>
+            </div>
+
+            <!-- Web APIs Box -->
+            <div class="sim-box web-api-box">
+              <div class="sim-box-title">
+                <span><i data-lucide="globe" style="width:16px;height:16px;"></i> Web APIs</span>
+              </div>
+              <div class="sim-box-content" id="sim-web-apis-content">
+                <!-- Cards render dynamically -->
+              </div>
+            </div>
+
+            <!-- Queues & Event Loop Wheel -->
+            <div style="display:flex; flex-direction:column; gap:0.75rem;">
+              <div class="sim-box microtask-box" style="min-height:100px;">
+                <div class="sim-box-title">
+                  <span><i data-lucide="zap" style="width:16px;height:16px;color:#0EA5E9;"></i> Microtask Queue</span>
+                </div>
+                <div class="sim-box-content" id="sim-microtasks-content"></div>
+              </div>
+
+              <div class="sim-box task-queue-box" style="min-height:100px;">
+                <div class="sim-box-title">
+                  <span><i data-lucide="clock" style="width:16px;height:16px;color:#F59E0B;"></i> Task Queue</span>
+                </div>
+                <div class="sim-box-content" id="sim-tasks-content"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Event Loop Indicator Bar -->
+          <div style="display:flex; align-items:center; justify-content:center; gap:1rem; background:var(--bg-secondary); padding:0.6rem 1rem; border-radius:var(--radius-md); border:1px solid var(--border);">
+            <div class="event-loop-wheel paused" id="sim-wheel"></div>
+            <div style="font-weight:800; font-size:0.95rem; color:var(--dark-navy);">
+              EVENT LOOP STATUS: <span id="sim-status-text" style="color:var(--primary);">Idle</span>
+            </div>
+          </div>
+
+          <!-- Bottom Log & Console Output -->
+          <div class="sim-bottom-grid">
+            <div>
+              <div style="font-size:0.8rem; font-weight:800; color:var(--text-muted); margin-bottom:0.25rem;">[ EXECUTION LOG ]</div>
+              <div class="sim-log-box" id="sim-execution-log">
+                <!-- Log entries render dynamically -->
+              </div>
+            </div>
+
+            <div>
+              <div style="font-size:0.8rem; font-weight:800; color:var(--text-muted); margin-bottom:0.25rem;">[ CONSOLE OUTPUT ]</div>
+              <div class="output-box" id="sim-console-output" style="height:140px; overflow-y:auto;">
+                <span style="color:#64748B;">[ Console Output ]</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 9: Microtask Queue vs Task Queue -->
+    <section class="slide" data-day="EVENT LOOP SESSION">
+      <div class="slide-header">
+        <span class="slide-tag">QUEUE PRIORITY</span>
+        <h2 class="slide-title">Microtask Queue vs Task Queue</h2>
+        <p class="slide-subtitle">Why Promise callbacks ALWAYS execute before setTimeout callbacks.</p>
+      </div>
+
+      <div class="slide-content">
+        <table class="comparison-table">
+          <thead>
+            <tr>
+              <th>Feature</th>
+              <th>Microtask Queue</th>
+              <th>Task Queue (Macrotask)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Examples</strong></td>
+              <td><code>Promise.then()</code>, <code>catch()</code>, <code>finally()</code>, <code>queueMicrotask()</code></td>
+              <td><code>setTimeout()</code>, <code>setInterval()</code>, <code>setImmediate()</code></td>
+            </tr>
+            <tr>
+              <td><strong>Priority Level</strong></td>
+              <td><span style="color:var(--success); font-weight:800;">HIGH PRIORITY (Emptied completely FIRST)</span></td>
+              <td><span style="color:var(--warning); font-weight:800;">NORMAL PRIORITY (Processed one at a time)</span></td>
+            </tr>
+            <tr>
+              <td><strong>Event Loop Rule</strong></td>
+              <td>When Call Stack is empty, Event Loop clears ALL microtasks before taking 1 task</td>
+              <td>Processed only after all Microtasks are cleared</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="callout tip" style="margin-top:1.25rem;">
+          <div class="callout-title"><i data-lucide="lightbulb"></i> GOLDEN RULE TO REMEMBER</div>
+          Synchronous Stack Code ➔ ALL Microtasks (Promises) ➔ ONE Task (setTimeout) ➔ Repeat!
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 10: Common Event Loop Misconceptions -->
+    <section class="slide" data-day="EVENT LOOP SESSION">
+      <div class="slide-header">
+        <span class="slide-tag">MYTH BUSTING</span>
+        <h2 class="slide-title">Common Event Loop Misconceptions</h2>
+        <p class="slide-subtitle">Clearing up 5 classic mistakes students make in technical interviews.</p>
+      </div>
+
+      <div class="slide-content">
+        <div class="grid-2">
+          <div class="card" style="border-left:4px solid var(--error);">
+            <h4 style="color:var(--error);"><i data-lucide="x"></i> MYTH 1: "setTimeout(..., 0) means execute immediately"</h4>
+            <p class="card-text" style="font-size:0.9rem; margin-top:0.25rem;"><strong>FACT:</strong> 0ms means the timer becomes ready in Web API. The callback still waits in Task Queue until Call Stack is empty!</p>
+          </div>
+
+          <div class="card" style="border-left:4px solid var(--error);">
+            <h4 style="color:var(--error);"><i data-lucide="x"></i> MYTH 2: "Promises run before synchronous code"</h4>
+            <p class="card-text" style="font-size:0.9rem; margin-top:0.25rem;"><strong>FACT:</strong> Synchronous code on the Call Stack ALWAYS executes first before any Promise callback.</p>
+          </div>
+
+          <div class="card" style="border-left:4px solid var(--error);">
+            <h4 style="color:var(--error);"><i data-lucide="x"></i> MYTH 3: "The browser has only one callback queue"</h4>
+            <p class="card-text" style="font-size:0.9rem; margin-top:0.25rem;"><strong>FACT:</strong> The browser has separate Microtask Queue and Task Queue with distinct priorities.</p>
+          </div>
+
+          <div class="card" style="border-left:4px solid var(--error);">
+            <h4 style="color:var(--error);"><i data-lucide="x"></i> MYTH 4: "Event Loop executes JavaScript"</h4>
+            <p class="card-text" style="font-size:0.9rem; margin-top:0.25rem;"><strong>FACT:</strong> V8 Call Stack executes JS; Event Loop only checks queues and pushes callbacks!</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 11: 10-Question Session Quiz -->
+    <section class="slide" data-day="EVENT LOOP SESSION">
+      <div class="slide-header">
+        <span class="slide-tag">SESSION EVALUATION</span>
+        <h2 class="slide-title">Event Loop Session Quiz</h2>
+        <p class="slide-subtitle">Test your understanding of the Call Stack, Queues & Execution order.</p>
+      </div>
+
+      <div class="slide-content">
+        <div class="card" style="margin-bottom:1rem; background:var(--primary-light); border-color:var(--primary-border); display:flex; align-items:center; justify-content:space-between; padding:1rem 1.5rem;">
+          <div id="quiz-score-display" style="font-size:1.1rem; font-weight:800; color:var(--dark-navy);">
+            Score: <strong>0 / 3</strong> (0%)
+          </div>
+          <span class="pill-badge" id="quiz-badge-display">Select options below</span>
+        </div>
+
+        <div class="quiz-card" data-question-id="el_q1" data-correct-option="B" style="margin-bottom:1.25rem;">
+          <div class="question-text">Q1: Which queue has higher priority when the Call Stack becomes empty?</div>
+          <div class="options-grid">
+            <button class="option-btn" data-option="A"><span>A:</span> Task Queue (setTimeout)</button>
+            <button class="option-btn" data-option="B"><span>B:</span> Microtask Queue (Promise.then)</button>
+            <button class="option-btn" data-option="C"><span>C:</span> Web API Container</button>
+            <button class="option-btn" data-option="D"><span>D:</span> Call Stack</button>
+          </div>
+          <div class="explanation-card">
+            <p><strong>Correct: B!</strong> Microtasks (Promises) are always emptied completely before the Event Loop moves to Task Queue.</p>
+          </div>
+        </div>
+
+        <div class="quiz-card" data-question-id="el_q2" data-correct-option="C">
+          <div class="question-text">Q2: Where does setTimeout() timer delay actually get processed?</div>
+          <div class="options-grid">
+            <button class="option-btn" data-option="A"><span>A:</span> Directly inside Call Stack</button>
+            <button class="option-btn" data-option="B"><span>B:</span> Inside Microtask Queue</button>
+            <button class="option-btn" data-option="C"><span>C:</span> Inside Web APIs background thread</button>
+            <button class="option-btn" data-option="D"><span>D:</span> Inside V8 Engine Memory</button>
+          </div>
+          <div class="explanation-card">
+            <p><strong>Correct: C!</strong> Browser Web APIs handle timer delays outside the single JavaScript thread.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- DAYS 11-13 CAPSTONE & GRADUATION SLIDES -->
+    <section class="slide" data-day="DAYS 11-13 — Todo Capstone">
+      <div class="slide-header" style="text-align: center; margin-top: 3rem;">
+        <span class="slide-tag">DAYS 11–13 CAPSTONE PROJECT</span>
+        <h1 class="slide-title" style="font-size: 2.8rem; color: var(--primary);">TO-DO LIST APPLICATION</h1>
+        <p class="slide-subtitle" style="font-size: 1.2rem;">Building a Complete Dynamic App with DOM, Events, Filters & localStorage</p>
+      </div>
+      <div class="slide-content" style="max-width: 700px; margin: 2rem auto 0 auto; text-align: center;">
+        <div class="badge-group" style="justify-content: center;">
+          <span class="pill-badge">State Array</span>
+          <span class="pill-badge">localStorage</span>
+          <span class="pill-badge">JSON.stringify</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- TO-DO APP STEP 1: UI & Data Architecture -->
+    <section class="slide" data-day="DAYS 11-13 — To-Do Architecture">
+      <div class="slide-header">
+        <span class="slide-tag">TO-DO APP — STEP 1</span>
+        <h2 class="slide-title">1. UI & State Data Model Architecture</h2>
+        <p class="slide-subtitle">Designing the HTML structure and in-memory JavaScript array state.</p>
+      </div>
+      <div class="slide-content">
+        <div class="grid-2">
+          <div class="col-theory">
+            <div class="card" style="border-left:4px solid var(--primary);">
+              <h4 style="color:var(--primary);">State-Driven Architecture Rule</h4>
+              <p style="font-size:0.85rem; color:var(--text-muted); margin-top:0.3rem;">
+                Never manipulate the DOM directly for data storage! Always modify the <code>todos</code> JavaScript array state first, then re-render the UI from state.
+              </p>
+            </div>
+            <div class="card" style="margin-top:0.85rem;">
+              <h4 style="font-weight:700;">Task Object Schema</h4>
+              <p style="font-size:0.85rem; color:var(--text-muted); margin-top:0.3rem;">
+                <code>{ id: Number, text: String, completed: Boolean }</code>
+              </p>
+            </div>
+          </div>
+          <div class="col-visual">
+            <div class="code-container">
+              <div class="code-header"><span class="code-title"><i data-lucide="layers"></i> state_model.js</span></div>
+              <pre class="code-body"><code class="language-javascript">// Central State Array
+let todos = [
+  { id: 1, text: "Master JS Fundamentals", completed: true },
+  { id: 2, text: "Build To-Do List App", completed: false }
+];
+
+// Helper to generate unique ID
+const generateId = () => Date.now();</code></pre>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TO-DO APP STEP 2: Adding & Rendering -->
+    <section class="slide" data-day="DAYS 11-13 — Add & Render">
+      <div class="slide-header">
+        <span class="slide-tag">TO-DO APP — STEP 2</span>
+        <h2 class="slide-title">2. Adding Tasks & Dynamic DOM Rendering</h2>
+        <p class="slide-subtitle">Capturing form input, pushing to state, and generating task list elements.</p>
+      </div>
+      <div class="slide-content">
+        <div class="grid-2">
+          <div class="col-theory">
+            <div class="card" style="border-top:4px solid var(--secondary);">
+              <h4 style="color:var(--secondary);">Render Loop Workflow</h4>
+              <p style="font-size:0.85rem; color:var(--text-muted); margin-top:0.3rem;">
+                1. Clear list container (<code>listEl.innerHTML = ""</code>).<br>
+                2. Iterate over <code>todos</code> array with <code>map()</code>.<br>
+                3. Inject generated template strings into DOM.
+              </p>
+            </div>
+          </div>
+          <div class="col-visual">
+            <div class="code-container">
+              <div class="code-header"><span class="code-title"><i data-lucide="plus-circle"></i> add_render.js</span></div>
+              <pre class="code-body"><code class="language-javascript">function addTodo(text) {
+  if (!text.trim()) return;
+  const newTodo = { id: generateId(), text, completed: false };
+  todos.push(newTodo);
+  renderTodos();
+}
+
+function renderTodos() {
+  const listEl = document.querySelector("#todo-list");
+  listEl.innerHTML = todos.map(todo => `
+    <li class="todo-item ${todo.completed ? 'done' : ''}">
+      <span>${todo.text}</span>
+      <button onclick="toggleTodo(${todo.id})">Done</button>
+      <button onclick="deleteTodo(${todo.id})">Delete</button>
+    </li>
+  `).join("");
+}</code></pre>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TO-DO APP STEP 3: Toggle, Edit & Delete -->
+    <section class="slide" data-day="DAYS 11-13 — Edit & Delete">
+      <div class="slide-header">
+        <span class="slide-tag">TO-DO APP — STEP 3</span>
+        <h2 class="slide-title">3. Toggling, Editing & Deleting Tasks</h2>
+        <p class="slide-subtitle">Updating item properties by ID and filtering deleted items from state.</p>
+      </div>
+      <div class="slide-content">
+        <div class="grid-2">
+          <div class="col-theory">
+            <div class="card" style="border-left:4px solid var(--primary);">
+              <h4 style="color:var(--primary);">State Immutability & Filtering</h4>
+              <p style="font-size:0.85rem; color:var(--text-muted); margin-top:0.3rem;">
+                • <strong>Toggle:</strong> Find task by ID using <code>find()</code> and flip <code>completed = !completed</code>.<br>
+                • <strong>Delete:</strong> Use <code>todos.filter(t => t.id !== targetId)</code> to produce a new array without the target item.
+              </p>
+            </div>
+          </div>
+          <div class="col-visual">
+            <div class="code-container">
+              <div class="code-header"><span class="code-title"><i data-lucide="trash-2"></i> toggle_delete.js</span></div>
+              <pre class="code-body"><code class="language-javascript">// Toggle task completion status
+function toggleTodo(id) {
+  todos = todos.map(t => 
+    t.id === id ? { ...t, completed: !t.completed } : t
+  );
+  renderTodos();
+}
+
+// Delete task by ID
+function deleteTodo(id) {
+  todos = todos.filter(t => t.id !== id);
+  renderTodos();
+}
+
+// Edit task text
+function editTodo(id, newText) {
+  todos = todos.map(t => t.id === id ? { ...t, text: newText } : t);
+  renderTodos();
+}</code></pre>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TO-DO APP STEP 4: LocalStorage Integration -->
+    <section class="slide" data-day="DAYS 11-13 — Storage Persistence">
+      <div class="slide-header">
+        <span class="slide-tag">TO-DO APP — STEP 4</span>
+        <h2 class="slide-title">4. LocalStorage Persistence Integration</h2>
+        <p class="slide-subtitle">Saving state on changes and restoring user tasks when opening the app.</p>
+      </div>
+      <div class="slide-content">
+        <div class="grid-2">
+          <div class="col-theory">
+            <div class="card" style="border-top:4px solid var(--success);">
+              <h4 style="color:var(--success);"><i data-lucide="save"></i> Complete Data Cycle</h4>
+              <p style="font-size:0.85rem; color:var(--text-muted); margin-top:0.3rem;">
+                Page Load ➔ Read LocalStorage ➔ Parse JSON ➔ Initialize State Array ➔ Render UI ➔ User Actions ➔ Save LocalStorage!
+              </p>
+            </div>
+          </div>
+          <div class="col-visual">
+            <div class="code-container">
+              <div class="code-header"><span class="code-title"><i data-lucide="hard-drive"></i> app_storage.js</span></div>
+              <pre class="code-body"><code class="language-javascript">const STORAGE_KEY = "haca_todo_app_state";
+
+function saveState() {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(todos));
+}
+
+function loadState() {
+  const data = localStorage.getItem(STORAGE_KEY);
+  todos = data ? JSON.parse(data) : [];
+  renderTodos();
+}
+
+// Initialize on window load
+window.addEventListener("DOMContentLoaded", loadState);</code></pre>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================================================================
+         PART C: NODE.JS & EXPRESS BACKEND MASTERCLASS
+         =================================================================== -->
+
+    <!-- NODE: Overview & NPM -->
+    <section class="slide" data-day="NODE — Overview & NPM">
+      <div class="slide-header">
+        <span class="slide-tag">NODE.JS MODULE — OVERVIEW</span>
+        <h2 class="slide-title">Introduction to Node.js & NPM Ecosystem</h2>
+        <p class="slide-subtitle">Running server-side JavaScript with V8, package.json, and dependency management.</p>
+      </div>
+      <div class="slide-content">
+        <div class="grid-2">
+          <div class="col-theory">
+            <div class="card" style="border-top:4px solid var(--primary);">
+              <h4 style="color:var(--primary);"><i data-lucide="server"></i> What is Node.js?</h4>
+              <p style="font-size:0.85rem; color:var(--text-muted); margin-top:0.3rem;">
+                Node.js is an open-source, cross-platform JavaScript runtime environment built on Chrome's V8 engine and the <strong>Libuv</strong> C++ library for non-blocking asynchronous I/O.
+              </p>
+            </div>
+            <div class="card" style="margin-top:0.85rem;">
+              <h4 style="font-weight:700;"><i data-lucide="box"></i> Understanding package.json</h4>
+              <p style="font-size:0.85rem; color:var(--text-muted); margin-top:0.3rem;">
+                • <code>dependencies</code>: Packages required for production.<br>
+                • <code>devDependencies</code>: Tooling required only for development.<br>
+                • <code>scripts</code>: Custom CLI shortcuts (e.g. <code>"start": "node server.js"</code>).
+              </p>
+            </div>
+          </div>
+          <div class="col-visual">
+            <div class="code-container">
+              <div class="code-header"><span class="code-title"><i data-lucide="terminal"></i> npm_commands.sh & package.json</span></div>
+              <pre class="code-body"><code class="language-json">// Initialize new Node.js project:
+// $ npm init -y
+
+// Install production & dev dependencies:
+// $ npm install express dotenv jsonwebtoken
+// $ npm install --save-dev nodemon
+
+{
+  "name": "my-node-api",
+  "version": "1.0.0",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js"
+  }
+}</code></pre>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- NODE: Modules System -->
+    <section class="slide" data-day="NODE — Modules">
+      <div class="slide-header">
+        <span class="slide-tag">NODE.JS MODULE — MODULES</span>
+        <h2 class="slide-title">Node.js Modules: Built-in, Local & Third-Party</h2>
+        <p class="slide-subtitle">Modular code architecture with CommonJS require() and ES Modules import.</p>
+      </div>
+      <div class="slide-content">
+        <div class="grid-2">
+          <div class="col-theory">
+            <table class="comparison-table">
+              <thead><tr><th>Module Type</th><th>Description</th><th>Examples</th></tr></thead>
+              <tbody>
+                <tr><td><strong>Built-in</strong></td><td>Core Node.js utilities (No npm needed)</td><td><code>fs</code>, <code>path</code>, <code>http</code>, <code>os</code></td></tr>
+                <tr><td><strong>Local</strong></td><td>Custom files created in your project</td><td><code>./utils/auth.js</code></td></tr>
+                <tr><td><strong>Third-Party</strong></td><td>Installed from NPM registry</td><td><code>express</code>, <code>dotenv</code></td></tr>
+              </tbody>
+            </table>
+            <div class="callout tip" style="margin-top:0.85rem;">
+              <div class="callout-title"><i data-lucide="code-2"></i> CommonJS vs ES Modules</div>
+              • CommonJS: <code>const fs = require('fs'); module.exports = ...</code><br>
+              • ESM: <code>import fs from 'fs'; export default ...</code>
+            </div>
+          </div>
+          <div class="col-visual">
+            <div class="code-container">
+              <div class="code-header"><span class="code-title"><i data-lucide="file-code"></i> modules_demo.js</span></div>
+              <pre class="code-body"><code class="language-javascript">// Built-in Module (fs & path)
+const fs = require("fs");
+const path = require("path");
+
+const filePath = path.join(__dirname, "data", "info.txt");
+fs.writeFileSync(filePath, "Node.js is fast!", "utf-8");
+
+// Local Module Import
+const { calculateTax } = require("./utils/math");
+
+// Third-Party Module
+const express = require("express");</code></pre>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- NODE: Timers & Callback Architecture -->
+    <section class="slide" data-day="NODE — Callbacks & Timers">
+      <div class="slide-header">
+        <span class="slide-tag">NODE.JS MODULE — ASYNC PATTERNS</span>
+        <h2 class="slide-title">Timers, Callbacks & Callback Hell</h2>
+        <p class="slide-subtitle">Understanding Node.js asynchronous callbacks and avoiding deep nesting.</p>
+      </div>
+      <div class="slide-content">
+        <div class="grid-2">
+          <div class="col-theory">
+            <div class="card" style="border-left:4px solid var(--primary);">
+              <h4 style="color:var(--primary);">Error-First Callback Convention</h4>
+              <p style="font-size:0.85rem; color:var(--text-muted); margin-top:0.3rem;">
+                Standard Node.js callbacks always accept <code>(err, data)</code> as parameters. If an error occurs, <code>err</code> contains the Error object; otherwise <code>err</code> is <code>null</code>.
+              </p>
+            </div>
+            <div class="card" style="margin-top:0.85rem; border-left:4px solid var(--error);">
+              <h4 style="color:var(--error);">The Callback Hell Problem</h4>
+              <p style="font-size:0.85rem; color:var(--text-muted); margin-top:0.3rem;">
+                Nested callbacks within callbacks form a "Pyramid of Doom" that makes code unreadable and error-prone.
+              </p>
+            </div>
+          </div>
+          <div class="col-visual">
+            <div class="code-container">
+              <div class="code-header"><span class="code-title"><i data-lucide="alert-triangle"></i> callback_hell_demo.js</span></div>
+              <pre class="code-body"><code class="language-javascript">// ❌ Callback Hell (Pyramid of Doom)
+fs.readFile("user.json", (err, data) => {
+  if (err) return console.error(err);
+  parseUser(data, (err, user) => {
+    if (err) return console.error(err);
+    getOrders(user.id, (err, orders) => {
+      if (err) return console.error(err);
+      console.log("Orders:", orders);
+    });
+  });
+});</code></pre>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- NODE: Promises & Async/Await Error Handling -->
+    <section class="slide" data-day="NODE — Promises & Async">
+      <div class="slide-header">
+        <span class="slide-tag">NODE.JS MODULE — PROMISES</span>
+        <h2 class="slide-title">Custom Promises & Backend Async Control</h2>
+        <p class="slide-subtitle">Creating Promises, Promise.all(), and handling errors cleanly with try/catch.</p>
+      </div>
+      <div class="slide-content">
+        <div class="grid-2">
+          <div class="col-theory">
+            <div class="card" style="border-top:4px solid var(--primary);">
+              <h4 style="color:var(--primary);">3 States of a Promise</h4>
+              <p style="font-size:0.85rem; color:var(--text-muted); margin-top:0.3rem;">
+                • <strong>Pending:</strong> Initial state, operation in progress.<br>
+                • <strong>Fulfilled:</strong> Resolved successfully with result.<br>
+                • <strong>Rejected:</strong> Failed with error reason.
+              </p>
+            </div>
+            <div class="callout tip" style="margin-top:0.85rem;">
+              <div class="callout-title"><i data-lucide="layers"></i> Promise.all Parallelization</div>
+              Run multiple independent promises concurrently with <code>Promise.all([p1, p2])</code>.
+            </div>
+          </div>
+          <div class="col-visual">
+            <div class="code-container">
+              <div class="code-header"><span class="code-title"><i data-lucide="check-circle"></i> custom_promise.js</span></div>
+              <pre class="code-body"><code class="language-javascript">// Creating Custom Promise wrapper
+const readFileAsync = (filename) => {
+  return new Promise((resolve, reject) => {
+    fs.readFile(filename, "utf-8", (err, data) => {
+      if (err) reject(err);
+      else resolve(data);
+    });
+  });
+};
+
+// Clean async/await consumption
+async function loadConfig() {
+  try {
+    const data = await readFileAsync("config.json");
+    console.log("Config loaded:", data);
+  } catch (err) {
+    console.error("Failed:", err.message);
+  }
+}</code></pre>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- NODE: Express.js & REST APIs -->
+    <section class="slide" data-day="NODE — Express & REST APIs">
+      <div class="slide-header">
+        <span class="slide-tag">NODE.JS MODULE — EXPRESS</span>
+        <h2 class="slide-title">Building REST APIs with Express.js</h2>
+        <p class="slide-subtitle">Minimalist web framework for HTTP routing, endpoints, and JSON responses.</p>
+      </div>
+      <div class="slide-content">
+        <div class="grid-2">
+          <div class="col-theory">
+            <div class="card" style="border-top:4px solid var(--primary);">
+              <h4 style="color:var(--primary);"><i data-lucide="globe"></i> REST API Principles</h4>
+              <p style="font-size:0.85rem; color:var(--text-muted); margin-top:0.3rem;">
+                Stateless client-server architecture using standard HTTP verbs:<br>
+                • <code>GET</code> — Retrieve resource<br>
+                • <code>POST</code> — Create new resource<br>
+                • <code>PUT / PATCH</code> — Update existing resource<br>
+                • <code>DELETE</code> — Remove resource
+              </p>
+            </div>
+          </div>
+          <div class="col-visual">
+            <div class="code-container">
+              <div class="code-header"><span class="code-title"><i data-lucide="server"></i> express_server.js</span></div>
+              <pre class="code-body"><code class="language-javascript">const express = require("express");
+const app = express();
+const PORT = 5000;
+
+// Enable JSON request body parsing
+app.use(express.json());
+
+// Basic Route
+app.get("/api/health", (req, res) => {
+  res.status(200).json({ status: "OK", timestamp: new Date() });
+});
+
+app.listen(PORT, () => {
+  console.log(`Server running on http://localhost:${PORT}`);
+});</code></pre>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- NODE: Request Parameters & CRUD Operations -->
+    <section class="slide" data-day="NODE — Express Params & CRUD">
+      <div class="slide-header">
+        <span class="slide-tag">NODE.JS MODULE — API ENDPOINTS</span>
+        <h2 class="slide-title">Request Parameters & CRUD Operations</h2>
+        <p class="slide-subtitle">Handling route parameters, query strings, and request body payloads.</p>
+      </div>
+      <div class="slide-content">
+        <div class="grid-2">
+          <div class="col-theory">
+            <table class="comparison-table">
+              <thead><tr><th>Param Type</th><th>Express Property</th><th>Example URL</th></tr></thead>
+              <tbody>
+                <tr><td><strong>Route Params</strong></td><td><code>req.params.id</code></td><td><code>/api/users/42</code></td></tr>
+                <tr><td><strong>Query Params</strong></td><td><code>req.query.search</code></td><td><code>/api/users?search=alex</code></td></tr>
+                <tr><td><strong>Request Body</strong></td><td><code>req.body</code></td><td><code>POST { "name": "John" }</code></td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="col-visual">
+            <div class="code-container">
+              <div class="code-header"><span class="code-title"><i data-lucide="git-pull-request"></i> crud_routes.js</span></div>
+              <pre class="code-body"><code class="language-javascript">// GET single item by ID param
+app.get("/api/products/:id", (req, res) => {
+  const { id } = req.params;
+  res.json({ productId: id, name: "Laptop" });
+});
+
+// POST create item using body
+app.post("/api/products", (req, res) => {
+  const { title, price } = req.body;
+  res.status(201).json({ id: Date.now(), title, price });
+});</code></pre>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- NODE: Express Middleware -->
+    <section class="slide" data-day="NODE — Middleware">
+      <div class="slide-header">
+        <span class="slide-tag">NODE.JS MODULE — MIDDLEWARE</span>
+        <h2 class="slide-title">Express Middleware Architecture</h2>
+        <p class="slide-subtitle">Functions executed in sequence to process requests before sending responses.</p>
+      </div>
+      <div class="slide-content">
+        <div class="grid-2">
+          <div class="col-theory">
+            <div class="diagram-container" style="padding:1.25rem;">
+              <div style="font-size:0.75rem; font-weight:800; color:var(--muted); text-transform:uppercase;">Middleware Pipeline</div>
+              <div class="flow-horizontal" style="gap:0.3rem; margin-top:0.5rem;">
+                <div class="flow-h-node" style="font-size:0.75rem;">HTTP Request</div>
+                <div class="flow-h-arrow">➔</div>
+                <div class="flow-h-node" style="font-size:0.75rem; background:#EFF6FF;">Logger (next)</div>
+                <div class="flow-h-arrow">➔</div>
+                <div class="flow-h-node" style="font-size:0.75rem; background:#F0F9FF;">Auth Check (next)</div>
+                <div class="flow-h-arrow">➔</div>
+                <div class="flow-h-node" style="font-size:0.75rem; background:var(--success-bg); color:var(--success);">Route Handler</div>
+              </div>
+            </div>
+            <div class="callout warning" style="margin-top:0.85rem;">
+              <div class="callout-title"><i data-lucide="alert-octagon"></i> Always call next()</div>
+              If a custom middleware does not send a response or call <code>next()</code>, the request hangs forever!
+            </div>
+          </div>
+          <div class="col-visual">
+            <div class="code-container">
+              <div class="code-header"><span class="code-title"><i data-lucide="sliders"></i> custom_middleware.js</span></div>
+              <pre class="code-body"><code class="language-javascript">// Custom Request Logger Middleware
+const logger = (req, res, next) => {
+  console.log(`[${new Date().toISOString()}] ${req.method} ${req.url}`);
+  next(); // Pass control to next middleware!
+};
+
+app.use(logger); // Apply globally
+
+// Global Error Handler Middleware (4 parameters)
+app.use((err, req, res, next) => {
+  res.status(500).json({ error: err.message });
+});</code></pre>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- NODE: MVC Folder Architecture -->
+    <section class="slide" data-day="NODE — MVC Architecture">
+      <div class="slide-header">
+        <span class="slide-tag">NODE.JS MODULE — ARCHITECTURE</span>
+        <h2 class="slide-title">MVC (Model-View-Controller) Design Pattern</h2>
+        <p class="slide-subtitle">Structuring backend applications for scalability, maintainability, and testing.</p>
+      </div>
+      <div class="slide-content">
+        <div class="grid-2">
+          <div class="col-theory">
+            <table class="comparison-table">
+              <thead><tr><th>Directory</th><th>Responsibility</th></tr></thead>
+              <tbody>
+                <tr><td><code>routes/</code></td><td>Maps HTTP URL endpoints to controller methods</td></tr>
+                <tr><td><code>controllers/</code></td><td>Contains business logic and handles req/res</td></tr>
+                <tr><td><code>models/</code></td><td>Defines data structures and DB schemas</td></tr>
+                <tr><td><code>middleware/</code></td><td>Authentication, logging & validation guards</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="col-visual">
+            <div class="code-container">
+              <div class="code-header"><span class="code-title"><i data-lucide="folder-tree"></i> MVC Folder Structure</span></div>
+              <pre class="code-body"><code class="language-text">my-express-app/
+├── server.js            # App entry point
+├── config/              # DB connection & environment
+├── controllers/         # Business logic functions
+│   └── userController.js
+├── routes/              # Express Router definitions
+│   └── userRoutes.js
+├── models/              # Data schemas (MongoDB/SQL)
+│   └── User.js
+└── middleware/          # Auth & Validation middleware
+    └── authMiddleware.js</code></pre>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- NODE: Authentication with JSON Web Tokens (JWT) -->
+    <section class="slide" data-day="NODE — JWT Auth">
+      <div class="slide-header">
+        <span class="slide-tag">NODE.JS MODULE — AUTHENTICATION</span>
+        <h2 class="slide-title">User Authentication with JSON Web Tokens (JWT)</h2>
+        <p class="slide-subtitle">Stateless authentication flow using signed cryptographic tokens.</p>
+      </div>
+      <div class="slide-content">
+        <div class="grid-2">
+          <div class="col-theory">
+            <div class="card" style="border-top:4px solid var(--primary);">
+              <h4 style="color:var(--primary);"><i data-lucide="lock"></i> JWT Structure</h4>
+              <p style="font-size:0.85rem; color:var(--text-muted); margin-top:0.3rem;">
+                <code>header.payload.signature</code> (Encoded as Base64Url). Client sends token in HTTP header: <code>Authorization: Bearer &lt;token&gt;</code>.
+              </p>
+            </div>
+          </div>
+          <div class="col-visual">
+            <div class="code-container">
+              <div class="code-header"><span class="code-title"><i data-lucide="key"></i> jwt_auth.js</span></div>
+              <pre class="code-body"><code class="language-javascript">const jwt = require("jsonwebtoken");
+const SECRET_KEY = "my_jwt_super_secret";
+
+// 1. Issue Token on Login
+const token = jwt.sign({ userId: 101, role: "admin" }, SECRET_KEY, { expiresIn: "2h" });
+
+// 2. Auth Protection Middleware
+const protect = (req, res, next) => {
+  const authHeader = req.headers.authorization;
+  if (!authHeader || !authHeader.startsWith("Bearer ")) {
+    return res.status(401).json({ message: "Unauthorized" });
+  }
+  const token = authHeader.split(" ")[1];
+  try {
+    req.user = jwt.verify(token, SECRET_KEY);
+    next();
+  } catch (err) {
+    res.status(403).json({ message: "Invalid token" });
+  }
+};</code></pre>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- NODE: Session Management & Cookies -->
+    <section class="slide" data-day="NODE — Session Management">
+      <div class="slide-header">
+        <span class="slide-tag">NODE.JS MODULE — SESSIONS</span>
+        <h2 class="slide-title">Session Management & Cookie Authentication</h2>
+        <p class="slide-subtitle">Managing stateful user sessions with express-session and HTTP cookies.</p>
+      </div>
+      <div class="slide-content">
+        <div class="grid-2">
+          <div class="col-theory">
+            <table class="comparison-table">
+              <thead><tr><th>Feature</th><th>JWT (Stateless)</th><th>Session (Stateful)</th></tr></thead>
+              <tbody>
+                <tr><td><strong>State Location</strong></td><td>Client side (Token)</td><td>Server memory / Redis DB</td></tr>
+                <tr><td><strong>Revocation</strong></td><td>Harder until expired</td><td>Instant (Destroy session)</td></tr>
+                <tr><td><strong>Best For</strong></td><td>REST APIs & Mobile Apps</td><td>Traditional Server-Rendered Web</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="col-visual">
+            <div class="code-container">
+              <div class="code-header"><span class="code-title"><i data-lucide="database"></i> session_demo.js</span></div>
+              <pre class="code-body"><code class="language-javascript">const session = require("express-session");
+
+app.use(session({
+  secret: "session_secret_key",
+  resave: false,
+  saveUninitialized: true,
+  cookie: { maxAge: 60000, httpOnly: true }
+}));
+
+// Set session data on Login
+app.post("/login", (req, res) => {
+  req.session.user = { id: 1, name: "Sarah" };
+  res.send("Logged in!");
+});</code></pre>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- NODE: Multer, Axios & Dotenv -->
+    <section class="slide" data-day="NODE — Multer, Axios & Dotenv">
+      <div class="slide-header">
+        <span class="slide-tag">NODE.JS MODULE — FILE UPLOAD & TOOLS</span>
+        <h2 class="slide-title">Multer File Uploads, Axios & Environment Variables</h2>
+        <p class="slide-subtitle">Handling multipart files, connecting frontend with Axios, and securing secrets with dotenv.</p>
+      </div>
+      <div class="slide-content">
+        <div class="grid-2">
+          <div class="col-theory">
+            <div class="card" style="border-top:4px solid var(--primary);">
+              <h4 style="color:var(--primary);"><i data-lucide="shield"></i> Environment Variables (.env)</h4>
+              <div class="code-container" style="margin-top:0.4rem;">
+                <pre class="code-body"><code class="language-javascript">require("dotenv").config();
+const PORT = process.env.PORT || 5000;</code></pre>
+              </div>
+            </div>
+            <div class="card" style="margin-top:0.85rem; border-top:4px solid var(--secondary);">
+              <h4 style="color:var(--secondary);"><i data-lucide="upload"></i> Multer Middleware</h4>
+              <p style="font-size:0.85rem; color:var(--text-muted); margin-top:0.3rem;">
+                Parses <code>multipart/form-data</code> for single or multiple file uploads.
+              </p>
+            </div>
+          </div>
+          <div class="col-visual">
+            <div class="code-container">
+              <div class="code-header"><span class="code-title"><i data-lucide="code"></i> multer_axios_demo.js</span></div>
+              <pre class="code-body"><code class="language-javascript">const multer = require("multer");
+const upload = multer({ dest: "uploads/" });
+
+// File Upload Route
+app.post("/api/upload", upload.single("avatar"), (req, res) => {
+  res.json({ message: "File uploaded!", file: req.file });
+});
+
+// Frontend Axios Connection
+axios.post("/api/upload", formData)
+  .then(res => console.log(res.data));</code></pre>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PROJECT: Movie Watchlist API Step 1 -->
+    <section class="slide" data-day="NODE — Movie Watchlist Project">
+      <div class="slide-header">
+        <span class="slide-tag">BACKEND PROJECT — STEP 1</span>
+        <h2 class="slide-title">Movie Watchlist API: Architecture & Data Schema</h2>
+        <p class="slide-subtitle">Designing REST endpoints and movie data model schema.</p>
+      </div>
+      <div class="slide-content">
+        <div class="grid-2">
+          <div class="col-theory">
+            <div class="card" style="border-left:4px solid var(--primary);">
+              <h4 style="color:var(--primary);">API Requirements</h4>
+              <p style="font-size:0.85rem; color:var(--text-muted); margin-top:0.3rem;">
+                • User Register/Login (JWT Auth).<br>
+                • Get all movies with genre filter.<br>
+                • Add movie to user watchlist.<br>
+                • Update rating & remove from watchlist.
+              </p>
+            </div>
+          </div>
+          <div class="col-visual">
+            <div class="code-container">
+              <div class="code-header"><span class="code-title"><i data-lucide="database"></i> movieModel.js</span></div>
+              <pre class="code-body"><code class="language-javascript">const movieSchema = {
+  id: "m101",
+  title: "Inception",
+  director: "Christopher Nolan",
+  genre: "Sci-Fi",
+  rating: 8.8,
+  watched: true
+};</code></pre>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PROJECT: Movie Watchlist API Step 2 -->
+    <section class="slide" data-day="NODE — Movie Watchlist Project">
+      <div class="slide-header">
+        <span class="slide-tag">BACKEND PROJECT — STEP 2</span>
+        <h2 class="slide-title">Movie Watchlist API: Routes & Controller Logic</h2>
+        <p class="slide-subtitle">Implementing Express router endpoints and business logic controllers.</p>
+      </div>
+      <div class="slide-content">
+        <div class="grid-2">
+          <div class="col-theory">
+            <div class="card">
+              <h4 style="font-weight:700;">Endpoints Overview</h4>
+              <p style="font-size:0.85rem; color:var(--text-muted); margin-top:0.3rem;">
+                • <code>GET /api/movies</code> — List all movies.<br>
+                • <code>POST /api/movies</code> — Add new movie.<br>
+                • <code>DELETE /api/movies/:id</code> — Delete movie.
+              </p>
+            </div>
+          </div>
+          <div class="col-visual">
+            <div class="code-container">
+              <div class="code-header"><span class="code-title"><i data-lucide="code"></i> movieController.js</span></div>
+              <pre class="code-body"><code class="language-javascript">exports.getMovies = (req, res) => {
+  const { genre } = req.query;
+  let results = moviesState;
+  if (genre) {
+    results = results.filter(m => m.genre.toLowerCase() === genre.toLowerCase());
+  }
+  res.json({ count: results.length, data: results });
+};</code></pre>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PROJECT: Movie Watchlist API Step 3 -->
+    <section class="slide" data-day="NODE — Movie Watchlist Project">
+      <div class="slide-header">
+        <span class="slide-tag">BACKEND PROJECT — STEP 3</span>
+        <h2 class="slide-title">Movie Watchlist API: JWT Auth Protection</h2>
+        <p class="slide-subtitle">Securing watchlist modification routes using JWT verification middleware.</p>
+      </div>
+      <div class="slide-content">
+        <div class="grid-2">
+          <div class="col-theory">
+            <div class="card" style="border-top:4px solid var(--secondary);">
+              <h4 style="color:var(--secondary);">Protected Route Flow</h4>
+              <p style="font-size:0.85rem; color:var(--text-muted); margin-top:0.3rem;">
+                Client sends request with Header <code>Authorization: Bearer &lt;token&gt;</code> ➔ Middleware validates ➔ Controller executes!
+              </p>
+            </div>
+          </div>
+          <div class="col-visual">
+            <div class="code-container">
+              <div class="code-header"><span class="code-title"><i data-lucide="lock"></i> movieRoutes.js</span></div>
+              <pre class="code-body"><code class="language-javascript">const router = require("express").Router();
+const { getMovies, addMovie, deleteMovie } = require("../controllers/movieController");
+const { protect } = require("../middleware/auth");
+
+router.get("/", getMovies);
+router.post("/", protect, addMovie);        // Protected!
+router.delete("/:id", protect, deleteMovie); // Protected!
+
+module.exports = router;</code></pre>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PROJECT: Movie Watchlist API Step 4 -->
+    <section class="slide" data-day="NODE — Movie Watchlist Project">
+      <div class="slide-header">
+        <span class="slide-tag">BACKEND PROJECT — STEP 4</span>
+        <h2 class="slide-title">Movie Watchlist API: Postman Testing & Deployment</h2>
+        <p class="slide-subtitle">Testing HTTP status codes, payload headers, and production deployment.</p>
+      </div>
+      <div class="slide-content">
+        <div class="grid-2">
+          <div class="col-theory">
+            <table class="comparison-table">
+              <thead><tr><th>Test Case</th><th>Expected HTTP Status</th></tr></thead>
+              <tbody>
+                <tr><td>Get Movies List</td><td><code>200 OK</code></td></tr>
+                <tr><td>Create Movie (Valid JWT)</td><td><code>201 Created</code></td></tr>
+                <tr><td>Create Movie (Missing JWT)</td><td><code>401 Unauthorized</code></td></tr>
+                <tr><td>Delete Invalid ID</td><td><code>404 Not Found</code></td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="col-visual">
+            <div class="code-container">
+              <div class="code-header"><span class="code-title"><i data-lucide="terminal"></i> server.js Production Setup</span></div>
+              <pre class="code-body"><code class="language-javascript">const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => {
+  console.log(`Movie Watchlist API Live on Port ${PORT}`);
+});</code></pre>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 13: Day 14 Placeholder -->
+    <section class="slide" data-day="DAY 14 — Placeholder">
+      <div class="slide-header" style="text-align: center; margin-top: 3rem;">
+        <span class="slide-tag" style="background:#F3F4F6; color:#6B7280; border-color:#E5E7EB;">DAY 14 — SYLLABUS PLACEHOLDER</span>
+        <h1 class="slide-title" style="font-size: 2.8rem; margin-top: 1rem; color: var(--text-subtle);">Day 14</h1>
+        <h2 style="font-size: 1.6rem; color: var(--primary); font-weight: 600; margin-top: 0.5rem;">Topic to be added</h2>
+      </div>
+      <div class="slide-content" style="max-width: 650px; margin: 2rem auto 0 auto; text-align: center;">
+        <div class="card" style="border: 2px dashed var(--border); padding: 3rem; background: var(--bg-surface);">
+          <div style="font-size: 3.5rem; color: var(--secondary); margin-bottom: 1rem;"><i data-lucide="calendar"></i></div>
+          <p class="card-text" style="font-size: 1.15rem; color: var(--text-muted); line-height: 1.6;">The official Day 14 topic has not been provided yet.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 14: Final Graduation Slide -->
+    <section class="slide" data-day="Module Graduation">
+      <div class="slide-header" style="text-align: center; margin-top: 2rem;">
+        <span class="slide-tag" style="background:#DCFCE7; color:#16A34A; border-color:#BBF7D0;">MODULE GRADUATION</span>
+        <h1 class="slide-title" style="font-size: 3.2rem; margin-top: 0.5rem; color: var(--primary);">FROM JAVASCRIPT BASICS TO REAL APPLICATIONS</h1>
+        <p class="slide-subtitle" style="font-size: 1.25rem;">You are now ready to build real projects, master React.js, and create Node.js backends!</p>
+      </div>
+      <div class="slide-content" style="max-width: 900px; margin: 1.5rem auto 0 auto;">
+        <div class="callout tip" style="margin-top:1.5rem; text-align:center;">
+          <div class="callout-title" style="justify-content:center;"><i data-lucide="trophy"></i> Main Takeaway</div>
+          "Understand the concept. Write the code. Predict the output. Debug the error. Build something real."
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- BOTTOM FOOTER TOOLBAR -->
+  <footer class="bottom-footer">
+    <button class="nav-btn secondary" id="prev-btn">
+      <i data-lucide="chevron-left"></i> Previous
+    </button>
+
+    <div class="footer-center">
+      <div class="slide-counter">
+        Slide <span class="current" id="current-slide-num">1</span> / <span id="total-slides-num">62</span>
+      </div>
+      <div class="progress-bar-container">
+        <div class="progress-bar-fill" id="progress-bar-fill"></div>
+      </div>
+    </div>
+
+    <button class="nav-btn" id="next-btn">
+      Next <i data-lucide="chevron-right"></i>
+    </button>
+  </footer>
+
+</div>
+
+<!-- DRAWER OVERLAY & PANELS -->
+<div class="drawer-overlay" id="drawer-overlay"></div>
+
+<!-- TABLE OF CONTENTS DRAWER -->
+<div class="drawer-panel" id="toc-drawer">
+  <div class="drawer-header">
+    <div class="drawer-title"><i data-lucide="list"></i> Table of Contents</div>
+    <button class="close-btn close-drawer-btn">&times;</button>
+  </div>
+  <div class="drawer-content">
+    <ul class="toc-list" id="toc-list"></ul>
+  </div>
+</div>
+
+<!-- MENTOR NOTES DRAWER -->
+<div class="drawer-panel" id="mentor-drawer">
+  <div class="drawer-header">
+    <div class="drawer-title"><i data-lucide="book-open"></i> Mentor / Speaker Notes</div>
+    <button class="close-btn close-drawer-btn">&times;</button>
+  </div>
+  <div class="drawer-content" id="mentor-note-content"></div>
+</div>
+
+<!-- Custom Presentation Script -->
+<script src="script.js"></script>
+
+</body>
+</html>
