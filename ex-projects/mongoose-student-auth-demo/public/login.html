@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Student Login - Mongoose Demo</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Top Educational Badge -->
+  <div class="demo-badge">Mongoose + Express Classroom Demo</div>
+
+  <!-- Centered Login Card -->
+  <main class="auth-card">
+    <div class="card-header">
+      <h1>Student Login</h1>
+      <p>Demonstrating Mongoose <code>Student.findOne()</code></p>
+    </div>
+
+    <!-- Message Alert Box for User Feedback -->
+    <div id="messageBox" class="message-box" role="alert"></div>
+
+    <!-- Login Form -->
+    <form id="loginForm" novalidate>
+      <!-- Email Field -->
+      <div class="form-group">
+        <label for="email">Email <span class="required">*</span></label>
+        <input 
+          type="email" 
+          id="email" 
+          name="email" 
+          placeholder="e.g. rahul@gmail.com" 
+          required 
+          autocomplete="email"
+        >
+        <small>Mongoose searches MongoDB: { email: email }</small>
+      </div>
+
+      <!-- Password Field -->
+      <div class="form-group">
+        <label for="password">Password <span class="required">*</span></label>
+        <input 
+          type="password" 
+          id="password" 
+          name="password" 
+          placeholder="Enter your password" 
+          required 
+          autocomplete="current-password"
+        >
+        <small>Checked against plain-text student.password</small>
+      </div>
+
+      <!-- Submit Button -->
+      <button type="submit" id="loginBtn" class="btn-submit">Login</button>
+    </form>
+
+    <!-- Navigation Link to Signup -->
+    <div class="card-footer">
+      Don't have an account? <a href="signup.html" id="goToSignup">Create Account</a>
+    </div>
+  </main>
+
+  <!-- Educational Footer Note -->
+  <aside class="teaching-note">
+    <strong>Educational Flow:</strong> HTML Form &rarr; fetch() &rarr; Express POST /login &rarr; Student.findOne({ email }) &rarr; Verify Password
+  </aside>
+
+  <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,25 @@
+{
+  "name": "mongoose-student-auth-demo",
+  "version": "1.0.0",
+  "description": "Beginner-friendly Student Signup and Login demonstration using HTML/CSS, Express, Mongoose, and MongoDB",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "node --watch src/server.js"
+  },
+  "keywords": [
+    "mongoose",
+    "mongodb",
+    "express",
+    "student-signup",
+    "beginner",
+    "educational"
+  ],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "mongoose": "^8.2.0"
+  }
+}

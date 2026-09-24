@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Student Signup - Mongoose Demo</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Top Educational Badge -->
+  <div class="demo-badge">Mongoose + Express Classroom Demo</div>
+
+  <!-- Centered Signup Card -->
+  <main class="auth-card">
+    <div class="card-header">
+      <h1>Student Signup</h1>
+      <p>Demonstrating Mongoose Schema & Validation</p>
+    </div>
+
+    <!-- Message Alert Box for User Feedback -->
+    <div id="messageBox" class="message-box" role="alert"></div>
+
+    <!-- Signup Form -->
+    <form id="signupForm" novalidate>
+      <!-- Name Field -->
+      <div class="form-group">
+        <label for="name">Name <span class="required">*</span></label>
+        <input 
+          type="text" 
+          id="name" 
+          name="name" 
+          placeholder="e.g. Rahul Sharma" 
+          required 
+          autocomplete="name"
+        >
+        <small>Schema rule: required: true</small>
+      </div>
+
+      <!-- Email Field -->
+      <div class="form-group">
+        <label for="email">Email <span class="required">*</span></label>
+        <input 
+          type="email" 
+          id="email" 
+          name="email" 
+          placeholder="e.g. rahul@gmail.com" 
+          required 
+          autocomplete="email"
+        >
+        <small>Schema rule: unique: true (No duplicates allowed)</small>
+      </div>
+
+      <!-- Password Field -->
+      <div class="form-group">
+        <label for="password">Password <span class="required">*</span></label>
+        <input 
+          type="password" 
+          id="password" 
+          name="password" 
+          placeholder="Enter a simple password" 
+          required 
+          autocomplete="new-password"
+        >
+        <small>Stored as plain text for classroom demonstration only</small>
+      </div>
+
+      <!-- Age Field -->
+      <div class="form-group">
+        <label for="age">Age <span class="required">*</span></label>
+        <input 
+          type="number" 
+          id="age" 
+          name="age" 
+          placeholder="e.g. 21" 
+          min="1" 
+          required
+        >
+        <small>Schema rule: min: 18 (Must be 18 or older)</small>
+      </div>
+
+      <!-- Course Dropdown -->
+      <div class="form-group">
+        <label for="course">Course</label>
+        <select id="course" name="course">
+          <option value="">-- Select Course (Defaults to MERN) --</option>
+          <option value="MERN">MERN</option>
+          <option value="Python">Python</option>
+          <option value="Java">Java</option>
+        </select>
+        <small>Schema rule: default: "MERN" (If left unselected)</small>
+      </div>
+
+      <!-- Submit Button -->
+      <button type="submit" id="signupBtn" class="btn-submit">Create Account</button>
+    </form>
+
+    <!-- Navigation Link to Login -->
+    <div class="card-footer">
+      Already have an account? <a href="login.html" id="goToLogin">Login</a>
+    </div>
+  </main>
+
+  <!-- Educational Footer Note -->
+  <aside class="teaching-note">
+    <strong>Educational Flow:</strong> HTML Form &rarr; fetch() &rarr; Express POST /signup &rarr; Student.create() &rarr; MongoDB <code>students</code> Collection
+  </aside>
+
+  <script src="script.js"></script>
+</body>
+</html>
