@@ -1,0 +1,2397 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MongoDB Day 4 — CRUD Operations Using Mongoose</title>
+  <meta name="description" content="Complete educational presentation on Mongoose CRUD operations for MongoDB: create, read, update, delete with practical code, diagrams, and beginner-friendly examples.">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Master App Shell -->
+  <div class="deck-container" id="deckContainer">
+
+    <!-- Top Progress Bar -->
+    <div class="progress-bar-container">
+      <div class="progress-bar" id="progressBar"></div>
+    </div>
+
+    <!-- Top Header Bar -->
+    <header class="top-header">
+      <div class="header-left">
+        <div class="brand-badge">
+          <svg viewBox="0 0 24 24">
+            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/>
+          </svg>
+          MongoDB Day 4
+        </div>
+        <div class="deck-title-badge">
+          <span>CRUD Operations Using Mongoose</span>
+          <span class="dot"></span>
+          <span class="deck-topic" id="headerTopic">Create • Read • Update • Delete</span>
+        </div>
+      </div>
+
+      <div class="header-right">
+        <!-- Interactive Simulator Quick Access Button -->
+        <button class="header-btn btn-highlight" id="openSimBtn" title="Open Interactive CRUD Simulator (S)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polygon points="5 3 19 12 5 21 5 3"></polygon>
+          </svg>
+          CRUD Simulator
+          <kbd>S</kbd>
+        </button>
+
+        <!-- Table of Contents Drawer Button -->
+        <button class="header-btn" id="openTocBtn" title="View All 36 Slides (T)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="3" y1="12" x2="21" y2="12"></line>
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <line x1="3" y1="18" x2="21" y2="18"></line>
+          </svg>
+          Index
+          <kbd>T</kbd>
+        </button>
+
+        <!-- Keyboard Shortcuts Help -->
+        <button class="header-btn" id="openShortcutsBtn" title="Keyboard Shortcuts (?)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"></circle>
+            <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+            <line x1="12" y1="17" x2="12.01" y2="17"></line>
+          </svg>
+          <kbd>?</kbd>
+        </button>
+
+        <!-- Fullscreen Button -->
+        <button class="header-btn" id="fullscreenBtn" title="Toggle Fullscreen (F)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path>
+          </svg>
+          <kbd>F</kbd>
+        </button>
+      </div>
+    </header>
+
+    <!-- Slide Viewport -->
+    <main class="slide-viewport">
+
+      <!-- ====================================================================
+           SLIDE 1 — TITLE
+           ==================================================================== -->
+      <section class="slide active" data-slide="1" id="slide-1">
+        <div class="slide-content" style="justify-content: center; align-items: center; text-align: center; max-width: 860px; margin: 0 auto;">
+          <div class="slide-tag" style="margin-bottom: 0.5rem;">MongoDB Course • Day 4</div>
+          <h1 class="slide-title" style="font-size: 2.8rem; margin-bottom: 0.5rem; letter-spacing: -0.03em;">
+            MongoDB Day 4
+          </h1>
+          <h2 style="font-size: 1.8rem; color: var(--mongo-green); font-weight: 700; margin-bottom: 1rem;">
+            CRUD Operations Using Mongoose
+          </h2>
+          <p style="font-size: 1.15rem; color: var(--text-secondary); max-width: 600px; margin-bottom: 2rem;">
+            Creating, Reading, Updating, and Deleting Documents in MongoDB with Clean Node.js Code
+          </p>
+
+          <div style="display: flex; gap: 1rem; margin-bottom: 2.5rem; flex-wrap: wrap; justify-content: center;">
+            <div style="padding: 0.6rem 1.2rem; background: rgba(0, 237, 100, 0.1); border: 1px solid var(--mongo-green-border); border-radius: var(--radius-sm); font-family: var(--font-mono); font-size: 0.9rem; color: var(--mongo-green);">
+              <strong>C</strong>REATE
+            </div>
+            <div style="padding: 0.6rem 1.2rem; background: var(--accent-cyan-bg); border: 1px solid var(--accent-cyan-border); border-radius: var(--radius-sm); font-family: var(--font-mono); font-size: 0.9rem; color: var(--accent-cyan);">
+              <strong>R</strong>EAD
+            </div>
+            <div style="padding: 0.6rem 1.2rem; background: var(--accent-amber-bg); border: 1px solid var(--accent-amber-border); border-radius: var(--radius-sm); font-family: var(--font-mono); font-size: 0.9rem; color: var(--accent-amber);">
+              <strong>U</strong>PDATE
+            </div>
+            <div style="padding: 0.6rem 1.2rem; background: var(--accent-rose-bg); border: 1px solid var(--accent-rose-border); border-radius: var(--radius-sm); font-family: var(--font-mono); font-size: 0.9rem; color: var(--accent-rose);">
+              <strong>D</strong>ELETE
+            </div>
+          </div>
+
+          <div style="display: flex; gap: 1rem; align-items: center;">
+            <button class="nav-btn primary-nav" onclick="Deck.nextSlide()" style="padding: 0.75rem 2rem; font-size: 1rem;">
+              Start Presentation →
+            </button>
+            <button class="nav-btn" onclick="Deck.openDrawer()" style="padding: 0.75rem 1.5rem; font-size: 1rem;">
+              Browse 36 Slides
+            </button>
+          </div>
+
+          <p style="margin-top: 2rem; font-size: 0.8rem; color: var(--text-dim); display: flex; align-items: center; gap: 0.5rem;">
+            Tip: Use <kbd style="background: rgba(255,255,255,0.08); padding: 0.1rem 0.4rem; border-radius: 4px; color: var(--text-secondary); font-family: var(--font-mono);">Arrow Keys</kbd> or <kbd style="background: rgba(255,255,255,0.08); padding: 0.1rem 0.4rem; border-radius: 4px; color: var(--text-secondary); font-family: var(--font-mono);">Space</kbd> to navigate
+          </p>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 2 — LEARNING OBJECTIVES
+           ==================================================================== -->
+      <section class="slide" data-slide="2" id="slide-2">
+        <div class="slide-header">
+          <span class="slide-tag">Course Road Map</span>
+          <h2 class="slide-title">Learning Objectives</h2>
+          <p class="slide-subtitle">What you will understand and be able to code by the end of today's session.</p>
+        </div>
+
+        <div class="slide-content">
+          <div class="grid-3">
+            <div class="card card-highlight">
+              <div class="card-title">
+                <span class="icon">🎯</span>
+                1. Core CRUD Meaning
+              </div>
+              <p>Understand the four fundamental operations (Create, Read, Update, Delete) and how they drive all data-driven web applications.</p>
+              <div class="card-footer-tip">Real-world Student Management model</div>
+            </div>
+
+            <div class="card">
+              <div class="card-title">
+                <span class="icon">➕</span>
+                2. Creating Documents
+              </div>
+              <p>Master document creation with <code>Model.create()</code>, <code>new Model() + save()</code>, and bulk insertion with <code>insertMany()</code>.</p>
+              <div class="card-footer-tip">Understanding the in-memory lifecycle</div>
+            </div>
+
+            <div class="card">
+              <div class="card-title">
+                <span class="icon">🔍</span>
+                3. Reading Documents
+              </div>
+              <p>Query documents using <code>find()</code>, <code>findOne()</code>, and <code>findById()</code> with conditions, operators, and field projection.</p>
+              <div class="card-footer-tip">Matching filters & field selection</div>
+            </div>
+
+            <div class="card">
+              <div class="card-title">
+                <span class="icon">✏️</span>
+                4. Updating Documents
+              </div>
+              <p>Modify records with <code>updateOne()</code>, <code>updateMany()</code>, <code>findOneAndUpdate()</code>, and enforce validation rules.</p>
+              <div class="card-footer-tip">Filter vs Update + <code>{ new: true }</code></div>
+            </div>
+
+            <div class="card">
+              <div class="card-title">
+                <span class="icon">🗑️</span>
+                5. Deleting Documents
+              </div>
+              <p>Remove records using <code>deleteOne()</code>, <code>deleteMany()</code>, <code>findOneAndDelete()</code>, and <code>findByIdAndDelete()</code>.</p>
+              <div class="card-footer-tip">Operation stats vs returned document</div>
+            </div>
+
+            <div class="card">
+              <div class="card-title">
+                <span class="icon">🛡️</span>
+                6. Shell Match & Errors
+              </div>
+              <p>Connect Mongoose methods directly with MongoDB shell commands, avoid common beginner traps, and handle runtime errors cleanly.</p>
+              <div class="card-footer-tip">Production-ready async/await & try/catch</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 3 — CRUD INTRODUCTION
+           ==================================================================== -->
+      <section class="slide" data-slide="3" id="slide-3">
+        <div class="slide-header">
+          <span class="slide-tag">Foundation</span>
+          <h2 class="slide-title">1. Introduction to CRUD</h2>
+          <p class="slide-subtitle">The four building blocks of every backend application, database, and API.</p>
+        </div>
+
+        <div class="slide-content">
+          <div class="grid-split-left-wide">
+            <div class="card">
+              <div class="card-title"><span class="icon">💡</span> What does CRUD stand for?</div>
+              <p><strong>CRUD</strong> is an acronym for the four basic operations that any persistent storage system performs:</p>
+              
+              <div style="display: flex; flex-direction: column; gap: 0.65rem; margin-top: 0.5rem;">
+                <div style="display: flex; align-items: center; gap: 1rem; padding: 0.6rem 0.8rem; background: var(--bg-surface); border-radius: var(--radius-sm); border-left: 3px solid var(--mongo-green);">
+                  <span class="method-tag create">CREATE</span>
+                  <span style="font-size: 0.88rem;">Add a new document into the database</span>
+                </div>
+                <div style="display: flex; align-items: center; gap: 1rem; padding: 0.6rem 0.8rem; background: var(--bg-surface); border-radius: var(--radius-sm); border-left: 3px solid var(--accent-cyan);">
+                  <span class="method-tag read">READ</span>
+                  <span style="font-size: 0.88rem;">Get or search for existing documents</span>
+                </div>
+                <div style="display: flex; align-items: center; gap: 1rem; padding: 0.6rem 0.8rem; background: var(--bg-surface); border-radius: var(--radius-sm); border-left: 3px solid var(--accent-amber);">
+                  <span class="method-tag update">UPDATE</span>
+                  <span style="font-size: 0.88rem;">Modify existing document data or fields</span>
+                </div>
+                <div style="display: flex; align-items: center; gap: 1rem; padding: 0.6rem 0.8rem; background: var(--bg-surface); border-radius: var(--radius-sm); border-left: 3px solid var(--accent-rose);">
+                  <span class="method-tag delete">DELETE</span>
+                  <span style="font-size: 0.88rem;">Remove unwanted documents from storage</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="card card-highlight">
+              <div class="card-title"><span class="icon">🎓</span> Student Management Example</div>
+              <p>Imagine we are building a Student Management System for a college:</p>
+              <ul style="list-style: none; display: flex; flex-direction: column; gap: 0.75rem; margin-top: 0.5rem;">
+                <li style="display: flex; align-items: center; gap: 0.6rem; font-size: 0.85rem;">
+                  <span style="color: var(--mongo-green); font-weight: bold;">[Create]</span>
+                  <span>New student enrolls &rarr; <strong>Add Rahul to the database</strong></span>
+                </li>
+                <li style="display: flex; align-items: center; gap: 0.6rem; font-size: 0.85rem;">
+                  <span style="color: var(--accent-cyan); font-weight: bold;">[Read]</span>
+                  <span>Teacher opens portal &rarr; <strong>View student profile & grades</strong></span>
+                </li>
+                <li style="display: flex; align-items: center; gap: 0.6rem; font-size: 0.85rem;">
+                  <span style="color: var(--accent-amber); font-weight: bold;">[Update]</span>
+                  <span>Exam completed &rarr; <strong>Change Rahul's mark from 85 to 95</strong></span>
+                </li>
+                <li style="display: flex; align-items: center; gap: 0.6rem; font-size: 0.85rem;">
+                  <span style="color: var(--accent-rose); font-weight: bold;">[Delete]</span>
+                  <span>Student graduates or cancels &rarr; <strong>Remove student record</strong></span>
+                </li>
+              </ul>
+              <div class="card-footer-tip">
+                Every web app (Instagram, Amazon, Netflix) is built on this exact cycle!
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 4 — QUICK REVISION
+           ==================================================================== -->
+      <section class="slide" data-slide="4" id="slide-4">
+        <div class="slide-header">
+          <span class="slide-tag">Prerequisites</span>
+          <h2 class="slide-title">2. Quick Revision from Day 3</h2>
+          <p class="slide-subtitle">How MongoDB hierarchy and Mongoose abstractions connect together.</p>
+        </div>
+
+        <div class="slide-content">
+          <div class="grid-2">
+            <div class="card">
+              <div class="card-title"><span class="icon">🗄️</span> MongoDB Database Hierarchy</div>
+              <div class="flow-vertical" style="margin: 0.5rem 0;">
+                <div class="flow-step-v"><span>MongoDB Server</span> <span style="color: var(--text-muted); font-size: 0.75rem;">Instance</span></div>
+                <div class="flow-arrow-v">↓</div>
+                <div class="flow-step-v"><span>Database</span> <span style="color: var(--text-muted); font-size: 0.75rem;">collegeDB</span></div>
+                <div class="flow-arrow-v">↓</div>
+                <div class="flow-step-v"><span>Collection</span> <span style="color: var(--text-muted); font-size: 0.75rem;">students</span></div>
+                <div class="flow-arrow-v">↓</div>
+                <div class="flow-step-v"><span style="color: var(--mongo-green);">Documents</span> <span style="color: var(--text-muted); font-size: 0.75rem;">{ name: "Rahul", ... }</span></div>
+              </div>
+              <p style="font-size: 0.8rem; color: var(--text-muted); text-align: center;">In raw MongoDB, documents live inside collections.</p>
+            </div>
+
+            <div class="card card-highlight">
+              <div class="card-title"><span class="icon">⚙️</span> Mongoose ODM Abstraction</div>
+              <div class="flow-vertical" style="margin: 0.5rem 0;">
+                <div class="flow-step-v"><span style="color: var(--accent-purple);">Schema</span> <span style="color: var(--text-muted); font-size: 0.75rem;">Rules, types, defaults</span></div>
+                <div class="flow-arrow-v">↓</div>
+                <div class="flow-step-v"><span style="color: var(--mongo-green); font-weight: bold;">Model</span> <span style="color: var(--mongo-green); font-size: 0.75rem;">The CRUD Engine</span></div>
+                <div class="flow-arrow-v">↓</div>
+                <div class="flow-step-v"><span>MongoDB Collection</span> <span style="color: var(--text-muted); font-size: 0.75rem;">Auto-pluralized 'students'</span></div>
+              </div>
+              <div class="callout callout-blue" style="margin-top: 0.5rem;">
+                <span class="callout-icon">💡</span>
+                <div>
+                  <strong>Crucial Takeaway:</strong> In Mongoose, <strong>all CRUD operations are executed through the Model</strong> (e.g., <code>Student.create()</code>, <code>Student.find()</code>). The model is your JavaScript bridge to MongoDB.
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 5 — PROJECT STRUCTURE
+           ==================================================================== -->
+      <section class="slide" data-slide="5" id="slide-5">
+        <div class="slide-header">
+          <span class="slide-tag">Project Setup</span>
+          <h2 class="slide-title">3. Basic Project Structure</h2>
+          <p class="slide-subtitle">A clean, beginner-friendly folder layout for running Mongoose CRUD scripts.</p>
+        </div>
+
+        <div class="slide-content">
+          <div class="grid-split-left-wide">
+            <div class="code-box">
+              <div class="code-header">
+                <div class="code-dots"><div class="code-dot red"></div><div class="code-dot yellow"></div><div class="code-dot green"></div></div>
+                <span class="code-title">Directory Tree</span>
+                <span style="font-size: 0.7rem; color: var(--text-muted); font-family: var(--font-mono);">mongoose-crud-demo/</span>
+              </div>
+              <pre class="code-content">mongoose-crud-demo/
+│
+├── <span class="green">src/</span>
+│   ├── <span class="fn">config/</span>
+│   │   └── <span class="str">db.js</span>           <span class="comment">// MongoDB connection using mongoose.connect()</span>
+│   │
+│   ├── <span class="fn">models/</span>
+│   │   └── <span class="str">Student.js</span>      <span class="comment">// Student Schema & Mongoose Model</span>
+│   │
+│   └── <span class="kwd">app.js</span>              <span class="comment">// Main CRUD execution script</span>
+│
+├── <span class="prop">.env</span>                    <span class="comment">// MONGO_URI=mongodb://127.0.0.1:27017/collegeDB</span>
+├── <span class="prop">package.json</span>            <span class="comment">// Project dependencies ("mongoose", "dotenv")</span>
+└── <span class="comment">.gitignore</span>              <span class="comment">// Excludes node_modules and .env</span></pre>
+            </div>
+
+            <div class="flex-col">
+              <div class="card">
+                <div class="card-title"><span class="icon">📁</span> File Responsibilities</div>
+                <ul style="font-size: 0.84rem; display: flex; flex-direction: column; gap: 0.6rem; color: var(--text-secondary); padding-left: 1.2rem;">
+                  <li><strong><code>src/config/db.js</code></strong>: Connects our Node.js process to MongoDB using connection URI.</li>
+                  <li><strong><code>src/models/Student.js</code></strong>: Defines the student data structure (name, email, age, mark).</li>
+                  <li><strong><code>src/app.js</code></strong>: Imports the <code>Student</code> model and performs CRUD operations in an <code>async</code> function.</li>
+                </ul>
+              </div>
+
+              <div class="callout callout-amber">
+                <span class="callout-icon">⚡</span>
+                <div>
+                  No Express server or web routes needed today! We focus 100% on the core Mongoose CRUD model methods.
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 6 — STUDENT MODEL
+           ==================================================================== -->
+      <section class="slide" data-slide="6" id="slide-6">
+        <div class="slide-header">
+          <span class="slide-tag">Data Model</span>
+          <h2 class="slide-title">4. Student Schema and Model</h2>
+          <p class="slide-subtitle">The standard model we will use across all our CRUD code examples today.</p>
+        </div>
+
+        <div class="slide-content">
+          <div class="grid-split-left-wide">
+            <div class="code-box">
+              <div class="code-header">
+                <div class="code-dots"><div class="code-dot red"></div><div class="code-dot yellow"></div><div class="code-dot green"></div></div>
+                <span class="code-title">src/models/Student.js</span>
+                <button class="copy-btn" onclick="Deck.copyCode(this)">Copy</button>
+              </div>
+              <pre class="code-content"><span class="kwd">const</span> mongoose = <span class="fn">require</span>(<span class="str">"mongoose"</span>);
+
+<span class="comment">// 1. Schema: Defines the structure & validation rules</span>
+<span class="kwd">const</span> studentSchema = <span class="kwd">new</span> mongoose.<span class="fn">Schema</span>({
+  <span class="prop">name</span>: {
+    <span class="prop">type</span>: String,
+    <span class="prop">required</span>: <span class="bool">true</span>
+  },
+  <span class="prop">email</span>: {
+    <span class="prop">type</span>: String,
+    <span class="prop">required</span>: <span class="bool">true</span>,
+    <span class="prop">unique</span>: <span class="bool">true</span>
+  },
+  <span class="prop">age</span>: {
+    <span class="prop">type</span>: Number,
+    <span class="prop">required</span>: <span class="bool">true</span>
+  },
+  <span class="prop">course</span>: {
+    <span class="prop">type</span>: String,
+    <span class="prop">default</span>: <span class="str">"MERN"</span>
+  },
+  <span class="prop">mark</span>: {
+    <span class="prop">type</span>: Number,
+    <span class="prop">default</span>: <span class="num">0</span>
+  },
+  <span class="prop">active</span>: {
+    <span class="prop">type</span>: Boolean,
+    <span class="prop">default</span>: <span class="bool">true</span>
+  }
+});
+
+<span class="comment">// 2. Model: The constructor used to interact with MongoDB</span>
+<span class="kwd">const</span> Student = mongoose.<span class="fn">model</span>(<span class="str">"Student"</span>, studentSchema);
+
+<span class="kwd">module.exports</span> = Student;</pre>
+            </div>
+
+            <div class="flex-col">
+              <div class="card card-highlight">
+                <div class="card-title"><span class="icon">🧠</span> Key Concept Reminder</div>
+                <div style="display: flex; flex-direction: column; gap: 0.6rem; font-size: 0.85rem;">
+                  <div><strong style="color: var(--accent-purple);">Schema:</strong> Blueprint / structure of the student data.</div>
+                  <div><strong style="color: var(--mongo-green);">Model:</strong> JavaScript class used to execute queries (CRUD).</div>
+                  <div><strong style="color: var(--accent-cyan);">Document:</strong> Individual student instance saved in MongoDB.</div>
+                </div>
+              </div>
+
+              <div class="callout callout-blue">
+                <span class="callout-icon">💡</span>
+                <div>
+                  <strong>Default values:</strong> If we don't provide a <code>course</code>, Mongoose sets it to <code>"MERN"</code>. If we don't provide a <code>mark</code>, it defaults to <code>0</code>.
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 7 — CRUD OVERVIEW
+           ==================================================================== -->
+      <section class="slide" data-slide="7" id="slide-7">
+        <div class="slide-header">
+          <span class="slide-tag">Architecture</span>
+          <h2 class="slide-title">5. CRUD Overview</h2>
+          <p class="slide-subtitle">A high-level view of the four core Mongoose operations.</p>
+        </div>
+
+        <div class="slide-content">
+          <div class="grid-4">
+            <div class="card" style="border-top: 4px solid var(--mongo-green);">
+              <div class="card-title" style="color: var(--mongo-green);"><span class="icon">➕</span> CREATE</div>
+              <p>Add new documents into the MongoDB collection with schema validation.</p>
+              <div class="method-tag create" style="align-self: flex-start; margin-top: 0.5rem;">Student.create()</div>
+              <div class="card-footer-tip">Inserts data</div>
+            </div>
+
+            <div class="card" style="border-top: 4px solid var(--accent-cyan);">
+              <div class="card-title" style="color: var(--accent-cyan);"><span class="icon">🔍</span> READ</div>
+              <p>Query and retrieve documents from MongoDB matching specific criteria.</p>
+              <div class="method-tag read" style="align-self: flex-start; margin-top: 0.5rem;">Student.find()</div>
+              <div class="card-footer-tip">Fetches data</div>
+            </div>
+
+            <div class="card" style="border-top: 4px solid var(--accent-amber);">
+              <div class="card-title" style="color: var(--accent-amber);"><span class="icon">✏️</span> UPDATE</div>
+              <p>Find existing documents and modify their fields or values.</p>
+              <div class="method-tag update" style="align-self: flex-start; margin-top: 0.5rem;">Student.updateOne()</div>
+              <div class="card-footer-tip">Changes data</div>
+            </div>
+
+            <div class="card" style="border-top: 4px solid var(--accent-rose);">
+              <div class="card-title" style="color: var(--accent-rose);"><span class="icon">🗑️</span> DELETE</div>
+              <p>Remove documents that match a query filter from the database.</p>
+              <div class="method-tag delete" style="align-self: flex-start; margin-top: 0.5rem;">Student.deleteOne()</div>
+              <div class="card-footer-tip">Removes data</div>
+            </div>
+          </div>
+
+          <div class="callout callout-purple" style="margin-top: 1rem;">
+            <span class="callout-icon">📌</span>
+            <div>
+              <strong>Every Mongoose query returns a Promise:</strong> Always use <code>await</code> or <code>.then()</code> when interacting with MongoDB, and wrap operations inside a <code>try / catch</code> block!
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 8 — CREATE DOCUMENT
+           ==================================================================== -->
+      <section class="slide" data-slide="8" id="slide-8">
+        <div class="slide-header">
+          <span class="slide-tag">CREATE</span>
+          <h2 class="slide-title">6. CREATE — Adding Documents with create()</h2>
+          <p class="slide-subtitle">The simplest and most direct method to validate and store a new document.</p>
+        </div>
+
+        <div class="slide-content">
+          <div class="grid-split-left-wide">
+            <div class="code-box">
+              <div class="code-header">
+                <div class="code-dots"><div class="code-dot red"></div><div class="code-dot yellow"></div><div class="code-dot green"></div></div>
+                <span class="code-title">Method 1 — Student.create()</span>
+                <button class="copy-btn" onclick="Deck.copyCode(this)">Copy</button>
+              </div>
+              <pre class="code-content"><span class="comment">// 1. Call Student.create() with student details</span>
+<span class="kwd">const</span> student = <span class="kwd">await</span> Student.<span class="fn">create</span>({
+  <span class="prop">name</span>: <span class="str">"Rahul"</span>,
+  <span class="prop">email</span>: <span class="str">"rahul@gmail.com"</span>,
+  <span class="prop">age</span>: <span class="num">21</span>,
+  <span class="prop">course</span>: <span class="str">"MERN"</span>,
+  <span class="prop">mark</span>: <span class="num">85</span>
+});
+
+console.<span class="fn">log</span>(student);</pre>
+              <div class="terminal-output">
+<span class="out-info">// Expected Output in Terminal:</span>
+{
+  <span class="prop">_id</span>: <span class="str">new ObjectId("66f81a7b8e3d09a12c84ef11")</span>,
+  <span class="prop">name</span>: <span class="str">'Rahul'</span>,
+  <span class="prop">email</span>: <span class="str">'rahul@gmail.com'</span>,
+  <span class="prop">age</span>: <span class="num">21</span>,
+  <span class="prop">course</span>: <span class="str">'MERN'</span>,
+  <span class="prop">mark</span>: <span class="num">85</span>,
+  <span class="prop">active</span>: <span class="bool">true</span>,
+  <span class="prop">__v</span>: <span class="num">0</span>
+}</div>
+            </div>
+
+            <div class="flex-col">
+              <div class="card card-highlight">
+                <div class="card-title"><span class="icon">🔍</span> How Student.create() Works</div>
+                <ol style="font-size: 0.85rem; padding-left: 1.2rem; display: flex; flex-direction: column; gap: 0.5rem; color: var(--text-secondary);">
+                  <li>Takes a plain JavaScript object with fields.</li>
+                  <li>Checks every field against <code>studentSchema</code> rules (e.g. required name, unique email).</li>
+                  <li>Applies default values (like <code>active: true</code>).</li>
+                  <li>Inserts the document into the <code>students</code> collection in MongoDB.</li>
+                  <li>Returns the newly saved Mongoose document (including generated <code>_id</code>).</li>
+                </ol>
+              </div>
+
+              <div class="callout callout-blue">
+                <span class="callout-icon">💡</span>
+                <div>
+                  <strong>Syntax:</strong> <code>await Model.create(documentObject)</code>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 9 — CREATE FLOW
+           ==================================================================== -->
+      <section class="slide" data-slide="9" id="slide-9">
+        <div class="slide-header">
+          <span class="slide-tag">CREATE</span>
+          <h2 class="slide-title">7. CREATE Flow — The Journey of Data</h2>
+          <p class="slide-subtitle">Visualizing what happens behind the scenes when you call Model.create().</p>
+        </div>
+
+        <div class="slide-content">
+          <div class="flow-container" style="gap: 1.25rem;">
+            <div class="flow-node">
+              <div class="flow-node-title">1. JS Object</div>
+              <div class="flow-node-desc">{ name: "Rahul", ... }</div>
+            </div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-node">
+              <div class="flow-node-title">2. Student Model</div>
+              <div class="flow-node-desc">Mongoose Model Layer</div>
+            </div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-node">
+              <div class="flow-node-title">3. Schema</div>
+              <div class="flow-node-desc">Blueprint & Types</div>
+            </div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-node active-node">
+              <div class="flow-node-title" style="color: var(--mongo-green);">4. Validation</div>
+              <div class="flow-node-desc">Required, unique, min/max</div>
+            </div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-node">
+              <div class="flow-node-title">5. MongoDB</div>
+              <div class="flow-node-desc">Database insert</div>
+            </div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-node active-node">
+              <div class="flow-node-title" style="color: var(--mongo-green);">6. Saved Document</div>
+              <div class="flow-node-desc">With _id & __v</div>
+            </div>
+          </div>
+
+          <div class="grid-2" style="margin-top: 1rem;">
+            <div class="card">
+              <div class="card-title"><span class="icon">🛡️</span> Why Validation Comes First</div>
+              <p>If any field fails validation (for example, missing required <code>email</code> or negative <code>age</code>), Mongoose throws an error <strong>immediately in Node.js</strong> before sending anything to MongoDB. This protects your database from bad data.</p>
+            </div>
+
+            <div class="card">
+              <div class="card-title"><span class="icon">🆔</span> Automatic _id Generation</div>
+              <p>MongoDB automatically assigns an immutable 12-byte <code>_id</code> (ObjectId) to the new document. You do not need to supply an ID when creating documents.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 10 — NEW MODEL + SAVE
+           ==================================================================== -->
+      <section class="slide" data-slide="10" id="slide-10">
+        <div class="slide-header">
+          <span class="slide-tag">CREATE</span>
+          <h2 class="slide-title">8. CREATE — new Model() + save()</h2>
+          <p class="slide-subtitle">The two-step approach: instantiate in memory, then save to MongoDB.</p>
+        </div>
+
+        <div class="slide-content">
+          <div class="grid-split-left-wide">
+            <div class="code-box">
+              <div class="code-header">
+                <div class="code-dots"><div class="code-dot red"></div><div class="code-dot yellow"></div><div class="code-dot green"></div></div>
+                <span class="code-title">Method 2 — new Student() + save()</span>
+                <button class="copy-btn" onclick="Deck.copyCode(this)">Copy</button>
+              </div>
+              <pre class="code-content"><span class="comment">// Step 1: Create a document instance in memory (Node.js RAM)</span>
+<span class="kwd">const</span> student = <span class="kwd">new</span> <span class="fn">Student</span>({
+  <span class="prop">name</span>: <span class="str">"Anjali"</span>,
+  <span class="prop">email</span>: <span class="str">"anjali@gmail.com"</span>,
+  <span class="prop">age</span>: <span class="num">22</span>,
+  <span class="prop">course</span>: <span class="str">"Python"</span>,
+  <span class="prop">mark</span>: <span class="num">90</span>
+});
+
+<span class="comment">// (Optional: modify fields before saving)</span>
+<span class="comment">// student.course = "Full Stack";</span>
+
+<span class="comment">// Step 2: Validate and persist to MongoDB</span>
+<span class="kwd">await</span> student.<span class="fn">save</span>();
+
+console.<span class="fn">log</span>(student);</pre>
+            </div>
+
+            <div class="flex-col">
+              <div class="card card-highlight">
+                <div class="card-title"><span class="icon">⚖️</span> create() vs new Model() + save()</div>
+                <table class="styled-table" style="font-size: 0.8rem;">
+                  <thead>
+                    <tr><th>Feature</th><th>Student.create()</th><th>new Student() + save()</th></tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><strong>Steps</strong></td>
+                      <td>1 step</td>
+                      <td>2 steps</td>
+                    </tr>
+                    <tr>
+                      <td><strong>Execution</strong></td>
+                      <td>Instantly creates & saves</td>
+                      <td>Creates in memory, saves when ready</td>
+                    </tr>
+                    <tr>
+                      <td><strong>Use Case</strong></td>
+                      <td>Fast, direct insertion</td>
+                      <td>When data needs manipulation before save</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <div class="callout callout-amber">
+                <span class="callout-icon">⚠️</span>
+                <div>
+                  <strong>Common beginner mistake:</strong> Calling <code>new Student({...})</code> without <code>await student.save()</code>. If you forget <code>save()</code>, nothing is written to MongoDB!
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 11 — INSERT MANY
+           ==================================================================== -->
+      <section class="slide" data-slide="11" id="slide-11">
+        <div class="slide-header">
+          <span class="slide-tag">CREATE</span>
+          <h2 class="slide-title">9. CREATE — insertMany() for Bulk Data</h2>
+          <p class="slide-subtitle">How to efficiently insert multiple documents in a single database operation.</p>
+        </div>
+
+        <div class="slide-content">
+          <div class="grid-split-left-wide">
+            <div class="code-box">
+              <div class="code-header">
+                <div class="code-dots"><div class="code-dot red"></div><div class="code-dot yellow"></div><div class="code-dot green"></div></div>
+                <span class="code-title">Method 3 — Student.insertMany()</span>
+                <button class="copy-btn" onclick="Deck.copyCode(this)">Copy</button>
+              </div>
+              <pre class="code-content"><span class="comment">// Pass an ARRAY of student objects</span>
+<span class="kwd">const</span> students = <span class="kwd">await</span> Student.<span class="fn">insertMany</span>([
+  {
+    <span class="prop">name</span>: <span class="str">"Arun"</span>,
+    <span class="prop">email</span>: <span class="str">"arun@gmail.com"</span>,
+    <span class="prop">age</span>: <span class="num">20</span>,
+    <span class="prop">course</span>: <span class="str">"MERN"</span>,
+    <span class="prop">mark</span>: <span class="num">78</span>
+  },
+  {
+    <span class="prop">name</span>: <span class="str">"Sneha"</span>,
+    <span class="prop">email</span>: <span class="str">"sneha@gmail.com"</span>,
+    <span class="prop">age</span>: <span class="num">23</span>,
+    <span class="prop">course</span>: <span class="str">"Java"</span>,
+    <span class="prop">mark</span>: <span class="num">88</span>
+  }
+]);
+
+console.<span class="fn">log</span>(students); <span class="comment">// Returns array of inserted documents</span></pre>
+            </div>
+
+            <div class="flex-col">
+              <div class="card card-highlight">
+                <div class="card-title"><span class="icon">🚀</span> When to use insertMany()</div>
+                <p>Instead of looping through 100 students and calling <code>Student.create()</code> 100 times (which makes 100 round-trip database requests), <code>insertMany()</code> sends all documents in <strong>one single batch command</strong> to MongoDB.</p>
+              </div>
+
+              <div class="card">
+                <div class="card-title"><span class="icon">📊</span> Method Comparison</div>
+                <div style="font-size: 0.85rem; display: flex; flex-direction: column; gap: 0.5rem;">
+                  <div><code>Student.create()</code> &rarr; 1 document (or array)</div>
+                  <div><code>new Student() + save()</code> &rarr; 1 document with custom logic</div>
+                  <div><code>Student.insertMany()</code> &rarr; Multiple documents in bulk</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 12 — READ DOCUMENTS
+           ==================================================================== -->
+      <section class="slide" data-slide="12" id="slide-12">
+        <div class="slide-header">
+          <span class="slide-tag">READ</span>
+          <h2 class="slide-title">10. READ — Getting Documents from MongoDB</h2>
+          <p class="slide-subtitle">Retrieving existing data using Mongoose's query methods.</p>
+        </div>
+
+        <div class="slide-content">
+          <p style="font-size: 0.95rem; color: var(--text-secondary); margin-bottom: 0.5rem;">
+            <strong>READ</strong> means querying MongoDB to fetch stored documents. Mongoose models provide three primary query methods:
+          </p>
+
+          <div class="grid-3">
+            <div class="card card-highlight">
+              <div class="card-title">
+                <span class="method-tag read">find()</span>
+              </div>
+              <p>Fetches <strong>all documents</strong> that match the query filter. Always returns an <strong>Array</strong> (even if only 1 match or 0 matches).</p>
+              <div class="card-footer-tip">Returns: <code>[ { ... }, { ... } ]</code> or <code>[]</code></div>
+            </div>
+
+            <div class="card">
+              <div class="card-title">
+                <span class="method-tag read">findOne()</span>
+              </div>
+              <p>Returns the <strong>first single document</strong> that matches the filter. If no match is found, returns <strong>null</strong>.</p>
+              <div class="card-footer-tip">Returns: <code>{ ... }</code> or <code>null</code></div>
+            </div>
+
+            <div class="card">
+              <div class="card-title">
+                <span class="method-tag read">findById()</span>
+              </div>
+              <p>Shorthand to search for a specific document by its unique MongoDB <code>_id</code>. Returns the document or <strong>null</strong>.</p>
+              <div class="card-footer-tip">Equivalent to: <code>findOne({ _id: id })</code></div>
+            </div>
+          </div>
+
+          <div class="callout callout-blue" style="margin-top: 0.5rem;">
+            <span class="callout-icon">💡</span>
+            <div>
+              <strong>Rule of thumb:</strong> If you expect multiple results (e.g., student list) &rarr; use <code>find()</code>. If you are looking for one unique user (e.g. by email or ID) &rarr; use <code>findOne()</code> or <code>findById()</code>.
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 13 — FIND ALL
+           ==================================================================== -->
+      <section class="slide" data-slide="13" id="slide-13">
+        <div class="slide-header">
+          <span class="slide-tag">READ</span>
+          <h2 class="slide-title">11. READ — find() to Get All Documents</h2>
+          <p class="slide-subtitle">Retrieving the entire collection when no filter condition is provided.</p>
+        </div>
+
+        <div class="slide-content">
+          <div class="grid-split-left-wide">
+            <div class="code-box">
+              <div class="code-header">
+                <div class="code-dots"><div class="code-dot red"></div><div class="code-dot yellow"></div><div class="code-dot green"></div></div>
+                <span class="code-title">Student.find() — Fetch All</span>
+                <button class="copy-btn" onclick="Deck.copyCode(this)">Copy</button>
+              </div>
+              <pre class="code-content"><span class="comment">// Leaving the find() argument empty retrieves all documents</span>
+<span class="kwd">const</span> students = <span class="kwd">await</span> Student.<span class="fn">find</span>();
+
+console.<span class="fn">log</span>(students);</pre>
+              <div class="terminal-output">
+<span class="out-info">// Output: An array containing all student documents:</span>
+[
+  { <span class="prop">_id</span>: <span class="str">ObjectId("...")</span>, <span class="prop">name</span>: <span class="str">"Rahul"</span>, <span class="prop">course</span>: <span class="str">"MERN"</span>, <span class="prop">mark</span>: <span class="num">85</span> },
+  { <span class="prop">_id</span>: <span class="str">ObjectId("...")</span>, <span class="prop">name</span>: <span class="str">"Anjali"</span>, <span class="prop">course</span>: <span class="str">"Python"</span>, <span class="prop">mark</span>: <span class="num">90</span> },
+  { <span class="prop">_id</span>: <span class="str">ObjectId("...")</span>, <span class="prop">name</span>: <span class="str">"Arun"</span>, <span class="prop">course</span>: <span class="str">"MERN"</span>, <span class="prop">mark</span>: <span class="num">78</span> }
+]</div>
+            </div>
+
+            <div class="flex-col">
+              <div class="card card-highlight">
+                <div class="card-title"><span class="icon">🔄</span> MongoDB Shell Equivalent</div>
+                <p>This is the direct Mongoose equivalent of running the MongoDB shell query:</p>
+                <div style="background: var(--bg-terminal); padding: 0.6rem; border-radius: var(--radius-sm); font-family: var(--font-mono); font-size: 0.85rem; color: var(--mongo-green);">
+                  db.students.find()
+                </div>
+              </div>
+
+              <div class="card">
+                <div class="card-title"><span class="icon">📦</span> Return Type Note</div>
+                <p>Even if the collection contains zero students, <code>Student.find()</code> will <strong>not</strong> return <code>null</code>. It returns an empty array: <code>[]</code>.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 14 — FIND WITH FILTER
+           ==================================================================== -->
+      <section class="slide" data-slide="14" id="slide-14">
+        <div class="slide-header">
+          <span class="slide-tag">READ</span>
+          <h2 class="slide-title">12. READ — find() With Filter Conditions</h2>
+          <p class="slide-subtitle">Filtering documents by exact values and comparison operators.</p>
+        </div>
+
+        <div class="slide-content">
+          <div class="grid-2">
+            <div class="code-box">
+              <div class="code-header">
+                <div class="code-dots"><div class="code-dot red"></div><div class="code-dot yellow"></div><div class="code-dot green"></div></div>
+                <span class="code-title">Example 1: Exact Match</span>
+                <button class="copy-btn" onclick="Deck.copyCode(this)">Copy</button>
+              </div>
+              <pre class="code-content"><span class="comment">// Find all students enrolled in the "MERN" course</span>
+<span class="kwd">const</span> mernStudents = <span class="kwd">await</span> Student.<span class="fn">find</span>({
+  <span class="prop">course</span>: <span class="str">"MERN"</span>
+});
+
+console.<span class="fn">log</span>(mernStudents);</pre>
+              <div class="card-footer-tip" style="padding: 0.75rem;">
+                Filters for documents where <code>course === "MERN"</code>
+              </div>
+            </div>
+
+            <div class="code-box">
+              <div class="code-header">
+                <div class="code-dots"><div class="code-dot red"></div><div class="code-dot yellow"></div><div class="code-dot green"></div></div>
+                <span class="code-title">Example 2: Comparison Operator</span>
+                <button class="copy-btn" onclick="Deck.copyCode(this)">Copy</button>
+              </div>
+              <pre class="code-content"><span class="comment">// Find students whose mark is 80 or above ($gte = Greater Than or Equal)</span>
+<span class="kwd">const</span> topStudents = <span class="kwd">await</span> Student.<span class="fn">find</span>({
+  <span class="prop">mark</span>: { <span class="prop">$gte</span>: <span class="num">80</span> }
+});
+
+console.<span class="fn">log</span>(topStudents);</pre>
+              <div class="card-footer-tip" style="padding: 0.75rem;">
+                Connects Day 2 MongoDB query operators (<code>$gte</code>, <code>$lte</code>, <code>$in</code>) with Mongoose!
+              </div>
+            </div>
+          </div>
+
+          <div class="callout callout-blue">
+            <span class="callout-icon">💡</span>
+            <div>
+              <strong>How filtering works:</strong> Pass an object as the first parameter to <code>find({ filter })</code>. Only documents matching the filter are fetched from the database.
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 15 — FIND ONE
+           ==================================================================== -->
+      <section class="slide" data-slide="15" id="slide-15">
+        <div class="slide-header">
+          <span class="slide-tag">READ</span>
+          <h2 class="slide-title">13. READ — findOne() for a Single Match</h2>
+          <p class="slide-subtitle">Finding a specific document such as looking up a user by email.</p>
+        </div>
+
+        <div class="slide-content">
+          <div class="grid-split-left-wide">
+            <div class="code-box">
+              <div class="code-header">
+                <div class="code-dots"><div class="code-dot red"></div><div class="code-dot yellow"></div><div class="code-dot green"></div></div>
+                <span class="code-title">Student.findOne()</span>
+                <button class="copy-btn" onclick="Deck.copyCode(this)">Copy</button>
+              </div>
+              <pre class="code-content"><span class="comment">// Find the single student with this unique email address</span>
+<span class="kwd">const</span> student = <span class="kwd">await</span> Student.<span class="fn">findOne</span>({
+  <span class="prop">email</span>: <span class="str">"rahul@gmail.com"</span>
+});
+
+console.<span class="fn">log</span>(student);</pre>
+              <div class="terminal-output">
+<span class="out-info">// Output: Single document object (NOT an array):</span>
+{
+  <span class="prop">_id</span>: <span class="str">ObjectId("66f81a7b8e3d09a12c84ef11")</span>,
+  <span class="prop">name</span>: <span class="str">'Rahul'</span>,
+  <span class="prop">email</span>: <span class="str">'rahul@gmail.com'</span>,
+  <span class="prop">age</span>: <span class="num">21</span>,
+  <span class="prop">course</span>: <span class="str">'MERN'</span>,
+  <span class="prop">mark</span>: <span class="num">85</span>,
+  <span class="prop">active</span>: <span class="bool">true</span>
+}</div>
+            </div>
+
+            <div class="flex-col">
+              <div class="card card-highlight">
+                <div class="card-title"><span class="icon">🔍</span> find() vs findOne()</div>
+                <table class="styled-table" style="font-size: 0.8rem;">
+                  <thead>
+                    <tr><th>Aspect</th><th>find()</th><th>findOne()</th></tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>Matches</td>
+                      <td>Returns all matches</td>
+                      <td>Returns first match only</td>
+                    </tr>
+                    <tr>
+                      <td>Format</td>
+                      <td>Array <code>[ ... ]</code></td>
+                      <td>Single Object <code>{ ... }</code></td>
+                    </tr>
+                    <tr>
+                      <td>If no match</td>
+                      <td>Empty array <code>[]</code></td>
+                      <td><code>null</code></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <div class="callout callout-amber">
+                <span class="callout-icon">⚠️</span>
+                <div>
+                  Always check if the result is <code>null</code> before accessing properties (e.g. <code>if (!student) { console.log("Not found"); }</code>).
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 16 — FIND BY ID
+           ==================================================================== -->
+      <section class="slide" data-slide="16" id="slide-16">
+        <div class="slide-header">
+          <span class="slide-tag">READ</span>
+          <h2 class="slide-title">14. READ — findById() Using Document _id</h2>
+          <p class="slide-subtitle">The fastest and cleanest way to fetch a document when you have its MongoDB ID.</p>
+        </div>
+
+        <div class="slide-content">
+          <div class="grid-split-left-wide">
+            <div class="code-box">
+              <div class="code-header">
+                <div class="code-dots"><div class="code-dot red"></div><div class="code-dot yellow"></div><div class="code-dot green"></div></div>
+                <span class="code-title">Student.findById()</span>
+                <button class="copy-btn" onclick="Deck.copyCode(this)">Copy</button>
+              </div>
+              <pre class="code-content"><span class="kwd">const</span> studentId = <span class="str">"66f81a7b8e3d09a12c84ef11"</span>;
+
+<span class="comment">// Look up document directly using its 24-character hexadecimal ID</span>
+<span class="kwd">const</span> student = <span class="kwd">await</span> Student.<span class="fn">findById</span>(studentId);
+
+console.<span class="fn">log</span>(student);</pre>
+            </div>
+
+            <div class="flex-col">
+              <div class="card card-highlight">
+                <div class="card-title"><span class="icon">💡</span> The Exact Equivalence</div>
+                <p>Under the hood, <code>findById(id)</code> is simply a convenient shorthand for:</p>
+                <div style="background: var(--bg-terminal); padding: 0.75rem; border-radius: var(--radius-sm); font-family: var(--font-mono); font-size: 0.82rem; color: var(--accent-cyan);">
+                  Student.<span class="fn">findOne</span>({ <span class="prop">_id</span>: studentId })
+                </div>
+                <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 0.5rem;">
+                  Mongoose automatically converts the string ID into an official MongoDB <code>ObjectId</code>.
+                </p>
+              </div>
+
+              <div class="callout callout-rose">
+                <span class="callout-icon">🚨</span>
+                <div>
+                  <strong>CastError Warning:</strong> If you pass an invalid ID string (e.g. <code>"123"</code> instead of 24 hex characters), Mongoose throws a <code>CastError: Cast to ObjectId failed</code>.
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 17 — SELECT FIELDS
+           ==================================================================== -->
+      <section class="slide" data-slide="17" id="slide-17">
+        <div class="slide-header">
+          <span class="slide-tag">READ</span>
+          <h2 class="slide-title">15. READ — Selecting Specific Fields (.select)</h2>
+          <p class="slide-subtitle">Optimizing query performance by choosing exactly which properties to retrieve.</p>
+        </div>
+
+        <div class="slide-content">
+          <div class="grid-split-left-wide">
+            <div class="code-box">
+              <div class="code-header">
+                <div class="code-dots"><div class="code-dot red"></div><div class="code-dot yellow"></div><div class="code-dot green"></div></div>
+                <span class="code-title">Field Selection with .select()</span>
+                <button class="copy-btn" onclick="Deck.copyCode(this)">Copy</button>
+              </div>
+              <pre class="code-content"><span class="comment">// Include only name, email, and course</span>
+<span class="kwd">const</span> students = <span class="kwd">await</span> Student.<span class="fn">find</span>()
+  .<span class="fn">select</span>(<span class="str">"name email course"</span>);
+
+console.<span class="fn">log</span>(students);</pre>
+              <div class="terminal-output">
+<span class="out-info">// Result: Notice that age, mark, and active are omitted:</span>
+[
+  {
+    <span class="prop">_id</span>: <span class="str">ObjectId("66f81a7b8e3d09a12c84ef11")</span>,
+    <span class="prop">name</span>: <span class="str">'Rahul'</span>,
+    <span class="prop">email</span>: <span class="str">'rahul@gmail.com'</span>,
+    <span class="prop">course</span>: <span class="str">'MERN'</span>
+  }
+]</div>
+            </div>
+
+            <div class="flex-col">
+              <div class="card">
+                <div class="card-title"><span class="icon">⚡</span> Why use .select()?</div>
+                <ul style="font-size: 0.85rem; padding-left: 1.2rem; display: flex; flex-direction: column; gap: 0.5rem; color: var(--text-secondary);">
+                  <li><strong>Speed:</strong> Smaller payload transferred from MongoDB to Node.js.</li>
+                  <li><strong>Privacy & Security:</strong> Exclude sensitive fields (like passwords or private tokens).</li>
+                  <li><strong>Syntax:</strong> Pass space-separated field names (e.g. <code>"name email"</code>) or prefix with <code>-</code> to exclude (e.g. <code>"-mark"</code>).</li>
+                </ul>
+              </div>
+
+              <div class="callout callout-blue">
+                <span class="callout-icon">💡</span>
+                <div>
+                  By default, MongoDB always includes <code>_id</code> unless explicitly excluded with <code>select("- _id name email")</code>.
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 18 — UPDATE INTRODUCTION
+           ==================================================================== -->
+      <section class="slide" data-slide="18" id="slide-18">
+        <div class="slide-header">
+          <span class="slide-tag">UPDATE</span>
+          <h2 class="slide-title">16. UPDATE — Modifying Existing Data</h2>
+          <p class="slide-subtitle">Understanding the two essential components of every update operation.</p>
+        </div>
+
+        <div class="slide-content">
+          <div class="grid-split-left-wide">
+            <div class="card">
+              <div class="card-title"><span class="icon">✏️</span> What is an UPDATE?</div>
+              <p>An update modifies one or more fields in an already existing document stored in MongoDB.</p>
+              
+              <div style="margin: 1rem 0; padding: 1rem; background: var(--bg-surface); border-radius: var(--radius-sm); border: 1px solid var(--border-subtle); display: flex; align-items: center; justify-content: space-around;">
+                <div style="text-align: center;">
+                  <div style="font-size: 0.75rem; color: var(--text-muted); font-family: var(--font-mono);">BEFORE</div>
+                  <div style="font-size: 1.1rem; font-weight: bold; color: var(--text-primary); margin-top: 0.25rem;">Rahul</div>
+                  <div style="color: var(--accent-rose); font-family: var(--font-mono); font-size: 0.95rem;">Mark: 85</div>
+                </div>
+
+                <div style="font-size: 1.5rem; color: var(--accent-amber); font-weight: bold;">➔ UPDATE ➔</div>
+
+                <div style="text-align: center;">
+                  <div style="font-size: 0.75rem; color: var(--text-muted); font-family: var(--font-mono);">AFTER</div>
+                  <div style="font-size: 1.1rem; font-weight: bold; color: var(--text-primary); margin-top: 0.25rem;">Rahul</div>
+                  <div style="color: var(--mongo-green); font-family: var(--font-mono); font-size: 0.95rem; font-weight: bold;">Mark: 95</div>
+                </div>
+              </div>
+
+              <p style="font-size: 0.85rem; color: var(--text-secondary);">
+                Notice: Rahul's name, email, and ID stay identical. Only the <code>mark</code> field changes.
+              </p>
+            </div>
+
+            <div class="card card-highlight">
+              <div class="card-title"><span class="icon">🧠</span> The Core Update Formula</div>
+              <p>Every update operation in Mongoose requires two vital pieces of information:</p>
+              
+              <div style="display: flex; flex-direction: column; gap: 0.85rem; margin-top: 0.5rem;">
+                <div style="padding: 0.75rem; background: var(--bg-surface); border-radius: var(--radius-sm); border-left: 3px solid var(--accent-cyan);">
+                  <strong style="color: var(--accent-cyan); font-family: var(--font-mono);">1. Filter Object</strong>
+                  <div style="font-size: 0.82rem; margin-top: 0.2rem;"><strong>"Which document?"</strong> (e.g. <code>{ email: "rahul@gmail.com" }</code>)</div>
+                </div>
+
+                <div style="padding: 0.75rem; background: var(--bg-surface); border-radius: var(--radius-sm); border-left: 3px solid var(--accent-amber);">
+                  <strong style="color: var(--accent-amber); font-family: var(--font-mono);">2. Update Object</strong>
+                  <div style="font-size: 0.82rem; margin-top: 0.2rem;"><strong>"What should change?"</strong> (e.g. <code>{ mark: 95 }</code>)</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 19 — UPDATE ONE
+           ==================================================================== -->
+      <section class="slide" data-slide="19" id="slide-19">
+        <div class="slide-header">
+          <span class="slide-tag">UPDATE</span>
+          <h2 class="slide-title">17. UPDATE — updateOne()</h2>
+          <p class="slide-subtitle">Modifying the first matching document without loading it into memory.</p>
+        </div>
+
+        <div class="slide-content">
+          <div class="grid-split-left-wide">
+            <div class="code-box">
+              <div class="code-header">
+                <div class="code-dots"><div class="code-dot red"></div><div class="code-dot yellow"></div><div class="code-dot green"></div></div>
+                <span class="code-title">Student.updateOne()</span>
+                <button class="copy-btn" onclick="Deck.copyCode(this)">Copy</button>
+              </div>
+              <pre class="code-content"><span class="kwd">const</span> result = <span class="kwd">await</span> Student.<span class="fn">updateOne</span>(
+  { <span class="prop">email</span>: <span class="str">"rahul@gmail.com"</span> }, <span class="comment">// 1. Filter: Which document?</span>
+  { <span class="prop">mark</span>: <span class="num">95</span> }                  <span class="comment">// 2. Update: What changes?</span>
+);
+
+console.<span class="fn">log</span>(result);</pre>
+              <div class="terminal-output">
+<span class="out-info">// Result Object returned by MongoDB:</span>
+{
+  <span class="prop">acknowledged</span>: <span class="bool">true</span>,
+  <span class="prop">modifiedCount</span>: <span class="num">1</span>,  <span class="comment">// Number of documents whose data changed</span>
+  <span class="prop">upsertedId</span>: <span class="bool">null</span>,
+  <span class="prop">upsertedCount</span>: <span class="num">0</span>,
+  <span class="prop">matchedCount</span>: <span class="num">1</span>   <span class="comment">// Number of documents matching filter</span>
+}</div>
+            </div>
+
+            <div class="flex-col">
+              <div class="card card-highlight">
+                <div class="card-title"><span class="icon">📌</span> Important Return Value Note</div>
+                <p><strong><code>updateOne()</code> does NOT return the updated student document!</strong></p>
+                <p style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 0.4rem;">
+                  Instead, it returns an acknowledgment object stating how many documents matched and how many were modified.
+                </p>
+              </div>
+
+              <div class="callout callout-amber">
+                <span class="callout-icon">💡</span>
+                <div>
+                  If multiple students have the same course, <code>updateOne()</code> modifies <strong>only the first matching one</strong> it encounters.
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 20 — $SET
+           ==================================================================== -->
+      <section class="slide" data-slide="20" id="slide-20">
+        <div class="slide-header">
+          <span class="slide-tag">UPDATE</span>
+          <h2 class="slide-title">18. UPDATE — The $set Operator</h2>
+          <p class="slide-subtitle">How MongoDB modifies specific fields while preserving the rest of the document.</p>
+        </div>
+
+        <div class="slide-content">
+          <div class="grid-split-left-wide">
+            <div class="code-box">
+              <div class="code-header">
+                <div class="code-dots"><div class="code-dot red"></div><div class="code-dot yellow"></div><div class="code-dot green"></div></div>
+                <span class="code-title">Explicit $set Syntax</span>
+                <button class="copy-btn" onclick="Deck.copyCode(this)">Copy</button>
+              </div>
+              <pre class="code-content"><span class="kwd">await</span> Student.<span class="fn">updateOne</span>(
+  { <span class="prop">email</span>: <span class="str">"rahul@gmail.com"</span> },
+  {
+    <span class="prop">$set</span>: {
+      <span class="prop">mark</span>: <span class="num">95</span>
+    }
+  }
+);</pre>
+              <div class="card-footer-tip" style="padding: 0.75rem;">
+                Explicitly tells MongoDB: "Only update the <code>mark</code> property."
+              </div>
+            </div>
+
+            <div class="flex-col">
+              <div class="card card-highlight">
+                <div class="card-title"><span class="icon">🔍</span> What is $set?</div>
+                <p><strong><code>$set</code></strong> is MongoDB's field update operator. It replaces the value of a field with the specified value without touching any other fields in the document.</p>
+              </div>
+
+              <div class="card">
+                <div class="card-title"><span class="icon">✨</span> Mongoose Auto-$set Magic</div>
+                <p>In standard MongoDB shell commands, forgetting <code>$set</code> could overwrite the entire document! However, <strong>Mongoose automatically wraps top-level fields inside <code>$set</code></strong> for you in <code>updateOne()</code> and <code>findOneAndUpdate()</code>.</p>
+                <div class="card-footer-tip">Both syntaxes work in Mongoose!</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 21 — UPDATE MANY
+           ==================================================================== -->
+      <section class="slide" data-slide="21" id="slide-21">
+        <div class="slide-header">
+          <span class="slide-tag">UPDATE</span>
+          <h2 class="slide-title">19. UPDATE — updateMany()</h2>
+          <p class="slide-subtitle">Modifying every single document that matches your query condition.</p>
+        </div>
+
+        <div class="slide-content">
+          <div class="grid-split-left-wide">
+            <div class="code-box">
+              <div class="code-header">
+                <div class="code-dots"><div class="code-dot red"></div><div class="code-dot yellow"></div><div class="code-dot green"></div></div>
+                <span class="code-title">Student.updateMany()</span>
+                <button class="copy-btn" onclick="Deck.copyCode(this)">Copy</button>
+              </div>
+              <pre class="code-content"><span class="comment">// Set active to true for ALL students in the "MERN" course</span>
+<span class="kwd">const</span> result = <span class="kwd">await</span> Student.<span class="fn">updateMany</span>(
+  { <span class="prop">course</span>: <span class="str">"MERN"</span> },
+  { <span class="prop">$set</span>: { <span class="prop">active</span>: <span class="bool">true</span> } }
+);
+
+console.<span class="fn">log</span>(result);</pre>
+              <div class="terminal-output">
+<span class="out-info">// Example Output:</span>
+{
+  <span class="prop">acknowledged</span>: <span class="bool">true</span>,
+  <span class="prop">modifiedCount</span>: <span class="num">15</span>, <span class="comment">// 15 students updated!</span>
+  <span class="prop">matchedCount</span>: <span class="num">15</span>
+}</div>
+            </div>
+
+            <div class="flex-col">
+              <div class="card card-highlight">
+                <div class="card-title"><span class="icon">⚖️</span> updateOne() vs updateMany()</div>
+                <div style="font-size: 0.85rem; display: flex; flex-direction: column; gap: 0.6rem;">
+                  <div><strong style="color: var(--accent-amber);">updateOne():</strong> Modifies ONLY the first matching document.</div>
+                  <div><strong style="color: var(--mongo-green);">updateMany():</strong> Modifies ALL documents matching the filter.</div>
+                </div>
+              </div>
+
+              <div class="callout callout-rose">
+                <span class="callout-icon">🚨</span>
+                <div>
+                  <strong>Danger of Empty Filter <code>{}</code>:</strong> If you pass <code>updateMany({}, { active: false })</code> with an empty filter, it will modify <strong>every single document</strong> in the database collection!
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 22 — FIND ONE AND UPDATE
+           ==================================================================== -->
+      <section class="slide" data-slide="22" id="slide-22">
+        <div class="slide-header">
+          <span class="slide-tag">UPDATE</span>
+          <h2 class="slide-title">20. UPDATE — findOneAndUpdate() & { new: true }</h2>
+          <p class="slide-subtitle">Finding, updating, and returning the student document in one atomic call.</p>
+        </div>
+
+        <div class="slide-content">
+          <div class="grid-split-left-wide">
+            <div class="code-box">
+              <div class="code-header">
+                <div class="code-dots"><div class="code-dot red"></div><div class="code-dot yellow"></div><div class="code-dot green"></div></div>
+                <span class="code-title">Student.findOneAndUpdate()</span>
+                <button class="copy-btn" onclick="Deck.copyCode(this)">Copy</button>
+              </div>
+              <pre class="code-content"><span class="kwd">const</span> student = <span class="kwd">await</span> Student.<span class="fn">findOneAndUpdate</span>(
+  { <span class="prop">email</span>: <span class="str">"rahul@gmail.com"</span> }, <span class="comment">// 1. Filter</span>
+  { <span class="prop">mark</span>: <span class="num">98</span> },                  <span class="comment">// 2. Update</span>
+  { <span class="prop">new</span>: <span class="bool">true</span> }                 <span class="comment">// 3. Options: Return the UPDATED document!</span>
+);
+
+console.<span class="fn">log</span>(student);</pre>
+              <div class="terminal-output">
+<span class="out-success">// Output: The newly updated document with mark: 98</span>
+{
+  <span class="prop">_id</span>: <span class="str">ObjectId("66f81a7b8e3d09a12c84ef11")</span>,
+  <span class="prop">name</span>: <span class="str">'Rahul'</span>,
+  <span class="prop">mark</span>: <span class="num">98</span>,  <span class="comment">// &lt;-- Contains the new value!</span>
+  <span class="prop">course</span>: <span class="str">'MERN'</span>
+}</div>
+            </div>
+
+            <div class="flex-col">
+              <div class="card card-highlight">
+                <div class="card-title"><span class="icon">⭐</span> Why { new: true } is Crucial</div>
+                <p><strong>By default, <code>findOneAndUpdate()</code> returns the document BEFORE the update took place.</strong></p>
+                <div style="font-size: 0.82rem; margin-top: 0.4rem; color: var(--text-secondary);">
+                  Without <code>{ new: true }</code> &rarr; Returns old data (Mark: 85)<br>
+                  With <code>{ new: true }</code> &rarr; Returns updated data (Mark: 98)
+                </div>
+              </div>
+
+              <div class="callout callout-blue">
+                <span class="callout-icon">💡</span>
+                <div>
+                  This is the #1 method used in backend APIs when returning an updated user profile or order to a frontend client!
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 23 — FIND BY ID AND UPDATE
+           ==================================================================== -->
+      <section class="slide" data-slide="23" id="slide-23">
+        <div class="slide-header">
+          <span class="slide-tag">UPDATE</span>
+          <h2 class="slide-title">21. UPDATE — findByIdAndUpdate()</h2>
+          <p class="slide-subtitle">The fastest shorthand when updating a document by its unique MongoDB _id.</p>
+        </div>
+
+        <div class="slide-content">
+          <div class="grid-split-left-wide">
+            <div class="code-box">
+              <div class="code-header">
+                <div class="code-dots"><div class="code-dot red"></div><div class="code-dot yellow"></div><div class="code-dot green"></div></div>
+                <span class="code-title">Student.findByIdAndUpdate()</span>
+                <button class="copy-btn" onclick="Deck.copyCode(this)">Copy</button>
+              </div>
+              <pre class="code-content"><span class="kwd">const</span> studentId = <span class="str">"66f81a7b8e3d09a12c84ef11"</span>;
+
+<span class="comment">// Shorthand for findOneAndUpdate({ _id: studentId }, ...)</span>
+<span class="kwd">const</span> student = <span class="kwd">await</span> Student.<span class="fn">findByIdAndUpdate</span>(
+  studentId,
+  { <span class="prop">mark</span>: <span class="num">95</span> },
+  { <span class="prop">new</span>: <span class="bool">true</span> }
+);
+
+console.<span class="fn">log</span>(student);</pre>
+            </div>
+
+            <div class="flex-col">
+              <div class="card card-highlight">
+                <div class="card-title"><span class="icon">💡</span> When to use findByIdAndUpdate()</div>
+                <p>In REST APIs (e.g. <code>PUT /api/students/:id</code>), you already receive the student's <code>_id</code> from the URL parameter. Using <code>findByIdAndUpdate()</code> is cleaner and more readable than writing <code>{ _id: id }</code> manually.</p>
+              </div>
+
+              <div class="card">
+                <div class="card-title"><span class="icon">🔄</span> Behind the scenes</div>
+                <div style="font-family: var(--font-mono); font-size: 0.8rem; color: var(--accent-cyan);">
+                  Student.findByIdAndUpdate(id, update, opts)<br>
+                  &darr; is shorthand for &darr;<br>
+                  Student.findOneAndUpdate({ _id: id }, update, opts)
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 24 — UPDATE VALIDATION
+           ==================================================================== -->
+      <section class="slide" data-slide="24" id="slide-24">
+        <div class="slide-header">
+          <span class="slide-tag">UPDATE</span>
+          <h2 class="slide-title">22. UPDATE — Validation with runValidators</h2>
+          <p class="slide-subtitle">Why update queries don't validate by default and how to enforce schema rules.</p>
+        </div>
+
+        <div class="slide-content">
+          <div class="grid-split-left-wide">
+            <div class="code-box">
+              <div class="code-header">
+                <div class="code-dots"><div class="code-dot red"></div><div class="code-dot yellow"></div><div class="code-dot green"></div></div>
+                <span class="code-title">Enforcing Schema Rules on Update</span>
+                <button class="copy-btn" onclick="Deck.copyCode(this)">Copy</button>
+              </div>
+              <pre class="code-content"><span class="kwd">try</span> {
+  <span class="kwd">const</span> student = <span class="kwd">await</span> Student.<span class="fn">findOneAndUpdate</span>(
+    { <span class="prop">email</span>: <span class="str">"rahul@gmail.com"</span> },
+    { <span class="prop">mark</span>: <span class="num">150</span> }, <span class="comment">// 🚨 Invalid mark (suppose schema max is 100)</span>
+    {
+      <span class="prop">new</span>: <span class="bool">true</span>,
+      <span class="prop">runValidators</span>: <span class="bool">true</span> <span class="comment">// &lt;-- Forces Mongoose to validate!</span>
+    }
+  );
+} <span class="kwd">catch</span> (error) {
+  console.<span class="fn">error</span>(error.message);
+  <span class="comment">// Validation failed: mark: Path `mark` (150) is more than maximum allowed value (100).</span>
+}</pre>
+            </div>
+
+            <div class="flex-col">
+              <div class="card card-highlight">
+                <div class="card-title"><span class="icon">🚨</span> Critical Mongoose Gotcha!</div>
+                <p>When you use <code>Student.create()</code>, Mongoose <strong>always</strong> runs schema validation. But when you run update operations (<code>findOneAndUpdate</code>, <code>updateOne</code>), <strong>update validators are OFF by default!</strong></p>
+              </div>
+
+              <div class="callout callout-amber">
+                <span class="callout-icon">⚡</span>
+                <div>
+                  <strong>Best Practice:</strong> Always add <code>{ runValidators: true }</code> to your update options whenever you want your schema constraints (like required, min, max, enum) to be enforced.
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 25 — DELETE INTRODUCTION
+           ==================================================================== -->
+      <section class="slide" data-slide="25" id="slide-25">
+        <div class="slide-header">
+          <span class="slide-tag">DELETE</span>
+          <h2 class="slide-title">23. DELETE — Removing Documents</h2>
+          <p class="slide-subtitle">Permanently deleting records from your MongoDB collection.</p>
+        </div>
+
+        <div class="slide-content">
+          <div class="grid-split-left-wide">
+            <div class="card">
+              <div class="card-title"><span class="icon">🗑️</span> What is a DELETE Operation?</div>
+              <p>DELETE removes unwanted or obsolete documents permanently from MongoDB.</p>
+
+              <div class="flow-vertical" style="margin: 1rem 0;">
+                <div class="flow-step-v"><span>1. Student Document</span> <span style="color: var(--text-muted); font-size: 0.75rem;">Exists in DB</span></div>
+                <div class="flow-arrow-v">↓</div>
+                <div class="flow-step-v"><span>2. Filter Match</span> <span style="color: var(--accent-cyan); font-size: 0.75rem;">{ email: "..." }</span></div>
+                <div class="flow-arrow-v">↓</div>
+                <div class="flow-step-v" style="border-color: var(--accent-rose);"><span style="color: var(--accent-rose);">3. Permanent Delete</span> <span style="color: var(--text-muted); font-size: 0.75rem;">Removed from disk</span></div>
+              </div>
+
+              <p style="font-size: 0.85rem; color: var(--text-secondary);">
+                Once deleted from MongoDB, the document no longer exists and subsequent <code>find()</code> queries will not return it.
+              </p>
+            </div>
+
+            <div class="card card-highlight">
+              <div class="card-title"><span class="icon">⚙️</span> The 4 Mongoose Delete Methods</div>
+              <div style="display: flex; flex-direction: column; gap: 0.65rem; font-size: 0.84rem;">
+                <div><span class="method-tag delete">deleteOne()</span> &rarr; Deletes first match, returns stats</div>
+                <div><span class="method-tag delete">deleteMany()</span> &rarr; Deletes all matches, returns stats</div>
+                <div><span class="method-tag delete">findOneAndDelete()</span> &rarr; Deletes match & returns document</div>
+                <div><span class="method-tag delete">findByIdAndDelete()</span> &rarr; Deletes by _id & returns document</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 26 — DELETE ONE
+           ==================================================================== -->
+      <section class="slide" data-slide="26" id="slide-26">
+        <div class="slide-header">
+          <span class="slide-tag">DELETE</span>
+          <h2 class="slide-title">24. DELETE — deleteOne()</h2>
+          <p class="slide-subtitle">Removing the first document matching your filter criteria.</p>
+        </div>
+
+        <div class="slide-content">
+          <div class="grid-split-left-wide">
+            <div class="code-box">
+              <div class="code-header">
+                <div class="code-dots"><div class="code-dot red"></div><div class="code-dot yellow"></div><div class="code-dot green"></div></div>
+                <span class="code-title">Student.deleteOne()</span>
+                <button class="copy-btn" onclick="Deck.copyCode(this)">Copy</button>
+              </div>
+              <pre class="code-content"><span class="comment">// Delete the student with this specific email address</span>
+<span class="kwd">const</span> result = <span class="kwd">await</span> Student.<span class="fn">deleteOne</span>({
+  <span class="prop">email</span>: <span class="str">"rahul@gmail.com"</span>
+});
+
+console.<span class="fn">log</span>(result);</pre>
+              <div class="terminal-output">
+<span class="out-info">// Returned operation acknowledgment:</span>
+{
+  <span class="prop">acknowledged</span>: <span class="bool">true</span>,
+  <span class="prop">deletedCount</span>: <span class="num">1</span> <span class="comment">// Exactly 1 document removed</span>
+}</div>
+            </div>
+
+            <div class="flex-col">
+              <div class="card card-highlight">
+                <div class="card-title"><span class="icon">🔍</span> How deleteOne() Works</div>
+                <ul style="font-size: 0.85rem; padding-left: 1.2rem; display: flex; flex-direction: column; gap: 0.5rem; color: var(--text-secondary);">
+                  <li>Scans the collection for documents matching the filter.</li>
+                  <li>Deletes the <strong>first</strong> matching document it encounters.</li>
+                  <li>If no matching student exists, it succeeds without error, but <code>deletedCount</code> will be <code>0</code>.</li>
+                </ul>
+              </div>
+
+              <div class="callout callout-blue">
+                <span class="callout-icon">💡</span>
+                <div>
+                  <strong>Notice:</strong> Like <code>updateOne()</code>, <code>deleteOne()</code> returns operation stats (<code>deletedCount</code>), not the student document itself.
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 27 — DELETE MANY
+           ==================================================================== -->
+      <section class="slide" data-slide="27" id="slide-27">
+        <div class="slide-header">
+          <span class="slide-tag">DELETE</span>
+          <h2 class="slide-title">25. DELETE — deleteMany()</h2>
+          <p class="slide-subtitle">Removing all documents that match a query condition.</p>
+        </div>
+
+        <div class="slide-content">
+          <div class="grid-split-left-wide">
+            <div class="code-box">
+              <div class="code-header">
+                <div class="code-dots"><div class="code-dot red"></div><div class="code-dot yellow"></div><div class="code-dot green"></div></div>
+                <span class="code-title">Student.deleteMany()</span>
+                <button class="copy-btn" onclick="Deck.copyCode(this)">Copy</button>
+              </div>
+              <pre class="code-content"><span class="comment">// Remove all inactive students from the collection</span>
+<span class="kwd">const</span> result = <span class="kwd">await</span> Student.<span class="fn">deleteMany</span>({
+  <span class="prop">active</span>: <span class="bool">false</span>
+});
+
+console.<span class="fn">log</span>(result);</pre>
+              <div class="terminal-output">
+<span class="out-info">// Example Output:</span>
+{
+  <span class="prop">acknowledged</span>: <span class="bool">true</span>,
+  <span class="prop">deletedCount</span>: <span class="num">8</span> <span class="comment">// All 8 inactive students deleted</span>
+}</div>
+            </div>
+
+            <div class="flex-col">
+              <div class="card card-highlight">
+                <div class="card-title"><span class="icon">⚖️</span> deleteOne() vs deleteMany()</div>
+                <div style="font-size: 0.85rem; display: flex; flex-direction: column; gap: 0.6rem;">
+                  <div><strong style="color: var(--accent-rose);">deleteOne():</strong> Deletes only the first matching document.</div>
+                  <div><strong style="color: var(--accent-rose);">deleteMany():</strong> Deletes ALL matching documents in one pass.</div>
+                </div>
+              </div>
+
+              <div class="callout callout-rose">
+                <span class="callout-icon">🚨</span>
+                <div>
+                  <strong>Critical Warning:</strong> Never run <code>Student.deleteMany({})</code> in production! An empty filter <code>{}</code> matches every single document, wiping out your entire database collection!
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 28 — FIND ONE AND DELETE
+           ==================================================================== -->
+      <section class="slide" data-slide="28" id="slide-28">
+        <div class="slide-header">
+          <span class="slide-tag">DELETE</span>
+          <h2 class="slide-title">26. DELETE — findOneAndDelete()</h2>
+          <p class="slide-subtitle">Finding a matching document, deleting it, and returning the deleted object.</p>
+        </div>
+
+        <div class="slide-content">
+          <div class="grid-split-left-wide">
+            <div class="code-box">
+              <div class="code-header">
+                <div class="code-dots"><div class="code-dot red"></div><div class="code-dot yellow"></div><div class="code-dot green"></div></div>
+                <span class="code-title">Student.findOneAndDelete()</span>
+                <button class="copy-btn" onclick="Deck.copyCode(this)">Copy</button>
+              </div>
+              <pre class="code-content"><span class="comment">// Deletes the student AND returns the deleted student record</span>
+<span class="kwd">const</span> student = <span class="kwd">await</span> Student.<span class="fn">findOneAndDelete</span>({
+  <span class="prop">email</span>: <span class="str">"rahul@gmail.com"</span>
+});
+
+console.<span class="fn">log</span>(student);</pre>
+              <div class="terminal-output">
+<span class="out-success">// Output: You receive the student object before it was destroyed:</span>
+{
+  <span class="prop">_id</span>: <span class="str">ObjectId("66f81a7b8e3d09a12c84ef11")</span>,
+  <span class="prop">name</span>: <span class="str">'Rahul'</span>,
+  <span class="prop">email</span>: <span class="str">'rahul@gmail.com'</span>,
+  <span class="prop">course</span>: <span class="str">'MERN'</span>
+}</div>
+            </div>
+
+            <div class="flex-col">
+              <div class="card card-highlight">
+                <div class="card-title"><span class="icon">🔍</span> deleteOne() vs findOneAndDelete()</div>
+                <table class="styled-table" style="font-size: 0.8rem;">
+                  <thead>
+                    <tr><th>Method</th><th>Return Value</th><th>Best For</th></tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><code>deleteOne()</code></td>
+                      <td><code>{ acknowledged, deletedCount }</code></td>
+                      <td>When you only care if the delete succeeded</td>
+                    </tr>
+                    <tr>
+                      <td><code>findOneAndDelete()</code></td>
+                      <td>The actual deleted <strong>Document Object</strong></td>
+                      <td>When you need to log, notify, or confirm what was deleted</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <div class="callout callout-blue">
+                <span class="callout-icon">💡</span>
+                <div>
+                  If no document matches the filter, <code>findOneAndDelete()</code> returns <code>null</code>.
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 29 — FIND BY ID AND DELETE
+           ==================================================================== -->
+      <section class="slide" data-slide="29" id="slide-29">
+        <div class="slide-header">
+          <span class="slide-tag">DELETE</span>
+          <h2 class="slide-title">27. DELETE — findByIdAndDelete()</h2>
+          <p class="slide-subtitle">The standard shorthand for removing a document using its primary key _id.</p>
+        </div>
+
+        <div class="slide-content">
+          <div class="grid-split-left-wide">
+            <div class="code-box">
+              <div class="code-header">
+                <div class="code-dots"><div class="code-dot red"></div><div class="code-dot yellow"></div><div class="code-dot green"></div></div>
+                <span class="code-title">Student.findByIdAndDelete()</span>
+                <button class="copy-btn" onclick="Deck.copyCode(this)">Copy</button>
+              </div>
+              <pre class="code-content"><span class="kwd">const</span> studentId = <span class="str">"66f81a7b8e3d09a12c84ef11"</span>;
+
+<span class="comment">// Finds document by _id, removes it, and returns the deleted document</span>
+<span class="kwd">const</span> deletedStudent = <span class="kwd">await</span> Student.<span class="fn">findByIdAndDelete</span>(studentId);
+
+console.<span class="fn">log</span>(<span class="str">"Removed:"</span>, deletedStudent);</pre>
+            </div>
+
+            <div class="flex-col">
+              <div class="card card-highlight">
+                <div class="card-title"><span class="icon">🚀</span> The Delete Data Flow</div>
+                <div class="flow-vertical" style="margin: 0.5rem 0;">
+                  <div class="flow-step-v"><span>1. studentId string</span></div>
+                  <div class="flow-arrow-v">↓</div>
+                  <div class="flow-step-v"><span>2. Locate by _id in MongoDB</span></div>
+                  <div class="flow-arrow-v">↓</div>
+                  <div class="flow-step-v"><span>3. Delete document from disk</span></div>
+                  <div class="flow-arrow-v">↓</div>
+                  <div class="flow-step-v" style="border-color: var(--mongo-green);"><span style="color: var(--mongo-green);">4. Return deleted document to Node.js</span></div>
+                </div>
+              </div>
+
+              <div class="callout callout-blue">
+                <span class="callout-icon">💡</span>
+                <div>
+                  <code>findByIdAndDelete(id)</code> is shorthand for <code>findOneAndDelete({ _id: id })</code>.
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 30 — CRUD CHEAT SHEET
+           ==================================================================== -->
+      <section class="slide" data-slide="30" id="slide-30">
+        <div class="slide-header">
+          <span class="slide-tag">Summary Table</span>
+          <h2 class="slide-title">28. CRUD Method Summary</h2>
+          <p class="slide-subtitle">A comprehensive master reference table of all Mongoose CRUD methods.</p>
+        </div>
+
+        <div class="slide-content">
+          <div class="table-wrapper">
+            <table class="styled-table">
+              <thead>
+                <tr>
+                  <th>Operation</th>
+                  <th>Mongoose Method</th>
+                  <th>Returns</th>
+                  <th>Purpose</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><span class="method-tag create">CREATE</span></td>
+                  <td><code>Student.create(data)</code></td>
+                  <td>Document</td>
+                  <td>Creates, validates, and saves in one step</td>
+                </tr>
+                <tr>
+                  <td><span class="method-tag create">CREATE</span></td>
+                  <td><code>new Student(data).save()</code></td>
+                  <td>Document</td>
+                  <td>Creates in-memory instance, then saves to DB</td>
+                </tr>
+                <tr>
+                  <td><span class="method-tag create">CREATE</span></td>
+                  <td><code>Student.insertMany([ ... ])</code></td>
+                  <td>Array of Docs</td>
+                  <td>Efficiently inserts multiple documents in bulk</td>
+                </tr>
+                <tr>
+                  <td><span class="method-tag read">READ</span></td>
+                  <td><code>Student.find(filter)</code></td>
+                  <td>Array of Docs</td>
+                  <td>Finds all matching documents (or <code>[]</code>)</td>
+                </tr>
+                <tr>
+                  <td><span class="method-tag read">READ</span></td>
+                  <td><code>Student.findOne(filter)</code></td>
+                  <td>Doc or null</td>
+                  <td>Finds the first matching document</td>
+                </tr>
+                <tr>
+                  <td><span class="method-tag read">READ</span></td>
+                  <td><code>Student.findById(id)</code></td>
+                  <td>Doc or null</td>
+                  <td>Finds a single document by its <code>_id</code></td>
+                </tr>
+                <tr>
+                  <td><span class="method-tag update">UPDATE</span></td>
+                  <td><code>Student.updateOne(filter, update)</code></td>
+                  <td>{ modifiedCount }</td>
+                  <td>Updates the first match; does NOT return doc</td>
+                </tr>
+                <tr>
+                  <td><span class="method-tag update">UPDATE</span></td>
+                  <td><code>Student.updateMany(filter, update)</code></td>
+                  <td>{ modifiedCount }</td>
+                  <td>Updates all matching documents in collection</td>
+                </tr>
+                <tr>
+                  <td><span class="method-tag update">UPDATE</span></td>
+                  <td><code>Student.findOneAndUpdate(filter, upd, {new: true})</code></td>
+                  <td>Updated Doc</td>
+                  <td>Finds, updates, and returns updated document</td>
+                </tr>
+                <tr>
+                  <td><span class="method-tag update">UPDATE</span></td>
+                  <td><code>Student.findByIdAndUpdate(id, upd, {new: true})</code></td>
+                  <td>Updated Doc</td>
+                  <td>Updates document by <code>_id</code> and returns it</td>
+                </tr>
+                <tr>
+                  <td><span class="method-tag delete">DELETE</span></td>
+                  <td><code>Student.deleteOne(filter)</code></td>
+                  <td>{ deletedCount }</td>
+                  <td>Deletes first match; returns operation stats</td>
+                </tr>
+                <tr>
+                  <td><span class="method-tag delete">DELETE</span></td>
+                  <td><code>Student.deleteMany(filter)</code></td>
+                  <td>{ deletedCount }</td>
+                  <td>Deletes all matches; returns operation stats</td>
+                </tr>
+                <tr>
+                  <td><span class="method-tag delete">DELETE</span></td>
+                  <td><code>Student.findOneAndDelete(filter)</code></td>
+                  <td>Deleted Doc</td>
+                  <td>Finds, deletes, and returns deleted document</td>
+                </tr>
+                <tr>
+                  <td><span class="method-tag delete">DELETE</span></td>
+                  <td><code>Student.findByIdAndDelete(id)</code></td>
+                  <td>Deleted Doc</td>
+                  <td>Deletes document by <code>_id</code> and returns it</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 31 — MONGODB VS MONGOOSE
+           ==================================================================== -->
+      <section class="slide" data-slide="31" id="slide-31">
+        <div class="slide-header">
+          <span class="slide-tag">Comparison</span>
+          <h2 class="slide-title">29. CRUD Comparison: MongoDB Shell vs Mongoose</h2>
+          <p class="slide-subtitle">Connecting Day 2 mongosh commands directly with Day 4 Mongoose methods.</p>
+        </div>
+
+        <div class="slide-content">
+          <div class="grid-2">
+            <div class="card">
+              <div class="card-title" style="color: var(--mongo-green);"><span class="icon">➕</span> CREATE</div>
+              <div style="font-size: 0.8rem; font-family: var(--font-mono); display: flex; flex-direction: column; gap: 0.4rem;">
+                <div style="color: var(--text-muted);">MongoDB Shell:</div>
+                <div style="background: var(--bg-terminal); padding: 0.4rem; border-radius: 4px;">db.students.insertOne({ name: "Rahul" })</div>
+                <div style="color: var(--text-muted); margin-top: 0.3rem;">Mongoose:</div>
+                <div style="background: var(--bg-terminal); padding: 0.4rem; border-radius: 4px; color: var(--mongo-green);">await Student.create({ name: "Rahul" })</div>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-title" style="color: var(--accent-cyan);"><span class="icon">🔍</span> READ</div>
+              <div style="font-size: 0.8rem; font-family: var(--font-mono); display: flex; flex-direction: column; gap: 0.4rem;">
+                <div style="color: var(--text-muted);">MongoDB Shell:</div>
+                <div style="background: var(--bg-terminal); padding: 0.4rem; border-radius: 4px;">db.students.find()</div>
+                <div style="color: var(--text-muted); margin-top: 0.3rem;">Mongoose:</div>
+                <div style="background: var(--bg-terminal); padding: 0.4rem; border-radius: 4px; color: var(--accent-cyan);">await Student.find()</div>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-title" style="color: var(--accent-amber);"><span class="icon">✏️</span> UPDATE</div>
+              <div style="font-size: 0.8rem; font-family: var(--font-mono); display: flex; flex-direction: column; gap: 0.4rem;">
+                <div style="color: var(--text-muted);">MongoDB Shell:</div>
+                <div style="background: var(--bg-terminal); padding: 0.4rem; border-radius: 4px;">db.students.updateOne({ email: "..." }, { $set: { mark: 95 } })</div>
+                <div style="color: var(--text-muted); margin-top: 0.3rem;">Mongoose:</div>
+                <div style="background: var(--bg-terminal); padding: 0.4rem; border-radius: 4px; color: var(--accent-amber);">await Student.updateOne({ email: "..." }, { $set: { mark: 95 } })</div>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-title" style="color: var(--accent-rose);"><span class="icon">🗑️</span> DELETE</div>
+              <div style="font-size: 0.8rem; font-family: var(--font-mono); display: flex; flex-direction: column; gap: 0.4rem;">
+                <div style="color: var(--text-muted);">MongoDB Shell:</div>
+                <div style="background: var(--bg-terminal); padding: 0.4rem; border-radius: 4px;">db.students.deleteOne({ email: "..." })</div>
+                <div style="color: var(--text-muted); margin-top: 0.3rem;">Mongoose:</div>
+                <div style="background: var(--bg-terminal); padding: 0.4rem; border-radius: 4px; color: var(--accent-rose);">await Student.deleteOne({ email: "..." })</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 32 — COMPLETE CRUD PROGRAM
+           ==================================================================== -->
+      <section class="slide" data-slide="32" id="slide-32">
+        <div class="slide-header">
+          <span class="slide-tag">Full Example</span>
+          <h2 class="slide-title">30. Complete CRUD Program (app.js)</h2>
+          <p class="slide-subtitle">A runnable end-to-end Node.js script demonstrating Create, Read, Update, and Delete.</p>
+        </div>
+
+        <div class="slide-content">
+          <div class="grid-split-left-wide">
+            <div class="code-box">
+              <div class="code-header">
+                <div class="code-dots"><div class="code-dot red"></div><div class="code-dot yellow"></div><div class="code-dot green"></div></div>
+                <span class="code-title">src/app.js</span>
+                <button class="copy-btn" onclick="Deck.copyCode(this)">Copy</button>
+              </div>
+              <pre class="code-content"><span class="fn">require</span>(<span class="str">"dotenv"</span>).<span class="fn">config</span>();
+
+<span class="kwd">const</span> connectDB = <span class="fn">require</span>(<span class="str">"./config/db"</span>);
+<span class="kwd">const</span> Student = <span class="fn">require</span>(<span class="str">"./models/Student"</span>);
+
+<span class="kwd">const</span> run = <span class="kwd">async</span> () => {
+  <span class="kwd">try</span> {
+    <span class="kwd">await</span> <span class="fn">connectDB</span>();
+
+    <span class="comment">// 1. CREATE</span>
+    <span class="kwd">const</span> student = <span class="kwd">await</span> Student.<span class="fn">create</span>({
+      <span class="prop">name</span>: <span class="str">"Rahul"</span>,
+      <span class="prop">email</span>: <span class="str">"rahul@gmail.com"</span>,
+      <span class="prop">age</span>: <span class="num">21</span>,
+      <span class="prop">course</span>: <span class="str">"MERN"</span>,
+      <span class="prop">mark</span>: <span class="num">85</span>
+    });
+    console.<span class="fn">log</span>(<span class="str">"Created:"</span>, student);
+
+    <span class="comment">// 2. READ</span>
+    <span class="kwd">const</span> students = <span class="kwd">await</span> Student.<span class="fn">find</span>();
+    console.<span class="fn">log</span>(<span class="str">"Students in DB:"</span>, students);
+
+    <span class="comment">// 3. UPDATE</span>
+    <span class="kwd">const</span> updatedStudent = <span class="kwd">await</span> Student.<span class="fn">findOneAndUpdate</span>(
+      { <span class="prop">email</span>: <span class="str">"rahul@gmail.com"</span> },
+      { <span class="prop">mark</span>: <span class="num">95</span> },
+      { <span class="prop">new</span>: <span class="bool">true</span>, <span class="prop">runValidators</span>: <span class="bool">true</span> }
+    );
+    console.<span class="fn">log</span>(<span class="str">"Updated:"</span>, updatedStudent);
+
+    <span class="comment">// 4. DELETE</span>
+    <span class="kwd">const</span> deletedStudent = <span class="kwd">await</span> Student.<span class="fn">findOneAndDelete</span>({
+      <span class="prop">email</span>: <span class="str">"rahul@gmail.com"</span>
+    });
+    console.<span class="fn">log</span>(<span class="str">"Deleted:"</span>, deletedStudent);
+
+  } <span class="kwd">catch</span> (error) {
+    console.<span class="fn">error</span>(<span class="str">"Error:"</span>, error.message);
+  }
+};
+
+<span class="fn">run</span>();</pre>
+            </div>
+
+            <div class="flex-col">
+              <div class="card card-highlight">
+                <div class="card-title"><span class="icon">🧭</span> Walkthrough from Top to Bottom</div>
+                <ol style="font-size: 0.84rem; padding-left: 1.2rem; display: flex; flex-direction: column; gap: 0.5rem; color: var(--text-secondary);">
+                  <li><strong>Loads environment:</strong> Reads connection string from <code>.env</code>.</li>
+                  <li><strong>Connects to DB:</strong> Waits for MongoDB connection to establish.</li>
+                  <li><strong>Executes CRUD in sequence:</strong> Adds Rahul, lists all students, updates Rahul's mark to 95, and deletes Rahul.</li>
+                  <li><strong>Handles errors:</strong> If any validation or network error occurs, the <code>catch</code> block captures it without crashing.</li>
+                </ol>
+              </div>
+
+              <div class="callout callout-blue">
+                <span class="callout-icon">💡</span>
+                <div>
+                  This is the standard pattern for running database test scripts, seeders, and migration scripts.
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 33 — CRUD DATA FLOW
+           ==================================================================== -->
+      <section class="slide" data-slide="33" id="slide-33">
+        <div class="slide-header">
+          <span class="slide-tag">Interactive Flow</span>
+          <h2 class="slide-title">31. CRUD Data Flow Diagram</h2>
+          <p class="slide-subtitle">Click each operation below to see the interactive data pathway between Node.js and MongoDB.</p>
+        </div>
+
+        <div class="slide-content">
+          <div class="flow-interactive-wrapper">
+            <div class="flow-tabs">
+              <span style="font-size: 0.8rem; color: var(--text-muted); margin-right: 0.5rem;">Select Operation:</span>
+              <button class="flow-tab-btn active" onclick="Deck.setFlow('create', this)">CREATE Flow</button>
+              <button class="flow-tab-btn" onclick="Deck.setFlow('read', this)">READ Flow</button>
+              <button class="flow-tab-btn" onclick="Deck.setFlow('update', this)">UPDATE Flow</button>
+              <button class="flow-tab-btn" onclick="Deck.setFlow('delete', this)">DELETE Flow</button>
+            </div>
+
+            <div class="flow-stages-row" id="flowStagesRow">
+              <div class="flow-stage lit" id="stage-node">
+                <h5>Node.js App</h5>
+                <p id="stage-node-desc">Student.create({ name: 'Rahul' })</p>
+              </div>
+              <div class="flow-arrow-dir" id="flow-arrow-1">&rarr;</div>
+              <div class="flow-stage lit" id="stage-model">
+                <h5>Mongoose Model</h5>
+                <p id="stage-model-desc">Runs schema validation</p>
+              </div>
+              <div class="flow-arrow-dir" id="flow-arrow-2">&rarr;</div>
+              <div class="flow-stage lit" id="stage-mongo">
+                <h5>MongoDB Server</h5>
+                <p id="stage-mongo-desc">Writes BSON to disk</p>
+              </div>
+              <div class="flow-arrow-dir" id="flow-arrow-3">&rarr;</div>
+              <div class="flow-stage lit" id="stage-coll">
+                <h5>students Collection</h5>
+                <p id="stage-coll-desc">Document stored with _id</p>
+              </div>
+            </div>
+
+            <div class="callout callout-blue" id="flowSummaryBox">
+              <span class="callout-icon">⚡</span>
+              <div id="flowSummaryText">
+                <strong>CREATE Flow:</strong> Data travels forward: <code>Node.js App &rarr; Mongoose Validation &rarr; MongoDB Storage &rarr; Document Stored</code>.
+              </div>
+            </div>
+          </div>
+
+          <div class="grid-4" style="margin-top: 0.5rem;">
+            <div class="card" style="padding: 0.85rem; text-align: center;">
+              <div style="color: var(--mongo-green); font-weight: bold; font-family: var(--font-mono);">CREATE &rarr;</div>
+              <div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 0.25rem;">Node.js pushes document to MongoDB</div>
+            </div>
+            <div class="card" style="padding: 0.85rem; text-align: center;">
+              <div style="color: var(--accent-cyan); font-weight: bold; font-family: var(--font-mono);">&larr; READ</div>
+              <div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 0.25rem;">MongoDB streams documents back to Node.js</div>
+            </div>
+            <div class="card" style="padding: 0.85rem; text-align: center;">
+              <div style="color: var(--accent-amber); font-weight: bold; font-family: var(--font-mono);">&harr; UPDATE &harr;</div>
+              <div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 0.25rem;">Filter sent, modified doc returned</div>
+            </div>
+            <div class="card" style="padding: 0.85rem; text-align: center;">
+              <div style="color: var(--accent-rose); font-weight: bold; font-family: var(--font-mono);">&rarr; DELETE &rarr;</div>
+              <div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 0.25rem;">Command removes record from collection</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 34 — COMMON BEGINNER MISTAKES
+           ==================================================================== -->
+      <section class="slide" data-slide="34" id="slide-34">
+        <div class="slide-header">
+          <span class="slide-tag">Traps & Fixes</span>
+          <h2 class="slide-title">32. Common Beginner Mistakes</h2>
+          <p class="slide-subtitle">Watch out for these 6 frequent pitfalls when working with Mongoose CRUD.</p>
+        </div>
+
+        <div class="slide-content">
+          <div class="grid-3">
+            <div class="card card-highlight">
+              <div class="card-title" style="color: var(--accent-rose);"><span class="icon">❌</span> 1. Forgetting await</div>
+              <p><code>const s = Student.find();</code></p>
+              <div style="font-size: 0.82rem; color: var(--text-muted); margin-top: 0.35rem;">
+                Without <code>await</code>, you receive a Mongoose <strong>Query object</strong>, NOT the student data! Always write <code>await Student.find()</code>.
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-title" style="color: var(--accent-rose);"><span class="icon">❌</span> 2. Wrong Field Name</div>
+              <p><code>Student.find({ courseName: "MERN" })</code></p>
+              <div style="font-size: 0.82rem; color: var(--text-muted); margin-top: 0.35rem;">
+                If your schema defined <code>course</code>, querying for <code>courseName</code> will find 0 results silently. Keep field names consistent!
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-title" style="color: var(--accent-rose);"><span class="icon">❌</span> 3. Invalid _id Format</div>
+              <p><code>Student.findById("12345")</code></p>
+              <div style="font-size: 0.82rem; color: var(--text-muted); margin-top: 0.35rem;">
+                MongoDB IDs must be 24-character hex strings. Passing an arbitrary string causes a crash: <code>Cast to ObjectId failed</code>.
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-title" style="color: var(--accent-rose);"><span class="icon">❌</span> 4. Empty Filter {} Trap</div>
+              <p><code>Student.updateMany({}, ...)</code></p>
+              <div style="font-size: 0.82rem; color: var(--text-muted); margin-top: 0.35rem;">
+                An empty filter <code>{}</code> matches <strong>every single document</strong>. Always double-check your filter before updating or deleting!
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-title" style="color: var(--accent-rose);"><span class="icon">❌</span> 5. No runValidators</div>
+              <p><code>Student.findOneAndUpdate(...)</code></p>
+              <div style="font-size: 0.82rem; color: var(--text-muted); margin-top: 0.35rem;">
+                Mongoose does not validate update queries by default. You must pass <code>{ runValidators: true }</code> to prevent invalid values.
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-title" style="color: var(--accent-rose);"><span class="icon">❌</span> 6. Missing try / catch</div>
+              <p><code>await Student.create(...)</code></p>
+              <div style="font-size: 0.82rem; color: var(--text-muted); margin-top: 0.35rem;">
+                Database calls can fail (network down, duplicate email). Always wrap database operations inside <code>try { ... } catch (err) { ... }</code>.
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 35 — PRACTICAL TASK
+           ==================================================================== -->
+      <section class="slide" data-slide="35" id="slide-35">
+        <div class="slide-header">
+          <span class="slide-tag">Classroom Lab</span>
+          <h2 class="slide-title">33. Practical Classroom Exercise</h2>
+          <p class="slide-subtitle">Build a complete Student CRUD script to test your understanding.</p>
+        </div>
+
+        <div class="slide-content">
+          <div class="grid-split-left-wide">
+            <div class="card card-highlight">
+              <div class="card-title"><span class="icon">💻</span> Hands-On Student Tasks</div>
+              <p>Create a script named <code>exercise.js</code> and complete the following 10 tasks in order:</p>
+              
+              <ol style="font-size: 0.85rem; padding-left: 1.2rem; display: flex; flex-direction: column; gap: 0.45rem; color: var(--text-secondary); margin-top: 0.5rem;">
+                <li><strong>Insert 5 students</strong> with different names, courses, marks, and active statuses.</li>
+                <li><strong>Display all students</strong> in the terminal using <code>find()</code>.</li>
+                <li><strong>Find one student</strong> using their unique email address.</li>
+                <li><strong>Find one student</strong> using their <code>_id</code>.</li>
+                <li><strong>Find all students</strong> enrolled in the <code>"MERN"</code> course.</li>
+                <li><strong>Update one student's mark</strong> from their current score to <code>95</code>.</li>
+                <li><strong>Update all inactive students</strong> to set <code>active: true</code>.</li>
+                <li><strong>Delete one student</strong> using their email address.</li>
+                <li><strong>Delete all inactive students</strong> using <code>deleteMany()</code>.</li>
+                <li><strong>Trigger a validation error:</strong> Try inserting a student without an email and log the error message.</li>
+              </ol>
+            </div>
+
+            <div class="flex-col">
+              <div class="card">
+                <div class="card-title"><span class="icon">💡</span> Teacher's Checkpoints</div>
+                <ul style="font-size: 0.82rem; color: var(--text-muted); padding-left: 1.2rem; display: flex; flex-direction: column; gap: 0.5rem;">
+                  <li>Did you use <code>async/await</code> for all operations?</li>
+                  <li>Did you wrap operations in <code>try/catch</code>?</li>
+                  <li>Did you pass <code>{ new: true }</code> when you needed the updated document?</li>
+                  <li>Did you use <code>insertMany()</code> for the 5 students?</li>
+                </ul>
+              </div>
+
+              <div class="callout callout-amber">
+                <span class="callout-icon">⏱️</span>
+                <div>
+                  <strong>Estimated time:</strong> 25 minutes. Try doing it on your own machine without looking at previous slides!
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 36 — FINAL SUMMARY
+           ==================================================================== -->
+      <section class="slide" data-slide="36" id="slide-36">
+        <div class="slide-header">
+          <span class="slide-tag">Recap</span>
+          <h2 class="slide-title">34. Final Summary & Core Mental Model</h2>
+          <p class="slide-subtitle">The essential concepts to take home from MongoDB Day 4.</p>
+        </div>
+
+        <div class="slide-content">
+          <div class="grid-split-left-wide">
+            <div class="card card-highlight">
+              <div class="card-title"><span class="icon">🧠</span> The Master CRUD Formula</div>
+              <p>Whenever you write a Mongoose query, keep these three questions in mind:</p>
+
+              <div style="display: flex; flex-direction: column; gap: 0.75rem; margin-top: 0.5rem;">
+                <div style="padding: 0.75rem; background: var(--bg-surface); border-radius: var(--radius-sm); border-left: 3px solid var(--accent-cyan);">
+                  <strong style="color: var(--accent-cyan); font-family: var(--font-mono);">1. Filter &rarr; Which document?</strong>
+                  <div style="font-size: 0.82rem; margin-top: 0.2rem;">Determines matching target records (e.g. <code>{ email: "rahul@gmail.com" }</code>).</div>
+                </div>
+
+                <div style="padding: 0.75rem; background: var(--bg-surface); border-radius: var(--radius-sm); border-left: 3px solid var(--accent-amber);">
+                  <strong style="color: var(--accent-amber); font-family: var(--font-mono);">2. Update &rarr; What should change?</strong>
+                  <div style="font-size: 0.82rem; margin-top: 0.2rem;">Specifies fields and values to modify (e.g. <code>{ mark: 95 }</code>).</div>
+                </div>
+
+                <div style="padding: 0.75rem; background: var(--bg-surface); border-radius: var(--radius-sm); border-left: 3px solid var(--mongo-green);">
+                  <strong style="color: var(--mongo-green); font-family: var(--font-mono);">3. Options &rarr; How should the query behave?</strong>
+                  <div style="font-size: 0.82rem; margin-top: 0.2rem;">Controls return values and validation (e.g. <code>{ new: true, runValidators: true }</code>).</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="flex-col">
+              <div class="card">
+                <div class="card-title"><span class="icon">🔗</span> The Mongoose Data Chain</div>
+                <div style="font-family: var(--font-mono); font-size: 0.82rem; line-height: 1.8; color: var(--text-secondary); text-align: center; padding: 0.5rem 0;">
+                  <span style="color: var(--accent-purple);">Schema</span> (Structure & Rules)<br>
+                  &darr;<br>
+                  <span style="color: var(--mongo-green); font-weight: bold;">Model</span> (Student)<br>
+                  &darr;<br>
+                  <span style="color: var(--accent-cyan);">CRUD Operations</span> (create, find, update, delete)<br>
+                  &darr;<br>
+                  <span style="color: var(--text-primary); font-weight: bold;">MongoDB Collection</span> (students)
+                </div>
+              </div>
+
+              <div class="card" style="background: rgba(0, 237, 100, 0.08); border-color: var(--mongo-green-border);">
+                <div class="card-title" style="color: var(--mongo-green);"><span class="icon">🎉</span> Day 4 Complete!</div>
+                <p style="font-size: 0.85rem;">You are now ready to build full REST APIs with Express and Mongoose in Day 5!</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- Bottom Footer Controls Bar -->
+    <footer class="bottom-footer">
+      <div class="footer-left">
+        <div class="slide-counter">
+          <span>Slide</span>
+          <span class="current-num" id="currentSlideNum">1</span>
+          <span class="total-num">/ <span id="totalSlidesNum">36</span></span>
+        </div>
+      </div>
+
+      <div class="footer-center">
+        <button class="nav-btn" id="prevBtn" onclick="Deck.prevSlide()" title="Previous Slide (Left Arrow)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="15 18 9 12 15 6"></polyline>
+          </svg>
+          Previous
+        </button>
+
+        <button class="nav-btn primary-nav" id="nextBtn" onclick="Deck.nextSlide()" title="Next Slide (Right Arrow or Space)">
+          Next
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="9 18 15 12 9 6"></polyline>
+          </svg>
+        </button>
+      </div>
+
+      <div class="footer-right">
+        <span class="nav-hint">
+          Navigate: <kbd>&larr;</kbd> <kbd>&rarr;</kbd> or <kbd>Space</kbd>
+        </span>
+      </div>
+    </footer>
+
+    <!-- ====================================================================
+         INTERACTIVE CRUD SIMULATOR MODAL
+         ==================================================================== -->
+    <div class="modal-backdrop" id="simModal">
+      <div class="modal-window" style="max-width: 880px;">
+        <div class="modal-header">
+          <div class="modal-title">
+            <span style="color: var(--mongo-green);">⚡</span>
+            Interactive Mongoose CRUD Simulator
+          </div>
+          <button class="close-modal-btn" onclick="Deck.closeModal('simModal')">
+            <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none">
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+          </button>
+        </div>
+
+        <div class="sim-banner">
+          <span>⚠️ <strong>Classroom Simulation:</strong> Runs entirely in your browser using JavaScript memory. No real database required.</span>
+          <span id="simDocCount">Documents: 0</span>
+        </div>
+
+        <div class="sim-controls">
+          <button class="sim-btn btn-create" onclick="Sim.createStudent()">
+            <span>➕</span> CREATE (Rahul)
+          </button>
+          <button class="sim-btn btn-read" onclick="Sim.readStudents()">
+            <span>🔍</span> READ (find)
+          </button>
+          <button class="sim-btn btn-update" onclick="Sim.updateStudent()">
+            <span>✏️</span> UPDATE (Mark 85 &rarr; 95)
+          </button>
+          <button class="sim-btn btn-delete" onclick="Sim.deleteStudent()">
+            <span>🗑️</span> DELETE (Rahul)
+          </button>
+          <button class="sim-btn btn-reset" onclick="Sim.reset()">
+            <span>🔄</span> Reset Demo
+          </button>
+        </div>
+
+        <div class="sim-body">
+          <!-- Left Pane: Visual MongoDB Collection -->
+          <div class="sim-pane">
+            <div class="sim-pane-header">
+              <span>MongoDB Collection: <code>students</code></span>
+              <span id="simStatusTag" style="color: var(--text-dim);">Ready</span>
+            </div>
+            <div id="simCollectionContainer" style="display: flex; flex-direction: column; gap: 0.6rem;">
+              <!-- Student cards rendered dynamically here -->
+            </div>
+          </div>
+
+          <!-- Right Pane: Terminal Output & Executed Mongoose Code -->
+          <div class="sim-pane" style="background: var(--bg-terminal);">
+            <div class="sim-pane-header">
+              <span style="color: var(--accent-cyan);">Executed Mongoose Query</span>
+              <span style="font-size: 0.65rem; color: var(--text-dim);">Terminal Log</span>
+            </div>
+            <div id="simCodeDisplay" style="font-family: var(--font-mono); font-size: 0.78rem; line-height: 1.5; color: var(--text-secondary); background: #020508; padding: 0.75rem; border-radius: var(--radius-sm); border: 1px solid var(--border-subtle);">
+<span class="comment">// Click any CRUD button above to simulate Mongoose query execution</span>
+            </div>
+
+            <div class="sim-pane-header" style="margin-top: 0.5rem;">
+              <span style="color: var(--mongo-green);">Operation Result</span>
+            </div>
+            <div id="simResultDisplay" style="font-family: var(--font-mono); font-size: 0.75rem; line-height: 1.45; color: #94A3B8; background: #020508; padding: 0.75rem; border-radius: var(--radius-sm); border: 1px solid var(--border-subtle); flex: 1; overflow-y: auto; max-height: 140px;">
+Waiting for action...
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ====================================================================
+         KEYBOARD SHORTCUTS HELP MODAL
+         ==================================================================== -->
+    <div class="modal-backdrop" id="shortcutsModal">
+      <div class="modal-window" style="max-width: 500px;">
+        <div class="modal-header">
+          <div class="modal-title">
+            <span>⌨️</span> Keyboard Shortcuts
+          </div>
+          <button class="close-modal-btn" onclick="Deck.closeModal('shortcutsModal')">
+            <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none">
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+          </button>
+        </div>
+        <div class="modal-content">
+          <div style="display: flex; flex-direction: column; gap: 0.75rem; font-size: 0.85rem;">
+            <div style="display: flex; justify-content: space-between; align-items: center; padding-bottom: 0.5rem; border-bottom: 1px solid var(--border-subtle);">
+              <span>Next Slide</span>
+              <span><kbd class="header-btn">Right Arrow</kbd> or <kbd class="header-btn">Space</kbd></span>
+            </div>
+            <div style="display: flex; justify-content: space-between; align-items: center; padding-bottom: 0.5rem; border-bottom: 1px solid var(--border-subtle);">
+              <span>Previous Slide</span>
+              <span><kbd class="header-btn">Left Arrow</kbd></span>
+            </div>
+            <div style="display: flex; justify-content: space-between; align-items: center; padding-bottom: 0.5rem; border-bottom: 1px solid var(--border-subtle);">
+              <span>First Slide (Title)</span>
+              <span><kbd class="header-btn">Home</kbd></span>
+            </div>
+            <div style="display: flex; justify-content: space-between; align-items: center; padding-bottom: 0.5rem; border-bottom: 1px solid var(--border-subtle);">
+              <span>Last Slide (Summary)</span>
+              <span><kbd class="header-btn">End</kbd></span>
+            </div>
+            <div style="display: flex; justify-content: space-between; align-items: center; padding-bottom: 0.5rem; border-bottom: 1px solid var(--border-subtle);">
+              <span>Toggle Fullscreen</span>
+              <span><kbd class="header-btn">F</kbd></span>
+            </div>
+            <div style="display: flex; justify-content: space-between; align-items: center; padding-bottom: 0.5rem; border-bottom: 1px solid var(--border-subtle);">
+              <span>Toggle CRUD Simulator</span>
+              <span><kbd class="header-btn">S</kbd></span>
+            </div>
+            <div style="display: flex; justify-content: space-between; align-items: center; padding-bottom: 0.5rem; border-bottom: 1px solid var(--border-subtle);">
+              <span>Toggle Slide Index</span>
+              <span><kbd class="header-btn">T</kbd></span>
+            </div>
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <span>Close Any Modal</span>
+              <span><kbd class="header-btn">Esc</kbd></span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ====================================================================
+         TABLE OF CONTENTS DRAWER
+         ==================================================================== -->
+    <div class="drawer-backdrop" id="drawerBackdrop" onclick="Deck.closeDrawer()"></div>
+    <div class="drawer" id="tocDrawer">
+      <div class="drawer-header">
+        <span style="font-weight: 700; font-size: 0.95rem; display: flex; align-items: center; gap: 0.4rem;">
+          <span style="color: var(--mongo-green);">📑</span> Slide Index (36 Slides)
+        </span>
+        <button class="close-modal-btn" onclick="Deck.closeDrawer()">
+          <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+
+      <ul class="drawer-list" id="drawerList">
+        <!-- Dynamically populated by JavaScript for all 36 slides -->
+      </ul>
+    </div>
+
+    <!-- Toast Notification Container -->
+    <div class="toast-container" id="toastContainer"></div>
+
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>

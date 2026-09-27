@@ -1,0 +1,2433 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>React Day 4 — Tailwind CSS, Virtual DOM, Diffing & Reconciliation</title>
+  <meta name="description" content="Complete educational presentation on styling React with Tailwind CSS, understanding the Virtual DOM, Diffing algorithm, and Reconciliation process.">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Master App Shell -->
+  <div class="deck-container" id="deckContainer">
+
+    <!-- Top Progress Bar -->
+    <div class="progress-bar-container">
+      <div class="progress-bar" id="progressBar"></div>
+    </div>
+
+    <!-- Top Header Bar -->
+    <header class="top-header">
+      <div class="header-left">
+        <div class="brand-badge">
+          <svg viewBox="0 0 24 24">
+            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-5-9c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zm10 0c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zm-5 4c2.21 0 4-1.79 4-4h-8c0 2.21 1.79 4 4 4z"/>
+          </svg>
+          React Day 4
+        </div>
+        <div class="deck-title-badge">
+          <span>Tailwind CSS &amp; React Internals</span>
+          <span class="dot"></span>
+          <span class="deck-topic" id="headerTopic">Styling • Virtual DOM • Diffing • Reconciliation</span>
+        </div>
+      </div>
+
+      <div class="header-right">
+        <!-- Interactive Tailwind Sandbox Button -->
+        <button class="header-btn btn-tailwind" id="openTwModalBtn" title="Open Interactive Tailwind Sandbox (W)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 3v18M3 12h18M5.3 5.3l13.4 13.4M5.3 18.7L18.7 5.3"/>
+          </svg>
+          Tailwind Sandbox
+          <kbd>W</kbd>
+        </button>
+
+        <!-- Interactive Diffing Simulator Quick Access Button -->
+        <button class="header-btn btn-highlight" id="openDiffModalBtn" title="Open Interactive Diffing Simulator (D)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polygon points="5 3 19 12 5 21 5 3"></polygon>
+          </svg>
+          Diffing Demo
+          <kbd>D</kbd>
+        </button>
+
+        <!-- Table of Contents Drawer Button -->
+        <button class="header-btn" id="openTocBtn" title="View All 36 Slides (T)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="3" y1="12" x2="21" y2="12"></line>
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <line x1="3" y1="18" x2="21" y2="18"></line>
+          </svg>
+          Index
+          <kbd>T</kbd>
+        </button>
+
+        <!-- Keyboard Shortcuts Help -->
+        <button class="header-btn" id="openShortcutsBtn" title="Keyboard Shortcuts (?)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"></circle>
+            <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+            <line x1="12" y1="17" x2="12.01" y2="17"></line>
+          </svg>
+          <kbd>?</kbd>
+        </button>
+
+        <!-- Fullscreen Button -->
+        <button class="header-btn" id="fullscreenBtn" title="Toggle Fullscreen (F)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path>
+          </svg>
+          <kbd>F</kbd>
+        </button>
+      </div>
+    </header>
+
+    <!-- Slide Viewport -->
+    <main class="slide-viewport">
+
+      <!-- ====================================================================
+           SLIDE 1 — TITLE
+           ==================================================================== -->
+      <section class="slide active" data-slide="1" id="slide-1">
+        <div class="slide-content" style="justify-content: center; align-items: center; text-align: center; max-width: 880px; margin: 0 auto;">
+          <div class="slide-tag" style="margin-bottom: 0.5rem;">React Masterclass • Day 4</div>
+          <h1 class="slide-title" style="font-size: 2.8rem; margin-bottom: 0.5rem; letter-spacing: -0.03em;">
+            React Day 4
+          </h1>
+          <h2 style="font-size: 1.8rem; color: var(--react-cyan); font-weight: 700; margin-bottom: 1rem;">
+            Tailwind CSS, Virtual DOM, Diffing &amp; Reconciliation
+          </h2>
+          <p style="font-size: 1.15rem; color: var(--text-secondary); max-width: 650px; margin-bottom: 2rem;">
+            From utility-first component styling to understanding how React internally compares UI representations and efficiently updates the browser DOM.
+          </p>
+
+          <div style="display: flex; gap: 1rem; margin-bottom: 2.5rem; flex-wrap: wrap; justify-content: center;">
+            <div style="padding: 0.6rem 1.2rem; background: var(--tailwind-sky-bg); border: 1px solid var(--tailwind-border); border-radius: var(--radius-sm); font-family: var(--font-mono); font-size: 0.9rem; color: var(--tailwind-sky);">
+              <strong>PART 1:</strong> Tailwind CSS
+            </div>
+            <div style="padding: 0.6rem 1.2rem; background: rgba(0, 216, 255, 0.1); border: 1px solid var(--react-border); border-radius: var(--radius-sm); font-family: var(--font-mono); font-size: 0.9rem; color: var(--react-cyan);">
+              <strong>PART 2:</strong> Real DOM
+            </div>
+            <div style="padding: 0.6rem 1.2rem; background: var(--accent-purple-bg); border: 1px solid var(--accent-purple-border); border-radius: var(--radius-sm); font-family: var(--font-mono); font-size: 0.9rem; color: var(--accent-purple);">
+              <strong>PART 3:</strong> Virtual DOM
+            </div>
+            <div style="padding: 0.6rem 1.2rem; background: var(--accent-amber-bg); border: 1px solid var(--accent-amber-border); border-radius: var(--radius-sm); font-family: var(--font-mono); font-size: 0.9rem; color: var(--accent-amber);">
+              <strong>PART 4:</strong> Diffing
+            </div>
+            <div style="padding: 0.6rem 1.2rem; background: var(--accent-emerald-bg); border: 1px solid var(--accent-emerald-border); border-radius: var(--radius-sm); font-family: var(--font-mono); font-size: 0.9rem; color: var(--accent-emerald);">
+              <strong>PART 5:</strong> Reconciliation
+            </div>
+          </div>
+
+          <div style="display: flex; gap: 1rem; align-items: center;">
+            <button class="nav-btn primary-nav" onclick="Deck.nextSlide()" style="padding: 0.75rem 2rem; font-size: 1rem;">
+              Start Presentation →
+            </button>
+            <button class="nav-btn" onclick="Deck.openDrawer()" style="padding: 0.75rem 1.5rem; font-size: 1rem;">
+              Browse 36 Slides
+            </button>
+          </div>
+
+          <p style="margin-top: 2rem; font-size: 0.8rem; color: var(--text-dim); display: flex; align-items: center; gap: 0.5rem;">
+            Tip: Use <kbd style="background: rgba(255,255,255,0.08); padding: 0.1rem 0.4rem; border-radius: 4px; color: var(--text-secondary); font-family: var(--font-mono);">Arrow Keys</kbd> or <kbd style="background: rgba(255,255,255,0.08); padding: 0.1rem 0.4rem; border-radius: 4px; color: var(--text-secondary); font-family: var(--font-mono);">Space</kbd> to navigate
+          </p>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 2 — LEARNING OBJECTIVES
+           ==================================================================== -->
+      <section class="slide" data-slide="2" id="slide-2">
+        <div class="slide-header">
+          <span class="slide-tag">Course Road Map</span>
+          <h2 class="slide-title">Learning Objectives</h2>
+          <p class="slide-subtitle">What you will understand and be able to explain by the end of today's session.</p>
+        </div>
+
+        <div class="slide-content">
+          <div class="grid-3">
+            <div class="card card-tailwind">
+              <div class="card-title" style="color: var(--tailwind-sky);">
+                <span class="icon">🎨</span> 1. Tailwind CSS
+              </div>
+              <p>Understand the utility-first CSS philosophy, why it pairs naturally with React components, and how to configure it modernly with Vite.</p>
+              <div class="card-footer-tip">Vite + Tailwind v4 setup &amp; JSX className</div>
+            </div>
+
+            <div class="card">
+              <div class="card-title">
+                <span class="icon">⚡</span> 2. Utility Classes
+              </div>
+              <p>Master common utilities: spacing (<code>p-4</code>, <code>px-6</code>), colors, flexbox alignment, and mobile-first responsive breakpoints.</p>
+              <div class="card-footer-tip">Rapid styling without context switching</div>
+            </div>
+
+            <div class="card">
+              <div class="card-title">
+                <span class="icon">🌲</span> 3. Real DOM vs VDOM
+              </div>
+              <p>Understand the browser's Document Object Model, why frequent DOM operations can be expensive, and what React's Virtual DOM actually is.</p>
+              <div class="card-footer-tip">In-memory JS representation of desired UI</div>
+            </div>
+
+            <div class="card card-highlight">
+              <div class="card-title" style="color: var(--accent-amber);">
+                <span class="icon">🔍</span> 4. Diffing Algorithm
+              </div>
+              <p>Learn how React compares previous and next UI representations to calculate exact changes (element type changes, props, and text updates).</p>
+              <div class="card-footer-tip">What changed? (Tree comparison)</div>
+            </div>
+
+            <div class="card">
+              <div class="card-title" style="color: var(--accent-emerald);">
+                <span class="icon">🔄</span> 5. Reconciliation
+              </div>
+              <p>Understand the broader process React uses to apply computed changes to the real DOM, updating only necessary nodes.</p>
+              <div class="card-footer-tip">Diffing is the comparison step of Reconciliation</div>
+            </div>
+
+            <div class="card">
+              <div class="card-title" style="color: var(--accent-purple);">
+                <span class="icon">🔑</span> 6. Lists and Keys
+              </div>
+              <p>Discover why stable keys are critical when rendering dynamic lists and why using array index as key causes rendering bugs.</p>
+              <div class="card-footer-tip">Preserving element identity across renders</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 3 — WHAT IS TAILWIND CSS?
+           ==================================================================== -->
+      <section class="slide" data-slide="3" id="slide-3">
+        <div class="slide-header">
+          <span class="slide-tag tag-tailwind">PART 1 — TAILWIND CSS</span>
+          <h2 class="slide-title">1. What is Tailwind CSS?</h2>
+          <p class="slide-subtitle">A utility-first CSS framework that provides small, single-purpose classes for rapid styling.</p>
+        </div>
+
+        <div class="slide-content">
+          <div class="grid-2">
+            <!-- Traditional CSS -->
+            <div class="card">
+              <div class="card-title"><span class="icon">📄</span> Traditional CSS Approach</div>
+              <p>You write separate CSS rules in a <code>.css</code> file, invent custom class names, and link them to your HTML/JSX:</p>
+
+              <div class="code-box">
+                <div class="code-header">
+                  <div class="code-dots"><div class="code-dot red"></div><div class="code-dot yellow"></div><div class="code-dot green"></div></div>
+                  <span class="code-title">styles.css</span>
+                </div>
+                <pre class="code-content"><span class="kwd">.button</span> {
+  <span class="attr">background-color</span>: <span class="str">#3b82f6</span>;
+  <span class="attr">color</span>: <span class="str">white</span>;
+  <span class="attr">padding</span>: <span class="num">10px 20px</span>;
+  <span class="attr">border-radius</span>: <span class="num">8px</span>;
+}</pre>
+              </div>
+
+              <div class="code-box" style="margin-top: 0.5rem;">
+                <div class="code-header">
+                  <div class="code-dots"><div class="code-dot red"></div><div class="code-dot yellow"></div><div class="code-dot green"></div></div>
+                  <span class="code-title">Button.jsx</span>
+                </div>
+                <pre class="code-content">&lt;<span class="tag">button</span> <span class="attr">className</span>=<span class="str">"button"</span>&gt;
+  Click Me
+&lt;/<span class="tag">button</span>&gt;</pre>
+              </div>
+            </div>
+
+            <!-- Tailwind CSS -->
+            <div class="card card-tailwind">
+              <div class="card-title" style="color: var(--tailwind-sky);"><span class="icon">⚡</span> The Tailwind CSS Approach</div>
+              <p>You style elements directly in your JSX markup using pre-defined utility classes:</p>
+
+              <div class="code-box">
+                <div class="code-header">
+                  <div class="code-dots"><div class="code-dot red"></div><div class="code-dot yellow"></div><div class="code-dot green"></div></div>
+                  <span class="code-title">Button.jsx (Tailwind CSS)</span>
+                </div>
+                <pre class="code-content">&lt;<span class="tag">button</span> <span class="attr">className</span>=<span class="str">"bg-blue-500 text-white px-5 py-2 rounded-lg"</span>&gt;
+  Click Me
+&lt;/<span class="tag">button</span>&gt;</pre>
+              </div>
+
+              <div class="callout callout-tailwind" style="margin-top: 0.75rem;">
+                <span class="callout-icon">💡</span>
+                <div>
+                  <strong>No naming fatigue!</strong> You never waste time inventing class names like <code>.btn-primary-wrapper-v2</code> or jumping back and forth between CSS files.
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 4 — WHAT DOES UTILITY-FIRST MEAN?
+           ==================================================================== -->
+      <section class="slide" data-slide="4" id="slide-4">
+        <div class="slide-header">
+          <span class="slide-tag tag-tailwind">PART 1 — TAILWIND CSS</span>
+          <h2 class="slide-title">2. What Does "Utility-First" Mean?</h2>
+          <p class="slide-subtitle">Individual classes for individual styles — like Lego bricks for building components.</p>
+        </div>
+
+        <div class="slide-content">
+          <p style="font-size: 0.92rem; color: var(--text-secondary);">
+            In Tailwind, instead of opinionated pre-built components (like Bootstrap's <code>.card</code> or <code>.navbar</code>), you get <strong>atomic utility classes</strong> where each class does exactly one job:
+          </p>
+
+          <div class="grid-4" style="margin-top: 0.25rem;">
+            <div class="card" style="padding: 0.85rem;">
+              <span class="badge-tag">p-4</span>
+              <div style="font-size: 0.85rem; font-weight: 600; margin-top: 0.4rem;">Padding</div>
+              <div style="font-size: 0.75rem; color: var(--text-muted);">padding: 1rem (16px)</div>
+            </div>
+
+            <div class="card" style="padding: 0.85rem;">
+              <span class="badge-tag">m-4</span>
+              <div style="font-size: 0.85rem; font-weight: 600; margin-top: 0.4rem;">Margin</div>
+              <div style="font-size: 0.75rem; color: var(--text-muted);">margin: 1rem (16px)</div>
+            </div>
+
+            <div class="card" style="padding: 0.85rem;">
+              <span class="badge-tag">text-lg</span>
+              <div style="font-size: 0.85rem; font-weight: 600; margin-top: 0.4rem;">Font Size</div>
+              <div style="font-size: 0.75rem; color: var(--text-muted);">font-size: 1.125rem</div>
+            </div>
+
+            <div class="card" style="padding: 0.85rem;">
+              <span class="badge-tag">font-bold</span>
+              <div style="font-size: 0.85rem; font-weight: 600; margin-top: 0.4rem;">Font Weight</div>
+              <div style="font-size: 0.75rem; color: var(--text-muted);">font-weight: 700</div>
+            </div>
+
+            <div class="card" style="padding: 0.85rem;">
+              <span class="badge-tag">bg-blue-500</span>
+              <div style="font-size: 0.85rem; font-weight: 600; margin-top: 0.4rem;">Background</div>
+              <div style="font-size: 0.75rem; color: var(--text-muted);">background-color: blue</div>
+            </div>
+
+            <div class="card" style="padding: 0.85rem;">
+              <span class="badge-tag">text-white</span>
+              <div style="font-size: 0.85rem; font-weight: 600; margin-top: 0.4rem;">Text Color</div>
+              <div style="font-size: 0.75rem; color: var(--text-muted);">color: #ffffff</div>
+            </div>
+
+            <div class="card" style="padding: 0.85rem;">
+              <span class="badge-tag">rounded-lg</span>
+              <div style="font-size: 0.85rem; font-weight: 600; margin-top: 0.4rem;">Border Radius</div>
+              <div style="font-size: 0.75rem; color: var(--text-muted);">border-radius: 0.5rem</div>
+            </div>
+
+            <div class="card" style="padding: 0.85rem;">
+              <span class="badge-tag">shadow-lg</span>
+              <div style="font-size: 0.85rem; font-weight: 600; margin-top: 0.4rem;">Box Shadow</div>
+              <div style="font-size: 0.75rem; color: var(--text-muted);">box-shadow: elevation</div>
+            </div>
+          </div>
+
+          <div class="callout callout-tailwind" style="margin-top: 0.75rem;">
+            <span class="callout-icon">🧩</span>
+            <div>
+              <strong>Composition:</strong> You combine these simple atomic utilities in your React component to build any custom UI design you can imagine!
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 5 — TRADITIONAL CSS VS TAILWIND
+           ==================================================================== -->
+      <section class="slide" data-slide="5" id="slide-5">
+        <div class="slide-header">
+          <span class="slide-tag tag-tailwind">PART 1 — TAILWIND CSS</span>
+          <h2 class="slide-title">3. Traditional CSS vs Tailwind CSS</h2>
+          <p class="slide-subtitle">A side-by-side comparison of workflow, maintenance, and architecture.</p>
+        </div>
+
+        <div class="slide-content">
+          <div class="table-wrapper">
+            <table class="styled-table">
+              <thead>
+                <tr>
+                  <th style="width: 25%;">Feature</th>
+                  <th style="width: 37%;">Traditional CSS</th>
+                  <th style="width: 38%;">Tailwind CSS</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Workflow</strong></td>
+                  <td>Switch constantly between JSX and CSS files</td>
+                  <td>Style elements directly inside your JSX</td>
+                </tr>
+                <tr>
+                  <td><strong>Class Naming</strong></td>
+                  <td>Must invent semantic names (e.g. <code>.user-card-header</code>)</td>
+                  <td>No naming required; use standard utility classes</td>
+                </tr>
+                <tr>
+                  <td><strong>CSS Bundle Size</strong></td>
+                  <td>Grows continuously as you write more features</td>
+                  <td>Stays small; only the classes you actually use are compiled</td>
+                </tr>
+                <tr>
+                  <td><strong>Design Consistency</strong></td>
+                  <td>Random values like <code>padding: 13px; margin: 7px;</code></td>
+                  <td>Standardized design tokens (spacing, colors, typography)</td>
+                </tr>
+                <tr>
+                  <td><strong>Component Deletion</strong></td>
+                  <td>Deleting a component leaves unused "dead" CSS behind</td>
+                  <td>Deleting the component automatically deletes the styles</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="grid-2" style="margin-top: 0.5rem;">
+            <div class="card" style="padding: 0.85rem;">
+              <div style="font-family: var(--font-mono); font-size: 0.8rem; color: var(--text-muted);">Traditional Flow:</div>
+              <div style="font-size: 0.9rem; font-weight: bold; margin-top: 0.25rem;">CSS File &rarr; <code>.class</code> &rarr; HTML/JSX</div>
+            </div>
+
+            <div class="card card-tailwind" style="padding: 0.85rem;">
+              <div style="font-family: var(--font-mono); font-size: 0.8rem; color: var(--tailwind-sky);">Tailwind Flow:</div>
+              <div style="font-size: 0.9rem; font-weight: bold; margin-top: 0.25rem; color: var(--tailwind-sky);">JSX &rarr; Utility Classes &rarr; Instant Styled UI</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 6 — TAILWIND SETUP WITH VITE
+           ==================================================================== -->
+      <section class="slide" data-slide="6" id="slide-6">
+        <div class="slide-header">
+          <span class="slide-tag tag-tailwind">PART 1 — TAILWIND CSS</span>
+          <h2 class="slide-title">4. Tailwind Setup in a Modern Vite React Project</h2>
+          <p class="slide-subtitle">Setting up Tailwind CSS v4 using the modern official Vite plugin.</p>
+        </div>
+
+        <div class="slide-content">
+          <div class="grid-split-left-wide">
+            <div class="flex-col">
+              <!-- Step 1: Install -->
+              <div class="code-box">
+                <div class="code-header">
+                  <div class="code-dots"><div class="code-dot red"></div><div class="code-dot yellow"></div><div class="code-dot green"></div></div>
+                  <span class="code-title">Step 1 — Terminal: Install Tailwind v4 for Vite</span>
+                  <button class="copy-btn" onclick="Deck.copyCode(this)">Copy</button>
+                </div>
+                <pre class="code-content">npm install tailwindcss @tailwindcss/vite</pre>
+              </div>
+
+              <!-- Step 2: Vite Plugin -->
+              <div class="code-box">
+                <div class="code-header">
+                  <div class="code-dots"><div class="code-dot red"></div><div class="code-dot yellow"></div><div class="code-dot green"></div></div>
+                  <span class="code-title">Step 2 — vite.config.js</span>
+                  <button class="copy-btn" onclick="Deck.copyCode(this)">Copy</button>
+                </div>
+                <pre class="code-content"><span class="kwd">import</span> { defineConfig } <span class="kwd">from</span> <span class="str">'vite'</span>;
+<span class="kwd">import</span> react <span class="kwd">from</span> <span class="str">'@vitejs/plugin-react'</span>;
+<span class="kwd">import</span> tailwindcss <span class="kwd">from</span> <span class="str">'@tailwindcss/vite'</span>;
+
+<span class="kwd">export default</span> <span class="fn">defineConfig</span>({
+  <span class="prop">plugins</span>: [
+    <span class="fn">react</span>(),
+    <span class="fn">tailwindcss</span>() <span class="comment">// &lt;-- Add the official Tailwind Vite plugin</span>
+  ],
+});</pre>
+              </div>
+
+              <!-- Step 3: CSS Import -->
+              <div class="code-box">
+                <div class="code-header">
+                  <div class="code-dots"><div class="code-dot red"></div><div class="code-dot yellow"></div><div class="code-dot green"></div></div>
+                  <span class="code-title">Step 3 — src/index.css</span>
+                  <button class="copy-btn" onclick="Deck.copyCode(this)">Copy</button>
+                </div>
+                <pre class="code-content"><span class="comment">/* Modern Tailwind v4 single import */</span>
+<span class="kwd">@import</span> <span class="str">"tailwindcss"</span>;</pre>
+              </div>
+            </div>
+
+            <div class="flex-col">
+              <div class="card card-tailwind">
+                <div class="card-title" style="color: var(--tailwind-sky);"><span class="icon">🚀</span> Modern Tailwind v4 Simplicity</div>
+                <p>In modern Tailwind CSS v4:</p>
+                <ul style="font-size: 0.85rem; padding-left: 1.2rem; display: flex; flex-direction: column; gap: 0.5rem; color: var(--text-secondary);">
+                  <li><strong>Zero config files:</strong> No separate <code>tailwind.config.js</code> or <code>postcss.config.js</code> needed by default!</li>
+                  <li><strong>Blazing Fast:</strong> Compiles up to 10x faster directly within the Vite build pipeline.</li>
+                  <li><strong>Single Import:</strong> Just <code>@import "tailwindcss";</code> in your main CSS file.</li>
+                </ul>
+              </div>
+
+              <div class="callout callout-amber">
+                <span class="callout-icon">⚠️</span>
+                <div>
+                  <strong>Avoid Outdated Tutorials:</strong> Older guides teach 3-line directives like <code>@tailwind base; @tailwind components; @tailwind utilities;</code>. In modern Tailwind v4 with Vite, <code>@import "tailwindcss";</code> is the official standard.
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 7 — CLASS VS CLASSNAME
+           ==================================================================== -->
+      <section class="slide" data-slide="7" id="slide-7">
+        <div class="slide-header">
+          <span class="slide-tag tag-tailwind">PART 1 — TAILWIND CSS</span>
+          <h2 class="slide-title">5. class vs className in React JSX</h2>
+          <p class="slide-subtitle">A vital beginner distinction when using Tailwind classes in React components.</p>
+        </div>
+
+        <div class="slide-content">
+          <div class="grid-2">
+            <!-- HTML class -->
+            <div class="card">
+              <div class="card-title"><span class="icon">🌐</span> Standard HTML</div>
+              <p>In standard HTML files, you use the <code>class</code> attribute:</p>
+              
+              <div class="code-box">
+                <div class="code-header">
+                  <div class="code-dots"><div class="code-dot red"></div><div class="code-dot yellow"></div><div class="code-dot green"></div></div>
+                  <span class="code-title">index.html</span>
+                </div>
+                <pre class="code-content">&lt;<span class="tag">div</span> <span class="attr">class</span>=<span class="str">"bg-blue-500 text-white"</span>&gt;
+  Hello World
+&lt;/<span class="tag">div</span>&gt;</pre>
+              </div>
+            </div>
+
+            <!-- React JSX className -->
+            <div class="card card-highlight">
+              <div class="card-title" style="color: var(--react-cyan);"><span class="icon">⚛️</span> React JSX</div>
+              <p>In React JSX files, you <strong>MUST</strong> use the <code>className</code> attribute:</p>
+
+              <div class="code-box">
+                <div class="code-header">
+                  <div class="code-dots"><div class="code-dot red"></div><div class="code-dot yellow"></div><div class="code-dot green"></div></div>
+                  <span class="code-title">App.jsx</span>
+                </div>
+                <pre class="code-content">&lt;<span class="tag">div</span> <span class="attr" style="color: var(--react-cyan); font-weight: bold;">className</span>=<span class="str">"bg-blue-500 text-white"</span>&gt;
+  Hello World
+&lt;/<span class="tag">div</span>&gt;</pre>
+              </div>
+            </div>
+          </div>
+
+          <div class="card" style="margin-top: 0.5rem;">
+            <div class="card-title"><span class="icon">❓</span> Why does React use className instead of class?</div>
+            <p>JSX is not HTML — it is JavaScript syntactic sugar! In JavaScript, <strong><code>class</code></strong> is a reserved keyword used to define ES6 classes (e.g. <code>class Person { ... }</code>). Therefore, React chose <strong><code>className</code></strong> (which matches the DOM API property <code>element.className</code>).</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 8 — COMMON TAILWIND UTILITIES
+           ==================================================================== -->
+      <section class="slide" data-slide="8" id="slide-8">
+        <div class="slide-header">
+          <span class="slide-tag tag-tailwind">PART 1 — TAILWIND CSS</span>
+          <h2 class="slide-title">6. Common Tailwind Utilities Reference Table</h2>
+          <p class="slide-subtitle">The most frequently used classes you will apply every day in React projects.</p>
+        </div>
+
+        <div class="slide-content">
+          <div class="table-wrapper">
+            <table class="styled-table">
+              <thead>
+                <tr>
+                  <th>Styling Purpose</th>
+                  <th>Tailwind Class</th>
+                  <th>CSS Equivalent</th>
+                  <th>Visual Effect</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Padding</strong></td>
+                  <td><span class="badge-tag">p-4</span></td>
+                  <td><code>padding: 1rem (16px);</code></td>
+                  <td>Inner spacing on all 4 sides</td>
+                </tr>
+                <tr>
+                  <td><strong>Margin</strong></td>
+                  <td><span class="badge-tag">m-4</span></td>
+                  <td><code>margin: 1rem (16px);</code></td>
+                  <td>Outer spacing pushing other elements away</td>
+                </tr>
+                <tr>
+                  <td><strong>Width</strong></td>
+                  <td><span class="badge-tag">w-full</span></td>
+                  <td><code>width: 100%;</code></td>
+                  <td>Spans 100% of parent width</td>
+                </tr>
+                <tr>
+                  <td><strong>Height</strong></td>
+                  <td><span class="badge-tag">h-20</span></td>
+                  <td><code>height: 5rem (80px);</code></td>
+                  <td>Fixed element height</td>
+                </tr>
+                <tr>
+                  <td><strong>Background</strong></td>
+                  <td><span class="badge-tag">bg-blue-500</span></td>
+                  <td><code>background-color: rgb(59 130 246);</code></td>
+                  <td>Solid background color</td>
+                </tr>
+                <tr>
+                  <td><strong>Text Color</strong></td>
+                  <td><span class="badge-tag">text-white</span></td>
+                  <td><code>color: #ffffff;</code></td>
+                  <td>Font color</td>
+                </tr>
+                <tr>
+                  <td><strong>Font Size</strong></td>
+                  <td><span class="badge-tag">text-xl</span></td>
+                  <td><code>font-size: 1.25rem (20px);</code></td>
+                  <td>Heading font size</td>
+                </tr>
+                <tr>
+                  <td><strong>Font Weight</strong></td>
+                  <td><span class="badge-tag">font-bold</span></td>
+                  <td><code>font-weight: 700;</code></td>
+                  <td>Bold typography</td>
+                </tr>
+                <tr>
+                  <td><strong>Border Radius</strong></td>
+                  <td><span class="badge-tag">rounded-lg</span></td>
+                  <td><code>border-radius: 0.5rem (8px);</code></td>
+                  <td>Smooth rounded corners</td>
+                </tr>
+                <tr>
+                  <td><strong>Box Shadow</strong></td>
+                  <td><span class="badge-tag">shadow-lg</span></td>
+                  <td><code>box-shadow: 0 10px 15px ...;</code></td>
+                  <td>Elevated drop shadow card look</td>
+                </tr>
+                <tr>
+                  <td><strong>Flexbox</strong></td>
+                  <td><span class="badge-tag">flex</span></td>
+                  <td><code>display: flex;</code></td>
+                  <td>Enables flex layout container</td>
+                </tr>
+                <tr>
+                  <td><strong>Center</strong></td>
+                  <td><span class="badge-tag">justify-center items-center</span></td>
+                  <td><code>justify-content: center; align-items: center;</code></td>
+                  <td>Centers children horizontally &amp; vertically</td>
+                </tr>
+                <tr>
+                  <td><strong>Gap</strong></td>
+                  <td><span class="badge-tag">gap-4</span></td>
+                  <td><code>gap: 1rem (16px);</code></td>
+                  <td>Space between flex or grid items</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 9 — COLORS AND SHADES
+           ==================================================================== -->
+      <section class="slide" data-slide="9" id="slide-9">
+        <div class="slide-header">
+          <span class="slide-tag tag-tailwind">PART 1 — TAILWIND CSS</span>
+          <h2 class="slide-title">7. Tailwind Colors and Shade Spectrum</h2>
+          <p class="slide-subtitle">Understanding the formula: [property]-[color]-[shade].</p>
+        </div>
+
+        <div class="slide-content">
+          <div class="grid-split-left-wide">
+            <div class="card card-tailwind">
+              <div class="card-title" style="color: var(--tailwind-sky);"><span class="icon">🎨</span> The Color Class Structure</div>
+              <p>Tailwind color classes follow a clean, predictable naming pattern:</p>
+
+              <div style="margin: 1.25rem 0; padding: 1.25rem; background: var(--code-bg); border-radius: var(--radius-sm); border: 1px solid var(--border-subtle); display: flex; justify-content: center; align-items: center;">
+                <div style="font-family: var(--font-mono); font-size: 1.5rem; letter-spacing: 0.05em;">
+                  <span style="color: var(--code-keyword);">text</span>-<span style="color: var(--code-function);">blue</span>-<span style="color: var(--code-number);">500</span>
+                </div>
+              </div>
+
+              <div class="grid-3" style="font-size: 0.82rem; text-align: center;">
+                <div style="padding: 0.5rem; background: var(--bg-surface); border-radius: var(--radius-xs);">
+                  <strong style="color: var(--code-keyword);">text / bg / border</strong>
+                  <div style="color: var(--text-muted); font-size: 0.72rem; margin-top: 0.2rem;">Property applied</div>
+                </div>
+                <div style="padding: 0.5rem; background: var(--bg-surface); border-radius: var(--radius-xs);">
+                  <strong style="color: var(--code-function);">blue, green, red</strong>
+                  <div style="color: var(--text-muted); font-size: 0.72rem; margin-top: 0.2rem;">Color family</div>
+                </div>
+                <div style="padding: 0.5rem; background: var(--bg-surface); border-radius: var(--radius-xs);">
+                  <strong style="color: var(--code-number);">50 to 950</strong>
+                  <div style="color: var(--text-muted); font-size: 0.72rem; margin-top: 0.2rem;">Brightness shade</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-title"><span class="icon">🌈</span> Shade Scale (Light to Dark)</div>
+              <p style="font-size: 0.85rem; color: var(--text-secondary);">
+                Numbers range from <code>100</code> (lightest tint) to <code>900</code> (deepest dark):
+              </p>
+
+              <div style="display: flex; flex-direction: column; gap: 0.35rem; margin-top: 0.5rem; font-family: var(--font-mono); font-size: 0.78rem;">
+                <div style="display: flex; align-items: center; justify-content: space-between; padding: 0.25rem 0.6rem; border-radius: 4px; background: #DBEAFE; color: #1E3A8A;">
+                  <span>bg-blue-100</span> <span>Very light tint</span>
+                </div>
+                <div style="display: flex; align-items: center; justify-content: space-between; padding: 0.25rem 0.6rem; border-radius: 4px; background: #93C5FD; color: #1E3A8A;">
+                  <span>bg-blue-300</span> <span>Soft pastel</span>
+                </div>
+                <div style="display: flex; align-items: center; justify-content: space-between; padding: 0.25rem 0.6rem; border-radius: 4px; background: #3B82F6; color: #FFFFFF; font-weight: bold;">
+                  <span>bg-blue-500</span> <span>Default brand primary</span>
+                </div>
+                <div style="display: flex; align-items: center; justify-content: space-between; padding: 0.25rem 0.6rem; border-radius: 4px; background: #1D4ED8; color: #FFFFFF;">
+                  <span>bg-blue-700</span> <span>Hover / Darker</span>
+                </div>
+                <div style="display: flex; align-items: center; justify-content: space-between; padding: 0.25rem 0.6rem; border-radius: 4px; background: #1E3A8A; color: #FFFFFF;">
+                  <span>bg-blue-900</span> <span>Deep navy dark</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 10 — SPACING (PADDING & MARGIN)
+           ==================================================================== -->
+      <section class="slide" data-slide="10" id="slide-10">
+        <div class="slide-header">
+          <span class="slide-tag tag-tailwind">PART 1 — TAILWIND CSS</span>
+          <h2 class="slide-title">8. Spacing — Padding (p) and Margin (m)</h2>
+          <p class="slide-subtitle">Precise spacing using directional prefixes and horizontal/vertical axis helpers.</p>
+        </div>
+
+        <div class="slide-content">
+          <div class="grid-2">
+            <div class="card">
+              <div class="card-title"><span class="icon">📐</span> Directional &amp; Axis Helpers</div>
+              <ul style="font-size: 0.85rem; padding-left: 1.2rem; display: flex; flex-direction: column; gap: 0.65rem; color: var(--text-secondary);">
+                <li><code>p-4</code> &rarr; Padding on <strong>all 4 sides</strong></li>
+                <li><code>m-4</code> &rarr; Margin on <strong>all 4 sides</strong></li>
+                <li><code>mt-4</code> &rarr; Margin <strong>top</strong> only</li>
+                <li><code>mb-4</code> &rarr; Margin <strong>bottom</strong> only</li>
+                <li><code>px-6</code> &rarr; Horizontal padding (<strong>left + right</strong>)</li>
+                <li><code>py-3</code> &rarr; Vertical padding (<strong>top + bottom</strong>)</li>
+              </ul>
+            </div>
+
+            <div class="card card-highlight">
+              <div class="card-title"><span class="icon">💡</span> The Tailwind Spacing Multiplier</div>
+              <p>In Tailwind's default spacing scale, <strong>1 unit = 0.25rem = 4px</strong>:</p>
+              
+              <div class="grid-2" style="font-family: var(--font-mono); font-size: 0.8rem; margin-top: 0.5rem; gap: 0.5rem;">
+                <div style="padding: 0.4rem; background: var(--bg-surface); border-radius: 4px;"><code>p-1</code> &rarr; 4px</div>
+                <div style="padding: 0.4rem; background: var(--bg-surface); border-radius: 4px;"><code>p-2</code> &rarr; 8px</div>
+                <div style="padding: 0.4rem; background: var(--bg-surface); border-radius: 4px;"><code>p-4</code> &rarr; 16px (1rem)</div>
+                <div style="padding: 0.4rem; background: var(--bg-surface); border-radius: 4px;"><code>p-6</code> &rarr; 24px (1.5rem)</div>
+                <div style="padding: 0.4rem; background: var(--bg-surface); border-radius: 4px;"><code>p-8</code> &rarr; 32px (2rem)</div>
+                <div style="padding: 0.4rem; background: var(--bg-surface); border-radius: 4px;"><code>p-12</code> &rarr; 48px (3rem)</div>
+              </div>
+              <div class="card-footer-tip">Multiply by 4 to get pixel values quickly!</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 11 — FLEXBOX WITH TAILWIND
+           ==================================================================== -->
+      <section class="slide" data-slide="11" id="slide-11">
+        <div class="slide-header">
+          <span class="slide-tag tag-tailwind">PART 1 — TAILWIND CSS</span>
+          <h2 class="slide-title">9. Flexbox Layout with Tailwind</h2>
+          <p class="slide-subtitle">Building fluid horizontal and vertical layouts with alignment and gap.</p>
+        </div>
+
+        <div class="slide-content">
+          <div class="grid-split-left-wide">
+            <div class="code-box">
+              <div class="code-header">
+                <div class="code-dots"><div class="code-dot red"></div><div class="code-dot yellow"></div><div class="code-dot green"></div></div>
+                <span class="code-title">Flexbox Container Example</span>
+                <button class="copy-btn" onclick="Deck.copyCode(this)">Copy</button>
+              </div>
+              <pre class="code-content">&lt;<span class="tag">div</span> <span class="attr">className</span>=<span class="str">"flex justify-center items-center gap-4"</span>&gt;
+  &lt;<span class="tag">button</span> <span class="attr">className</span>=<span class="str">"bg-blue-500 text-white px-4 py-2 rounded"</span>&gt;
+    Save
+  &lt;/<span class="tag">button</span>&gt;
+  &lt;<span class="tag">button</span> <span class="attr">className</span>=<span class="str">"bg-gray-200 text-gray-800 px-4 py-2 rounded"</span>&gt;
+    Cancel
+  &lt;/<span class="tag">button</span>&gt;
+&lt;/<span class="tag">div</span>&gt;</pre>
+            </div>
+
+            <div class="flex-col">
+              <div class="card card-tailwind">
+                <div class="card-title" style="color: var(--tailwind-sky);"><span class="icon">🔍</span> Class Breakdown</div>
+                <ul style="font-size: 0.85rem; padding-left: 1.2rem; display: flex; flex-direction: column; gap: 0.5rem; color: var(--text-secondary);">
+                  <li><strong><code>flex</code>:</strong> Sets <code>display: flex;</code></li>
+                  <li><strong><code>justify-center</code>:</strong> Centers items horizontally along the main axis</li>
+                  <li><strong><code>items-center</code>:</strong> Centers items vertically along the cross axis</li>
+                  <li><strong><code>gap-4</code>:</strong> Adds <code>1rem (16px)</code> space between child elements</li>
+                </ul>
+              </div>
+
+              <div class="callout callout-emerald">
+                <span class="callout-icon">💡</span>
+                <div>
+                  No more messy <code>margin-right</code> on buttons! Using <code>gap-4</code> automatically spaces items cleanly.
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 12 — RESPONSIVE DESIGN
+           ==================================================================== -->
+      <section class="slide" data-slide="12" id="slide-12">
+        <div class="slide-header">
+          <span class="slide-tag tag-tailwind">PART 1 — TAILWIND CSS</span>
+          <h2 class="slide-title">10. Responsive Design with Breakpoints</h2>
+          <p class="slide-subtitle">Tailwind is mobile-first: styles apply from small screens upward.</p>
+        </div>
+
+        <div class="slide-content">
+          <div class="grid-split-left-wide">
+            <div class="code-box">
+              <div class="code-header">
+                <div class="code-dots"><div class="code-dot red"></div><div class="code-dot yellow"></div><div class="code-dot green"></div></div>
+                <span class="code-title">Responsive Text &amp; Layout</span>
+                <button class="copy-btn" onclick="Deck.copyCode(this)">Copy</button>
+              </div>
+              <pre class="code-content">&lt;<span class="tag">div</span> <span class="attr">className</span>=<span class="str">"
+  text-sm        /* Default (Mobile: &lt; 768px) */
+  md:text-lg     /* Medium screens (Tablet: &gt;= 768px) */
+  lg:text-2xl    /* Large screens (Desktop: &gt;= 1024px) */
+"</span>&gt;
+  Responsive Heading
+&lt;/<span class="tag">div</span>&gt;</pre>
+            </div>
+
+            <div class="flex-col">
+              <div class="table-wrapper">
+                <table class="styled-table" style="font-size: 0.8rem;">
+                  <thead>
+                    <tr><th>Prefix</th><th>Min Width</th><th>Target Device</th></tr>
+                  </thead>
+                  <tbody>
+                    <tr><td><code>(default)</code></td><td>0px</td><td>Mobile Phones</td></tr>
+                    <tr><td><code>sm:</code></td><td>640px</td><td>Large Phones / Phablets</td></tr>
+                    <tr><td><code>md:</code></td><td>768px</td><td>Tablets / iPads</td></tr>
+                    <tr><td><code>lg:</code></td><td>1024px</td><td>Laptops / Desktops</td></tr>
+                    <tr><td><code>xl:</code></td><td>1280px</td><td>Large Monitors</td></tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <div class="callout callout-tailwind">
+                <span class="callout-icon">📱</span>
+                <div>
+                  <strong>Mobile-First Principle:</strong> Always write your mobile styles first with standard classes, then override them for larger screens with <code>md:</code> or <code>lg:</code>.
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 13 — TAILWIND REACT MINI EXAMPLE
+           ==================================================================== -->
+      <section class="slide" data-slide="13" id="slide-13">
+        <div class="slide-header">
+          <span class="slide-tag tag-tailwind">PART 1 — TAILWIND CSS</span>
+          <h2 class="slide-title">11. Tailwind React Mini Example — Student Card</h2>
+          <p class="slide-subtitle">Putting it all together into a clean, reusable React component.</p>
+        </div>
+
+        <div class="slide-content">
+          <div class="grid-split-left-wide">
+            <div class="code-box">
+              <div class="code-header">
+                <div class="code-dots"><div class="code-dot red"></div><div class="code-dot yellow"></div><div class="code-dot green"></div></div>
+                <span class="code-title">src/components/StudentCard.jsx</span>
+                <button class="copy-btn" onclick="Deck.copyCode(this)">Copy</button>
+              </div>
+              <pre class="code-content"><span class="kwd">function</span> <span class="fn">StudentCard</span>() {
+  <span class="kwd">return</span> (
+    &lt;<span class="tag">div</span> <span class="attr">className</span>=<span class="str">"max-w-sm p-6 bg-white rounded-xl shadow-lg"</span>&gt;
+      &lt;<span class="tag">h2</span> <span class="attr">className</span>=<span class="str">"text-2xl font-bold text-gray-900"</span>&gt;
+        Rahul
+      &lt;/<span class="tag">h2</span>&gt;
+
+      &lt;<span class="tag">p</span> <span class="attr">className</span>=<span class="str">"text-gray-600 mt-1"</span>&gt;
+        MERN Stack Developer
+      &lt;/<span class="tag">p</span>&gt;
+
+      &lt;<span class="tag">button</span> <span class="attr">className</span>=<span class="str">"mt-4 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition"</span>&gt;
+        View Profile
+      &lt;/<span class="tag">button</span>&gt;
+    &lt;/<span class="tag">div</span>&gt;
+  );
+}
+
+<span class="kwd">export default</span> StudentCard;</pre>
+            </div>
+
+            <div class="flex-col">
+              <div class="card card-tailwind">
+                <div class="card-title" style="color: var(--tailwind-sky);"><span class="icon">🔍</span> Classes Breakdown</div>
+                <div style="font-size: 0.82rem; display: flex; flex-direction: column; gap: 0.45rem; color: var(--text-secondary);">
+                  <div><code>max-w-sm</code>: Maximum width constraint (384px)</div>
+                  <div><code>p-6</code>: Comfortable inner padding (24px)</div>
+                  <div><code>bg-white</code>: Crisp white surface card</div>
+                  <div><code>rounded-xl</code>: Extra smooth 12px border radius</div>
+                  <div><code>shadow-lg</code>: Floating drop shadow</div>
+                  <div><code>hover:bg-blue-600</code>: Interactive hover state!</div>
+                </div>
+              </div>
+
+              <!-- Live Card Preview -->
+              <div style="padding: 1.25rem; background: #0A101C; border-radius: var(--radius-sm); border: 1px dashed var(--border-medium); display: flex; justify-content: center;">
+                <div style="background: #ffffff; color: #111827; padding: 1.25rem; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.5); width: 100%; max-width: 240px; font-family: var(--font-sans);">
+                  <div style="font-size: 1.15rem; font-weight: 800; color: #111827;">Rahul</div>
+                  <div style="font-size: 0.8rem; color: #4B5563; margin-top: 2px;">MERN Stack Developer</div>
+                  <button style="margin-top: 12px; padding: 6px 14px; background: #3B82F6; color: #ffffff; border: none; border-radius: 8px; font-size: 0.8rem; font-weight: 600; cursor: pointer;">
+                    View Profile
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 14 — TAILWIND PRACTICE / MINI CHALLENGE
+           ==================================================================== -->
+      <section class="slide" data-slide="14" id="slide-14">
+        <div class="slide-header">
+          <span class="slide-tag tag-tailwind">PART 1 — TAILWIND CSS</span>
+          <h2 class="slide-title">12. Tailwind Hands-On Mini Challenge</h2>
+          <p class="slide-subtitle">Build a Student Profile Card component using the utilities you just learned.</p>
+        </div>
+
+        <div class="slide-content">
+          <div class="grid-split-left-wide">
+            <div class="card card-highlight">
+              <div class="card-title"><span class="icon">💻</span> Challenge Requirements</div>
+              <p>Create a component named <code>StudentProfile.jsx</code> that includes:</p>
+
+              <ol style="font-size: 0.85rem; padding-left: 1.2rem; display: flex; flex-direction: column; gap: 0.45rem; color: var(--text-secondary); margin-top: 0.5rem;">
+                <li><strong>Card Container:</strong> Background color, rounded corners, drop shadow.</li>
+                <li><strong>Student Name:</strong> Bold, large heading (<code>text-2xl font-bold</code>).</li>
+                <li><strong>Course &amp; Email:</strong> Subtle gray text with proper margin spacing.</li>
+                <li><strong>Action Button:</strong> Primary background, white text, padding, rounded-md, and hover effect.</li>
+                <li><strong>Responsive Width:</strong> 100% on mobile, max-width on desktop.</li>
+              </ol>
+
+              <div class="callout callout-amber" style="margin-top: 1rem;">
+                <span class="callout-icon">💡</span>
+                <div>
+                  Try opening the <strong>Tailwind Sandbox</strong> (<kbd>W</kbd>) right in this presentation to test different utility combinations live!
+                </div>
+              </div>
+            </div>
+
+            <div class="flex-col">
+              <div class="card">
+                <div class="card-title"><span class="icon">🎯</span> Self-Check Criteria</div>
+                <div style="font-size: 0.82rem; display: flex; flex-direction: column; gap: 0.5rem; color: var(--text-muted);">
+                  <div>✔ Did you use <code>className</code> instead of <code>class</code>?</div>
+                  <div>✔ Did you use <code>px-</code> and <code>py-</code> for button padding?</div>
+                  <div>✔ Did you add <code>shadow-md</code> or <code>shadow-lg</code>?</div>
+                  <div>✔ Did you test responsive width?</div>
+                </div>
+              </div>
+
+              <div class="card card-tailwind" style="text-align: center; padding: 1.2rem;">
+                <div style="font-size: 1.2rem; font-weight: bold; color: var(--tailwind-sky);">Ready for React Internals?</div>
+                <p style="font-size: 0.85rem; margin-top: 0.4rem;">
+                  Now that we know how React components are styled with Tailwind, let's explore how React renders and updates them under the hood!
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 15 — WHAT IS THE DOM?
+           ==================================================================== -->
+      <section class="slide" data-slide="15" id="slide-15">
+        <div class="slide-header">
+          <span class="slide-tag">PART 2 — THE DOM</span>
+          <h2 class="slide-title">13. What is the DOM?</h2>
+          <p class="slide-subtitle">Document Object Model: the browser's internal tree structure representing HTML.</p>
+        </div>
+
+        <div class="slide-content">
+          <div class="grid-split-left-wide">
+            <div class="card">
+              <div class="card-title"><span class="icon">🌲</span> DOM = Document Object Model</div>
+              <p>When a browser loads an HTML file, it parses the HTML tags and converts them into a hierarchical tree of live JavaScript objects:</p>
+
+              <div class="code-box" style="margin-top: 0.5rem;">
+                <div class="code-header">
+                  <div class="code-dots"><div class="code-dot red"></div><div class="code-dot yellow"></div><div class="code-dot green"></div></div>
+                  <span class="code-title">HTML Source</span>
+                </div>
+                <pre class="code-content">&lt;<span class="tag">div</span>&gt;
+  &lt;<span class="tag">h1</span>&gt;Hello&lt;/<span class="tag">h1</span>&gt;
+  &lt;<span class="tag">p</span>&gt;Welcome&lt;/<span class="tag">p</span>&gt;
+&lt;/<span class="tag">div</span>&gt;</pre>
+              </div>
+            </div>
+
+            <div class="card card-highlight">
+              <div class="card-title"><span class="icon">🌳</span> The Browser DOM Tree</div>
+              <div class="flow-vertical" style="margin: 0.5rem 0; font-family: var(--font-mono); font-size: 0.85rem;">
+                <div class="flow-step-v"><span>Document</span></div>
+                <div class="flow-arrow-v">↓</div>
+                <div class="flow-step-v"><span>&lt;div&gt;</span></div>
+                <div class="flow-arrow-v">↓</div>
+                <div style="display: flex; gap: 1rem; width: 100%;">
+                  <div class="flow-step-v" style="flex: 1;"><span style="color: var(--react-cyan);">&lt;h1&gt; "Hello"</span></div>
+                  <div class="flow-step-v" style="flex: 1;"><span style="color: var(--tailwind-sky);">&lt;p&gt; "Welcome"</span></div>
+                </div>
+              </div>
+              <p style="font-size: 0.8rem; color: var(--text-muted); text-align: center;">Each node represents an element, attribute, or text fragment.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 16 — REAL DOM
+           ==================================================================== -->
+      <section class="slide" data-slide="16" id="slide-16">
+        <div class="slide-header">
+          <span class="slide-tag">PART 2 — THE DOM</span>
+          <h2 class="slide-title">14. Direct Real DOM Manipulation</h2>
+          <p class="slide-subtitle">How vanilla JavaScript directly accesses and modifies live browser nodes.</p>
+        </div>
+
+        <div class="slide-content">
+          <div class="grid-split-left-wide">
+            <div class="code-box">
+              <div class="code-header">
+                <div class="code-dots"><div class="code-dot red"></div><div class="code-dot yellow"></div><div class="code-dot green"></div></div>
+                <span class="code-title">Vanilla JavaScript (Direct DOM API)</span>
+                <button class="copy-btn" onclick="Deck.copyCode(this)">Copy</button>
+              </div>
+              <pre class="code-content"><span class="comment">// 1. Select the live DOM element</span>
+<span class="kwd">const</span> heading = document.<span class="fn">querySelector</span>(<span class="str">"h1"</span>);
+
+<span class="comment">// 2. Directly mutate its text property</span>
+heading.<span class="prop">textContent</span> = <span class="str">"Hello React"</span>;</pre>
+              <div class="card-footer-tip" style="padding: 0.75rem;">
+                This immediately updates the actual browser DOM node in memory.
+              </div>
+            </div>
+
+            <div class="flex-col">
+              <div class="card">
+                <div class="card-title"><span class="icon">⚙️</span> What Happens in the Browser?</div>
+                <p>When you modify a live DOM node via JavaScript:</p>
+                <ol style="font-size: 0.85rem; padding-left: 1.2rem; display: flex; flex-direction: column; gap: 0.45rem; color: var(--text-secondary); margin-top: 0.4rem;">
+                  <li>The DOM tree node updates.</li>
+                  <li>The browser recalculates geometry &amp; layout (<strong>Reflow</strong>).</li>
+                  <li>The browser redraws affected pixels on screen (<strong>Repaint</strong>).</li>
+                  <li>The composite layers are updated on the GPU.</li>
+                </ol>
+              </div>
+
+              <div class="callout callout-blue">
+                <span class="callout-icon">💡</span>
+                <div>
+                  For a single <code>h1</code> heading, this is instantaneous. But what happens when an application has thousands of dynamic elements?
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 17 — PROBLEM WITH FREQUENT DOM UPDATES
+           ==================================================================== -->
+      <section class="slide" data-slide="17" id="slide-17">
+        <div class="slide-header">
+          <span class="slide-tag">PART 2 — THE DOM</span>
+          <h2 class="slide-title">15. Why Frequent DOM Updates Matter</h2>
+          <p class="slide-subtitle">Understanding browser layout recalculations and repaint costs.</p>
+        </div>
+
+        <div class="slide-content">
+          <div class="grid-split-left-wide">
+            <div class="card card-highlight">
+              <div class="card-title"><span class="icon">📊</span> The 1,000-Item List Scenario</div>
+              <p>Imagine a dynamic data table or social media feed with <strong>1,000 items</strong>:</p>
+              
+              <div style="padding: 0.75rem; background: var(--bg-surface); border-radius: var(--radius-sm); border-left: 3px solid var(--accent-rose); margin: 0.5rem 0;">
+                <div style="color: var(--accent-rose); font-weight: bold;">Naive Direct Re-rendering:</div>
+                <div style="font-size: 0.82rem; margin-top: 0.2rem; color: var(--text-secondary);">
+                  If 1 user mark changes, destroying and recreating all 1,000 DOM elements causes massive, unnecessary layout recalculation and screen repainting!
+                </div>
+              </div>
+
+              <p style="font-size: 0.85rem; color: var(--text-secondary);">
+                Every time DOM elements are added, removed, or resized, the browser must recalculate positions for all surrounding elements.
+              </p>
+            </div>
+
+            <div class="flex-col">
+              <div class="card">
+                <div class="card-title"><span class="icon">🛡️</span> Important Technical Accuracy Rule</div>
+                <div style="font-size: 0.85rem; line-height: 1.5; color: var(--text-secondary);">
+                  <div style="color: var(--accent-rose); text-decoration: line-through; font-weight: bold; margin-bottom: 0.35rem;">
+                    ❌ "The DOM is always slow."
+                  </div>
+                  <div style="color: var(--accent-emerald); font-weight: bold; margin-bottom: 0.5rem;">
+                    ✔ "Updating the DOM can be expensive, so React tries to minimize unnecessary DOM work."
+                  </div>
+                  <p style="font-size: 0.8rem; color: var(--text-muted);">
+                    JavaScript execution in memory is extremely fast. React utilizes this speed by performing comparisons in JavaScript before touching the real DOM!
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 18 — WHAT IS THE VIRTUAL DOM?
+           ==================================================================== -->
+      <section class="slide" data-slide="18" id="slide-18">
+        <div class="slide-header">
+          <span class="slide-tag">PART 3 — VIRTUAL DOM</span>
+          <h2 class="slide-title">16. What is the Virtual DOM?</h2>
+          <p class="slide-subtitle">React's lightweight, in-memory JavaScript representation of the user interface.</p>
+        </div>
+
+        <div class="slide-content">
+          <div class="callout callout-blue" style="font-size: 1rem; padding: 1.25rem;">
+            <span class="callout-icon" style="font-size: 1.5rem;">⭐</span>
+            <div>
+              <strong>Definition:</strong> <em>"The Virtual DOM is an in-memory JavaScript representation of the UI that React uses to determine what changes need to be applied to the real DOM."</em>
+            </div>
+          </div>
+
+          <div class="flow-container" style="gap: 1.5rem; margin-top: 1rem;">
+            <div class="flow-node active-node">
+              <div class="flow-node-title" style="color: var(--react-cyan);">1. React Component</div>
+              <div class="flow-node-desc">Returns JSX</div>
+            </div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-node active-node">
+              <div class="flow-node-title" style="color: var(--react-cyan);">2. Virtual DOM</div>
+              <div class="flow-node-desc">In-memory JS Object Tree</div>
+            </div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-node active-amber">
+              <div class="flow-node-title" style="color: var(--accent-amber);">3. Compare Changes</div>
+              <div class="flow-node-desc">Diffing Algorithm</div>
+            </div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-node">
+              <div class="flow-node-title" style="color: var(--accent-emerald);">4. Real DOM</div>
+              <div class="flow-node-desc">Updates only needed nodes</div>
+            </div>
+          </div>
+
+          <div class="card" style="margin-top: 0.5rem;">
+            <div class="card-title"><span class="icon">💡</span> The Core Idea</div>
+            <p>Instead of touching the browser's live DOM immediately whenever state changes, React first builds a new lightweight JavaScript object tree in memory, calculates the exact differences, and updates only the necessary nodes in the real DOM.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 19 — REAL DOM VS VIRTUAL DOM
+           ==================================================================== -->
+      <section class="slide" data-slide="19" id="slide-19">
+        <div class="slide-header">
+          <span class="slide-tag">PART 3 — VIRTUAL DOM</span>
+          <h2 class="slide-title">17. Real DOM vs Virtual DOM Comparison</h2>
+          <p class="slide-subtitle">Clarifying the roles and responsibilities of both representations.</p>
+        </div>
+
+        <div class="slide-content">
+          <div class="table-wrapper">
+            <table class="styled-table">
+              <thead>
+                <tr>
+                  <th style="width: 25%;">Characteristic</th>
+                  <th style="width: 37%;">Real DOM (Browser)</th>
+                  <th style="width: 38%;">Virtual DOM (React)</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Where does it live?</strong></td>
+                  <td>Inside the browser engine memory (C++ / WebCore)</td>
+                  <td>Inside JavaScript memory as plain JS objects</td>
+                </tr>
+                <tr>
+                  <td><strong>What does it represent?</strong></td>
+                  <td>The actual live webpage structure and pixels</td>
+                  <td>The desired UI that React wants to render</td>
+                </tr>
+                <tr>
+                  <td><strong>Direct Screen Impact</strong></td>
+                  <td>Yes — triggers reflow, repaint, and layout</td>
+                  <td>No — purely in-memory; has zero direct screen cost</td>
+                </tr>
+                <tr>
+                  <td><strong>Who manages it?</strong></td>
+                  <td>The browser window / document</td>
+                  <td>React rendering runtime</td>
+                </tr>
+                <tr>
+                  <td><strong>Speed of Operation</strong></td>
+                  <td>Modifying many nodes triggers layout calculations</td>
+                  <td>Creating/comparing JS objects is extremely fast</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="callout callout-purple" style="margin-top: 0.75rem;">
+            <span class="callout-icon">📌</span>
+            <div>
+              <strong>Important Clarification:</strong> The Virtual DOM does <strong>NOT replace</strong> the real DOM. At the end of the day, users look at the real DOM. The Virtual DOM is simply React's internal blueprint to decide how to update the real DOM efficiently!
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 20 — EXAMPLE OF VIRTUAL DOM
+           ==================================================================== -->
+      <section class="slide" data-slide="20" id="slide-20">
+        <div class="slide-header">
+          <span class="slide-tag">PART 3 — VIRTUAL DOM</span>
+          <h2 class="slide-title">18. Conceptual Representation of Virtual DOM</h2>
+          <p class="slide-subtitle">A Virtual DOM node is just a plain, lightweight JavaScript object.</p>
+        </div>
+
+        <div class="slide-content">
+          <div class="grid-split-left-wide">
+            <div class="code-box">
+              <div class="code-header">
+                <div class="code-dots"><div class="code-dot red"></div><div class="code-dot yellow"></div><div class="code-dot green"></div></div>
+                <span class="code-title">Conceptual JS Object Representation</span>
+              </div>
+              <pre class="code-content"><span class="comment">// 1. When React renders: &lt;h1 className="title"&gt;Hello&lt;/h1&gt;</span>
+<span class="comment">// It creates an in-memory object conceptually like:</span>
+<span class="kwd">const</span> prevVDOM = {
+  <span class="prop">type</span>: <span class="str">"h1"</span>,
+  <span class="prop">props</span>: {
+    <span class="prop">className</span>: <span class="str">"title"</span>,
+    <span class="prop">children</span>: <span class="str">"Hello"</span>
+  }
+};
+
+<span class="comment">// 2. Later, when text changes to "Hello React":</span>
+<span class="kwd">const</span> nextVDOM = {
+  <span class="prop">type</span>: <span class="str">"h1"</span>,
+  <span class="prop">props</span>: {
+    <span class="prop">className</span>: <span class="str">"title"</span>,
+    <span class="prop">children</span>: <span class="str">"Hello React"</span> <span class="comment">// &lt;-- Only this changed!</span>
+  }
+};</pre>
+            </div>
+
+            <div class="flex-col">
+              <div class="card card-highlight">
+                <div class="card-title"><span class="icon">🔍</span> Why Plain Objects?</div>
+                <p>A real browser DOM node has over <strong>300+ properties</strong> (like <code>offsetTop</code>, <code>style</code>, <code>childNodes</code>, event listeners, etc.).</p>
+                <p style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 0.4rem;">
+                  A Virtual DOM node is just a simple object with <code>type</code> and <code>props</code>. Comparing two simple JS objects takes microseconds!
+                </p>
+              </div>
+
+              <div class="callout callout-amber">
+                <span class="callout-icon">💡</span>
+                <div>
+                  This comparison between <code>prevVDOM</code> and <code>nextVDOM</code> leads directly to React's <strong>Diffing</strong> algorithm!
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 21 — WHY DOES REACT USE THIS APPROACH?
+           ==================================================================== -->
+      <section class="slide" data-slide="21" id="slide-21">
+        <div class="slide-header">
+          <span class="slide-tag">PART 3 — VIRTUAL DOM</span>
+          <h2 class="slide-title">19. Why Does React Use This Approach?</h2>
+          <p class="slide-subtitle">Declarative UI updates without manual, error-prone DOM querying.</p>
+        </div>
+
+        <div class="slide-content">
+          <div class="grid-split-left-wide">
+            <div class="card">
+              <div class="card-title"><span class="icon">🧠</span> The Core Mental Model</div>
+              <div class="flow-vertical" style="margin: 0.5rem 0;">
+                <div class="flow-step-v"><span>1. Component State / Props Change</span></div>
+                <div class="flow-arrow-v">↓</div>
+                <div class="flow-step-v"><span>2. React Builds New UI Description</span></div>
+                <div class="flow-arrow-v">↓</div>
+                <div class="flow-step-v"><span>3. Compare with Previous UI Tree</span></div>
+                <div class="flow-arrow-v">↓</div>
+                <div class="flow-step-v"><span>4. Find the Exact Differences (Diffing)</span></div>
+                <div class="flow-arrow-v">↓</div>
+                <div class="flow-step-v" style="border-color: var(--accent-emerald);"><span style="color: var(--accent-emerald);">5. Apply ONLY Necessary Real DOM Changes</span></div>
+              </div>
+            </div>
+
+            <div class="flex-col">
+              <div class="card card-highlight">
+                <div class="card-title"><span class="icon">🎯</span> The Big Benefit: Declarative Code</div>
+                <p>In vanilla JS, you have to write tedious imperative code:</p>
+                <div style="font-family: var(--font-mono); font-size: 0.78rem; background: var(--code-bg); padding: 0.5rem; border-radius: 4px; color: var(--accent-rose);">
+                  // You had to manually find and mutate everything:<br>
+                  document.getElementById("btn").classList.add("active");
+                </div>
+                <p style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 0.5rem;">
+                  In React, you simply declare: <em>"Here is what my UI should look like based on current state"</em>. React's Virtual DOM figures out the minimal operations to get there!
+                </p>
+              </div>
+
+              <div class="callout callout-blue">
+                <span class="callout-icon">⭐</span>
+                <div>
+                  <strong>Key Idea:</strong> Don't update more of the real DOM than necessary.
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 22 — WHAT IS DIFFING?
+           ==================================================================== -->
+      <section class="slide" data-slide="22" id="slide-22">
+        <div class="slide-header">
+          <span class="slide-tag tag-amber">PART 4 — DIFFING</span>
+          <h2 class="slide-title">20. What is Diffing?</h2>
+          <p class="slide-subtitle">The algorithmic process of comparing previous and new Virtual DOM representations.</p>
+        </div>
+
+        <div class="slide-content">
+          <div class="callout callout-amber" style="font-size: 1rem; padding: 1.25rem;">
+            <span class="callout-icon" style="font-size: 1.5rem;">🔍</span>
+            <div>
+              <strong>Definition:</strong> <em>"Diffing is the process of comparing the previous Virtual DOM representation with the new one to determine exactly what changed."</em>
+            </div>
+          </div>
+
+          <div class="grid-2" style="margin-top: 1rem;">
+            <div class="card">
+              <div class="card-title" style="color: var(--text-muted);"><span class="icon">⏪</span> Previous Virtual DOM</div>
+              <div class="code-box">
+                <pre class="code-content">&lt;<span class="tag">div</span>&gt;
+  &lt;<span class="tag">h1</span>&gt;Hello&lt;/<span class="tag">h1</span>&gt;
+  &lt;<span class="tag">p</span>&gt;Welcome&lt;/<span class="tag">p</span>&gt;
+&lt;/<span class="tag">div</span>&gt;</pre>
+              </div>
+            </div>
+
+            <div class="card card-highlight">
+              <div class="card-title" style="color: var(--accent-amber);"><span class="icon">⏩</span> New Virtual DOM</div>
+              <div class="code-box">
+                <pre class="code-content">&lt;<span class="tag">div</span>&gt;
+  &lt;<span class="tag">h1</span> <span class="attr" style="background: rgba(245, 158, 11, 0.2); padding: 2px 4px; border-radius: 3px;">style="color: #F59E0B;"</span>&gt;Hello React&lt;/<span class="tag">h1</span>&gt;
+  &lt;<span class="tag">p</span>&gt;Welcome&lt;/<span class="tag">p</span>&gt;
+&lt;/<span class="tag">div</span>&gt;</pre>
+              </div>
+            </div>
+          </div>
+
+          <div class="card" style="margin-top: 0.5rem;">
+            <div class="card-title"><span class="icon">⚖️</span> The Diffing Result</div>
+            <div style="font-family: var(--font-mono); font-size: 0.85rem; color: var(--text-secondary); display: flex; gap: 1.5rem; flex-wrap: wrap;">
+              <div><code>&lt;div&gt;</code> &rarr; <span style="color: var(--accent-emerald);">SAME (no change)</span></div>
+              <div><code>&lt;h1&gt;</code> &rarr; <span style="color: var(--accent-amber);">TEXT CHANGED ("Hello" &rarr; "Hello React")</span></div>
+              <div><code>&lt;p&gt;</code> &rarr; <span style="color: var(--accent-emerald);">SAME (no change)</span></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 23 — SIMPLE DIFFING EXAMPLE
+           ==================================================================== -->
+      <section class="slide" data-slide="23" id="slide-23">
+        <div class="slide-header">
+          <span class="slide-tag tag-amber">PART 4 — DIFFING</span>
+          <h2 class="slide-title">21. Tree Diffing Example</h2>
+          <p class="slide-subtitle">Visualizing how React traverses the tree to isolate changes.</p>
+        </div>
+
+        <div class="slide-content">
+          <div class="grid-split-left-wide">
+            <div class="card">
+              <div class="card-title"><span class="icon">🌲</span> Comparing Node by Node</div>
+              
+              <div class="flow-vertical" style="margin: 0.5rem 0; font-family: var(--font-mono); font-size: 0.85rem;">
+                <div class="flow-step-v" style="border-color: var(--accent-emerald);"><span style="color: var(--accent-emerald);">div (same element)</span> <span style="font-size: 0.72rem; color: var(--text-dim);">No DOM touch</span></div>
+                <div class="flow-arrow-v">↓</div>
+                <div style="display: flex; gap: 0.75rem; width: 100%;">
+                  <div class="flow-step-v" style="flex: 1; border-color: var(--accent-amber); background: rgba(245, 158, 11, 0.1);">
+                    <span style="color: var(--accent-amber); font-weight: bold;">h1 (Text Changed)</span>
+                  </div>
+                  <div class="flow-step-v" style="flex: 1; border-color: var(--accent-emerald);">
+                    <span style="color: var(--accent-emerald);">p (Unchanged)</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="callout callout-amber" style="margin-top: 0.75rem;">
+                <span class="callout-icon">🎯</span>
+                <div>
+                  <strong>Conclusion:</strong> React does NOT replace the <code>div</code> or touch the <code>p</code> paragraph. It executes a single surgical update:
+                  <div style="font-family: var(--font-mono); font-size: 0.8rem; margin-top: 0.25rem; color: var(--accent-amber);">
+                    h1Element.firstChild.nodeValue = "Hello React";
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="flex-col">
+              <div class="card card-highlight">
+                <div class="card-title"><span class="icon">⚡</span> Efficiency at Scale</div>
+                <p>Imagine 50 other paragraphs, buttons, and images inside that <code>div</code>. React will leave all 50 existing DOM nodes intact without re-rendering them to the screen!</p>
+              </div>
+
+              <div class="card">
+                <div class="card-title"><span class="icon">🧠</span> Key Rule</div>
+                <p style="font-size: 0.85rem; color: var(--text-secondary);">
+                  React compares trees level by level (breadth-first traversal). If a node hasn't changed, React skips all its children immediately!
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 24 — ELEMENT TYPE CHANGES
+           ==================================================================== -->
+      <section class="slide" data-slide="24" id="slide-24">
+        <div class="slide-header">
+          <span class="slide-tag tag-amber">PART 4 — DIFFING</span>
+          <h2 class="slide-title">22. Diffing Rule 1: Element Type Changes</h2>
+          <p class="slide-subtitle">When the root element tag changes, React tears down and rebuilds the tree.</p>
+        </div>
+
+        <div class="slide-content">
+          <div class="grid-2">
+            <div class="card">
+              <div class="card-title" style="color: var(--text-muted);"><span class="icon">⏪</span> Before</div>
+              <div class="code-box">
+                <pre class="code-content">&lt;<span class="tag">div</span>&gt;
+  &lt;<span class="tag">Counter</span> /&gt;
+&lt;/<span class="tag">div</span>&gt;</pre>
+              </div>
+            </div>
+
+            <div class="card card-highlight">
+              <div class="card-title" style="color: var(--accent-rose);"><span class="icon">⏩</span> After (Type Changed)</div>
+              <div class="code-box">
+                <pre class="code-content">&lt;<span class="tag">section</span>&gt;
+  &lt;<span class="tag">Counter</span> /&gt;
+&lt;/<span class="tag">section</span>&gt;</pre>
+              </div>
+            </div>
+          </div>
+
+          <div class="grid-split-left-wide" style="margin-top: 0.5rem;">
+            <div class="card">
+              <div class="card-title"><span class="icon">💥</span> What Happens Under the Hood?</div>
+              <p>The element type changed from <strong><code>div</code></strong> to <strong><code>section</code></strong>.</p>
+              <ul style="font-size: 0.85rem; padding-left: 1.2rem; display: flex; flex-direction: column; gap: 0.4rem; color: var(--text-secondary); margin-top: 0.4rem;">
+                <li>React treats different element types as completely different subtrees.</li>
+                <li>It <strong>destroys (unmounts)</strong> the old <code>&lt;div&gt;</code> and all its children.</li>
+                <li>Any component state inside child elements (like <code>Counter</code> state) is reset.</li>
+                <li>It creates a brand new <code>&lt;section&gt;</code> DOM node and mounts fresh children.</li>
+              </ul>
+            </div>
+
+            <div class="callout callout-rose">
+              <span class="callout-icon">⚠️</span>
+              <div>
+                <strong>Takeaway:</strong> Changing a parent tag (e.g. <code>div</code> &rarr; <code>section</code> or <code>p</code> &rarr; <code>span</code>) completely resets that entire branch of the DOM.
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 25 — PROPS CHANGES
+           ==================================================================== -->
+      <section class="slide" data-slide="25" id="slide-25">
+        <div class="slide-header">
+          <span class="slide-tag tag-amber">PART 4 — DIFFING</span>
+          <h2 class="slide-title">23. Diffing Rule 2: Props Changes</h2>
+          <p class="slide-subtitle">When the element type remains identical, React only updates changed attributes.</p>
+        </div>
+
+        <div class="slide-content">
+          <div class="grid-2">
+            <div class="card">
+              <div class="card-title" style="color: var(--text-muted);"><span class="icon">⏪</span> Before</div>
+              <div class="code-box">
+                <pre class="code-content">&lt;<span class="tag">button</span> <span class="attr">className</span>=<span class="str">"bg-blue-500 text-white"</span>&gt;
+  Submit
+&lt;/<span class="tag">button</span>&gt;</pre>
+              </div>
+            </div>
+
+            <div class="card card-highlight">
+              <div class="card-title" style="color: var(--react-cyan);"><span class="icon">⏩</span> After (Props Changed)</div>
+              <div class="code-box">
+                <pre class="code-content">&lt;<span class="tag">button</span> <span class="attr" style="background: rgba(0, 216, 255, 0.15); padding: 2px 4px; border-radius: 3px;">className="bg-red-500 text-white"</span>&gt;
+  Submit
+&lt;/<span class="tag">button</span>&gt;</pre>
+              </div>
+            </div>
+          </div>
+
+          <div class="grid-split-left-wide" style="margin-top: 0.5rem;">
+            <div class="card">
+              <div class="card-title"><span class="icon">✨</span> Preservation of DOM Node</div>
+              <ul style="font-size: 0.85rem; padding-left: 1.2rem; display: flex; flex-direction: column; gap: 0.45rem; color: var(--text-secondary);">
+                <li>Element type is identical (both are <code>&lt;button&gt;</code>).</li>
+                <li>React <strong>retains the exact same DOM node</strong> on screen!</li>
+                <li>It only modifies the changed attribute (e.g. swaps <code>bg-blue-500</code> for <code>bg-red-500</code>).</li>
+                <li>Child text ("Submit") and component focus are smoothly preserved without flickering.</li>
+              </ul>
+            </div>
+
+            <div class="callout callout-emerald">
+              <span class="callout-icon">💡</span>
+              <div>
+                <strong>Same Element Type:</strong> React modifies only the changed attribute or style on the underlying DOM node.
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 26 — LISTS AND KEYS
+           ==================================================================== -->
+      <section class="slide" data-slide="26" id="slide-26">
+        <div class="slide-header">
+          <span class="slide-tag tag-purple">PART 4 — DIFFING</span>
+          <h2 class="slide-title">24. Diffing Lists: Why the "key" Prop Matters</h2>
+          <p class="slide-subtitle">Helping React match items across renders when arrays are reordered or updated.</p>
+        </div>
+
+        <div class="slide-content">
+          <div class="grid-split-left-wide">
+            <div class="code-box">
+              <div class="code-header">
+                <div class="code-dots"><div class="code-dot red"></div><div class="code-dot yellow"></div><div class="code-dot green"></div></div>
+                <span class="code-title">Rendering Dynamic Lists with key</span>
+                <button class="copy-btn" onclick="Deck.copyCode(this)">Copy</button>
+              </div>
+              <pre class="code-content">{students.<span class="fn">map</span>(student =&gt; (
+  &lt;<span class="tag">StudentCard</span>
+    <span class="attr" style="color: var(--accent-purple); font-weight: bold;">key</span>={student.<span class="prop">id</span>} <span class="comment">// &lt;-- Stable unique identifier</span>
+    <span class="attr">student</span>={student}
+  /&gt;
+))}</pre>
+            </div>
+
+            <div class="flex-col">
+              <div class="card card-highlight">
+                <div class="card-title" style="color: var(--accent-purple);"><span class="icon">🔑</span> Why Does React Need Keys?</div>
+                <p>Consider an array before and after an item <code>X</code> is added at the start:</p>
+                <div style="font-family: var(--font-mono); font-size: 0.85rem; padding: 0.5rem; background: var(--code-bg); border-radius: 4px; margin-top: 0.3rem;">
+                  Before: [ A, B, C ]<br>
+                  After:  [ <strong style="color: var(--accent-amber);">X</strong>, A, B, C ]
+                </div>
+                <p style="font-size: 0.8rem; color: var(--text-secondary); margin-top: 0.4rem;">
+                  <strong>With stable keys:</strong> React knows <code>X</code> was inserted at position 0, while <code>A</code>, <code>B</code>, and <code>C</code> just shifted position. It preserves their DOM nodes!
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 27 — WHY INDEX AS KEY CAN BE PROBLEMATIC
+           ==================================================================== -->
+      <section class="slide" data-slide="27" id="slide-27">
+        <div class="slide-header">
+          <span class="slide-tag tag-purple">PART 4 — DIFFING</span>
+          <h2 class="slide-title">25. Why Using Array Index as Key is Problematic</h2>
+          <p class="slide-subtitle">Unstable keys cause subtle UI bugs when items are reordered or removed.</p>
+        </div>
+
+        <div class="slide-content">
+          <div class="grid-split-left-wide">
+            <div class="code-box">
+              <div class="code-header">
+                <div class="code-dots"><div class="code-dot red"></div><div class="code-dot yellow"></div><div class="code-dot green"></div></div>
+                <span class="code-title">Anti-pattern: key={index}</span>
+              </div>
+              <pre class="code-content"><span class="comment">// 🚨 AVOID THIS when items can be added, deleted, or reordered</span>
+{students.<span class="fn">map</span>((student, <span class="prop">index</span>) =&gt; (
+  &lt;<span class="tag">StudentCard</span>
+    <span class="attr" style="color: var(--accent-rose); font-weight: bold;">key</span>={<span class="prop">index</span>} <span class="comment">// ❌ Index is tied to position, NOT the data!</span>
+    <span class="attr">student</span>={student}
+  /&gt;
+))}</pre>
+            </div>
+
+            <div class="flex-col">
+              <div class="card card-highlight">
+                <div class="card-title" style="color: var(--accent-rose);"><span class="icon">💥</span> What Goes Wrong?</div>
+                <p>If you delete the first student, the student at index <code>1</code> becomes index <code>0</code>. React sees that <code>key=0</code> is still there and assumes it's the same item, causing:</p>
+                <ul style="font-size: 0.82rem; padding-left: 1.2rem; display: flex; flex-direction: column; gap: 0.35rem; color: var(--text-secondary); margin-top: 0.35rem;">
+                  <li>Form input fields retaining old typed values</li>
+                  <li>Checkbox states attaching to the wrong student</li>
+                  <li>CSS animations glitching</li>
+                </ul>
+              </div>
+
+              <div class="callout callout-emerald">
+                <span class="callout-icon">✔</span>
+                <div>
+                  <strong>Best Practice:</strong> Always use unique, persistent data IDs like <code>key={student.id}</code> or <code>key={student._id}</code>!
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 28 — WHAT IS RECONCILIATION?
+           ==================================================================== -->
+      <section class="slide" data-slide="28" id="slide-28">
+        <div class="slide-header">
+          <span class="slide-tag tag-emerald">PART 5 — RECONCILIATION</span>
+          <h2 class="slide-title">26. What is Reconciliation?</h2>
+          <p class="slide-subtitle">React's overarching process for coordinating and applying UI updates.</p>
+        </div>
+
+        <div class="slide-content">
+          <div class="callout callout-emerald" style="font-size: 1rem; padding: 1.25rem;">
+            <span class="callout-icon" style="font-size: 1.5rem;">🔄</span>
+            <div>
+              <strong>Definition:</strong> <em>"Reconciliation is React's process of determining how the rendered UI should be updated when the component tree changes."</em>
+            </div>
+          </div>
+
+          <div class="flow-container" style="gap: 1.5rem; margin-top: 1rem;">
+            <div class="flow-node">
+              <div class="flow-node-title">1. New UI</div>
+              <div class="flow-node-desc">Triggered by change</div>
+            </div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-node active-amber">
+              <div class="flow-node-title" style="color: var(--accent-amber);">2. Diffing Phase</div>
+              <div class="flow-node-desc">Compares with previous UI</div>
+            </div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-node active-node">
+              <div class="flow-node-title" style="color: var(--accent-emerald);">3. Reconciliation</div>
+              <div class="flow-node-desc">Determines required updates</div>
+            </div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-node">
+              <div class="flow-node-title">4. Real DOM</div>
+              <div class="flow-node-desc">Updates live page</div>
+            </div>
+          </div>
+
+          <div class="card" style="margin-top: 0.5rem;">
+            <div class="card-title"><span class="icon">💡</span> The Relationship</div>
+            <p><strong>Diffing is part of Reconciliation.</strong> Diffing is the comparison step where React figures out <em>"what changed"</em>, and Reconciliation is the broader process of coordinating and applying those changes to the real DOM.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 29 — DIFFING VS RECONCILIATION
+           ==================================================================== -->
+      <section class="slide" data-slide="29" id="slide-29">
+        <div class="slide-header">
+          <span class="slide-tag tag-emerald">PART 5 — RECONCILIATION</span>
+          <h2 class="slide-title">27. Diffing vs Reconciliation: The Key Difference</h2>
+          <p class="slide-subtitle">Clear distinction between the comparison algorithm and the update pipeline.</p>
+        </div>
+
+        <div class="slide-content">
+          <div class="grid-2">
+            <div class="card card-highlight" style="border-color: var(--accent-amber-border);">
+              <div class="card-title" style="color: var(--accent-amber);"><span class="icon">🔍</span> Diffing</div>
+              <p style="font-size: 1.1rem; font-weight: bold; color: var(--text-main);">"What changed?"</p>
+              <ul style="font-size: 0.85rem; padding-left: 1.2rem; display: flex; flex-direction: column; gap: 0.5rem; color: var(--text-secondary); margin-top: 0.5rem;">
+                <li>The comparison algorithm.</li>
+                <li>Compares the previous Virtual DOM tree with the newly generated Virtual DOM tree.</li>
+                <li>Produces a set of differences (diffs).</li>
+              </ul>
+            </div>
+
+            <div class="card card-highlight" style="border-color: var(--accent-emerald-border);">
+              <div class="card-title" style="color: var(--accent-emerald);"><span class="icon">🔄</span> Reconciliation</div>
+              <p style="font-size: 1.1rem; font-weight: bold; color: var(--text-main);">"How should React update the UI?"</p>
+              <ul style="font-size: 0.85rem; padding-left: 1.2rem; display: flex; flex-direction: column; gap: 0.5rem; color: var(--text-secondary); margin-top: 0.5rem;">
+                <li>The complete update workflow.</li>
+                <li>Takes the diff results and decides which Real DOM nodes must be added, updated, or removed.</li>
+                <li>Coordinates batching and DOM mutations.</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="callout callout-purple" style="margin-top: 0.75rem;">
+            <span class="callout-icon">📌</span>
+            <div>
+              <strong>Simple Memory Trick:</strong> Diffing calculates the recipe of changes. Reconciliation is the entire cooking process that delivers the final meal to the browser!
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 30 — COMPLETE REACT UPDATE FLOW
+           ==================================================================== -->
+      <section class="slide" data-slide="30" id="slide-30">
+        <div class="slide-header">
+          <span class="slide-tag">ARCHITECTURE</span>
+          <h2 class="slide-title">28. The Complete React Update Flow</h2>
+          <p class="slide-subtitle">The end-to-end lifecycle from user interaction to screen pixels.</p>
+        </div>
+
+        <div class="slide-content">
+          <div class="update-flow-wrapper">
+            <div class="update-stages-row" id="updateStagesRow">
+              <div class="update-stage active-stage" onclick="Deck.setUpdateStage(1, this)">
+                <h5>1. User Action</h5>
+                <p>Click, typing, etc.</p>
+              </div>
+              <div style="color: var(--react-cyan); font-weight: bold;">&rarr;</div>
+              <div class="update-stage" onclick="Deck.setUpdateStage(2, this)">
+                <h5>2. State Change</h5>
+                <p>Trigger update</p>
+              </div>
+              <div style="color: var(--react-cyan); font-weight: bold;">&rarr;</div>
+              <div class="update-stage" onclick="Deck.setUpdateStage(3, this)">
+                <h5>3. Re-render</h5>
+                <p>New VDOM tree</p>
+              </div>
+              <div style="color: var(--react-cyan); font-weight: bold;">&rarr;</div>
+              <div class="update-stage" onclick="Deck.setUpdateStage(4, this)">
+                <h5>4. Diffing</h5>
+                <p>Compare trees</p>
+              </div>
+              <div style="color: var(--react-cyan); font-weight: bold;">&rarr;</div>
+              <div class="update-stage" onclick="Deck.setUpdateStage(5, this)">
+                <h5>5. Reconciliation</h5>
+                <p>Update real DOM</p>
+              </div>
+              <div style="color: var(--react-cyan); font-weight: bold;">&rarr;</div>
+              <div class="update-stage" onclick="Deck.setUpdateStage(6, this)">
+                <h5>6. Browser Paint</h5>
+                <p>Updated screen</p>
+              </div>
+            </div>
+
+            <div class="callout callout-blue" id="updateStageDetailsBox">
+              <span class="callout-icon">⚡</span>
+              <div id="updateStageDetailsText">
+                <strong>Stage 1 — User Action:</strong> A user clicks a button or inputs text, triggering an event handler in the component.
+              </div>
+            </div>
+          </div>
+
+          <div class="grid-3" style="margin-top: 0.5rem;">
+            <div class="card" style="padding: 0.85rem; text-align: center;">
+              <div style="color: var(--react-cyan); font-weight: bold; font-family: var(--font-mono);">Render Phase</div>
+              <div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 0.25rem;">Component calls &rarr; VDOM tree built &rarr; Diffing occurs (pure JS, no DOM side-effects)</div>
+            </div>
+            <div class="card" style="padding: 0.85rem; text-align: center;">
+              <div style="color: var(--accent-emerald); font-weight: bold; font-family: var(--font-mono);">Commit Phase</div>
+              <div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 0.25rem;">Reconciliation writes computed changes to real DOM nodes</div>
+            </div>
+            <div class="card" style="padding: 0.85rem; text-align: center;">
+              <div style="color: var(--tailwind-sky); font-weight: bold; font-family: var(--font-mono);">Paint Phase</div>
+              <div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 0.25rem;">Browser draws pixels to display updated UI to user</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 31 — SIMPLE COMPLETE WALKTHROUGH
+           ==================================================================== -->
+      <section class="slide" data-slide="31" id="slide-31">
+        <div class="slide-header">
+          <span class="slide-tag">STEP-BY-STEP</span>
+          <h2 class="slide-title">29. Complete Walkthrough of an Update</h2>
+          <p class="slide-subtitle">Tracing what happens when a simple heading changes.</p>
+        </div>
+
+        <div class="slide-content">
+          <div class="grid-split-left-wide">
+            <div class="code-box">
+              <div class="code-header">
+                <div class="code-dots"><div class="code-dot red"></div><div class="code-dot yellow"></div><div class="code-dot green"></div></div>
+                <span class="code-title">App.jsx</span>
+              </div>
+              <pre class="code-content"><span class="kwd">function</span> <span class="fn">App</span>() {
+  <span class="kwd">return</span> (
+    &lt;&gt;
+      &lt;<span class="tag">h1</span>&gt;Hello&lt;/<span class="tag">h1</span>&gt;
+      &lt;<span class="tag">p</span>&gt;Welcome to React&lt;/<span class="tag">p</span>&gt;
+    &lt;/&gt;
+  );
+}
+
+<span class="comment">// Later heading changes to: &lt;h1&gt;Hello React&lt;/h1&gt;</span></pre>
+            </div>
+
+            <div class="flex-col">
+              <div class="card card-highlight">
+                <div class="card-title"><span class="icon">🧭</span> Step-by-Step Execution</div>
+                <div style="font-size: 0.82rem; display: flex; flex-direction: column; gap: 0.45rem; color: var(--text-secondary);">
+                  <div><strong>1. Previous UI:</strong> <code>h1</code> ("Hello"), <code>p</code> ("Welcome to React")</div>
+                  <div><strong>2. State change:</strong> Triggers re-render</div>
+                  <div><strong>3. New UI:</strong> <code>h1</code> ("Hello React"), <code>p</code> ("Welcome to React")</div>
+                  <div><strong>4. Diffing:</strong> Compares previous and new UI descriptions</div>
+                  <div><strong>5. Difference identified:</strong> Only <code>h1</code> text changed!</div>
+                  <div><strong>6. Real DOM:</strong> React updates only the single text node of <code>h1</code></div>
+                </div>
+              </div>
+
+              <div class="callout callout-emerald">
+                <span class="callout-icon">✔</span>
+                <div>
+                  The <code>p</code> paragraph was completely untouched in the real DOM!
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 32 — INTERACTIVE DIFFING DEMO
+           ==================================================================== -->
+      <section class="slide" data-slide="32" id="slide-32">
+        <div class="slide-header">
+          <span class="slide-tag tag-amber">INTERACTIVE DEMO</span>
+          <h2 class="slide-title">30. Interactive Diffing &amp; Reconciliation Simulator</h2>
+          <p class="slide-subtitle">Click the button below to see React's diffing algorithm detect changes in real-time.</p>
+        </div>
+
+        <div class="slide-content">
+          <div class="diff-sim-container">
+            <div class="diff-sim-controls">
+              <div style="font-family: var(--font-mono); font-size: 0.85rem; font-weight: 700;">
+                Simulation Status: <span id="slideSimStatus" style="color: var(--react-cyan);">Initial Render</span>
+              </div>
+              <div style="display: flex; gap: 0.5rem;">
+                <button class="diff-action-btn" id="slideSimToggleBtn" onclick="DiffSim.toggleChange()">
+                  <span>⚡</span> Change Title ("Hello" &rarr; "Hello React")
+                </button>
+                <button class="diff-reset-btn" onclick="DiffSim.reset()">
+                  <span>🔄</span> Reset
+                </button>
+              </div>
+            </div>
+
+            <div class="diff-trees-grid">
+              <!-- Before Tree -->
+              <div class="tree-card">
+                <div class="tree-card-title">
+                  <span>Previous Virtual DOM</span>
+                  <span style="color: var(--text-dim);">Before</span>
+                </div>
+                <div class="tree-node node-same">
+                  <span>&lt;Card&gt;</span>
+                  <span style="font-size: 0.68rem; color: var(--accent-emerald);">[Unchanged]</span>
+                </div>
+                <div class="tree-node node-same" id="prevTitleNode" style="margin-left: 1rem;">
+                  <span>Title: "Hello"</span>
+                  <span style="font-size: 0.68rem; color: var(--text-dim);">Text</span>
+                </div>
+                <div class="tree-node node-same" style="margin-left: 1rem;">
+                  <span>Message: "Welcome"</span>
+                  <span style="font-size: 0.68rem; color: var(--accent-emerald);">[Unchanged]</span>
+                </div>
+              </div>
+
+              <!-- Center Arrow -->
+              <div style="text-align: center; color: var(--react-cyan); font-size: 1.5rem; font-weight: bold;">
+                &rarr;
+              </div>
+
+              <!-- After Tree -->
+              <div class="tree-card">
+                <div class="tree-card-title">
+                  <span>New Virtual DOM</span>
+                  <span style="color: var(--accent-amber);">After Change</span>
+                </div>
+                <div class="tree-node node-same">
+                  <span>&lt;Card&gt;</span>
+                  <span style="font-size: 0.68rem; color: var(--accent-emerald);">[Unchanged]</span>
+                </div>
+                <div class="tree-node" id="nextTitleNode" style="margin-left: 1rem;">
+                  <span id="nextTitleText">Title: "Hello"</span>
+                  <span id="nextTitleBadge" style="font-size: 0.68rem; color: var(--text-dim);">Text</span>
+                </div>
+                <div class="tree-node node-same" style="margin-left: 1rem;">
+                  <span>Message: "Welcome"</span>
+                  <span style="font-size: 0.68rem; color: var(--accent-emerald);">[Unchanged]</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="callout callout-amber" id="slideSimLogBox">
+              <span class="callout-icon">💡</span>
+              <div id="slideSimLogText">
+                Click <strong>"Change Title"</strong> above to trigger a simulated state change and watch React diff the trees!
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 33 — TAILWIND + REACT + VIRTUAL DOM CONNECTED
+           ==================================================================== -->
+      <section class="slide" data-slide="33" id="slide-33">
+        <div class="slide-header">
+          <span class="slide-tag">SYNTHESIS</span>
+          <h2 class="slide-title">31. Connecting Tailwind + React + Virtual DOM</h2>
+          <p class="slide-subtitle">How styling and internal rendering work together in modern React apps.</p>
+        </div>
+
+        <div class="slide-content">
+          <div class="flow-container" style="gap: 1.25rem;">
+            <div class="flow-node active-node">
+              <div class="flow-node-title" style="color: var(--react-cyan);">React Component</div>
+              <div class="flow-node-desc">JSX Architecture</div>
+            </div>
+            <div class="flow-arrow">+</div>
+            <div class="flow-node" style="border-color: var(--tailwind-border);">
+              <div class="flow-node-title" style="color: var(--tailwind-sky);">Tailwind Classes</div>
+              <div class="flow-node-desc">Styling directly in JSX</div>
+            </div>
+            <div class="flow-arrow">&rarr;</div>
+            <div class="flow-node">
+              <div class="flow-node-title">Virtual DOM Tree</div>
+              <div class="flow-node-desc">Objects with className</div>
+            </div>
+            <div class="flow-arrow">&rarr;</div>
+            <div class="flow-node active-amber">
+              <div class="flow-node-title" style="color: var(--accent-amber);">Diffing</div>
+              <div class="flow-node-desc">Detects state changes</div>
+            </div>
+            <div class="flow-arrow">&rarr;</div>
+            <div class="flow-node">
+              <div class="flow-node-title" style="color: var(--accent-emerald);">Real DOM</div>
+              <div class="flow-node-desc">Surgical updates</div>
+            </div>
+          </div>
+
+          <div class="grid-2" style="margin-top: 1rem;">
+            <div class="card card-tailwind">
+              <div class="card-title" style="color: var(--tailwind-sky);"><span class="icon">🎨</span> Tailwind CSS Role</div>
+              <p>Controls <strong>appearance and styling</strong>. It runs through your build tool (Vite) to generate utility classes, which you write as strings inside <code>className="..."</code>.</p>
+            </div>
+
+            <div class="card card-highlight">
+              <div class="card-title" style="color: var(--react-cyan);"><span class="icon">⚙️</span> React VDOM &amp; Reconciliation Role</div>
+              <p>Controls <strong>behavior and UI updates</strong>. It tracks state changes, compares component trees in memory, and applies minimal real DOM mutations.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 34 — COMMON MISCONCEPTIONS
+           ==================================================================== -->
+      <section class="slide" data-slide="34" id="slide-34">
+        <div class="slide-header">
+          <span class="slide-tag tag-rose">MYTHS VS REALITY</span>
+          <h2 class="slide-title">32. Common Misconceptions Debunked</h2>
+          <p class="slide-subtitle">Clarifying the most frequent misunderstandings among React learners.</p>
+        </div>
+
+        <div class="slide-content">
+          <div class="grid-2">
+            <div class="card">
+              <div style="font-size: 0.85rem; color: var(--accent-rose); font-weight: bold; margin-bottom: 0.25rem;">
+                ❌ MISCONCEPTION 1:
+              </div>
+              <p style="font-size: 0.9rem; font-weight: bold; color: var(--text-main);">"Virtual DOM replaces the real DOM."</p>
+              <div style="font-size: 0.82rem; color: var(--text-secondary); margin-top: 0.4rem; padding-top: 0.4rem; border-top: 1px solid var(--border-subtle);">
+                <strong style="color: var(--accent-emerald);">REALITY:</strong> No. React ultimately updates the real DOM. The Virtual DOM is only an in-memory staging area.
+              </div>
+            </div>
+
+            <div class="card">
+              <div style="font-size: 0.85rem; color: var(--accent-rose); font-weight: bold; margin-bottom: 0.25rem;">
+                ❌ MISCONCEPTION 2:
+              </div>
+              <p style="font-size: 0.9rem; font-weight: bold; color: var(--text-main);">"React updates the entire DOM every time."</p>
+              <div style="font-size: 0.82rem; color: var(--text-secondary); margin-top: 0.4rem; padding-top: 0.4rem; border-top: 1px solid var(--border-subtle);">
+                <strong style="color: var(--accent-emerald);">REALITY:</strong> React determines exactly what changed and applies only the necessary DOM updates.
+              </div>
+            </div>
+
+            <div class="card">
+              <div style="font-size: 0.85rem; color: var(--accent-rose); font-weight: bold; margin-bottom: 0.25rem;">
+                ❌ MISCONCEPTION 3:
+              </div>
+              <p style="font-size: 0.9rem; font-weight: bold; color: var(--text-main);">"Virtual DOM automatically makes every React app faster."</p>
+              <div style="font-size: 0.82rem; color: var(--text-secondary); margin-top: 0.4rem; padding-top: 0.4rem; border-top: 1px solid var(--border-subtle);">
+                <strong style="color: var(--accent-emerald);">REALITY:</strong> It provides a predictable declarative programming model; real app performance depends on clean component design and avoiding unnecessary work.
+              </div>
+            </div>
+
+            <div class="card">
+              <div style="font-size: 0.85rem; color: var(--accent-rose); font-weight: bold; margin-bottom: 0.25rem;">
+                ❌ MISCONCEPTION 4:
+              </div>
+              <p style="font-size: 0.9rem; font-weight: bold; color: var(--text-main);">"Diffing and Reconciliation are two unrelated algorithms."</p>
+              <div style="font-size: 0.82rem; color: var(--text-secondary); margin-top: 0.4rem; padding-top: 0.4rem; border-top: 1px solid var(--border-subtle);">
+                <strong style="color: var(--accent-emerald);">REALITY:</strong> Diffing is simply the comparison phase *inside* React's reconciliation process.
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 35 — PRACTICAL ASSIGNMENT
+           ==================================================================== -->
+      <section class="slide" data-slide="35" id="slide-35">
+        <div class="slide-header">
+          <span class="slide-tag">CLASSROOM LAB</span>
+          <h2 class="slide-title">33. Practical Assignment</h2>
+          <p class="slide-subtitle">Hands-on student exercises covering both styling and React rendering internals.</p>
+        </div>
+
+        <div class="slide-content">
+          <div class="grid-split-left-wide">
+            <div class="card card-highlight">
+              <div class="card-title"><span class="icon">💻</span> Student Practice Tasks</div>
+              <div style="display: flex; flex-direction: column; gap: 0.75rem; font-size: 0.85rem; margin-top: 0.4rem;">
+                <div style="padding: 0.6rem; background: var(--bg-surface); border-radius: var(--radius-sm); border-left: 3px solid var(--tailwind-sky);">
+                  <strong style="color: var(--tailwind-sky);">Task 1 — Tailwind Card:</strong><br>
+                  Create a responsive Student Profile Card using Tailwind CSS (name, course, email, rounded-lg, shadow-md, responsive width).
+                </div>
+
+                <div style="padding: 0.6rem; background: var(--bg-surface); border-radius: var(--radius-sm); border-left: 3px solid var(--react-cyan);">
+                  <strong style="color: var(--react-cyan);">Task 2 — Product List with Stable Keys:</strong><br>
+                  Create a simple product list component and render 4 products using <code>key={product.id}</code> instead of array indices.
+                </div>
+
+                <div style="padding: 0.6rem; background: var(--bg-surface); border-radius: var(--radius-sm); border-left: 3px solid var(--accent-amber);">
+                  <strong style="color: var(--accent-amber);">Task 3 — Trace the Flow:</strong><br>
+                  When a product's price updates, explain on paper:
+                  <code>Previous UI &rarr; New UI &rarr; What changed? &rarr; What should React update?</code>
+                </div>
+              </div>
+            </div>
+
+            <div class="flex-col">
+              <div class="card">
+                <div class="card-title"><span class="icon">⏱️</span> Teacher's Notes</div>
+                <ul style="font-size: 0.82rem; color: var(--text-muted); padding-left: 1.2rem; display: flex; flex-direction: column; gap: 0.45rem;">
+                  <li>Estimated lab time: 20 minutes.</li>
+                  <li>No external API calls or routing needed.</li>
+                  <li>Focus on clean Tailwind classes and understanding why React avoids touching unrelated DOM nodes.</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 36 — FINAL CHEAT SHEET
+           ==================================================================== -->
+      <section class="slide" data-slide="36" id="slide-36">
+        <div class="slide-header">
+          <span class="slide-tag">SUMMARY</span>
+          <h2 class="slide-title">34. Master Cheat Sheet &amp; Key Takeaways</h2>
+          <p class="slide-subtitle">The core mental models to remember from React Day 4.</p>
+        </div>
+
+        <div class="slide-content">
+          <div class="grid-split-left-wide">
+            <div class="card card-highlight">
+              <div class="card-title"><span class="icon">🧠</span> The Core Terminology</div>
+              
+              <div style="display: flex; flex-direction: column; gap: 0.6rem; font-size: 0.85rem; margin-top: 0.4rem;">
+                <div><strong style="color: var(--tailwind-sky);">TAILWIND CSS:</strong> Utility-first CSS framework providing small classes directly in JSX.</div>
+                <div><strong style="color: var(--text-main);">DOM:</strong> Browser's tree structure of live HTML objects.</div>
+                <div><strong style="color: var(--react-cyan);">VIRTUAL DOM:</strong> React's lightweight in-memory JavaScript representation of the UI.</div>
+                <div><strong style="color: var(--accent-amber);">DIFFING:</strong> The algorithm comparing previous vs new VDOM trees ("What changed?").</div>
+                <div><strong style="color: var(--accent-emerald);">RECONCILIATION:</strong> The broader process determining and applying real DOM updates.</div>
+                <div><strong style="color: var(--accent-purple);">KEY:</strong> Persistent identifier helping React track list items across renders.</div>
+              </div>
+            </div>
+
+            <div class="flex-col">
+              <div class="card" style="text-align: center; padding: 1rem;">
+                <div class="card-title" style="justify-content: center; color: var(--react-cyan);">
+                  <span class="icon">⚛️</span> The Complete Lifecycle Flow
+                </div>
+                <div style="font-family: var(--font-mono); font-size: 0.78rem; line-height: 1.8; color: var(--text-secondary); margin-top: 0.5rem;">
+                  React Component<br>
+                  &darr;<br>
+                  Virtual DOM Tree<br>
+                  &darr;<br>
+                  State / Props Change<br>
+                  &darr;<br>
+                  New Virtual DOM Tree<br>
+                  &darr;<br>
+                  <span style="color: var(--accent-amber); font-weight: bold;">Diffing Algorithm</span><br>
+                  &darr;<br>
+                  <span style="color: var(--accent-emerald); font-weight: bold;">Reconciliation</span><br>
+                  &darr;<br>
+                  <strong style="color: var(--react-cyan);">Update Only Necessary DOM!</strong>
+                </div>
+              </div>
+
+              <div class="card" style="background: rgba(0, 216, 255, 0.08); border-color: var(--react-border); text-align: center;">
+                <div style="color: var(--react-cyan); font-weight: bold;">🎉 Day 4 Complete!</div>
+                <p style="font-size: 0.8rem; margin-top: 0.2rem;">You now understand both how to style React apps fast and how React efficiently coordinates DOM updates!</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- Bottom Footer Controls Bar -->
+    <footer class="bottom-footer">
+      <div class="footer-left">
+        <div class="slide-counter">
+          <span>Slide</span>
+          <span class="current-num" id="currentSlideNum">1</span>
+          <span class="total-num">/ <span id="totalSlidesNum">36</span></span>
+        </div>
+      </div>
+
+      <div class="footer-center">
+        <button class="nav-btn" id="prevBtn" onclick="Deck.prevSlide()" title="Previous Slide (Left Arrow)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="15 18 9 12 15 6"></polyline>
+          </svg>
+          Previous
+        </button>
+
+        <button class="nav-btn primary-nav" id="nextBtn" onclick="Deck.nextSlide()" title="Next Slide (Right Arrow or Space)">
+          Next
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="9 18 15 12 9 6"></polyline>
+          </svg>
+        </button>
+      </div>
+
+      <div class="footer-right">
+        <span class="nav-hint">
+          Navigate: <kbd>&larr;</kbd> <kbd>&rarr;</kbd> or <kbd>Space</kbd>
+        </span>
+      </div>
+    </footer>
+
+    <!-- ====================================================================
+         INTERACTIVE TAILWIND SANDBOX MODAL
+         ==================================================================== -->
+    <div class="modal-backdrop" id="twModal">
+      <div class="modal-window" style="max-width: 840px;">
+        <div class="modal-header">
+          <div class="modal-title">
+            <span style="color: var(--tailwind-sky);">🎨</span>
+            Interactive Tailwind Utility Sandbox
+          </div>
+          <button class="close-modal-btn" onclick="Deck.closeModal('twModal')">
+            <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none">
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+          </button>
+        </div>
+
+        <div class="tw-sandbox-card" style="border: none; border-radius: 0;">
+          <div class="tw-sandbox-grid">
+            <!-- Controls -->
+            <div class="tw-controls-pane">
+              <!-- Padding -->
+              <div class="tw-control-group">
+                <div class="tw-control-label">Padding (p)</div>
+                <div class="tw-btn-group" id="twPadGroup">
+                  <button class="tw-option-btn" data-prop="pad" data-val="p-2" onclick="TwSandbox.setOption('pad', 'p-2', this)">p-2 (8px)</button>
+                  <button class="tw-option-btn active" data-prop="pad" data-val="p-4" onclick="TwSandbox.setOption('pad', 'p-4', this)">p-4 (16px)</button>
+                  <button class="tw-option-btn" data-prop="pad" data-val="p-8" onclick="TwSandbox.setOption('pad', 'p-8', this)">p-8 (32px)</button>
+                </div>
+              </div>
+
+              <!-- Rounded -->
+              <div class="tw-control-group">
+                <div class="tw-control-label">Border Radius (rounded)</div>
+                <div class="tw-btn-group" id="twRoundGroup">
+                  <button class="tw-option-btn" data-prop="round" data-val="rounded-none" onclick="TwSandbox.setOption('round', 'rounded-none', this)">rounded-none</button>
+                  <button class="tw-option-btn active" data-prop="round" data-val="rounded-lg" onclick="TwSandbox.setOption('round', 'rounded-lg', this)">rounded-lg</button>
+                  <button class="tw-option-btn" data-prop="round" data-val="rounded-full" onclick="TwSandbox.setOption('round', 'rounded-full', this)">rounded-full</button>
+                </div>
+              </div>
+
+              <!-- Shadow -->
+              <div class="tw-control-group">
+                <div class="tw-control-label">Shadow</div>
+                <div class="tw-btn-group" id="twShadowGroup">
+                  <button class="tw-option-btn" data-prop="shadow" data-val="shadow-none" onclick="TwSandbox.setOption('shadow', 'shadow-none', this)">shadow-none</button>
+                  <button class="tw-option-btn active" data-prop="shadow" data-val="shadow-lg" onclick="TwSandbox.setOption('shadow', 'shadow-lg', this)">shadow-lg</button>
+                  <button class="tw-option-btn" data-prop="shadow" data-val="shadow-2xl" onclick="TwSandbox.setOption('shadow', 'shadow-2xl', this)">shadow-2xl</button>
+                </div>
+              </div>
+
+              <!-- Background Color -->
+              <div class="tw-control-group">
+                <div class="tw-control-label">Background Color (bg)</div>
+                <div class="tw-btn-group" id="twBgGroup">
+                  <button class="tw-option-btn active" data-prop="bg" data-val="bg-blue-500" onclick="TwSandbox.setOption('bg', 'bg-blue-500', this)">bg-blue-500</button>
+                  <button class="tw-option-btn" data-prop="bg" data-val="bg-emerald-500" onclick="TwSandbox.setOption('bg', 'bg-emerald-500', this)">bg-emerald-500</button>
+                  <button class="tw-option-btn" data-prop="bg" data-val="bg-purple-600" onclick="TwSandbox.setOption('bg', 'bg-purple-600', this)">bg-purple-600</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Live Element Preview -->
+            <div class="tw-preview-pane">
+              <div id="twLiveElement" style="background-color: #3b82f6; padding: 16px; border-radius: 8px; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.4); width: 220px;">
+                <div style="font-weight: 700; font-size: 1rem;">Tailwind Box</div>
+                <div style="font-size: 0.75rem; opacity: 0.9; margin-top: 4px;">Live Component Preview</div>
+              </div>
+
+              <div style="margin-top: 1.5rem; width: 100%;">
+                <div style="font-family: var(--font-mono); font-size: 0.72rem; color: var(--text-muted); margin-bottom: 0.35rem;">
+                  Generated React JSX:
+                </div>
+                <div id="twCodeOutput" style="font-family: var(--font-mono); font-size: 0.78rem; background: #020408; padding: 0.6rem; border-radius: 4px; border: 1px solid var(--border-subtle); color: var(--tailwind-sky);">
+                  &lt;div className="bg-blue-500 p-4 rounded-lg shadow-lg"&gt;
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ====================================================================
+         INTERACTIVE DIFFING SIMULATOR MODAL
+         ==================================================================== -->
+    <div class="modal-backdrop" id="diffModal">
+      <div class="modal-window" style="max-width: 860px;">
+        <div class="modal-header">
+          <div class="modal-title">
+            <span style="color: var(--react-cyan);">⚡</span>
+            Interactive Diffing &amp; Reconciliation Engine
+          </div>
+          <button class="close-modal-btn" onclick="Deck.closeModal('diffModal')">
+            <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none">
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+          </button>
+        </div>
+
+        <div class="diff-sim-container" style="border: none; border-radius: 0;">
+          <div class="diff-sim-controls">
+            <div style="font-family: var(--font-mono); font-size: 0.85rem; font-weight: 700;">
+              Status: <span id="modalSimStatus" style="color: var(--react-cyan);">Initial Render</span>
+            </div>
+            <div style="display: flex; gap: 0.5rem;">
+              <button class="diff-action-btn" id="modalSimToggleBtn" onclick="DiffSim.toggleChange()">
+                <span>⚡</span> Change Title ("Hello" &rarr; "Hello React")
+              </button>
+              <button class="diff-reset-btn" onclick="DiffSim.reset()">
+                <span>🔄</span> Reset
+              </button>
+            </div>
+          </div>
+
+          <div class="diff-trees-grid">
+            <div class="tree-card">
+              <div class="tree-card-title">
+                <span>Previous Virtual DOM</span>
+                <span style="color: var(--text-dim);">Before</span>
+              </div>
+              <div class="tree-node node-same">
+                <span>&lt;Card&gt;</span>
+                <span style="font-size: 0.68rem; color: var(--accent-emerald);">[Unchanged]</span>
+              </div>
+              <div class="tree-node node-same" style="margin-left: 1rem;">
+                <span>Title: "Hello"</span>
+                <span style="font-size: 0.68rem; color: var(--text-dim);">Text</span>
+              </div>
+              <div class="tree-node node-same" style="margin-left: 1rem;">
+                <span>Message: "Welcome"</span>
+                <span style="font-size: 0.68rem; color: var(--accent-emerald);">[Unchanged]</span>
+              </div>
+            </div>
+
+            <div style="text-align: center; color: var(--react-cyan); font-size: 1.5rem; font-weight: bold;">
+              &rarr;
+            </div>
+
+            <div class="tree-card">
+              <div class="tree-card-title">
+                <span>New Virtual DOM</span>
+                <span style="color: var(--accent-amber);">After Change</span>
+              </div>
+              <div class="tree-node node-same">
+                <span>&lt;Card&gt;</span>
+                <span style="font-size: 0.68rem; color: var(--accent-emerald);">[Unchanged]</span>
+              </div>
+              <div class="tree-node" id="modalNextTitleNode" style="margin-left: 1rem;">
+                <span id="modalNextTitleText">Title: "Hello"</span>
+                <span id="modalNextTitleBadge" style="font-size: 0.68rem; color: var(--text-dim);">Text</span>
+              </div>
+              <div class="tree-node node-same" style="margin-left: 1rem;">
+                <span>Message: "Welcome"</span>
+                <span style="font-size: 0.68rem; color: var(--accent-emerald);">[Unchanged]</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="callout callout-amber" id="modalSimLogBox">
+            <span class="callout-icon">💡</span>
+            <div id="modalSimLogText">
+              React compares the previous and next UI representations and determines which part changed.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ====================================================================
+         KEYBOARD SHORTCUTS HELP MODAL
+         ==================================================================== -->
+    <div class="modal-backdrop" id="shortcutsModal">
+      <div class="modal-window" style="max-width: 500px;">
+        <div class="modal-header">
+          <div class="modal-title">
+            <span>⌨️</span> Keyboard Shortcuts
+          </div>
+          <button class="close-modal-btn" onclick="Deck.closeModal('shortcutsModal')">
+            <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none">
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+          </button>
+        </div>
+        <div class="modal-content">
+          <div style="display: flex; flex-direction: column; gap: 0.75rem; font-size: 0.85rem;">
+            <div style="display: flex; justify-content: space-between; align-items: center; padding-bottom: 0.5rem; border-bottom: 1px solid var(--border-subtle);">
+              <span>Next Slide</span>
+              <span><kbd class="header-btn">Right Arrow</kbd> or <kbd class="header-btn">Space</kbd></span>
+            </div>
+            <div style="display: flex; justify-content: space-between; align-items: center; padding-bottom: 0.5rem; border-bottom: 1px solid var(--border-subtle);">
+              <span>Previous Slide</span>
+              <span><kbd class="header-btn">Left Arrow</kbd></span>
+            </div>
+            <div style="display: flex; justify-content: space-between; align-items: center; padding-bottom: 0.5rem; border-bottom: 1px solid var(--border-subtle);">
+              <span>First Slide (Title)</span>
+              <span><kbd class="header-btn">Home</kbd></span>
+            </div>
+            <div style="display: flex; justify-content: space-between; align-items: center; padding-bottom: 0.5rem; border-bottom: 1px solid var(--border-subtle);">
+              <span>Last Slide (Summary)</span>
+              <span><kbd class="header-btn">End</kbd></span>
+            </div>
+            <div style="display: flex; justify-content: space-between; align-items: center; padding-bottom: 0.5rem; border-bottom: 1px solid var(--border-subtle);">
+              <span>Toggle Fullscreen</span>
+              <span><kbd class="header-btn">F</kbd></span>
+            </div>
+            <div style="display: flex; justify-content: space-between; align-items: center; padding-bottom: 0.5rem; border-bottom: 1px solid var(--border-subtle);">
+              <span>Tailwind Utility Sandbox</span>
+              <span><kbd class="header-btn">W</kbd></span>
+            </div>
+            <div style="display: flex; justify-content: space-between; align-items: center; padding-bottom: 0.5rem; border-bottom: 1px solid var(--border-subtle);">
+              <span>Diffing Simulator</span>
+              <span><kbd class="header-btn">D</kbd></span>
+            </div>
+            <div style="display: flex; justify-content: space-between; align-items: center; padding-bottom: 0.5rem; border-bottom: 1px solid var(--border-subtle);">
+              <span>Toggle Slide Index</span>
+              <span><kbd class="header-btn">T</kbd></span>
+            </div>
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <span>Close Any Modal</span>
+              <span><kbd class="header-btn">Esc</kbd></span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ====================================================================
+         TABLE OF CONTENTS DRAWER
+         ==================================================================== -->
+    <div class="drawer-backdrop" id="drawerBackdrop" onclick="Deck.closeDrawer()"></div>
+    <div class="drawer" id="tocDrawer">
+      <div class="drawer-header">
+        <span style="font-weight: 700; font-size: 0.95rem; display: flex; align-items: center; gap: 0.4rem;">
+          <span style="color: var(--react-cyan);">📑</span> Slide Index (36 Slides)
+        </span>
+        <button class="close-modal-btn" onclick="Deck.closeDrawer()">
+          <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+
+      <ul class="drawer-list" id="drawerList">
+        <!-- Dynamically populated by JavaScript for all 36 slides -->
+      </ul>
+    </div>
+
+    <!-- Toast Notification Container -->
+    <div class="toast-container" id="toastContainer"></div>
+
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
