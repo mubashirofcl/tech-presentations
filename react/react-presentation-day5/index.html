@@ -1,0 +1,2432 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>React Day 5 — React Hooks, State, useState & Controlled Components</title>
+  <meta name="description" content="Complete educational presentation on React Hooks: Introduction to Hooks, State, useState, and Controlled Components with interactive live demos.">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Master App Shell -->
+  <div class="deck-container" id="deckContainer">
+
+    <!-- Top Progress Bar -->
+    <div class="progress-bar-container">
+      <div class="progress-bar" id="progressBar"></div>
+    </div>
+
+    <!-- Top Header Bar -->
+    <header class="top-header">
+      <div class="header-left">
+        <div class="brand-badge">
+          <svg viewBox="0 0 24 24">
+            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-5-9c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zm10 0c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zm-5 4c2.21 0 4-1.79 4-4h-8c0 2.21 1.79 4 4 4z"/>
+          </svg>
+          React Day 5
+        </div>
+        <div class="deck-title-badge">
+          <span>React Hooks &amp; State</span>
+          <span class="dot"></span>
+          <span class="deck-topic" id="headerTopic">Introduction to Hooks • useState • Controlled Components</span>
+        </div>
+      </div>
+
+      <div class="header-right">
+        <!-- Live Form Playground Quick Access Button -->
+        <button class="header-btn btn-highlight" id="openPlaygroundBtn" title="Open Interactive Student Form Sandbox (P)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+            <line x1="9" y1="9" x2="15" y2="9"></line>
+            <line x1="9" y1="13" x2="15" y2="13"></line>
+            <line x1="9" y1="17" x2="13" y2="17"></line>
+          </svg>
+          Form Sandbox
+          <kbd>P</kbd>
+        </button>
+
+        <!-- Table of Contents Drawer Button -->
+        <button class="header-btn" id="openTocBtn" title="View All 40 Slides (T)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="3" y1="12" x2="21" y2="12"></line>
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <line x1="3" y1="18" x2="21" y2="18"></line>
+          </svg>
+          Index
+          <kbd>T</kbd>
+        </button>
+
+        <!-- Keyboard Shortcuts Help -->
+        <button class="header-btn" id="openShortcutsBtn" title="Keyboard Shortcuts (?)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"></circle>
+            <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+            <line x1="12" y1="17" x2="12.01" y2="17"></line>
+          </svg>
+          <kbd>?</kbd>
+        </button>
+
+        <!-- Fullscreen Button -->
+        <button class="header-btn" id="fullscreenBtn" title="Toggle Fullscreen (F)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path>
+          </svg>
+          <kbd>F</kbd>
+        </button>
+      </div>
+    </header>
+
+    <!-- Slide Viewport -->
+    <main class="slide-viewport">
+
+      <!-- ====================================================================
+           SLIDE 1 — TITLE
+           ==================================================================== -->
+      <section class="slide active" data-slide="1" id="slide-1">
+        <div class="slide-content" style="justify-content: center; align-items: center; text-align: center; max-width: 860px; margin: 0 auto;">
+          <div class="slide-tag" style="margin-bottom: 0.5rem;">React Course • Day 5</div>
+          <h1 class="slide-title" style="font-size: 2.8rem; margin-bottom: 0.5rem; letter-spacing: -0.03em;">
+            React Hooks
+          </h1>
+          <h2 style="font-size: 1.8rem; color: var(--react-cyan); font-weight: 700; margin-bottom: 1rem;">
+            State, useState &amp; Controlled Components
+          </h2>
+          <p style="font-size: 1.15rem; color: var(--text-secondary); max-width: 620px; margin-bottom: 2rem;">
+            Mastering component state, re-rendering lifecycles, and managing user input with clean controlled form elements
+          </p>
+
+          <div style="display: flex; gap: 1rem; margin-bottom: 2.5rem; flex-wrap: wrap; justify-content: center;">
+            <div style="padding: 0.6rem 1.2rem; background: rgba(0, 216, 255, 0.1); border: 1px solid var(--react-border); border-radius: var(--radius-sm); font-family: var(--font-mono); font-size: 0.85rem; color: var(--react-cyan);">
+              <strong>⚡</strong> React Hooks
+            </div>
+            <div style="padding: 0.6rem 1.2rem; background: var(--accent-emerald-bg); border: 1px solid var(--accent-emerald-border); border-radius: var(--radius-sm); font-family: var(--font-mono); font-size: 0.85rem; color: var(--accent-emerald);">
+              <strong>📦</strong> useState()
+            </div>
+            <div style="padding: 0.6rem 1.2rem; background: var(--accent-amber-bg); border: 1px solid var(--accent-amber-border); border-radius: var(--radius-sm); font-family: var(--font-mono); font-size: 0.85rem; color: var(--accent-amber);">
+              <strong>🔄</strong> Re-rendering Flow
+            </div>
+            <div style="padding: 0.6rem 1.2rem; background: var(--accent-purple-bg); border: 1px solid var(--accent-purple-border); border-radius: var(--radius-sm); font-family: var(--font-mono); font-size: 0.85rem; color: var(--accent-purple);">
+              <strong>📝</strong> Controlled Forms
+            </div>
+          </div>
+
+          <div class="callout" style="max-width: 620px; text-align: left;">
+            <span class="callout-icon">💡</span>
+            <div>
+              <strong>Classroom Context:</strong> In Day 1–4, our components were mostly static displays. Today, we give components <strong>memory</strong> so they can remember user input, count clicks, and respond dynamically in real time.
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 2 — LEARNING OBJECTIVES
+           ==================================================================== -->
+      <section class="slide" data-slide="2" id="slide-2">
+        <div class="slide-header">
+          <div class="slide-tag">Roadmap</div>
+          <h2 class="slide-title">Learning Objectives</h2>
+          <p class="slide-subtitle">Master these foundational React concepts by the end of today's session</p>
+        </div>
+
+        <div class="slide-content">
+          <div class="grid-2">
+            <div class="card card-highlight">
+              <div class="card-title">
+                <span class="icon">⚡</span>
+                Part 1: Hooks &amp; State Fundamentals
+              </div>
+              <ul style="padding-left: 1.2rem; display: flex; flex-direction: column; gap: 0.6rem; font-size: 0.88rem; color: var(--text-secondary);">
+                <li>What React Hooks are and why they were introduced</li>
+                <li>What <strong>state</strong> means in React vs props</li>
+                <li>How <code style="color: var(--react-cyan); font-family: var(--font-mono);">useState()</code> creates component memory</li>
+                <li>How to update state and why re-rendering happens</li>
+                <li>Working with different state types: numbers, strings, booleans, arrays, objects</li>
+                <li>Fundamental Rules of Hooks every developer must follow</li>
+              </ul>
+              <div class="card-footer-tip">
+                Component memory that makes UI interactive!
+              </div>
+            </div>
+
+            <div class="card card-highlight-purple">
+              <div class="card-title">
+                <span class="icon">📝</span>
+                Part 2: Controlled Components &amp; Forms
+              </div>
+              <ul style="padding-left: 1.2rem; display: flex; flex-direction: column; gap: 0.6rem; font-size: 0.88rem; color: var(--text-secondary);">
+                <li>What <strong>controlled components</strong> are and why React controls the DOM</li>
+                <li>Understanding the <code style="color: var(--react-cyan); font-family: var(--font-mono);">onChange</code> event and <code style="color: var(--accent-amber); font-family: var(--font-mono);">e.target.value</code></li>
+                <li>Handling text inputs, textareas, selects, and checkboxes (<code style="color: var(--accent-amber); font-family: var(--font-mono);">e.target.checked</code>)</li>
+                <li>Managing multiple form inputs in a clean state object</li>
+                <li>Handling form submit with <code style="color: var(--react-cyan); font-family: var(--font-mono);">e.preventDefault()</code></li>
+                <li>Building a complete Student Registration Form mini-project</li>
+              </ul>
+              <div class="card-footer-tip">
+                Single source of truth for all form inputs!
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 3 — WHAT ARE REACT HOOKS?
+           ==================================================================== -->
+      <section class="slide" data-slide="3" id="slide-3">
+        <div class="slide-header">
+          <div class="slide-tag">Section 1 • React Hooks</div>
+          <h2 class="slide-title">What Are React Hooks?</h2>
+          <p class="slide-subtitle">Special built-in functions that give functional components superpowers</p>
+        </div>
+
+        <div class="slide-content">
+          <div class="callout" style="font-size: 1rem; padding: 1rem 1.25rem;">
+            <span class="callout-icon" style="font-size: 1.5rem;">📖</span>
+            <div>
+              <strong>Definition:</strong> <strong>React Hooks</strong> are special functions (starting with <code style="font-family: var(--font-mono); color: var(--react-cyan);">use</code>) that allow functional components to "hook into" React features like <strong>state</strong> and lifecycle capabilities without writing class components.
+            </div>
+          </div>
+
+          <div class="grid-2">
+            <div class="card card-highlight">
+              <div class="card-title">
+                <span class="icon">⚛️</span>
+                Common React Features Hooks Provide
+              </div>
+              <ul style="padding-left: 1.2rem; display: flex; flex-direction: column; gap: 0.65rem; font-size: 0.88rem; color: var(--text-secondary);">
+                <li><strong style="color: var(--react-cyan);">State:</strong> <code style="font-family: var(--font-mono);">useState</code> &rarr; Remembering changing values (Today's focus!)</li>
+                <li><strong style="color: var(--text-muted);">Side Effects:</strong> <code style="font-family: var(--font-mono);">useEffect</code> &rarr; Fetching data, subscriptions</li>
+                <li><strong style="color: var(--text-muted);">Global Context:</strong> <code style="font-family: var(--font-mono);">useContext</code> &rarr; Shared app themes/auth</li>
+                <li><strong style="color: var(--text-muted);">DOM References:</strong> <code style="font-family: var(--font-mono);">useRef</code> &rarr; Accessing direct DOM nodes</li>
+              </ul>
+              <div class="card-footer-tip">
+                All Hooks start with the prefix <code style="font-family: var(--font-mono);">use...</code>
+              </div>
+            </div>
+
+            <div class="code-box">
+              <div class="code-header">
+                <div class="code-dots"><span class="code-dot red"></span><span class="code-dot yellow"></span><span class="code-dot green"></span></div>
+                <span class="code-title">Counter.jsx — A Taste of Hooks</span>
+                <button class="copy-btn" onclick="Deck.copyCode(this)">Copy</button>
+              </div>
+              <pre class="code-content"><span class="comment">// 1. Import Hook from react</span>
+<span class="kwd">import</span> { <span class="fn">useState</span> } <span class="kwd">from</span> <span class="str">"react"</span>;
+
+<span class="kwd">function</span> <span class="fn">Counter</span>() {
+  <span class="comment">// 2. Call Hook at top of component</span>
+  <span class="kwd">const</span> [<span class="prop">count</span>, <span class="fn">setCount</span>] <span class="op">=</span> <span class="fn">useState</span>(<span class="num">0</span>);
+
+  <span class="kwd">return</span> (
+    <span class="tag">&lt;h2&gt;</span>{<span class="prop">count</span>}<span class="tag">&lt;/h2&gt;</span>
+  );
+}</pre>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 4 — WHY WERE HOOKS INTRODUCED?
+           ==================================================================== -->
+      <section class="slide" data-slide="4" id="slide-4">
+        <div class="slide-header">
+          <div class="slide-tag">Evolution of React</div>
+          <h2 class="slide-title">Why Were Hooks Introduced?</h2>
+          <p class="slide-subtitle">Moving from complex class components to simple, functional programming</p>
+        </div>
+
+        <div class="slide-content">
+          <div class="grid-2">
+            <div class="card">
+              <div class="card-title" style="color: var(--text-muted);">
+                <span class="icon">📜</span>
+                Before Hooks (React &lt; 16.8)
+              </div>
+              <p>To use state, developers were <strong>forced</strong> to write Class Components:</p>
+              <ul style="padding-left: 1.2rem; display: flex; flex-direction: column; gap: 0.5rem; font-size: 0.84rem; color: var(--text-muted);">
+                <li>Complex <code style="font-family: var(--font-mono);">this.state</code> and <code style="font-family: var(--font-mono);">this.setState</code></li>
+                <li>Confusing JavaScript <code style="font-family: var(--font-mono);">this</code> binding in constructors</li>
+                <li>Verbose boilerplate code for simple state values</li>
+                <li>Difficult to share and reuse logic between components</li>
+              </ul>
+            </div>
+
+            <div class="card card-highlight">
+              <div class="card-title" style="color: var(--react-cyan);">
+                <span class="icon">✨</span>
+                With Hooks (Modern React)
+              </div>
+              <p>Hooks allow plain <strong>functional components</strong> to manage state directly:</p>
+              <ul style="padding-left: 1.2rem; display: flex; flex-direction: column; gap: 0.5rem; font-size: 0.84rem; color: var(--text-secondary);">
+                <li>No class syntax, no <code style="font-family: var(--font-mono);">this</code> keyword confusion</li>
+                <li>Simpler, shorter, more readable code</li>
+                <li>Easy to organize related logic together</li>
+                <li>Components remain pure JavaScript functions</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="callout callout-amber" style="margin-top: 0.5rem;">
+            <span class="callout-icon">💡</span>
+            <div>
+              <strong>Important:</strong> Hooks do <strong>not</strong> replace React components! They enhance functional components with built-in React capabilities.
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 5 — FUNCTIONAL COMPONENT BEFORE STATE
+           ==================================================================== -->
+      <section class="slide" data-slide="5" id="slide-5">
+        <div class="slide-header">
+          <div class="slide-tag">Motivation</div>
+          <h2 class="slide-title">Functional Components Before State</h2>
+          <p class="slide-subtitle">A simple function can render UI, but what if it needs to remember things?</p>
+        </div>
+
+        <div class="slide-content">
+          <div class="grid-split-left-wide">
+            <div class="code-box">
+              <div class="code-header">
+                <div class="code-dots"><span class="code-dot red"></span><span class="code-dot yellow"></span><span class="code-dot green"></span></div>
+                <span class="code-title">Welcome.jsx — Stateless Functional Component</span>
+                <button class="copy-btn" onclick="Deck.copyCode(this)">Copy</button>
+              </div>
+              <pre class="code-content"><span class="comment">// A standard functional component:</span>
+<span class="kwd">function</span> <span class="fn">Welcome</span>({ <span class="prop">name</span> }) {
+  <span class="kwd">return</span> <span class="tag">&lt;h1&gt;</span>Hello {<span class="prop">name</span>}<span class="tag">&lt;/h1&gt;</span>;
+}
+
+<span class="comment">// It receives props and returns JSX.</span>
+<span class="comment">// But what if something inside changes dynamically?</span></pre>
+            </div>
+
+            <div class="card card-highlight">
+              <div class="card-title"><span class="icon">❓</span> When Does a Component Need Memory?</div>
+              <p style="font-size: 0.84rem;">Real applications require remembering data that changes:</p>
+              <div style="background: var(--bg-surface); padding: 0.75rem; border-radius: var(--radius-sm); border: 1px solid var(--border-subtle); font-family: var(--font-mono); font-size: 0.78rem; display: flex; flex-direction: column; gap: 0.4rem;">
+                <div><span style="color: var(--react-cyan);">• Counter:</span> Number of likes/items (0 &rarr; 1 &rarr; 2)</div>
+                <div><span style="color: var(--accent-emerald);">• Form Input:</span> Text typed by the user ("Rahul")</div>
+                <div><span style="color: var(--accent-amber);">• Dropdown:</span> Selected course ("MERN")</div>
+                <div><span style="color: var(--accent-purple);">• Toggle:</span> Menu open or closed (true/false)</div>
+              </div>
+              <div class="card-footer-tip">
+                This is where <strong>State</strong> becomes essential!
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 6 — WHAT IS STATE?
+           ==================================================================== -->
+      <section class="slide" data-slide="6" id="slide-6">
+        <div class="slide-header">
+          <div class="slide-tag tag-emerald">Section 2 • State</div>
+          <h2 class="slide-title">What Is State in React?</h2>
+          <p class="slide-subtitle">A component's private, mutable memory that controls what is rendered</p>
+        </div>
+
+        <div class="slide-content">
+          <div class="callout" style="font-size: 1rem;">
+            <span class="callout-icon" style="font-size: 1.5rem;">📦</span>
+            <div>
+              <strong>Definition:</strong> <strong>State</strong> is data that belongs to a component and can change over time. When state changes, React automatically re-renders the component to update the UI.
+            </div>
+          </div>
+
+          <div class="flow-container" style="padding: 1rem 0;">
+            <div class="flow-node">
+              <div class="flow-node-title">1. State Changes</div>
+              <div class="flow-node-desc">setCount(1) called</div>
+            </div>
+            <div class="flow-arrow">&rarr;</div>
+            <div class="flow-node active-node">
+              <div class="flow-node-title">2. React Re-renders</div>
+              <div class="flow-node-desc">Calls component function again</div>
+            </div>
+            <div class="flow-arrow">&rarr;</div>
+            <div class="flow-node">
+              <div class="flow-node-title">3. UI Updates</div>
+              <div class="flow-node-desc">Screen reflects new number</div>
+            </div>
+          </div>
+
+          <div class="grid-4" style="margin-top: 0.5rem;">
+            <div class="card">
+              <div class="card-title" style="font-size: 0.9rem;"><span class="icon">🔢</span> Counter</div>
+              <p style="font-family: var(--font-mono); font-size: 0.8rem; color: var(--react-cyan);">0 &rarr; 1 &rarr; 2</p>
+            </div>
+            <div class="card">
+              <div class="card-title" style="font-size: 0.9rem;"><span class="icon">✍️</span> Input</div>
+              <p style="font-family: var(--font-mono); font-size: 0.8rem; color: var(--accent-emerald);">"" &rarr; "Rahul"</p>
+            </div>
+            <div class="card">
+              <div class="card-title" style="font-size: 0.9rem;"><span class="icon">📂</span> Menu</div>
+              <p style="font-family: var(--font-mono); font-size: 0.8rem; color: var(--accent-amber);">Closed &rarr; Open</p>
+            </div>
+            <div class="card">
+              <div class="card-title" style="font-size: 0.9rem;"><span class="icon">🌓</span> Theme</div>
+              <p style="font-family: var(--font-mono); font-size: 0.8rem; color: var(--accent-purple);">"light" &rarr; "dark"</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 7 — PROPS VS STATE
+           ==================================================================== -->
+      <section class="slide" data-slide="7" id="slide-7">
+        <div class="slide-header">
+          <div class="slide-tag tag-emerald">Core Distinction</div>
+          <h2 class="slide-title">Props vs State</h2>
+          <p class="slide-subtitle">Understanding the two fundamental ways data flows in React</p>
+        </div>
+
+        <div class="slide-content">
+          <div class="table-wrapper">
+            <table class="styled-table">
+              <thead>
+                <tr>
+                  <th>Feature</th>
+                  <th>Props (Properties) 📨</th>
+                  <th>State (Component Memory) 🧠</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Source</strong></td>
+                  <td>Passed from parent component</td>
+                  <td>Defined and managed inside component</td>
+                </tr>
+                <tr>
+                  <td><strong>Mutability</strong></td>
+                  <td>Read-only (immutable by child)</td>
+                  <td>Can be updated via setter function</td>
+                </tr>
+                <tr>
+                  <td><strong>Purpose</strong></td>
+                  <td>Used to configure &amp; communicate</td>
+                  <td>Used to track data that changes over time</td>
+                </tr>
+                <tr>
+                  <td><strong>Analogy</strong></td>
+                  <td>Like function arguments passed in</td>
+                  <td>Like local variables inside a function</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="code-box" style="margin-top: 0.5rem;">
+            <div class="code-header">
+              <div class="code-dots"><span class="code-dot red"></span><span class="code-dot yellow"></span><span class="code-dot green"></span></div>
+              <span class="code-title">Props vs State in Action</span>
+              <button class="copy-btn" onclick="Deck.copyCode(this)">Copy</button>
+            </div>
+            <pre class="code-content"><span class="kwd">function</span> <span class="fn">User</span>({ <span class="prop">name</span> }) {          <span class="comment">// 👈 'name' is a PROP (passed from parent)</span>
+  <span class="kwd">const</span> [<span class="prop">age</span>, <span class="fn">setAge</span>] <span class="op">=</span> <span class="fn">useState</span>(<span class="num">20</span>); <span class="comment">// 👈 'age' is STATE (component's own data)</span>
+
+  <span class="kwd">return</span> <span class="tag">&lt;h2&gt;</span>{<span class="prop">name</span>} - {<span class="prop">age</span>}<span class="tag">&lt;/h2&gt;</span>;
+}</pre>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 8 — WHY DO WE NEED STATE?
+           ==================================================================== -->
+      <section class="slide" data-slide="8" id="slide-8">
+        <div class="slide-header">
+          <div class="slide-tag tag-emerald">Under The Hood</div>
+          <h2 class="slide-title">Why Normal Variables Fail in React</h2>
+          <p class="slide-subtitle">Why <code style="color: var(--accent-rose); font-family: var(--font-mono);">let count = 0</code> does not update the screen</p>
+        </div>
+
+        <div class="slide-content">
+          <div class="grid-2">
+            <div class="card" style="border-color: var(--accent-rose-border);">
+              <div class="card-title" style="color: var(--accent-rose);">
+                <span class="icon">❌</span> The Broken Approach (Plain Variable)
+              </div>
+              <div class="code-box">
+                <pre class="code-content"><span class="kwd">let</span> <span class="prop">count</span> <span class="op">=</span> <span class="num">0</span>;
+
+<span class="kwd">function</span> <span class="fn">Counter</span>() {
+  <span class="kwd">const</span> <span class="fn">handleClick</span> <span class="op">=</span> () <span class="op">=&gt;</span> {
+    <span class="prop">count</span><span class="op">++</span>; <span class="comment">// Variable changes in memory...</span>
+    <span class="fn">console</span>.<span class="fn">log</span>(<span class="prop">count</span>); <span class="comment">// Logs: 1, 2, 3</span>
+  };
+
+  <span class="comment">// But React NEVER re-renders! Screen stays 0!</span>
+  <span class="kwd">return</span> <span class="tag">&lt;button</span> <span class="attr">onClick</span>={handleClick}<span class="tag">&gt;</span>{<span class="prop">count</span>}<span class="tag">&lt;/button&gt;</span>;
+}</pre>
+              </div>
+              <p style="font-size: 0.82rem; color: var(--accent-rose);">
+                React doesn't watch plain variables. It has no idea the variable changed!
+              </p>
+            </div>
+
+            <div class="card card-highlight">
+              <div class="card-title" style="color: var(--react-cyan);">
+                <span class="icon">✅</span> The React State Approach
+              </div>
+              <p>React needs a formal contract to manage changing data:</p>
+              <ul style="padding-left: 1.2rem; display: flex; flex-direction: column; gap: 0.6rem; font-size: 0.85rem; color: var(--text-secondary);">
+                <li><strong>Preserve value:</strong> Keep the data between renders (plain variables get wiped on each render).</li>
+                <li><strong>Notify React:</strong> Calling <code style="font-family: var(--font-mono); color: var(--react-cyan);">setCount()</code> triggers React's internal scheduler.</li>
+                <li><strong>Re-render DOM:</strong> React calls the component again and updates the screen.</li>
+              </ul>
+              <div class="card-footer-tip">
+                That is exactly what <code style="font-family: var(--font-mono); color: var(--react-cyan);">useState()</code> does!
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 9 — WHAT IS USESTATE?
+           ==================================================================== -->
+      <section class="slide" data-slide="9" id="slide-9">
+        <div class="slide-header">
+          <div class="slide-tag">Section 3 • useState</div>
+          <h2 class="slide-title">What Is <code style="color: var(--react-cyan); font-family: var(--font-mono);">useState</code>?</h2>
+          <p class="slide-subtitle">The fundamental React Hook for declaring and updating component state</p>
+        </div>
+
+        <div class="slide-content">
+          <div class="callout" style="font-size: 0.95rem;">
+            <span class="callout-icon">💡</span>
+            <div>
+              <strong>useState()</strong> is a built-in Hook from React. It returns an array with exactly <strong>two elements</strong>: the current state value, and a function to update it.
+            </div>
+          </div>
+
+          <div style="background: var(--code-bg); border: 1px solid var(--border-medium); border-radius: var(--radius-md); padding: 1.5rem; text-align: center; margin: 0.5rem 0;">
+            <div style="font-family: var(--font-mono); font-size: 1.35rem; color: var(--text-main); margin-bottom: 1.25rem;">
+              <span class="kwd">const</span> [<span style="color: var(--react-cyan); font-weight: bold;">count</span>, <span style="color: var(--code-function); font-weight: bold;">setCount</span>] <span class="op">=</span> <span class="fn">useState</span>(<span style="color: var(--accent-amber); font-weight: bold;">0</span>);
+            </div>
+
+            <div style="display: flex; justify-content: center; gap: 2rem; flex-wrap: wrap;">
+              <div style="display: flex; flex-direction: column; align-items: center; gap: 0.3rem;">
+                <span style="color: var(--react-cyan); font-size: 1.2rem;">&uarr;</span>
+                <span style="font-family: var(--font-mono); font-size: 0.85rem; color: var(--react-cyan); font-weight: bold;">count</span>
+                <span style="font-size: 0.75rem; color: var(--text-muted);">Current state value</span>
+              </div>
+
+              <div style="display: flex; flex-direction: column; align-items: center; gap: 0.3rem;">
+                <span style="color: var(--code-function); font-size: 1.2rem;">&uarr;</span>
+                <span style="font-family: var(--font-mono); font-size: 0.85rem; color: var(--code-function); font-weight: bold;">setCount</span>
+                <span style="font-size: 0.75rem; color: var(--text-muted);">Updater function</span>
+              </div>
+
+              <div style="display: flex; flex-direction: column; align-items: center; gap: 0.3rem;">
+                <span style="color: var(--accent-amber); font-size: 1.2rem;">&uarr;</span>
+                <span style="font-family: var(--font-mono); font-size: 0.85rem; color: var(--accent-amber); font-weight: bold;">0</span>
+                <span style="font-size: 0.75rem; color: var(--text-muted);">Initial value</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="card card-highlight">
+            <div class="card-title"><span class="icon">📦</span> JavaScript Array Destructuring</div>
+            <p style="font-size: 0.85rem; color: var(--text-secondary);">
+              <code style="font-family: var(--font-mono);">useState(0)</code> returns an array like <code style="font-family: var(--font-mono);">[0, function]</code>. Using JavaScript array destructuring <code style="font-family: var(--font-mono);">[count, setCount]</code> allows us to give custom names to both items in one clean line.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 10 — UNDERSTANDING USESTATE()
+           ==================================================================== -->
+      <section class="slide" data-slide="10" id="slide-10">
+        <div class="slide-header">
+          <div class="slide-tag tag-amber">Interactive Breakdown</div>
+          <h2 class="slide-title">Understanding the 3 Parts of <code style="color: var(--react-cyan); font-family: var(--font-mono);">useState()</code></h2>
+          <p class="slide-subtitle">Click each section to inspect its role and responsibility</p>
+        </div>
+
+        <div class="slide-content">
+          <div style="display: flex; justify-content: center; gap: 1rem; margin-bottom: 1rem;">
+            <button class="demo-btn" id="btnInspectState" onclick="SlideDemos.inspectPart('state')">
+              1. Current State (count)
+            </button>
+            <button class="demo-btn btn-emerald" id="btnInspectSetter" onclick="SlideDemos.inspectPart('setter')">
+              2. Setter Function (setCount)
+            </button>
+            <button class="demo-btn btn-amber" id="btnInspectInitial" onclick="SlideDemos.inspectPart('initial')">
+              3. Initial Value (0)
+            </button>
+          </div>
+
+          <div class="card card-highlight" id="useStateInspectCard" style="min-height: 180px; justify-content: center;">
+            <div class="card-title" id="useStateInspectTitle" style="color: var(--react-cyan);">
+              <span class="icon">🔍</span> 1. The State Variable (count)
+            </div>
+            <p id="useStateInspectDesc" style="font-size: 0.9rem; line-height: 1.6;">
+              This holds the <strong>current value</strong> of the state during the current render. In your JSX, you display this value using curly braces: <code style="font-family: var(--font-mono); color: var(--react-cyan);">&lt;h2&gt;{count}&lt;/h2&gt;</code>. React ensures this value persists across component renders!
+            </p>
+          </div>
+
+          <div class="callout callout-blue">
+            <span class="callout-icon">💡</span>
+            <div>
+              <strong>Convention:</strong> By React naming convention, if the state variable is named <code style="font-family: var(--font-mono);">xyz</code>, the setter is always named <code style="font-family: var(--font-mono);">setXyz</code> (e.g. <code style="font-family: var(--font-mono);">name &rarr; setName</code>, <code style="font-family: var(--font-mono);">isOpen &rarr; setIsOpen</code>).
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 11 — FIRST COUNTER EXAMPLE
+           ==================================================================== -->
+      <section class="slide" data-slide="11" id="slide-11">
+        <div class="slide-header">
+          <div class="slide-tag tag-emerald">Live Example</div>
+          <h2 class="slide-title">First useState Counter: Code &amp; Demo</h2>
+          <p class="slide-subtitle">See the code and test the live interactive counter right beside it</p>
+        </div>
+
+        <div class="slide-content">
+          <div class="grid-2">
+            <div class="code-box">
+              <div class="code-header">
+                <div class="code-dots"><span class="code-dot red"></span><span class="code-dot yellow"></span><span class="code-dot green"></span></div>
+                <span class="code-title">Counter.jsx</span>
+                <button class="copy-btn" onclick="Deck.copyCode(this)">Copy</button>
+              </div>
+              <pre class="code-content"><span class="kwd">import</span> { <span class="fn">useState</span> } <span class="kwd">from</span> <span class="str">"react"</span>;
+
+<span class="kwd">function</span> <span class="fn">Counter</span>() {
+  <span class="comment">// Declare count initialized to 0</span>
+  <span class="kwd">const</span> [<span class="prop">count</span>, <span class="fn">setCount</span>] <span class="op">=</span> <span class="fn">useState</span>(<span class="num">0</span>);
+
+  <span class="kwd">return</span> (
+    <span class="tag">&lt;div&gt;</span>
+      <span class="tag">&lt;h2&gt;</span>{<span class="prop">count</span>}<span class="tag">&lt;/h2&gt;</span>
+      <span class="tag">&lt;button</span> <span class="attr">onClick</span>={() <span class="op">=&gt;</span> <span class="fn">setCount</span>(<span class="prop">count</span> <span class="op">+</span> <span class="num">1</span>)}<span class="tag">&gt;</span>
+        Increase
+      <span class="tag">&lt;/button&gt;</span>
+    <span class="tag">&lt;/div&gt;</span>
+  );
+}</pre>
+            </div>
+
+            <div class="interactive-demo-card">
+              <div class="card-title"><span class="icon">⚡</span> Live Interactive Counter</div>
+              
+              <div style="background: var(--bg-surface); padding: 1.5rem; border-radius: var(--radius-sm); border: 1px solid var(--border-subtle); text-align: center;">
+                <div style="font-size: 0.78rem; color: var(--text-muted); text-transform: uppercase; font-family: var(--font-mono); margin-bottom: 0.5rem;">Current count:</div>
+                <div id="liveCounterValue" style="font-size: 3rem; font-weight: 900; color: var(--react-cyan); font-family: var(--font-mono); margin-bottom: 1rem;">0</div>
+                
+                <div class="demo-controls-bar" style="justify-content: center;">
+                  <button class="demo-btn" onclick="SlideDemos.increaseCounter()">Increase (+1)</button>
+                  <button class="demo-btn btn-rose" onclick="SlideDemos.decreaseCounter()">Decrease (-1)</button>
+                  <button class="demo-btn btn-reset" onclick="SlideDemos.resetCounter()">Reset (0)</button>
+                </div>
+              </div>
+
+              <div class="demo-result-box" id="counterLogBox" style="font-size: 0.78rem;">
+                Click "Increase" to trigger setCount(count + 1)...
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 12 — HOW STATE UPDATE WORKS
+           ==================================================================== -->
+      <section class="slide" data-slide="12" id="slide-12">
+        <div class="slide-header">
+          <div class="slide-tag">Lifecycle</div>
+          <h2 class="slide-title">How State Updates Work Step-by-Step</h2>
+          <p class="slide-subtitle">The 5-phase re-rendering lifecycle triggered on every state change</p>
+        </div>
+
+        <div class="slide-content">
+          <div class="flow-container" style="gap: 0.5rem; padding: 1.5rem 0;">
+            <div class="flow-node active-node" id="step1">
+              <div class="flow-node-title">1. User Event</div>
+              <div class="flow-node-desc">User clicks button</div>
+            </div>
+            <div class="flow-arrow">&rarr;</div>
+            <div class="flow-node" id="step2">
+              <div class="flow-node-title">2. Setter Called</div>
+              <div class="flow-node-desc">setCount(count + 1)</div>
+            </div>
+            <div class="flow-arrow">&rarr;</div>
+            <div class="flow-node" id="step3">
+              <div class="flow-node-title">3. State Changes</div>
+              <div class="flow-node-desc">React stores new value</div>
+            </div>
+            <div class="flow-arrow">&rarr;</div>
+            <div class="flow-node" id="step4">
+              <div class="flow-node-title">4. Re-render</div>
+              <div class="flow-node-desc">Function runs again</div>
+            </div>
+            <div class="flow-arrow">&rarr;</div>
+            <div class="flow-node" id="step5">
+              <div class="flow-node-title">5. DOM Updates</div>
+              <div class="flow-node-desc">New number appears on screen</div>
+            </div>
+          </div>
+
+          <div style="text-align: center; margin-bottom: 0.5rem;">
+            <button class="demo-btn" onclick="SlideDemos.animateStateFlow()">
+              ▶ Animate Step-by-Step Flow
+            </button>
+          </div>
+
+          <div class="callout callout-blue">
+            <span class="callout-icon">💡</span>
+            <div>
+              <strong>Re-render Meaning:</strong> When React re-renders, it simply calls your component function <code style="font-family: var(--font-mono);">Counter()</code> again. On this second run, <code style="font-family: var(--font-mono);">useState(0)</code> returns the updated value (<code style="font-family: var(--font-mono);">1</code>) instead of the initial value (<code style="font-family: var(--font-mono);">0</code>)!
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 13 — STATE UPDATE EXAMPLE
+           ==================================================================== -->
+      <section class="slide" data-slide="13" id="slide-13">
+        <div class="slide-header">
+          <div class="slide-tag">Code Best Practice</div>
+          <h2 class="slide-title">Separating Event Handlers from JSX</h2>
+          <p class="slide-subtitle">Creating named helper functions for cleaner and more readable components</p>
+        </div>
+
+        <div class="slide-content">
+          <div class="grid-2">
+            <div class="card">
+              <div class="card-title"><span class="icon">⚠️</span> Inline Arrow Function</div>
+              <p>Putting logic directly in the <code style="font-family: var(--font-mono);">onClick</code> prop can get messy:</p>
+              <div class="code-box">
+                <pre class="code-content"><span class="comment">// Can become hard to read when logic grows:</span>
+<span class="tag">&lt;button</span> <span class="attr">onClick</span>={() <span class="op">=&gt;</span> <span class="fn">setCount</span>(<span class="prop">count</span> <span class="op">+</span> <span class="num">1</span>)}<span class="tag">&gt;</span>
+  Increase
+<span class="tag">&lt;/button&gt;</span></pre>
+              </div>
+            </div>
+
+            <div class="card card-highlight">
+              <div class="card-title"><span class="icon">✨</span> Named Handler Function (Recommended)</div>
+              <p>Declare the function above the return statement:</p>
+              <div class="code-box">
+                <pre class="code-content"><span class="kwd">const</span> <span class="fn">increase</span> <span class="op">=</span> () <span class="op">=&gt;</span> {
+  <span class="fn">setCount</span>(<span class="prop">count</span> <span class="op">+</span> <span class="num">1</span>);
+};
+
+<span class="comment">// Clean and easy to read:</span>
+<span class="tag">&lt;button</span> <span class="attr">onClick</span>={increase}<span class="tag">&gt;</span>Increase<span class="tag">&lt;/button&gt;</span></pre>
+              </div>
+            </div>
+          </div>
+
+          <div class="callout callout-amber" style="margin-top: 0.5rem;">
+            <span class="callout-icon">🚨</span>
+            <div>
+              <strong>Beginner Warning:</strong> Pass the function reference <code style="font-family: var(--font-mono); color: var(--react-cyan);">onClick={increase}</code>. <strong>DO NOT</strong> call it directly: <code style="font-family: var(--font-mono); color: var(--accent-rose);">onClick={increase()}</code>! Calling it with parentheses will execute it immediately on render, causing an infinite re-render loop!
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 14 — DIFFERENT TYPES OF STATE
+           ==================================================================== -->
+      <section class="slide" data-slide="14" id="slide-14">
+        <div class="slide-header">
+          <div class="slide-tag">State Types</div>
+          <h2 class="slide-title">State Can Store Any JavaScript Data Type</h2>
+          <p class="slide-subtitle">From primitives like numbers and booleans to complex arrays and objects</p>
+        </div>
+
+        <div class="slide-content">
+          <div class="grid-3">
+            <div class="card card-highlight">
+              <div class="card-title" style="font-size: 0.92rem;"><span class="icon">🔢</span> 1. Number</div>
+              <div class="code-box">
+                <pre class="code-content"><span class="kwd">const</span> [<span class="prop">age</span>, <span class="fn">setAge</span>] <span class="op">=</span> <span class="fn">useState</span>(<span class="num">20</span>);</pre>
+              </div>
+              <p style="font-size: 0.78rem; color: var(--text-muted);">Counters, quantities, pricing, ratings</p>
+            </div>
+
+            <div class="card card-highlight-emerald">
+              <div class="card-title" style="font-size: 0.92rem;"><span class="icon">🔤</span> 2. String</div>
+              <div class="code-box">
+                <pre class="code-content"><span class="kwd">const</span> [<span class="prop">name</span>, <span class="fn">setName</span>] <span class="op">=</span> <span class="fn">useState</span>(<span class="str">"Rahul"</span>);</pre>
+              </div>
+              <p style="font-size: 0.78rem; color: var(--text-muted);">Text inputs, selected options, search terms</p>
+            </div>
+
+            <div class="card card-highlight-amber">
+              <div class="card-title" style="font-size: 0.92rem;"><span class="icon">🔘</span> 3. Boolean</div>
+              <div class="code-box">
+                <pre class="code-content"><span class="kwd">const</span> [<span class="prop">isOpen</span>, <span class="fn">setIsOpen</span>] <span class="op">=</span> <span class="fn">useState</span>(<span class="bool">false</span>);</pre>
+              </div>
+              <p style="font-size: 0.78rem; color: var(--text-muted);">Toggles, modals, checkboxes, login status</p>
+            </div>
+
+            <div class="card card-highlight-purple">
+              <div class="card-title" style="font-size: 0.92rem;"><span class="icon">📋</span> 4. Array</div>
+              <div class="code-box">
+                <pre class="code-content"><span class="kwd">const</span> [<span class="prop">skills</span>, <span class="fn">setSkills</span>] <span class="op">=</span> <span class="fn">useState</span>([]);</pre>
+              </div>
+              <p style="font-size: 0.78rem; color: var(--text-muted);">Lists of items, todos, cart items</p>
+            </div>
+
+            <div class="card" style="grid-column: span 2;">
+              <div class="card-title" style="font-size: 0.92rem;"><span class="icon">📦</span> 5. Object</div>
+              <div class="code-box">
+                <pre class="code-content"><span class="kwd">const</span> [<span class="prop">user</span>, <span class="fn">setUser</span>] <span class="op">=</span> <span class="fn">useState</span>({ <span class="prop">name</span>: <span class="str">""</span>, <span class="prop">age</span>: <span class="num">0</span> });</pre>
+              </div>
+              <p style="font-size: 0.78rem; color: var(--text-muted);">Grouping related form inputs into a single state model</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 15 — UPDATING STRING STATE
+           ==================================================================== -->
+      <section class="slide" data-slide="15" id="slide-15">
+        <div class="slide-header">
+          <div class="slide-tag tag-emerald">Live Demo</div>
+          <h2 class="slide-title">Updating String State: Live Demo</h2>
+          <p class="slide-subtitle">Replacing text values by passing the new string into the setter</p>
+        </div>
+
+        <div class="slide-content">
+          <div class="grid-2">
+            <div class="code-box">
+              <div class="code-header">
+                <div class="code-dots"><span class="code-dot red"></span><span class="code-dot yellow"></span><span class="code-dot green"></span></div>
+                <span class="code-title">NameChanger.jsx</span>
+                <button class="copy-btn" onclick="Deck.copyCode(this)">Copy</button>
+              </div>
+              <pre class="code-content"><span class="kwd">const</span> [<span class="prop">name</span>, <span class="fn">setName</span>] <span class="op">=</span> <span class="fn">useState</span>(<span class="str">"Rahul"</span>);
+
+<span class="comment">// Simply pass the new string into setter:</span>
+<span class="kwd">const</span> <span class="fn">changeName</span> <span class="op">=</span> () <span class="op">=&gt;</span> {
+  <span class="fn">setName</span>(<span class="str">"Arun"</span>);
+};
+
+<span class="kwd">return</span> (
+  <span class="tag">&lt;div&gt;</span>
+    <span class="tag">&lt;h2&gt;</span>Hello, {<span class="prop">name</span>}!<span class="tag">&lt;/h2&gt;</span>
+    <span class="tag">&lt;button</span> <span class="attr">onClick</span>={changeName}<span class="tag">&gt;</span>
+      Change Name
+    <span class="tag">&lt;/button&gt;</span>
+  <span class="tag">&lt;/div&gt;</span>
+);</pre>
+            </div>
+
+            <div class="interactive-demo-card">
+              <div class="card-title"><span class="icon">⚡</span> Interactive Name State Demo</div>
+
+              <div style="background: var(--bg-surface); padding: 1.5rem; border-radius: var(--radius-sm); border: 1px solid var(--border-subtle); text-align: center;">
+                <div style="font-size: 0.78rem; color: var(--text-muted); text-transform: uppercase; font-family: var(--font-mono); margin-bottom: 0.5rem;">Current State value:</div>
+                <div id="demoStringStateDisplay" style="font-size: 2.2rem; font-weight: 800; color: var(--accent-emerald); font-family: var(--font-mono); margin-bottom: 1.25rem;">"Rahul"</div>
+
+                <div class="demo-controls-bar" style="justify-content: center;">
+                  <button class="demo-btn" onclick="SlideDemos.setStringState('Rahul')">setName("Rahul")</button>
+                  <button class="demo-btn btn-emerald" onclick="SlideDemos.setStringState('Arun')">setName("Arun")</button>
+                  <button class="demo-btn btn-amber" onclick="SlideDemos.setStringState('Priya')">setName("Priya")</button>
+                </div>
+              </div>
+
+              <div class="demo-result-box" id="demoStringLog">
+                Click a button above to call setName(...) and re-render.
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 16 — UPDATING BOOLEAN STATE
+           ==================================================================== -->
+      <section class="slide" data-slide="16" id="slide-16">
+        <div class="slide-header">
+          <div class="slide-tag tag-amber">Live Demo</div>
+          <h2 class="slide-title">Updating Boolean State: Toggle Pattern</h2>
+          <p class="slide-subtitle">Using the logical NOT operator (<code style="color: var(--accent-amber); font-family: var(--font-mono);">!isOpen</code>) to flip true and false</p>
+        </div>
+
+        <div class="slide-content">
+          <div class="grid-2">
+            <div class="code-box">
+              <div class="code-header">
+                <div class="code-dots"><span class="code-dot red"></span><span class="code-dot yellow"></span><span class="code-dot green"></span></div>
+                <span class="code-title">ToggleDetails.jsx</span>
+                <button class="copy-btn" onclick="Deck.copyCode(this)">Copy</button>
+              </div>
+              <pre class="code-content"><span class="kwd">const</span> [<span class="prop">isOpen</span>, <span class="fn">setIsOpen</span>] <span class="op">=</span> <span class="fn">useState</span>(<span class="bool">false</span>);
+
+<span class="comment">// Invert the boolean value:</span>
+<span class="kwd">const</span> <span class="fn">toggle</span> <span class="op">=</span> () <span class="op">=&gt;</span> {
+  <span class="fn">setIsOpen</span>(<span class="op">!</span><span class="prop">isOpen</span>);
+};
+
+<span class="kwd">return</span> (
+  <span class="tag">&lt;div&gt;</span>
+    <span class="tag">&lt;button</span> <span class="attr">onClick</span>={toggle}<span class="tag">&gt;</span>
+      {<span class="prop">isOpen</span> ? <span class="str">"Hide Details"</span> : <span class="str">"Show Details"</span>}
+    <span class="tag">&lt;/button&gt;</span>
+
+    {<span class="prop">isOpen</span> <span class="op">&amp;&amp;</span> <span class="tag">&lt;p&gt;</span>Secret course details revealed!<span class="tag">&lt;/p&gt;</span>}
+  <span class="tag">&lt;/div&gt;</span>
+);</pre>
+            </div>
+
+            <div class="interactive-demo-card">
+              <div class="card-title"><span class="icon">⚡</span> Interactive Show / Hide Demo</div>
+
+              <div style="background: var(--bg-surface); padding: 1.25rem; border-radius: var(--radius-sm); border: 1px solid var(--border-subtle); display: flex; flex-direction: column; gap: 1rem; align-items: center;">
+                <div style="font-family: var(--font-mono); font-size: 0.85rem;">
+                  State: <strong id="demoBoolStateVal" style="color: var(--accent-rose);">false</strong>
+                </div>
+
+                <button class="demo-btn btn-amber" id="demoToggleBtn" onclick="SlideDemos.toggleBooleanState()">
+                  Show Details
+                </button>
+
+                <div id="demoBoolDetailsBox" style="display: none; background: rgba(0, 216, 255, 0.08); border: 1px dashed var(--react-border); padding: 1rem; border-radius: var(--radius-sm); width: 100%; text-align: center; font-size: 0.85rem; color: var(--react-cyan);">
+                  🎉 <strong>Bonus Content:</strong> MERN course includes React 19, Node.js, and MongoDB Atlas!
+                </div>
+              </div>
+
+              <div class="demo-result-box" id="demoBoolLog">
+                Commonly used for dropdowns, sidebars, modals, and accordions!
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 17 — UPDATING ARRAY STATE
+           ==================================================================== -->
+      <section class="slide" data-slide="17" id="slide-17">
+        <div class="slide-header">
+          <div class="slide-tag tag-purple">Immutability</div>
+          <h2 class="slide-title">Updating Array State: Spread Operator</h2>
+          <p class="slide-subtitle">Never mutate arrays with <code style="color: var(--accent-rose); font-family: var(--font-mono);">.push()</code> — always create a brand new array!</p>
+        </div>
+
+        <div class="slide-content">
+          <div class="grid-2">
+            <div class="code-box">
+              <div class="code-header">
+                <div class="code-dots"><span class="code-dot red"></span><span class="code-dot yellow"></span><span class="code-dot green"></span></div>
+                <span class="code-title">SkillsList.jsx</span>
+                <button class="copy-btn" onclick="Deck.copyCode(this)">Copy</button>
+              </div>
+              <pre class="code-content"><span class="kwd">const</span> [<span class="prop">skills</span>, <span class="fn">setSkills</span>] <span class="op">=</span> <span class="fn">useState</span>([]);
+
+<span class="kwd">const</span> <span class="fn">addSkill</span> <span class="op">=</span> (<span class="prop">newSkill</span>) <span class="op">=&gt;</span> {
+  <span class="comment">// ❌ WRONG: skills.push(newSkill);</span>
+
+  <span class="comment">// ✅ CORRECT: Spread old array into a new array!</span>
+  <span class="fn">setSkills</span>([...<span class="prop">skills</span>, <span class="prop">newSkill</span>]);
+};</pre>
+            </div>
+
+            <div class="interactive-demo-card">
+              <div class="card-title"><span class="icon">⚡</span> Interactive Array State Demo</div>
+
+              <div style="background: var(--bg-surface); padding: 1.25rem; border-radius: var(--radius-sm); border: 1px solid var(--border-subtle);">
+                <div style="font-size: 0.75rem; color: var(--text-muted); font-family: var(--font-mono); margin-bottom: 0.5rem;">
+                  Current Array: <span id="demoArrayStateRaw" style="color: var(--accent-purple);">[]</span>
+                </div>
+
+                <div class="demo-controls-bar" style="margin-bottom: 1rem;">
+                  <button class="demo-btn" onclick="SlideDemos.addSkill('HTML')">+ HTML</button>
+                  <button class="demo-btn btn-emerald" onclick="SlideDemos.addSkill('CSS')">+ CSS</button>
+                  <button class="demo-btn btn-amber" onclick="SlideDemos.addSkill('React')">+ React</button>
+                  <button class="demo-btn btn-reset" onclick="SlideDemos.clearSkills()">Clear</button>
+                </div>
+
+                <div style="font-size: 0.78rem; color: var(--text-muted); margin-bottom: 0.4rem;">Rendered List:</div>
+                <div id="demoSkillsTagsContainer" style="display: flex; gap: 0.4rem; flex-wrap: wrap; min-height: 36px; align-items: center;">
+                  <span style="font-size: 0.75rem; color: var(--text-dim); font-style: italic;">No skills added yet.</span>
+                </div>
+              </div>
+
+              <div class="demo-result-box" id="demoArrayLog">
+                The spread operator (<code style="font-family: var(--font-mono);">...skills</code>) copies all existing items into a new array!
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 18 — UPDATING OBJECT STATE
+           ==================================================================== -->
+      <section class="slide" data-slide="18" id="slide-18">
+        <div class="slide-header">
+          <div class="slide-tag tag-purple">Object Immutability</div>
+          <h2 class="slide-title">Updating Object State</h2>
+          <p class="slide-subtitle">Copying existing properties with spread and overriding only what changed</p>
+        </div>
+
+        <div class="slide-content">
+          <div class="grid-split-left-wide">
+            <div class="code-box">
+              <div class="code-header">
+                <div class="code-dots"><span class="code-dot red"></span><span class="code-dot yellow"></span><span class="code-dot green"></span></div>
+                <span class="code-title">UserProfile.jsx</span>
+                <button class="copy-btn" onclick="Deck.copyCode(this)">Copy</button>
+              </div>
+              <pre class="code-content"><span class="kwd">const</span> [<span class="prop">user</span>, <span class="fn">setUser</span>] <span class="op">=</span> <span class="fn">useState</span>({
+  <span class="prop">name</span>: <span class="str">"Rahul"</span>,
+  <span class="prop">age</span>: <span class="num">21</span>
+});
+
+<span class="comment">// ❌ WRONG: user.name = "Arun"; (Mutating state directly)</span>
+
+<span class="comment">// ✅ CORRECT: Copy all fields, then override 'name'</span>
+<span class="kwd">const</span> <span class="fn">updateName</span> <span class="op">=</span> () <span class="op">=&gt;</span> {
+  <span class="fn">setUser</span>({
+    ...<span class="prop">user</span>,        <span class="comment">// Copies { name: "Rahul", age: 21 }</span>
+    <span class="prop">name</span>: <span class="str">"Arun"</span>   <span class="comment">// Replaces only 'name' with "Arun"</span>
+  });
+};</pre>
+            </div>
+
+            <div class="flex-col">
+              <div class="card card-highlight">
+                <div class="card-title"><span class="icon">🔍</span> Why Is Spread Necessary?</div>
+                <p style="font-size: 0.85rem; color: var(--text-secondary);">
+                  In React, <code style="font-family: var(--font-mono); color: var(--react-cyan);">setUser()</code> does <strong>NOT</strong> automatically merge objects!
+                </p>
+                <p style="font-size: 0.85rem; color: var(--text-secondary);">
+                  If you write <code style="font-family: var(--font-mono); color: var(--accent-rose);">setUser({ name: "Arun" })</code> without <code style="font-family: var(--font-mono);">...user</code>, the <code style="font-family: var(--font-mono);">age</code> property will be completely wiped out!
+                </p>
+              </div>
+
+              <div class="card">
+                <div class="card-title"><span class="icon">✨</span> Resulting Object</div>
+                <div style="background: #02050E; padding: 0.75rem; border-radius: var(--radius-sm); font-family: var(--font-mono); font-size: 0.8rem; color: var(--accent-emerald);">
+                  { name: "Arun", age: 21 }
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 19 — FUNCTIONAL STATE UPDATE
+           ==================================================================== -->
+      <section class="slide" data-slide="19" id="slide-19">
+        <div class="slide-header">
+          <div class="slide-tag tag-blue">Advanced Pattern</div>
+          <h2 class="slide-title">Functional State Updates (<code style="color: var(--react-cyan); font-family: var(--font-mono);">prev &rarr; prev + 1</code>)</h2>
+          <p class="slide-subtitle">When the new state depends directly on the previous state value</p>
+        </div>
+
+        <div class="slide-content">
+          <div class="grid-2">
+            <div class="card">
+              <div class="card-title"><span class="icon">1️⃣</span> Direct Value Update</div>
+              <div class="code-box">
+                <pre class="code-content"><span class="fn">setCount</span>(<span class="prop">count</span> <span class="op">+</span> <span class="num">1</span>);</pre>
+              </div>
+              <p style="font-size: 0.84rem; color: var(--text-secondary);">
+                Fine for simple, single updates. But React state updates are scheduled asynchronously. If multiple updates run close together, <code style="font-family: var(--font-mono);">count</code> might be stale.
+              </p>
+            </div>
+
+            <div class="card card-highlight">
+              <div class="card-title"><span class="icon">2️⃣</span> Functional Updater (Reliable)</div>
+              <div class="code-box">
+                <pre class="code-content"><span class="fn">setCount</span>((<span class="prop">prevCount</span>) <span class="op">=&gt;</span> <span class="prop">prevCount</span> <span class="op">+</span> <span class="num">1</span>);</pre>
+              </div>
+              <p style="font-size: 0.84rem; color: var(--text-secondary);">
+                React passes the <strong>exact guaranteed latest state</strong> into your callback function. Always safe, especially when queuing multiple updates!
+              </p>
+            </div>
+          </div>
+
+          <div class="callout callout-emerald" style="margin-top: 0.5rem;">
+            <span class="callout-icon">💡</span>
+            <div>
+              <strong>Rule of Thumb:</strong> Whenever your next state calculation relies on the current value (e.g. counters, toggling booleans: <code style="font-family: var(--font-mono);">setOpen(prev => !prev)</code>), the functional form is the cleanest and most professional React practice.
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 20 — COMMON USESTATE MISTAKES
+           ==================================================================== -->
+      <section class="slide" data-slide="20" id="slide-20">
+        <div class="slide-header">
+          <div class="slide-tag tag-rose">Mistakes to Avoid</div>
+          <h2 class="slide-title">Common useState Mistakes</h2>
+          <p class="slide-subtitle">Never mutate state directly — always use the setter function!</p>
+        </div>
+
+        <div class="slide-content">
+          <div class="grid-2">
+            <div class="card" style="border-color: var(--accent-rose-border);">
+              <div class="card-title" style="color: var(--accent-rose);">
+                <span class="icon">❌</span> WRONG: Direct Mutation
+              </div>
+              <div class="code-box">
+                <pre class="code-content"><span class="comment">// 1. Direct variable re-assignment</span>
+<span class="prop">count</span> <span class="op">=</span> <span class="prop">count</span> <span class="op">+</span> <span class="num">1</span>;
+
+<span class="comment">// 2. Mutating arrays directly</span>
+<span class="prop">skills</span>.<span class="fn">push</span>(<span class="str">"React"</span>);
+
+<span class="comment">// 3. Mutating object fields directly</span>
+<span class="prop">user</span>.<span class="prop">name</span> <span class="op">=</span> <span class="str">"Arun"</span>;</pre>
+              </div>
+              <p style="font-size: 0.8rem; color: var(--accent-rose);">
+                React detects changes by checking if the object reference changed. Direct mutations don't trigger re-renders!
+              </p>
+            </div>
+
+            <div class="card card-highlight">
+              <div class="card-title" style="color: var(--accent-emerald);">
+                <span class="icon">✅</span> CORRECT: Using Setter Function
+              </div>
+              <div class="code-box">
+                <pre class="code-content"><span class="comment">// 1. Call setter with new number</span>
+<span class="fn">setCount</span>(<span class="prop">count</span> <span class="op">+</span> <span class="num">1</span>);
+
+<span class="comment">// 2. Create new array with spread</span>
+<span class="fn">setSkills</span>([...<span class="prop">skills</span>, <span class="str">"React"</span>]);
+
+<span class="comment">// 3. Create new object with spread</span>
+<span class="fn">setUser</span>({ ...<span class="prop">user</span>, <span class="prop">name</span>: <span class="str">"Arun"</span> });</pre>
+              </div>
+              <p style="font-size: 0.8rem; color: var(--accent-emerald);">
+                Always pass a brand new value or object through the setter function.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 21 — RULES OF HOOKS
+           ==================================================================== -->
+      <section class="slide" data-slide="21" id="slide-21">
+        <div class="slide-header">
+          <div class="slide-tag tag-amber">Fundamental Laws</div>
+          <h2 class="slide-title">The Two Fundamental Rules of Hooks</h2>
+          <p class="slide-subtitle">Simple guidelines to prevent bugs and ensure React tracks state order correctly</p>
+        </div>
+
+        <div class="slide-content">
+          <div class="grid-2">
+            <div class="card card-highlight">
+              <div class="card-title">
+                <span class="icon">1️⃣</span>
+                Rule 1: Only Call Hooks at the Top Level
+              </div>
+              <p style="font-size: 0.85rem;">
+                Do <strong>NOT</strong> call Hooks inside loops, conditions, or nested functions. Always declare them at the very top of your React component:
+              </p>
+
+              <div class="code-box">
+                <pre class="code-content"><span class="comment">// ✅ CORRECT: Top level of component</span>
+<span class="kwd">function</span> <span class="fn">App</span>() {
+  <span class="kwd">const</span> [<span class="prop">count</span>, <span class="fn">setCount</span>] <span class="op">=</span> <span class="fn">useState</span>(<span class="num">0</span>);
+  <span class="comment">// ...</span>
+}
+
+<span class="comment">// ❌ WRONG: Inside an if condition!</span>
+<span class="kwd">if</span> (<span class="prop">isLoggedIn</span>) {
+  <span class="kwd">const</span> [<span class="prop">count</span>, <span class="fn">setCount</span>] <span class="op">=</span> <span class="fn">useState</span>(<span class="num">0</span>); <span class="comment">// Breaks!</span>
+}</pre>
+              </div>
+            </div>
+
+            <div class="card card-highlight-purple">
+              <div class="card-title">
+                <span class="icon">2️⃣</span>
+                Rule 2: Only Call Hooks from React Functions
+              </div>
+              <p style="font-size: 0.85rem;">
+                Call Hooks <strong>only</strong> from:
+              </p>
+              <ul style="padding-left: 1.2rem; display: flex; flex-direction: column; gap: 0.5rem; font-size: 0.85rem; color: var(--text-secondary);">
+                <li>React <strong>functional components</strong></li>
+                <li>Custom React <strong>Hooks</strong> (functions starting with <code style="font-family: var(--font-mono);">use...</code>)</li>
+              </ul>
+              <p style="font-size: 0.82rem; color: var(--accent-rose); margin-top: 0.5rem;">
+                Do not call Hooks inside regular vanilla JavaScript helper functions outside React components.
+              </p>
+              <div class="card-footer-tip">
+                Keeps Hook order strictly deterministic!
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 22 — WHAT IS A CONTROLLED COMPONENT?
+           ==================================================================== -->
+      <section class="slide" data-slide="22" id="slide-22">
+        <div class="slide-header">
+          <div class="slide-tag tag-purple">Section 4 • Controlled Components</div>
+          <h2 class="slide-title">What Is a Controlled Component?</h2>
+          <p class="slide-subtitle">Form elements whose values are entirely driven by React state</p>
+        </div>
+
+        <div class="slide-content">
+          <div class="callout" style="font-size: 1rem;">
+            <span class="callout-icon" style="font-size: 1.5rem;">🎯</span>
+            <div>
+              <strong>Definition:</strong> A <strong>controlled component</strong> is a form element (like <code style="font-family: var(--font-mono);">&lt;input&gt;</code>, <code style="font-family: var(--font-mono);">&lt;textarea&gt;</code>, or <code style="font-family: var(--font-mono);">&lt;select&gt;</code>) whose value is controlled by React state rather than the browser DOM.
+            </div>
+          </div>
+
+          <div class="grid-split-left-wide">
+            <div class="code-box">
+              <div class="code-header">
+                <div class="code-dots"><span class="code-dot red"></span><span class="code-dot yellow"></span><span class="code-dot green"></span></div>
+                <span class="code-title">The Controlled Input Pattern</span>
+                <button class="copy-btn" onclick="Deck.copyCode(this)">Copy</button>
+              </div>
+              <pre class="code-content"><span class="kwd">const</span> [<span class="prop">name</span>, <span class="fn">setName</span>] <span class="op">=</span> <span class="fn">useState</span>(<span class="str">""</span>);
+
+<span class="tag">&lt;input</span>
+  <span class="attr">value</span>={<span class="prop">name</span>}                           <span class="comment">// 👈 1. Value driven by State</span>
+  <span class="attr">onChange</span>={(<span class="prop">e</span>) <span class="op">=&gt;</span> <span class="fn">setName</span>(<span class="prop">e</span>.<span class="prop">target</span>.<span class="prop">value</span>)} <span class="comment">// 👈 2. User input updates State</span>
+<span class="tag">/&gt;</span></pre>
+            </div>
+
+            <div class="card card-highlight">
+              <div class="card-title"><span class="icon">🔄</span> The Controlled Cycle</div>
+              <div style="background: var(--bg-surface); padding: 0.8rem; border-radius: var(--radius-sm); border: 1px solid var(--border-subtle); font-family: var(--font-mono); font-size: 0.8rem; display: flex; flex-direction: column; gap: 0.35rem; text-align: center;">
+                <div><span style="color: var(--react-cyan);">React State</span></div>
+                <div style="color: var(--text-dim);">&darr; value={name}</div>
+                <div><span style="color: var(--accent-emerald);">&lt;input /&gt; on screen</span></div>
+                <div style="color: var(--text-dim);">&darr; user types &rarr; onChange</div>
+                <div><span style="color: var(--accent-amber);">setName(e.target.value)</span></div>
+                <div style="color: var(--text-dim);">&darr; state updates &amp; re-renders</div>
+                <div><span style="color: var(--react-cyan);">React State</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 23 — NORMAL INPUT VS CONTROLLED INPUT
+           ==================================================================== -->
+      <section class="slide" data-slide="23" id="slide-23">
+        <div class="slide-header">
+          <div class="slide-tag tag-purple">Comparison</div>
+          <h2 class="slide-title">Normal (Uncontrolled) vs Controlled Input</h2>
+          <p class="slide-subtitle">Who controls the truth: the browser DOM or React state?</p>
+        </div>
+
+        <div class="slide-content">
+          <div class="grid-2">
+            <div class="card">
+              <div class="card-title" style="color: var(--text-muted);"><span class="icon">🌐</span> Normal / Uncontrolled Input</div>
+              <div class="code-box">
+                <pre class="code-content"><span class="tag">&lt;input /&gt;</span></pre>
+              </div>
+              <ul style="padding-left: 1.2rem; display: flex; flex-direction: column; gap: 0.5rem; font-size: 0.84rem; color: var(--text-muted);">
+                <li>The browser DOM stores what the user typed</li>
+                <li>React does <strong>not</strong> know the value until you inspect the DOM manually</li>
+                <li>Hard to validate or transform as the user types</li>
+              </ul>
+            </div>
+
+            <div class="card card-highlight">
+              <div class="card-title" style="color: var(--react-cyan);"><span class="icon">⚛️</span> Controlled Input (The React Way)</div>
+              <div class="code-box">
+                <pre class="code-content"><span class="tag">&lt;input</span>
+  <span class="attr">value</span>={<span class="prop">name</span>}
+  <span class="attr">onChange</span>={(<span class="prop">e</span>) <span class="op">=&gt;</span> <span class="fn">setName</span>(<span class="prop">e</span>.<span class="prop">target</span>.<span class="prop">value</span>)}
+<span class="tag">/&gt;</span></pre>
+              </div>
+              <ul style="padding-left: 1.2rem; display: flex; flex-direction: column; gap: 0.5rem; font-size: 0.84rem; color: var(--text-secondary);">
+                <li>React state is the <strong>Single Source of Truth</strong></li>
+                <li>Instant validation, formatting, and live character counts</li>
+                <li>UI updates instantly in real time</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 24 — BASIC CONTROLLED INPUT
+           ==================================================================== -->
+      <section class="slide" data-slide="24" id="slide-24">
+        <div class="slide-header">
+          <div class="slide-tag tag-emerald">Live Interactive Demo</div>
+          <h2 class="slide-title">Basic Controlled Input: Live Demo</h2>
+          <p class="slide-subtitle">Type in the box below to see React state sync and update the greeting in real time</p>
+        </div>
+
+        <div class="slide-content">
+          <div class="grid-2">
+            <div class="code-box">
+              <div class="code-header">
+                <div class="code-dots"><span class="code-dot red"></span><span class="code-dot yellow"></span><span class="code-dot green"></span></div>
+                <span class="code-title">GreetingApp.jsx</span>
+                <button class="copy-btn" onclick="Deck.copyCode(this)">Copy</button>
+              </div>
+              <pre class="code-content"><span class="kwd">import</span> { <span class="fn">useState</span> } <span class="kwd">from</span> <span class="str">"react"</span>;
+
+<span class="kwd">function</span> <span class="fn">App</span>() {
+  <span class="kwd">const</span> [<span class="prop">name</span>, <span class="fn">setName</span>] <span class="op">=</span> <span class="fn">useState</span>(<span class="str">""</span>);
+
+  <span class="kwd">return</span> (
+    <span class="tag">&lt;div&gt;</span>
+      <span class="tag">&lt;input</span>
+        <span class="attr">value</span>={<span class="prop">name</span>}
+        <span class="attr">onChange</span>={(<span class="prop">e</span>) <span class="op">=&gt;</span> <span class="fn">setName</span>(<span class="prop">e</span>.<span class="prop">target</span>.<span class="prop">value</span>)}
+        <span class="attr">placeholder</span>=<span class="str">"Enter your name"</span>
+      <span class="tag">/&gt;</span>
+
+      <span class="tag">&lt;h2&gt;</span>Hello {<span class="prop">name</span> || <span class="str">"Guest"</span>}!<span class="tag">&lt;/h2&gt;</span>
+    <span class="tag">&lt;/div&gt;</span>
+  );
+}</pre>
+            </div>
+
+            <div class="interactive-demo-card">
+              <div class="card-title"><span class="icon">⚡</span> Live Controlled Input Tester</div>
+
+              <div style="background: var(--bg-surface); padding: 1.25rem; border-radius: var(--radius-sm); border: 1px solid var(--border-subtle); display: flex; flex-direction: column; gap: 0.75rem;">
+                <label style="font-size: 0.75rem; color: var(--text-muted); font-family: var(--font-mono);">
+                  &lt;input value={name} onChange={...} /&gt;
+                </label>
+
+                <input type="text" id="demoLiveControlledInput" class="demo-input" placeholder="Type a student name (e.g. Rahul)..." oninput="SlideDemos.handleControlledInput(this.value)">
+
+                <div style="border-top: 1px solid var(--border-subtle); padding-top: 0.75rem; margin-top: 0.25rem;">
+                  <span style="font-size: 0.72rem; color: var(--text-muted); font-family: var(--font-mono);">Rendered &lt;h2&gt;:</span>
+                  <div id="demoGreetingHeading" style="font-size: 1.5rem; font-weight: 800; color: var(--react-cyan); margin-top: 0.25rem;">
+                    Hello Guest!
+                  </div>
+                </div>
+              </div>
+
+              <div class="demo-result-box" id="demoInputStateLog" style="font-size: 0.78rem;">
+                State: name = ""
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 25 — UNDERSTANDING ONCHANGE
+           ==================================================================== -->
+      <section class="slide" data-slide="25" id="slide-25">
+        <div class="slide-header">
+          <div class="slide-tag tag-purple">Event Mechanics</div>
+          <h2 class="slide-title">Understanding <code style="color: var(--react-cyan); font-family: var(--font-mono);">onChange</code> &amp; <code style="color: var(--accent-amber); font-family: var(--font-mono);">e.target.value</code></h2>
+          <p class="slide-subtitle">Dissecting the synthetic event object passed to your event listener</p>
+        </div>
+
+        <div class="slide-content">
+          <div class="code-box">
+            <div class="code-header">
+              <div class="code-dots"><span class="code-dot red"></span><span class="code-dot yellow"></span><span class="code-dot green"></span></div>
+              <span class="code-title">onChange Event Handler Syntax</span>
+              <button class="copy-btn" onclick="Deck.copyCode(this)">Copy</button>
+            </div>
+            <pre class="code-content"><span class="attr">onChange</span><span class="op">=</span>{(<span class="prop">e</span>) <span class="op">=&gt;</span> <span class="fn">setName</span>(<span class="prop">e</span>.<span class="prop">target</span>.<span class="prop">value</span>)}</pre>
+          </div>
+
+          <div class="flow-container" style="padding: 1rem 0;">
+            <div class="flow-node">
+              <div class="flow-node-title">1. User types</div>
+              <div class="flow-node-desc">Keystroke in box</div>
+            </div>
+            <div class="flow-arrow">&rarr;</div>
+            <div class="flow-node active-node">
+              <div class="flow-node-title">2. 'e' (Event)</div>
+              <div class="flow-node-desc">React SyntheticEvent</div>
+            </div>
+            <div class="flow-arrow">&rarr;</div>
+            <div class="flow-node">
+              <div class="flow-node-title">3. e.target</div>
+              <div class="flow-node-desc">The &lt;input&gt; DOM node</div>
+            </div>
+            <div class="flow-arrow">&rarr;</div>
+            <div class="flow-node active-node">
+              <div class="flow-node-title">4. e.target.value</div>
+              <div class="flow-node-desc">The string typed inside</div>
+            </div>
+            <div class="flow-arrow">&rarr;</div>
+            <div class="flow-node">
+              <div class="flow-node-title">5. setName(...)</div>
+              <div class="flow-node-desc">Updates React State!</div>
+            </div>
+          </div>
+
+          <div class="grid-2">
+            <div class="card">
+              <div class="card-title"><span class="icon">🎯</span> What is `e`?</div>
+              <p style="font-size: 0.85rem; color: var(--text-secondary);">
+                <code style="font-family: var(--font-mono);">e</code> is the event object created automatically by React when an event fires. It wraps the browser's native event.
+              </p>
+            </div>
+            <div class="card">
+              <div class="card-title"><span class="icon">🔑</span> What is `e.target.value`?</div>
+              <p style="font-size: 0.85rem; color: var(--text-secondary);">
+                <code style="font-family: var(--font-mono);">e.target</code> refers to the input element itself, and <code style="font-family: var(--font-mono);">.value</code> is the exact text currently sitting inside that element.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 26 — CONTROLLED INPUT DATA FLOW
+           ==================================================================== -->
+      <section class="slide" data-slide="26" id="slide-26">
+        <div class="slide-header">
+          <div class="slide-tag tag-purple">Mental Model</div>
+          <h2 class="slide-title">Controlled Input Data Flow Diagram</h2>
+          <p class="slide-subtitle">The circular feedback loop that maintains a single source of truth</p>
+        </div>
+
+        <div class="slide-content">
+          <div style="background: var(--bg-surface); border: 1px solid var(--border-medium); border-radius: var(--radius-md); padding: 2rem; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1rem; box-shadow: var(--shadow-sm);">
+            <div style="background: rgba(0, 216, 255, 0.12); border: 2px solid var(--react-border); padding: 0.85rem 2rem; border-radius: var(--radius-sm); font-family: var(--font-mono); font-size: 1.1rem; color: var(--react-cyan); font-weight: bold;">
+              React State: const [name, setName] = useState("")
+            </div>
+
+            <div style="display: flex; justify-content: space-between; width: 100%; max-width: 520px; align-items: center;">
+              <div style="display: flex; flex-direction: column; align-items: center; color: var(--accent-emerald);">
+                <span style="font-size: 1.2rem;">&uarr;</span>
+                <span style="font-family: var(--font-mono); font-size: 0.78rem;">setName(e.target.value)</span>
+                <span style="font-size: 0.7rem; color: var(--text-muted);">(State updated &rarr; Re-render)</span>
+              </div>
+
+              <div style="display: flex; flex-direction: column; align-items: center; color: var(--accent-amber);">
+                <span style="font-family: var(--font-mono); font-size: 0.78rem;">value={name}</span>
+                <span style="font-size: 0.7rem; color: var(--text-muted);">(State dictates input value)</span>
+                <span style="font-size: 1.2rem;">&darr;</span>
+              </div>
+            </div>
+
+            <div style="background: #02050E; border: 2px solid var(--border-subtle); padding: 0.85rem 2rem; border-radius: var(--radius-sm); font-family: var(--font-mono); font-size: 1rem; color: var(--text-main);">
+              &lt;input value={name} onChange={...} /&gt;
+            </div>
+
+            <div style="font-size: 0.8rem; color: var(--text-muted); font-style: italic;">
+              User types in box &rarr; fires onChange event with e.target.value
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 27 — CONTROLLED TEXTAREA
+           ==================================================================== -->
+      <section class="slide" data-slide="27" id="slide-27">
+        <div class="slide-header">
+          <div class="slide-tag tag-purple">Form Elements</div>
+          <h2 class="slide-title">Controlled &lt;textarea&gt; &amp; Character Counter</h2>
+          <p class="slide-subtitle">Controlled components work identically across textareas, inputs, and selects</p>
+        </div>
+
+        <div class="slide-content">
+          <div class="grid-2">
+            <div class="code-box">
+              <div class="code-header">
+                <div class="code-dots"><span class="code-dot red"></span><span class="code-dot yellow"></span><span class="code-dot green"></span></div>
+                <span class="code-title">ControlledTextarea.jsx</span>
+                <button class="copy-btn" onclick="Deck.copyCode(this)">Copy</button>
+              </div>
+              <pre class="code-content"><span class="kwd">const</span> [<span class="prop">message</span>, <span class="fn">setMessage</span>] <span class="op">=</span> <span class="fn">useState</span>(<span class="str">""</span>);
+
+<span class="kwd">return</span> (
+  <span class="tag">&lt;div&gt;</span>
+    <span class="tag">&lt;textarea</span>
+      <span class="attr">value</span>={<span class="prop">message</span>}
+      <span class="attr">onChange</span>={(<span class="prop">e</span>) <span class="op">=&gt;</span> <span class="fn">setMessage</span>(<span class="prop">e</span>.<span class="prop">target</span>.<span class="prop">value</span>)}
+      <span class="attr">placeholder</span>=<span class="str">"Enter student feedback..."</span>
+    <span class="tag">/&gt;</span>
+    <span class="tag">&lt;p&gt;</span>Characters: {<span class="prop">message</span>.<span class="prop">length</span>}<span class="tag">&lt;/p&gt;</span>
+  <span class="tag">&lt;/div&gt;</span>
+);</pre>
+            </div>
+
+            <div class="interactive-demo-card">
+              <div class="card-title"><span class="icon">⚡</span> Live Textarea Counter Demo</div>
+
+              <div style="background: var(--bg-surface); padding: 1.25rem; border-radius: var(--radius-sm); border: 1px solid var(--border-subtle); display: flex; flex-direction: column; gap: 0.5rem;">
+                <textarea id="demoLiveTextarea" class="demo-input" rows="3" placeholder="Type comments here..." oninput="SlideDemos.handleTextarea(this.value)" style="resize: vertical; font-family: var(--font-sans);"></textarea>
+
+                <div style="display: flex; justify-content: space-between; align-items: center; font-family: var(--font-mono); font-size: 0.78rem; margin-top: 0.25rem;">
+                  <span style="color: var(--text-muted);">Character Count:</span>
+                  <span id="demoCharCountDisplay" style="color: var(--react-cyan); font-weight: bold;">0 / 100</span>
+                </div>
+              </div>
+
+              <div class="demo-result-box" id="demoTextareaLog">
+                Because React controls the value, measuring length or restricting max characters is trivial!
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 28 — CONTROLLED SELECT
+           ==================================================================== -->
+      <section class="slide" data-slide="28" id="slide-28">
+        <div class="slide-header">
+          <div class="slide-tag tag-purple">Form Elements</div>
+          <h2 class="slide-title">Controlled &lt;select&gt; Dropdowns</h2>
+          <p class="slide-subtitle">Setting the active selected option through React state</p>
+        </div>
+
+        <div class="slide-content">
+          <div class="grid-2">
+            <div class="code-box">
+              <div class="code-header">
+                <div class="code-dots"><span class="code-dot red"></span><span class="code-dot yellow"></span><span class="code-dot green"></span></div>
+                <span class="code-title">CourseDropdown.jsx</span>
+                <button class="copy-btn" onclick="Deck.copyCode(this)">Copy</button>
+              </div>
+              <pre class="code-content"><span class="kwd">const</span> [<span class="prop">course</span>, <span class="fn">setCourse</span>] <span class="op">=</span> <span class="fn">useState</span>(<span class="str">""</span>);
+
+<span class="tag">&lt;select</span>
+  <span class="attr">value</span>={<span class="prop">course</span>}
+  <span class="attr">onChange</span>={(<span class="prop">e</span>) <span class="op">=&gt;</span> <span class="fn">setCourse</span>(<span class="prop">e</span>.<span class="prop">target</span>.<span class="prop">value</span>)}
+<span class="tag">&gt;</span>
+  <span class="tag">&lt;option</span> <span class="attr">value</span>=<span class="str">""</span><span class="tag">&gt;</span>Select Course<span class="tag">&lt;/option&gt;</span>
+  <span class="tag">&lt;option</span> <span class="attr">value</span>=<span class="str">"MERN"</span><span class="tag">&gt;</span>MERN Stack<span class="tag">&lt;/option&gt;</span>
+  <span class="tag">&lt;option</span> <span class="attr">value</span>=<span class="str">"Python"</span><span class="tag">&gt;</span>Python Fullstack<span class="tag">&lt;/option&gt;</span>
+<span class="tag">&lt;/select&gt;</span></pre>
+            </div>
+
+            <div class="interactive-demo-card">
+              <div class="card-title"><span class="icon">⚡</span> Interactive Select Demo</div>
+
+              <div style="background: var(--bg-surface); padding: 1.25rem; border-radius: var(--radius-sm); border: 1px solid var(--border-subtle); display: flex; flex-direction: column; gap: 0.75rem;">
+                <label style="font-size: 0.75rem; color: var(--text-muted); font-family: var(--font-mono);">Choose Course:</label>
+                <select id="demoSelectElement" class="demo-input" onchange="SlideDemos.handleSelect(this.value)">
+                  <option value="">-- Choose Course --</option>
+                  <option value="MERN">MERN Stack</option>
+                  <option value="Python">Python Fullstack</option>
+                  <option value="Java">Java Spring Boot</option>
+                </select>
+
+                <div style="border-top: 1px solid var(--border-subtle); padding-top: 0.75rem; font-family: var(--font-mono); font-size: 0.82rem;">
+                  Selected: <span id="demoSelectOutput" style="color: var(--accent-amber); font-weight: bold;">(None)</span>
+                </div>
+              </div>
+
+              <div class="demo-result-box" id="demoSelectLog">
+                Notice React uses <code style="font-family: var(--font-mono);">value</code> on the &lt;select&gt; tag directly instead of putting <code style="font-family: var(--font-mono);">selected</code> on the &lt;option&gt;!
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 29 — CONTROLLED CHECKBOX
+           ==================================================================== -->
+      <section class="slide" data-slide="29" id="slide-29">
+        <div class="slide-header">
+          <div class="slide-tag tag-rose">Critical Distinction</div>
+          <h2 class="slide-title">Controlled &lt;input type="checkbox"&gt;</h2>
+          <p class="slide-subtitle">Use <code style="color: var(--accent-rose); font-family: var(--font-mono);">checked</code> and <code style="color: var(--accent-rose); font-family: var(--font-mono);">e.target.checked</code> — NOT value!</p>
+        </div>
+
+        <div class="slide-content">
+          <div class="grid-2">
+            <div class="code-box">
+              <div class="code-header">
+                <div class="code-dots"><span class="code-dot red"></span><span class="code-dot yellow"></span><span class="code-dot green"></span></div>
+                <span class="code-title">TermsCheckbox.jsx</span>
+                <button class="copy-btn" onclick="Deck.copyCode(this)">Copy</button>
+              </div>
+              <pre class="code-content"><span class="kwd">const</span> [<span class="prop">agree</span>, <span class="fn">setAgree</span>] <span class="op">=</span> <span class="fn">useState</span>(<span class="bool">false</span>);
+
+<span class="tag">&lt;input</span>
+  <span class="attr">type</span>=<span class="str">"checkbox"</span>
+  <span class="attr">checked</span>={<span class="prop">agree</span>}                         <span class="comment">// 👈 'checked' instead of 'value'</span>
+  <span class="attr">onChange</span>={(<span class="prop">e</span>) <span class="op">=&gt;</span> <span class="fn">setAgree</span>(<span class="prop">e</span>.<span class="prop">target</span>.<span class="prop">checked</span>)} <span class="comment">// 👈 'e.target.checked' (boolean)</span>
+<span class="tag">/&gt;</span></pre>
+            </div>
+
+            <div class="interactive-demo-card">
+              <div class="card-title"><span class="icon">⚡</span> Interactive Checkbox Demo</div>
+
+              <div style="background: var(--bg-surface); padding: 1.25rem; border-radius: var(--radius-sm); border: 1px solid var(--border-subtle); display: flex; flex-direction: column; gap: 0.75rem;">
+                <label style="display: flex; align-items: center; gap: 0.6rem; cursor: pointer; font-size: 0.88rem;">
+                  <input type="checkbox" id="demoCheckboxInput" onchange="SlideDemos.handleCheckbox(this.checked)" style="width: 18px; height: 18px; accent-color: var(--react-cyan); cursor: pointer;">
+                  <span>I agree to the Terms &amp; Conditions</span>
+                </label>
+
+                <div style="border-top: 1px solid var(--border-subtle); padding-top: 0.5rem; font-family: var(--font-mono); font-size: 0.8rem;">
+                  Status: <span id="demoCheckboxStatus" style="color: var(--accent-rose); font-weight: bold;">Unchecked (false)</span>
+                </div>
+              </div>
+
+              <div class="demo-result-box" id="demoCheckboxLog">
+                For text inputs: <code style="font-family: var(--font-mono); color: var(--react-cyan);">e.target.value</code> (string). For checkboxes: <code style="font-family: var(--font-mono); color: var(--accent-rose);">e.target.checked</code> (boolean)!
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 30 — MULTIPLE FORM FIELDS
+           ==================================================================== -->
+      <section class="slide" data-slide="30" id="slide-30">
+        <div class="slide-header">
+          <div class="slide-tag tag-purple">Section 5 • Controlled Forms</div>
+          <h2 class="slide-title">Handling Multiple Form Fields in One State</h2>
+          <p class="slide-subtitle">Grouping related inputs into a single state object to avoid declaring 10 useState hooks</p>
+        </div>
+
+        <div class="slide-content">
+          <div class="code-box">
+            <div class="code-header">
+              <div class="code-dots"><span class="code-dot red"></span><span class="code-dot yellow"></span><span class="code-dot green"></span></div>
+              <span class="code-title">StudentRegistration.jsx — Single Form State</span>
+              <button class="copy-btn" onclick="Deck.copyCode(this)">Copy</button>
+            </div>
+            <pre class="code-content"><span class="comment">// 1. Single state object for all inputs</span>
+<span class="kwd">const</span> [<span class="prop">form</span>, <span class="fn">setForm</span>] <span class="op">=</span> <span class="fn">useState</span>({
+  <span class="prop">name</span>: <span class="str">""</span>,
+  <span class="prop">email</span>: <span class="str">""</span>
+});
+
+<span class="comment">// 2. Update specific field while preserving the rest using spread operator:</span>
+<span class="tag">&lt;input</span>
+  <span class="attr">value</span>={<span class="prop">form</span>.<span class="prop">name</span>}
+  <span class="attr">onChange</span>={(<span class="prop">e</span>) <span class="op">=&gt;</span> <span class="fn">setForm</span>({ ...<span class="prop">form</span>, <span class="prop">name</span>: <span class="prop">e</span>.<span class="prop">target</span>.<span class="prop">value</span> })}
+<span class="tag">/&gt;</span>
+
+<span class="tag">&lt;input</span>
+  <span class="attr">value</span>={<span class="prop">form</span>.<span class="prop">email</span>}
+  <span class="attr">onChange</span>={(<span class="prop">e</span>) <span class="op">=&gt;</span> <span class="fn">setForm</span>({ ...<span class="prop">form</span>, <span class="prop">email</span>: <span class="prop">e</span>.<span class="prop">target</span>.<span class="prop">value</span> })}
+<span class="tag">/&gt;</span></pre>
+          </div>
+
+          <div class="grid-2" style="margin-top: 0.5rem;">
+            <div class="card card-highlight">
+              <div class="card-title"><span class="icon">✨</span> Clean Scalability</div>
+              <p style="font-size: 0.85rem; color: var(--text-secondary);">
+                As your form expands to 6 or 10 inputs, managing one state object is much easier than writing 10 individual <code style="font-family: var(--font-mono);">useState</code> calls!
+              </p>
+            </div>
+            <div class="card card-highlight-amber">
+              <div class="card-title"><span class="icon">⚠️</span> Crucial Rule</div>
+              <p style="font-size: 0.85rem; color: var(--text-secondary);">
+                Always include <code style="font-family: var(--font-mono); color: var(--accent-amber);">...form</code> so the other fields are not erased when one field updates.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 31 — HANDLING FORM SUBMIT
+           ==================================================================== -->
+      <section class="slide" data-slide="31" id="slide-31">
+        <div class="slide-header">
+          <div class="slide-tag tag-purple">Form Submission</div>
+          <h2 class="slide-title">Handling Form Submit &amp; <code style="color: var(--react-cyan); font-family: var(--font-mono);">preventDefault()</code></h2>
+          <p class="slide-subtitle">Stopping browser page reload so React can handle the submission smoothly in JavaScript</p>
+        </div>
+
+        <div class="slide-content">
+          <div class="grid-split-left-wide">
+            <div class="code-box">
+              <div class="code-header">
+                <div class="code-dots"><span class="code-dot red"></span><span class="code-dot yellow"></span><span class="code-dot green"></span></div>
+                <span class="code-title">Handling Submit in React</span>
+                <button class="copy-btn" onclick="Deck.copyCode(this)">Copy</button>
+              </div>
+              <pre class="code-content"><span class="kwd">const</span> <span class="fn">handleSubmit</span> <span class="op">=</span> (<span class="prop">e</span>) <span class="op">=&gt;</span> {
+  <span class="comment">// 🛑 PREVENT default browser form reload:</span>
+  <span class="prop">e</span>.<span class="fn">preventDefault</span>();
+
+  <span class="comment">// Process data in React state:</span>
+  <span class="fn">console</span>.<span class="fn">log</span>(<span class="str">"Submitting student data:"</span>, <span class="prop">form</span>);
+};
+
+<span class="kwd">return</span> (
+  <span class="tag">&lt;form</span> <span class="attr">onSubmit</span>={handleSubmit}<span class="tag">&gt;</span>
+    <span class="comment">{/* inputs here */}</span>
+    <span class="tag">&lt;button</span> <span class="attr">type</span>=<span class="str">"submit"</span><span class="tag">&gt;</span>Register Student<span class="tag">&lt;/button&gt;</span>
+  <span class="tag">&lt;/form&gt;</span>
+);</pre>
+            </div>
+
+            <div class="flex-col">
+              <div class="card card-highlight">
+                <div class="card-title"><span class="icon">🛑</span> Why `preventDefault()`?</div>
+                <p style="font-size: 0.85rem; color: var(--text-secondary);">
+                  By default, HTML forms submit by making an HTTP GET/POST request and <strong>reloading the entire browser page</strong>.
+                </p>
+                <p style="font-size: 0.85rem; color: var(--text-secondary);">
+                  A page reload wipes all your React state in memory! <code style="font-family: var(--font-mono); color: var(--react-cyan);">e.preventDefault()</code> stops the reload so React stays in control.
+                </p>
+              </div>
+
+              <div class="callout callout-emerald">
+                <span class="callout-icon">💡</span>
+                <div>
+                  Always attach <code style="font-family: var(--font-mono);">onSubmit</code> to the <code style="font-family: var(--font-mono);">&lt;form&gt;</code> element, not <code style="font-family: var(--font-mono);">onClick</code> on the button! This ensures pressing <strong>Enter</strong> also submits.
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 32 — COMPLETE CONTROLLED FORM
+           ==================================================================== -->
+      <section class="slide" data-slide="32" id="slide-32">
+        <div class="slide-header">
+          <div class="slide-tag tag-emerald">Complete Component</div>
+          <h2 class="slide-title">Complete Controlled Form Example</h2>
+          <p class="slide-subtitle">A full working component putting all state, controlled inputs, and submit handling together</p>
+        </div>
+
+        <div class="slide-content">
+          <div class="code-box">
+            <div class="code-header">
+              <div class="code-dots"><span class="code-dot red"></span><span class="code-dot yellow"></span><span class="code-dot green"></span></div>
+              <span class="code-title">StudentForm.jsx</span>
+              <button class="copy-btn" onclick="Deck.copyCode(this)">Copy</button>
+            </div>
+            <pre class="code-content"><span class="kwd">import</span> { <span class="fn">useState</span> } <span class="kwd">from</span> <span class="str">"react"</span>;
+
+<span class="kwd">function</span> <span class="fn">StudentForm</span>() {
+  <span class="kwd">const</span> [<span class="prop">name</span>, <span class="fn">setName</span>] <span class="op">=</span> <span class="fn">useState</span>(<span class="str">""</span>);
+  <span class="kwd">const</span> [<span class="prop">course</span>, <span class="fn">setCourse</span>] <span class="op">=</span> <span class="fn">useState</span>(<span class="str">""</span>);
+
+  <span class="kwd">const</span> <span class="fn">handleSubmit</span> <span class="op">=</span> (<span class="prop">e</span>) <span class="op">=&gt;</span> {
+    <span class="prop">e</span>.<span class="fn">preventDefault</span>();
+    <span class="fn">console</span>.<span class="fn">log</span>({ <span class="prop">name</span>, <span class="prop">course</span> });
+  };
+
+  <span class="kwd">return</span> (
+    <span class="tag">&lt;form</span> <span class="attr">onSubmit</span>={handleSubmit}<span class="tag">&gt;</span>
+      <span class="tag">&lt;input</span>
+        <span class="attr">value</span>={<span class="prop">name</span>}
+        <span class="attr">onChange</span>={(<span class="prop">e</span>) <span class="op">=&gt;</span> <span class="fn">setName</span>(<span class="prop">e</span>.<span class="prop">target</span>.<span class="prop">value</span>)}
+        <span class="attr">placeholder</span>=<span class="str">"Enter name"</span>
+      <span class="tag">/&gt;</span>
+
+      <span class="tag">&lt;select</span> <span class="attr">value</span>={<span class="prop">course</span>} <span class="attr">onChange</span>={(<span class="prop">e</span>) <span class="op">=&gt;</span> <span class="fn">setCourse</span>(<span class="prop">e</span>.<span class="prop">target</span>.<span class="prop">value</span>)}<span class="tag">&gt;</span>
+        <span class="tag">&lt;option</span> <span class="attr">value</span>=<span class="str">""</span><span class="tag">&gt;</span>Select course<span class="tag">&lt;/option&gt;</span>
+        <span class="tag">&lt;option</span> <span class="attr">value</span>=<span class="str">"MERN"</span><span class="tag">&gt;</span>MERN<span class="tag">&lt;/option&gt;</span>
+        <span class="tag">&lt;option</span> <span class="attr">value</span>=<span class="str">"Python"</span><span class="tag">&gt;</span>Python<span class="tag">&lt;/option&gt;</span>
+      <span class="tag">&lt;/select&gt;</span>
+
+      <span class="tag">&lt;button</span> <span class="attr">type</span>=<span class="str">"submit"</span><span class="tag">&gt;</span>Submit<span class="tag">&lt;/button&gt;</span>
+    <span class="tag">&lt;/form&gt;</span>
+  );
+}</pre>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 33 — MINI PROJECT: STUDENT REGISTRATION FORM
+           ==================================================================== -->
+      <section class="slide" data-slide="33" id="slide-33">
+        <div class="slide-header">
+          <div class="slide-tag tag-blue">Section 6 • Practical Project</div>
+          <h2 class="slide-title">Mini Project: Student Registration Form</h2>
+          <p class="slide-subtitle">Building an interactive classroom form application with full client-side state</p>
+        </div>
+
+        <div class="slide-content">
+          <div class="grid-2">
+            <div class="card card-highlight">
+              <div class="card-title"><span class="icon">📋</span> Form Field Requirements</div>
+              <ul style="padding-left: 1.2rem; display: flex; flex-direction: column; gap: 0.5rem; font-size: 0.85rem; color: var(--text-secondary);">
+                <li><strong style="color: var(--react-cyan);">Student Name:</strong> Text input</li>
+                <li><strong style="color: var(--react-cyan);">Email:</strong> Email input</li>
+                <li><strong style="color: var(--react-cyan);">Age:</strong> Number input</li>
+                <li><strong style="color: var(--react-cyan);">Course:</strong> Dropdown select (MERN, Python, Java)</li>
+                <li><strong style="color: var(--react-cyan);">Gender:</strong> Radio buttons or select (Male, Female)</li>
+                <li><strong style="color: var(--react-cyan);">Submit Button:</strong> Fires form submission</li>
+              </ul>
+            </div>
+
+            <div class="card card-highlight-purple">
+              <div class="card-title"><span class="icon">🎯</span> Skills Practiced</div>
+              <ul style="padding-left: 1.2rem; display: flex; flex-direction: column; gap: 0.5rem; font-size: 0.85rem; color: var(--text-secondary);">
+                <li>Importing and initializing <code style="font-family: var(--font-mono); color: var(--react-cyan);">useState</code></li>
+                <li>Controlled inputs with <code style="font-family: var(--font-mono);">value</code> and <code style="font-family: var(--font-mono);">onChange</code></li>
+                <li>Form submit handling with <code style="font-family: var(--font-mono);">e.preventDefault()</code></li>
+                <li>Displaying submitted student card dynamically on screen</li>
+                <li>Zero external libraries, backend, or database needed!</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 34 — PROJECT DATA FLOW
+           ==================================================================== -->
+      <section class="slide" data-slide="34" id="slide-34">
+        <div class="slide-header">
+          <div class="slide-tag tag-blue">Architecture</div>
+          <h2 class="slide-title">Mini Project Complete Data Flow</h2>
+          <p class="slide-subtitle">How data travels from user keystrokes to final on-screen student display</p>
+        </div>
+
+        <div class="slide-content">
+          <div class="grid-2">
+            <div class="card">
+              <div class="card-title"><span class="icon">1️⃣</span> Phase 1: Typing &amp; State Sync</div>
+              <div style="background: var(--bg-surface); padding: 0.85rem; border-radius: var(--radius-sm); border: 1px solid var(--border-subtle); font-family: var(--font-mono); font-size: 0.8rem; display: flex; flex-direction: column; gap: 0.4rem; text-align: center;">
+                <div>User types in input</div>
+                <div style="color: var(--text-dim);">&darr;</div>
+                <div style="color: var(--react-cyan);">onChange event triggered</div>
+                <div style="color: var(--text-dim);">&darr;</div>
+                <div style="color: var(--accent-amber);">setName(e.target.value)</div>
+                <div style="color: var(--text-dim);">&darr;</div>
+                <div style="color: var(--accent-emerald);">React State updated &amp; input re-rendered</div>
+              </div>
+            </div>
+
+            <div class="card card-highlight">
+              <div class="card-title"><span class="icon">2️⃣</span> Phase 2: Form Submission</div>
+              <div style="background: var(--bg-surface); padding: 0.85rem; border-radius: var(--radius-sm); border: 1px solid var(--border-subtle); font-family: var(--font-mono); font-size: 0.8rem; display: flex; flex-direction: column; gap: 0.4rem; text-align: center;">
+                <div>User clicks "Register Student"</div>
+                <div style="color: var(--text-dim);">&darr;</div>
+                <div style="color: var(--react-cyan);">handleSubmit() called</div>
+                <div style="color: var(--text-dim);">&darr;</div>
+                <div style="color: var(--accent-rose);">e.preventDefault() stops reload</div>
+                <div style="color: var(--text-dim);">&darr;</div>
+                <div style="color: var(--accent-emerald);">Render Student Information Profile Card!</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 35 — DISPLAY SUBMITTED DATA (LIVE FORM SANDBOX)
+           ==================================================================== -->
+      <section class="slide" data-slide="35" id="slide-35">
+        <div class="slide-header">
+          <div class="slide-tag tag-emerald">Live Form Sandbox</div>
+          <h2 class="slide-title">Display Submitted Data: Live Demo</h2>
+          <p class="slide-subtitle">Fill in student details and submit to see the real-time generated profile card</p>
+        </div>
+
+        <div class="slide-content">
+          <div class="grid-2">
+            <!-- Form Card -->
+            <div class="interactive-demo-card">
+              <div class="card-title"><span class="icon">📝</span> Student Registration Form</div>
+
+              <form id="slideStudentForm" onsubmit="SlideDemos.handleFormSubmit(event)" style="display: flex; flex-direction: column; gap: 0.6rem;">
+                <div>
+                  <label style="font-size: 0.72rem; color: var(--text-muted); display: block; margin-bottom: 2px;">Name</label>
+                  <input type="text" id="sfName" class="demo-input" placeholder="e.g. Rahul" required>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem;">
+                  <div>
+                    <label style="font-size: 0.72rem; color: var(--text-muted); display: block; margin-bottom: 2px;">Email</label>
+                    <input type="email" id="sfEmail" class="demo-input" placeholder="rahul@gmail.com" required>
+                  </div>
+                  <div>
+                    <label style="font-size: 0.72rem; color: var(--text-muted); display: block; margin-bottom: 2px;">Age</label>
+                    <input type="number" id="sfAge" class="demo-input" placeholder="21" min="15" max="80" required>
+                  </div>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem;">
+                  <div>
+                    <label style="font-size: 0.72rem; color: var(--text-muted); display: block; margin-bottom: 2px;">Course</label>
+                    <select id="sfCourse" class="demo-input" required>
+                      <option value="">Select course</option>
+                      <option value="MERN">MERN Stack</option>
+                      <option value="Python">Python Fullstack</option>
+                      <option value="Java">Java Spring</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label style="font-size: 0.72rem; color: var(--text-muted); display: block; margin-bottom: 2px;">Gender</label>
+                    <select id="sfGender" class="demo-input" required>
+                      <option value="">Select gender</option>
+                      <option value="Male">Male</option>
+                      <option value="Female">Female</option>
+                      <option value="Other">Other</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div style="display: flex; gap: 0.5rem; margin-top: 0.5rem;">
+                  <button type="submit" class="demo-btn" style="flex: 1; justify-content: center;">
+                    Submit Student Form
+                  </button>
+                  <button type="button" class="demo-btn btn-reset" onclick="SlideDemos.resetForm()">
+                    Reset
+                  </button>
+                </div>
+              </form>
+            </div>
+
+            <!-- Profile Display Card -->
+            <div class="interactive-demo-card">
+              <div class="card-title"><span class="icon">🎓</span> Submitted Student Profile</div>
+
+              <div id="submittedProfileCard" style="background: var(--bg-surface); border: 1px dashed var(--border-medium); border-radius: var(--radius-sm); padding: 1.25rem; min-height: 220px; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center;">
+                <div style="font-size: 2.5rem; margin-bottom: 0.5rem;">👤</div>
+                <div style="font-size: 0.85rem; color: var(--text-muted); font-style: italic;">
+                  No student submitted yet. Fill out the form and click Submit!
+                </div>
+              </div>
+
+              <div class="demo-result-box" id="formSubmissionLog" style="font-size: 0.75rem;">
+                No backend or database needed — purely client-side React state!
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 36 — COMMON MISTAKES
+           ==================================================================== -->
+      <section class="slide" data-slide="36" id="slide-36">
+        <div class="slide-header">
+          <div class="slide-tag tag-rose">Troubleshooting</div>
+          <h2 class="slide-title">Common Beginner Mistakes &amp; Fixes</h2>
+          <p class="slide-subtitle">6 critical mistakes students frequently encounter with React state &amp; forms</p>
+        </div>
+
+        <div class="slide-content">
+          <div class="grid-3">
+            <div class="card" style="border-color: var(--accent-rose-border);">
+              <div class="card-title" style="font-size: 0.9rem; color: var(--accent-rose);"><span class="icon">1️⃣</span> Forgetting Import</div>
+              <p style="font-size: 0.78rem;">Using <code style="font-family: var(--font-mono);">useState</code> without importing causes: <span style="color: var(--accent-rose);">ReferenceError: useState is not defined</span>.</p>
+              <div class="card-footer-tip" style="color: var(--accent-emerald);">Fix: import { useState } from "react";</div>
+            </div>
+
+            <div class="card" style="border-color: var(--accent-rose-border);">
+              <div class="card-title" style="font-size: 0.9rem; color: var(--accent-rose);"><span class="icon">2️⃣</span> Checkbox `e.target.value`</div>
+              <p style="font-size: 0.78rem;">Reading <code style="font-family: var(--font-mono);">.value</code> on checkbox returns the string "on" instead of true/false.</p>
+              <div class="card-footer-tip" style="color: var(--accent-emerald);">Fix: Use e.target.checked!</div>
+            </div>
+
+            <div class="card" style="border-color: var(--accent-rose-border);">
+              <div class="card-title" style="font-size: 0.9rem; color: var(--accent-rose);"><span class="icon">3️⃣</span> Direct State Mutation</div>
+              <p style="font-size: 0.78rem;">Writing <code style="font-family: var(--font-mono);">count++</code> or <code style="font-family: var(--font-mono);">array.push()</code> fails to trigger re-renders.</p>
+              <div class="card-footer-tip" style="color: var(--accent-emerald);">Fix: Always call setter function!</div>
+            </div>
+
+            <div class="card" style="border-color: var(--accent-rose-border);">
+              <div class="card-title" style="font-size: 0.9rem; color: var(--accent-rose);"><span class="icon">4️⃣</span> Missing `value` Prop</div>
+              <p style="font-size: 0.78rem;">Omitting <code style="font-family: var(--font-mono);">value={name}</code> turns the input uncontrolled.</p>
+              <div class="card-footer-tip" style="color: var(--accent-emerald);">Fix: Always bind value={state}!</div>
+            </div>
+
+            <div class="card" style="border-color: var(--accent-rose-border);">
+              <div class="card-title" style="font-size: 0.9rem; color: var(--accent-rose);"><span class="icon">5️⃣</span> Missing `onChange`</div>
+              <p style="font-size: 0.78rem;">Setting <code style="font-family: var(--font-mono);">value={name}</code> without <code style="font-family: var(--font-mono);">onChange</code> locks the input read-only!</p>
+              <div class="card-footer-tip" style="color: var(--accent-emerald);">Fix: Provide onChange updater!</div>
+            </div>
+
+            <div class="card" style="border-color: var(--accent-rose-border);">
+              <div class="card-title" style="font-size: 0.9rem; color: var(--accent-rose);"><span class="icon">6️⃣</span> Missing `preventDefault()`</div>
+              <p style="font-size: 0.78rem;">Submitting causes a full browser page reload and resets all state.</p>
+              <div class="card-footer-tip" style="color: var(--accent-emerald);">Fix: Call e.preventDefault() first!</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 37 — USESTATE CHEAT SHEET
+           ==================================================================== -->
+      <section class="slide" data-slide="37" id="slide-37">
+        <div class="slide-header">
+          <div class="slide-tag tag-blue">Quick Reference</div>
+          <h2 class="slide-title">useState &amp; Controlled Forms Cheat Sheet</h2>
+          <p class="slide-subtitle">Fast syntax lookup for all common React state patterns</p>
+        </div>
+
+        <div class="slide-content">
+          <div class="grid-2">
+            <div class="card">
+              <div class="card-title" style="color: var(--react-cyan);"><span class="icon">1️⃣</span> Creating &amp; Updating State</div>
+              <div class="code-box">
+                <pre class="code-content"><span class="kwd">import</span> { <span class="fn">useState</span> } <span class="kwd">from</span> <span class="str">"react"</span>;
+
+<span class="comment">// Simple State:</span>
+<span class="kwd">const</span> [<span class="prop">name</span>, <span class="fn">setName</span>] <span class="op">=</span> <span class="fn">useState</span>(<span class="str">""</span>);
+<span class="fn">setName</span>(<span class="str">"Rahul"</span>);
+
+<span class="comment">// Functional Update:</span>
+<span class="fn">setCount</span>((<span class="prop">prev</span>) <span class="op">=&gt;</span> <span class="prop">prev</span> <span class="op">+</span> <span class="num">1</span>);
+
+<span class="comment">// Boolean Toggle:</span>
+<span class="fn">setOpen</span>((<span class="prop">prev</span>) <span class="op">=&gt;</span> <span class="op">!</span><span class="prop">prev</span>);</pre>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-title" style="color: var(--accent-purple);"><span class="icon">2️⃣</span> Objects &amp; Controlled Elements</div>
+              <div class="code-box">
+                <pre class="code-content"><span class="comment">// Object State:</span>
+<span class="fn">setUser</span>({ ...<span class="prop">user</span>, <span class="prop">name</span>: <span class="str">"Arun"</span> });
+
+<span class="comment">// Array State:</span>
+<span class="fn">setSkills</span>([...<span class="prop">skills</span>, <span class="str">"React"</span>]);
+
+<span class="comment">// Controlled Text Input:</span>
+<span class="tag">&lt;input</span> <span class="attr">value</span>={<span class="prop">name</span>} <span class="attr">onChange</span>={(<span class="prop">e</span>) <span class="op">=&gt;</span> <span class="fn">setName</span>(<span class="prop">e</span>.<span class="prop">target</span>.<span class="prop">value</span>)} <span class="tag">/&gt;</span>
+
+<span class="comment">// Controlled Checkbox:</span>
+<span class="tag">&lt;input</span> <span class="attr">type</span>=<span class="str">"checkbox"</span> <span class="attr">checked</span>={<span class="prop">agree</span>} <span class="attr">onChange</span>={(<span class="prop">e</span>) <span class="op">=&gt;</span> <span class="fn">setAgree</span>(<span class="prop">e</span>.<span class="prop">target</span>.<span class="prop">checked</span>)} <span class="tag">/&gt;</span></pre>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 38 — KEY CONCEPTS & ARCHITECTURE MAP
+           ==================================================================== -->
+      <section class="slide" data-slide="38" id="slide-38">
+        <div class="slide-header">
+          <div class="slide-tag tag-blue">Grand Architecture</div>
+          <h2 class="slide-title">Key Concepts &amp; Architecture Map</h2>
+          <p class="slide-subtitle">Connecting Hooks, state updates, component re-renders, and controlled forms</p>
+        </div>
+
+        <div class="slide-content">
+          <div class="grid-2">
+            <div class="card card-highlight">
+              <div class="card-title"><span class="icon">⚛️</span> The React State Cycle</div>
+              <div style="background: var(--bg-surface); padding: 1rem; border-radius: var(--radius-sm); border: 1px solid var(--border-subtle); font-family: var(--font-mono); font-size: 0.85rem; line-height: 1.8; text-align: center;">
+                <div style="color: var(--react-cyan); font-weight: bold;">React Hooks</div>
+                <div style="color: var(--text-dim);">&darr;</div>
+                <div style="color: var(--accent-emerald); font-weight: bold;">useState()</div>
+                <div style="color: var(--text-dim);">&darr;</div>
+                <div>Component State</div>
+                <div style="color: var(--text-dim);">&darr;</div>
+                <div style="color: var(--accent-amber);">State Update (setter called)</div>
+                <div style="color: var(--text-dim);">&darr;</div>
+                <div style="color: var(--accent-purple);">Component Re-renders</div>
+                <div style="color: var(--text-dim);">&darr;</div>
+                <div style="color: var(--react-cyan); font-weight: bold;">Updated UI on Screen</div>
+              </div>
+            </div>
+
+            <div class="card card-highlight-purple">
+              <div class="card-title"><span class="icon">📝</span> The Controlled Component Loop</div>
+              <div style="background: var(--bg-surface); padding: 1rem; border-radius: var(--radius-sm); border: 1px solid var(--border-subtle); font-family: var(--font-mono); font-size: 0.85rem; line-height: 1.8; text-align: center;">
+                <div style="color: var(--react-cyan); font-weight: bold;">&lt;input /&gt; Element</div>
+                <div style="color: var(--text-dim);">&darr; user types</div>
+                <div style="color: var(--accent-emerald);">onChange Event</div>
+                <div style="color: var(--text-dim);">&darr; e.target.value</div>
+                <div style="color: var(--accent-amber);">setState(e.target.value)</div>
+                <div style="color: var(--text-dim);">&darr; updates</div>
+                <div style="color: var(--accent-purple);">React State</div>
+                <div style="color: var(--text-dim);">&darr; feeds back into value prop</div>
+                <div style="color: var(--react-cyan); font-weight: bold;">Single Source of Truth!</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 39 — QUICK QUIZ
+           ==================================================================== -->
+      <section class="slide" data-slide="39" id="slide-39">
+        <div class="slide-header">
+          <div class="slide-tag tag-amber">Interactive Review</div>
+          <h2 class="slide-title">Quick Classroom Quiz (10 Questions)</h2>
+          <p class="slide-subtitle">Test your mastery of React Hooks, useState, and controlled components</p>
+        </div>
+
+        <div class="slide-content">
+          <div style="display: flex; flex-direction: column; gap: 0.65rem; max-height: 520px; overflow-y: auto; padding-right: 0.5rem;">
+            
+            <div class="quiz-item">
+              <div class="quiz-question-row">
+                <span class="quiz-question-text">1. What is a React Hook?</span>
+                <button class="demo-btn btn-reset" onclick="SlideDemos.toggleQuizAnswer(1)">Show Answer</button>
+              </div>
+              <div class="quiz-answer-box" id="quiz-ans-1">
+                A special function (starting with <code style="font-family: var(--font-mono);">use...</code>) that allows functional components to use React features like state without writing classes.
+              </div>
+            </div>
+
+            <div class="quiz-item">
+              <div class="quiz-question-row">
+                <span class="quiz-question-text">2. What is state in React?</span>
+                <button class="demo-btn btn-reset" onclick="SlideDemos.toggleQuizAnswer(2)">Show Answer</button>
+              </div>
+              <div class="quiz-answer-box" id="quiz-ans-2">
+                A component's internal data that can change over time. When state updates, React re-renders the component.
+              </div>
+            </div>
+
+            <div class="quiz-item">
+              <div class="quiz-question-row">
+                <span class="quiz-question-text">3. What does useState() return?</span>
+                <button class="demo-btn btn-reset" onclick="SlideDemos.toggleQuizAnswer(3)">Show Answer</button>
+              </div>
+              <div class="quiz-answer-box" id="quiz-ans-3">
+                An array with exactly two items: the current state value and a function to update that state value.
+              </div>
+            </div>
+
+            <div class="quiz-item">
+              <div class="quiz-question-row">
+                <span class="quiz-question-text">4. What is the purpose of the setter function (e.g. setCount)?</span>
+                <button class="demo-btn btn-reset" onclick="SlideDemos.toggleQuizAnswer(4)">Show Answer</button>
+              </div>
+              <div class="quiz-answer-box" id="quiz-ans-4">
+                To update the state variable and tell React to schedule a component re-render so the UI reflects the new data.
+              </div>
+            </div>
+
+            <div class="quiz-item">
+              <div class="quiz-question-row">
+                <span class="quiz-question-text">5. Why shouldn't we directly modify state (e.g. count = count + 1)?</span>
+                <button class="demo-btn btn-reset" onclick="SlideDemos.toggleQuizAnswer(5)">Show Answer</button>
+              </div>
+              <div class="quiz-answer-box" id="quiz-ans-5">
+                Direct mutation does not notify React, meaning React will never re-render and the screen will remain outdated.
+              </div>
+            </div>
+
+            <div class="quiz-item">
+              <div class="quiz-question-row">
+                <span class="quiz-question-text">6. What is a controlled component?</span>
+                <button class="demo-btn btn-reset" onclick="SlideDemos.toggleQuizAnswer(6)">Show Answer</button>
+              </div>
+              <div class="quiz-answer-box" id="quiz-ans-6">
+                An input element whose current value is governed entirely by React state via <code style="font-family: var(--font-mono);">value</code> and updated via <code style="font-family: var(--font-mono);">onChange</code>.
+              </div>
+            </div>
+
+            <div class="quiz-item">
+              <div class="quiz-question-row">
+                <span class="quiz-question-text">7. What is e.target.value?</span>
+                <button class="demo-btn btn-reset" onclick="SlideDemos.toggleQuizAnswer(7)">Show Answer</button>
+              </div>
+              <div class="quiz-answer-box" id="quiz-ans-7">
+                The current string content typed by the user inside the target DOM form element.
+              </div>
+            </div>
+
+            <div class="quiz-item">
+              <div class="quiz-question-row">
+                <span class="quiz-question-text">8. What is e.target.checked used for?</span>
+                <button class="demo-btn btn-reset" onclick="SlideDemos.toggleQuizAnswer(8)">Show Answer</button>
+              </div>
+              <div class="quiz-answer-box" id="quiz-ans-8">
+                Reading the boolean status (true or false) of a checkbox input element.
+              </div>
+            </div>
+
+            <div class="quiz-item">
+              <div class="quiz-question-row">
+                <span class="quiz-question-text">9. Why do we use e.preventDefault() in form submission?</span>
+                <button class="demo-btn btn-reset" onclick="SlideDemos.toggleQuizAnswer(9)">Show Answer</button>
+              </div>
+              <div class="quiz-answer-box" id="quiz-ans-9">
+                To prevent the browser from reloading the page, which would erase all React component state in memory.
+              </div>
+            </div>
+
+            <div class="quiz-item">
+              <div class="quiz-question-row">
+                <span class="quiz-question-text">10. What happens when state changes?</span>
+                <button class="demo-btn btn-reset" onclick="SlideDemos.toggleQuizAnswer(10)">Show Answer</button>
+              </div>
+              <div class="quiz-answer-box" id="quiz-ans-10">
+                React calls the component function again (re-renders) and updates the Virtual DOM and browser DOM to match the new state.
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 40 — FINAL SUMMARY
+           ==================================================================== -->
+      <section class="slide" data-slide="40" id="slide-40">
+        <div class="slide-header">
+          <div class="slide-tag tag-blue">Grand Summary</div>
+          <h2 class="slide-title">React Day 5 Summary &amp; Takeaway</h2>
+          <p class="slide-subtitle">A concise review of everything learned today in React Day 5</p>
+        </div>
+
+        <div class="slide-content" style="align-items: center; justify-content: center;">
+          <div class="grid-3" style="width: 100%; max-width: 900px;">
+            <div class="card card-highlight">
+              <div class="card-title" style="color: var(--react-cyan);"><span class="icon">⚡</span> 1. Hooks</div>
+              <ul style="padding-left: 1.2rem; display: flex; flex-direction: column; gap: 0.4rem; font-size: 0.8rem; color: var(--text-secondary);">
+                <li>Special functions for functional components</li>
+                <li>Start with prefix <code style="font-family: var(--font-mono);">use...</code></li>
+                <li>Eliminate class component complexity</li>
+                <li>Must be called at the top level</li>
+              </ul>
+            </div>
+
+            <div class="card card-highlight-emerald">
+              <div class="card-title" style="color: var(--accent-emerald);"><span class="icon">📦</span> 2. State &amp; useState</div>
+              <ul style="padding-left: 1.2rem; display: flex; flex-direction: column; gap: 0.4rem; font-size: 0.8rem; color: var(--text-secondary);">
+                <li>Component memory that can change</li>
+                <li><code style="font-family: var(--font-mono);">const [val, setVal] = useState(init)</code></li>
+                <li>Setting state triggers re-render</li>
+                <li>Supports numbers, strings, booleans, arrays, objects</li>
+              </ul>
+            </div>
+
+            <div class="card card-highlight-purple">
+              <div class="card-title" style="color: var(--accent-purple);"><span class="icon">📝</span> 3. Controlled Forms</div>
+              <ul style="padding-left: 1.2rem; display: flex; flex-direction: column; gap: 0.4rem; font-size: 0.8rem; color: var(--text-secondary);">
+                <li>React state is single source of truth</li>
+                <li>Bound with <code style="font-family: var(--font-mono);">value</code> and <code style="font-family: var(--font-mono);">onChange</code></li>
+                <li><code style="font-family: var(--font-mono);">e.target.value</code> for text, <code style="font-family: var(--font-mono);">checked</code> for checkbox</li>
+                <li><code style="font-family: var(--font-mono);">e.preventDefault()</code> stops reload</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="callout card-highlight" style="max-width: 720px; text-align: center; margin-top: 1.5rem; font-size: 1.15rem; border-color: var(--react-cyan); box-shadow: 0 0 20px var(--react-glow);">
+            <div>
+              <strong>🎓 Master Rule of Day 5:</strong><br>
+              <em style="color: var(--react-cyan);">"State makes React interfaces interactive."</em>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- Bottom Footer Controls Bar -->
+    <footer class="bottom-footer">
+      <div class="footer-left">
+        <div class="slide-counter">
+          <span>Slide</span>
+          <span class="current-num" id="currentSlideNum">1</span>
+          <span class="total-num">/ <span id="totalSlidesNum">40</span></span>
+        </div>
+      </div>
+
+      <div class="footer-center">
+        <button class="nav-btn" id="prevBtn" onclick="Deck.prevSlide()" title="Previous Slide (Left Arrow)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="15 18 9 12 15 6"></polyline>
+          </svg>
+          Previous
+        </button>
+
+        <button class="nav-btn primary-nav" id="nextBtn" onclick="Deck.nextSlide()" title="Next Slide (Right Arrow or Space)">
+          Next
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="9 18 15 12 9 6"></polyline>
+          </svg>
+        </button>
+      </div>
+
+      <div class="footer-right">
+        <span class="nav-hint">
+          Navigate: <kbd>&larr;</kbd> <kbd>&rarr;</kbd> or <kbd>Space</kbd>
+        </span>
+      </div>
+    </footer>
+
+    <!-- ====================================================================
+         LIVE FORM SANDBOX MODAL (Quick P)
+         ==================================================================== -->
+    <div class="modal-backdrop" id="playgroundModal">
+      <div class="modal-window" style="max-width: 820px;">
+        <div class="modal-header">
+          <div class="modal-title">
+            <span style="color: var(--react-cyan);">⚡</span>
+            Interactive Student Form Sandbox
+          </div>
+          <button class="close-modal-btn" onclick="Deck.closeModal('playgroundModal')">
+            <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none">
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+          </button>
+        </div>
+
+        <div class="modal-content">
+          <div class="grid-2">
+            <div>
+              <div style="font-weight: 700; font-size: 0.9rem; color: var(--react-cyan); margin-bottom: 0.75rem;">
+                Controlled React Form
+              </div>
+
+              <form onsubmit="SlideDemos.handleModalSubmit(event)" style="display: flex; flex-direction: column; gap: 0.6rem;">
+                <div>
+                  <label style="font-size: 0.72rem; color: var(--text-muted); display: block;">Student Name</label>
+                  <input type="text" id="mName" class="demo-input" placeholder="Rahul" required>
+                </div>
+                <div>
+                  <label style="font-size: 0.72rem; color: var(--text-muted); display: block;">Email Address</label>
+                  <input type="email" id="mEmail" class="demo-input" placeholder="rahul@gmail.com" required>
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem;">
+                  <div>
+                    <label style="font-size: 0.72rem; color: var(--text-muted); display: block;">Course</label>
+                    <select id="mCourse" class="demo-input" required>
+                      <option value="">Choose Course</option>
+                      <option value="MERN">MERN Stack</option>
+                      <option value="Python">Python Fullstack</option>
+                      <option value="Java">Java Spring</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label style="font-size: 0.72rem; color: var(--text-muted); display: block;">Gender</label>
+                    <select id="mGender" class="demo-input" required>
+                      <option value="">Choose Gender</option>
+                      <option value="Male">Male</option>
+                      <option value="Female">Female</option>
+                      <option value="Other">Other</option>
+                    </select>
+                  </div>
+                </div>
+
+                <button type="submit" class="demo-btn" style="margin-top: 0.5rem; justify-content: center;">
+                  Submit to React State
+                </button>
+              </form>
+            </div>
+
+            <div>
+              <div style="font-weight: 700; font-size: 0.9rem; color: var(--accent-emerald); margin-bottom: 0.75rem;">
+                Live React State JSON
+              </div>
+              <div id="modalStateJson" style="background: #02050E; border: 1px solid var(--border-subtle); padding: 0.85rem; border-radius: var(--radius-sm); font-family: var(--font-mono); font-size: 0.78rem; color: var(--accent-emerald); min-height: 180px; white-space: pre;">
+{
+  "name": "",
+  "email": "",
+  "course": "",
+  "gender": ""
+}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ====================================================================
+         KEYBOARD SHORTCUTS HELP MODAL (?)
+         ==================================================================== -->
+    <div class="modal-backdrop" id="shortcutsModal">
+      <div class="modal-window" style="max-width: 500px;">
+        <div class="modal-header">
+          <div class="modal-title">
+            <span>⌨️</span> Keyboard Shortcuts
+          </div>
+          <button class="close-modal-btn" onclick="Deck.closeModal('shortcutsModal')">
+            <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none">
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+          </button>
+        </div>
+        <div class="modal-content">
+          <div style="display: flex; flex-direction: column; gap: 0.75rem; font-size: 0.85rem;">
+            <div style="display: flex; justify-content: space-between; align-items: center; padding-bottom: 0.5rem; border-bottom: 1px solid var(--border-subtle);">
+              <span>Next Slide</span>
+              <span><kbd class="header-btn">Right Arrow</kbd> or <kbd class="header-btn">Space</kbd></span>
+            </div>
+            <div style="display: flex; justify-content: space-between; align-items: center; padding-bottom: 0.5rem; border-bottom: 1px solid var(--border-subtle);">
+              <span>Previous Slide</span>
+              <span><kbd class="header-btn">Left Arrow</kbd></span>
+            </div>
+            <div style="display: flex; justify-content: space-between; align-items: center; padding-bottom: 0.5rem; border-bottom: 1px solid var(--border-subtle);">
+              <span>First Slide (Title)</span>
+              <span><kbd class="header-btn">Home</kbd></span>
+            </div>
+            <div style="display: flex; justify-content: space-between; align-items: center; padding-bottom: 0.5rem; border-bottom: 1px solid var(--border-subtle);">
+              <span>Last Slide (Summary)</span>
+              <span><kbd class="header-btn">End</kbd></span>
+            </div>
+            <div style="display: flex; justify-content: space-between; align-items: center; padding-bottom: 0.5rem; border-bottom: 1px solid var(--border-subtle);">
+              <span>Toggle Fullscreen</span>
+              <span><kbd class="header-btn">F</kbd></span>
+            </div>
+            <div style="display: flex; justify-content: space-between; align-items: center; padding-bottom: 0.5rem; border-bottom: 1px solid var(--border-subtle);">
+              <span>Toggle Form Sandbox</span>
+              <span><kbd class="header-btn">P</kbd></span>
+            </div>
+            <div style="display: flex; justify-content: space-between; align-items: center; padding-bottom: 0.5rem; border-bottom: 1px solid var(--border-subtle);">
+              <span>Toggle Slide Index</span>
+              <span><kbd class="header-btn">T</kbd></span>
+            </div>
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <span>Close Any Modal</span>
+              <span><kbd class="header-btn">Esc</kbd></span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ====================================================================
+         TABLE OF CONTENTS DRAWER (T)
+         ==================================================================== -->
+    <div class="drawer-backdrop" id="drawerBackdrop" onclick="Deck.closeDrawer()"></div>
+    <div class="drawer" id="tocDrawer">
+      <div class="drawer-header">
+        <span style="font-weight: 700; font-size: 0.95rem; display: flex; align-items: center; gap: 0.4rem;">
+          <span style="color: var(--react-cyan);">📑</span> Slide Index (40 Slides)
+        </span>
+        <button class="close-modal-btn" onclick="Deck.closeDrawer()">
+          <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+
+      <ul class="drawer-list" id="drawerList">
+        <!-- Dynamically populated by JavaScript for all 40 slides -->
+      </ul>
+    </div>
+
+    <!-- Toast Notification Container -->
+    <div class="toast-container" id="toastContainer"></div>
+
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>

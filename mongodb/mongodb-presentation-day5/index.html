@@ -1,0 +1,2624 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MongoDB Day 5 — Mongoose Schema Methods & Relationships</title>
+  <meta name="description" content="Complete educational presentation on Mongoose Schema Methods & Relationships: instance methods, one-to-one, one-to-many, embedding vs referencing, ObjectId, ref, and populate().">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Master App Shell -->
+  <div class="deck-container" id="deckContainer">
+
+    <!-- Top Progress Bar -->
+    <div class="progress-bar-container">
+      <div class="progress-bar" id="progressBar"></div>
+    </div>
+
+    <!-- Top Header Bar -->
+    <header class="top-header">
+      <div class="header-left">
+        <div class="brand-badge">
+          <svg viewBox="0 0 24 24">
+            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/>
+          </svg>
+          MongoDB Day 5
+        </div>
+        <div class="deck-title-badge">
+          <span>Schema Methods & Relationships</span>
+          <span class="dot"></span>
+          <span class="deck-topic" id="headerTopic">Schema Methods • References • Embedding • populate()</span>
+        </div>
+      </div>
+
+      <div class="header-right">
+        <!-- Interactive Simulator Quick Access Button -->
+        <button class="header-btn btn-highlight" id="openSimBtn" title="Open Interactive Relationship Simulator (S)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polygon points="5 3 19 12 5 21 5 3"></polygon>
+          </svg>
+          Simulator
+          <kbd>S</kbd>
+        </button>
+
+        <!-- Table of Contents Drawer Button -->
+        <button class="header-btn" id="openTocBtn" title="View All 43 Slides (T)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="3" y1="12" x2="21" y2="12"></line>
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <line x1="3" y1="18" x2="21" y2="18"></line>
+          </svg>
+          Index
+          <kbd>T</kbd>
+        </button>
+
+        <!-- Keyboard Shortcuts Help -->
+        <button class="header-btn" id="openShortcutsBtn" title="Keyboard Shortcuts (?)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"></circle>
+            <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+            <line x1="12" y1="17" x2="12.01" y2="17"></line>
+          </svg>
+          <kbd>?</kbd>
+        </button>
+
+        <!-- Fullscreen Button -->
+        <button class="header-btn" id="fullscreenBtn" title="Toggle Fullscreen (F)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path>
+          </svg>
+          <kbd>F</kbd>
+        </button>
+      </div>
+    </header>
+
+    <!-- Slide Viewport -->
+    <main class="slide-viewport">
+
+      <!-- ====================================================================
+           SLIDE 1 — TITLE
+           ==================================================================== -->
+      <section class="slide active" data-slide="1" id="slide-1">
+        <div class="slide-content" style="justify-content: center; align-items: center; text-align: center; max-width: 860px; margin: 0 auto;">
+          <div class="slide-tag" style="margin-bottom: 0.5rem;">MongoDB Course • Day 5</div>
+          <h1 class="slide-title" style="font-size: 2.8rem; margin-bottom: 0.5rem; letter-spacing: -0.03em;">
+            MongoDB Day 5
+          </h1>
+          <h2 style="font-size: 1.8rem; color: var(--mongo-green); font-weight: 700; margin-bottom: 1rem;">
+            Mongoose Schema Methods &amp; Relationships
+          </h2>
+          <p style="font-size: 1.15rem; color: var(--text-secondary); max-width: 620px; margin-bottom: 2rem;">
+            Custom Document Behavior, Relational Data Modeling, Embedding vs Referencing, and Mongoose <code style="color: var(--mongo-green); font-family: var(--font-mono);">populate()</code>
+          </p>
+
+          <div style="display: flex; gap: 1rem; margin-bottom: 2.5rem; flex-wrap: wrap; justify-content: center;">
+            <div style="padding: 0.6rem 1.2rem; background: rgba(0, 237, 100, 0.1); border: 1px solid var(--mongo-green-border); border-radius: var(--radius-sm); font-family: var(--font-mono); font-size: 0.85rem; color: var(--mongo-green);">
+              <strong>⚡</strong> Schema Methods
+            </div>
+            <div style="padding: 0.6rem 1.2rem; background: var(--accent-cyan-bg); border: 1px solid var(--accent-cyan-border); border-radius: var(--radius-sm); font-family: var(--font-mono); font-size: 0.85rem; color: var(--accent-cyan);">
+              <strong>🔗</strong> ObjectId References
+            </div>
+            <div style="padding: 0.6rem 1.2rem; background: var(--accent-amber-bg); border: 1px solid var(--accent-amber-border); border-radius: var(--radius-sm); font-family: var(--font-mono); font-size: 0.85rem; color: var(--accent-amber);">
+              <strong>📦</strong> Embedding
+            </div>
+            <div style="padding: 0.6rem 1.2rem; background: var(--accent-purple-bg); border: 1px solid var(--accent-purple-border); border-radius: var(--radius-sm); font-family: var(--font-mono); font-size: 0.85rem; color: var(--accent-purple);">
+              <strong>🚀</strong> populate()
+            </div>
+          </div>
+
+          <div class="callout" style="max-width: 620px; text-align: left;">
+            <span class="callout-icon">💡</span>
+            <div>
+              <strong>Classroom Context:</strong> Today builds directly upon Day 4 CRUD. Instead of plain static data, we attach <strong>custom functions</strong> to documents and <strong>connect collections together</strong> using realistic Student &rarr; Course relationships.
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 2 — LEARNING OBJECTIVES
+           ==================================================================== -->
+      <section class="slide" data-slide="2" id="slide-2">
+        <div class="slide-header">
+          <div class="slide-tag tag-blue">Roadmap</div>
+          <h2 class="slide-title">Learning Objectives</h2>
+          <p class="slide-subtitle">Master these foundational Mongoose concepts by the end of today's session</p>
+        </div>
+
+        <div class="slide-content">
+          <div class="grid-2">
+            <div class="card card-highlight">
+              <div class="card-title">
+                <span class="icon">⚡</span>
+                Part 1: Schema Methods
+              </div>
+              <ul style="padding-left: 1.2rem; display: flex; flex-direction: column; gap: 0.6rem; font-size: 0.88rem; color: var(--text-secondary);">
+                <li>What schema methods are and why they avoid repetitive code</li>
+                <li>How to attach custom instance methods using <code style="color: var(--mongo-green); font-family: var(--font-mono);">schema.methods</code></li>
+                <li>How to call schema methods directly on document instances</li>
+                <li>Understanding the <code style="color: var(--accent-amber); font-family: var(--font-mono);">this</code> keyword and why normal functions are mandatory</li>
+                <li>Creating practical helper methods: formatting, status, and grading logic</li>
+              </ul>
+              <div class="card-footer-tip">
+                Document behavior encapsulated inside the model!
+              </div>
+            </div>
+
+            <div class="card card-highlight-blue">
+              <div class="card-title">
+                <span class="icon">🔗</span>
+                Part 2: MongoDB Relationships
+              </div>
+              <ul style="padding-left: 1.2rem; display: flex; flex-direction: column; gap: 0.6rem; font-size: 0.88rem; color: var(--text-secondary);">
+                <li>What relationships mean in NoSQL document databases</li>
+                <li>One-to-One (1:1) vs One-to-Many (1:N) relationship architectures</li>
+                <li>Embedding (nested subdocuments) vs Referencing (normalized collections)</li>
+                <li>Decision guidelines: when to embed vs when to reference</li>
+                <li>How <code style="color: var(--accent-cyan); font-family: var(--font-mono);">ObjectId</code> and <code style="color: var(--accent-amber); font-family: var(--font-mono);">ref</code> link documents</li>
+                <li>Using <code style="color: var(--mongo-green); font-family: var(--font-mono);">populate()</code> to retrieve joined documents in query results</li>
+              </ul>
+              <div class="card-footer-tip">
+                Clean, scalable data architecture without duplicated data!
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 3 — WHAT IS A SCHEMA METHOD?
+           ==================================================================== -->
+      <section class="slide" data-slide="3" id="slide-3">
+        <div class="slide-header">
+          <div class="slide-tag">Part 1 • Schema Methods</div>
+          <h2 class="slide-title">What is a Schema Method?</h2>
+          <p class="slide-subtitle">Attaching custom helper behavior directly to your Mongoose document instances</p>
+        </div>
+
+        <div class="slide-content">
+          <div class="callout" style="font-size: 1rem; padding: 1rem 1.25rem;">
+            <span class="callout-icon" style="font-size: 1.5rem;">📖</span>
+            <div>
+              <strong>Definition:</strong> A <strong>schema method</strong> is a custom function that you attach to a Mongoose schema so that documents created from that schema can call that function directly.
+            </div>
+          </div>
+
+          <div class="grid-2">
+            <div class="card">
+              <div class="card-title">
+                <span class="icon">❌</span>
+                Without Schema Methods (Repetitive)
+              </div>
+              <p>Every time you need a student's summary in different parts of your code, you repeat the formatting logic:</p>
+              <div class="code-box">
+                <div class="code-header">
+                  <div class="code-dots"><span class="code-dot red"></span><span class="code-dot yellow"></span><span class="code-dot green"></span></div>
+                  <span class="code-title">manual-logs.js</span>
+                  <button class="copy-btn" onclick="Deck.copyCode(this)">Copy</button>
+                </div>
+                <pre class="code-content"><span class="fn">console</span>.<span class="fn">log</span>(student.<span class="prop">name</span>);
+<span class="fn">console</span>.<span class="fn">log</span>(student.<span class="prop">course</span>);
+<span class="fn">console</span>.<span class="fn">log</span>(student.<span class="prop">mark</span>);
+
+<span class="comment">// Or repeated template strings everywhere:</span>
+<span class="fn">console</span>.<span class="fn">log</span>(<span class="str">`${student.name} - ${student.course} - ${student.mark}`</span>);</pre>
+              </div>
+            </div>
+
+            <div class="card card-highlight">
+              <div class="card-title">
+                <span class="icon">✅</span>
+                With Schema Methods (Clean &amp; Reusable)
+              </div>
+              <p>Define the method once on the schema. Now every retrieved student document has it built in:</p>
+              <div class="code-box">
+                <div class="code-header">
+                  <div class="code-dots"><span class="code-dot red"></span><span class="code-dot yellow"></span><span class="code-dot green"></span></div>
+                  <span class="code-title">clean-method.js</span>
+                  <button class="copy-btn" onclick="Deck.copyCode(this)">Copy</button>
+                </div>
+                <pre class="code-content"><span class="comment">// Clean, readable, and centralized in the model:</span>
+<span class="fn">console</span>.<span class="fn">log</span>(student.<span class="fn">getDetails</span>());
+
+<span class="comment">// Output:</span>
+<span class="comment">// Rahul - MERN - 85</span></pre>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 4 — WHY USE SCHEMA METHODS?
+           ==================================================================== -->
+      <section class="slide" data-slide="4" id="slide-4">
+        <div class="slide-header">
+          <div class="slide-tag">Design Pattern</div>
+          <h2 class="slide-title">Why Do We Need Schema Methods?</h2>
+          <p class="slide-subtitle">Encapsulation: keeping business logic right next to the data</p>
+        </div>
+
+        <div class="slide-content">
+          <div class="flow-container" style="margin-bottom: 0.5rem;">
+            <div class="flow-node">
+              <div class="flow-node-title">Repeated Logic</div>
+              <div class="flow-node-desc">Formatting strings, checking pass/fail, calculating discounts</div>
+            </div>
+            <div class="flow-arrow">&rarr;</div>
+            <div class="flow-node active-node">
+              <div class="flow-node-title">Create Schema Method</div>
+              <div class="flow-node-desc">Attach function once to schema.methods</div>
+            </div>
+            <div class="flow-arrow">&rarr;</div>
+            <div class="flow-node">
+              <div class="flow-node-title">Call on Document</div>
+              <div class="flow-node-desc">Clean, reusable: doc.myMethod()</div>
+            </div>
+          </div>
+
+          <div class="grid-3">
+            <div class="card">
+              <div class="card-title"><span class="icon">🔁</span> DRY Principle</div>
+              <p>Don't Repeat Yourself. If you need to change how a student's info is formatted, you update it in <strong>one place</strong> (the schema method) rather than 20 different files.</p>
+            </div>
+            <div class="card">
+              <div class="card-title"><span class="icon">📦</span> Encapsulation</div>
+              <p>In Object-Oriented Programming (OOP), an object should bundle both its <strong>state (data)</strong> and its <strong>behavior (methods)</strong> together. Schema methods achieve this perfectly.</p>
+            </div>
+            <div class="card">
+              <div class="card-title"><span class="icon">🎯</span> Clean Controllers</div>
+              <p>Your application controllers stay slim and focused. They don't need complex `if/else` checks for student status—they simply call <code style="color: var(--mongo-green); font-family: var(--font-mono);">student.isPassed()</code>.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 5 — CREATE A SCHEMA METHOD
+           ==================================================================== -->
+      <section class="slide" data-slide="5" id="slide-5">
+        <div class="slide-header">
+          <div class="slide-tag">Syntax &amp; Structure</div>
+          <h2 class="slide-title">Creating a Schema Method</h2>
+          <p class="slide-subtitle">The exact syntax for attaching custom functions to <code style="color: var(--mongo-green); font-family: var(--font-mono);">schema.methods</code></p>
+        </div>
+
+        <div class="slide-content">
+          <div class="code-box">
+            <div class="code-header">
+              <div class="code-dots"><span class="code-dot red"></span><span class="code-dot yellow"></span><span class="code-dot green"></span></div>
+              <span class="code-title">Student.js — Defining a Schema Method</span>
+              <button class="copy-btn" onclick="Deck.copyCode(this)">Copy</button>
+            </div>
+            <pre class="code-content"><span class="kwd">const</span> <span class="prop">mongoose</span> <span class="op">=</span> <span class="fn">require</span>(<span class="str">"mongoose"</span>);
+
+<span class="comment">// 1. Define the Schema</span>
+<span class="kwd">const</span> <span class="prop">studentSchema</span> <span class="op">=</span> <span class="kwd">new</span> <span class="prop">mongoose</span>.<span class="fn">Schema</span>({
+  <span class="prop">name</span>: <span class="type">String</span>,
+  <span class="prop">course</span>: <span class="type">String</span>,
+  <span class="prop">mark</span>: <span class="type">Number</span>
+});
+
+<span class="comment">// 2. Attach custom method to studentSchema.methods</span>
+<span class="prop">studentSchema</span>.<span class="prop">methods</span>.<span class="fn">getDetails</span> <span class="op">=</span> <span class="kwd">function</span> () {
+  <span class="kwd">return</span> <span class="str">`${this.name} - ${this.course} - ${this.mark}`</span>;
+};
+
+<span class="comment">// 3. Compile Schema into Model</span>
+<span class="kwd">const</span> <span class="prop">Student</span> <span class="op">=</span> <span class="prop">mongoose</span>.<span class="fn">model</span>(<span class="str">"Student"</span>, <span class="prop">studentSchema</span>);
+<span class="prop">module</span>.<span class="prop">exports</span> <span class="op">=</span> <span class="prop">Student</span>;</pre>
+          </div>
+
+          <div class="grid-3" style="margin-top: 0.5rem;">
+            <div class="card">
+              <div class="card-title" style="font-size: 0.95rem; color: var(--mongo-green);"><code style="font-family: var(--font-mono);">.methods</code></div>
+              <p>Mongoose provides the <code style="color: var(--mongo-green); font-family: var(--font-mono);">methods</code> object on schemas as the registry for instance functions.</p>
+            </div>
+            <div class="card">
+              <div class="card-title" style="font-size: 0.95rem; color: var(--accent-amber);"><code style="font-family: var(--font-mono);">function ()</code></div>
+              <p>Must be a standard JavaScript function expression so that <code style="color: var(--accent-amber); font-family: var(--font-mono);">this</code> refers to the active document.</p>
+            </div>
+            <div class="card">
+              <div class="card-title" style="font-size: 0.95rem; color: var(--accent-cyan);"><code style="font-family: var(--font-mono);">return value</code></div>
+              <p>Methods can return formatted strings, booleans, calculated numbers, or even Promises if performing async tasks.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 6 — USING THE METHOD
+           ==================================================================== -->
+      <section class="slide" data-slide="6" id="slide-6">
+        <div class="slide-header">
+          <div class="slide-tag tag-blue">Execution Flow</div>
+          <h2 class="slide-title">Using the Schema Method</h2>
+          <p class="slide-subtitle">Calling your custom method on a newly created or retrieved Mongoose document</p>
+        </div>
+
+        <div class="slide-content">
+          <div class="grid-split-left-wide">
+            <div class="code-box">
+              <div class="code-header">
+                <div class="code-dots"><span class="code-dot red"></span><span class="code-dot yellow"></span><span class="code-dot green"></span></div>
+                <span class="code-title">app.js — Calling Document Instance Method</span>
+                <button class="copy-btn" onclick="Deck.copyCode(this)">Copy</button>
+              </div>
+              <pre class="code-content"><span class="kwd">const</span> <span class="prop">Student</span> <span class="op">=</span> <span class="fn">require</span>(<span class="str">"./models/Student"</span>);
+
+<span class="kwd">async</span> <span class="kwd">function</span> <span class="fn">runDemo</span>() {
+  <span class="comment">// 1. Create a student document in MongoDB</span>
+  <span class="kwd">const</span> <span class="prop">student</span> <span class="op">=</span> <span class="kwd">await</span> <span class="prop">Student</span>.<span class="fn">create</span>({
+    <span class="prop">name</span>: <span class="str">"Rahul"</span>,
+    <span class="prop">course</span>: <span class="str">"MERN"</span>,
+    <span class="prop">mark</span>: <span class="num">85</span>
+  });
+
+  <span class="comment">// 2. Call your schema method directly on the document!</span>
+  <span class="kwd">const</span> <span class="prop">details</span> <span class="op">=</span> <span class="prop">student</span>.<span class="fn">getDetails</span>();
+  <span class="fn">console</span>.<span class="fn">log</span>(<span class="prop">details</span>);
+}
+
+<span class="fn">runDemo</span>();</pre>
+            </div>
+
+            <div class="flex-col">
+              <div class="card card-highlight">
+                <div class="card-title"><span class="icon">🖥️</span> Terminal Output</div>
+                <div class="terminal-output" style="font-size: 0.88rem; padding: 1rem;">
+                  <span class="out-success">Rahul - MERN - 85</span>
+                </div>
+              </div>
+
+              <div class="card">
+                <div class="card-title"><span class="icon">🔍</span> Why It Works</div>
+                <p>When <code style="color: var(--mongo-green); font-family: var(--font-mono);">Student.create()</code> or <code style="color: var(--mongo-green); font-family: var(--font-mono);">Student.findOne()</code> runs, Mongoose returns an <strong>instance of the Student model</strong>.</p>
+                <p>Every method added to <code style="color: var(--accent-cyan); font-family: var(--font-mono);">studentSchema.methods</code> is automatically inherited on that document's prototype!</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 7 — UNDERSTANDING THIS
+           ==================================================================== -->
+      <section class="slide" data-slide="7" id="slide-7">
+        <div class="slide-header">
+          <div class="slide-tag tag-amber">Critical Concept</div>
+          <h2 class="slide-title">Understanding the <code style="color: var(--accent-amber); font-family: var(--font-mono);">this</code> Keyword</h2>
+          <p class="slide-subtitle">How <code style="color: var(--accent-amber); font-family: var(--font-mono);">this</code> accesses document fields, and why arrow functions will break your code</p>
+        </div>
+
+        <div class="slide-content">
+          <div class="grid-2">
+            <div class="card card-highlight">
+              <div class="card-title">
+                <span class="icon">🎯</span> What does <code style="font-family: var(--font-mono);">this</code> refer to?
+              </div>
+              <p>Inside a Mongoose schema method, <code style="color: var(--accent-amber); font-family: var(--font-mono); font-weight: bold;">this</code> refers directly to the <strong>current Mongoose document instance</strong> that called the method.</p>
+              
+              <div style="background: var(--bg-surface); padding: 0.9rem; border-radius: var(--radius-sm); border: 1px solid var(--border-subtle); font-family: var(--font-mono); font-size: 0.82rem; display: flex; flex-direction: column; gap: 0.4rem;">
+                <div><span style="color: var(--accent-amber);">this</span> &rarr; Current Student document</div>
+                <div><span style="color: var(--accent-amber);">this.name</span> &rarr; <span style="color: var(--mongo-green);">"Rahul"</span></div>
+                <div><span style="color: var(--accent-amber);">this.course</span> &rarr; <span style="color: var(--mongo-green);">"MERN"</span></div>
+                <div><span style="color: var(--accent-amber);">this.mark</span> &rarr; <span style="color: var(--syn-num);">85</span></div>
+              </div>
+
+              <div class="card-footer-tip">
+                Whenever you say <code style="font-family: var(--font-mono);">this.xyz</code>, you read that document's field!
+              </div>
+            </div>
+
+            <div class="card" style="border-color: var(--accent-rose-border);">
+              <div class="card-title" style="color: var(--accent-rose);">
+                <span class="icon">⚠️</span> Beginner Pitfall: Arrow Functions
+              </div>
+              <p><strong>DO NOT</strong> use an arrow function when you need <code style="font-family: var(--font-mono); color: var(--accent-amber);">this</code>:</p>
+              
+              <div class="code-box">
+                <div class="code-header">
+                  <div class="code-dots"><span class="code-dot red"></span><span class="code-dot yellow"></span><span class="code-dot green"></span></div>
+                  <span class="code-title" style="color: var(--accent-rose);">BROKEN CODE</span>
+                </div>
+                <pre class="code-content"><span class="comment">// ❌ THIS WILL FAIL!</span>
+<span class="prop">studentSchema</span>.<span class="prop">methods</span>.<span class="fn">getDetails</span> <span class="op">=</span> () <span class="op">=&gt;</span> {
+  <span class="comment">// In arrow functions, 'this' is lexically bound</span>
+  <span class="comment">// 'this' will NOT refer to the document!</span>
+  <span class="kwd">return</span> <span class="str">`${this.name} - ${this.course}`</span>; 
+  <span class="comment">// Result: undefined - undefined</span>
+};</pre>
+              </div>
+
+              <p style="font-size: 0.8rem; color: var(--accent-rose); margin-top: -0.25rem;">
+                Always use standard <code style="font-family: var(--font-mono);">function () { ... }</code> for Mongoose schema methods!
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 8 — MULTIPLE SCHEMA METHODS
+           ==================================================================== -->
+      <section class="slide" data-slide="8" id="slide-8">
+        <div class="slide-header">
+          <div class="slide-tag">Flexibility</div>
+          <h2 class="slide-title">Attaching Multiple Schema Methods</h2>
+          <p class="slide-subtitle">A schema can define as many specialized helper methods as your application requires</p>
+        </div>
+
+        <div class="slide-content">
+          <div class="grid-split-left-wide">
+            <div class="code-box">
+              <div class="code-header">
+                <div class="code-dots"><span class="code-dot red"></span><span class="code-dot yellow"></span><span class="code-dot green"></span></div>
+                <span class="code-title">Student.js — Multiple Methods</span>
+                <button class="copy-btn" onclick="Deck.copyCode(this)">Copy</button>
+              </div>
+              <pre class="code-content"><span class="comment">// Method 1: Check pass/fail status</span>
+<span class="prop">studentSchema</span>.<span class="prop">methods</span>.<span class="fn">isPassed</span> <span class="op">=</span> <span class="kwd">function</span> () {
+  <span class="kwd">return</span> <span class="kwd">this</span>.<span class="prop">mark</span> <span class="op">&gt;=</span> <span class="num">40</span>;
+};
+
+<span class="comment">// Method 2: Generate formatted sentence</span>
+<span class="prop">studentSchema</span>.<span class="prop">methods</span>.<span class="fn">getCourseInfo</span> <span class="op">=</span> <span class="kwd">function</span> () {
+  <span class="kwd">return</span> <span class="str">`${this.name} is studying ${this.course}`</span>;
+};
+
+<span class="comment">// Usage:</span>
+<span class="kwd">const</span> <span class="prop">student</span> <span class="op">=</span> <span class="kwd">await</span> <span class="prop">Student</span>.<span class="fn">findOne</span>({ <span class="prop">name</span>: <span class="str">"Rahul"</span> });
+
+<span class="fn">console</span>.<span class="fn">log</span>(<span class="prop">student</span>.<span class="fn">isPassed</span>());      <span class="comment">// true</span>
+<span class="fn">console</span>.<span class="fn">log</span>(<span class="prop">student</span>.<span class="fn">getCourseInfo</span>());  <span class="comment">// Rahul is studying MERN</span></pre>
+            </div>
+
+            <div class="flex-col">
+              <div class="card">
+                <div class="card-title"><span class="icon">💡</span> What Can Methods Do?</div>
+                <ul style="padding-left: 1.2rem; display: flex; flex-direction: column; gap: 0.5rem; font-size: 0.84rem; color: var(--text-secondary);">
+                  <li><strong>Formatting:</strong> Full names, addresses, currency formatting</li>
+                  <li><strong>Logic checks:</strong> <code style="font-family: var(--font-mono);">isPassed()</code>, <code style="font-family: var(--font-mono);">hasGraduated()</code>, <code style="font-family: var(--font-mono);">isAdult()</code></li>
+                  <li><strong>Calculations:</strong> Percentage, GPA, final grade</li>
+                  <li><strong>Status transitions:</strong> Modifying internal fields and saving</li>
+                </ul>
+              </div>
+
+              <div class="callout callout-blue">
+                <span class="callout-icon">ℹ️</span>
+                <div>
+                  Methods are attached to <strong>each document</strong>. If you need a helper that runs on the entire collection (like <code style="font-family: var(--font-mono);">Student.findByCourse("MERN")</code>), that is a <em>static method</em> (<code style="font-family: var(--font-mono);">schema.statics</code>).
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 9 — PRACTICAL SCHEMA METHOD & LIVE DEMO
+           ==================================================================== -->
+      <section class="slide" data-slide="9" id="slide-9">
+        <div class="slide-header">
+          <div class="slide-tag tag-amber">Interactive Demo</div>
+          <h2 class="slide-title">Practical Schema Method: Live Demo</h2>
+          <p class="slide-subtitle">See how schema methods compute results on a live document instance</p>
+        </div>
+
+        <div class="slide-content">
+          <div class="grid-2">
+            <div class="code-box">
+              <div class="code-header">
+                <div class="code-dots"><span class="code-dot red"></span><span class="code-dot yellow"></span><span class="code-dot green"></span></div>
+                <span class="code-title">Grading Logic in Schema Method</span>
+                <button class="copy-btn" onclick="Deck.copyCode(this)">Copy</button>
+              </div>
+              <pre class="code-content"><span class="prop">studentSchema</span>.<span class="prop">methods</span>.<span class="fn">getResult</span> <span class="op">=</span> <span class="kwd">function</span> () {
+  <span class="kwd">if</span> (<span class="kwd">this</span>.<span class="prop">mark</span> <span class="op">&gt;=</span> <span class="num">40</span>) {
+    <span class="kwd">return</span> <span class="str">"Passed"</span>;
+  }
+  <span class="kwd">return</span> <span class="str">"Failed"</span>;
+};
+
+<span class="comment">// Calling:</span>
+<span class="fn">console</span>.<span class="fn">log</span>(<span class="prop">student</span>.<span class="fn">getResult</span>());</pre>
+            </div>
+
+            <div class="interactive-demo-card">
+              <div class="card-title"><span class="icon">⚡</span> Interactive Document Tester</div>
+              
+              <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0.5rem;">
+                <div>
+                  <label style="font-size: 0.72rem; color: var(--text-muted); display: block; margin-bottom: 2px;">Name</label>
+                  <input type="text" id="demoStudentName" value="Rahul" style="width: 100%; background: var(--bg-surface); border: 1px solid var(--border-subtle); color: var(--text-primary); padding: 0.4rem; border-radius: 4px; font-family: var(--font-mono); font-size: 0.8rem;">
+                </div>
+                <div>
+                  <label style="font-size: 0.72rem; color: var(--text-muted); display: block; margin-bottom: 2px;">Course</label>
+                  <input type="text" id="demoStudentCourse" value="MERN" style="width: 100%; background: var(--bg-surface); border: 1px solid var(--border-subtle); color: var(--text-primary); padding: 0.4rem; border-radius: 4px; font-family: var(--font-mono); font-size: 0.8rem;">
+                </div>
+                <div>
+                  <label style="font-size: 0.72rem; color: var(--text-muted); display: block; margin-bottom: 2px;">Mark (0-100)</label>
+                  <input type="number" id="demoStudentMark" value="85" style="width: 100%; background: var(--bg-surface); border: 1px solid var(--border-subtle); color: var(--text-primary); padding: 0.4rem; border-radius: 4px; font-family: var(--font-mono); font-size: 0.8rem;">
+                </div>
+              </div>
+
+              <div class="demo-controls-bar">
+                <button class="demo-btn" onclick="SlideDemos.runGetDetails()">Run getDetails()</button>
+                <button class="demo-btn btn-cyan" onclick="SlideDemos.runIsPassed()">Run isPassed()</button>
+                <button class="demo-btn btn-amber" onclick="SlideDemos.runGetResult()">Run getResult()</button>
+              </div>
+
+              <div>
+                <span style="font-size: 0.72rem; color: var(--text-muted); text-transform: uppercase; font-family: var(--font-mono);">Method Return Output:</span>
+                <div class="demo-result-box" id="demoMethodOutput">
+                  Click a button above to execute that schema method on the document!
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 10 — WHAT IS A RELATIONSHIP?
+           ==================================================================== -->
+      <section class="slide" data-slide="10" id="slide-10">
+        <div class="slide-header">
+          <div class="slide-tag tag-blue">Part 2 • Relationships</div>
+          <h2 class="slide-title">What is a Relationship?</h2>
+          <p class="slide-subtitle">Connecting documents across different MongoDB collections</p>
+        </div>
+
+        <div class="slide-content">
+          <div class="callout" style="font-size: 0.95rem;">
+            <span class="callout-icon">💡</span>
+            <div>
+              <strong>Definition:</strong> A <strong>relationship</strong> means that data stored in one collection is logically connected to data stored in another collection.
+            </div>
+          </div>
+
+          <div class="rel-diagram-container" style="margin: 0.75rem 0;">
+            <div class="rel-doc-box highlight">
+              <div class="rel-doc-header">
+                <span>STUDENT</span>
+                <span style="font-size: 0.68rem; color: var(--text-dim);">Collection</span>
+              </div>
+              <div class="rel-doc-row"><span class="key">_id:</span> <span class="val">ObjectId("201")</span></div>
+              <div class="rel-doc-row"><span class="key">name:</span> <span class="val">"Rahul"</span></div>
+              <div class="rel-doc-row"><span class="key">course:</span> <span class="val ref-id">101 &rarr;</span></div>
+            </div>
+
+            <div class="rel-connector">
+              <span>belongs to</span>
+              <div class="rel-connector-line"></div>
+              <span>referenced by ID</span>
+            </div>
+
+            <div class="rel-doc-box highlight">
+              <div class="rel-doc-header">
+                <span>COURSE</span>
+                <span style="font-size: 0.68rem; color: var(--text-dim);">Collection</span>
+              </div>
+              <div class="rel-doc-row"><span class="key">_id:</span> <span class="val ref-id">ObjectId("101")</span></div>
+              <div class="rel-doc-row"><span class="key">name:</span> <span class="val">"MERN Stack"</span></div>
+              <div class="rel-doc-row"><span class="key">duration:</span> <span class="val">6 months</span></div>
+            </div>
+          </div>
+
+          <div class="grid-2">
+            <div class="card">
+              <div class="card-title"><span class="icon">🚫</span> Why NOT store everything in one big document?</div>
+              <p>If 500 students study MERN, duplicating the course name, syllabus, and duration in all 500 documents wastes space and creates massive update nightmares.</p>
+            </div>
+            <div class="card">
+              <div class="card-title"><span class="icon">✨</span> The Relational Solution</div>
+              <p>Store courses in a dedicated <code style="font-family: var(--font-mono); color: var(--mongo-green);">courses</code> collection, and let each student document hold a reference pointer to that course!</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 11 — WHY RELATIONSHIPS?
+           ==================================================================== -->
+      <section class="slide" data-slide="11" id="slide-11">
+        <div class="slide-header">
+          <div class="slide-tag">Architecture</div>
+          <h2 class="slide-title">Why Do We Need Relationships?</h2>
+          <p class="slide-subtitle">Real-world scenarios require connecting shared data without duplication</p>
+        </div>
+
+        <div class="slide-content">
+          <div class="grid-2">
+            <div class="card card-highlight">
+              <div class="card-title"><span class="icon">👥</span> Multiple Students, Shared Course</div>
+              <div style="background: var(--bg-surface); padding: 0.9rem; border-radius: var(--radius-sm); border: 1px solid var(--border-subtle); font-family: var(--font-mono); font-size: 0.85rem; display: flex; flex-direction: column; gap: 0.5rem;">
+                <div><span style="color: var(--mongo-green);">Rahul</span> &rarr; studies <span style="color: var(--accent-cyan);">MERN</span></div>
+                <div><span style="color: var(--mongo-green);">Anjali</span> &rarr; studies <span style="color: var(--accent-amber);">Python</span></div>
+                <div><span style="color: var(--mongo-green);">Arun</span> &rarr; studies <span style="color: var(--accent-cyan);">MERN</span></div>
+                <div><span style="color: var(--mongo-green);">Sneha</span> &rarr; studies <span style="color: var(--accent-cyan);">MERN</span></div>
+              </div>
+              <p style="margin-top: 0.5rem; font-size: 0.82rem; color: var(--text-secondary);">
+                Notice that <strong>Rahul, Arun, and Sneha</strong> all share the exact same course: <strong style="color: var(--accent-cyan);">MERN</strong>.
+              </p>
+            </div>
+
+            <div class="card">
+              <div class="card-title"><span class="icon">⚡</span> The "What If" Scenario</div>
+              <p><strong>Question:</strong> What happens if the MERN course duration increases from <strong>6 months &rarr; 8 months</strong>?</p>
+              
+              <div style="display: flex; flex-direction: column; gap: 0.6rem; margin-top: 0.25rem;">
+                <div style="padding: 0.6rem; border-radius: 4px; background: rgba(251, 113, 133, 0.1); border-left: 3px solid var(--accent-rose); font-size: 0.8rem;">
+                  <strong>Bad Design (Duplicated):</strong> You must locate and update 500 individual student documents! If one fails, data becomes inconsistent.
+                </div>
+                <div style="padding: 0.6rem; border-radius: 4px; background: rgba(0, 237, 100, 0.1); border-left: 3px solid var(--mongo-green); font-size: 0.8rem;">
+                  <strong>Good Design (Referenced):</strong> You update <strong>one single document</strong> in the <code style="font-family: var(--font-mono);">courses</code> collection. All students instantly reflect the update!
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 12 — TYPES OF RELATIONSHIPS
+           ==================================================================== -->
+      <section class="slide" data-slide="12" id="slide-12">
+        <div class="slide-header">
+          <div class="slide-tag">Classification</div>
+          <h2 class="slide-title">Types of Relationships</h2>
+          <p class="slide-subtitle">The primary relationship patterns in database modeling</p>
+        </div>
+
+        <div class="slide-content">
+          <div class="grid-3">
+            <div class="card card-highlight">
+              <div class="card-title">
+                <span class="icon">1️⃣:1️⃣</span>
+                One-to-One (1:1)
+              </div>
+              <div style="background: var(--bg-surface); padding: 0.75rem; border-radius: 4px; text-align: center; font-family: var(--font-mono); font-size: 0.85rem; color: var(--mongo-green);">
+                One A &rarr; Exactly One B
+              </div>
+              <p><strong>Example:</strong> User &rarr; Profile</p>
+              <p style="font-size: 0.8rem; color: var(--text-muted);">
+                A User has exactly one Profile document, and that Profile belongs to only that User.
+              </p>
+              <div class="card-footer-tip" style="color: var(--mongo-green);">
+                Focus of Part C today!
+              </div>
+            </div>
+
+            <div class="card card-highlight-blue">
+              <div class="card-title">
+                <span class="icon">1️⃣:🔢</span>
+                One-to-Many (1:N)
+              </div>
+              <div style="background: var(--bg-surface); padding: 0.75rem; border-radius: 4px; text-align: center; font-family: var(--font-mono); font-size: 0.85rem; color: var(--accent-cyan);">
+                One A &rarr; Many B
+              </div>
+              <p><strong>Example:</strong> Course &rarr; Students</p>
+              <p style="font-size: 0.8rem; color: var(--text-muted);">
+                One Course (MERN) has multiple Students enrolled. Each student points to their parent course.
+              </p>
+              <div class="card-footer-tip" style="color: var(--accent-cyan);">
+                Focus of Part D &amp; Project!
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-title">
+                <span class="icon">🔢:🔢</span>
+                Many-to-Many (N:N)
+              </div>
+              <div style="background: var(--bg-surface); padding: 0.75rem; border-radius: 4px; text-align: center; font-family: var(--font-mono); font-size: 0.85rem; color: var(--text-muted);">
+                Many A &rarr; Many B
+              </div>
+              <p><strong>Example:</strong> Students &harr; Clubs</p>
+              <p style="font-size: 0.8rem; color: var(--text-muted);">
+                A student can join multiple clubs, and each club contains multiple students.
+              </p>
+              <div class="card-footer-tip" style="color: var(--text-dim);">
+                Concept mention only today
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 13 — ONE-TO-ONE RELATIONSHIP
+           ==================================================================== -->
+      <section class="slide" data-slide="13" id="slide-13">
+        <div class="slide-header">
+          <div class="slide-tag tag-blue">Part 3 • One-to-One</div>
+          <h2 class="slide-title">One-to-One (1:1) Relationship</h2>
+          <p class="slide-subtitle">When one document maps exclusively to exactly one other document</p>
+        </div>
+
+        <div class="slide-content">
+          <div class="callout">
+            <span class="callout-icon">📌</span>
+            <div>
+              <strong>Definition:</strong> In a One-to-One relationship, each document in Collection A corresponds to exactly one document in Collection B.
+            </div>
+          </div>
+
+          <div class="rel-diagram-container" style="margin: 1rem 0;">
+            <div class="rel-doc-box">
+              <div class="rel-doc-header">
+                <span>USER</span>
+                <span style="font-size: 0.68rem; color: var(--text-dim);">User Collection</span>
+              </div>
+              <div class="rel-doc-row"><span class="key">_id:</span> <span class="val">ObjectId("U101")</span></div>
+              <div class="rel-doc-row"><span class="key">name:</span> <span class="val">"Rahul"</span></div>
+              <div class="rel-doc-row"><span class="key">email:</span> <span class="val">"rahul@gmail.com"</span></div>
+            </div>
+
+            <div class="rel-connector">
+              <span>1 to 1 link</span>
+              <div class="rel-connector-line"></div>
+              <span>holds User ID</span>
+            </div>
+
+            <div class="rel-doc-box">
+              <div class="rel-doc-header">
+                <span>PROFILE</span>
+                <span style="font-size: 0.68rem; color: var(--text-dim);">Profile Collection</span>
+              </div>
+              <div class="rel-doc-row"><span class="key">_id:</span> <span class="val">ObjectId("P901")</span></div>
+              <div class="rel-doc-row"><span class="key">user:</span> <span class="val ref-id">ObjectId("U101")</span></div>
+              <div class="rel-doc-row"><span class="key">bio:</span> <span class="val">"MERN Developer"</span></div>
+              <div class="rel-doc-row"><span class="key">age:</span> <span class="val">21</span></div>
+            </div>
+          </div>
+
+          <div class="grid-2">
+            <div class="card">
+              <div class="card-title"><span class="icon">❓</span> Why split into two collections?</div>
+              <p>Separating sensitive or secondary data (e.g. detailed user profile, preferences, verification docs) prevents loading huge documents on simple login checks.</p>
+            </div>
+            <div class="card">
+              <div class="card-title"><span class="icon">🔑</span> The Link Mechanism</div>
+              <p>The <code style="font-family: var(--font-mono); color: var(--accent-amber);">user</code> field in the Profile document stores the unique <code style="font-family: var(--font-mono); color: var(--mongo-green);">_id</code> of the associated User document.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 14 — ONE-TO-ONE EXAMPLE
+           ==================================================================== -->
+      <section class="slide" data-slide="14" id="slide-14">
+        <div class="slide-header">
+          <div class="slide-tag tag-blue">Data Representation</div>
+          <h2 class="slide-title">One-to-One JSON Representation</h2>
+          <p class="slide-subtitle">How MongoDB stores these two connected documents in their collections</p>
+        </div>
+
+        <div class="slide-content">
+          <div class="grid-2">
+            <div class="card">
+              <div class="card-title"><span class="icon">👤</span> 1. In `users` Collection</div>
+              <div class="code-box">
+                <div class="code-header">
+                  <div class="code-dots"><span class="code-dot red"></span><span class="code-dot yellow"></span><span class="code-dot green"></span></div>
+                  <span class="code-title">users document</span>
+                </div>
+                <pre class="code-content">{
+  <span class="prop">"_id"</span>: <span class="fn">ObjectId</span>(<span class="str">"64abc1110000000000000001"</span>),
+  <span class="prop">"name"</span>: <span class="str">"Rahul"</span>,
+  <span class="prop">"email"</span>: <span class="str">"rahul@gmail.com"</span>
+}</pre>
+              </div>
+              <p style="font-size: 0.8rem; color: var(--text-muted);">
+                The User document contains core credentials and essential identity.
+              </p>
+            </div>
+
+            <div class="card card-highlight">
+              <div class="card-title"><span class="icon">📝</span> 2. In `profiles` Collection</div>
+              <div class="code-box">
+                <div class="code-header">
+                  <div class="code-dots"><span class="code-dot red"></span><span class="code-dot yellow"></span><span class="code-dot green"></span></div>
+                  <span class="code-title">profiles document</span>
+                </div>
+                <pre class="code-content">{
+  <span class="prop">"_id"</span>: <span class="fn">ObjectId</span>(<span class="str">"64abc2220000000000000002"</span>),
+  <span class="prop">"user"</span>: <span class="fn">ObjectId</span>(<span class="str">"64abc1110000000000000001"</span>), <span class="comment">// 👈 Points to Rahul</span>
+  <span class="prop">"bio"</span>: <span class="str">"MERN Developer"</span>,
+  <span class="prop">"age"</span>: <span class="num">21</span>
+}</pre>
+              </div>
+              <p style="font-size: 0.8rem; color: var(--text-muted);">
+                The <code style="font-family: var(--font-mono); color: var(--accent-amber);">user</code> field holds the exact <code style="font-family: var(--font-mono); color: var(--mongo-green);">_id</code> of Rahul's user document.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 15 — ONE-TO-ONE USING REFERENCING
+           ==================================================================== -->
+      <section class="slide" data-slide="15" id="slide-15">
+        <div class="slide-header">
+          <div class="slide-tag tag-blue">Mongoose Schema</div>
+          <h2 class="slide-title">Defining the Reference in Mongoose</h2>
+          <p class="slide-subtitle">Using <code style="color: var(--mongo-green); font-family: var(--font-mono);">mongoose.Schema.Types.ObjectId</code> and <code style="color: var(--accent-amber); font-family: var(--font-mono);">ref</code></p>
+        </div>
+
+        <div class="slide-content">
+          <div class="code-box">
+            <div class="code-header">
+              <div class="code-dots"><span class="code-dot red"></span><span class="code-dot yellow"></span><span class="code-dot green"></span></div>
+              <span class="code-title">Profile.js &amp; User.js Schemas</span>
+              <button class="copy-btn" onclick="Deck.copyCode(this)">Copy</button>
+            </div>
+            <pre class="code-content"><span class="comment">// 1. User Schema</span>
+<span class="kwd">const</span> <span class="prop">userSchema</span> <span class="op">=</span> <span class="kwd">new</span> <span class="prop">mongoose</span>.<span class="fn">Schema</span>({
+  <span class="prop">name</span>: <span class="type">String</span>,
+  <span class="prop">email</span>: <span class="type">String</span>
+});
+
+<span class="comment">// 2. Profile Schema with Reference</span>
+<span class="kwd">const</span> <span class="prop">profileSchema</span> <span class="op">=</span> <span class="kwd">new</span> <span class="prop">mongoose</span>.<span class="fn">Schema</span>({
+  <span class="prop">user</span>: {
+    <span class="prop">type</span>: <span class="prop">mongoose</span>.<span class="prop">Schema</span>.<span class="prop">Types</span>.<span class="type">ObjectId</span>, <span class="comment">// Must store an ObjectId</span>
+    <span class="prop">ref</span>: <span class="str">"User"</span>                            <span class="comment">// Tells Mongoose which Model to populate</span>
+  },
+  <span class="prop">bio</span>: <span class="type">String</span>,
+  <span class="prop">age</span>: <span class="type">Number</span>
+});</pre>
+          </div>
+
+          <div class="grid-2" style="margin-top: 0.5rem;">
+            <div class="card card-highlight">
+              <div class="card-title"><span class="icon">🏷️</span> What is <code style="font-family: var(--font-mono);">type: ObjectId</code>?</div>
+              <p>Tells Mongoose and MongoDB that this field stores an authentic 12-byte BSON identifier, not a random plain string.</p>
+            </div>
+            <div class="card card-highlight-amber">
+              <div class="card-title"><span class="icon">🧭</span> What is <code style="font-family: var(--font-mono);">ref: "User"</code>?</div>
+              <p>Tells Mongoose: <em>"When I ask you to populate this field later, go query the <strong>User</strong> model to retrieve the corresponding document."</em></p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 16 — ONE-TO-MANY RELATIONSHIP
+           ==================================================================== -->
+      <section class="slide" data-slide="16" id="slide-16">
+        <div class="slide-header">
+          <div class="slide-tag tag-purple">Part 4 • One-to-Many</div>
+          <h2 class="slide-title">One-to-Many (1:N) Relationship</h2>
+          <p class="slide-subtitle">The most common relationship pattern in modern web development</p>
+        </div>
+
+        <div class="slide-content">
+          <div class="callout">
+            <span class="callout-icon">🏫</span>
+            <div>
+              <strong>Definition:</strong> In a One-to-Many relationship, one parent document connects to multiple child documents.
+            </div>
+          </div>
+
+          <div class="grid-2" style="align-items: center;">
+            <div class="tree-visual">
+              <div class="root">Course: MERN Stack (Parent)</div>
+              <div class="branch">├── <span class="node-prop">Student: Rahul</span></div>
+              <div class="branch">├── <span class="node-prop">Student: Anjali</span></div>
+              <div class="branch">├── <span class="node-prop">Student: Arun</span></div>
+              <div class="branch">└── <span class="node-prop">Student: Sneha</span></div>
+            </div>
+
+            <div class="flex-col">
+              <div class="card card-highlight">
+                <div class="card-title"><span class="icon">🎯</span> Real-World Examples</div>
+                <ul style="padding-left: 1.2rem; display: flex; flex-direction: column; gap: 0.4rem; font-size: 0.85rem; color: var(--text-secondary);">
+                  <li><strong>Course &rarr; Students:</strong> One course taught to 50 students</li>
+                  <li><strong>Author &rarr; Books:</strong> One author writes 10 books</li>
+                  <li><strong>Department &rarr; Employees:</strong> One department has 25 workers</li>
+                  <li><strong>Blog Post &rarr; Comments:</strong> One post has 100 comments</li>
+                </ul>
+              </div>
+
+              <div class="card-footer-tip" style="background: var(--bg-surface); padding: 0.75rem; border-radius: var(--radius-sm);">
+                <strong>Key Question:</strong> Where should we store the reference ID? On the Course or on each Student?
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 17 — ONE-TO-MANY DATA MODEL
+           ==================================================================== -->
+      <section class="slide" data-slide="17" id="slide-17">
+        <div class="slide-header">
+          <div class="slide-tag tag-purple">Architecture</div>
+          <h2 class="slide-title">One-to-Many Data Model: Parent Pointer</h2>
+          <p class="slide-subtitle">Why storing the Course ID inside each Student document is the cleanest design</p>
+        </div>
+
+        <div class="slide-content">
+          <div class="grid-2">
+            <div class="card card-highlight">
+              <div class="card-title"><span class="icon">📚</span> courses Collection (One)</div>
+              <div class="code-box">
+                <div class="code-header">
+                  <div class="code-dots"><span class="code-dot red"></span><span class="code-dot yellow"></span><span class="code-dot green"></span></div>
+                  <span class="code-title">Course document</span>
+                </div>
+                <pre class="code-content">{
+  <span class="prop">"_id"</span>: <span class="fn">ObjectId</span>(<span class="str">"64abc101"</span>),
+  <span class="prop">"name"</span>: <span class="str">"MERN"</span>,
+  <span class="prop">"duration"</span>: <span class="num">6</span>
+}</pre>
+              </div>
+              <p style="font-size: 0.82rem; color: var(--text-muted);">
+                Stored once. Contains course details only.
+              </p>
+            </div>
+
+            <div class="card">
+              <div class="card-title"><span class="icon">🎓</span> students Collection (Many)</div>
+              <div class="code-box">
+                <div class="code-header">
+                  <div class="code-dots"><span class="code-dot red"></span><span class="code-dot yellow"></span><span class="code-dot green"></span></div>
+                  <span class="code-title">Student documents</span>
+                </div>
+                <pre class="code-content"><span class="comment">// Student 1</span>
+{ <span class="prop">"_id"</span>: <span class="str">"..."</span>, <span class="prop">"name"</span>: <span class="str">"Rahul"</span>, <span class="prop">"course"</span>: <span class="fn">ObjectId</span>(<span class="str">"64abc101"</span>) }
+
+<span class="comment">// Student 2</span>
+{ <span class="prop">"_id"</span>: <span class="str">"..."</span>, <span class="prop">"name"</span>: <span class="str">"Anjali"</span>, <span class="prop">"course"</span>: <span class="fn">ObjectId</span>(<span class="str">"64abc101"</span>) }</pre>
+              </div>
+              <p style="font-size: 0.82rem; color: var(--text-muted);">
+                Each student has a <code style="font-family: var(--font-mono); color: var(--accent-amber);">course</code> field pointing back to the parent Course.
+              </p>
+            </div>
+          </div>
+
+          <div class="callout callout-blue" style="margin-top: 0.5rem;">
+            <span class="callout-icon">💡</span>
+            <div>
+              <strong>Mongoose Best Practice:</strong> Storing a parent pointer on the "many" side avoids huge, unbounded arrays of student IDs inside the course document. As your school grows to 10,000 students, the course document stays compact!
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 18 — REFERENCING IN ONE-TO-MANY
+           ==================================================================== -->
+      <section class="slide" data-slide="18" id="slide-18">
+        <div class="slide-header">
+          <div class="slide-tag tag-purple">Code Implementation</div>
+          <h2 class="slide-title">Referencing in One-to-Many Schemas</h2>
+          <p class="slide-subtitle">Setting up Course and Student models with Mongoose reference</p>
+        </div>
+
+        <div class="slide-content">
+          <div class="code-box">
+            <div class="code-header">
+              <div class="code-dots"><span class="code-dot red"></span><span class="code-dot yellow"></span><span class="code-dot green"></span></div>
+              <span class="code-title">Course.js &amp; Student.js Models</span>
+              <button class="copy-btn" onclick="Deck.copyCode(this)">Copy</button>
+            </div>
+            <pre class="code-content"><span class="comment">// 1. Course Schema</span>
+<span class="kwd">const</span> <span class="prop">courseSchema</span> <span class="op">=</span> <span class="kwd">new</span> <span class="prop">mongoose</span>.<span class="fn">Schema</span>({
+  <span class="prop">name</span>: <span class="type">String</span>,
+  <span class="prop">duration</span>: <span class="type">Number</span>
+});
+<span class="kwd">const</span> <span class="prop">Course</span> <span class="op">=</span> <span class="prop">mongoose</span>.<span class="fn">model</span>(<span class="str">"Course"</span>, <span class="prop">courseSchema</span>);
+
+<span class="comment">// 2. Student Schema referencing Course</span>
+<span class="kwd">const</span> <span class="prop">studentSchema</span> <span class="op">=</span> <span class="kwd">new</span> <span class="prop">mongoose</span>.<span class="fn">Schema</span>({
+  <span class="prop">name</span>: <span class="type">String</span>,
+  <span class="prop">course</span>: {
+    <span class="prop">type</span>: <span class="prop">mongoose</span>.<span class="prop">Schema</span>.<span class="prop">Types</span>.<span class="type">ObjectId</span>, <span class="comment">// Stores Course _id</span>
+    <span class="prop">ref</span>: <span class="str">"Course"</span>                            <span class="comment">// References the Course model</span>
+  }
+});
+<span class="kwd">const</span> <span class="prop">Student</span> <span class="op">=</span> <span class="prop">mongoose</span>.<span class="fn">model</span>(<span class="str">"Student"</span>, <span class="prop">studentSchema</span>);</pre>
+          </div>
+
+          <div class="flow-container" style="padding: 0.5rem 0;">
+            <div class="flow-node">
+              <div class="flow-node-title">Student Document</div>
+              <div class="flow-node-desc">name: "Rahul"</div>
+            </div>
+            <div class="flow-arrow">&rarr;</div>
+            <div class="flow-node active-node">
+              <div class="flow-node-title">course field</div>
+              <div class="flow-node-desc">ObjectId("64abc101")</div>
+            </div>
+            <div class="flow-arrow">&rarr;</div>
+            <div class="flow-node">
+              <div class="flow-node-title">Course Document</div>
+              <div class="flow-node-desc">name: "MERN"</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 19 — WHAT IS OBJECTID REFERENCE?
+           ==================================================================== -->
+      <section class="slide" data-slide="19" id="slide-19">
+        <div class="slide-header">
+          <div class="slide-tag">Under The Hood</div>
+          <h2 class="slide-title">What is an ObjectId Reference?</h2>
+          <p class="slide-subtitle">Understanding how MongoDB identifies and links documents using 24-character hex IDs</p>
+        </div>
+
+        <div class="slide-content">
+          <div class="grid-2">
+            <div class="card">
+              <div class="card-title"><span class="icon">🆔</span> Anatomy of MongoDB `_id`</div>
+              <p>Every document in MongoDB automatically receives a unique 12-byte identifier called an <strong>ObjectId</strong> (displayed as a 24-character hex string):</p>
+              
+              <div style="background: #020508; border: 1px solid var(--border-subtle); padding: 0.8rem; border-radius: var(--radius-sm); font-family: var(--font-mono); font-size: 0.82rem; color: var(--accent-cyan); text-align: center;">
+                ObjectId("64abc123e4b09a1234567890")
+              </div>
+
+              <p style="font-size: 0.82rem; color: var(--text-muted); margin-top: 0.25rem;">
+                It contains a 4-byte timestamp, 5-byte random value, and a 3-byte incrementing counter. It is globally unique!
+              </p>
+            </div>
+
+            <div class="card card-highlight">
+              <div class="card-title"><span class="icon">🔗</span> How The Reference Works</div>
+              <p>Another document stores that exact ID in one of its fields:</p>
+              
+              <div style="background: var(--bg-surface); padding: 0.85rem; border-radius: var(--radius-sm); border: 1px solid var(--border-subtle); font-family: var(--font-mono); font-size: 0.8rem; display: flex; flex-direction: column; gap: 0.4rem;">
+                <div><strong>Course:</strong> _id: <span style="color: var(--accent-amber);">ObjectId("64abc123...")</span></div>
+                <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;name: "MERN"</div>
+                <div style="border-top: 1px solid var(--border-subtle); margin: 0.2rem 0;"></div>
+                <div><strong>Student:</strong> name: "Rahul"</div>
+                <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;course: <span style="color: var(--accent-amber);">ObjectId("64abc123...")</span></div>
+              </div>
+
+              <div class="card-footer-tip">
+                Rahul doesn't duplicate "MERN". He just holds the ticket to it!
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 20 — WHAT IS EMBEDDING?
+           ==================================================================== -->
+      <section class="slide" data-slide="20" id="slide-20">
+        <div class="slide-header">
+          <div class="slide-tag tag-amber">Part 5 • Embedding</div>
+          <h2 class="slide-title">What is Embedding?</h2>
+          <p class="slide-subtitle">Storing related data nested directly inside the same MongoDB document</p>
+        </div>
+
+        <div class="slide-content">
+          <div class="callout" style="font-size: 1rem;">
+            <span class="callout-icon" style="font-size: 1.5rem;">📦</span>
+            <div>
+              <strong>Definition:</strong> <strong>Embedding</strong> means storing related data directly inside the parent MongoDB document as a subdocument (nested object or array).
+            </div>
+          </div>
+
+          <div class="grid-2">
+            <div class="code-box">
+              <div class="code-header">
+                <div class="code-dots"><span class="code-dot red"></span><span class="code-dot yellow"></span><span class="code-dot green"></span></div>
+                <span class="code-title">Embedded Document Example</span>
+              </div>
+              <pre class="code-content">{
+  <span class="prop">"_id"</span>: <span class="fn">ObjectId</span>(<span class="str">"64abc999"</span>),
+  <span class="prop">"name"</span>: <span class="str">"Rahul"</span>,
+  <span class="prop">"email"</span>: <span class="str">"rahul@gmail.com"</span>,
+  
+  <span class="comment">// 👇 Embedded Subdocument!</span>
+  <span class="prop">"address"</span>: {
+    <span class="prop">"city"</span>: <span class="str">"Kozhikode"</span>,
+    <span class="prop">"state"</span>: <span class="str">"Kerala"</span>,
+    <span class="prop">"pincode"</span>: <span class="str">"673001"</span>
+  }
+}</pre>
+            </div>
+
+            <div class="card card-highlight">
+              <div class="card-title"><span class="icon">💡</span> Key Observations</div>
+              <ul style="padding-left: 1.2rem; display: flex; flex-direction: column; gap: 0.6rem; font-size: 0.88rem; color: var(--text-secondary);">
+                <li><strong>No second collection:</strong> There is no separate <code style="font-family: var(--font-mono);">addresses</code> collection.</li>
+                <li><strong>No JOIN or populate:</strong> When you read Rahul, his address is already right there!</li>
+                <li><strong>Atomic read &amp; write:</strong> Reading the student automatically reads the address in a single fast disk fetch.</li>
+              </ul>
+              <div class="card-footer-tip">
+                Everything is stored and retrieved together!
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 21 — EMBEDDING SCHEMA
+           ==================================================================== -->
+      <section class="slide" data-slide="21" id="slide-21">
+        <div class="slide-header">
+          <div class="slide-tag tag-amber">Mongoose Syntax</div>
+          <h2 class="slide-title">Defining an Embedded Schema</h2>
+          <p class="slide-subtitle">Declaring nested objects directly in Mongoose schema definitions</p>
+        </div>
+
+        <div class="slide-content">
+          <div class="grid-split-left-wide">
+            <div class="code-box">
+              <div class="code-header">
+                <div class="code-dots"><span class="code-dot red"></span><span class="code-dot yellow"></span><span class="code-dot green"></span></div>
+                <span class="code-title">Student.js — Embedded Address</span>
+                <button class="copy-btn" onclick="Deck.copyCode(this)">Copy</button>
+              </div>
+              <pre class="code-content"><span class="kwd">const</span> <span class="prop">mongoose</span> <span class="op">=</span> <span class="fn">require</span>(<span class="str">"mongoose"</span>);
+
+<span class="kwd">const</span> <span class="prop">studentSchema</span> <span class="op">=</span> <span class="kwd">new</span> <span class="prop">mongoose</span>.<span class="fn">Schema</span>({
+  <span class="prop">name</span>: <span class="type">String</span>,
+  <span class="prop">email</span>: <span class="type">String</span>,
+
+  <span class="comment">// Embedded Subdocument schema:</span>
+  <span class="prop">address</span>: {
+    <span class="prop">city</span>: <span class="type">String</span>,
+    <span class="prop">state</span>: <span class="type">String</span>,
+    <span class="prop">pincode</span>: <span class="type">String</span>
+  }
+});
+
+<span class="prop">module</span>.<span class="prop">exports</span> <span class="op">=</span> <span class="prop">mongoose</span>.<span class="fn">model</span>(<span class="str">"Student"</span>, <span class="prop">studentSchema</span>);</pre>
+            </div>
+
+            <div class="flex-col">
+              <div class="card card-highlight">
+                <div class="card-title"><span class="icon">✨</span> Inserting Embedded Data</div>
+                <div class="code-box">
+                  <pre class="code-content"><span class="kwd">await</span> <span class="prop">Student</span>.<span class="fn">create</span>({
+  <span class="prop">name</span>: <span class="str">"Rahul"</span>,
+  <span class="prop">address</span>: {
+    <span class="prop">city</span>: <span class="str">"Kozhikode"</span>,
+    <span class="prop">state</span>: <span class="str">"Kerala"</span>,
+    <span class="prop">pincode</span>: <span class="str">"673001"</span>
+  }
+});</pre>
+                </div>
+              </div>
+
+              <div class="card">
+                <div class="card-title"><span class="icon">🎯</span> Querying Embedded Fields</div>
+                <p style="font-size: 0.84rem;">You can use dot notation in queries:</p>
+                <div style="background: #020508; padding: 0.5rem 0.8rem; border-radius: 4px; font-family: var(--font-mono); font-size: 0.78rem; color: var(--accent-cyan);">
+                  Student.find({ "address.city": "Kozhikode" });
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 22 — WHEN TO USE EMBEDDING
+           ==================================================================== -->
+      <section class="slide" data-slide="22" id="slide-22">
+        <div class="slide-header">
+          <div class="slide-tag tag-amber">Design Rules</div>
+          <h2 class="slide-title">When is Embedding Useful?</h2>
+          <p class="slide-subtitle">The four golden rules for choosing embedded documents</p>
+        </div>
+
+        <div class="slide-content">
+          <div class="grid-2">
+            <div class="card card-highlight">
+              <div class="card-title"><span class="icon">✅</span> Use Embedding When:</div>
+              <ul style="padding-left: 1.2rem; display: flex; flex-direction: column; gap: 0.65rem; font-size: 0.88rem; color: var(--text-secondary);">
+                <li><strong>Belongs closely to parent:</strong> An address has no meaning without the student it belongs to.</li>
+                <li><strong>Read together:</strong> When you fetch a student, you almost always need their address on the same page.</li>
+                <li><strong>Data is small and bounded:</strong> An address has 3-4 fields; it will never grow to millions of items.</li>
+                <li><strong>No independent existence:</strong> Nobody searches an "address catalog" without looking for the person.</li>
+              </ul>
+            </div>
+
+            <div class="card" style="border-color: var(--accent-rose-border);">
+              <div class="card-title" style="color: var(--accent-rose);"><span class="icon">❌</span> Do NOT Embed When:</div>
+              <ul style="padding-left: 1.2rem; display: flex; flex-direction: column; gap: 0.65rem; font-size: 0.88rem; color: var(--text-secondary);">
+                <li><strong>Data is shared across parents:</strong> e.g. 500 students in the same Course.</li>
+                <li><strong>Data grows without limit:</strong> e.g. embedding 100,000 logs into a single document will hit MongoDB's 16MB document size limit!</li>
+                <li><strong>Data changes frequently on its own:</strong> updating a shared course shouldn't require modifying 500 documents.</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="tree-visual" style="margin-top: 0.5rem;">
+            <div class="root">Student Document</div>
+            <div class="branch">├── <span class="node-prop">name: "Rahul"</span></div>
+            <div class="branch">├── <span class="node-prop">email: "rahul@gmail.com"</span></div>
+            <div class="branch">└── <span class="node-sub">address (Embedded Subdocument)</span></div>
+            <div class="branch">&nbsp;&nbsp;&nbsp;&nbsp;├── <span class="node-prop">city: "Kozhikode"</span></div>
+            <div class="branch">&nbsp;&nbsp;&nbsp;&nbsp;└── <span class="node-prop">state: "Kerala"</span></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 23 — WHAT IS REFERENCING?
+           ==================================================================== -->
+      <section class="slide" data-slide="23" id="slide-23">
+        <div class="slide-header">
+          <div class="slide-tag">Part 6 • Referencing</div>
+          <h2 class="slide-title">What is Referencing?</h2>
+          <p class="slide-subtitle">Storing a document ID to point to independent documents in other collections</p>
+        </div>
+
+        <div class="slide-content">
+          <div class="callout" style="font-size: 1rem;">
+            <span class="callout-icon" style="font-size: 1.5rem;">🔗</span>
+            <div>
+              <strong>Definition:</strong> <strong>Referencing</strong> (normalization) means storing the <code style="font-family: var(--font-mono); color: var(--mongo-green);">_id</code> of another document instead of copying the entire related document into the parent.
+            </div>
+          </div>
+
+          <div class="grid-2">
+            <div class="card">
+              <div class="card-title"><span class="icon">👤</span> Student Document</div>
+              <div class="code-box">
+                <div class="code-header">
+                  <div class="code-dots"><span class="code-dot red"></span><span class="code-dot yellow"></span><span class="code-dot green"></span></div>
+                  <span class="code-title">students collection</span>
+                </div>
+                <pre class="code-content">{
+  <span class="prop">"_id"</span>: <span class="fn">ObjectId</span>(<span class="str">"64a02"</span>),
+  <span class="prop">"name"</span>: <span class="str">"Rahul"</span>,
+  <span class="comment">// Holds pointer ID only:</span>
+  <span class="prop">"course"</span>: <span class="fn">ObjectId</span>(<span class="str">"64a01"</span>)
+}</pre>
+              </div>
+            </div>
+
+            <div class="card card-highlight">
+              <div class="card-title"><span class="icon">📚</span> Course Document</div>
+              <div class="code-box">
+                <div class="code-header">
+                  <div class="code-dots"><span class="code-dot red"></span><span class="code-dot yellow"></span><span class="code-dot green"></span></div>
+                  <span class="code-title">courses collection</span>
+                </div>
+                <pre class="code-content">{
+  <span class="prop">"_id"</span>: <span class="fn">ObjectId</span>(<span class="str">"64a01"</span>),
+  <span class="prop">"name"</span>: <span class="str">"MERN"</span>,
+  <span class="prop">"duration"</span>: <span class="num">6</span>
+}</pre>
+              </div>
+            </div>
+          </div>
+
+          <div class="callout callout-blue" style="margin-top: 0.5rem;">
+            <span class="callout-icon">💡</span>
+            <div>
+              <strong>The Reference Link:</strong> The student's <code style="font-family: var(--font-mono); color: var(--accent-amber);">course</code> field acts like a foreign key in SQL databases. It links two standalone collections together cleanly!
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 24 — EMBEDDING VS REFERENCING
+           ==================================================================== -->
+      <section class="slide" data-slide="24" id="slide-24">
+        <div class="slide-header">
+          <div class="slide-tag tag-blue">Architectural Comparison</div>
+          <h2 class="slide-title">Embedding vs Referencing: Side-by-Side</h2>
+          <p class="slide-subtitle">Visualizing the structural difference between nested and linked data</p>
+        </div>
+
+        <div class="slide-content">
+          <div class="grid-2">
+            <div class="card card-highlight-amber">
+              <div class="card-title" style="color: var(--accent-amber);">
+                <span class="icon">📦</span> EMBEDDING (Nested)
+              </div>
+              <div class="tree-visual" style="min-height: 180px;">
+                <div class="root">Student Document</div>
+                <div class="branch">├── <span class="node-prop">name: "Rahul"</span></div>
+                <div class="branch">└── <span class="node-sub">address: {</span></div>
+                <div class="branch">&nbsp;&nbsp;&nbsp;&nbsp;├── <span class="node-prop">city: "Kozhikode"</span></div>
+                <div class="branch">&nbsp;&nbsp;&nbsp;&nbsp;└── <span class="node-prop">state: "Kerala"</span></div>
+                <div class="branch">&nbsp;&nbsp;&nbsp;&nbsp;}</div>
+              </div>
+              <p style="font-size: 0.8rem; color: var(--text-muted);">
+                Single document. Fast read. Data duplicated if shared.
+              </p>
+            </div>
+
+            <div class="card card-highlight">
+              <div class="card-title" style="color: var(--mongo-green);">
+                <span class="icon">🔗</span> REFERENCING (Normalized)
+              </div>
+              <div class="tree-visual" style="min-height: 180px;">
+                <div class="root">Student Document</div>
+                <div class="branch">├── <span class="node-prop">name: "Rahul"</span></div>
+                <div class="branch">└── <span class="node-ref">course: ObjectId("101")</span></div>
+                <div style="margin-top: 0.75rem; border-top: 1px dashed var(--border-subtle); padding-top: 0.5rem;">
+                  <div class="root" style="color: var(--accent-cyan);">Course Document (Collection)</div>
+                  <div class="branch">├── <span class="node-ref">_id: ObjectId("101")</span></div>
+                  <div class="branch">└── <span class="node-prop">name: "MERN"</span></div>
+                </div>
+              </div>
+              <p style="font-size: 0.8rem; color: var(--text-muted);">
+                Separate collections. Zero duplication. Resolved via populate().
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 25 — WHEN TO USE EACH
+           ==================================================================== -->
+      <section class="slide" data-slide="25" id="slide-25">
+        <div class="slide-header">
+          <div class="slide-tag">Decision Framework</div>
+          <h2 class="slide-title">When to Use Embedding vs Referencing</h2>
+          <p class="slide-subtitle">A practical guideline matrix based on data lifecycle and access patterns</p>
+        </div>
+
+        <div class="slide-content">
+          <div class="table-wrapper">
+            <table class="styled-table">
+              <thead>
+                <tr>
+                  <th>Decision Factor</th>
+                  <th>Choose Embedding 📦</th>
+                  <th>Choose Referencing 🔗</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Data Size</strong></td>
+                  <td>Small, bounded, few fields</td>
+                  <td>Large, many fields, or unlimited growth</td>
+                </tr>
+                <tr>
+                  <td><strong>Ownership</strong></td>
+                  <td>Belongs exclusively to parent</td>
+                  <td>Shared across multiple parents</td>
+                </tr>
+                <tr>
+                  <td><strong>Read Patterns</strong></td>
+                  <td>Usually read together every time</td>
+                  <td>Often read separately or in different views</td>
+                </tr>
+                <tr>
+                  <td><strong>Update Frequency</strong></td>
+                  <td>Updated rarely or with parent</td>
+                  <td>Updated frequently and independently</td>
+                </tr>
+                <tr>
+                  <td><strong>Lifecycle</strong></td>
+                  <td>Deleted when parent is deleted</td>
+                  <td>Must survive even if parent is deleted</td>
+                </tr>
+                <tr>
+                  <td><strong>Classic Example</strong></td>
+                  <td><code style="font-family: var(--font-mono);">Student &rarr; Address</code></td>
+                  <td><code style="font-family: var(--font-mono);">Student &rarr; Course</code></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="callout callout-amber" style="margin-top: 0.5rem;">
+            <span class="callout-icon">💡</span>
+            <div>
+              <strong>Practical Rule of Thumb:</strong> There is no single universal rule. The best design depends on <em>how your application queries and updates data</em>. If multiple parents share it, <strong>reference it</strong>. If it only belongs to one parent and is always read together, <strong>embed it</strong>.
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 26 — EMBEDDING VS REFERENCING EXAMPLE & DISCUSSION
+           ==================================================================== -->
+      <section class="slide" data-slide="26" id="slide-26">
+        <div class="slide-header">
+          <div class="slide-tag tag-rose">Classroom Discussion</div>
+          <h2 class="slide-title">Embedding vs Referencing: Real Example</h2>
+          <p class="slide-subtitle">Analyze these two database designs for a school management platform</p>
+        </div>
+
+        <div class="slide-content">
+          <div class="grid-2">
+            <div class="card">
+              <div class="card-title"><span class="icon">🅰️</span> Design A — Embedding Course in Student</div>
+              <div class="code-box">
+                <div class="code-header">
+                  <div class="code-dots"><span class="code-dot red"></span><span class="code-dot yellow"></span><span class="code-dot green"></span></div>
+                  <span class="code-title">Design A (Nested)</span>
+                </div>
+                <pre class="code-content">{
+  <span class="prop">"name"</span>: <span class="str">"Rahul"</span>,
+  <span class="prop">"course"</span>: {
+    <span class="prop">"name"</span>: <span class="str">"MERN"</span>,
+    <span class="prop">"duration"</span>: <span class="num">6</span>
+  }
+}</pre>
+              </div>
+            </div>
+
+            <div class="card card-highlight">
+              <div class="card-title"><span class="icon">🅱️</span> Design B — Referencing Course by ID</div>
+              <div class="code-box">
+                <div class="code-header">
+                  <div class="code-dots"><span class="code-dot red"></span><span class="code-dot yellow"></span><span class="code-dot green"></span></div>
+                  <span class="code-title">Design B (Referenced)</span>
+                </div>
+                <pre class="code-content"><span class="comment">// In students:</span>
+{ <span class="prop">"name"</span>: <span class="str">"Rahul"</span>, <span class="prop">"course"</span>: <span class="fn">ObjectId</span>(<span class="str">"101"</span>) }
+
+<span class="comment">// In courses:</span>
+{ <span class="prop">"_id"</span>: <span class="fn">ObjectId</span>(<span class="str">"101"</span>), <span class="prop">"name"</span>: <span class="str">"MERN"</span>, <span class="prop">"duration"</span>: <span class="num">6</span> }</pre>
+              </div>
+            </div>
+          </div>
+
+          <div class="callout callout-amber" style="margin-top: 0.5rem;">
+            <span class="callout-icon">🤔</span>
+            <div>
+              <strong>Discussion Question for Students:</strong><br>
+              <em>"If 500 students belong to the MERN course, which design makes sense and why?"</em><br>
+              <span style="color: var(--mongo-green); font-size: 0.84rem; display: block; margin-top: 0.35rem;">
+                &rarr; <strong>Design B!</strong> In Design A, the course name and duration would be duplicated 500 times. If the course fee or duration changes, Design B requires updating only <strong>1 document</strong> instead of 500!
+              </span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 27 — WHAT IS POPULATE?
+           ==================================================================== -->
+      <section class="slide" data-slide="27" id="slide-27">
+        <div class="slide-header">
+          <div class="slide-tag tag-purple">Part 7 • populate()</div>
+          <h2 class="slide-title">What is <code style="color: var(--mongo-green); font-family: var(--font-mono);">populate()</code>?</h2>
+          <p class="slide-subtitle">Mongoose's powerful mechanism for replacing referenced IDs with actual documents</p>
+        </div>
+
+        <div class="slide-content">
+          <div class="callout" style="font-size: 1rem;">
+            <span class="callout-icon" style="font-size: 1.5rem;">🚀</span>
+            <div>
+              <strong>Definition:</strong> <code style="font-family: var(--font-mono); color: var(--mongo-green);">populate()</code> is a Mongoose query method that automatically replaces a referenced <code style="font-family: var(--font-mono); color: var(--accent-amber);">ObjectId</code> with the corresponding document retrieved from the referenced collection.
+            </div>
+          </div>
+
+          <div class="grid-2">
+            <div class="card">
+              <div class="card-title">
+                <span class="icon">❌</span> Without <code style="font-family: var(--font-mono);">populate()</code>
+              </div>
+              <p>Mongoose returns only the raw stored ID:</p>
+              <div class="code-box">
+                <pre class="code-content">{
+  <span class="prop">"_id"</span>: <span class="fn">ObjectId</span>(<span class="str">"64b01"</span>),
+  <span class="prop">"name"</span>: <span class="str">"Rahul"</span>,
+  <span class="prop">"course"</span>: <span class="fn">ObjectId</span>(<span class="str">"64a01"</span>) <span class="comment">// 👈 Just an ID!</span>
+}</pre>
+              </div>
+              <p style="font-size: 0.8rem; color: var(--text-muted);">
+                You cannot access <code style="font-family: var(--font-mono);">student.course.name</code> yet!
+              </p>
+            </div>
+
+            <div class="card card-highlight">
+              <div class="card-title">
+                <span class="icon">✨</span> With <code style="font-family: var(--font-mono);">populate("course")</code>
+              </div>
+              <p>Mongoose replaces the ID with the full course document:</p>
+              <div class="code-box">
+                <pre class="code-content">{
+  <span class="prop">"_id"</span>: <span class="fn">ObjectId</span>(<span class="str">"64b01"</span>),
+  <span class="prop">"name"</span>: <span class="str">"Rahul"</span>,
+  <span class="prop">"course"</span>: {                <span class="comment">// 👈 Replaced with Document!</span>
+    <span class="prop">"_id"</span>: <span class="fn">ObjectId</span>(<span class="str">"64a01"</span>),
+    <span class="prop">"name"</span>: <span class="str">"MERN"</span>,
+    <span class="prop">"duration"</span>: <span class="num">6</span>
+  }
+}</pre>
+              </div>
+              <p style="font-size: 0.8rem; color: var(--mongo-green);">
+                Now <code style="font-family: var(--font-mono);">student.course.name</code> is <span style="font-family: var(--font-mono);">"MERN"</span>!
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 28 — REF + POPULATE
+           ==================================================================== -->
+      <section class="slide" data-slide="28" id="slide-28">
+        <div class="slide-header">
+          <div class="slide-tag tag-purple">Connection Mechanics</div>
+          <h2 class="slide-title">How <code style="color: var(--accent-amber); font-family: var(--font-mono);">ref</code> Enables <code style="color: var(--mongo-green); font-family: var(--font-mono);">populate()</code></h2>
+          <p class="slide-subtitle">The two-step handshake between the schema definition and the query</p>
+        </div>
+
+        <div class="slide-content">
+          <div class="grid-2">
+            <div class="card">
+              <div class="card-title"><span class="icon">1️⃣</span> Step 1: The Schema Reference</div>
+              <div class="code-box">
+                <div class="code-header">
+                  <div class="code-dots"><span class="code-dot red"></span><span class="code-dot yellow"></span><span class="code-dot green"></span></div>
+                  <span class="code-title">Student.js</span>
+                </div>
+                <pre class="code-content"><span class="prop">course</span>: {
+  <span class="prop">type</span>: <span class="prop">mongoose</span>.<span class="prop">Schema</span>.<span class="prop">Types</span>.<span class="type">ObjectId</span>,
+  <span class="prop">ref</span>: <span class="str">"Course"</span>  <span class="comment">// 👈 Target Model name</span>
+}</pre>
+              </div>
+              <p style="font-size: 0.82rem; color: var(--text-secondary);">
+                The <code style="font-family: var(--font-mono); color: var(--accent-amber);">ref</code> value must <strong>exactly match</strong> the model name: <code style="font-family: var(--font-mono); color: var(--mongo-green);">mongoose.model("Course", ...)</code>.
+              </p>
+            </div>
+
+            <div class="card card-highlight">
+              <div class="card-title"><span class="icon">2️⃣</span> Step 2: The Populate Query</div>
+              <div class="code-box">
+                <div class="code-header">
+                  <div class="code-dots"><span class="code-dot red"></span><span class="code-dot yellow"></span><span class="code-dot green"></span></div>
+                  <span class="code-title">app.js</span>
+                </div>
+                <pre class="code-content"><span class="kwd">const</span> <span class="prop">students</span> <span class="op">=</span> <span class="kwd">await</span> <span class="prop">Student</span>
+  .<span class="fn">find</span>()
+  .<span class="fn">populate</span>(<span class="str">"course"</span>); <span class="comment">// 👈 Field to populate</span></pre>
+              </div>
+              <p style="font-size: 0.82rem; color: var(--text-secondary);">
+                You pass the <strong>field name</strong> (<code style="font-family: var(--font-mono); color: var(--accent-cyan);">"course"</code>) to <code style="font-family: var(--font-mono); color: var(--mongo-green);">populate()</code>. Mongoose reads the <code style="font-family: var(--font-mono); color: var(--accent-amber);">ref</code> on that field to know which collection to look up.
+              </p>
+            </div>
+          </div>
+
+          <div class="callout callout-amber" style="margin-top: 0.5rem;">
+            <span class="callout-icon">⚠️</span>
+            <div>
+              <strong>Common Beginner Confusion:</strong> In <code style="font-family: var(--font-mono);">.populate("course")</code>, pass the <strong>property name</strong> on the Student schema (<code style="font-family: var(--font-mono);">"course"</code>), NOT the model name (<code style="font-family: var(--font-mono);">"Course"</code>) or collection name (<code style="font-family: var(--font-mono);">"courses"</code>)!
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 29 — CREATE REFERENCED DATA
+           ==================================================================== -->
+      <section class="slide" data-slide="29" id="slide-29">
+        <div class="slide-header">
+          <div class="slide-tag tag-blue">Hands-On Code</div>
+          <h2 class="slide-title">Creating Referenced Documents</h2>
+          <p class="slide-subtitle">Step-by-step workflow: create the parent first, then link the child</p>
+        </div>
+
+        <div class="slide-content">
+          <div class="code-box">
+            <div class="code-header">
+              <div class="code-dots"><span class="code-dot red"></span><span class="code-dot yellow"></span><span class="code-dot green"></span></div>
+              <span class="code-title">Creating Course &amp; Student in app.js</span>
+              <button class="copy-btn" onclick="Deck.copyCode(this)">Copy</button>
+            </div>
+            <pre class="code-content"><span class="comment">// Step 1: Create the Course first so it gets an _id</span>
+<span class="kwd">const</span> <span class="prop">course</span> <span class="op">=</span> <span class="kwd">await</span> <span class="prop">Course</span>.<span class="fn">create</span>({
+  <span class="prop">name</span>: <span class="str">"MERN"</span>,
+  <span class="prop">duration</span>: <span class="num">6</span>
+});
+
+<span class="fn">console</span>.<span class="fn">log</span>(<span class="str">"Course Created with ID:"</span>, <span class="prop">course</span>.<span class="prop">_id</span>);
+
+<span class="comment">// Step 2: Create the Student and pass course._id into the course field!</span>
+<span class="kwd">const</span> <span class="prop">student</span> <span class="op">=</span> <span class="kwd">await</span> <span class="prop">Student</span>.<span class="fn">create</span>({
+  <span class="prop">name</span>: <span class="str">"Rahul"</span>,
+  <span class="prop">email</span>: <span class="str">"rahul@gmail.com"</span>,
+  <span class="prop">course</span>: <span class="prop">course</span>.<span class="prop">_id</span> <span class="comment">// 👈 Assign parent's _id</span>
+});
+
+<span class="fn">console</span>.<span class="fn">log</span>(<span class="str">"Student Created:"</span>, <span class="prop">student</span>);</pre>
+          </div>
+
+          <div class="flow-container" style="padding: 0.5rem 0;">
+            <div class="flow-node">
+              <div class="flow-node-title">1. Course Created</div>
+              <div class="flow-node-desc">MongoDB generates course._id</div>
+            </div>
+            <div class="flow-arrow">&rarr;</div>
+            <div class="flow-node active-node">
+              <div class="flow-node-title">2. course._id Passed</div>
+              <div class="flow-node-desc">course: course._id</div>
+            </div>
+            <div class="flow-arrow">&rarr;</div>
+            <div class="flow-node">
+              <div class="flow-node-title">3. Student Saved</div>
+              <div class="flow-node-desc">Reference stored in student doc</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 30 — READ WITHOUT POPULATE
+           ==================================================================== -->
+      <section class="slide" data-slide="30" id="slide-30">
+        <div class="slide-header">
+          <div class="slide-tag">Querying</div>
+          <h2 class="slide-title">Reading Data Without <code style="color: var(--mongo-green); font-family: var(--font-mono);">populate()</code></h2>
+          <p class="slide-subtitle">What standard Mongoose queries return when referencing documents</p>
+        </div>
+
+        <div class="slide-content">
+          <div class="grid-split-left-wide">
+            <div class="code-box">
+              <div class="code-header">
+                <div class="code-dots"><span class="code-dot red"></span><span class="code-dot yellow"></span><span class="code-dot green"></span></div>
+                <span class="code-title">Standard findOne() Query</span>
+                <button class="copy-btn" onclick="Deck.copyCode(this)">Copy</button>
+              </div>
+              <pre class="code-content"><span class="comment">// Query the student:</span>
+<span class="kwd">const</span> <span class="prop">student</span> <span class="op">=</span> <span class="kwd">await</span> <span class="prop">Student</span>.<span class="fn">findOne</span>({ <span class="prop">name</span>: <span class="str">"Rahul"</span> });
+
+<span class="fn">console</span>.<span class="fn">log</span>(<span class="prop">student</span>);
+<span class="fn">console</span>.<span class="fn">log</span>(<span class="prop">student</span>.<span class="prop">course</span>);      <span class="comment">// 64abc101...</span>
+<span class="fn">console</span>.<span class="fn">log</span>(<span class="prop">student</span>.<span class="prop">course</span>.<span class="prop">name</span>); <span class="comment">// undefined ❌</span></pre>
+            </div>
+
+            <div class="flex-col">
+              <div class="card card-highlight">
+                <div class="card-title"><span class="icon">🖥️</span> Returned Object</div>
+                <div class="terminal-output" style="font-size: 0.8rem;">
+{
+  "_id": "64abc201",
+  "name": "Rahul",
+  "email": "rahul@gmail.com",
+  <span class="out-warn">"course": "64abc101"</span>
+}
+                </div>
+              </div>
+
+              <div class="callout callout-amber">
+                <span class="callout-icon">💡</span>
+                <div>
+                  <strong>Key Takeaway:</strong> MongoDB only physically stores the reference ID. It does NOT automatically fetch the course document until you explicitly tell Mongoose to <code style="font-family: var(--font-mono); color: var(--mongo-green);">.populate("course")</code>!
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 31 — READ WITH POPULATE & INTERACTIVE POPULATE WIDGET
+           ==================================================================== -->
+      <section class="slide" data-slide="31" id="slide-31">
+        <div class="slide-header">
+          <div class="slide-tag tag-purple">Interactive Widget</div>
+          <h2 class="slide-title">Reading Data With <code style="color: var(--mongo-green); font-family: var(--font-mono);">populate()</code></h2>
+          <p class="slide-subtitle">Watch Mongoose seamlessly swap the raw ObjectId with the full Course document</p>
+        </div>
+
+        <div class="slide-content">
+          <div class="grid-2">
+            <div class="code-box">
+              <div class="code-header">
+                <div class="code-dots"><span class="code-dot red"></span><span class="code-dot yellow"></span><span class="code-dot green"></span></div>
+                <span class="code-title">Populating the course field</span>
+                <button class="copy-btn" onclick="Deck.copyCode(this)">Copy</button>
+              </div>
+              <pre class="code-content"><span class="comment">// Query with populate:</span>
+<span class="kwd">const</span> <span class="prop">student</span> <span class="op">=</span> <span class="kwd">await</span> <span class="prop">Student</span>
+  .<span class="fn">findOne</span>({ <span class="prop">name</span>: <span class="str">"Rahul"</span> })
+  .<span class="fn">populate</span>(<span class="str">"course"</span>);
+
+<span class="fn">console</span>.<span class="fn">log</span>(<span class="prop">student</span>);
+<span class="fn">console</span>.<span class="fn">log</span>(<span class="prop">student</span>.<span class="prop">course</span>.<span class="prop">name</span>);     <span class="comment">// "MERN" ✅</span>
+<span class="fn">console</span>.<span class="fn">log</span>(<span class="prop">student</span>.<span class="prop">course</span>.<span class="prop">duration</span>); <span class="comment">// 6 ✅</span></pre>
+            </div>
+
+            <div class="interactive-demo-card">
+              <div class="card-title"><span class="icon">⚡</span> Interactive Populate Playground</div>
+
+              <div style="display: flex; gap: 0.5rem;">
+                <button class="demo-btn" id="btnRunPopulate" onclick="SlideDemos.togglePopulate(true)">
+                  ▶ Execute .populate("course")
+                </button>
+                <button class="demo-btn btn-reset" onclick="SlideDemos.togglePopulate(false)">
+                  ↺ Reset (Raw ID)
+                </button>
+              </div>
+
+              <div>
+                <span style="font-size: 0.72rem; color: var(--text-muted); text-transform: uppercase; font-family: var(--font-mono);">Student Query Result:</span>
+                <div class="demo-result-box" id="popDemoResult" style="min-height: 120px; white-space: pre; font-size: 0.78rem;">
+{
+  "name": "Rahul",
+  "course": ObjectId("64abc101")
+}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 32 — POPULATE SPECIFIC FIELDS
+           ==================================================================== -->
+      <section class="slide" data-slide="32" id="slide-32">
+        <div class="slide-header">
+          <div class="slide-tag tag-purple">Performance &amp; Selection</div>
+          <h2 class="slide-title">Populating Specific Fields</h2>
+          <p class="slide-subtitle">Selecting only the exact fields you need from the referenced collection</p>
+        </div>
+
+        <div class="slide-content">
+          <div class="grid-split-left-wide">
+            <div class="code-box">
+              <div class="code-header">
+                <div class="code-dots"><span class="code-dot red"></span><span class="code-dot yellow"></span><span class="code-dot green"></span></div>
+                <span class="code-title">Field Selection Syntax</span>
+                <button class="copy-btn" onclick="Deck.copyCode(this)">Copy</button>
+              </div>
+              <pre class="code-content"><span class="comment">// Pass field names as the 2nd argument:</span>
+<span class="kwd">const</span> <span class="prop">student</span> <span class="op">=</span> <span class="kwd">await</span> <span class="prop">Student</span>
+  .<span class="fn">findOne</span>({ <span class="prop">name</span>: <span class="str">"Rahul"</span> })
+  .<span class="fn">populate</span>(<span class="str">"course"</span>, <span class="str">"name duration"</span>);
+
+<span class="comment">// Or use the object syntax:</span>
+<span class="kwd">const</span> <span class="prop">student</span> <span class="op">=</span> <span class="kwd">await</span> <span class="prop">Student</span>
+  .<span class="fn">findOne</span>({ <span class="prop">name</span>: <span class="str">"Rahul"</span> })
+  .<span class="fn">populate</span>({
+    <span class="prop">path</span>: <span class="str">"course"</span>,
+    <span class="prop">select</span>: <span class="str">"name duration -_id"</span> <span class="comment">// Exclude _id if desired</span>
+  });</pre>
+            </div>
+
+            <div class="flex-col">
+              <div class="card card-highlight">
+                <div class="card-title"><span class="icon">🎯</span> Why Select Fields?</div>
+                <ul style="padding-left: 1.2rem; display: flex; flex-direction: column; gap: 0.5rem; font-size: 0.85rem; color: var(--text-secondary);">
+                  <li><strong>Security:</strong> Don't accidentally expose course admin notes or sensitive internal tags</li>
+                  <li><strong>Speed:</strong> Smaller payload transferred between MongoDB &rarr; Node.js &rarr; Client</li>
+                  <li><strong>Lower RAM:</strong> Avoid allocating large objects in memory for unneeded data</li>
+                </ul>
+              </div>
+
+              <div class="terminal-output">
+<span class="out-info">Result course object contains ONLY requested fields:</span>
+course: { name: "MERN", duration: 6 }
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 33 — ONE-TO-MANY POPULATE
+           ==================================================================== -->
+      <section class="slide" data-slide="33" id="slide-33">
+        <div class="slide-header">
+          <div class="slide-tag tag-purple">Querying Arrays</div>
+          <h2 class="slide-title">Populating Multiple Documents</h2>
+          <p class="slide-subtitle">Resolving references across a list of documents in a single <code style="color: var(--mongo-green); font-family: var(--font-mono);">find()</code> query</p>
+        </div>
+
+        <div class="slide-content">
+          <div class="grid-split-left-wide">
+            <div class="code-box">
+              <div class="code-header">
+                <div class="code-dots"><span class="code-dot red"></span><span class="code-dot yellow"></span><span class="code-dot green"></span></div>
+                <span class="code-title">Finding All Students with Populated Course</span>
+                <button class="copy-btn" onclick="Deck.copyCode(this)">Copy</button>
+              </div>
+              <pre class="code-content"><span class="comment">// Retrieve all students and populate their course:</span>
+<span class="kwd">const</span> <span class="prop">students</span> <span class="op">=</span> <span class="kwd">await</span> <span class="prop">Student</span>
+  .<span class="fn">find</span>()
+  .<span class="fn">populate</span>(<span class="str">"course"</span>);
+
+<span class="prop">students</span>.<span class="fn">forEach</span>(<span class="prop">s</span> <span class="op">=&gt;</span> {
+  <span class="fn">console</span>.<span class="fn">log</span>(<span class="str">`${s.name} &rarr; ${s.course.name}`</span>);
+});</pre>
+            </div>
+
+            <div class="flex-col">
+              <div class="card card-highlight">
+                <div class="card-title"><span class="icon">🖥️</span> Output List</div>
+                <div class="terminal-output" style="font-size: 0.85rem; line-height: 1.8;">
+<span class="out-success">Rahul &rarr; MERN</span><br>
+<span class="out-info">Anjali &rarr; Python</span><br>
+<span class="out-success">Arun &rarr; MERN</span><br>
+<span class="out-success">Sneha &rarr; MERN</span>
+                </div>
+              </div>
+
+              <div class="card">
+                <div class="card-title"><span class="icon">⚡</span> How Mongoose Optimizes This</div>
+                <p style="font-size: 0.82rem; color: var(--text-secondary);">
+                  Mongoose automatically collects all the unique Course IDs from the retrieved students and fetches them in <strong>one single batch query</strong> behind the scenes (<code style="font-family: var(--font-mono);">$in: [...]</code>).
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 34 — POPULATE VS SQL JOIN
+           ==================================================================== -->
+      <section class="slide" data-slide="34" id="slide-34">
+        <div class="slide-header">
+          <div class="slide-tag">Technical Precision</div>
+          <h2 class="slide-title">Is <code style="color: var(--mongo-green); font-family: var(--font-mono);">populate()</code> the Same as SQL JOIN?</h2>
+          <p class="slide-subtitle">Clearing up a common misconception: application orchestration vs database joins</p>
+        </div>
+
+        <div class="slide-content">
+          <div class="grid-2">
+            <div class="card card-highlight">
+              <div class="card-title"><span class="icon">🍃</span> Mongoose populate()</div>
+              <ul style="padding-left: 1.2rem; display: flex; flex-direction: column; gap: 0.5rem; font-size: 0.85rem; color: var(--text-secondary);">
+                <li>Executed by <strong>Mongoose inside Node.js</strong></li>
+                <li>Mongoose performs a first query for the Students, extracts the course IDs, and executes a second query for the Courses</li>
+                <li>Mongoose matches them in Node.js memory and builds the joined structure</li>
+              </ul>
+              <div class="card-footer-tip" style="color: var(--mongo-green);">
+                Application-level join!
+              </div>
+            </div>
+
+            <div class="card card-highlight-blue">
+              <div class="card-title"><span class="icon">🐬</span> SQL JOIN / MongoDB $lookup</div>
+              <ul style="padding-left: 1.2rem; display: flex; flex-direction: column; gap: 0.5rem; font-size: 0.85rem; color: var(--text-secondary);">
+                <li>Executed by the <strong>database server itself</strong> in a single relational query engine operation</li>
+                <li>MongoDB also has a native join operator: <code style="font-family: var(--font-mono); color: var(--accent-cyan);">$lookup</code> inside the Aggregation Pipeline</li>
+                <li>Handy when sorting or filtering heavily by joined fields on the database</li>
+              </ul>
+              <div class="card-footer-tip" style="color: var(--accent-cyan);">
+                Database engine-level join!
+              </div>
+            </div>
+          </div>
+
+          <div class="callout callout-amber" style="margin-top: 0.5rem;">
+            <span class="callout-icon">💡</span>
+            <div>
+              <strong>Summary:</strong> For Day 5 and general application code, Mongoose <code style="font-family: var(--font-mono); color: var(--mongo-green);">populate()</code> is simple, elegant, and standard!
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 35 — COMPLETE MINI PROJECT STRUCTURE
+           ==================================================================== -->
+      <section class="slide" data-slide="35" id="slide-35">
+        <div class="slide-header">
+          <div class="slide-tag tag-blue">Part 8 • Practical Mini Project</div>
+          <h2 class="slide-title">Mini Project Directory Structure</h2>
+          <p class="slide-subtitle">A clean, production-grade folder layout for models, config, and scripts</p>
+        </div>
+
+        <div class="slide-content">
+          <div class="grid-split-left-wide">
+            <div class="code-box">
+              <div class="code-header">
+                <div class="code-dots"><span class="code-dot red"></span><span class="code-dot yellow"></span><span class="code-dot green"></span></div>
+                <span class="code-title">mongoose-relationships-demo/</span>
+              </div>
+              <pre class="code-content">mongoose-relationships-demo/
+│
+├── src/
+│   ├── config/
+│   │   └── <span class="green">db.js</span>           <span class="comment">// MongoDB connection using mongoose.connect()</span>
+│   │
+│   ├── models/
+│   │   ├── <span class="green">Course.js</span>       <span class="comment">// Course model (name, duration)</span>
+│   │   └── <span class="green">Student.js</span>      <span class="comment">// Student model (methods + Course reference)</span>
+│   │
+│   └── <span class="green">app.js</span>              <span class="comment">// Main executable demonstration flow</span>
+│
+├── <span class="prop">.env</span>                    <span class="comment">// MONGO_URI=mongodb://127.0.0.1:27017/school</span>
+├── <span class="prop">package.json</span>            <span class="comment">// dependencies: mongoose, dotenv</span>
+└── <span class="prop">.gitignore</span>              <span class="comment">// node_modules, .env</span></pre>
+            </div>
+
+            <div class="flex-col">
+              <div class="card card-highlight">
+                <div class="card-title"><span class="icon">📁</span> Clean Separation of Concerns</div>
+                <p style="font-size: 0.85rem; color: var(--text-secondary);">
+                  Putting each Mongoose model in its own dedicated file inside <code style="font-family: var(--font-mono); color: var(--mongo-green);">src/models/</code> ensures that schema methods, validators, and relationships remain organized and testable.
+                </p>
+              </div>
+
+              <div class="card">
+                <div class="card-title"><span class="icon">📦</span> Install Command</div>
+                <div class="code-box">
+                  <pre class="code-content"><span class="comment"># In your terminal:</span>
+npm init -y
+npm install mongoose dotenv</pre>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 36 — COURSE MODEL
+           ==================================================================== -->
+      <section class="slide" data-slide="36" id="slide-36">
+        <div class="slide-header">
+          <div class="slide-tag tag-blue">Project Implementation</div>
+          <h2 class="slide-title">The Complete Course Model</h2>
+          <p class="slide-subtitle">Full production code for <code style="color: var(--mongo-green); font-family: var(--font-mono);">src/models/Course.js</code></p>
+        </div>
+
+        <div class="slide-content">
+          <div class="code-box">
+            <div class="code-header">
+              <div class="code-dots"><span class="code-dot red"></span><span class="code-dot yellow"></span><span class="code-dot green"></span></div>
+              <span class="code-title">src/models/Course.js</span>
+              <button class="copy-btn" onclick="Deck.copyCode(this)">Copy</button>
+            </div>
+            <pre class="code-content"><span class="kwd">const</span> <span class="prop">mongoose</span> <span class="op">=</span> <span class="fn">require</span>(<span class="str">"mongoose"</span>);
+
+<span class="kwd">const</span> <span class="prop">courseSchema</span> <span class="op">=</span> <span class="kwd">new</span> <span class="prop">mongoose</span>.<span class="fn">Schema</span>({
+  <span class="prop">name</span>: {
+    <span class="prop">type</span>: <span class="type">String</span>,
+    <span class="prop">required</span>: [<span class="bool">true</span>, <span class="str">"Course name is required"</span>],
+    <span class="prop">trim</span>: <span class="bool">true</span>
+  },
+  <span class="prop">duration</span>: {
+    <span class="prop">type</span>: <span class="type">Number</span>,
+    <span class="prop">required</span>: [<span class="bool">true</span>, <span class="str">"Duration in months is required"</span>]
+  }
+}, {
+  <span class="prop">timestamps</span>: <span class="bool">true</span>
+});
+
+<span class="prop">module</span>.<span class="prop">exports</span> <span class="op">=</span> <span class="prop">mongoose</span>.<span class="fn">model</span>(<span class="str">"Course"</span>, <span class="prop">courseSchema</span>);</pre>
+          </div>
+
+          <div class="grid-3" style="margin-top: 0.5rem;">
+            <div class="card">
+              <div class="card-title" style="font-size: 0.9rem;"><span class="icon">🏷️</span> Model Name</div>
+              <p style="font-size: 0.8rem; color: var(--text-secondary);">Model name is <code style="font-family: var(--font-mono); color: var(--mongo-green);">"Course"</code>. MongoDB will automatically create the collection named <code style="font-family: var(--font-mono);">courses</code>.</p>
+            </div>
+            <div class="card">
+              <div class="card-title" style="font-size: 0.9rem;"><span class="icon">🔒</span> Validation</div>
+              <p style="font-size: 0.8rem; color: var(--text-secondary);">Course name and duration are required with clean error messages.</p>
+            </div>
+            <div class="card">
+              <div class="card-title" style="font-size: 0.9rem;"><span class="icon">🕒</span> Timestamps</div>
+              <p style="font-size: 0.8rem; color: var(--text-secondary);">Adds <code style="font-family: var(--font-mono);">createdAt</code> and <code style="font-family: var(--font-mono);">updatedAt</code> automatically.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 37 — STUDENT MODEL
+           ==================================================================== -->
+      <section class="slide" data-slide="37" id="slide-37">
+        <div class="slide-header">
+          <div class="slide-tag tag-blue">Project Implementation</div>
+          <h2 class="slide-title">The Complete Student Model</h2>
+          <p class="slide-subtitle">Combining both Day 5 topics: Schema Method + ObjectId Reference</p>
+        </div>
+
+        <div class="slide-content">
+          <div class="code-box">
+            <div class="code-header">
+              <div class="code-dots"><span class="code-dot red"></span><span class="code-dot yellow"></span><span class="code-dot green"></span></div>
+              <span class="code-title">src/models/Student.js</span>
+              <button class="copy-btn" onclick="Deck.copyCode(this)">Copy</button>
+            </div>
+            <pre class="code-content"><span class="kwd">const</span> <span class="prop">mongoose</span> <span class="op">=</span> <span class="fn">require</span>(<span class="str">"mongoose"</span>);
+
+<span class="comment">// 1. Schema definition with Course Reference</span>
+<span class="kwd">const</span> <span class="prop">studentSchema</span> <span class="op">=</span> <span class="kwd">new</span> <span class="prop">mongoose</span>.<span class="fn">Schema</span>({
+  <span class="prop">name</span>: {
+    <span class="prop">type</span>: <span class="type">String</span>,
+    <span class="prop">required</span>: [<span class="bool">true</span>, <span class="str">"Student name is required"</span>]
+  },
+  <span class="prop">email</span>: {
+    <span class="prop">type</span>: <span class="type">String</span>,
+    <span class="prop">required</span>: [<span class="bool">true</span>, <span class="str">"Email is required"</span>]
+  },
+  <span class="prop">course</span>: {
+    <span class="prop">type</span>: <span class="prop">mongoose</span>.<span class="prop">Schema</span>.<span class="prop">Types</span>.<span class="type">ObjectId</span>,
+    <span class="prop">ref</span>: <span class="str">"Course"</span>,                          <span class="comment">// 👈 Connects to Course model</span>
+    <span class="prop">required</span>: [<span class="bool">true</span>, <span class="str">"Course reference is required"</span>]
+  }
+});
+
+<span class="comment">// 2. Attach Custom Schema Method</span>
+<span class="prop">studentSchema</span>.<span class="prop">methods</span>.<span class="fn">getStudentInfo</span> <span class="op">=</span> <span class="kwd">function</span> () {
+  <span class="kwd">return</span> <span class="str">`${this.name} - ${this.email}`</span>;
+};
+
+<span class="prop">module</span>.<span class="prop">exports</span> <span class="op">=</span> <span class="prop">mongoose</span>.<span class="fn">model</span>(<span class="str">"Student"</span>, <span class="prop">studentSchema</span>);</pre>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 38 — COMPLETE PRACTICAL FLOW
+           ==================================================================== -->
+      <section class="slide" data-slide="38" id="slide-38">
+        <div class="slide-header">
+          <div class="slide-tag tag-blue">End-to-End Code</div>
+          <h2 class="slide-title">Complete Practical Flow: <code style="color: var(--mongo-green); font-family: var(--font-mono);">app.js</code></h2>
+          <p class="slide-subtitle">Connecting, creating, calling schema method, and populating the relationship</p>
+        </div>
+
+        <div class="slide-content">
+          <div class="code-box">
+            <div class="code-header">
+              <div class="code-dots"><span class="code-dot red"></span><span class="code-dot yellow"></span><span class="code-dot green"></span></div>
+              <span class="code-title">src/app.js</span>
+              <button class="copy-btn" onclick="Deck.copyCode(this)">Copy</button>
+            </div>
+            <pre class="code-content"><span class="kwd">const</span> <span class="prop">mongoose</span> <span class="op">=</span> <span class="fn">require</span>(<span class="str">"mongoose"</span>);
+<span class="kwd">const</span> <span class="prop">Course</span> <span class="op">=</span> <span class="fn">require</span>(<span class="str">"./models/Course"</span>);
+<span class="kwd">const</span> <span class="prop">Student</span> <span class="op">=</span> <span class="fn">require</span>(<span class="str">"./models/Student"</span>);
+
+<span class="kwd">async</span> <span class="kwd">function</span> <span class="fn">main</span>() {
+  <span class="kwd">try</span> {
+    <span class="kwd">await</span> <span class="prop">mongoose</span>.<span class="fn">connect</span>(<span class="str">"mongodb://127.0.0.1:27017/schoolDB"</span>);
+    <span class="fn">console</span>.<span class="fn">log</span>(<span class="str">"Connected to MongoDB"</span>);
+
+    <span class="comment">// 1. Create a Course</span>
+    <span class="kwd">const</span> <span class="prop">course</span> <span class="op">=</span> <span class="kwd">await</span> <span class="prop">Course</span>.<span class="fn">create</span>({ <span class="prop">name</span>: <span class="str">"MERN"</span>, <span class="prop">duration</span>: <span class="num">6</span> });
+
+    <span class="comment">// 2. Create Student with course._id</span>
+    <span class="kwd">const</span> <span class="prop">student</span> <span class="op">=</span> <span class="kwd">await</span> <span class="prop">Student</span>.<span class="fn">create</span>({
+      <span class="prop">name</span>: <span class="str">"Rahul"</span>,
+      <span class="prop">email</span>: <span class="str">"rahul@gmail.com"</span>,
+      <span class="prop">course</span>: <span class="prop">course</span>.<span class="prop">_id</span>
+    });
+
+    <span class="comment">// 3. Call Schema Method</span>
+    <span class="fn">console</span>.<span class="fn">log</span>(<span class="str">"Schema Method Output:"</span>, <span class="prop">student</span>.<span class="fn">getStudentInfo</span>());
+
+    <span class="comment">// 4. Query Student with populate("course")</span>
+    <span class="kwd">const</span> <span class="prop">result</span> <span class="op">=</span> <span class="kwd">await</span> <span class="prop">Student</span>.<span class="fn">findOne</span>({ <span class="prop">email</span>: <span class="str">"rahul@gmail.com"</span> }).<span class="fn">populate</span>(<span class="str">"course"</span>);
+    <span class="fn">console</span>.<span class="fn">log</span>(<span class="str">"Populated Student:"</span>, <span class="prop">result</span>);
+  } <span class="kwd">catch</span> (<span class="prop">error</span>) {
+    <span class="fn">console</span>.<span class="fn">error</span>(<span class="str">"Error:"</span>, <span class="prop">error</span>.<span class="prop">message</span>);
+  } <span class="kwd">finally</span> {
+    <span class="kwd">await</span> <span class="prop">mongoose</span>.<span class="fn">disconnect</span>();
+  }
+}
+<span class="fn">main</span>();</pre>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 39 — RELATIONSHIP VISUALIZATION
+           ==================================================================== -->
+      <section class="slide" data-slide="39" id="slide-39">
+        <div class="slide-header">
+          <div class="slide-tag tag-purple">Mental Model</div>
+          <h2 class="slide-title">Complete Relationship &amp; Populate Flow</h2>
+          <p class="slide-subtitle">The big picture of how Course, Student, and populate() interact</p>
+        </div>
+
+        <div class="slide-content">
+          <div class="rel-diagram-container" style="padding: 2rem;">
+            <div class="flex-col" style="align-items: center;">
+              <div class="rel-doc-box highlight" style="min-width: 250px;">
+                <div class="rel-doc-header">
+                  <span>COURSES COLLECTION</span>
+                </div>
+                <div class="rel-doc-row"><span class="key">_id:</span> <span class="val ref-id">101</span></div>
+                <div class="rel-doc-row"><span class="key">name:</span> <span class="val">"MERN"</span></div>
+                <div class="rel-doc-row"><span class="key">duration:</span> <span class="val">6 months</span></div>
+              </div>
+
+              <div style="color: var(--mongo-green); font-size: 1.5rem; margin: 0.5rem 0;">
+                &uarr;
+              </div>
+
+              <div class="rel-doc-box highlight" style="min-width: 250px;">
+                <div class="rel-doc-header">
+                  <span>STUDENTS COLLECTION</span>
+                </div>
+                <div class="rel-doc-row"><span class="key">_id:</span> <span class="val">201</span></div>
+                <div class="rel-doc-row"><span class="key">name:</span> <span class="val">"Rahul"</span></div>
+                <div class="rel-doc-row"><span class="key">course:</span> <span class="val ref-id">101 (ObjectId)</span></div>
+              </div>
+            </div>
+
+            <div style="display: flex; flex-direction: column; align-items: center; gap: 0.5rem;">
+              <div style="font-family: var(--font-mono); font-size: 0.85rem; color: var(--accent-cyan); font-weight: 700;">
+                .populate("course")
+              </div>
+              <div style="font-size: 2rem; color: var(--mongo-green);">&rarr;</div>
+            </div>
+
+            <div class="rel-doc-box" style="border-color: var(--mongo-green); box-shadow: 0 0 20px var(--mongo-green-glow); min-width: 280px;">
+              <div class="rel-doc-header" style="color: var(--mongo-green);">
+                <span>QUERY RESULT IN NODE.JS</span>
+              </div>
+              <div class="rel-doc-row"><span class="key">_id:</span> <span class="val">"201"</span></div>
+              <div class="rel-doc-row"><span class="key">name:</span> <span class="val">"Rahul"</span></div>
+              <div class="rel-doc-row" style="background: rgba(0, 237, 100, 0.08); padding: 0.5rem; border-radius: 4px; display: flex; flex-direction: column; align-items: flex-start; gap: 0.2rem; width: 100%;">
+                <span style="color: var(--mongo-green); font-weight: bold;">course: {</span>
+                <span style="padding-left: 0.75rem;"><span class="key">_id:</span> "101",</span>
+                <span style="padding-left: 0.75rem;"><span class="key">name:</span> "MERN",</span>
+                <span style="padding-left: 0.75rem;"><span class="key">duration:</span> 6</span>
+                <span style="color: var(--mongo-green); font-weight: bold;">}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 40 — COMMON MISTAKES
+           ==================================================================== -->
+      <section class="slide" data-slide="40" id="slide-40">
+        <div class="slide-header">
+          <div class="slide-tag tag-rose">Troubleshooting</div>
+          <h2 class="slide-title">Common Beginner Mistakes &amp; Fixes</h2>
+          <p class="slide-subtitle">Watch out for these 6 pitfalls when working with Mongoose methods &amp; relations</p>
+        </div>
+
+        <div class="slide-content">
+          <div class="grid-3">
+            <div class="card" style="border-color: var(--accent-rose-border);">
+              <div class="card-title" style="font-size: 0.92rem; color: var(--accent-rose);">
+                <span class="icon">1️⃣</span> Wrong `ref` Model Name
+              </div>
+              <p style="font-size: 0.8rem;">
+                Writing <code style="font-family: var(--font-mono); color: var(--accent-rose);">ref: "Courses"</code> when the model was registered as <code style="font-family: var(--font-mono); color: var(--mongo-green);">mongoose.model("Course", ...)</code>.
+              </p>
+              <div class="card-footer-tip" style="color: var(--mongo-green);">
+                Fix: Match the exact singular model name string!
+              </div>
+            </div>
+
+            <div class="card" style="border-color: var(--accent-rose-border);">
+              <div class="card-title" style="font-size: 0.92rem; color: var(--accent-rose);">
+                <span class="icon">2️⃣</span> Forgetting `.populate()`
+              </div>
+              <p style="font-size: 0.8rem;">
+                Expecting <code style="font-family: var(--font-mono);">student.course.name</code> to exist without calling <code style="font-family: var(--font-mono); color: var(--mongo-green);">.populate("course")</code> first.
+              </p>
+              <div class="card-footer-tip" style="color: var(--mongo-green);">
+                Fix: Add .populate("course") to your query!
+              </div>
+            </div>
+
+            <div class="card" style="border-color: var(--accent-rose-border);">
+              <div class="card-title" style="font-size: 0.92rem; color: var(--accent-rose);">
+                <span class="icon">3️⃣</span> Arrow Functions for Methods
+              </div>
+              <p style="font-size: 0.8rem;">
+                Using <code style="font-family: var(--font-mono); color: var(--accent-rose);">methods.getDetails = () => {}</code> causes <code style="font-family: var(--font-mono); color: var(--accent-amber);">this</code> to be undefined.
+              </p>
+              <div class="card-footer-tip" style="color: var(--mongo-green);">
+                Fix: Always use standard function () {}!
+              </div>
+            </div>
+
+            <div class="card" style="border-color: var(--accent-rose-border);">
+              <div class="card-title" style="font-size: 0.92rem; color: var(--accent-rose);">
+                <span class="icon">4️⃣</span> Storing Wrong ObjectId
+              </div>
+              <p style="font-size: 0.8rem;">
+                Passing a random string or the entire course object into the field instead of <code style="font-family: var(--font-mono); color: var(--mongo-green);">course._id</code>.
+              </p>
+              <div class="card-footer-tip" style="color: var(--mongo-green);">
+                Fix: Pass course._id when creating children!
+              </div>
+            </div>
+
+            <div class="card" style="border-color: var(--accent-rose-border);">
+              <div class="card-title" style="font-size: 0.92rem; color: var(--accent-rose);">
+                <span class="icon">5️⃣</span> Over-Embedding Shared Data
+              </div>
+              <p style="font-size: 0.8rem;">
+                Embedding the entire course object into 500 students, causing massive data redundancy and painful updates.
+              </p>
+              <div class="card-footer-tip" style="color: var(--mongo-green);">
+                Fix: Use referencing for shared entities!
+              </div>
+            </div>
+
+            <div class="card" style="border-color: var(--accent-rose-border);">
+              <div class="card-title" style="font-size: 0.92rem; color: var(--accent-rose);">
+                <span class="icon">6️⃣</span> Populating Wrong Field
+              </div>
+              <p style="font-size: 0.8rem;">
+                Calling <code style="font-family: var(--font-mono); color: var(--accent-rose);">.populate("Course")</code> instead of the property name <code style="font-family: var(--font-mono); color: var(--mongo-green);">.populate("course")</code>.
+              </p>
+              <div class="card-footer-tip" style="color: var(--mongo-green);">
+                Fix: Pass the schema property key string!
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 41 — PRACTICAL ASSIGNMENT
+           ==================================================================== -->
+      <section class="slide" data-slide="41" id="slide-41">
+        <div class="slide-header">
+          <div class="slide-tag tag-amber">Hands-On Lab</div>
+          <h2 class="slide-title">Practical Classroom Assignment</h2>
+          <p class="slide-subtitle">Student &amp; Course Relationship: Build and execute this step-by-step</p>
+        </div>
+
+        <div class="slide-content">
+          <div class="grid-2">
+            <div class="card card-highlight">
+              <div class="card-title"><span class="icon">📋</span> Models to Build</div>
+              
+              <div style="font-size: 0.82rem; display: flex; flex-direction: column; gap: 0.5rem;">
+                <div>
+                  <strong style="color: var(--mongo-green);">Course Model:</strong>
+                  <ul style="padding-left: 1.2rem; color: var(--text-secondary); margin-top: 2px;">
+                    <li><code style="font-family: var(--font-mono);">name</code> (String, required)</li>
+                    <li><code style="font-family: var(--font-mono);">duration</code> (Number, required)</li>
+                    <li><code style="font-family: var(--font-mono);">fee</code> (Number, required)</li>
+                  </ul>
+                </div>
+
+                <div style="border-top: 1px solid var(--border-subtle); padding-top: 0.4rem;">
+                  <strong style="color: var(--accent-cyan);">Student Model:</strong>
+                  <ul style="padding-left: 1.2rem; color: var(--text-secondary); margin-top: 2px;">
+                    <li><code style="font-family: var(--font-mono);">name</code> (String, required)</li>
+                    <li><code style="font-family: var(--font-mono);">email</code> (String, required)</li>
+                    <li><code style="font-family: var(--font-mono);">age</code> (Number)</li>
+                    <li><code style="font-family: var(--font-mono);">course</code> (ObjectId, ref: "Course", required)</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-title"><span class="icon">🎯</span> Tasks to Complete</div>
+              <ol style="padding-left: 1.2rem; display: flex; flex-direction: column; gap: 0.45rem; font-size: 0.82rem; color: var(--text-secondary);">
+                <li>Create 3 courses: <em>MERN (6 mo), Python (4 mo), DevOps (5 mo)</em></li>
+                <li>Create 5 students and assign them to courses using <code style="font-family: var(--font-mono);">course._id</code></li>
+                <li>Write a schema method <code style="font-family: var(--font-mono); color: var(--mongo-green);">getStudentInfo()</code> that returns <code style="font-family: var(--font-mono);">`${this.name} (${this.email})`</code></li>
+                <li>Call the schema method on a student and log the result</li>
+                <li>Query all students and retrieve full course details using <code style="font-family: var(--font-mono); color: var(--accent-cyan);">.populate("course")</code></li>
+                <li>Query students populating only course <code style="font-family: var(--font-mono);">name</code> and <code style="font-family: var(--font-mono);">duration</code></li>
+              </ol>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 42 — FINAL CHEAT SHEET
+           ==================================================================== -->
+      <section class="slide" data-slide="42" id="slide-42">
+        <div class="slide-header">
+          <div class="slide-tag tag-blue">Quick Reference</div>
+          <h2 class="slide-title">Day 5 Syntax Cheat Sheet</h2>
+          <p class="slide-subtitle">Copy-paste reference for all schema methods and relationship commands</p>
+        </div>
+
+        <div class="slide-content">
+          <div class="grid-2">
+            <div class="card">
+              <div class="card-title" style="color: var(--mongo-green);"><span class="icon">⚡</span> 1. Schema Method</div>
+              <div class="code-box">
+                <pre class="code-content"><span class="comment">// Define:</span>
+<span class="prop">schema</span>.<span class="prop">methods</span>.<span class="fn">methodName</span> <span class="op">=</span> <span class="kwd">function</span> () {
+  <span class="kwd">return</span> <span class="kwd">this</span>.<span class="prop">field</span>;
+};
+
+<span class="comment">// Call on document:</span>
+<span class="prop">doc</span>.<span class="fn">methodName</span>();</pre>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-title" style="color: var(--accent-amber);"><span class="icon">🔗</span> 2. ObjectId Reference</div>
+              <div class="code-box">
+                <pre class="code-content"><span class="comment">// In child schema:</span>
+<span class="prop">course</span>: {
+  <span class="prop">type</span>: <span class="prop">mongoose</span>.<span class="prop">Schema</span>.<span class="prop">Types</span>.<span class="type">ObjectId</span>,
+  <span class="prop">ref</span>: <span class="str">"Course"</span>
+}</pre>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-title" style="color: var(--accent-cyan);"><span class="icon">🚀</span> 3. Basic Populate</div>
+              <div class="code-box">
+                <pre class="code-content"><span class="comment">// Replace ID with document:</span>
+<span class="kwd">await</span> <span class="prop">Student</span>.<span class="fn">find</span>().<span class="fn">populate</span>(<span class="str">"course"</span>);</pre>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-title" style="color: var(--accent-purple);"><span class="icon">🎯</span> 4. Populate with Field Select</div>
+              <div class="code-box">
+                <pre class="code-content"><span class="comment">// Return only name and duration:</span>
+<span class="kwd">await</span> <span class="prop">Student</span>.<span class="fn">find</span>().<span class="fn">populate</span>(<span class="str">"course"</span>, <span class="str">"name duration"</span>);</pre>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 43 — FINAL CONCEPT MAP & TAKEAWAYS
+           ==================================================================== -->
+      <section class="slide" data-slide="43" id="slide-43">
+        <div class="slide-header">
+          <div class="slide-tag tag-blue">Grand Summary</div>
+          <h2 class="slide-title">Final Concept Map &amp; Core Takeaway</h2>
+          <p class="slide-subtitle">The complete mental model connecting every concept learned in Day 5</p>
+        </div>
+
+        <div class="slide-content" style="align-items: center;">
+          <div class="tree-visual" style="max-width: 650px; width: 100%; text-align: center; font-size: 0.95rem; line-height: 1.8;">
+            <div style="font-size: 1.2rem; font-weight: 800; color: var(--mongo-green);">MONGOOSE</div>
+            <div style="color: var(--text-dim);">│</div>
+            <div style="display: flex; justify-content: space-around;">
+              <div>
+                <div style="color: var(--accent-cyan); font-weight: 700;">⚡ Schema Methods</div>
+                <div style="font-size: 0.78rem; color: var(--text-muted);">&darr;</div>
+                <div style="font-size: 0.78rem; color: var(--text-secondary);">Custom instance functions</div>
+                <div style="font-size: 0.78rem; color: var(--text-secondary);">Encapsulated business logic</div>
+              </div>
+
+              <div>
+                <div style="color: var(--accent-amber); font-weight: 700;">🔗 Relationships</div>
+                <div style="font-size: 0.78rem; color: var(--text-muted);">&darr;</div>
+                <div style="display: flex; gap: 1rem; font-size: 0.78rem;">
+                  <div>
+                    <span style="color: var(--text-primary); font-weight: 600;">Embedding</span><br>
+                    <span style="color: var(--text-muted);">Nested in document</span>
+                  </div>
+                  <div>
+                    <span style="color: var(--mongo-green); font-weight: 600;">Referencing</span><br>
+                    <span style="color: var(--accent-cyan);">ref</span> &rarr; <span style="color: var(--mongo-green);">populate()</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="callout card-highlight" style="max-width: 650px; text-align: center; margin-top: 1rem; font-size: 1.05rem;">
+            <div>
+              <strong>🎓 Master Rule of Day 5:</strong><br>
+              <em>"Schema Methods add <strong>behavior</strong> to documents.<br>
+              Relationships <strong>connect</strong> documents.<br>
+              <code style="color: var(--mongo-green); font-family: var(--font-mono);">populate()</code> helps retrieve referenced documents."</em>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- Bottom Footer Controls Bar -->
+    <footer class="bottom-footer">
+      <div class="footer-left">
+        <div class="slide-counter">
+          <span>Slide</span>
+          <span class="current-num" id="currentSlideNum">1</span>
+          <span class="total-num">/ <span id="totalSlidesNum">43</span></span>
+        </div>
+      </div>
+
+      <div class="footer-center">
+        <button class="nav-btn" id="prevBtn" onclick="Deck.prevSlide()" title="Previous Slide (Left Arrow)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="15 18 9 12 15 6"></polyline>
+          </svg>
+          Previous
+        </button>
+
+        <button class="nav-btn primary-nav" id="nextBtn" onclick="Deck.nextSlide()" title="Next Slide (Right Arrow or Space)">
+          Next
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="9 18 15 12 9 6"></polyline>
+          </svg>
+        </button>
+      </div>
+
+      <div class="footer-right">
+        <span class="nav-hint">
+          Navigate: <kbd>&larr;</kbd> <kbd>&rarr;</kbd> or <kbd>Space</kbd>
+        </span>
+      </div>
+    </footer>
+
+    <!-- ====================================================================
+         INTERACTIVE RELATIONSHIP SIMULATOR MODAL (Quick S)
+         ==================================================================== -->
+    <div class="modal-backdrop" id="simModal">
+      <div class="modal-window" style="max-width: 920px;">
+        <div class="modal-header">
+          <div class="modal-title">
+            <span style="color: var(--mongo-green);">⚡</span>
+            Interactive Mongoose Schema Methods &amp; Relationships Simulator
+          </div>
+          <button class="close-modal-btn" onclick="Deck.closeModal('simModal')">
+            <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none">
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+          </button>
+        </div>
+
+        <div class="sim-banner">
+          <span>⚠️ <strong>Classroom Simulation:</strong> Runs entirely in your browser using JavaScript memory. Demonstrates ObjectId referencing, schema methods, and populate().</span>
+          <span id="simStatusBadge">Ready</span>
+        </div>
+
+        <div class="sim-controls">
+          <button class="sim-btn btn-green" onclick="Sim.createCourse()">
+            <span>1️⃣</span> Create Course (MERN)
+          </button>
+          <button class="sim-btn btn-blue" onclick="Sim.createStudent()">
+            <span>2️⃣</span> Create Student (Rahul)
+          </button>
+          <button class="sim-btn btn-amber" onclick="Sim.runSchemaMethod()">
+            <span>3️⃣</span> student.getStudentInfo()
+          </button>
+          <button class="sim-btn btn-purple" onclick="Sim.queryWithoutPopulate()">
+            <span>4️⃣</span> Find (No populate)
+          </button>
+          <button class="sim-btn btn-green" onclick="Sim.queryWithPopulate()">
+            <span>5️⃣</span> Find .populate("course")
+          </button>
+          <button class="sim-btn btn-reset" onclick="Sim.reset()">
+            <span>🔄</span> Reset
+          </button>
+        </div>
+
+        <div class="sim-body">
+          <!-- Left Pane: Database Collections -->
+          <div class="sim-pane">
+            <div class="sim-pane-header">
+              <span>Simulated Database Collections</span>
+              <span id="simCounts">Courses: 0 | Students: 0</span>
+            </div>
+
+            <div style="font-size: 0.72rem; color: var(--text-muted); text-transform: uppercase; font-family: var(--font-mono); margin-top: 0.25rem;">
+              courses collection:
+            </div>
+            <div id="simCoursesList" style="display: flex; flex-direction: column; gap: 0.4rem; min-height: 50px;">
+              <div style="font-size: 0.75rem; color: var(--text-dim); font-style: italic;">No courses created yet. Click button 1.</div>
+            </div>
+
+            <div style="font-size: 0.72rem; color: var(--text-muted); text-transform: uppercase; font-family: var(--font-mono); margin-top: 0.5rem;">
+              students collection:
+            </div>
+            <div id="simStudentsList" style="display: flex; flex-direction: column; gap: 0.4rem; min-height: 50px;">
+              <div style="font-size: 0.75rem; color: var(--text-dim); font-style: italic;">No students created yet. Click button 2.</div>
+            </div>
+          </div>
+
+          <!-- Right Pane: Code & Results -->
+          <div class="sim-pane" style="background: var(--bg-surface);">
+            <div class="sim-pane-header">
+              <span>Executed Mongoose Operation</span>
+              <span style="color: var(--mongo-green);">Live Output</span>
+            </div>
+
+            <div id="simCodeDisplay" style="font-family: var(--font-mono); font-size: 0.75rem; line-height: 1.45; color: #38BDF8; background: #020508; padding: 0.65rem; border-radius: var(--radius-sm); border: 1px solid var(--border-subtle); max-height: 90px; overflow-y: auto;">
+// Click a simulation button above to begin...
+            </div>
+
+            <div class="sim-pane-header" style="margin-top: 0.25rem;">
+              <span style="color: var(--mongo-green);">Operation Result</span>
+            </div>
+            <div id="simResultDisplay" style="font-family: var(--font-mono); font-size: 0.75rem; line-height: 1.45; color: #94A3B8; background: #020508; padding: 0.75rem; border-radius: var(--radius-sm); border: 1px solid var(--border-subtle); flex: 1; overflow-y: auto; max-height: 140px;">
+Waiting for action...
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ====================================================================
+         KEYBOARD SHORTCUTS HELP MODAL (?)
+         ==================================================================== -->
+    <div class="modal-backdrop" id="shortcutsModal">
+      <div class="modal-window" style="max-width: 500px;">
+        <div class="modal-header">
+          <div class="modal-title">
+            <span>⌨️</span> Keyboard Shortcuts
+          </div>
+          <button class="close-modal-btn" onclick="Deck.closeModal('shortcutsModal')">
+            <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none">
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+          </button>
+        </div>
+        <div class="modal-content">
+          <div style="display: flex; flex-direction: column; gap: 0.75rem; font-size: 0.85rem;">
+            <div style="display: flex; justify-content: space-between; align-items: center; padding-bottom: 0.5rem; border-bottom: 1px solid var(--border-subtle);">
+              <span>Next Slide</span>
+              <span><kbd class="header-btn">Right Arrow</kbd> or <kbd class="header-btn">Space</kbd></span>
+            </div>
+            <div style="display: flex; justify-content: space-between; align-items: center; padding-bottom: 0.5rem; border-bottom: 1px solid var(--border-subtle);">
+              <span>Previous Slide</span>
+              <span><kbd class="header-btn">Left Arrow</kbd></span>
+            </div>
+            <div style="display: flex; justify-content: space-between; align-items: center; padding-bottom: 0.5rem; border-bottom: 1px solid var(--border-subtle);">
+              <span>First Slide (Title)</span>
+              <span><kbd class="header-btn">Home</kbd></span>
+            </div>
+            <div style="display: flex; justify-content: space-between; align-items: center; padding-bottom: 0.5rem; border-bottom: 1px solid var(--border-subtle);">
+              <span>Last Slide (Summary)</span>
+              <span><kbd class="header-btn">End</kbd></span>
+            </div>
+            <div style="display: flex; justify-content: space-between; align-items: center; padding-bottom: 0.5rem; border-bottom: 1px solid var(--border-subtle);">
+              <span>Toggle Fullscreen</span>
+              <span><kbd class="header-btn">F</kbd></span>
+            </div>
+            <div style="display: flex; justify-content: space-between; align-items: center; padding-bottom: 0.5rem; border-bottom: 1px solid var(--border-subtle);">
+              <span>Toggle Simulator</span>
+              <span><kbd class="header-btn">S</kbd></span>
+            </div>
+            <div style="display: flex; justify-content: space-between; align-items: center; padding-bottom: 0.5rem; border-bottom: 1px solid var(--border-subtle);">
+              <span>Toggle Slide Index</span>
+              <span><kbd class="header-btn">T</kbd></span>
+            </div>
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <span>Close Any Modal</span>
+              <span><kbd class="header-btn">Esc</kbd></span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ====================================================================
+         TABLE OF CONTENTS DRAWER (T)
+         ==================================================================== -->
+    <div class="drawer-backdrop" id="drawerBackdrop" onclick="Deck.closeDrawer()"></div>
+    <div class="drawer" id="tocDrawer">
+      <div class="drawer-header">
+        <span style="font-weight: 700; font-size: 0.95rem; display: flex; align-items: center; gap: 0.4rem;">
+          <span style="color: var(--mongo-green);">📑</span> Slide Index (43 Slides)
+        </span>
+        <button class="close-modal-btn" onclick="Deck.closeDrawer()">
+          <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+
+      <ul class="drawer-list" id="drawerList">
+        <!-- Dynamically populated by JavaScript for all 43 slides -->
+      </ul>
+    </div>
+
+    <!-- Toast Notification Container -->
+    <div class="toast-container" id="toastContainer"></div>
+
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
