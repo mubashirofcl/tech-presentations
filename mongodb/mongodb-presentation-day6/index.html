@@ -1,0 +1,2774 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MongoDB Day 6 — Mongoose Middleware: Pre/Post Hooks, Validation &amp; Timestamps</title>
+  <meta name="description" content="Complete educational presentation on Mongoose Middleware: Pre Hooks, Post Hooks, Validation Middleware, and Timestamps with a practical Student Management example.">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Master App Shell -->
+  <div class="deck-container" id="deckContainer">
+
+    <!-- Top Progress Bar -->
+    <div class="progress-bar-container">
+      <div class="progress-bar" id="progressBar"></div>
+    </div>
+
+    <!-- Top Header Bar -->
+    <header class="top-header">
+      <div class="header-left">
+        <div class="brand-badge">
+          <svg viewBox="0 0 24 24">
+            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/>
+          </svg>
+          MongoDB Day 6
+        </div>
+        <div class="deck-title-badge">
+          <span>Mongoose Middleware</span>
+          <span class="dot"></span>
+          <span class="deck-topic" id="headerTopic">Pre/Post Hooks • Validation • Timestamps</span>
+        </div>
+      </div>
+
+      <div class="header-right">
+        <!-- Table of Contents Drawer Button -->
+        <button class="header-btn" id="openTocBtn" title="View All 40 Slides (T)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="3" y1="12" x2="21" y2="12"></line>
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <line x1="3" y1="18" x2="21" y2="18"></line>
+          </svg>
+          Index
+          <kbd>T</kbd>
+        </button>
+
+        <!-- Keyboard Shortcuts Help -->
+        <button class="header-btn" id="openShortcutsBtn" title="Keyboard Shortcuts (?)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"></circle>
+            <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+            <line x1="12" y1="17" x2="12.01" y2="17"></line>
+          </svg>
+          <kbd>?</kbd>
+        </button>
+
+        <!-- Fullscreen Button -->
+        <button class="header-btn" id="fullscreenBtn" title="Toggle Fullscreen (F)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path>
+          </svg>
+          <kbd>F</kbd>
+        </button>
+      </div>
+    </header>
+
+    <!-- Slide Viewport -->
+    <main class="slide-viewport">
+
+      <!-- ====================================================================
+           SLIDE 1 — TITLE
+           ==================================================================== -->
+      <section class="slide active" data-slide="1" id="slide-1">
+        <div class="slide-content" style="justify-content: center; align-items: center; text-align: center; max-width: 860px; margin: 0 auto;">
+          <div class="slide-tag" style="margin-bottom: 0.5rem;">MongoDB Course • Day 6</div>
+          <h1 class="slide-title" style="font-size: 2.8rem; margin-bottom: 0.5rem; letter-spacing: -0.03em;">
+            Mongoose Middleware
+          </h1>
+          <h2 style="font-size: 1.8rem; color: var(--mongo-green); font-weight: 700; margin-bottom: 1rem;">
+            Pre/Post Hooks, Validation Middleware &amp; Timestamps
+          </h2>
+          <p style="font-size: 1.15rem; color: var(--text-secondary); max-width: 620px; margin-bottom: 2rem;">
+            A practical, classroom-focused guide to intercepting database operations, enforcing custom validation rules, and automatically auditing records.
+          </p>
+
+          <div style="display: flex; gap: 1rem; margin-bottom: 2.5rem; flex-wrap: wrap; justify-content: center;">
+            <div style="padding: 0.6rem 1.2rem; background: rgba(0, 237, 100, 0.1); border: 1px solid var(--mongo-green-border); border-radius: var(--radius-sm); font-family: var(--font-mono); font-size: 0.85rem; color: var(--mongo-green);">
+              <strong>⚡</strong> Pre Hooks
+            </div>
+            <div style="padding: 0.6rem 1.2rem; background: var(--accent-cyan-bg); border: 1px solid var(--accent-cyan-border); border-radius: var(--radius-sm); font-family: var(--font-mono); font-size: 0.85rem; color: var(--accent-cyan);">
+              <strong>🔄</strong> Post Hooks
+            </div>
+            <div style="padding: 0.6rem 1.2rem; background: var(--accent-amber-bg); border: 1px solid var(--accent-amber-border); border-radius: var(--radius-sm); font-family: var(--font-mono); font-size: 0.85rem; color: var(--accent-amber);">
+              <strong>🛡️</strong> Validation Middleware
+            </div>
+            <div style="padding: 0.6rem 1.2rem; background: var(--accent-purple-bg); border: 1px solid var(--accent-purple-border); border-radius: var(--radius-sm); font-family: var(--font-mono); font-size: 0.85rem; color: var(--accent-purple);">
+              <strong>⏱️</strong> Timestamps
+            </div>
+          </div>
+
+          <div class="callout" style="max-width: 650px; text-align: left;">
+            <span class="callout-icon">💡</span>
+            <div>
+              <strong>Classroom Context:</strong> Today we tie these three powerful concepts together using one simple, realistic <strong>Student</strong> model. No confusing advanced plugins or aggregation—just clean, practical Mongoose mechanics.
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 2 — LEARNING OBJECTIVES
+           ==================================================================== -->
+      <section class="slide" data-slide="2" id="slide-2">
+        <div class="slide-header">
+          <div class="slide-tag tag-blue">Roadmap</div>
+          <h1 class="slide-title">Learning Objectives</h1>
+          <p class="slide-subtitle">What you will understand and build by the end of this session</p>
+        </div>
+        <div class="slide-content">
+          <div class="grid-2">
+            <div class="card card-highlight">
+              <div class="card-title"><span class="icon">🧩</span> 1. Middleware Fundamentals</div>
+              <p>Understand what Mongoose middleware is and how functions intercept the document lifecycle before and after database actions.</p>
+              <div class="card-footer-tip"><strong>Core:</strong> Application &rarr; Middleware &rarr; MongoDB</div>
+            </div>
+            <div class="card card-highlight">
+              <div class="card-title"><span class="icon">⚡</span> 2. Pre Hooks &amp; Document Context</div>
+              <p>Learn how <code class="prop">schema.pre("save")</code> runs prior to persistence, how to access document data via <code class="kwd">this</code>, and why <code class="fn">next()</code> is required.</p>
+              <div class="card-footer-tip"><strong>Syntax:</strong> schema.pre("save", function(next) { ... })</div>
+            </div>
+            <div class="card card-highlight-blue">
+              <div class="card-title"><span class="icon">🔄</span> 3. Post Hooks &amp; Saved Data</div>
+              <p>Discover how <code class="prop">schema.post("save")</code> reacts to successful operations, receiving the newly saved <code class="prop">doc</code> object for logging.</p>
+              <div class="card-footer-tip"><strong>Syntax:</strong> schema.post("save", function(doc) { ... })</div>
+            </div>
+            <div class="card card-highlight-amber">
+              <div class="card-title"><span class="icon">🛡️</span> 4. Custom Validation &amp; Error Gates</div>
+              <p>Use pre-save hooks to enforce custom business rules (like mark range checks) and abort invalid operations with <code class="kwd">next(new Error(...))</code>.</p>
+              <div class="card-footer-tip"><strong>Safe:</strong> Halts invalid saves before MongoDB touches data</div>
+            </div>
+            <div class="card card-highlight-purple" style="grid-column: span 2;">
+              <div class="card-title"><span class="icon">⏱️</span> 5. Automatic Auditing with Timestamps</div>
+              <p>Enable <code class="prop">{ timestamps: true }</code> to let Mongoose automatically create and manage immutable <code class="prop">createdAt</code> and updating <code class="prop">updatedAt</code> fields.</p>
+              <div class="card-footer-tip"><strong>Outcome:</strong> Combine Schema + Pre Hook + Post Hook + Validation + Timestamps in one Mini Project!</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SECTION 1 — INTRODUCTION
+           SLIDE 3 — What Is Mongoose Middleware?
+           ==================================================================== -->
+      <section class="slide" data-slide="3" id="slide-3">
+        <div class="slide-header">
+          <div class="slide-tag">Section 1 — Introduction</div>
+          <h1 class="slide-title">What Is Mongoose Middleware?</h1>
+          <p class="slide-subtitle">Functions that run at specified interception points during a Mongoose operation</p>
+        </div>
+        <div class="slide-content">
+          <div class="grid-split-left-wide">
+            <div class="flex-col">
+              <div class="card">
+                <div class="card-title"><span class="icon">💡</span> The Core Idea</div>
+                <p>
+                  Middleware (also called <strong>hooks</strong>) are functions that are passed control during execution of asynchronous Mongoose functions.
+                </p>
+                <p>
+                  Instead of saving raw data directly to MongoDB, middleware lets you inspect, transform, validate, or log data on its way in or out.
+                </p>
+              </div>
+
+              <div class="card">
+                <div class="card-title"><span class="icon">🛠️</span> Common Use Cases for Middleware</div>
+                <ul style="list-style: none; display: flex; flex-direction: column; gap: 0.5rem; font-size: 0.88rem; color: var(--text-secondary);">
+                  <li><strong style="color: var(--mongo-green);">✓ Data Validation:</strong> Enforce multi-field or complex custom constraints</li>
+                  <li><strong style="color: var(--mongo-green);">✓ Data Sanitization:</strong> Automatically trim spaces, format phone numbers, or lowercase emails</li>
+                  <li><strong style="color: var(--mongo-green);">✓ Logging &amp; Auditing:</strong> Log when records are created, updated, or removed</li>
+                  <li><strong style="color: var(--mongo-green);">✓ Data Preparation:</strong> Calculate derived fields or default states</li>
+                  <li><strong style="color: var(--mongo-green);">✓ Cleanup Operations:</strong> Remove associated child records when a parent is deleted</li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="card card-highlight flex-col" style="justify-content: center; align-items: center; text-align: center;">
+              <h3 style="font-size: 1.1rem; color: var(--mongo-green); margin-bottom: 0.5rem;">The Architecture Flow</h3>
+              <div class="flow-vertical" style="width: 100%;">
+                <div class="flow-step-v">
+                  <span>Application</span>
+                  <span style="color: var(--accent-cyan); font-size: 0.75rem;">student.save()</span>
+                </div>
+                <div class="flow-arrow-v">↓</div>
+                <div class="flow-step-v">
+                  <span>Mongoose Operation</span>
+                  <span style="color: var(--accent-amber); font-size: 0.75rem;">Document Engine</span>
+                </div>
+                <div class="flow-arrow-v">↓</div>
+                <div class="flow-step-v highlight-step">
+                  <span style="color: var(--mongo-green); font-weight: 700;">Middleware</span>
+                  <span style="color: var(--mongo-green); font-size: 0.75rem;">Pre / Post Hooks</span>
+                </div>
+                <div class="flow-arrow-v">↓</div>
+                <div class="flow-step-v">
+                  <span>MongoDB Database</span>
+                  <span style="color: var(--text-muted); font-size: 0.75rem;">BSON Storage</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SECTION 2 — PRE HOOKS
+           SLIDE 4 — What Is a Pre Hook?
+           ==================================================================== -->
+      <section class="slide" data-slide="4" id="slide-4">
+        <div class="slide-header">
+          <div class="slide-tag">Section 2 — Pre Hooks</div>
+          <h1 class="slide-title">What Is a Pre Hook?</h1>
+          <p class="slide-subtitle">A middleware function that executes BEFORE a Mongoose operation completes</p>
+        </div>
+        <div class="slide-content">
+          <div class="grid-2">
+            <div class="flex-col">
+              <div class="card">
+                <div class="card-title"><span class="icon">⚡</span> Execution Timing: Before Save</div>
+                <p>
+                  A <strong>pre hook</strong> intercepts the operation right after you call a Mongoose method like <code class="prop">.save()</code>, but <strong>before</strong> any data is written to MongoDB.
+                </p>
+                <p>
+                  This gives you the perfect opportunity to verify the data, modify field values, or cancel the save if rules are violated.
+                </p>
+              </div>
+
+              <div class="card card-highlight">
+                <div class="card-title"><span class="icon">📍</span> The Execution Flow</div>
+                <div class="flow-container" style="padding: 0.5rem 0;">
+                  <div class="flow-node">
+                    <span class="flow-node-title">Student.save()</span>
+                    <span class="flow-node-desc">Triggered in app</span>
+                  </div>
+                  <div class="flow-arrow">&rarr;</div>
+                  <div class="flow-node active-node">
+                    <span class="flow-node-title" style="color: var(--mongo-green);">pre("save")</span>
+                    <span class="flow-node-desc">Runs custom logic</span>
+                  </div>
+                  <div class="flow-arrow">&rarr;</div>
+                  <div class="flow-node">
+                    <span class="flow-node-title">MongoDB Save</span>
+                    <span class="flow-node-desc">Data stored</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="code-box">
+              <div class="code-header">
+                <div class="code-dots">
+                  <div class="code-dot red"></div>
+                  <div class="code-dot yellow"></div>
+                  <div class="code-dot green"></div>
+                </div>
+                <span class="code-title">Student.js — Simple Pre Hook</span>
+                <button class="copy-btn">
+                  <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                  </svg>
+                  Copy
+                </button>
+              </div>
+              <pre class="code-content"><span class="comment">// 1. Define schema</span>
+<span class="kwd">const</span> <span class="prop">studentSchema</span> = <span class="kwd">new</span> <span class="type">mongoose.Schema</span>({
+  <span class="prop">name</span>: <span class="type">String</span>,
+  <span class="prop">email</span>: <span class="type">String</span>
+});
+
+<span class="comment">// 2. Attach pre hook BEFORE compiling model</span>
+<span class="prop">studentSchema</span>.<span class="fn">pre</span>(<span class="str">"save"</span>, <span class="kwd">function</span>(<span class="prop">next</span>) {
+  <span class="fn">console</span>.<span class="fn">log</span>(<span class="str">"Before saving student..."</span>);
+
+  <span class="comment">// Must call next() to let Mongoose proceed!</span>
+  <span class="fn">next</span>();
+});
+
+<span class="comment">// 3. Compile model</span>
+<span class="kwd">const</span> <span class="type">Student</span> = <span class="prop">mongoose</span>.<span class="fn">model</span>(<span class="str">"Student"</span>, <span class="prop">studentSchema</span>);</pre>
+              <div class="terminal-output">
+                <span class="out-info">Console output when student.save() is called:</span><br>
+                <span class="out-success">&gt; Before saving student...</span><br>
+                <span class="out-info">&gt; Document persisted to MongoDB.</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 5 — Understanding pre()
+           ==================================================================== -->
+      <section class="slide" data-slide="5" id="slide-5">
+        <div class="slide-header">
+          <div class="slide-tag">Section 2 — Pre Hooks</div>
+          <h1 class="slide-title">Understanding pre() Syntax</h1>
+          <p class="slide-subtitle">Breaking down the three vital components of a pre-hook definition</p>
+        </div>
+        <div class="slide-content">
+          <div class="code-box">
+            <div class="code-header">
+              <div class="code-dots">
+                <div class="code-dot red"></div>
+                <div class="code-dot yellow"></div>
+                <div class="code-dot green"></div>
+              </div>
+              <span class="code-title">General Syntax</span>
+              <button class="copy-btn">
+                <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2">
+                  <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                  <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                </svg>
+                Copy
+              </button>
+            </div>
+            <pre class="code-content"><span class="prop">schema</span>.<span class="fn">pre</span>(<span class="str">"operation"</span>, <span class="kwd">function</span>(<span class="prop">next</span>) {
+  <span class="comment">// 1. Custom logic goes here</span>
+  <span class="fn">console</span>.<span class="fn">log</span>(<span class="str">"Saving..."</span>);
+
+  <span class="comment">// 2. Pass control to the next middleware in the queue</span>
+  <span class="fn">next</span>();
+});</pre>
+          </div>
+
+          <div class="grid-3">
+            <div class="card card-highlight">
+              <div class="card-title">
+                <span style="color: var(--syn-str); font-family: var(--font-mono);">"save"</span>
+              </div>
+              <p><strong>Operation Being Monitored:</strong> Specifies which Mongoose lifecycle event triggers this hook. In beginner Mongoose, we focus primarily on <code class="str">"save"</code>.</p>
+              <div class="card-footer-tip"><strong>Target:</strong> Document persistence</div>
+            </div>
+
+            <div class="card card-highlight-blue">
+              <div class="card-title">
+                <span style="color: var(--syn-kwd); font-family: var(--font-mono);">function(next)</span>
+              </div>
+              <p><strong>Middleware Function:</strong> The function that executes. Uses a traditional <code class="kwd">function</code> keyword so <code class="prop">this</code> points to the document being saved.</p>
+              <div class="card-footer-tip"><strong>Context:</strong> Accesses this.name, this.mark</div>
+            </div>
+
+            <div class="card card-highlight-amber">
+              <div class="card-title">
+                <span style="color: var(--syn-fn); font-family: var(--font-mono);">next()</span>
+              </div>
+              <p><strong>The Gateway Callback:</strong> Tells Mongoose that this hook has finished. If you forget to invoke <code class="fn">next()</code>, the request will hang indefinitely!</p>
+              <div class="card-footer-tip"><strong>Action:</strong> Continue execution chain</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 6 — Why Use Pre Hooks?
+           ==================================================================== -->
+      <section class="slide" data-slide="6" id="slide-6">
+        <div class="slide-header">
+          <div class="slide-tag">Section 2 — Pre Hooks</div>
+          <h1 class="slide-title">Why Use Pre Hooks?</h1>
+          <p class="slide-subtitle">Common real-world scenarios where logic must run before persistence</p>
+        </div>
+        <div class="slide-content">
+          <div class="grid-2">
+            <div class="card flex-col">
+              <div class="card-title"><span class="icon">🎯</span> Top Beginner Use Cases</div>
+              <ul style="list-style: none; display: flex; flex-direction: column; gap: 0.75rem; font-size: 0.88rem; color: var(--text-secondary);">
+                <li>
+                  <strong style="color: var(--mongo-green);">1. Sanitizing &amp; Trimming Strings:</strong> Automatically strip accidental whitespace from names and emails before storage.
+                </li>
+                <li>
+                  <strong style="color: var(--mongo-green);">2. Enforcing Custom Validation:</strong> Reject documents that fail compound business conditions.
+                </li>
+                <li>
+                  <strong style="color: var(--mongo-green);">3. Normalizing Values:</strong> Ensure lowercase emails (<code class="prop">this.email = this.email.toLowerCase()</code>).
+                </li>
+                <li>
+                  <strong style="color: var(--mongo-green);">4. Operation Logging:</strong> Print diagnostic telemetry right before records are committed.
+                </li>
+                <li>
+                  <strong style="color: var(--mongo-green);">5. Generating Helper Data:</strong> Compute default identifiers or metadata before saving.
+                </li>
+              </ul>
+            </div>
+
+            <div class="code-box">
+              <div class="code-header">
+                <div class="code-dots">
+                  <div class="code-dot red"></div>
+                  <div class="code-dot yellow"></div>
+                  <div class="code-dot green"></div>
+                </div>
+                <span class="code-title">Example: Auto-Trimming Data</span>
+                <button class="copy-btn">
+                  <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                  </svg>
+                  Copy
+                </button>
+              </div>
+              <pre class="code-content"><span class="comment">// Pre-save hook cleans up user input</span>
+<span class="prop">studentSchema</span>.<span class="fn">pre</span>(<span class="str">"save"</span>, <span class="kwd">function</span>(<span class="prop">next</span>) {
+  <span class="comment">// If name has extra padding spaces, trim it!</span>
+  <span class="kwd">if</span> (<span class="kwd">this</span>.<span class="prop">name</span>) {
+    <span class="kwd">this</span>.<span class="prop">name</span> = <span class="kwd">this</span>.<span class="prop">name</span>.<span class="fn">trim</span>();
+  }
+
+  <span class="comment">// Proceed to save</span>
+  <span class="fn">next</span>();
+});</pre>
+              <div class="callout callout-amber" style="margin: 0.75rem;">
+                <span class="callout-icon">💡</span>
+                <div>
+                  <strong>Key Takeaway:</strong> Without this pre hook, messy input from web forms like <code class="str">"   Rahul   "</code> would pollute your database. With the hook, it is cleaned automatically every single time!
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 7 — Pre Save Example
+           ==================================================================== -->
+      <section class="slide" data-slide="7" id="slide-7">
+        <div class="slide-header">
+          <div class="slide-tag">Section 2 — Pre Hooks</div>
+          <h1 class="slide-title">Pre Save Hook Example: Data Cleanup</h1>
+          <p class="slide-subtitle">Witnessing input transformation right before database persistence</p>
+        </div>
+        <div class="slide-content">
+          <div class="grid-split-left-wide">
+            <div class="code-box">
+              <div class="code-header">
+                <div class="code-dots">
+                  <div class="code-dot red"></div>
+                  <div class="code-dot yellow"></div>
+                  <div class="code-dot green"></div>
+                </div>
+                <span class="code-title">Student.js — Trimming Pre-Hook</span>
+                <button class="copy-btn">
+                  <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                  </svg>
+                  Copy
+                </button>
+              </div>
+              <pre class="code-content"><span class="kwd">const</span> <span class="prop">studentSchema</span> = <span class="kwd">new</span> <span class="type">mongoose.Schema</span>({
+  <span class="prop">name</span>: <span class="type">String</span>,
+  <span class="prop">email</span>: <span class="type">String</span>
+});
+
+<span class="comment">// Automatically trim name before saving</span>
+<span class="prop">studentSchema</span>.<span class="fn">pre</span>(<span class="str">"save"</span>, <span class="kwd">function</span>(<span class="prop">next</span>) {
+  <span class="kwd">this</span>.<span class="prop">name</span> = <span class="kwd">this</span>.<span class="prop">name</span>.<span class="fn">trim</span>();
+
+  <span class="fn">console</span>.<span class="fn">log</span>(<span class="str">"Student is about to be saved:"</span>, <span class="kwd">this</span>.<span class="prop">name</span>);
+
+  <span class="fn">next</span>();
+});</pre>
+            </div>
+
+            <div class="flex-col">
+              <div class="card card-highlight">
+                <div class="card-title"><span class="icon">🔍</span> Visual Data Transformation</div>
+                <div style="display: flex; flex-direction: column; gap: 0.75rem; margin-top: 0.5rem;">
+                  <div style="padding: 0.75rem; background: var(--bg-surface); border: 1px solid var(--border-medium); border-radius: var(--radius-sm); font-family: var(--font-mono); font-size: 0.82rem;">
+                    <div style="color: var(--accent-amber); font-weight: 600; margin-bottom: 0.25rem;">1. Input from user / form:</div>
+                    <code style="color: var(--text-primary); font-size: 0.95rem;">name = "   Rahul   "</code>
+                  </div>
+
+                  <div style="text-align: center; color: var(--mongo-green); font-size: 1.25rem; font-weight: bold;">
+                    ↓ <span style="font-size: 0.75rem; font-family: var(--font-mono); text-transform: uppercase;">Pre Hook Trimming</span> ↓
+                  </div>
+
+                  <div style="padding: 0.75rem; background: var(--bg-surface); border: 1px solid var(--mongo-green-border); border-radius: var(--radius-sm); font-family: var(--font-mono); font-size: 0.82rem;">
+                    <div style="color: var(--mongo-green); font-weight: 600; margin-bottom: 0.25rem;">2. Stored in MongoDB:</div>
+                    <code style="color: var(--mongo-green); font-size: 0.95rem;">name = "Rahul"</code>
+                  </div>
+                </div>
+              </div>
+
+              <div class="callout">
+                <span class="callout-icon">⚡</span>
+                <div>
+                  <strong>Result:</strong> Database integrity is protected automatically, keeping your collection clean and searchable without needing manual trim calls across every controller!
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 8 — What Is this?
+           ==================================================================== -->
+      <section class="slide" data-slide="8" id="slide-8">
+        <div class="slide-header">
+          <div class="slide-tag">Section 2 — Pre Hooks</div>
+          <h1 class="slide-title">What Is "this" in a Pre Save Hook?</h1>
+          <p class="slide-subtitle">Understanding document context and the critical Function vs Arrow Function rule</p>
+        </div>
+        <div class="slide-content">
+          <div class="card card-highlight" style="margin-bottom: 0.5rem;">
+            <div class="card-title"><span class="icon">📍</span> Inside Document Save Middleware:</div>
+            <p style="font-size: 0.95rem;">
+              <code class="kwd" style="font-size: 1.1rem; color: var(--mongo-green);">this</code> refers directly to the <strong>current document</strong> being saved!
+            </p>
+            <p>You can read or mutate any property on the document before it reaches MongoDB:</p>
+            <div style="display: flex; gap: 1rem; flex-wrap: wrap; margin-top: 0.25rem; font-family: var(--font-mono); font-size: 0.85rem;">
+              <span style="color: var(--accent-cyan); background: var(--bg-surface); padding: 0.3rem 0.6rem; border-radius: 4px; border: 1px solid var(--border-subtle);">this.name</span>
+              <span style="color: var(--accent-cyan); background: var(--bg-surface); padding: 0.3rem 0.6rem; border-radius: 4px; border: 1px solid var(--border-subtle);">this.email</span>
+              <span style="color: var(--accent-cyan); background: var(--bg-surface); padding: 0.3rem 0.6rem; border-radius: 4px; border: 1px solid var(--border-subtle);">this.age</span>
+              <span style="color: var(--accent-cyan); background: var(--bg-surface); padding: 0.3rem 0.6rem; border-radius: 4px; border: 1px solid var(--border-subtle);">this.mark</span>
+            </div>
+          </div>
+
+          <div class="compare-container">
+            <!-- Wrong Way -->
+            <div class="compare-card wrong">
+              <div class="compare-header">
+                <span>❌ INCORRECT — Arrow Function</span>
+              </div>
+              <div class="compare-body">
+                <pre class="code-content" style="padding: 0.5rem 0;"><span class="comment">// ❌ BROKEN: Arrow functions don't bind 'this'</span>
+<span class="prop">studentSchema</span>.<span class="fn">pre</span>(<span class="str">"save"</span>, (<span class="prop">next</span>) =&gt; {
+  <span class="comment">// 'this' is undefined or refers to window/global!</span>
+  <span class="fn">console</span>.<span class="fn">log</span>(<span class="kwd">this</span>.<span class="prop">name</span>); <span class="comment">// 💥 TypeError / undefined</span>
+
+  <span class="fn">next</span>();
+});</pre>
+                <div class="callout callout-rose">
+                  <span class="callout-icon">⚠️</span>
+                  <div>Arrow functions use lexical scoping and do <strong>NOT</strong> have their own <code class="kwd">this</code>. Mongoose cannot inject the document.</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Correct Way -->
+            <div class="compare-card correct">
+              <div class="compare-header">
+                <span>✅ CORRECT — Normal Function</span>
+              </div>
+              <div class="compare-body">
+                <pre class="code-content" style="padding: 0.5rem 0;"><span class="comment">// ✅ CORRECT: Traditional function allows 'this' binding</span>
+<span class="prop">studentSchema</span>.<span class="fn">pre</span>(<span class="str">"save"</span>, <span class="kwd">function</span>(<span class="prop">next</span>) {
+  <span class="comment">// 'this' points to the Student document!</span>
+  <span class="fn">console</span>.<span class="fn">log</span>(<span class="kwd">this</span>.<span class="prop">name</span>); <span class="comment">// ✓ "Rahul"</span>
+
+  <span class="fn">next</span>();
+});</pre>
+                <div class="callout">
+                  <span class="callout-icon">💡</span>
+                  <div><strong>Rule for Beginners:</strong> Whenever you access document fields in middleware, always write <code class="kwd">function(next)</code>!</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 9 — Pre Hook Execution Flow
+           ==================================================================== -->
+      <section class="slide" data-slide="9" id="slide-9">
+        <div class="slide-header">
+          <div class="slide-tag">Section 2 — Pre Hooks</div>
+          <h1 class="slide-title">Pre Hook Execution Flow</h1>
+          <p class="slide-subtitle">Step-by-step interactive diagram of how data flows from memory into MongoDB</p>
+        </div>
+        <div class="slide-content">
+          <div class="card" style="padding: 1rem;">
+            <div class="flow-container" id="preHookFlowContainer">
+              <div class="flow-node" id="step-node-1">
+                <span class="flow-node-title">1. Student Data</span>
+                <span class="flow-node-desc">Raw object</span>
+              </div>
+              <div class="flow-arrow">&rarr;</div>
+              <div class="flow-node" id="step-node-2">
+                <span class="flow-node-title">2. student.save()</span>
+                <span class="flow-node-desc">Initiates lifecycle</span>
+              </div>
+              <div class="flow-arrow">&rarr;</div>
+              <div class="flow-node" id="step-node-3">
+                <span class="flow-node-title">3. pre("save")</span>
+                <span class="flow-node-desc">Hook intercepts</span>
+              </div>
+              <div class="flow-arrow">&rarr;</div>
+              <div class="flow-node" id="step-node-4">
+                <span class="flow-node-title">4. Custom Logic</span>
+                <span class="flow-node-desc">Trimming / Checks</span>
+              </div>
+              <div class="flow-arrow">&rarr;</div>
+              <div class="flow-node" id="step-node-5">
+                <span class="flow-node-title">5. next()</span>
+                <span class="flow-node-desc">Signals OK</span>
+              </div>
+              <div class="flow-arrow">&rarr;</div>
+              <div class="flow-node" id="step-node-6">
+                <span class="flow-node-title">6. MongoDB Save</span>
+                <span class="flow-node-desc">Persisted to disk</span>
+              </div>
+            </div>
+
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-top: 1rem; padding-top: 0.75rem; border-top: 1px solid var(--border-subtle); flex-wrap: wrap; gap: 0.75rem;">
+              <div id="flowStatusText" style="font-family: var(--font-mono); font-size: 0.85rem; color: var(--mongo-green);">
+                Click "Next Step" to step through the pre-save lifecycle.
+              </div>
+              <div style="display: flex; gap: 0.5rem;">
+                <button class="demo-btn" id="flowNextBtn">
+                  <span>Next Step</span> &rarr;
+                </button>
+                <button class="demo-btn btn-reset" id="flowResetBtn">
+                  <span>Reset Flow</span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div class="grid-2">
+            <div class="card">
+              <div class="card-title"><span class="icon">🔍</span> Why This Flow Matters</div>
+              <p>
+                Notice how the <strong>Pre Hook</strong> is positioned like a security checkpoint. No document can cross into the MongoDB Database box without first passing your custom logic and having <code class="fn">next()</code> invoked.
+              </p>
+            </div>
+            <div class="card">
+              <div class="card-title"><span class="icon">🛑</span> What If Validation Fails?</div>
+              <p>
+                If your logic discovers bad data (e.g., negative mark), it does <strong>not</strong> call <code class="fn">next()</code>. Instead, it calls <code class="fn">next(new Error(...))</code>. This instantly aborts the flow, and MongoDB is never touched.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SECTION 3 — POST HOOKS
+           SLIDE 10 — What Is a Post Hook?
+           ==================================================================== -->
+      <section class="slide" data-slide="10" id="slide-10">
+        <div class="slide-header">
+          <div class="slide-tag tag-blue">Section 3 — Post Hooks</div>
+          <h1 class="slide-title">What Is a Post Hook?</h1>
+          <p class="slide-subtitle">A middleware function that executes AFTER a Mongoose operation completes</p>
+        </div>
+        <div class="slide-content">
+          <div class="grid-2">
+            <div class="flex-col">
+              <div class="card">
+                <div class="card-title"><span class="icon">🔄</span> Execution Timing: After Persistence</div>
+                <p>
+                  A <strong>post hook</strong> runs only after the document has been successfully saved into MongoDB.
+                </p>
+                <p>
+                  Because the operation is already done, post hooks are used to <strong>react</strong> to the result—such as logging, sending confirmation emails, or triggering background jobs.
+                </p>
+              </div>
+
+              <div class="card card-highlight-blue">
+                <div class="card-title"><span class="icon">📍</span> The Post Hook Flow</div>
+                <div class="flow-container" style="padding: 0.5rem 0;">
+                  <div class="flow-node">
+                    <span class="flow-node-title">student.save()</span>
+                    <span class="flow-node-desc">Initiated</span>
+                  </div>
+                  <div class="flow-arrow">&rarr;</div>
+                  <div class="flow-node">
+                    <span class="flow-node-title">MongoDB Save</span>
+                    <span class="flow-node-desc">Written to DB</span>
+                  </div>
+                  <div class="flow-arrow">&rarr;</div>
+                  <div class="flow-node active-node" style="border-color: var(--accent-cyan); background: var(--accent-cyan-bg);">
+                    <span class="flow-node-title" style="color: var(--accent-cyan);">post("save")</span>
+                    <span class="flow-node-desc">Receives doc</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="code-box">
+              <div class="code-header">
+                <div class="code-dots">
+                  <div class="code-dot red"></div>
+                  <div class="code-dot yellow"></div>
+                  <div class="code-dot green"></div>
+                </div>
+                <span class="code-title">Student.js — Post Hook Syntax</span>
+                <button class="copy-btn">
+                  <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                  </svg>
+                  Copy
+                </button>
+              </div>
+              <pre class="code-content"><span class="comment">// Post hook runs AFTER document is saved</span>
+<span class="prop">studentSchema</span>.<span class="fn">post</span>(<span class="str">"save"</span>, <span class="kwd">function</span>(<span class="prop">doc</span>) {
+  <span class="fn">console</span>.<span class="fn">log</span>(<span class="str">"Student saved successfully!"</span>);
+  <span class="fn">console</span>.<span class="fn">log</span>(<span class="str">"Saved document ID:"</span>, <span class="prop">doc</span>.<span class="prop">_id</span>);
+});</pre>
+              <div class="terminal-output">
+                <span class="out-info">Console output after successful save:</span><br>
+                <span class="out-success">&gt; Student saved successfully!</span><br>
+                <span class="out-info">&gt; Saved document ID: 673f8a19b4e2f90a12</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 11 — Pre vs Post Hooks
+           ==================================================================== -->
+      <section class="slide" data-slide="11" id="slide-11">
+        <div class="slide-header">
+          <div class="slide-tag tag-blue">Section 3 — Post Hooks</div>
+          <h1 class="slide-title">Pre Hooks vs Post Hooks</h1>
+          <p class="slide-subtitle">Clear side-by-side comparison of execution timing, purpose, and parameters</p>
+        </div>
+        <div class="slide-content">
+          <div class="table-wrapper">
+            <table class="styled-table">
+              <thead>
+                <tr>
+                  <th>Feature</th>
+                  <th>Pre Hook (schema.pre)</th>
+                  <th>Post Hook (schema.post)</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Execution Timing</strong></td>
+                  <td><span style="color: var(--mongo-green); font-weight: 700;">Runs BEFORE</span> the operation executes</td>
+                  <td><span style="color: var(--accent-cyan); font-weight: 700;">Runs AFTER</span> the operation completes</td>
+                </tr>
+                <tr>
+                  <td><strong>Primary Purpose</strong></td>
+                  <td>Pre-processing, sanitizing data, validation</td>
+                  <td>Post-processing, reacting to result, logging</td>
+                </tr>
+                <tr>
+                  <td><strong>Parameters Passed</strong></td>
+                  <td><code class="fn">function(next)</code></td>
+                  <td><code class="fn">function(doc)</code> (the saved document)</td>
+                </tr>
+                <tr>
+                  <td><strong>Can Alter Saved Data?</strong></td>
+                  <td><span style="color: var(--mongo-green);">Yes</span> (can modify <code class="prop">this.name</code> before save)</td>
+                  <td><span style="color: var(--accent-rose);">No</span> (document is already saved in MongoDB)</td>
+                </tr>
+                <tr>
+                  <td><strong>Can Halt Operation?</strong></td>
+                  <td><span style="color: var(--mongo-green);">Yes</span> (<code class="fn">next(new Error(...))</code> cancels save)</td>
+                  <td><span style="color: var(--text-dim);">No</span> (save has already succeeded)</td>
+                </tr>
+                <tr>
+                  <td><strong>Syntax Example</strong></td>
+                  <td><code class="str">studentSchema.pre("save", fn)</code></td>
+                  <td><code class="str">studentSchema.post("save", fn)</code></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="grid-2">
+            <div class="card card-highlight">
+              <div class="card-title"><span class="icon">⚡</span> Remember Pre:</div>
+              <p>Think of <strong>Pre</strong> as <em>"Preparation &amp; Gatekeeping"</em>. Use it whenever you need to check rules or modify values.</p>
+            </div>
+            <div class="card card-highlight-blue">
+              <div class="card-title"><span class="icon">🔄</span> Remember Post:</div>
+              <p>Think of <strong>Post</strong> as <em>"Notification &amp; Reporting"</em>. Use it whenever you want to confirm success or print an audit log.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 12 — Post Save Example
+           ==================================================================== -->
+      <section class="slide" data-slide="12" id="slide-12">
+        <div class="slide-header">
+          <div class="slide-tag tag-blue">Section 3 — Post Hooks</div>
+          <h1 class="slide-title">Post Save Hook Example</h1>
+          <p class="slide-subtitle">Understanding the "doc" parameter passed to post-save middleware</p>
+        </div>
+        <div class="slide-content">
+          <div class="grid-split-left-wide">
+            <div class="code-box">
+              <div class="code-header">
+                <div class="code-dots">
+                  <div class="code-dot red"></div>
+                  <div class="code-dot yellow"></div>
+                  <div class="code-dot green"></div>
+                </div>
+                <span class="code-title">Student.js — Post Save Logging</span>
+                <button class="copy-btn">
+                  <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                  </svg>
+                  Copy
+                </button>
+              </div>
+              <pre class="code-content"><span class="comment">// Post-save hook receives the newly persisted doc</span>
+<span class="prop">studentSchema</span>.<span class="fn">post</span>(<span class="str">"save"</span>, <span class="kwd">function</span>(<span class="prop">doc</span>) {
+  <span class="fn">console</span>.<span class="fn">log</span>(
+    <span class="str">`Student ${<span class="prop">doc</span>.<span class="prop">name</span>} was saved successfully`</span>
+  );
+  <span class="fn">console</span>.<span class="fn">log</span>(<span class="str">"MongoDB assigned ID:"</span>, <span class="prop">doc</span>.<span class="prop">_id</span>);
+});</pre>
+              <div class="terminal-output">
+                <span class="out-info">Terminal Output:</span><br>
+                <span class="out-success">&gt; Student Rahul was saved successfully</span><br>
+                <span class="out-info">&gt; MongoDB assigned ID: 673f8a19b4e2f90a12</span>
+              </div>
+            </div>
+
+            <div class="card card-highlight-blue flex-col">
+              <div class="card-title"><span class="icon">📦</span> What Does "doc" Represent?</div>
+              <p>
+                In a post-save hook, Mongoose automatically passes the <strong>completed, saved document</strong> as the first argument (<code class="prop">doc</code>).
+              </p>
+              <p>This includes all fields that MongoDB and Mongoose generated during the save:</p>
+              <ul style="list-style: none; display: flex; flex-direction: column; gap: 0.4rem; font-family: var(--font-mono); font-size: 0.82rem; color: var(--text-secondary);">
+                <li>• <span style="color: var(--accent-cyan);">doc._id</span> (the unique ObjectId)</li>
+                <li>• <span style="color: var(--accent-cyan);">doc.name</span> (the stored name)</li>
+                <li>• <span style="color: var(--accent-cyan);">doc.createdAt</span> (the timestamp)</li>
+                <li>• <span style="color: var(--accent-cyan);">doc.__v</span> (version key)</li>
+              </ul>
+              <div class="card-footer-tip" style="margin-top: auto;">
+                <strong>Notice:</strong> In basic post hooks, you don't need <code class="fn">next()</code> because the save is already done!
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 13 — Pre + Post Together
+           ==================================================================== -->
+      <section class="slide" data-slide="13" id="slide-13">
+        <div class="slide-header">
+          <div class="slide-tag tag-blue">Section 3 — Post Hooks</div>
+          <h1 class="slide-title">Pre + Post Working Together</h1>
+          <p class="slide-subtitle">Combining both hooks to orchestrate the complete document save lifecycle</p>
+        </div>
+        <div class="slide-content">
+          <div class="grid-split-left-wide">
+            <div class="code-box">
+              <div class="code-header">
+                <div class="code-dots">
+                  <div class="code-dot red"></div>
+                  <div class="code-dot yellow"></div>
+                  <div class="code-dot green"></div>
+                </div>
+                <span class="code-title">Student.js — Combined Pre &amp; Post Hooks</span>
+                <button class="copy-btn">
+                  <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                  </svg>
+                  Copy
+                </button>
+              </div>
+              <pre class="code-content"><span class="comment">// 1. PRE HOOK: Runs before database write</span>
+<span class="prop">studentSchema</span>.<span class="fn">pre</span>(<span class="str">"save"</span>, <span class="kwd">function</span>(<span class="prop">next</span>) {
+  <span class="fn">console</span>.<span class="fn">log</span>(<span class="str">"1. Before save: Preparing data..."</span>);
+  <span class="fn">next</span>();
+});
+
+<span class="comment">// 2. POST HOOK: Runs after database write</span>
+<span class="prop">studentSchema</span>.<span class="fn">post</span>(<span class="str">"save"</span>, <span class="kwd">function</span>(<span class="prop">doc</span>) {
+  <span class="fn">console</span>.<span class="fn">log</span>(<span class="str">"2. After save: Document is stored!"</span>);
+});</pre>
+            </div>
+
+            <div class="card card-highlight flex-col" style="justify-content: center;">
+              <h3 style="font-size: 1rem; color: var(--mongo-green); margin-bottom: 0.5rem; text-align: center;">The Lifecycle Chain</h3>
+              <div class="flow-vertical">
+                <div class="flow-step-v">
+                  <span>Application initiates</span>
+                  <span style="color: var(--accent-cyan); font-size: 0.75rem;">student.save()</span>
+                </div>
+                <div class="flow-arrow-v">↓</div>
+                <div class="flow-step-v" style="border-color: var(--mongo-green); color: var(--mongo-green);">
+                  <span>pre("save")</span>
+                  <span style="font-size: 0.75rem;">Step 1: Check &amp; Prep</span>
+                </div>
+                <div class="flow-arrow-v">↓</div>
+                <div class="flow-step-v">
+                  <span>MongoDB Engine</span>
+                  <span style="color: var(--accent-amber); font-size: 0.75rem;">Inserts BSON doc</span>
+                </div>
+                <div class="flow-arrow-v">↓</div>
+                <div class="flow-step-v" style="border-color: var(--accent-cyan); color: var(--accent-cyan);">
+                  <span>post("save")</span>
+                  <span style="font-size: 0.75rem;">Step 2: Log confirmation</span>
+                </div>
+                <div class="flow-arrow-v">↓</div>
+                <div class="flow-step-v">
+                  <span>Completed</span>
+                  <span style="color: var(--mongo-green); font-size: 0.75rem;">Promise resolves</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SECTION 4 — MIDDLEWARE FOR VALIDATION
+           SLIDE 14 — What Is Validation?
+           ==================================================================== -->
+      <section class="slide" data-slide="14" id="slide-14">
+        <div class="slide-header">
+          <div class="slide-tag tag-amber">Section 4 — Validation</div>
+          <h1 class="slide-title">What Is Validation?</h1>
+          <p class="slide-subtitle">Enforcing rules so only clean, valid data is allowed into your database</p>
+        </div>
+        <div class="slide-content">
+          <div class="grid-2">
+            <div class="flex-col">
+              <div class="card card-highlight-amber">
+                <div class="card-title"><span class="icon">🛡️</span> Why Validate?</div>
+                <p>
+                  MongoDB by default is schema-less. Mongoose adds schemas on top of MongoDB to guarantee that documents follow predictable, safe shapes.
+                </p>
+                <p>
+                  <strong>Validation</strong> checks whether incoming user data satisfies your application's rules <em>before</em> saving.
+                </p>
+              </div>
+
+              <div class="card">
+                <div class="card-title"><span class="icon">📋</span> Typical Student Validation Rules:</div>
+                <ul style="list-style: none; display: flex; flex-direction: column; gap: 0.4rem; font-size: 0.88rem; color: var(--text-secondary);">
+                  <li>• <strong style="color: var(--text-primary);">Name:</strong> Required string, non-empty, trimmed</li>
+                  <li>• <strong style="color: var(--text-primary);">Email:</strong> Required, formatted as email</li>
+                  <li>• <strong style="color: var(--text-primary);">Age:</strong> Must be a number &ge; 16</li>
+                  <li>• <strong style="color: var(--text-primary);">Mark:</strong> Must be a number between 0 and 100</li>
+                  <li>• <strong style="color: var(--text-primary);">Course:</strong> Must be one of valid courses</li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="card flex-col">
+              <div class="card-title"><span class="icon">🧰</span> Mongoose Built-in Validators</div>
+              <p>Mongoose comes with several standard built-in validators out of the box:</p>
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; font-family: var(--font-mono); font-size: 0.82rem;">
+                <div style="background: var(--bg-surface); padding: 0.6rem; border-radius: 4px; border: 1px solid var(--border-subtle);">
+                  <strong style="color: var(--mongo-green);">required</strong>: field must exist
+                </div>
+                <div style="background: var(--bg-surface); padding: 0.6rem; border-radius: 4px; border: 1px solid var(--border-subtle);">
+                  <strong style="color: var(--mongo-green);">min / max</strong>: numeric bounds
+                </div>
+                <div style="background: var(--bg-surface); padding: 0.6rem; border-radius: 4px; border: 1px solid var(--border-subtle);">
+                  <strong style="color: var(--mongo-green);">minLength / maxLength</strong>: string length
+                </div>
+                <div style="background: var(--bg-surface); padding: 0.6rem; border-radius: 4px; border: 1px solid var(--border-subtle);">
+                  <strong style="color: var(--mongo-green);">enum</strong>: list of allowed values
+                </div>
+                <div style="background: var(--bg-surface); padding: 0.6rem; border-radius: 4px; border: 1px solid var(--border-subtle); grid-column: span 2;">
+                  <strong style="color: var(--mongo-green);">match</strong>: regex matching (e.g. email regex)
+                </div>
+              </div>
+              <div class="callout callout-amber" style="margin-top: auto;">
+                <span class="callout-icon">💡</span>
+                <div>
+                  <strong>Next Question:</strong> If Mongoose already has built-in validation, why and when do we use <strong>Validation Middleware</strong>?
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 15 — Built-in vs Custom Validation
+           ==================================================================== -->
+      <section class="slide" data-slide="15" id="slide-15">
+        <div class="slide-header">
+          <div class="slide-tag tag-amber">Section 4 — Validation</div>
+          <h1 class="slide-title">Built-in Validation vs Custom Validation</h1>
+          <p class="slide-subtitle">Knowing when to use built-in schema rules versus custom validation logic</p>
+        </div>
+        <div class="slide-content">
+          <div class="grid-2">
+            <div class="code-box">
+              <div class="code-header">
+                <div class="code-dots">
+                  <div class="code-dot red"></div>
+                  <div class="code-dot yellow"></div>
+                  <div class="code-dot green"></div>
+                </div>
+                <span class="code-title">1. Built-in Schema Validation</span>
+                <button class="copy-btn">
+                  <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                  </svg>
+                  Copy
+                </button>
+              </div>
+              <pre class="code-content"><span class="comment">// Built-in validators directly in schema</span>
+<span class="prop">age</span>: {
+  <span class="prop">type</span>: <span class="type">Number</span>,
+  <span class="prop">required</span>: <span class="bool">true</span>,
+  <span class="prop">min</span>: <span class="num">16</span>,
+  <span class="prop">max</span>: <span class="num">60</span>
+}</pre>
+              <div class="card-footer-tip" style="padding: 0.75rem;">
+                <strong>Best For:</strong> Simple, standard field boundaries (numbers, lengths, enums).
+              </div>
+            </div>
+
+            <div class="code-box">
+              <div class="code-header">
+                <div class="code-dots">
+                  <div class="code-dot red"></div>
+                  <div class="code-dot yellow"></div>
+                  <div class="code-dot green"></div>
+                </div>
+                <span class="code-title">2. Custom Validation Logic</span>
+                <button class="copy-btn">
+                  <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                  </svg>
+                  Copy
+                </button>
+              </div>
+              <pre class="code-content"><span class="comment">// Custom validator or pre-save middleware</span>
+<span class="prop">studentSchema</span>.<span class="fn">path</span>(<span class="str">"mark"</span>).<span class="fn">validate</span>(<span class="kwd">function</span>(<span class="prop">value</span>) {
+  <span class="comment">// Custom rule logic</span>
+  <span class="kwd">return</span> <span class="prop">value</span> &gt;= <span class="num">0</span> &amp;&amp; <span class="prop">value</span> &lt;= <span class="num">100</span>;
+}, <span class="str">"Mark must be between 0 and 100"</span>);</pre>
+              <div class="card-footer-tip" style="padding: 0.75rem;">
+                <strong>Best For:</strong> Domain-specific rules, checking multiple conditions together.
+              </div>
+            </div>
+          </div>
+
+          <div class="card card-highlight-amber">
+            <div class="card-title"><span class="icon">⚖️</span> Golden Rule for Developers:</div>
+            <p>
+              Use <strong>built-in validators</strong> whenever they are sufficient (e.g. <code class="prop">required: true</code>, <code class="prop">min: 0</code>).<br>
+              Use <strong>middleware or custom validators</strong> when your business logic requires multi-step evaluation, interdependent fields, or complex decision branching!
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 16 — Validation Middleware
+           ==================================================================== -->
+      <section class="slide" data-slide="16" id="slide-16">
+        <div class="slide-header">
+          <div class="slide-tag tag-amber">Section 4 — Validation</div>
+          <h1 class="slide-title">Validation Middleware &amp; Decision Flow</h1>
+          <p class="slide-subtitle">Intercepting saves and halting invalid data using next(new Error(...))</p>
+        </div>
+        <div class="slide-content">
+          <div class="grid-split-left-wide">
+            <div class="code-box">
+              <div class="code-header">
+                <div class="code-dots">
+                  <div class="code-dot red"></div>
+                  <div class="code-dot yellow"></div>
+                  <div class="code-dot green"></div>
+                </div>
+                <span class="code-title">Pre-Save Validation Middleware</span>
+                <button class="copy-btn">
+                  <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                  </svg>
+                  Copy
+                </button>
+              </div>
+              <pre class="code-content"><span class="prop">studentSchema</span>.<span class="fn">pre</span>(<span class="str">"save"</span>, <span class="kwd">function</span>(<span class="prop">next</span>) {
+  <span class="comment">// Check custom validation condition</span>
+  <span class="kwd">if</span> (<span class="kwd">this</span>.<span class="prop">mark</span> &lt; <span class="num">0</span> || <span class="kwd">this</span>.<span class="prop">mark</span> &gt; <span class="num">100</span>) {
+    <span class="comment">// ❌ Reject and halt with Error</span>
+    <span class="kwd">return</span> <span class="fn">next</span>(<span class="kwd">new</span> <span class="type">Error</span>(<span class="str">"Mark must be between 0 and 100"</span>));
+  }
+
+  <span class="comment">// ✅ Valid! Continue to MongoDB save</span>
+  <span class="fn">next</span>();
+});</pre>
+            </div>
+
+            <!-- Decision Flow Visualizer -->
+            <div class="decision-container">
+              <div class="flow-step-v" style="max-width: 220px; text-align: center;">
+                Student Data &rarr; student.save()
+              </div>
+              <div class="flow-arrow-v">↓</div>
+              <div class="decision-box">
+                Is mark &ge; 0 and &le; 100?
+              </div>
+              <div class="decision-branches">
+                <!-- No Branch -->
+                <div class="decision-branch" id="valBranchNo">
+                  <span class="branch-label no">NO (Invalid)</span>
+                  <div class="flow-arrow-v" style="color: var(--accent-rose);">↓</div>
+                  <div class="branch-node error-node">
+                    next(new Error(...))<br>
+                    <small>❌ Save Aborted</small>
+                  </div>
+                </div>
+
+                <!-- Yes Branch -->
+                <div class="decision-branch" id="valBranchYes">
+                  <span class="branch-label yes">YES (Valid)</span>
+                  <div class="flow-arrow-v" style="color: var(--mongo-green);">↓</div>
+                  <div class="branch-node pass-node">
+                    next()<br>
+                    <small>✅ Save to MongoDB</small>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 17 — How next() Works
+           ==================================================================== -->
+      <section class="slide" data-slide="17" id="slide-17">
+        <div class="slide-header">
+          <div class="slide-tag tag-amber">Section 4 — Validation</div>
+          <h1 class="slide-title">How next() Works in Mongoose</h1>
+          <p class="slide-subtitle">The fundamental mechanism that controls whether execution continues or fails</p>
+        </div>
+        <div class="slide-content">
+          <div class="card card-highlight">
+            <div class="card-title"><span class="icon">🚦</span> next() is Mongoose's Traffic Controller</div>
+            <p>
+              Mongoose middleware functions are asynchronous callbacks. Calling <code class="fn">next()</code> is how you communicate back to Mongoose what should happen next.
+            </p>
+          </div>
+
+          <div class="grid-2">
+            <!-- Continue Case -->
+            <div class="card card-highlight">
+              <div class="card-title" style="color: var(--mongo-green);">
+                <span class="icon">🟢</span> Case 1: Continue Execution
+              </div>
+              <p>Calling <code class="fn">next()</code> with <strong>no arguments</strong> signals success:</p>
+              <div class="code-box" style="margin-top: 0.5rem;">
+                <pre class="code-content"><span class="comment">// All checks passed: proceed to database</span>
+<span class="fn">next</span>();</pre>
+              </div>
+              <ul style="list-style: none; display: flex; flex-direction: column; gap: 0.35rem; font-size: 0.85rem; color: var(--text-secondary); margin-top: 0.5rem;">
+                <li>• Mongoose moves to the next middleware in line</li>
+                <li>• If no more middleware, MongoDB executes the operation</li>
+                <li>• The document is safely saved!</li>
+              </ul>
+            </div>
+
+            <!-- Stop with Error Case -->
+            <div class="card card-highlight-rose">
+              <div class="card-title" style="color: var(--accent-rose);">
+                <span class="icon">🔴</span> Case 2: Stop with an Error
+              </div>
+              <p>Calling <code class="fn">next(error)</code> with an <strong>Error object</strong> signals failure:</p>
+              <div class="code-box" style="margin-top: 0.5rem;">
+                <pre class="code-content"><span class="comment">// Error detected: halt immediately</span>
+<span class="kwd">return</span> <span class="fn">next</span>(<span class="kwd">new</span> <span class="type">Error</span>(<span class="str">"Invalid mark"</span>));</pre>
+              </div>
+              <ul style="list-style: none; display: flex; flex-direction: column; gap: 0.35rem; font-size: 0.85rem; color: var(--text-secondary); margin-top: 0.5rem;">
+                <li>• Mongoose halts the entire middleware pipeline</li>
+                <li>• The database operation is completely skipped</li>
+                <li>• The error is passed to your controller's catch block!</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 18 — Validation Example (Interactive Sandbox)
+           ==================================================================== -->
+      <section class="slide" data-slide="18" id="slide-18">
+        <div class="slide-header">
+          <div class="slide-tag tag-amber">Section 4 — Validation</div>
+          <h1 class="slide-title">Complete Validation Example &amp; Live Test</h1>
+          <p class="slide-subtitle">Test how Mongoose pre-save validation handles marks between 0 and 100</p>
+        </div>
+        <div class="slide-content">
+          <div class="grid-2">
+            <!-- Code representation -->
+            <div class="code-box">
+              <div class="code-header">
+                <div class="code-dots">
+                  <div class="code-dot red"></div>
+                  <div class="code-dot yellow"></div>
+                  <div class="code-dot green"></div>
+                </div>
+                <span class="code-title">Student.js — Mark Validation Hook</span>
+                <button class="copy-btn">
+                  <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                  </svg>
+                  Copy
+                </button>
+              </div>
+              <pre class="code-content"><span class="kwd">const</span> <span class="prop">studentSchema</span> = <span class="kwd">new</span> <span class="type">mongoose.Schema</span>({
+  <span class="prop">name</span>: { <span class="prop">type</span>: <span class="type">String</span>, <span class="prop">required</span>: <span class="bool">true</span> },
+  <span class="prop">mark</span>: { <span class="prop">type</span>: <span class="type">Number</span>, <span class="prop">required</span>: <span class="bool">true</span> }
+});
+
+<span class="comment">// Validation middleware</span>
+<span class="prop">studentSchema</span>.<span class="fn">pre</span>(<span class="str">"save"</span>, <span class="kwd">function</span>(<span class="prop">next</span>) {
+  <span class="kwd">if</span> (<span class="kwd">this</span>.<span class="prop">mark</span> &lt; <span class="num">0</span> || <span class="kwd">this</span>.<span class="prop">mark</span> &gt; <span class="num">100</span>) {
+    <span class="kwd">return</span> <span class="fn">next</span>(
+      <span class="kwd">new</span> <span class="type">Error</span>(<span class="str">"Mark must be between 0 and 100"</span>)
+    );
+  }
+
+  <span class="fn">next</span>();
+});</pre>
+            </div>
+
+            <!-- Interactive Live Testing Sandbox -->
+            <div class="interactive-demo-card">
+              <div class="card-title">
+                <span class="icon">🧪</span> Live Student Validation Sandbox
+              </div>
+              <p style="font-size: 0.85rem; color: var(--text-muted);">
+                Enter test values and click <strong>Run Validation</strong> to simulate the pre-save hook:
+              </p>
+
+              <div class="flex-col" style="gap: 0.75rem;">
+                <div class="demo-input-group">
+                  <label class="demo-label" for="valNameInput" style="width: 70px;">Name:</label>
+                  <input type="text" id="valNameInput" class="demo-input" value="Rahul" style="flex: 1;">
+                </div>
+
+                <div class="demo-input-group">
+                  <label class="demo-label" for="valMarkInput" style="width: 70px;">Mark:</label>
+                  <input type="number" id="valMarkInput" class="demo-input" value="85" placeholder="e.g. 85 or 120" style="flex: 1;">
+                </div>
+              </div>
+
+              <div class="demo-controls-bar">
+                <button class="demo-btn" id="runValBtn">
+                  <span>▶ Run Validation</span>
+                </button>
+                <button class="demo-btn btn-reset" id="resetValBtn">
+                  <span>Reset</span>
+                </button>
+              </div>
+
+              <div class="demo-result-box" id="valResultBox">
+                Enter student details and click 'Run Validation' to test the middleware.
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 19 — Important Validation Note
+           ==================================================================== -->
+      <section class="slide" data-slide="19" id="slide-19">
+        <div class="slide-header">
+          <div class="slide-tag tag-amber">Section 4 — Validation</div>
+          <h1 class="slide-title">Important Validation Best Practice</h1>
+          <p class="slide-subtitle">Don't reinvent the wheel: when to use schema validators vs custom middleware</p>
+        </div>
+        <div class="slide-content">
+          <div class="card card-highlight-amber" style="margin-bottom: 0.5rem;">
+            <div class="card-title"><span class="icon">⚠️</span> Crucial Rule for Developers</div>
+            <p style="font-size: 0.95rem;">
+              Mongoose <strong>already provides built-in schema validation</strong> for simple ranges:
+            </p>
+            <div class="code-box" style="margin-top: 0.5rem; max-width: 480px;">
+              <pre class="code-content"><span class="prop">mark</span>: {
+  <span class="prop">type</span>: <span class="type">Number</span>,
+  <span class="prop">min</span>: <span class="num">0</span>,
+  <span class="prop">max</span>: <span class="num">100</span>
+}</pre>
+            </div>
+          </div>
+
+          <div class="grid-2">
+            <div class="card">
+              <div class="card-title" style="color: var(--accent-rose);">
+                <span class="icon">🚫</span> DON'T DO THIS
+              </div>
+              <p>
+                Don't write custom pre-save hooks for simple, single-field checks that Mongoose already handles natively (like <code class="prop">required</code>, <code class="prop">min</code>, <code class="prop">max</code>).
+              </p>
+              <div class="card-footer-tip">
+                Writing middleware for basic min/max creates unnecessary boilerplate.
+              </div>
+            </div>
+
+            <div class="card card-highlight">
+              <div class="card-title" style="color: var(--mongo-green);">
+                <span class="icon">✅</span> DO USE MIDDLEWARE WHEN:
+              </div>
+              <ul style="list-style: none; display: flex; flex-direction: column; gap: 0.4rem; font-size: 0.85rem; color: var(--text-secondary);">
+                <li>• You need to check multiple fields together (e.g. if course is "MERN", mark must be &ge; 50)</li>
+                <li>• You need custom data normalization (e.g. trimming or regex transformations)</li>
+                <li>• You need asynchronous database lookups before confirming validity</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SECTION 5 — TIMESTAMPS
+           SLIDE 20 — What Are Timestamps?
+           ==================================================================== -->
+      <section class="slide" data-slide="20" id="slide-20">
+        <div class="slide-header">
+          <div class="slide-tag tag-purple">Section 5 — Timestamps</div>
+          <h1 class="slide-title">What Are Timestamps?</h1>
+          <p class="slide-subtitle">Automatic tracking of document creation and modification dates</p>
+        </div>
+        <div class="slide-content">
+          <div class="grid-2">
+            <div class="flex-col">
+              <div class="card card-highlight-purple">
+                <div class="card-title"><span class="icon">⏱️</span> Automatic Date Tracking</div>
+                <p>
+                  In real-world applications, almost every database record needs to know <strong>when it was created</strong> and <strong>when it was last modified</strong>.
+                </p>
+                <p>
+                  Instead of manually writing <code class="prop">new Date()</code> on every insert and update, Mongoose can manage this automatically using <strong>timestamps</strong>.
+                </p>
+              </div>
+
+              <div class="card">
+                <div class="card-title"><span class="icon">🏷️</span> The Two Managed Fields</div>
+                <div style="display: flex; flex-direction: column; gap: 0.75rem; margin-top: 0.25rem;">
+                  <div style="padding: 0.75rem; background: var(--bg-surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); font-family: var(--font-mono); font-size: 0.85rem;">
+                    <strong style="color: var(--mongo-green);">createdAt:</strong> Stores the exact Date and Time when the document was initially created. Never changes afterwards!
+                  </div>
+                  <div style="padding: 0.75rem; background: var(--bg-surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); font-family: var(--font-mono); font-size: 0.85rem;">
+                    <strong style="color: var(--accent-cyan);">updatedAt:</strong> Stores the exact Date and Time of the latest modification. Automatically updates whenever you save changes!
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="card card-highlight flex-col" style="justify-content: center; align-items: center; text-align: center;">
+              <h3 style="font-size: 1.15rem; color: var(--mongo-green); margin-bottom: 1rem;">Mongoose Manages Everything</h3>
+              <div style="font-family: var(--font-mono); font-size: 0.9rem; display: flex; flex-direction: column; gap: 0.75rem; width: 100%; max-width: 320px;">
+                <div style="background: rgba(0, 237, 100, 0.1); border: 1px solid var(--mongo-green-border); padding: 0.75rem; border-radius: 6px; color: var(--mongo-green);">
+                  Document Created<br>
+                  <small style="color: var(--text-muted);">createdAt &amp; updatedAt initialized</small>
+                </div>
+                <div style="color: var(--mongo-green); font-size: 1.2rem;">↓</div>
+                <div style="background: rgba(56, 189, 248, 0.1); border: 1px solid var(--accent-cyan-border); padding: 0.75rem; border-radius: 6px; color: var(--accent-cyan);">
+                  Document Modified Later<br>
+                  <small style="color: var(--text-muted);">createdAt stays same, updatedAt changes</small>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 21 — Enabling Timestamps
+           ==================================================================== -->
+      <section class="slide" data-slide="21" id="slide-21">
+        <div class="slide-header">
+          <div class="slide-tag tag-purple">Section 5 — Timestamps</div>
+          <h1 class="slide-title">Enabling Timestamps in Mongoose</h1>
+          <p class="slide-subtitle">Just one simple schema option activates full lifecycle auditing</p>
+        </div>
+        <div class="slide-content">
+          <div class="grid-split-left-wide">
+            <div class="code-box">
+              <div class="code-header">
+                <div class="code-dots">
+                  <div class="code-dot red"></div>
+                  <div class="code-dot yellow"></div>
+                  <div class="code-dot green"></div>
+                </div>
+                <span class="code-title">Student.js — Schema Options</span>
+                <button class="copy-btn">
+                  <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                  </svg>
+                  Copy
+                </button>
+              </div>
+              <pre class="code-content"><span class="kwd">const</span> <span class="prop">studentSchema</span> = <span class="kwd">new</span> <span class="type">mongoose.Schema</span>(
+  {
+    <span class="prop">name</span>: <span class="type">String</span>,
+    <span class="prop">email</span>: <span class="type">String</span>
+  },
+  {
+    <span class="comment">// Enable timestamps in schema options</span>
+    <span class="prop">timestamps</span>: <span class="bool">true</span>
+  }
+);</pre>
+            </div>
+
+            <div class="flex-col">
+              <div class="card card-highlight-purple">
+                <div class="card-title"><span class="icon">⚙️</span> The Second Parameter</div>
+                <p>
+                  In Mongoose, <code class="fn">new mongoose.Schema(definition, options)</code> accepts an options object as its second argument.
+                </p>
+                <p>
+                  By passing <code class="prop">{ timestamps: true }</code>, Mongoose injects <code class="prop">createdAt</code> and <code class="prop">updatedAt</code> of type <code class="type">Date</code> under the hood.
+                </p>
+              </div>
+
+              <div class="callout">
+                <span class="callout-icon">💡</span>
+                <div>
+                  <strong>Zero Manual Code:</strong> You do <strong>not</strong> need to define <code class="prop">createdAt: Date</code> in your schema fields. Mongoose creates and manages them for you automatically!
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 22 — Example Timestamp Data
+           ==================================================================== -->
+      <section class="slide" data-slide="22" id="slide-22">
+        <div class="slide-header">
+          <div class="slide-tag tag-purple">Section 5 — Timestamps</div>
+          <h1 class="slide-title">Example Timestamp Data in MongoDB</h1>
+          <p class="slide-subtitle">How timestamp fields are stored and behave across the document lifecycle</p>
+        </div>
+        <div class="slide-content">
+          <div class="grid-2">
+            <!-- Creation State -->
+            <div class="card">
+              <div class="card-title" style="color: var(--mongo-green);">
+                <span class="icon">🌱</span> 1. When Document is Created:
+              </div>
+              <div class="code-box" style="margin-top: 0.5rem;">
+                <pre class="code-content">{
+  <span class="str">"_id"</span>: <span class="str">"673f8a19b4e2f90a12"</span>,
+  <span class="str">"name"</span>: <span class="str">"Rahul"</span>,
+  <span class="str">"email"</span>: <span class="str">"rahul@gmail.com"</span>,
+  <span class="str">"createdAt"</span>: <span class="str">"2026-09-29T10:00:00Z"</span>,
+  <span class="str">"updatedAt"</span>: <span class="str">"2026-09-29T10:00:00Z"</span>
+}</pre>
+              </div>
+              <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 0.5rem;">
+                Both <code class="prop">createdAt</code> and <code class="prop">updatedAt</code> match the initial creation timestamp.
+              </p>
+            </div>
+
+            <!-- Update State -->
+            <div class="card card-highlight-blue">
+              <div class="card-title" style="color: var(--accent-cyan);">
+                <span class="icon">✏️</span> 2. When Document is Updated Later:
+              </div>
+              <div class="code-box" style="margin-top: 0.5rem;">
+                <pre class="code-content">{
+  <span class="str">"_id"</span>: <span class="str">"673f8a19b4e2f90a12"</span>,
+  <span class="str">"name"</span>: <span class="str">"Rahul"</span>,
+  <span class="str">"email"</span>: <span class="str">"rahul@gmail.com"</span>,
+  <span class="str">"createdAt"</span>: <span class="str">"2026-09-29T10:00:00Z"</span>, <span class="comment">// 🔒 SAME</span>
+  <span class="str">"updatedAt"</span>: <span class="str">"2026-09-29T14:30:00Z"</span>  <span class="comment">// ⚡ CHANGED</span>
+}</pre>
+              </div>
+              <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 0.5rem;">
+                <code class="prop">createdAt</code> remains completely unchanged, while <code class="prop">updatedAt</code> reflects the new modification time!
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 23 — Why Are Timestamps Useful?
+           ==================================================================== -->
+      <section class="slide" data-slide="23" id="slide-23">
+        <div class="slide-header">
+          <div class="slide-tag tag-purple">Section 5 — Timestamps</div>
+          <h1 class="slide-title">Why Are Timestamps Useful?</h1>
+          <p class="slide-subtitle">Essential real-world applications of createdAt and updatedAt in production</p>
+        </div>
+        <div class="slide-content">
+          <div class="grid-3">
+            <div class="card card-highlight">
+              <div class="card-title"><span class="icon">📅</span> 1. Record History</div>
+              <p>Knowing exactly when an account was registered, when a student enrolled, or when a payment was processed.</p>
+              <div class="card-footer-tip"><strong>Field:</strong> createdAt</div>
+            </div>
+
+            <div class="card card-highlight-blue">
+              <div class="card-title"><span class="icon">🔄</span> 2. Audit Modification</div>
+              <p>Track when grades or profiles were last altered, providing accountability and security audit logs.</p>
+              <div class="card-footer-tip"><strong>Field:</strong> updatedAt</div>
+            </div>
+
+            <div class="card card-highlight-amber">
+              <div class="card-title"><span class="icon">📶</span> 3. Sorting &amp; Queries</div>
+              <p>Easily retrieve recently joined students or newest articles using <code class="prop">.sort({ createdAt: -1 })</code>.</p>
+              <div class="card-footer-tip"><strong>Query:</strong> Newest records first</div>
+            </div>
+
+            <div class="card card-highlight-purple">
+              <div class="card-title"><span class="icon">📊</span> 4. Admin Dashboards</div>
+              <p>Plot weekly signups, student performance trends, or system activity charts over time.</p>
+              <div class="card-footer-tip"><strong>Analytics:</strong> Time-series metrics</div>
+            </div>
+
+            <div class="card">
+              <div class="card-title"><span class="icon">💬</span> 5. UI Time Displays</div>
+              <p>Display friendly user-facing messages like <em>"Joined September 2026"</em> or <em>"Updated 5 minutes ago"</em>.</p>
+              <div class="card-footer-tip"><strong>UX:</strong> Relative timestamps</div>
+            </div>
+
+            <div class="card">
+              <div class="card-title"><span class="icon">⚡</span> 6. Caching &amp; Sync</div>
+              <p>Client applications can compare <code class="prop">updatedAt</code> to check if local cached data is still fresh.</p>
+              <div class="card-footer-tip"><strong>Performance:</strong> Cache invalidation</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 24 — Custom Timestamp Names
+           ==================================================================== -->
+      <section class="slide" data-slide="24" id="slide-24">
+        <div class="slide-header">
+          <div class="slide-tag tag-purple">Section 5 — Timestamps</div>
+          <h1 class="slide-title">Custom Timestamp Field Names</h1>
+          <p class="slide-subtitle">Overriding default camelCase names to match SQL or snake_case conventions</p>
+        </div>
+        <div class="slide-content">
+          <div class="grid-split-left-wide">
+            <div class="code-box">
+              <div class="code-header">
+                <div class="code-dots">
+                  <div class="code-dot red"></div>
+                  <div class="code-dot yellow"></div>
+                  <div class="code-dot green"></div>
+                </div>
+                <span class="code-title">Student.js — Custom Timestamp Names</span>
+                <button class="copy-btn">
+                  <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                  </svg>
+                  Copy
+                </button>
+              </div>
+              <pre class="code-content"><span class="comment">// Customize timestamp field keys</span>
+<span class="kwd">const</span> <span class="prop">studentSchema</span> = <span class="kwd">new</span> <span class="type">mongoose.Schema</span>(
+  {
+    <span class="prop">name</span>: <span class="type">String</span>,
+    <span class="prop">email</span>: <span class="type">String</span>
+  },
+  {
+    <span class="prop">timestamps</span>: {
+      <span class="prop">createdAt</span>: <span class="str">"created_at"</span>,
+      <span class="prop">updatedAt</span>: <span class="str">"updated_at"</span>
+    }
+  }
+);</pre>
+            </div>
+
+            <div class="flex-col">
+              <div class="card card-highlight">
+                <div class="card-title"><span class="icon">🔄</span> Result in MongoDB</div>
+                <p>Instead of the default camelCase keys, your MongoDB document will contain:</p>
+                <div class="code-box" style="margin-top: 0.5rem;">
+                  <pre class="code-content">{
+  <span class="str">"name"</span>: <span class="str">"Rahul"</span>,
+  <span class="str">"created_at"</span>: <span class="str">"2026-09-29T10:00:00Z"</span>,
+  <span class="str">"updated_at"</span>: <span class="str">"2026-09-29T10:00:00Z"</span>
+}</pre>
+                </div>
+              </div>
+
+              <div class="callout callout-blue">
+                <span class="callout-icon">💡</span>
+                <div>
+                  <strong>Convention:</strong> By default in JavaScript, <code class="prop">createdAt</code> and <code class="prop">updatedAt</code> are standard. Only customize them if you are integrating with legacy databases or external APIs that require snake_case.
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SECTION 6 — PRACTICAL PROJECT
+           SLIDE 25 — MINI PROJECT: Student Management System
+           ==================================================================== -->
+      <section class="slide" data-slide="25" id="slide-25">
+        <div class="slide-header">
+          <div class="slide-tag">Section 6 — Practical Project</div>
+          <h1 class="slide-title">Mini Project: Student Management System</h1>
+          <p class="slide-subtitle">Tying Pre Hooks, Post Hooks, Validation, and Timestamps into one real-world model</p>
+        </div>
+        <div class="slide-content">
+          <div class="grid-2">
+            <div class="card card-highlight flex-col">
+              <div class="card-title"><span class="icon">🎓</span> Student Model Requirements</div>
+              <p>We will construct a complete Student model containing:</p>
+              <div style="background: var(--bg-surface); border: 1px solid var(--border-medium); border-radius: 6px; padding: 0.85rem; font-family: var(--font-mono); font-size: 0.82rem; line-height: 1.6;">
+                <span style="color: var(--mongo-green); font-weight: 700;">Student</span><br>
+                ├── <span style="color: var(--text-primary);">name</span> (String, required, trim)<br>
+                ├── <span style="color: var(--text-primary);">email</span> (String, required)<br>
+                ├── <span style="color: var(--text-primary);">age</span> (Number, required, min: 16)<br>
+                ├── <span style="color: var(--text-primary);">mark</span> (Number, required, min: 0, max: 100)<br>
+                ├── <span style="color: var(--text-primary);">course</span> (String, required)<br>
+                ├── <span style="color: var(--mongo-green);">createdAt</span> (Date, auto-managed)<br>
+                └── <span style="color: var(--accent-cyan);">updatedAt</span> (Date, auto-managed)
+              </div>
+            </div>
+
+            <div class="card card-highlight-amber flex-col">
+              <div class="card-title"><span class="icon">🛠️</span> Concept Integration Checklist</div>
+              <ul style="list-style: none; display: flex; flex-direction: column; gap: 0.65rem; font-size: 0.88rem; color: var(--text-secondary);">
+                <li><strong style="color: var(--mongo-green);">✓ Mongoose Schema:</strong> Define types and built-in rules</li>
+                <li><strong style="color: var(--mongo-green);">✓ Pre Save Hook:</strong> Validate mark bounds and print prep log</li>
+                <li><strong style="color: var(--mongo-green);">✓ Post Save Hook:</strong> Log student saved confirmation with <code class="prop">doc.name</code></li>
+                <li><strong style="color: var(--mongo-green);">✓ Custom Validation:</strong> Gate bad inputs using <code class="fn">next(new Error(...))</code></li>
+                <li><strong style="color: var(--mongo-green);">✓ Timestamps:</strong> Automatic tracking with <code class="prop">{ timestamps: true }</code></li>
+              </ul>
+              <div class="card-footer-tip" style="margin-top: auto;">
+                <strong>Next:</strong> Let's see the clean project folder structure!
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 26 — Project Structure
+           ==================================================================== -->
+      <section class="slide" data-slide="26" id="slide-26">
+        <div class="slide-header">
+          <div class="slide-tag">Section 6 — Practical Project</div>
+          <h1 class="slide-title">Project Structure (mongoose-day6)</h1>
+          <p class="slide-subtitle">Clean, industry-standard file organization for a beginner Node.js &amp; Mongoose app</p>
+        </div>
+        <div class="slide-content">
+          <div class="grid-split-left-wide">
+            <div class="code-box">
+              <div class="code-header">
+                <div class="code-dots">
+                  <div class="code-dot red"></div>
+                  <div class="code-dot yellow"></div>
+                  <div class="code-dot green"></div>
+                </div>
+                <span class="code-title">File Tree</span>
+              </div>
+              <pre class="code-content" style="color: var(--text-secondary);"><span style="color: var(--mongo-green); font-weight: 700;">mongoose-day6/</span>
+│
+├── <span style="color: var(--accent-cyan); font-weight: 600;">src/</span>
+│   ├── <span style="color: var(--accent-cyan);">config/</span>
+│   │   └── <span style="color: var(--text-primary);">db.js</span>           <span class="comment">// MongoDB connection with mongoose.connect()</span>
+│   │
+│   ├── <span style="color: var(--accent-cyan);">models/</span>
+│   │   └── <span style="color: var(--mongo-green); font-weight: 600;">Student.js</span>      <span class="comment">// Schema + Pre/Post Hooks + Timestamps</span>
+│   │
+│   └── <span style="color: var(--text-primary); font-weight: 600;">app.js</span>              <span class="comment">// Main entry point: creates &amp; updates students</span>
+│
+├── <span style="color: var(--accent-amber);">.env</span>                    <span class="comment">// MONGO_URI and PORT</span>
+├── <span style="color: var(--text-muted);">.gitignore</span>              <span class="comment">// node_modules, .env</span>
+├── <span style="color: var(--accent-cyan);">package.json</span>            <span class="comment">// Dependencies: mongoose, dotenv</span>
+└── <span style="color: var(--text-dim);">package-lock.json</span></pre>
+            </div>
+
+            <div class="flex-col">
+              <div class="card card-highlight">
+                <div class="card-title"><span class="icon">📁</span> Separation of Concerns</div>
+                <p>
+                  <strong>config/db.js:</strong> Keeps database connection logic isolated from models.
+                </p>
+                <p>
+                  <strong>models/Student.js:</strong> Centralizes the student schema, middleware hooks, and validation rules.
+                </p>
+                <p>
+                  <strong>app.js:</strong> Executes the runtime application code cleanly.
+                </p>
+              </div>
+
+              <div class="callout">
+                <span class="callout-icon">💡</span>
+                <div>
+                  <strong>Notice:</strong> We keep everything simple and minimal. No complex controllers, routers, or extraneous libraries needed for mastering middleware!
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 27 — Student Schema
+           ==================================================================== -->
+      <section class="slide" data-slide="27" id="slide-27">
+        <div class="slide-header">
+          <div class="slide-tag">Section 6 — Practical Project</div>
+          <h1 class="slide-title">Defining the Student Schema</h1>
+          <p class="slide-subtitle">Setting up the base schema with field constraints and timestamps</p>
+        </div>
+        <div class="slide-content">
+          <div class="grid-split-left-wide">
+            <div class="code-box">
+              <div class="code-header">
+                <div class="code-dots">
+                  <div class="code-dot red"></div>
+                  <div class="code-dot yellow"></div>
+                  <div class="code-dot green"></div>
+                </div>
+                <span class="code-title">src/models/Student.js (Part 1: Schema)</span>
+                <button class="copy-btn">
+                  <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                  </svg>
+                  Copy
+                </button>
+              </div>
+              <pre class="code-content"><span class="kwd">const</span> <span class="prop">mongoose</span> = <span class="fn">require</span>(<span class="str">"mongoose"</span>);
+
+<span class="kwd">const</span> <span class="prop">studentSchema</span> = <span class="kwd">new</span> <span class="type">mongoose.Schema</span>(
+  {
+    <span class="prop">name</span>: {
+      <span class="prop">type</span>: <span class="type">String</span>,
+      <span class="prop">required</span>: <span class="bool">true</span>,
+      <span class="prop">trim</span>: <span class="bool">true</span>
+    },
+    <span class="prop">email</span>: {
+      <span class="prop">type</span>: <span class="type">String</span>,
+      <span class="prop">required</span>: <span class="bool">true</span>
+    },
+    <span class="prop">age</span>: {
+      <span class="prop">type</span>: <span class="type">Number</span>,
+      <span class="prop">required</span>: <span class="bool">true</span>,
+      <span class="prop">min</span>: <span class="num">16</span>
+    },
+    <span class="prop">mark</span>: {
+      <span class="prop">type</span>: <span class="type">Number</span>,
+      <span class="prop">required</span>: <span class="bool">true</span>,
+      <span class="prop">min</span>: <span class="num">0</span>,
+      <span class="prop">max</span>: <span class="num">100</span>
+    },
+    <span class="prop">course</span>: {
+      <span class="prop">type</span>: <span class="type">String</span>,
+      <span class="prop">required</span>: <span class="bool">true</span>
+    }
+  },
+  {
+    <span class="prop">timestamps</span>: <span class="bool">true</span>
+  }
+);</pre>
+            </div>
+
+            <div class="flex-col">
+              <div class="card card-highlight">
+                <div class="card-title"><span class="icon">🔍</span> Breakdown of Key Schema Features</div>
+                <ul style="list-style: none; display: flex; flex-direction: column; gap: 0.6rem; font-size: 0.85rem; color: var(--text-secondary);">
+                  <li><strong style="color: var(--mongo-green);">trim: true:</strong> Removes leading and trailing spaces from <code class="prop">name</code>.</li>
+                  <li><strong style="color: var(--mongo-green);">min: 16:</strong> Ensures no underage student records are entered.</li>
+                  <li><strong style="color: var(--mongo-green);">min: 0, max: 100:</strong> Built-in boundary checks for student grades.</li>
+                  <li><strong style="color: var(--accent-cyan);">timestamps: true:</strong> Tells Mongoose to automatically attach and update <code class="prop">createdAt</code> and <code class="prop">updatedAt</code>.</li>
+                </ul>
+              </div>
+
+              <div class="callout callout-amber">
+                <span class="callout-icon">⚡</span>
+                <div>
+                  <strong>Note:</strong> We have NOT exported the model yet! We must attach our Pre and Post hooks <strong>before</strong> compiling the schema into a model.
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 28 — Adding Pre Hook
+           ==================================================================== -->
+      <section class="slide" data-slide="28" id="slide-28">
+        <div class="slide-header">
+          <div class="slide-tag">Section 6 — Practical Project</div>
+          <h1 class="slide-title">Adding a Pre Hook to Student Model</h1>
+          <p class="slide-subtitle">Attaching pre-save validation logic directly to the student schema</p>
+        </div>
+        <div class="slide-content">
+          <div class="grid-split-left-wide">
+            <div class="code-box">
+              <div class="code-header">
+                <div class="code-dots">
+                  <div class="code-dot red"></div>
+                  <div class="code-dot yellow"></div>
+                  <div class="code-dot green"></div>
+                </div>
+                <span class="code-title">src/models/Student.js (Part 2: Pre Hook)</span>
+                <button class="copy-btn">
+                  <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                  </svg>
+                  Copy
+                </button>
+              </div>
+              <pre class="code-content"><span class="comment">// Pre-save hook: Enforce mark range validation</span>
+<span class="prop">studentSchema</span>.<span class="fn">pre</span>(<span class="str">"save"</span>, <span class="kwd">function</span>(<span class="prop">next</span>) {
+  <span class="comment">// Check custom validation logic</span>
+  <span class="kwd">if</span> (<span class="kwd">this</span>.<span class="prop">mark</span> &lt; <span class="num">0</span> || <span class="kwd">this</span>.<span class="prop">mark</span> &gt; <span class="num">100</span>) {
+    <span class="kwd">return</span> <span class="fn">next</span>(
+      <span class="kwd">new</span> <span class="type">Error</span>(<span class="str">"Mark must be between 0 and 100"</span>)
+    );
+  }
+
+  <span class="fn">console</span>.<span class="fn">log</span>(<span class="str">`Pre-save passed for: ${<span class="kwd">this</span>.<span class="prop">name</span>}`</span>);
+
+  <span class="comment">// Move on to save</span>
+  <span class="fn">next</span>();
+});</pre>
+            </div>
+
+            <div class="flex-col">
+              <div class="card card-highlight">
+                <div class="card-title"><span class="icon">📍</span> The Pre Hook Decision Flow</div>
+                <div class="flow-vertical" style="margin-top: 0.5rem;">
+                  <div class="flow-step-v">1. Before Save: Intercept</div>
+                  <div class="flow-arrow-v">↓</div>
+                  <div class="flow-step-v" style="border-color: var(--accent-amber); color: var(--accent-amber);">2. Check this.mark</div>
+                  <div class="flow-arrow-v">↓</div>
+                  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; width: 100%; max-width: 380px;">
+                    <div style="background: rgba(251, 113, 133, 0.1); border: 1px solid var(--accent-rose-border); padding: 0.5rem; border-radius: 4px; font-family: var(--font-mono); font-size: 0.75rem; text-align: center; color: var(--accent-rose);">
+                      &lt;0 or &gt;100<br>
+                      <strong>next(Error)</strong>
+                    </div>
+                    <div style="background: rgba(0, 237, 100, 0.1); border: 1px solid var(--mongo-green-border); padding: 0.5rem; border-radius: 4px; font-family: var(--font-mono); font-size: 0.75rem; text-align: center; color: var(--mongo-green);">
+                      0 to 100<br>
+                      <strong>next() &rarr; Save</strong>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="callout callout-amber">
+                <span class="callout-icon">💡</span>
+                <div>
+                  <strong>Early Return:</strong> Notice <code class="kwd">return next(new Error(...))</code>. The <code class="kwd">return</code> statement is essential to stop further execution of the function!
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 29 — Adding Post Hook
+           ==================================================================== -->
+      <section class="slide" data-slide="29" id="slide-29">
+        <div class="slide-header">
+          <div class="slide-tag">Section 6 — Practical Project</div>
+          <h1 class="slide-title">Adding a Post Hook to Student Model</h1>
+          <p class="slide-subtitle">Logging successful database writes with document details</p>
+        </div>
+        <div class="slide-content">
+          <div class="grid-split-left-wide">
+            <div class="code-box">
+              <div class="code-header">
+                <div class="code-dots">
+                  <div class="code-dot red"></div>
+                  <div class="code-dot yellow"></div>
+                  <div class="code-dot green"></div>
+                </div>
+                <span class="code-title">src/models/Student.js (Part 3: Post Hook)</span>
+                <button class="copy-btn">
+                  <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                  </svg>
+                  Copy
+                </button>
+              </div>
+              <pre class="code-content"><span class="comment">// Post-save hook: Confirms document is safely in MongoDB</span>
+<span class="prop">studentSchema</span>.<span class="fn">post</span>(<span class="str">"save"</span>, <span class="kwd">function</span>(<span class="prop">doc</span>) {
+  <span class="fn">console</span>.<span class="fn">log</span>(
+    <span class="str">`Student ${<span class="prop">doc</span>.<span class="prop">name</span>} saved successfully`</span>
+  );
+  <span class="fn">console</span>.<span class="fn">log</span>(<span class="str">"Creation timestamp:"</span>, <span class="prop">doc</span>.<span class="prop">createdAt</span>);
+});</pre>
+              <div class="terminal-output">
+                <span class="out-info">Terminal Output after save:</span><br>
+                <span class="out-success">&gt; Student Rahul saved successfully</span><br>
+                <span class="out-info">&gt; Creation timestamp: 2026-09-29T10:00:00.000Z</span>
+              </div>
+            </div>
+
+            <div class="flex-col">
+              <div class="card card-highlight-blue">
+                <div class="card-title"><span class="icon">🔄</span> What Runs Here?</div>
+                <p>
+                  This function triggers <strong>after</strong> MongoDB successfully completes the write operation.
+                </p>
+                <p>
+                  Because <code class="prop">timestamps: true</code> is active, the <code class="prop">doc</code> object already has its newly generated <code class="prop">createdAt</code> and <code class="prop">updatedAt</code> dates attached!
+                </p>
+              </div>
+
+              <div class="callout">
+                <span class="callout-icon">⚡</span>
+                <div>
+                  <strong>Notice:</strong> Post hooks never block the write from happening, because by the time this runs, the data is already inside the database.
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 30 — Complete Student Model
+           ==================================================================== -->
+      <section class="slide" data-slide="30" id="slide-30">
+        <div class="slide-header">
+          <div class="slide-tag">Section 6 — Practical Project</div>
+          <h1 class="slide-title">Complete Student Model (Student.js)</h1>
+          <p class="slide-subtitle">The entire production-ready file combining schema, hooks, and timestamps</p>
+        </div>
+        <div class="slide-content">
+          <div class="code-box">
+            <div class="code-header">
+              <div class="code-dots">
+                <div class="code-dot red"></div>
+                <div class="code-dot yellow"></div>
+                <div class="code-dot green"></div>
+              </div>
+              <span class="code-title">src/models/Student.js (Full File)</span>
+              <button class="copy-btn">
+                <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2">
+                  <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                  <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                </svg>
+                Copy
+              </button>
+            </div>
+            <pre class="code-content"><span class="kwd">const</span> <span class="prop">mongoose</span> = <span class="fn">require</span>(<span class="str">"mongoose"</span>);
+
+<span class="comment">// 1. Schema Definition with Timestamps</span>
+<span class="kwd">const</span> <span class="prop">studentSchema</span> = <span class="kwd">new</span> <span class="type">mongoose.Schema</span>(
+  {
+    <span class="prop">name</span>: { <span class="prop">type</span>: <span class="type">String</span>, <span class="prop">required</span>: <span class="bool">true</span>, <span class="prop">trim</span>: <span class="bool">true</span> },
+    <span class="prop">email</span>: { <span class="prop">type</span>: <span class="type">String</span>, <span class="prop">required</span>: <span class="bool">true</span> },
+    <span class="prop">age</span>: { <span class="prop">type</span>: <span class="type">Number</span>, <span class="prop">required</span>: <span class="bool">true</span>, <span class="prop">min</span>: <span class="num">16</span> },
+    <span class="prop">mark</span>: { <span class="prop">type</span>: <span class="type">Number</span>, <span class="prop">required</span>: <span class="bool">true</span>, <span class="prop">min</span>: <span class="num">0</span>, <span class="prop">max</span>: <span class="num">100</span> },
+    <span class="prop">course</span>: { <span class="prop">type</span>: <span class="type">String</span>, <span class="prop">required</span>: <span class="bool">true</span> }
+  },
+  {
+    <span class="prop">timestamps</span>: <span class="bool">true</span>
+  }
+);
+
+<span class="comment">// 2. Pre Save Hook (Validation &amp; Prep)</span>
+<span class="prop">studentSchema</span>.<span class="fn">pre</span>(<span class="str">"save"</span>, <span class="kwd">function</span>(<span class="prop">next</span>) {
+  <span class="kwd">if</span> (<span class="kwd">this</span>.<span class="prop">mark</span> &lt; <span class="num">0</span> || <span class="kwd">this</span>.<span class="prop">mark</span> &gt; <span class="num">100</span>) {
+    <span class="kwd">return</span> <span class="fn">next</span>(<span class="kwd">new</span> <span class="type">Error</span>(<span class="str">"Mark must be between 0 and 100"</span>));
+  }
+  <span class="fn">next</span>();
+});
+
+<span class="comment">// 3. Post Save Hook (Confirmation Log)</span>
+<span class="prop">studentSchema</span>.<span class="fn">post</span>(<span class="str">"save"</span>, <span class="kwd">function</span>(<span class="prop">doc</span>) {
+  <span class="fn">console</span>.<span class="fn">log</span>(<span class="str">`Student ${<span class="prop">doc</span>.<span class="prop">name</span>} saved successfully`</span>);
+});
+
+<span class="comment">// 4. Compile and Export Model (AFTER hooks are attached!)</span>
+<span class="prop">module</span>.<span class="prop">exports</span> = <span class="prop">mongoose</span>.<span class="fn">model</span>(<span class="str">"Student"</span>, <span class="prop">studentSchema</span>);</pre>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 31 — Creating a Student
+           ==================================================================== -->
+      <section class="slide" data-slide="31" id="slide-31">
+        <div class="slide-header">
+          <div class="slide-tag">Section 6 — Practical Project</div>
+          <h1 class="slide-title">Creating a Student in app.js</h1>
+          <p class="slide-subtitle">Calling Student.create() and observing the full lifecycle in motion</p>
+        </div>
+        <div class="slide-content">
+          <div class="grid-split-left-wide">
+            <div class="code-box">
+              <div class="code-header">
+                <div class="code-dots">
+                  <div class="code-dot red"></div>
+                  <div class="code-dot yellow"></div>
+                  <div class="code-dot green"></div>
+                </div>
+                <span class="code-title">src/app.js — Student Creation</span>
+                <button class="copy-btn">
+                  <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                  </svg>
+                  Copy
+                </button>
+              </div>
+              <pre class="code-content"><span class="kwd">const</span> <span class="type">Student</span> = <span class="fn">require</span>(<span class="str">"./models/Student"</span>);
+
+<span class="kwd">async</span> <span class="kwd">function</span> <span class="fn">run</span>() {
+  <span class="kwd">try</span> {
+    <span class="comment">// Create a new student record</span>
+    <span class="kwd">const</span> <span class="prop">student</span> = <span class="kwd">await</span> <span class="type">Student</span>.<span class="fn">create</span>({
+      <span class="prop">name</span>: <span class="str">"Rahul"</span>,
+      <span class="prop">email</span>: <span class="str">"rahul@gmail.com"</span>,
+      <span class="prop">age</span>: <span class="num">21</span>,
+      <span class="prop">mark</span>: <span class="num">85</span>,
+      <span class="prop">course</span>: <span class="str">"MERN"</span>
+    });
+
+    <span class="fn">console</span>.<span class="fn">log</span>(<span class="str">"Created Document:"</span>, <span class="prop">student</span>);
+  } <span class="kwd">catch</span> (<span class="prop">err</span>) {
+    <span class="fn">console</span>.<span class="fn">error</span>(<span class="str">"Save failed:"</span>, <span class="prop">err</span>.<span class="prop">message</span>);
+  }
+}
+
+<span class="fn">run</span>();</pre>
+            </div>
+
+            <div class="flex-col">
+              <div class="card card-highlight">
+                <div class="card-title"><span class="icon">⚙️</span> Step-by-Step Execution</div>
+                <div class="flow-vertical" style="gap: 0.3rem;">
+                  <div class="flow-step-v">1. Student.create() called</div>
+                  <div class="flow-arrow-v">↓</div>
+                  <div class="flow-step-v">2. Schema Validation checks types &amp; min</div>
+                  <div class="flow-arrow-v">↓</div>
+                  <div class="flow-step-v" style="color: var(--mongo-green);">3. Pre Save Hook checks mark &amp; calls next()</div>
+                  <div class="flow-arrow-v">↓</div>
+                  <div class="flow-step-v">4. MongoDB saves record with Timestamps</div>
+                  <div class="flow-arrow-v">↓</div>
+                  <div class="flow-step-v" style="color: var(--accent-cyan);">5. Post Save Hook logs success</div>
+                  <div class="flow-arrow-v">↓</div>
+                  <div class="flow-step-v">6. Document returned to application</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 32 — What Happens to Timestamps? (Interactive Timeline)
+           ==================================================================== -->
+      <section class="slide" data-slide="32" id="slide-32">
+        <div class="slide-header">
+          <div class="slide-tag">Section 6 — Practical Project</div>
+          <h1 class="slide-title">Timestamp Behavior: Interactive Timeline</h1>
+          <p class="slide-subtitle">Watch how createdAt remains locked in time while updatedAt updates on every save</p>
+        </div>
+        <div class="slide-content">
+          <div class="timeline-container">
+            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem;">
+              <div style="font-family: var(--font-mono); font-size: 0.85rem; color: var(--text-primary);">
+                <strong>Document Timeline:</strong> Student "Rahul"
+              </div>
+              <div style="display: flex; gap: 0.5rem;">
+                <button class="demo-btn btn-cyan" id="simUpdateTimestampBtn">
+                  <span>⚡ Simulate Update (Change Mark to 92 &amp; Save)</span>
+                </button>
+                <button class="demo-btn btn-reset" id="simResetTimestampBtn">
+                  <span>Reset</span>
+                </button>
+              </div>
+            </div>
+
+            <div class="timeline-track">
+              <div class="timeline-line"></div>
+
+              <!-- Node 1: Creation -->
+              <div class="timeline-node">
+                <div class="timeline-badge">1. Created At Initial Save</div>
+                <div class="timeline-time">10:00:00 AM UTC</div>
+                <pre class="timeline-doc">{
+  "_id": "673f8a19b4e2f90a12",
+  "name": "Rahul",
+  "mark": 85,
+  "createdAt": "<span class="highlight-same">10:00:00.000Z</span>",
+  "updatedAt": "<span class="highlight-same">10:00:00.000Z</span>"
+}</pre>
+              </div>
+
+              <!-- Node 2: After Update -->
+              <div class="timeline-node updated-node">
+                <div class="timeline-badge">2. After student.save()</div>
+                <div class="timeline-time" id="timelineAfterLabel">A few hours / minutes later...</div>
+                <pre class="timeline-doc" id="timelineAfterDoc">{
+  "_id": "673f8a19b4e2f90a12",
+  "name": "Rahul",
+  "mark": 85,
+  "course": "MERN",
+  "createdAt": "<span class="highlight-same">2026-09-29T10:00:00.000Z</span>",
+  "updatedAt": "<span class="highlight-same">2026-09-29T10:00:00.000Z</span>"
+}</pre>
+              </div>
+            </div>
+
+            <div class="callout" id="timestampNote">
+              <span class="callout-icon">💡</span>
+              <div>
+                Click the button above to simulate <code class="prop">student.mark = 92; await student.save();</code> and watch <code class="prop">updatedAt</code> refresh automatically.
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SECTION 7 — UNDERSTANDING THE COMPLETE FLOW
+           SLIDE 33 — Complete Mongoose Flow
+           ==================================================================== -->
+      <section class="slide" data-slide="33" id="slide-33">
+        <div class="slide-header">
+          <div class="slide-tag">Section 7 — Complete Flow</div>
+          <h1 class="slide-title">Complete Mongoose Execution Flow</h1>
+          <p class="slide-subtitle">The full master architecture from client request to database persistence</p>
+        </div>
+        <div class="slide-content">
+          <div class="grid-split-left-wide">
+            <div class="card card-highlight flex-col" style="justify-content: center;">
+              <h3 style="font-size: 1.05rem; color: var(--mongo-green); margin-bottom: 0.5rem; text-align: center;">Master Lifecycle Pipeline</h3>
+              <div class="flow-vertical">
+                <div class="flow-step-v">
+                  <span>1. Application Controller</span>
+                  <span style="color: var(--accent-cyan); font-size: 0.75rem;">Student.create(data)</span>
+                </div>
+                <div class="flow-arrow-v">↓</div>
+                <div class="flow-step-v">
+                  <span>2. Schema Validation</span>
+                  <span style="color: var(--accent-amber); font-size: 0.75rem;">required, min, max, types</span>
+                </div>
+                <div class="flow-arrow-v">↓</div>
+                <div class="flow-step-v" style="border-color: var(--mongo-green); color: var(--mongo-green);">
+                  <span>3. Pre Hook Execution</span>
+                  <span style="font-size: 0.75rem;">schema.pre("save")</span>
+                </div>
+                <div class="flow-arrow-v">↓</div>
+                <div class="flow-step-v" style="border-color: var(--accent-purple); color: var(--accent-purple);">
+                  <span>4. Timestamps Injected</span>
+                  <span style="font-size: 0.75rem;">createdAt &amp; updatedAt set</span>
+                </div>
+                <div class="flow-arrow-v">↓</div>
+                <div class="flow-step-v">
+                  <span>5. MongoDB Operation</span>
+                  <span style="color: var(--text-muted); font-size: 0.75rem;">BSON insert / update</span>
+                </div>
+                <div class="flow-arrow-v">↓</div>
+                <div class="flow-step-v" style="border-color: var(--accent-cyan); color: var(--accent-cyan);">
+                  <span>6. Post Hook Execution</span>
+                  <span style="font-size: 0.75rem;">schema.post("save", doc)</span>
+                </div>
+                <div class="flow-arrow-v">↓</div>
+                <div class="flow-step-v">
+                  <span>7. Document Returned</span>
+                  <span style="color: var(--mongo-green); font-size: 0.75rem;">Promise resolves</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="flex-col">
+              <div class="card">
+                <div class="card-title"><span class="icon">🧠</span> The Big Picture</div>
+                <p>
+                  Notice how each component has a single, well-defined responsibility:
+                </p>
+                <ul style="list-style: none; display: flex; flex-direction: column; gap: 0.5rem; font-size: 0.85rem; color: var(--text-secondary); margin-top: 0.25rem;">
+                  <li>• <strong>Schema:</strong> Enforces structural blueprint &amp; types</li>
+                  <li>• <strong>Pre Hook:</strong> Custom validation &amp; data sanitization</li>
+                  <li>• <strong>Timestamps:</strong> Automatic auditing metadata</li>
+                  <li>• <strong>MongoDB:</strong> Storage and index management</li>
+                  <li>• <strong>Post Hook:</strong> Post-save telemetry and events</li>
+                </ul>
+              </div>
+
+              <div class="callout callout-blue">
+                <span class="callout-icon">⚡</span>
+                <div>
+                  <strong>Key Takeaway:</strong> Timestamps are an automatic layer maintained seamlessly by Mongoose without requiring manual hook intervention.
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 34 — Pre vs Post vs Validation vs Timestamps
+           ==================================================================== -->
+      <section class="slide" data-slide="34" id="slide-34">
+        <div class="slide-header">
+          <div class="slide-tag">Section 7 — Complete Flow</div>
+          <h1 class="slide-title">Pre vs Post vs Validation vs Timestamps</h1>
+          <p class="slide-subtitle">Summary matrix of the four core pillars learned today</p>
+        </div>
+        <div class="slide-content">
+          <div class="table-wrapper">
+            <table class="styled-table">
+              <thead>
+                <tr>
+                  <th>Feature</th>
+                  <th>Primary Purpose</th>
+                  <th>When It Executes</th>
+                  <th>Access to Document</th>
+                  <th>How to Enable</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong style="color: var(--mongo-green);">Pre Hook</strong></td>
+                  <td>Run logic or modify data before an operation</td>
+                  <td>Before database write</td>
+                  <td>Via <code class="kwd">this</code> (normal function)</td>
+                  <td><code class="str">schema.pre("save", fn)</code></td>
+                </tr>
+                <tr>
+                  <td><strong style="color: var(--accent-cyan);">Post Hook</strong></td>
+                  <td>Run logic or notify after an operation succeeds</td>
+                  <td>After database write</td>
+                  <td>Via parameter <code class="prop">doc</code></td>
+                  <td><code class="str">schema.post("save", fn)</code></td>
+                </tr>
+                <tr>
+                  <td><strong style="color: var(--accent-amber);">Validation</strong></td>
+                  <td>Ensure data satisfies constraints before storage</td>
+                  <td>Before database write</td>
+                  <td>Via schema rules or pre-save</td>
+                  <td><code class="prop">min, max</code> or <code class="fn">next(err)</code></td>
+                </tr>
+                <tr>
+                  <td><strong style="color: var(--accent-purple);">Timestamps</strong></td>
+                  <td>Automatically track creation and update dates</td>
+                  <td>Automatically on save/update</td>
+                  <td><code class="prop">doc.createdAt</code>, <code class="prop">doc.updatedAt</code></td>
+                  <td><code class="prop">{ timestamps: true }</code></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="callout">
+            <span class="callout-icon">💡</span>
+            <div>
+              <strong>Classroom Summary:</strong> Pre hooks <em>prepare</em>, Post hooks <em>react</em>, Validation <em>protects</em>, and Timestamps <em>audit</em>!
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 35 — Common Mistakes
+           ==================================================================== -->
+      <section class="slide" data-slide="35" id="slide-35">
+        <div class="slide-header">
+          <div class="slide-tag tag-rose">Section 7 — Pitfalls</div>
+          <h1 class="slide-title">Common Beginner Mistakes &amp; Fixes</h1>
+          <p class="slide-subtitle">Four traps beginner developers fall into when writing Mongoose middleware</p>
+        </div>
+        <div class="slide-content">
+          <div class="grid-2">
+            <!-- Mistake 1 -->
+            <div class="card" style="border-left: 4px solid var(--accent-rose);">
+              <div class="card-title" style="color: var(--accent-rose); font-size: 0.95rem;">
+                Mistake 1: Forgetting next()
+              </div>
+              <p style="font-size: 0.82rem;">
+                If you forget <code class="fn">next()</code> in a pre hook, Mongoose never proceeds and your request hangs forever!
+              </p>
+              <div style="font-family: var(--font-mono); font-size: 0.78rem; background: var(--bg-surface); padding: 0.5rem; border-radius: 4px;">
+                <span style="color: var(--accent-rose);">❌ Missing next():</span> schema.pre("save", function(next) { console.log("Hi"); });<br>
+                <span style="color: var(--mongo-green);">✅ Correct:</span> schema.pre("save", function(next) { console.log("Hi"); <strong style="color: var(--mongo-green);">next();</strong> });
+              </div>
+            </div>
+
+            <!-- Mistake 2 -->
+            <div class="card" style="border-left: 4px solid var(--accent-rose);">
+              <div class="card-title" style="color: var(--accent-rose); font-size: 0.95rem;">
+                Mistake 2: Using Arrow Functions with "this"
+              </div>
+              <p style="font-size: 0.82rem;">
+                Arrow functions do not bind <code class="kwd">this</code>. Accessing <code class="prop">this.name</code> inside an arrow hook returns <code class="str">undefined</code>!
+              </p>
+              <div style="font-family: var(--font-mono); font-size: 0.78rem; background: var(--bg-surface); padding: 0.5rem; border-radius: 4px;">
+                <span style="color: var(--accent-rose);">❌ Arrow fn:</span> schema.pre("save", (next) =&gt; { this.name; });<br>
+                <span style="color: var(--mongo-green);">✅ Normal fn:</span> schema.pre("save", <strong style="color: var(--mongo-green);">function</strong>(next) { this.name; next(); });
+              </div>
+            </div>
+
+            <!-- Mistake 3 -->
+            <div class="card" style="border-left: 4px solid var(--accent-rose);">
+              <div class="card-title" style="color: var(--accent-rose); font-size: 0.95rem;">
+                Mistake 3: Middleware After model() Compilation
+              </div>
+              <p style="font-size: 0.82rem;">
+                Hooks must be declared on the schema <strong>before</strong> compiling with <code class="fn">mongoose.model()</code>. Hooks added after will be completely ignored!
+              </p>
+              <div style="font-family: var(--font-mono); font-size: 0.78rem; background: var(--bg-surface); padding: 0.5rem; border-radius: 4px;">
+                <span style="color: var(--mongo-green);">Order:</span> Schema Definition &rarr; <strong>pre/post hooks</strong> &rarr; mongoose.model()
+              </div>
+            </div>
+
+            <!-- Mistake 4 -->
+            <div class="card" style="border-left: 4px solid var(--accent-rose);">
+              <div class="card-title" style="color: var(--accent-rose); font-size: 0.95rem;">
+                Mistake 4: Overcomplicating Simple Validation
+              </div>
+              <p style="font-size: 0.82rem;">
+                Writing complex middleware for simple bounds that Mongoose already handles natively via schema options.
+              </p>
+              <div style="font-family: var(--font-mono); font-size: 0.78rem; background: var(--bg-surface); padding: 0.5rem; border-radius: 4px;">
+                <span style="color: var(--mongo-green);">Rule:</span> Use schema options (<code class="prop">min, max, required</code>) first; reserve middleware for custom compound checks.
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 36 — Practical Exercise
+           ==================================================================== -->
+      <section class="slide" data-slide="36" id="slide-36">
+        <div class="slide-header">
+          <div class="slide-tag tag-blue">Classroom Challenge</div>
+          <h1 class="slide-title">Practical Exercise: Student Validation &amp; Timestamps</h1>
+          <p class="slide-subtitle">Hands-on student assignment to complete in your code editor</p>
+        </div>
+        <div class="slide-content">
+          <div class="card card-highlight">
+            <div class="card-title"><span class="icon">🎯</span> Assignment Tasks</div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 0.5rem;">
+              <ol style="display: flex; flex-direction: column; gap: 0.5rem; font-size: 0.88rem; color: var(--text-secondary); padding-left: 1.25rem;">
+                <li>Create a <strong>Student</strong> schema with <code class="prop">name</code>, <code class="prop">email</code>, <code class="prop">age</code>, <code class="prop">mark</code>, and <code class="prop">course</code>.</li>
+                <li>Add <code class="prop">{ timestamps: true }</code> to the schema options.</li>
+                <li>Add a <strong>pre-save hook</strong> that validates <code class="prop">mark</code>: reject if &lt; 0 or &gt; 100 with an Error.</li>
+                <li>Add a <strong>post-save hook</strong> that logs <code class="str">"Student [name] saved successfully"</code>.</li>
+              </ol>
+              <ol start="5" style="display: flex; flex-direction: column; gap: 0.5rem; font-size: 0.88rem; color: var(--text-secondary); padding-left: 1.25rem;">
+                <li>In <code class="prop">app.js</code>, create at least <strong>3 students</strong> with valid marks.</li>
+                <li>Display their <code class="prop">createdAt</code> and <code class="prop">updatedAt</code> timestamps in the terminal.</li>
+                <li>Update one student's mark from 85 to 95 and save.</li>
+                <li>Verify in the terminal that <code class="prop">createdAt</code> stayed the same while <code class="prop">updatedAt</code> changed!</li>
+              </ol>
+            </div>
+          </div>
+
+          <div class="callout callout-amber">
+            <span class="callout-icon">💡</span>
+            <div>
+              <strong>Bonus Challenge:</strong> Add a test case where a student is created with <code class="prop">mark: 120</code>. Catch the error in a <code class="kwd">try/catch</code> block and print the error message!
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 37 — Quick Quiz
+           ==================================================================== -->
+      <section class="slide" data-slide="37" id="slide-37">
+        <div class="slide-header">
+          <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem;">
+            <div>
+              <div class="slide-tag tag-amber">Review</div>
+              <h1 class="slide-title">Quick Classroom Quiz</h1>
+            </div>
+            <div style="display: flex; gap: 0.5rem;">
+              <button class="demo-btn" id="revealQuizAllBtn" style="font-size: 0.75rem; padding: 0.35rem 0.75rem;">Reveal All</button>
+              <button class="demo-btn btn-reset" id="hideQuizAllBtn" style="font-size: 0.75rem; padding: 0.35rem 0.75rem;">Hide All</button>
+            </div>
+          </div>
+          <p class="slide-subtitle">Test your understanding of today's core concepts with 10 quick questions</p>
+        </div>
+        <div class="slide-content">
+          <div class="quiz-list">
+            <!-- Q1 -->
+            <div class="quiz-card">
+              <div class="quiz-q"><span class="quiz-badge">Q1</span> What is Mongoose middleware?</div>
+              <button class="quiz-btn">Show Answer</button>
+              <div class="quiz-ans">Functions that run at specified points during Mongoose document operations (before or after operations like save).</div>
+            </div>
+
+            <!-- Q2 -->
+            <div class="quiz-card">
+              <div class="quiz-q"><span class="quiz-badge">Q2</span> What is a pre hook?</div>
+              <button class="quiz-btn">Show Answer</button>
+              <div class="quiz-ans">A middleware function that executes <strong>before</strong> a Mongoose operation writes data to MongoDB.</div>
+            </div>
+
+            <!-- Q3 -->
+            <div class="quiz-card">
+              <div class="quiz-q"><span class="quiz-badge">Q3</span> What is a post hook?</div>
+              <button class="quiz-btn">Show Answer</button>
+              <div class="quiz-ans">A middleware function that executes <strong>after</strong> an operation has successfully completed.</div>
+            </div>
+
+            <!-- Q4 -->
+            <div class="quiz-card">
+              <div class="quiz-q"><span class="quiz-badge">Q4</span> What does next() do in middleware?</div>
+              <button class="quiz-btn">Show Answer</button>
+              <div class="quiz-ans">It passes control to the next middleware in the queue. Calling next(new Error(...)) halts the save with an error.</div>
+            </div>
+
+            <!-- Q5 -->
+            <div class="quiz-card">
+              <div class="quiz-q"><span class="quiz-badge">Q5</span> What does "this" represent in a pre-save hook?</div>
+              <button class="quiz-btn">Show Answer</button>
+              <div class="quiz-ans">It refers directly to the current Mongoose document instance being saved.</div>
+            </div>
+
+            <!-- Q6 -->
+            <div class="quiz-card">
+              <div class="quiz-q"><span class="quiz-badge">Q6</span> Why avoid arrow functions when using "this"?</div>
+              <button class="quiz-btn">Show Answer</button>
+              <div class="quiz-ans">Arrow functions do not bind their own 'this' context, causing this to be undefined inside the hook.</div>
+            </div>
+
+            <!-- Q7 -->
+            <div class="quiz-card">
+              <div class="quiz-q"><span class="quiz-badge">Q7</span> What is validation in Mongoose?</div>
+              <button class="quiz-btn">Show Answer</button>
+              <div class="quiz-ans">Checking whether data follows specified rules and constraints before it is stored in the database.</div>
+            </div>
+
+            <!-- Q8 -->
+            <div class="quiz-card">
+              <div class="quiz-q"><span class="quiz-badge">Q8</span> What does { timestamps: true } do?</div>
+              <button class="quiz-btn">Show Answer</button>
+              <div class="quiz-ans">Automatically injects and manages createdAt and updatedAt Date fields on your documents.</div>
+            </div>
+
+            <!-- Q9 -->
+            <div class="quiz-card">
+              <div class="quiz-q"><span class="quiz-badge">Q9</span> Difference between createdAt &amp; updatedAt?</div>
+              <button class="quiz-btn">Show Answer</button>
+              <div class="quiz-ans">createdAt is set once upon creation and never changes; updatedAt updates every time the document is modified.</div>
+            </div>
+
+            <!-- Q10 -->
+            <div class="quiz-card">
+              <div class="quiz-q"><span class="quiz-badge">Q10</span> When should custom validation middleware be used?</div>
+              <button class="quiz-btn">Show Answer</button>
+              <div class="quiz-ans">When validation involves custom business logic, multi-field comparisons, or asynchronous checks beyond simple built-in rules.</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 38 — Final Cheat Sheet
+           ==================================================================== -->
+      <section class="slide" data-slide="38" id="slide-38">
+        <div class="slide-header">
+          <div class="slide-tag tag-blue">Reference</div>
+          <h1 class="slide-title">Final Syntax Cheat Sheet</h1>
+          <p class="slide-subtitle">Compact syntax cards to keep open while coding your MERN assignments</p>
+        </div>
+        <div class="slide-content">
+          <div class="grid-3">
+            <!-- Pre Hook Card -->
+            <div class="card card-highlight">
+              <div class="card-title" style="color: var(--mongo-green);">
+                <span class="icon">⚡</span> PRE HOOK
+              </div>
+              <div class="code-box" style="margin-top: 0.25rem;">
+                <pre class="code-content"><span class="prop">schema</span>.<span class="fn">pre</span>(<span class="str">"save"</span>, <span class="kwd">function</span>(<span class="prop">next</span>) {
+  <span class="comment">// 1. Runs before save</span>
+  <span class="kwd">this</span>.<span class="prop">name</span> = <span class="kwd">this</span>.<span class="prop">name</span>.<span class="fn">trim</span>();
+
+  <span class="comment">// 2. Continue or error</span>
+  <span class="fn">next</span>();
+});</pre>
+              </div>
+              <div class="card-footer-tip">
+                <strong>Uses:</strong> Trimming, hashing, custom validation gates.
+              </div>
+            </div>
+
+            <!-- Post Hook Card -->
+            <div class="card card-highlight-blue">
+              <div class="card-title" style="color: var(--accent-cyan);">
+                <span class="icon">🔄</span> POST HOOK
+              </div>
+              <div class="code-box" style="margin-top: 0.25rem;">
+                <pre class="code-content"><span class="prop">schema</span>.<span class="fn">post</span>(<span class="str">"save"</span>, <span class="kwd">function</span>(<span class="prop">doc</span>) {
+  <span class="comment">// 1. Runs after save</span>
+  <span class="fn">console</span>.<span class="fn">log</span>(<span class="str">"Saved:"</span>, <span class="prop">doc</span>.<span class="prop">name</span>);
+  <span class="fn">console</span>.<span class="fn">log</span>(<span class="str">"ID:"</span>, <span class="prop">doc</span>.<span class="prop">_id</span>);
+});</pre>
+              </div>
+              <div class="card-footer-tip">
+                <strong>Uses:</strong> Logging, notifications, triggering follow-up events.
+              </div>
+            </div>
+
+            <!-- Timestamps Card -->
+            <div class="card card-highlight-purple">
+              <div class="card-title" style="color: var(--accent-purple);">
+                <span class="icon">⏱️</span> TIMESTAMPS
+              </div>
+              <div class="code-box" style="margin-top: 0.25rem;">
+                <pre class="code-content"><span class="kwd">new</span> <span class="type">mongoose.Schema</span>(
+  {
+    <span class="prop">name</span>: <span class="type">String</span>
+  },
+  {
+    <span class="prop">timestamps</span>: <span class="bool">true</span>
+  }
+);</pre>
+              </div>
+              <div class="card-footer-tip">
+                <strong>Generates:</strong> <code class="prop">createdAt</code> &amp; <code class="prop">updatedAt</code>.
+              </div>
+            </div>
+          </div>
+
+          <div class="callout callout-amber" style="margin-top: 0.5rem;">
+            <span class="callout-icon">💡</span>
+            <div>
+              <strong>Order of Operations:</strong> Always attach your <code class="fn">pre</code> and <code class="fn">post</code> middleware to the schema <strong>before</strong> calling <code class="fn">mongoose.model()</code>!
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 39 — Final Concept Map
+           ==================================================================== -->
+      <section class="slide" data-slide="39" id="slide-39">
+        <div class="slide-header">
+          <div class="slide-tag">Architecture</div>
+          <h1 class="slide-title">Interactive Concept Map</h1>
+          <p class="slide-subtitle">Click any branch below to explore its role in the Mongoose architecture</p>
+        </div>
+        <div class="slide-content">
+          <div class="concept-map-container">
+            <!-- Root -->
+            <div class="map-root active-map" data-map-key="mongoose">
+              MONGOOSE
+            </div>
+
+            <!-- Branches -->
+            <div class="map-branches">
+              <div class="map-branch-card" data-map-key="pre">
+                <div class="map-branch-title">⚡ PRE HOOK</div>
+                <div class="map-branch-desc">Before operation &bull; schema.pre() &bull; Data modification &bull; next()</div>
+              </div>
+
+              <div class="map-branch-card" data-map-key="post">
+                <div class="map-branch-title">🔄 POST HOOK</div>
+                <div class="map-branch-desc">After operation &bull; schema.post() &bull; Receives doc &bull; Logging</div>
+              </div>
+
+              <div class="map-branch-card" data-map-key="timestamps">
+                <div class="map-branch-title">⏱️ TIMESTAMPS</div>
+                <div class="map-branch-desc">{ timestamps: true } &bull; createdAt &bull; updatedAt</div>
+              </div>
+            </div>
+
+            <div class="map-detail-panel" id="mapDetailPanel">
+              <strong>Mongoose Middleware &amp; Timestamps Core:</strong> Extends MongoDB document lifecycle with interception hooks, data validation gates, and automatic auditing timestamps. Click any box above to see details!
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 40 — Summary
+           ==================================================================== -->
+      <section class="slide" data-slide="40" id="slide-40">
+        <div class="slide-header">
+          <div class="slide-tag tag-blue">Conclusion</div>
+          <h1 class="slide-title">Summary: What We Learned Today</h1>
+          <p class="slide-subtitle">Congratulations! You have mastered Mongoose Middleware and Timestamps</p>
+        </div>
+        <div class="slide-content">
+          <div class="grid-2">
+            <div class="card card-highlight">
+              <div class="card-title"><span class="icon">🎓</span> Today's Core Takeaways</div>
+              <ul style="list-style: none; display: flex; flex-direction: column; gap: 0.65rem; font-size: 0.88rem; color: var(--text-secondary);">
+                <li>
+                  <strong style="color: var(--mongo-green);">1. Pre Hooks:</strong> Run before an operation executes. Use traditional functions to access <code class="kwd">this</code>, and always call <code class="fn">next()</code>.
+                </li>
+                <li>
+                  <strong style="color: var(--accent-cyan);">2. Post Hooks:</strong> Run after an operation completes. Access the saved document via <code class="prop">doc</code> to log or notify.
+                </li>
+                <li>
+                  <strong style="color: var(--accent-amber);">3. Validation Middleware:</strong> Halt invalid saves before database writes using <code class="fn">next(new Error(...))</code>.
+                </li>
+                <li>
+                  <strong style="color: var(--accent-purple);">4. Timestamps:</strong> Add <code class="prop">{ timestamps: true }</code> to effortlessly track <code class="prop">createdAt</code> and <code class="prop">updatedAt</code>.
+                </li>
+              </ul>
+            </div>
+
+            <div class="card card-highlight-blue flex-col" style="justify-content: center;">
+              <h3 style="font-size: 1rem; color: var(--mongo-green); margin-bottom: 0.5rem; text-align: center;">The Most Important Flow</h3>
+              <div class="flow-vertical">
+                <div class="flow-step-v">Operation: Student.create()</div>
+                <div class="flow-arrow-v">↓</div>
+                <div class="flow-step-v">Schema Validation</div>
+                <div class="flow-arrow-v">↓</div>
+                <div class="flow-step-v" style="color: var(--mongo-green);">Pre Hook (Preparation &amp; Gates)</div>
+                <div class="flow-arrow-v">↓</div>
+                <div class="flow-step-v">Database Write + Timestamps</div>
+                <div class="flow-arrow-v">↓</div>
+                <div class="flow-step-v" style="color: var(--accent-cyan);">Post Hook (Confirmation &amp; Logs)</div>
+                <div class="flow-arrow-v">↓</div>
+                <div class="flow-step-v" style="color: var(--text-primary); font-weight: 700;">Result Returned to Application</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="callout" style="text-align: center; justify-content: center;">
+            <span class="callout-icon">🚀</span>
+            <div>
+              <strong>Day 6 Complete!</strong> You now possess the tools to build clean, self-validating, audited MongoDB applications in Express and Node.js.
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- Bottom Footer Controls Bar -->
+    <footer class="bottom-footer">
+      <div class="footer-left">
+        <div class="slide-counter">
+          <span>Slide</span>
+          <span class="current-num" id="currentSlideNum">1</span>
+          <span class="total-num">/</span>
+          <span class="total-num" id="totalSlidesNum">40</span>
+        </div>
+      </div>
+
+      <div class="footer-center">
+        <button class="nav-btn" id="prevSlideBtn" disabled title="Previous Slide (Left Arrow)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="15 18 9 12 15 6"></polyline>
+          </svg>
+          Previous
+        </button>
+        <button class="nav-btn primary-nav" id="nextSlideBtn" title="Next Slide (Right Arrow / Space)">
+          Next
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="9 18 15 12 9 6"></polyline>
+          </svg>
+        </button>
+      </div>
+
+      <div class="footer-right">
+        <div class="nav-hint">
+          <span>Navigate:</span>
+          <kbd>&larr;</kbd>
+          <kbd>&rarr;</kbd>
+          <kbd>Space</kbd>
+        </div>
+      </div>
+    </footer>
+
+    <!-- Table of Contents Slide Index Drawer -->
+    <div class="drawer-backdrop" id="drawerBackdrop"></div>
+    <aside class="drawer" id="tocDrawer">
+      <div class="drawer-header">
+        <div style="font-weight: 700; font-size: 0.95rem; color: var(--text-primary); display: flex; align-items: center; gap: 0.5rem;">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="3" y1="12" x2="21" y2="12"></line>
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <line x1="3" y1="18" x2="21" y2="18"></line>
+          </svg>
+          Table of Contents (40 Slides)
+        </div>
+        <button class="close-modal-btn" id="closeTocBtn" title="Close Drawer (Esc)">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+      <ul class="drawer-list" id="tocList"></ul>
+    </aside>
+
+    <!-- Keyboard Shortcuts Modal -->
+    <div class="modal-backdrop" id="shortcutsModal">
+      <div class="modal-window">
+        <div class="modal-header">
+          <div class="modal-title">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10"></circle>
+              <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+              <line x1="12" y1="17" x2="12.01" y2="17"></line>
+            </svg>
+            Keyboard Shortcuts
+          </div>
+          <button class="close-modal-btn" id="closeShortcutsBtn" title="Close (Esc)">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+          </button>
+        </div>
+        <div class="modal-content">
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; font-size: 0.85rem;">
+            <div style="display: flex; justify-content: space-between; padding: 0.4rem 0.6rem; background: var(--bg-card); border-radius: 4px;">
+              <span>Next Slide</span>
+              <span><kbd>&rarr;</kbd> or <kbd>Space</kbd></span>
+            </div>
+            <div style="display: flex; justify-content: space-between; padding: 0.4rem 0.6rem; background: var(--bg-card); border-radius: 4px;">
+              <span>Previous Slide</span>
+              <span><kbd>&larr;</kbd> or <kbd>PageUp</kbd></span>
+            </div>
+            <div style="display: flex; justify-content: space-between; padding: 0.4rem 0.6rem; background: var(--bg-card); border-radius: 4px;">
+              <span>First Slide</span>
+              <span><kbd>Home</kbd></span>
+            </div>
+            <div style="display: flex; justify-content: space-between; padding: 0.4rem 0.6rem; background: var(--bg-card); border-radius: 4px;">
+              <span>Last Slide</span>
+              <span><kbd>End</kbd></span>
+            </div>
+            <div style="display: flex; justify-content: space-between; padding: 0.4rem 0.6rem; background: var(--bg-card); border-radius: 4px;">
+              <span>Toggle Index Drawer</span>
+              <span><kbd>T</kbd></span>
+            </div>
+            <div style="display: flex; justify-content: space-between; padding: 0.4rem 0.6rem; background: var(--bg-card); border-radius: 4px;">
+              <span>Toggle Fullscreen</span>
+              <span><kbd>F</kbd></span>
+            </div>
+            <div style="display: flex; justify-content: space-between; padding: 0.4rem 0.6rem; background: var(--bg-card); border-radius: 4px;">
+              <span>Help Shortcuts</span>
+              <span><kbd>?</kbd></span>
+            </div>
+            <div style="display: flex; justify-content: space-between; padding: 0.4rem 0.6rem; background: var(--bg-card); border-radius: 4px;">
+              <span>Close Any Modal</span>
+              <span><kbd>Esc</kbd></span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Toast Notification Container -->
+    <div class="toast-container" id="toastContainer"></div>
+
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>

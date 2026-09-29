@@ -45,10 +45,31 @@ const studentSchema = new mongoose.Schema({
     default: "MERN" // If no course is provided, Mongoose automatically sets "MERN"
   },
 
+  /**
+   * ===================================================================
+   * Step 2.1: Reference to Course Model (For Mongoose populate())
+   * ===================================================================
+   * 1. type: mongoose.Schema.Types.ObjectId
+   *    Tells Mongoose this field stores a 24-character hexadecimal ObjectId
+   *    pointing to a document in another collection.
+   * 
+   * 2. ref: "Course"
+   *    Tells Mongoose which model to look up when .populate("enrolledCourse") is called.
+   *    This must exactly match the model name registered in Course.js:
+   *    mongoose.model("Course", courseSchema)
+   */
+  enrolledCourse: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Course"
+  },
+
   active: {
     type: Boolean,
     default: true // Automatically marks newly registered students as active
   }
+}, {
+  // Automatically manages createdAt and updatedAt timestamps
+  timestamps: true
 });
 
 /**

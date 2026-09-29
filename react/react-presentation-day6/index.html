@@ -1,0 +1,2507 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>React Day 6 — React Forms: Form Submission, Validation &amp; Import/Export</title>
+  <meta name="description" content="Complete educational presentation on React Forms: Form Submission, Form Validation, Controlled Components, and Component Import/Export.">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Master App Shell -->
+  <div class="deck-container" id="deckContainer">
+
+    <!-- Top Progress Bar -->
+    <div class="progress-bar-container">
+      <div class="progress-bar" id="progressBar"></div>
+    </div>
+
+    <!-- Top Header Bar -->
+    <header class="top-header">
+      <div class="header-left">
+        <div class="brand-badge">
+          <svg viewBox="0 0 24 24">
+            <ellipse cx="12" cy="12" rx="11" ry="4.2" fill="none" stroke="currentColor" stroke-width="1.8"/>
+            <ellipse cx="12" cy="12" rx="11" ry="4.2" transform="rotate(60 12 12)" fill="none" stroke="currentColor" stroke-width="1.8"/>
+            <ellipse cx="12" cy="12" rx="11" ry="4.2" transform="rotate(120 12 12)" fill="none" stroke="currentColor" stroke-width="1.8"/>
+            <circle cx="12" cy="12" r="2.2" fill="currentColor"/>
+          </svg>
+          React Day 6
+        </div>
+        <div class="deck-title-badge">
+          <span>React Forms</span>
+          <span class="dot"></span>
+          <span class="deck-topic" id="headerTopic">Form Submission • Validation • Import/Export</span>
+        </div>
+      </div>
+
+      <div class="header-right">
+        <!-- Table of Contents Drawer Button -->
+        <button class="header-btn" id="openTocBtn" title="View All 40 Slides (T)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="3" y1="12" x2="21" y2="12"></line>
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <line x1="3" y1="18" x2="21" y2="18"></line>
+          </svg>
+          Index
+          <kbd>T</kbd>
+        </button>
+
+        <!-- Keyboard Shortcuts Help -->
+        <button class="header-btn" id="openShortcutsBtn" title="Keyboard Shortcuts (?)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"></circle>
+            <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+            <line x1="12" y1="17" x2="12.01" y2="17"></line>
+          </svg>
+          <kbd>?</kbd>
+        </button>
+
+        <!-- Fullscreen Button -->
+        <button class="header-btn" id="fullscreenBtn" title="Toggle Fullscreen (F)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path>
+          </svg>
+          <kbd>F</kbd>
+        </button>
+      </div>
+    </header>
+
+    <!-- Slide Viewport -->
+    <main class="slide-viewport">
+
+      <!-- ====================================================================
+           SLIDE 1 — TITLE
+           ==================================================================== -->
+      <section class="slide active" data-slide="1" id="slide-1">
+        <div class="slide-content" style="justify-content: center; align-items: center; text-align: center; max-width: 860px; margin: 0 auto;">
+          <div class="slide-tag" style="margin-bottom: 0.5rem;">React Course • Day 6</div>
+          <h1 class="slide-title" style="font-size: 2.8rem; margin-bottom: 0.5rem; letter-spacing: -0.03em;">
+            React Forms
+          </h1>
+          <h2 style="font-size: 1.8rem; color: var(--react-cyan); font-weight: 700; margin-bottom: 1rem;">
+            Form Submission, Form Validation &amp; Import/Export
+          </h2>
+          <p style="font-size: 1.15rem; color: var(--text-secondary); max-width: 620px; margin-bottom: 2rem;">
+            A practical, classroom-focused guide to capturing user input, preventing default reloads, enforcing validation rules, and structuring clean multi-file React apps.
+          </p>
+
+          <div style="display: flex; gap: 1rem; margin-bottom: 2.5rem; flex-wrap: wrap; justify-content: center;">
+            <div style="padding: 0.6rem 1.2rem; background: rgba(0, 216, 255, 0.1); border: 1px solid var(--react-border); border-radius: var(--radius-sm); font-family: var(--font-mono); font-size: 0.85rem; color: var(--react-cyan);">
+              <strong>📝</strong> Form Submission
+            </div>
+            <div style="padding: 0.6rem 1.2rem; background: var(--accent-rose-bg); border: 1px solid var(--accent-rose-border); border-radius: var(--radius-sm); font-family: var(--font-mono); font-size: 0.85rem; color: var(--accent-rose);">
+              <strong>🛡️</strong> Form Validation
+            </div>
+            <div style="padding: 0.6rem 1.2rem; background: var(--accent-amber-bg); border: 1px solid var(--accent-amber-border); border-radius: var(--radius-sm); font-family: var(--font-mono); font-size: 0.85rem; color: var(--accent-amber);">
+              <strong>📦</strong> Import &amp; Export
+            </div>
+            <div style="padding: 0.6rem 1.2rem; background: var(--accent-emerald-bg); border: 1px solid var(--accent-emerald-border); border-radius: var(--radius-sm); font-family: var(--font-mono); font-size: 0.85rem; color: var(--accent-emerald);">
+              <strong>🎓</strong> Student Project
+            </div>
+          </div>
+
+          <div class="callout" style="max-width: 660px; text-align: left;">
+            <span class="callout-icon">💡</span>
+            <div>
+              <strong>Classroom Context:</strong> Today is centered on building a proper interactive <strong>Student Registration Form</strong>. We tie submission, validation, and modular files together without any confusing routing, APIs, or external form libraries.
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 2 — LEARNING OBJECTIVES
+           ==================================================================== -->
+      <section class="slide" data-slide="2" id="slide-2">
+        <div class="slide-header">
+          <div class="slide-tag tag-emerald">Roadmap</div>
+          <h1 class="slide-title">Learning Objectives</h1>
+          <p class="slide-subtitle">Skills and concepts you will master by the end of this session</p>
+        </div>
+        <div class="slide-content">
+          <div class="grid-2">
+            <div class="card card-highlight">
+              <div class="card-title"><span class="icon">⚡</span> 1. Form Submission &amp; preventDefault</div>
+              <p>Learn how <code class="attr">onSubmit</code> works on the <code class="tag">&lt;form&gt;</code> element, and why <code class="fn">event.preventDefault()</code> is critical to prevent unwanted page reloads.</p>
+              <div class="card-footer-tip"><strong>Core:</strong> e.preventDefault() &rarr; React handles submission</div>
+            </div>
+            <div class="card card-highlight">
+              <div class="card-title"><span class="icon">🎯</span> 2. Collecting Form Data</div>
+              <p>Bind inputs to React state using controlled components, updating single fields or grouped state objects via dynamic <code class="prop">[name]: value</code> handlers.</p>
+              <div class="card-footer-tip"><strong>State:</strong> Single source of truth for input values</div>
+            </div>
+            <div class="card card-highlight-rose">
+              <div class="card-title"><span class="icon">🛡️</span> 3. Field Validation &amp; Errors State</div>
+              <p>Validate required strings with <code class="fn">.trim()</code>, check email patterns, verify minimum ages using <code class="fn">Number()</code>, and store error messages in state.</p>
+              <div class="card-footer-tip"><strong>UX:</strong> Immediate inline error messages</div>
+            </div>
+            <div class="card card-highlight-amber">
+              <div class="card-title"><span class="icon">📦</span> 4. Module Import &amp; Export</div>
+              <p>Understand the exact differences between <code class="kwd">export default</code> and <code class="kwd">named exports</code>, and how to import components and pure utility functions.</p>
+              <div class="card-footer-tip"><strong>Modularity:</strong> Split large apps into maintainable files</div>
+            </div>
+            <div class="card card-highlight-purple" style="grid-column: span 2;">
+              <div class="card-title"><span class="icon">🏗️</span> 5. Building the Student Registration App</div>
+              <p>Combine UI components, form state, separate validation functions, and clean file organization into one cohesive mini project.</p>
+              <div class="card-footer-tip"><strong>Result:</strong> Production-style React form mechanics!</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SECTION 1 — FORM SUBMISSION
+           SLIDE 3 — What Happens When a Form Is Submitted?
+           ==================================================================== -->
+      <section class="slide" data-slide="3" id="slide-3">
+        <div class="slide-header">
+          <div class="slide-tag">Section 1 — Form Submission</div>
+          <h1 class="slide-title">What Happens When a Form Is Submitted?</h1>
+          <p class="slide-subtitle">Comparing native browser behavior with React's controlled handling</p>
+        </div>
+        <div class="slide-content">
+          <div class="grid-split-left-wide">
+            <div class="flex-col">
+              <div class="card">
+                <div class="card-title"><span class="icon">🌐</span> Native HTML Form Behavior</div>
+                <p>
+                  In traditional web development, submitting a form triggers a <strong>full page refresh</strong> and sends an HTTP GET/POST request to the server specified in the <code class="attr">action</code> attribute.
+                </p>
+                <p>
+                  This causes the browser to discard its entire current JavaScript state!
+                </p>
+              </div>
+
+              <div class="card card-highlight">
+                <div class="card-title"><span class="icon">⚛️</span> How React Handles Submission</div>
+                <p>
+                  In Single Page Applications (SPAs), we do <strong>NOT</strong> want the page to reload. We intercept the submit event in JavaScript, validate the inputs, and process data inside React state.
+                </p>
+              </div>
+            </div>
+
+            <div class="card card-highlight flex-col" style="justify-content: center; align-items: center; text-align: center;">
+              <h3 style="font-size: 1.05rem; color: var(--react-cyan); margin-bottom: 0.5rem;">React Submission Flow</h3>
+              <div class="flow-vertical" style="width: 100%;">
+                <div class="flow-step-v">
+                  <span>User fills form</span>
+                  <span style="color: var(--text-muted); font-size: 0.75rem;">Inputs</span>
+                </div>
+                <div class="flow-arrow-v">↓</div>
+                <div class="flow-step-v">
+                  <span>Clicks Submit</span>
+                  <span style="color: var(--accent-amber); font-size: 0.75rem;">Button / Enter</span>
+                </div>
+                <div class="flow-arrow-v">↓</div>
+                <div class="flow-step-v highlight-step">
+                  <span style="color: var(--react-cyan); font-weight: 700;">onSubmit</span>
+                  <span style="color: var(--react-cyan); font-size: 0.75rem;">&lt;form&gt; event</span>
+                </div>
+                <div class="flow-arrow-v">↓</div>
+                <div class="flow-step-v">
+                  <span>handleSubmit(event)</span>
+                  <span style="color: var(--code-keyword); font-size: 0.75rem;">event.preventDefault()</span>
+                </div>
+                <div class="flow-arrow-v">↓</div>
+                <div class="flow-step-v">
+                  <span>Validate data</span>
+                  <span style="color: var(--accent-rose); font-size: 0.75rem;">Checks</span>
+                </div>
+                <div class="flow-arrow-v">↓</div>
+                <div class="flow-step-v">
+                  <span>Process / Display</span>
+                  <span style="color: var(--accent-emerald); font-size: 0.75rem;">State updated</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 4 — Basic React Form
+           ==================================================================== -->
+      <section class="slide" data-slide="4" id="slide-4">
+        <div class="slide-header">
+          <div class="slide-tag">Section 1 — Form Submission</div>
+          <h1 class="slide-title">Basic React Form</h1>
+          <p class="slide-subtitle">The three essential elements that make up every HTML/JSX form</p>
+        </div>
+        <div class="slide-content">
+          <div class="grid-split-left-wide">
+            <div class="code-box">
+              <div class="code-header">
+                <div class="code-dots">
+                  <div class="code-dot red"></div>
+                  <div class="code-dot yellow"></div>
+                  <div class="code-dot green"></div>
+                </div>
+                <span class="code-title">StudentForm.jsx — Simple Form Structure</span>
+                <button class="copy-btn">
+                  <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                  </svg>
+                  Copy
+                </button>
+              </div>
+              <pre class="code-content"><span class="kwd">function</span> <span class="fn">StudentForm</span>() {
+  <span class="kwd">return</span> (
+    <span class="tag">&lt;form&gt;</span>
+      <span class="tag">&lt;input</span>
+        <span class="attr">type</span>=<span class="str">"text"</span>
+        <span class="attr">placeholder</span>=<span class="str">"Enter name"</span>
+      <span class="tag">/&gt;</span>
+
+      <span class="tag">&lt;button</span> <span class="attr">type</span>=<span class="str">"submit"</span><span class="tag">&gt;</span>
+        Submit
+      <span class="tag">&lt;/button&gt;</span>
+    <span class="tag">&lt;/form&gt;</span>
+  );
+}</pre>
+            </div>
+
+            <div class="flex-col">
+              <div class="card card-highlight">
+                <div class="card-title"><span class="icon">🧩</span> The 3 Core Building Blocks</div>
+                <ul style="list-style: none; display: flex; flex-direction: column; gap: 0.75rem; font-size: 0.88rem; color: var(--text-secondary);">
+                  <li>
+                    <strong style="color: var(--react-cyan);">&lt;form&gt;:</strong> Wraps all inputs and defines the container that fires the submission event.
+                  </li>
+                  <li>
+                    <strong style="color: var(--react-cyan);">&lt;input&gt;:</strong> Collects information typed in by the user.
+                  </li>
+                  <li>
+                    <strong style="color: var(--react-cyan);">&lt;button type="submit"&gt;:</strong> Triggers the form submission when clicked or when the user presses <kbd>Enter</kbd>.
+                  </li>
+                </ul>
+              </div>
+
+              <div class="callout callout-amber">
+                <span class="callout-icon">⚠️</span>
+                <div>
+                  <strong>Notice:</strong> Right now, clicking Submit will reload the page because we haven't attached an <code class="attr">onSubmit</code> handler or called <code class="fn">preventDefault()</code>!
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 5 — Using onSubmit
+           ==================================================================== -->
+      <section class="slide" data-slide="5" id="slide-5">
+        <div class="slide-header">
+          <div class="slide-tag">Section 1 — Form Submission</div>
+          <h1 class="slide-title">Using the onSubmit Event</h1>
+          <p class="slide-subtitle">Listening for form submissions in React</p>
+        </div>
+        <div class="slide-content">
+          <div class="grid-split-left-wide">
+            <div class="code-box">
+              <div class="code-header">
+                <div class="code-dots">
+                  <div class="code-dot red"></div>
+                  <div class="code-dot yellow"></div>
+                  <div class="code-dot green"></div>
+                </div>
+                <span class="code-title">StudentForm.jsx — Adding onSubmit</span>
+                <button class="copy-btn">
+                  <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                  </svg>
+                  Copy
+                </button>
+              </div>
+              <pre class="code-content"><span class="kwd">function</span> <span class="fn">StudentForm</span>() {
+
+  <span class="comment">// 1. Define the submit handler function</span>
+  <span class="kwd">const</span> <span class="fn">handleSubmit</span> = (<span class="prop">event</span>) =&gt; {
+    <span class="fn">console</span>.<span class="fn">log</span>(<span class="str">"Form submitted"</span>);
+  };
+
+  <span class="comment">// 2. Attach handler to &lt;form onSubmit={handleSubmit}&gt;</span>
+  <span class="kwd">return</span> (
+    <span class="tag">&lt;form</span> <span class="attr">onSubmit</span>={<span class="fn">handleSubmit</span>}<span class="tag">&gt;</span>
+      <span class="tag">&lt;input</span> <span class="attr">type</span>=<span class="str">"text"</span> <span class="tag">/&gt;</span>
+
+      <span class="tag">&lt;button</span> <span class="attr">type</span>=<span class="str">"submit"</span><span class="tag">&gt;</span>
+        Submit
+      <span class="tag">&lt;/button&gt;</span>
+    <span class="tag">&lt;/form&gt;</span>
+  );
+}</pre>
+            </div>
+
+            <div class="flex-col">
+              <div class="card card-highlight">
+                <div class="card-title"><span class="icon">🎯</span> Key Connections</div>
+                <p>
+                  In React, <code class="attr">onSubmit</code> is a synthetic event attribute placed directly on the <code class="tag">&lt;form&gt;</code> element.
+                </p>
+                <div style="font-family: var(--font-mono); font-size: 0.82rem; background: var(--bg-surface); padding: 0.75rem; border-radius: 4px; border: 1px solid var(--border-medium);">
+                  &lt;form <span style="color: var(--code-attr);">onSubmit</span>={<span style="color: var(--code-function);">handleSubmit</span>}&gt;
+                </div>
+              </div>
+
+              <div class="callout">
+                <span class="callout-icon">💡</span>
+                <div>
+                  <strong>Syntactic Convention:</strong> By convention, the event handler is named <code class="fn">handleSubmit</code>, and it automatically receives the synthetic <code class="prop">event</code> object.
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 6 — Understanding onSubmit
+           ==================================================================== -->
+      <section class="slide" data-slide="6" id="slide-6">
+        <div class="slide-header">
+          <div class="slide-tag">Section 1 — Form Submission</div>
+          <h1 class="slide-title">Understanding onSubmit Flow</h1>
+          <p class="slide-subtitle">Why onSubmit belongs on the &lt;form&gt; and NOT on the &lt;button&gt;</p>
+        </div>
+        <div class="slide-content">
+          <div class="card card-highlight" style="padding: 1rem;">
+            <div class="flow-container">
+              <div class="flow-node">
+                <span class="flow-node-title">1. Submit Button</span>
+                <span class="flow-node-desc">type="submit"</span>
+              </div>
+              <div class="flow-arrow">&rarr;</div>
+              <div class="flow-node">
+                <span class="flow-node-title">2. Form Submission</span>
+                <span class="flow-node-desc">Browser trigger</span>
+              </div>
+              <div class="flow-arrow">&rarr;</div>
+              <div class="flow-node active-node">
+                <span class="flow-node-title" style="color: var(--react-cyan);">3. onSubmit</span>
+                <span class="flow-node-desc">Fired by &lt;form&gt;</span>
+              </div>
+              <div class="flow-arrow">&rarr;</div>
+              <div class="flow-node">
+                <span class="flow-node-title">4. handleSubmit()</span>
+                <span class="flow-node-desc">Handler runs</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="compare-container">
+            <div class="compare-card wrong">
+              <div class="compare-header">
+                <span>❌ INCORRECT: Putting onClick on the Submit Button</span>
+              </div>
+              <div class="compare-body">
+                <pre class="code-content" style="padding: 0.5rem 0;"><span class="comment">// ❌ BAD: Won't trigger if user presses ENTER in an input</span>
+<span class="tag">&lt;form&gt;</span>
+  <span class="tag">&lt;input</span> <span class="attr">type</span>=<span class="str">"text"</span> <span class="tag">/&gt;</span>
+  <span class="tag">&lt;button</span> <span class="attr">onClick</span>={<span class="fn">handleSubmit</span>}<span class="tag">&gt;</span>Submit<span class="tag">&lt;/button&gt;</span>
+<span class="tag">&lt;/form&gt;</span></pre>
+              </div>
+            </div>
+
+            <div class="compare-card correct">
+              <div class="compare-header">
+                <span>✅ CORRECT: Putting onSubmit on the &lt;form&gt;</span>
+              </div>
+              <div class="compare-body">
+                <pre class="code-content" style="padding: 0.5rem 0;"><span class="comment">// ✅ GOOD: Works on click AND when pressing Enter!</span>
+<span class="tag">&lt;form</span> <span class="attr">onSubmit</span>={<span class="fn">handleSubmit</span>}<span class="tag">&gt;</span>
+  <span class="tag">&lt;input</span> <span class="attr">type</span>=<span class="str">"text"</span> <span class="tag">/&gt;</span>
+  <span class="tag">&lt;button</span> <span class="attr">type</span>=<span class="str">"submit"</span><span class="tag">&gt;</span>Submit<span class="tag">&lt;/button&gt;</span>
+<span class="tag">&lt;/form&gt;</span></pre>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 7 — Why Do We Use preventDefault()?
+           ==================================================================== -->
+      <section class="slide" data-slide="7" id="slide-7">
+        <div class="slide-header">
+          <div class="slide-tag">Section 1 — Form Submission</div>
+          <h1 class="slide-title">Why Do We Use preventDefault()?</h1>
+          <p class="slide-subtitle">Stopping the browser's default refresh behavior to keep state intact</p>
+        </div>
+        <div class="slide-content">
+          <div class="grid-split-left-wide">
+            <div class="code-box">
+              <div class="code-header">
+                <div class="code-dots">
+                  <div class="code-dot red"></div>
+                  <div class="code-dot yellow"></div>
+                  <div class="code-dot green"></div>
+                </div>
+                <span class="code-title">Preventing Browser Reload</span>
+                <button class="copy-btn">
+                  <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                  </svg>
+                  Copy
+                </button>
+              </div>
+              <pre class="code-content"><span class="kwd">const</span> <span class="fn">handleSubmit</span> = (<span class="prop">event</span>) =&gt; {
+  <span class="comment">// 🛑 Essential: stops browser default submission</span>
+  <span class="prop">event</span>.<span class="fn">preventDefault</span>();
+
+  <span class="fn">console</span>.<span class="fn">log</span>(<span class="str">"Form submitted safely without reload!"</span>);
+};</pre>
+            </div>
+
+            <div class="flex-col">
+              <div class="card card-highlight">
+                <div class="card-title"><span class="icon">🛑</span> What Happens Without It?</div>
+                <p>
+                  If you omit <code class="fn">event.preventDefault()</code>:
+                </p>
+                <ul style="list-style: none; display: flex; flex-direction: column; gap: 0.4rem; font-size: 0.85rem; color: var(--text-secondary);">
+                  <li>1. Browser tries to reload the page URL</li>
+                  <li>2. All React component state in memory is wiped out</li>
+                  <li>3. Console logs disappear in a flash</li>
+                  <li>4. Form inputs reset back to empty</li>
+                </ul>
+              </div>
+
+              <div class="callout callout-emerald">
+                <span class="callout-icon">✅</span>
+                <div>
+                  <strong>Golden Rule:</strong> In React, <strong>always</strong> call <code class="fn">event.preventDefault()</code> as the first line of your submit handler!
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 8 — Complete Basic Submission
+           ==================================================================== -->
+      <section class="slide" data-slide="8" id="slide-8">
+        <div class="slide-header">
+          <div class="slide-tag">Section 1 — Form Submission</div>
+          <h1 class="slide-title">Complete Basic Submission</h1>
+          <p class="slide-subtitle">Putting &lt;form&gt;, onSubmit, preventDefault(), and inputs together</p>
+        </div>
+        <div class="slide-content">
+          <div class="code-box">
+            <div class="code-header">
+              <div class="code-dots">
+                <div class="code-dot red"></div>
+                <div class="code-dot yellow"></div>
+                <div class="code-dot green"></div>
+              </div>
+              <span class="code-title">StudentForm.jsx — Working Submit Flow</span>
+              <button class="copy-btn">
+                <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2">
+                  <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                  <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                </svg>
+                Copy
+              </button>
+            </div>
+            <pre class="code-content"><span class="kwd">function</span> <span class="fn">StudentForm</span>() {
+
+  <span class="kwd">const</span> <span class="fn">handleSubmit</span> = (<span class="prop">event</span>) =&gt; {
+    <span class="comment">// 1. Prevent native page refresh</span>
+    <span class="prop">event</span>.<span class="fn">preventDefault</span>();
+
+    <span class="fn">console</span>.<span class="fn">log</span>(<span class="str">"Form submitted successfully!"</span>);
+  };
+
+  <span class="kwd">return</span> (
+    <span class="tag">&lt;form</span> <span class="attr">onSubmit</span>={<span class="fn">handleSubmit</span>}<span class="tag">&gt;</span>
+      <span class="tag">&lt;input</span>
+        <span class="attr">type</span>=<span class="str">"text"</span>
+        <span class="attr">placeholder</span>=<span class="str">"Enter name"</span>
+      <span class="tag">/&gt;</span>
+
+      <span class="tag">&lt;input</span>
+        <span class="attr">type</span>=<span class="str">"email"</span>
+        <span class="attr">placeholder</span>=<span class="str">"Enter email"</span>
+      <span class="tag">/&gt;</span>
+
+      <span class="tag">&lt;button</span> <span class="attr">type</span>=<span class="str">"submit"</span><span class="tag">&gt;</span>
+        Submit
+      <span class="tag">&lt;/button&gt;</span>
+    <span class="tag">&lt;/form&gt;</span>
+  );
+}</pre>
+          </div>
+
+          <div class="card">
+            <div class="card-title"><span class="icon">❓</span> Next Challenge:</div>
+            <p>
+              How does <code class="fn">handleSubmit</code> read what the user typed into the name and email inputs? That's where <strong>Controlled Components</strong> and React State come in!
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 9 — Getting Form Values
+           ==================================================================== -->
+      <section class="slide" data-slide="9" id="slide-9">
+        <div class="slide-header">
+          <div class="slide-tag">Section 1 — Form Submission</div>
+          <h1 class="slide-title">Getting Form Values (Controlled Inputs)</h1>
+          <p class="slide-subtitle">Connecting inputs to useState so React is always in full control of the data</p>
+        </div>
+        <div class="slide-content">
+          <div class="grid-split-left-wide">
+            <div class="code-box">
+              <div class="code-header">
+                <div class="code-dots">
+                  <div class="code-dot red"></div>
+                  <div class="code-dot yellow"></div>
+                  <div class="code-dot green"></div>
+                </div>
+                <span class="code-title">Controlled Input Binding</span>
+                <button class="copy-btn">
+                  <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                  </svg>
+                  Copy
+                </button>
+              </div>
+              <pre class="code-content"><span class="comment">// 1. Create state for each input</span>
+<span class="kwd">const</span> [<span class="prop">name</span>, <span class="fn">setName</span>] = <span class="fn">useState</span>(<span class="str">""</span>);
+<span class="kwd">const</span> [<span class="prop">email</span>, <span class="fn">setEmail</span>] = <span class="fn">useState</span>(<span class="str">""</span>);
+
+<span class="comment">// 2. Controlled inputs with value &amp; onChange</span>
+<span class="tag">&lt;input</span>
+  <span class="attr">value</span>={<span class="prop">name</span>}
+  <span class="attr">onChange</span>={(<span class="prop">e</span>) =&gt; <span class="fn">setName</span>(<span class="prop">e</span>.<span class="prop">target</span>.<span class="prop">value</span>)}
+<span class="tag">/&gt;</span>
+
+<span class="tag">&lt;input</span>
+  <span class="attr">value</span>={<span class="prop">email</span>}
+  <span class="attr">onChange</span>={(<span class="prop">e</span>) =&gt; <span class="fn">setEmail</span>(<span class="prop">e</span>.<span class="prop">target</span>.<span class="prop">value</span>)}
+<span class="tag">/&gt;</span>
+
+<span class="comment">// 3. On submit, values are immediately ready in state!</span>
+<span class="kwd">const</span> <span class="fn">handleSubmit</span> = (<span class="prop">e</span>) =&gt; {
+  <span class="prop">e</span>.<span class="fn">preventDefault</span>();
+  <span class="fn">console</span>.<span class="fn">log</span>(<span class="str">"Name:"</span>, <span class="prop">name</span>);
+  <span class="fn">console</span>.<span class="fn">log</span>(<span class="str">"Email:"</span>, <span class="prop">email</span>);
+};</pre>
+            </div>
+
+            <div class="flex-col">
+              <div class="card card-highlight">
+                <div class="card-title"><span class="icon">🔄</span> What Is a Controlled Component?</div>
+                <p>
+                  An input whose value is governed by React state.
+                </p>
+                <div style="font-family: var(--font-mono); font-size: 0.8rem; background: var(--bg-surface); padding: 0.6rem; border-radius: 4px;">
+                  value = React State<br>
+                  onChange = Updates React State
+                </div>
+              </div>
+
+              <div class="callout callout-emerald">
+                <span class="callout-icon">💡</span>
+                <div>
+                  <strong>Advantage:</strong> You never have to query the DOM with <code class="fn">document.getElementById</code>! The current values are always stored and ready inside your state variables.
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 10 — Form Submission Flow
+           ==================================================================== -->
+      <section class="slide" data-slide="10" id="slide-10">
+        <div class="slide-header">
+          <div class="slide-tag">Section 1 — Form Submission</div>
+          <h1 class="slide-title">Form Submission Flow Visualizer</h1>
+          <p class="slide-subtitle">Step through the 8 stages of modern React form submission</p>
+        </div>
+        <div class="slide-content">
+          <div class="card card-highlight" style="padding: 1rem;">
+            <div class="flow-container" id="submissionFlowContainer">
+              <div class="flow-node">
+                <span class="flow-node-title">1. Enter Data</span>
+                <span class="flow-node-desc">User types</span>
+              </div>
+              <div class="flow-arrow">&rarr;</div>
+              <div class="flow-node">
+                <span class="flow-node-title">2. Controlled Input</span>
+                <span class="flow-node-desc">onChange</span>
+              </div>
+              <div class="flow-arrow">&rarr;</div>
+              <div class="flow-node">
+                <span class="flow-node-title">3. React State</span>
+                <span class="flow-node-desc">setForm()</span>
+              </div>
+              <div class="flow-arrow">&rarr;</div>
+              <div class="flow-node">
+                <span class="flow-node-title">4. Clicks Submit</span>
+                <span class="flow-node-desc">button</span>
+              </div>
+              <div class="flow-arrow">&rarr;</div>
+              <div class="flow-node">
+                <span class="flow-node-title">5. onSubmit</span>
+                <span class="flow-node-desc">&lt;form&gt; event</span>
+              </div>
+              <div class="flow-arrow">&rarr;</div>
+              <div class="flow-node">
+                <span class="flow-node-title">6. handleSubmit</span>
+                <span class="flow-node-desc">Handler runs</span>
+              </div>
+              <div class="flow-arrow">&rarr;</div>
+              <div class="flow-node">
+                <span class="flow-node-title">7. preventDefault</span>
+                <span class="flow-node-desc">Stops reload</span>
+              </div>
+              <div class="flow-arrow">&rarr;</div>
+              <div class="flow-node">
+                <span class="flow-node-title">8. Process Data</span>
+                <span class="flow-node-desc">Validated!</span>
+              </div>
+            </div>
+
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-top: 1rem; padding-top: 0.75rem; border-top: 1px solid var(--border-subtle); flex-wrap: wrap; gap: 0.75rem;">
+              <div id="submissionFlowStatusText" style="font-family: var(--font-mono); font-size: 0.85rem; color: var(--react-cyan);">
+                Click "Next Step" to step through the form submission lifecycle.
+              </div>
+              <div style="display: flex; gap: 0.5rem;">
+                <button class="demo-btn" id="submissionFlowNextBtn">
+                  <span>Next Step</span> &rarr;
+                </button>
+                <button class="demo-btn btn-reset" id="submissionFlowResetBtn">
+                  <span>Reset Flow</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 11 — Multiple Form Fields
+           ==================================================================== -->
+      <section class="slide" data-slide="11" id="slide-11">
+        <div class="slide-header">
+          <div class="slide-tag">Section 1 — Form Submission</div>
+          <h1 class="slide-title">Multiple Form Fields in One State Object</h1>
+          <p class="slide-subtitle">Grouping related inputs into a single JavaScript object</p>
+        </div>
+        <div class="slide-content">
+          <div class="grid-split-left-wide">
+            <div class="code-box">
+              <div class="code-header">
+                <div class="code-dots">
+                  <div class="code-dot red"></div>
+                  <div class="code-dot yellow"></div>
+                  <div class="code-dot green"></div>
+                </div>
+                <span class="code-title">Form Object State</span>
+                <button class="copy-btn">
+                  <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                  </svg>
+                  Copy
+                </button>
+              </div>
+              <pre class="code-content"><span class="comment">// Instead of 4 separate useState variables:</span>
+<span class="kwd">const</span> [<span class="prop">form</span>, <span class="fn">setForm</span>] = <span class="fn">useState</span>({
+  <span class="prop">name</span>: <span class="str">""</span>,
+  <span class="prop">email</span>: <span class="str">""</span>,
+  <span class="prop">age</span>: <span class="str">""</span>
+});
+
+<span class="comment">// Updating a specific property using spread operator:</span>
+<span class="fn">setForm</span>({
+  ...<span class="prop">form</span>,
+  <span class="prop">name</span>: <span class="prop">e</span>.<span class="prop">target</span>.<span class="prop">value</span>
+});</pre>
+            </div>
+
+            <div class="flex-col">
+              <div class="card card-highlight">
+                <div class="card-title"><span class="icon">📦</span> Why Store in an Object?</div>
+                <ul style="list-style: none; display: flex; flex-direction: column; gap: 0.5rem; font-size: 0.85rem; color: var(--text-secondary);">
+                  <li>• Keeps related form values together in one place</li>
+                  <li>• Enables a single, reusable <code class="fn">handleChange</code> function for all inputs</li>
+                  <li>• Easier to reset (<code class="fn">setForm(initialState)</code>)</li>
+                  <li>• Ready to send directly to backend or display</li>
+                </ul>
+              </div>
+
+              <div class="callout callout-amber">
+                <span class="callout-icon">💡</span>
+                <div>
+                  <strong>Remember the Spread Operator:</strong> Always write <code class="prop">...form</code> when updating state so you don't accidentally overwrite the other field values!
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SECTION 2 — FORM VALIDATION
+           SLIDE 12 — What Is Form Validation?
+           ==================================================================== -->
+      <section class="slide" data-slide="12" id="slide-12">
+        <div class="slide-header">
+          <div class="slide-tag tag-rose">Section 2 — Form Validation</div>
+          <h1 class="slide-title">What Is Form Validation?</h1>
+          <p class="slide-subtitle">Checking whether user input satisfies business rules before submission</p>
+        </div>
+        <div class="slide-content">
+          <div class="grid-2">
+            <div class="card card-highlight-rose">
+              <div class="card-title"><span class="icon">🛡️</span> The Purpose of Validation</div>
+              <p>
+                <strong>Form validation</strong> is the process of testing user input against specified rules before processing or sending the data.
+              </p>
+              <p>
+                It protects your application from broken, incomplete, or malicious data while guiding the user toward correct input.
+              </p>
+            </div>
+
+            <div class="card">
+              <div class="card-title"><span class="icon">📋</span> Standard Form Validation Rules</div>
+              <ul style="list-style: none; display: flex; flex-direction: column; gap: 0.5rem; font-size: 0.88rem; color: var(--text-secondary);">
+                <li><strong style="color: var(--react-cyan);">Name:</strong> Required, cannot be blank spaces</li>
+                <li><strong style="color: var(--react-cyan);">Email:</strong> Must match a valid email format</li>
+                <li><strong style="color: var(--react-cyan);">Age:</strong> Must be a valid number &ge; 18</li>
+                <li><strong style="color: var(--react-cyan);">Course:</strong> Must select an option from dropdown</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="callout callout-emerald">
+            <span class="callout-icon">💬</span>
+            <div>
+              <strong>User Experience First:</strong> Validation should always provide immediate, clear, friendly feedback so users know exactly how to fix mistakes!
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 13 — Why Validate Forms?
+           ==================================================================== -->
+      <section class="slide" data-slide="13" id="slide-13">
+        <div class="slide-header">
+          <div class="slide-tag tag-rose">Section 2 — Form Validation</div>
+          <h1 class="slide-title">Why Validate Forms?</h1>
+          <p class="slide-subtitle">Providing immediate visual feedback to prevent bad data</p>
+        </div>
+        <div class="slide-content">
+          <div class="compare-container">
+            <div class="compare-card wrong">
+              <div class="compare-header">
+                <span>❌ WITHOUT VALIDATION (Bad Data Enters System)</span>
+              </div>
+              <div class="compare-body">
+                <div style="font-family: var(--font-mono); font-size: 0.85rem; display: flex; flex-direction: column; gap: 0.5rem;">
+                  <div>Name: <span style="color: var(--accent-rose);">""</span> (Empty string accepted)</div>
+                  <div>Email: <span style="color: var(--accent-rose);">"hello"</span> (Not an email)</div>
+                  <div>Age: <span style="color: var(--accent-rose);">"abc"</span> (Not a number)</div>
+                  <div>Course: <span style="color: var(--accent-rose);">""</span> (Unselected)</div>
+                </div>
+                <div class="callout callout-rose" style="margin-top: 0.5rem;">
+                  <span class="callout-icon">💥</span>
+                  <div>Database corrupts or application crashes down the line!</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="compare-card correct">
+              <div class="compare-header">
+                <span>✅ WITH VALIDATION (Helpful User Feedback)</span>
+              </div>
+              <div class="compare-body">
+                <div style="font-family: var(--font-mono); font-size: 0.85rem; display: flex; flex-direction: column; gap: 0.5rem;">
+                  <div>Name &rarr; <span style="color: var(--accent-rose); font-weight: 600;">"Name is required"</span></div>
+                  <div>Email &rarr; <span style="color: var(--accent-rose); font-weight: 600;">"Enter a valid email"</span></div>
+                  <div>Age &rarr; <span style="color: var(--accent-rose); font-weight: 600;">"Age must be at least 18"</span></div>
+                  <div>Course &rarr; <span style="color: var(--accent-rose); font-weight: 600;">"Select a course"</span></div>
+                </div>
+                <div class="callout callout-emerald" style="margin-top: 0.5rem;">
+                  <span class="callout-icon">✨</span>
+                  <div>User immediately sees what to correct before submission!</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 14 — Required Field Validation
+           ==================================================================== -->
+      <section class="slide" data-slide="14" id="slide-14">
+        <div class="slide-header">
+          <div class="slide-tag tag-rose">Section 2 — Form Validation</div>
+          <h1 class="slide-title">Required Field Validation &amp; .trim()</h1>
+          <p class="slide-subtitle">Why checking !form.name.trim() is much safer than !form.name</p>
+        </div>
+        <div class="slide-content">
+          <div class="grid-split-left-wide">
+            <div class="code-box">
+              <div class="code-header">
+                <div class="code-dots">
+                  <div class="code-dot red"></div>
+                  <div class="code-dot yellow"></div>
+                  <div class="code-dot green"></div>
+                </div>
+                <span class="code-title">Checking for Non-Empty Strings</span>
+                <button class="copy-btn">
+                  <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                  </svg>
+                  Copy
+                </button>
+              </div>
+              <pre class="code-content"><span class="comment">// ❌ Weak check: Passing "   " bypasses this!</span>
+<span class="kwd">if</span> (!<span class="prop">form</span>.<span class="prop">name</span>) {
+  <span class="prop">errors</span>.<span class="prop">name</span> = <span class="str">"Name is required"</span>;
+}
+
+<span class="comment">// ✅ Best Practice: .trim() removes padding spaces first</span>
+<span class="kwd">if</span> (!<span class="prop">form</span>.<span class="prop">name</span>.<span class="fn">trim</span>()) {
+  <span class="prop">errors</span>.<span class="prop">name</span> = <span class="str">"Name is required"</span>;
+}</pre>
+            </div>
+
+            <div class="card card-highlight">
+              <div class="card-title"><span class="icon">🔍</span> Why .trim() Matters</div>
+              <div style="font-family: var(--font-mono); font-size: 0.82rem; display: flex; flex-direction: column; gap: 0.5rem;">
+                <div style="padding: 0.35rem 0.6rem; background: var(--bg-surface); border-radius: 4px;">
+                  <code>"Rahul"</code> &rarr; <span style="color: var(--accent-emerald);">Valid</span>
+                </div>
+                <div style="padding: 0.35rem 0.6rem; background: var(--bg-surface); border-radius: 4px;">
+                  <code>"   Rahul"</code> &rarr; <span style="color: var(--accent-emerald);">Valid ("Rahul")</span>
+                </div>
+                <div style="padding: 0.35rem 0.6rem; background: var(--bg-surface); border-radius: 4px;">
+                  <code>"     "</code> &rarr; <span style="color: var(--accent-rose);">Invalid (Trims to "")</span>
+                </div>
+                <div style="padding: 0.35rem 0.6rem; background: var(--bg-surface); border-radius: 4px;">
+                  <code>""</code> &rarr; <span style="color: var(--accent-rose);">Invalid (Empty)</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 15 — Email Validation
+           ==================================================================== -->
+      <section class="slide" data-slide="15" id="slide-15">
+        <div class="slide-header">
+          <div class="slide-tag tag-rose">Section 2 — Form Validation</div>
+          <h1 class="slide-title">Email Validation</h1>
+          <p class="slide-subtitle">From simple .includes("@") to clean beginner-friendly regular expressions</p>
+        </div>
+        <div class="slide-content">
+          <div class="grid-2">
+            <div class="code-box">
+              <div class="code-header">
+                <div class="code-dots">
+                  <div class="code-dot red"></div>
+                  <div class="code-dot yellow"></div>
+                  <div class="code-dot green"></div>
+                </div>
+                <span class="code-title">Method 1: Simple Check</span>
+              </div>
+              <pre class="code-content"><span class="comment">// Beginner check</span>
+<span class="kwd">if</span> (!<span class="prop">form</span>.<span class="prop">email</span>.<span class="fn">includes</span>(<span class="str">"@"</span>)) {
+  <span class="prop">errors</span>.<span class="prop">email</span> = <span class="str">"Enter a valid email"</span>;
+}</pre>
+              <div class="card-footer-tip" style="padding: 0.75rem;">
+                <strong>Pros:</strong> Very simple. <strong>Cons:</strong> Accepts <code>"@"</code> or <code>"abc@"</code>.
+              </div>
+            </div>
+
+            <div class="code-box">
+              <div class="code-header">
+                <div class="code-dots">
+                  <div class="code-dot red"></div>
+                  <div class="code-dot yellow"></div>
+                  <div class="code-dot green"></div>
+                </div>
+                <span class="code-title">Method 2: Clean Regex Pattern (Recommended)</span>
+              </div>
+              <pre class="code-content"><span class="kwd">const</span> <span class="prop">emailPattern</span> =
+  <span class="str">/^[^\s@]+@[^\s@]+\.[^\s@]+$/</span>;
+
+<span class="kwd">if</span> (!<span class="prop">emailPattern</span>.<span class="fn">test</span>(<span class="prop">form</span>.<span class="prop">email</span>)) {
+  <span class="prop">errors</span>.<span class="prop">email</span> = <span class="str">"Enter a valid email"</span>;
+}</pre>
+              <div class="card-footer-tip" style="padding: 0.75rem;">
+                <strong>Explanation:</strong> Checks for characters before <code>@</code>, a domain name, and a dot extension (like <code>.com</code>).
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 16 — Number Validation
+           ==================================================================== -->
+      <section class="slide" data-slide="16" id="slide-16">
+        <div class="slide-header">
+          <div class="slide-tag tag-rose">Section 2 — Form Validation</div>
+          <h1 class="slide-title">Number Validation &amp; String Conversion</h1>
+          <p class="slide-subtitle">Remember: HTML form inputs always store their values as strings!</p>
+        </div>
+        <div class="slide-content">
+          <div class="grid-split-left-wide">
+            <div class="code-box">
+              <div class="code-header">
+                <div class="code-dots">
+                  <div class="code-dot red"></div>
+                  <div class="code-dot yellow"></div>
+                  <div class="code-dot green"></div>
+                </div>
+                <span class="code-title">Converting String to Number for Validation</span>
+                <button class="copy-btn">
+                  <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                  </svg>
+                  Copy
+                </button>
+              </div>
+              <pre class="code-content"><span class="comment">// In form inputs, typing 21 produces the string "21"</span>
+<span class="kwd">if</span> (!<span class="prop">form</span>.<span class="prop">age</span>) {
+  <span class="prop">errors</span>.<span class="prop">age</span> = <span class="str">"Age is required"</span>;
+} <span class="kwd">else if</span> (<span class="fn">Number</span>(<span class="prop">form</span>.<span class="prop">age</span>) &lt; <span class="num">18</span>) {
+  <span class="prop">errors</span>.<span class="prop">age</span> = <span class="str">"Age must be at least 18"</span>;
+}</pre>
+            </div>
+
+            <div class="flex-col">
+              <div class="card card-highlight-amber">
+                <div class="card-title"><span class="icon">⚠️</span> The Common "String" Trap</div>
+                <p>
+                  Even if <code class="attr">type="number"</code> is on the input, JavaScript's <code class="prop">e.target.value</code> is <strong>always a string</strong> (<code class="str">"21"</code>).
+                </p>
+                <p>
+                  Always wrap in <code class="fn">Number(form.age)</code> or <code class="fn">parseInt(form.age, 10)</code> when doing mathematical comparisons!
+                </p>
+              </div>
+
+              <div class="callout">
+                <span class="callout-icon">💡</span>
+                <div>
+                  <strong>Bonus check:</strong> <code class="fn">isNaN(Number(form.age))</code> can be used to ensure the user didn't type non-numeric text.
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 17 — The Validation Function
+           ==================================================================== -->
+      <section class="slide" data-slide="17" id="slide-17">
+        <div class="slide-header">
+          <div class="slide-tag tag-rose">Section 2 — Form Validation</div>
+          <h1 class="slide-title">The Dedicated validateForm Function</h1>
+          <p class="slide-subtitle">Encapsulating validation rules into a clean, reusable pure function</p>
+        </div>
+        <div class="slide-content">
+          <div class="grid-split-left-wide">
+            <div class="code-box">
+              <div class="code-header">
+                <div class="code-dots">
+                  <div class="code-dot red"></div>
+                  <div class="code-dot yellow"></div>
+                  <div class="code-dot green"></div>
+                </div>
+                <span class="code-title">validateForm Function</span>
+                <button class="copy-btn">
+                  <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                  </svg>
+                  Copy
+                </button>
+              </div>
+              <pre class="code-content"><span class="kwd">const</span> <span class="fn">validateForm</span> = () =&gt; {
+  <span class="kwd">const</span> <span class="prop">errors</span> = {};
+
+  <span class="kwd">if</span> (!<span class="prop">form</span>.<span class="prop">name</span>.<span class="fn">trim</span>()) {
+    <span class="prop">errors</span>.<span class="prop">name</span> = <span class="str">"Name is required"</span>;
+  }
+
+  <span class="kwd">if</span> (!<span class="prop">form</span>.<span class="prop">email</span>) {
+    <span class="prop">errors</span>.<span class="prop">email</span> = <span class="str">"Email is required"</span>;
+  }
+
+  <span class="kwd">if</span> (!<span class="prop">form</span>.<span class="prop">age</span>) {
+    <span class="prop">errors</span>.<span class="prop">age</span> = <span class="str">"Age is required"</span>;
+  }
+
+  <span class="kwd">return</span> <span class="prop">errors</span>;
+};</pre>
+            </div>
+
+            <div class="flex-col">
+              <div class="card card-highlight">
+                <div class="card-title"><span class="icon">✨</span> Why Separate Validation?</div>
+                <ul style="list-style: none; display: flex; flex-direction: column; gap: 0.6rem; font-size: 0.85rem; color: var(--text-secondary);">
+                  <li><strong style="color: var(--react-cyan);">1. Cleaner Code:</strong> Keeps your <code class="fn">handleSubmit</code> slim and readable.</li>
+                  <li><strong style="color: var(--react-cyan);">2. Testable:</strong> You can test validation rules independently.</li>
+                  <li><strong style="color: var(--react-cyan);">3. Exportable:</strong> Later, we can extract this into a separate <code class="str">utils/validation.js</code> file!</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 18 — Handling Validation Errors
+           ==================================================================== -->
+      <section class="slide" data-slide="18" id="slide-18">
+        <div class="slide-header">
+          <div class="slide-tag tag-rose">Section 2 — Form Validation</div>
+          <h1 class="slide-title">Handling Validation Errors in State</h1>
+          <p class="slide-subtitle">Using Object.keys(errors).length to decide whether to abort or proceed</p>
+        </div>
+        <div class="slide-content">
+          <div class="grid-split-left-wide">
+            <div class="code-box">
+              <div class="code-header">
+                <div class="code-dots">
+                  <div class="code-dot red"></div>
+                  <div class="code-dot yellow"></div>
+                  <div class="code-dot green"></div>
+                </div>
+                <span class="code-title">Checking for Errors in handleSubmit</span>
+                <button class="copy-btn">
+                  <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                  </svg>
+                  Copy
+                </button>
+              </div>
+              <pre class="code-content"><span class="kwd">const</span> [<span class="prop">errors</span>, <span class="fn">setErrors</span>] = <span class="fn">useState</span>({});
+
+<span class="kwd">const</span> <span class="fn">handleSubmit</span> = (<span class="prop">e</span>) =&gt; {
+  <span class="prop">e</span>.<span class="fn">preventDefault</span>();
+
+  <span class="comment">// 1. Run validation</span>
+  <span class="kwd">const</span> <span class="prop">validationErrors</span> = <span class="fn">validateForm</span>();
+
+  <span class="comment">// 2. If errors exist, update error state and HALT</span>
+  <span class="kwd">if</span> (<span class="type">Object</span>.<span class="fn">keys</span>(<span class="prop">validationErrors</span>).<span class="prop">length</span> &gt; <span class="num">0</span>) {
+    <span class="fn">setErrors</span>(<span class="prop">validationErrors</span>);
+    <span class="kwd">return</span>; <span class="comment">// 🛑 Abort submission</span>
+  }
+
+  <span class="comment">// 3. If no errors, clear previous errors and continue!</span>
+  <span class="fn">setErrors</span>({});
+  <span class="fn">console</span>.<span class="fn">log</span>(<span class="str">"Data ready to submit:"</span>, <span class="prop">form</span>);
+};</pre>
+            </div>
+
+            <div class="flex-col">
+              <div class="card card-highlight">
+                <div class="card-title"><span class="icon">🔍</span> Why Object.keys().length?</div>
+                <p>
+                  In JavaScript, an empty object <code class="prop">{}</code> is truthy (<code class="kwd">Boolean({}) === true</code>).
+                </p>
+                <p>
+                  To check if an object has no keys, we check:
+                </p>
+                <div style="font-family: var(--font-mono); font-size: 0.82rem; background: var(--bg-surface); padding: 0.6rem; border-radius: 4px; border: 1px solid var(--border-medium);">
+                  Object.keys(validationErrors).length &gt; 0
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 19 — Displaying Error Messages
+           ==================================================================== -->
+      <section class="slide" data-slide="19" id="slide-19">
+        <div class="slide-header">
+          <div class="slide-tag tag-rose">Section 2 — Form Validation</div>
+          <h1 class="slide-title">Displaying Error Messages in JSX</h1>
+          <p class="slide-subtitle">Conditional rendering with the logical AND (&amp;&amp;) operator</p>
+        </div>
+        <div class="slide-content">
+          <div class="grid-split-left-wide">
+            <div class="code-box">
+              <div class="code-header">
+                <div class="code-dots">
+                  <div class="code-dot red"></div>
+                  <div class="code-dot yellow"></div>
+                  <div class="code-dot green"></div>
+                </div>
+                <span class="code-title">Conditional Error Rendering</span>
+                <button class="copy-btn">
+                  <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                  </svg>
+                  Copy
+                </button>
+              </div>
+              <pre class="code-content"><span class="tag">&lt;div</span> <span class="attr">className</span>=<span class="str">"form-group"</span><span class="tag">&gt;</span>
+  <span class="tag">&lt;label&gt;</span>Name:<span class="tag">&lt;/label&gt;</span>
+  <span class="tag">&lt;input</span>
+    <span class="attr">name</span>=<span class="str">"name"</span>
+    <span class="attr">value</span>={<span class="prop">form</span>.<span class="prop">name</span>}
+    <span class="attr">onChange</span>={<span class="fn">handleChange</span>}
+  <span class="tag">/&gt;</span>
+
+  <span class="comment">{/* If errors.name has a message, render &lt;p&gt; */}</span>
+  {<span class="prop">errors</span>.<span class="prop">name</span> &amp;&amp; (
+    <span class="tag">&lt;p</span> <span class="attr">className</span>=<span class="str">"error-text"</span><span class="tag">&gt;</span>{<span class="prop">errors</span>.<span class="prop">name</span>}<span class="tag">&lt;/p&gt;</span>
+  )}
+<span class="tag">&lt;/div&gt;</span></pre>
+            </div>
+
+            <div class="flex-col">
+              <div class="card card-highlight">
+                <div class="card-title"><span class="icon">⚡</span> How It Works</div>
+                <p>
+                  If <code class="prop">errors.name</code> is empty or undefined, React renders nothing.
+                </p>
+                <p>
+                  As soon as <code class="prop">errors.name</code> becomes <code class="str">"Name is required"</code>, the <code class="tag">&lt;p&gt;</code> element appears immediately below the input!
+                </p>
+              </div>
+
+              <div class="card" style="border-left: 3px solid var(--accent-rose);">
+                <div style="font-size: 0.82rem; color: var(--accent-rose); font-weight: 600;">
+                  Live Visual in UI:
+                </div>
+                <div style="font-family: var(--font-sans); font-size: 0.85rem; color: var(--accent-rose);">
+                  ⚠ Name is required
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 20 — Complete Validation Flow
+           ==================================================================== -->
+      <section class="slide" data-slide="20" id="slide-20">
+        <div class="slide-header">
+          <div class="slide-tag tag-rose">Section 2 — Form Validation</div>
+          <h1 class="slide-title">Complete Validation Flow</h1>
+          <p class="slide-subtitle">Interactive decision tree of the validation and error handling process</p>
+        </div>
+        <div class="slide-content">
+          <div class="decision-container">
+            <div class="flow-step-v" style="max-width: 220px; text-align: center;">
+              Submit Form &rarr; validateForm()
+            </div>
+            <div class="flow-arrow-v">↓</div>
+            <div class="decision-box">
+              Create errors object: Are there errors?
+            </div>
+            <div class="decision-branches">
+              <!-- Yes Branch -->
+              <div class="decision-branch" id="valBranchYes">
+                <span class="branch-label yes">YES (Errors Exist)</span>
+                <div class="flow-arrow-v" style="color: var(--accent-rose);">↓</div>
+                <div class="branch-node error-node">
+                  setErrors(validationErrors)<br>
+                  <small>❌ Show error messages in UI</small>
+                </div>
+              </div>
+
+              <!-- No Branch -->
+              <div class="decision-branch" id="valBranchNo">
+                <span class="branch-label no">NO (Valid Form)</span>
+                <div class="flow-arrow-v" style="color: var(--accent-emerald);">↓</div>
+                <div class="branch-node pass-node">
+                  setErrors({}) &rarr; Continue<br>
+                  <small>✅ Process/Submit Form Data</small>
+                </div>
+              </div>
+            </div>
+
+            <div style="display: flex; gap: 0.5rem; margin-top: 0.75rem;">
+              <button class="demo-btn" id="simErrorBtn" style="border-color: var(--accent-rose-border); color: var(--accent-rose);">
+                Simulate: With Errors
+              </button>
+              <button class="demo-btn btn-emerald" id="simValidBtn">
+                Simulate: Valid Submit
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 21 — Validation Example
+           ==================================================================== -->
+      <section class="slide" data-slide="21" id="slide-21">
+        <div class="slide-header">
+          <div class="slide-tag tag-rose">Section 2 — Form Validation</div>
+          <h1 class="slide-title">Comprehensive validateForm Example</h1>
+          <p class="slide-subtitle">Combining name, email, and age rules into one robust validation function</p>
+        </div>
+        <div class="slide-content">
+          <div class="code-box">
+            <div class="code-header">
+              <div class="code-dots">
+                <div class="code-dot red"></div>
+                <div class="code-dot yellow"></div>
+                <div class="code-dot green"></div>
+              </div>
+              <span class="code-title">Complete validateForm Function</span>
+              <button class="copy-btn">
+                <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2">
+                  <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                  <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                </svg>
+                Copy
+              </button>
+            </div>
+            <pre class="code-content"><span class="kwd">const</span> <span class="fn">validateForm</span> = () =&gt; {
+  <span class="kwd">const</span> <span class="prop">errors</span> = {};
+
+  <span class="comment">// 1. Name: Required (after stripping spaces)</span>
+  <span class="kwd">if</span> (!<span class="prop">form</span>.<span class="prop">name</span>.<span class="fn">trim</span>()) {
+    <span class="prop">errors</span>.<span class="prop">name</span> = <span class="str">"Name is required"</span>;
+  }
+
+  <span class="comment">// 2. Email: Must include '@'</span>
+  <span class="kwd">if</span> (!<span class="prop">form</span>.<span class="prop">email</span>.<span class="fn">includes</span>(<span class="str">"@"</span>)) {
+    <span class="prop">errors</span>.<span class="prop">email</span> = <span class="str">"Enter a valid email"</span>;
+  }
+
+  <span class="comment">// 3. Age: Must be a number and &gt;= 18</span>
+  <span class="kwd">if</span> (!<span class="prop">form</span>.<span class="prop">age</span>) {
+    <span class="prop">errors</span>.<span class="prop">age</span> = <span class="str">"Age is required"</span>;
+  } <span class="kwd">else if</span> (<span class="fn">Number</span>(<span class="prop">form</span>.<span class="prop">age</span>) &lt; <span class="num">18</span>) {
+    <span class="prop">errors</span>.<span class="prop">age</span> = <span class="str">"Age must be at least 18"</span>;
+  }
+
+  <span class="kwd">return</span> <span class="prop">errors</span>;
+};</pre>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SECTION 3 — COMPLETE FORM
+           SLIDE 22 — Student Registration Form UI
+           ==================================================================== -->
+      <section class="slide" data-slide="22" id="slide-22">
+        <div class="slide-header">
+          <div class="slide-tag tag-emerald">Section 3 — Complete Form</div>
+          <h1 class="slide-title">Interactive Student Registration Form Demo</h1>
+          <p class="slide-subtitle">Live working form with instant validation, error alerts, and state display</p>
+        </div>
+        <div class="slide-content">
+          <div class="grid-split-left-wide">
+            <!-- Working Form Component -->
+            <div class="form-demo-card">
+              <div class="card-title">
+                <span class="icon">🎓</span> Student Registration
+              </div>
+
+              <form id="demoStudentForm" class="flex-col" style="gap: 0.75rem;">
+                <div class="form-group">
+                  <label class="form-label" for="demoName">Name:</label>
+                  <input type="text" id="demoName" name="name" class="form-input" placeholder="e.g. Rahul Sharma">
+                  <div class="form-error-msg" id="err_name"></div>
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label" for="demoEmail">Email:</label>
+                  <input type="text" id="demoEmail" name="email" class="form-input" placeholder="e.g. rahul@gmail.com">
+                  <div class="form-error-msg" id="err_email"></div>
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label" for="demoAge">Age:</label>
+                  <input type="number" id="demoAge" name="age" class="form-input" placeholder="e.g. 21">
+                  <div class="form-error-msg" id="err_age"></div>
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label" for="demoCourse">Course:</label>
+                  <select id="demoCourse" name="course" class="form-select">
+                    <option value="">-- Select Course --</option>
+                    <option value="MERN Stack">MERN Stack Development</option>
+                    <option value="React Deep Dive">React Deep Dive</option>
+                    <option value="Node.js & MongoDB">Node.js &amp; MongoDB</option>
+                  </select>
+                  <div class="form-error-msg" id="err_course"></div>
+                </div>
+
+                <div class="form-actions">
+                  <button type="submit" class="demo-btn">
+                    <span>Submit Registration</span> &rarr;
+                  </button>
+                  <button type="button" class="demo-btn btn-reset" id="demoResetBtn">
+                    Reset
+                  </button>
+                </div>
+              </form>
+
+              <!-- Success Card -->
+              <div class="form-success-card" id="demoSuccessCard">
+                <div class="form-success-header">
+                  <span>✅ Student registration successful!</span>
+                </div>
+                <div class="form-success-grid">
+                  <div><strong>Name:</strong> <span id="resName"></span></div>
+                  <div><strong>Email:</strong> <span id="resEmail"></span></div>
+                  <div><strong>Age:</strong> <span id="resAge"></span></div>
+                  <div><strong>Course:</strong> <span id="resCourse"></span></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Live State Inspector -->
+            <div class="flex-col">
+              <div class="card card-highlight">
+                <div class="card-title"><span class="icon">🔍</span> Live Form State Inspector</div>
+                <p style="font-size: 0.8rem; color: var(--text-muted);">
+                  As you type into the inputs, watch React state update in real-time:
+                </p>
+                <div class="code-box" style="margin-top: 0.25rem;">
+                  <pre class="code-content" id="demoLiveStateJson" style="font-size: 0.78rem; padding: 0.75rem; color: var(--react-cyan);"></pre>
+                </div>
+              </div>
+
+              <div class="callout callout-amber">
+                <span class="callout-icon">💡</span>
+                <div>
+                  <strong>Try it:</strong> Click Submit with empty fields to trigger validation errors. Then enter valid data (Age &ge; 18) to see the success output!
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 23 — Form State
+           ==================================================================== -->
+      <section class="slide" data-slide="23" id="slide-23">
+        <div class="slide-header">
+          <div class="slide-tag tag-emerald">Section 3 — Complete Form</div>
+          <h1 class="slide-title">Form State Architecture</h1>
+          <p class="slide-subtitle">Separating user input data from validation error messages</p>
+        </div>
+        <div class="slide-content">
+          <div class="grid-2">
+            <div class="code-box">
+              <div class="code-header">
+                <div class="code-dots">
+                  <div class="code-dot red"></div>
+                  <div class="code-dot yellow"></div>
+                  <div class="code-dot green"></div>
+                </div>
+                <span class="code-title">1. Form Data State</span>
+              </div>
+              <pre class="code-content"><span class="kwd">const</span> [<span class="prop">form</span>, <span class="fn">setForm</span>] = <span class="fn">useState</span>({
+  <span class="prop">name</span>: <span class="str">""</span>,
+  <span class="prop">email</span>: <span class="str">""</span>,
+  <span class="prop">age</span>: <span class="str">""</span>,
+  <span class="prop">course</span>: <span class="str">""</span>
+});</pre>
+              <div class="card-footer-tip" style="padding: 0.75rem;">
+                <strong>Stores:</strong> Current values entered by user in controlled inputs.
+              </div>
+            </div>
+
+            <div class="code-box">
+              <div class="code-header">
+                <div class="code-dots">
+                  <div class="code-dot red"></div>
+                  <div class="code-dot yellow"></div>
+                  <div class="code-dot green"></div>
+                </div>
+                <span class="code-title">2. Validation Errors State</span>
+              </div>
+              <pre class="code-content"><span class="kwd">const</span> [<span class="prop">errors</span>, <span class="fn">setErrors</span>] = <span class="fn">useState</span>({});</pre>
+              <div class="card-footer-tip" style="padding: 0.75rem;">
+                <strong>Stores:</strong> Validation error messages mapped to field names.
+              </div>
+            </div>
+          </div>
+
+          <div class="card card-highlight">
+            <div class="card-title"><span class="icon">⚖️</span> Clean Separation of Concerns</div>
+            <p>
+              By keeping <code class="prop">form</code> and <code class="prop">errors</code> in two distinct states, your input handlers remain simple, and error messages only change when validation is evaluated!
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 24 — Handling Input Changes Dynamically
+           ==================================================================== -->
+      <section class="slide" data-slide="24" id="slide-24">
+        <div class="slide-header">
+          <div class="slide-tag tag-emerald">Section 3 — Complete Form</div>
+          <h1 class="slide-title">Handling Input Changes Dynamically</h1>
+          <p class="slide-subtitle">Using Computed Property Names [name]: value for universal input handling</p>
+        </div>
+        <div class="slide-content">
+          <div class="grid-split-left-wide">
+            <div class="code-box">
+              <div class="code-header">
+                <div class="code-dots">
+                  <div class="code-dot red"></div>
+                  <div class="code-dot yellow"></div>
+                  <div class="code-dot green"></div>
+                </div>
+                <span class="code-title">Universal handleChange</span>
+                <button class="copy-btn">
+                  <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                  </svg>
+                  Copy
+                </button>
+              </div>
+              <pre class="code-content"><span class="kwd">const</span> <span class="fn">handleChange</span> = (<span class="prop">e</span>) =&gt; {
+  <span class="kwd">const</span> { <span class="prop">name</span>, <span class="prop">value</span> } = <span class="prop">e</span>.<span class="prop">target</span>;
+
+  <span class="comment">// [name] dynamically updates "name", "email", or "age"</span>
+  <span class="fn">setForm</span>({
+    ...<span class="prop">form</span>,
+    [<span class="prop">name</span>]: <span class="prop">value</span>
+  });
+};</pre>
+            </div>
+
+            <div class="flex-col">
+              <div class="card card-highlight">
+                <div class="card-title"><span class="icon">🔗</span> The name Attribute Link</div>
+                <div style="font-family: var(--font-mono); font-size: 0.8rem; display: flex; flex-direction: column; gap: 0.4rem;">
+                  <div>&lt;input <span style="color: var(--accent-amber);">name="email"</span> ... /&gt;</div>
+                  <div style="color: var(--react-cyan); text-align: center;">↓</div>
+                  <div>e.target.name is <span style="color: var(--accent-amber);">"email"</span></div>
+                  <div style="color: var(--react-cyan); text-align: center;">↓</div>
+                  <div>updates <span style="color: var(--accent-emerald);">form.email</span></div>
+                </div>
+              </div>
+
+              <div class="callout callout-emerald">
+                <span class="callout-icon">💡</span>
+                <div>
+                  <strong>Efficiency:</strong> Instead of writing 4 separate handlers (<code class="fn">handleNameChange</code>, <code class="fn">handleEmailChange</code>...), one single function handles all 4 inputs!
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 25 — Complete handleSubmit
+           ==================================================================== -->
+      <section class="slide" data-slide="25" id="slide-25">
+        <div class="slide-header">
+          <div class="slide-tag tag-emerald">Section 3 — Complete Form</div>
+          <h1 class="slide-title">Complete handleSubmit Function</h1>
+          <p class="slide-subtitle">Step-by-step walk-through of the full submission logic</p>
+        </div>
+        <div class="slide-content">
+          <div class="code-box">
+            <div class="code-header">
+              <div class="code-dots">
+                <div class="code-dot red"></div>
+                <div class="code-dot yellow"></div>
+                <div class="code-dot green"></div>
+              </div>
+              <span class="code-title">handleSubmit Logic</span>
+              <button class="copy-btn">
+                <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2">
+                  <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                  <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                </svg>
+                Copy
+              </button>
+            </div>
+            <pre class="code-content"><span class="kwd">const</span> <span class="fn">handleSubmit</span> = (<span class="prop">e</span>) =&gt; {
+  <span class="comment">// 1. Prevent default browser reload</span>
+  <span class="prop">e</span>.<span class="fn">preventDefault</span>();
+
+  <span class="comment">// 2. Execute validation function</span>
+  <span class="kwd">const</span> <span class="prop">validationErrors</span> = <span class="fn">validateForm</span>();
+
+  <span class="comment">// 3. If there are any errors, update state and stop</span>
+  <span class="kwd">if</span> (<span class="type">Object</span>.<span class="fn">keys</span>(<span class="prop">validationErrors</span>).<span class="prop">length</span> &gt; <span class="num">0</span>) {
+    <span class="fn">setErrors</span>(<span class="prop">validationErrors</span>);
+    <span class="kwd">return</span>;
+  }
+
+  <span class="comment">// 4. Clear any existing errors</span>
+  <span class="fn">setErrors</span>({});
+
+  <span class="comment">// 5. Process clean data!</span>
+  <span class="fn">console</span>.<span class="fn">log</span>(<span class="str">"Form submitted successfully:"</span>, <span class="prop">form</span>);
+};</pre>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 26 — Complete Form Example
+           ==================================================================== -->
+      <section class="slide" data-slide="26" id="slide-26">
+        <div class="slide-header">
+          <div class="slide-tag tag-emerald">Section 3 — Complete Form</div>
+          <h1 class="slide-title">Complete StudentForm.jsx Component</h1>
+          <p class="slide-subtitle">The full beginner-friendly component ready for production use</p>
+        </div>
+        <div class="slide-content">
+          <div class="code-box">
+            <div class="code-header">
+              <div class="code-dots">
+                <div class="code-dot red"></div>
+                <div class="code-dot yellow"></div>
+                <div class="code-dot green"></div>
+              </div>
+              <span class="code-title">src/components/StudentForm.jsx</span>
+              <button class="copy-btn">
+                <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2">
+                  <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                  <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                </svg>
+                Copy
+              </button>
+            </div>
+            <pre class="code-content"><span class="kwd">import</span> { <span class="fn">useState</span> } <span class="kwd">from</span> <span class="str">"react"</span>;
+
+<span class="kwd">function</span> <span class="fn">StudentForm</span>() {
+  <span class="kwd">const</span> [<span class="prop">form</span>, <span class="fn">setForm</span>] = <span class="fn">useState</span>({
+    <span class="prop">name</span>: <span class="str">""</span>,
+    <span class="prop">email</span>: <span class="str">""</span>,
+    <span class="prop">age</span>: <span class="str">""</span>,
+    <span class="prop">course</span>: <span class="str">""</span>
+  });
+
+  <span class="kwd">const</span> [<span class="prop">errors</span>, <span class="fn">setErrors</span>] = <span class="fn">useState</span>({});
+
+  <span class="kwd">const</span> <span class="fn">handleChange</span> = (<span class="prop">e</span>) =&gt; {
+    <span class="kwd">const</span> { <span class="prop">name</span>, <span class="prop">value</span> } = <span class="prop">e</span>.<span class="prop">target</span>;
+    <span class="fn">setForm</span>({ ...<span class="prop">form</span>, [<span class="prop">name</span>]: <span class="prop">value</span> });
+  };
+
+  <span class="kwd">const</span> <span class="fn">validateForm</span> = () =&gt; {
+    <span class="kwd">const</span> <span class="prop">errors</span> = {};
+    <span class="kwd">if</span> (!<span class="prop">form</span>.<span class="prop">name</span>.<span class="fn">trim</span>()) <span class="prop">errors</span>.<span class="prop">name</span> = <span class="str">"Name is required"</span>;
+    <span class="kwd">if</span> (!<span class="prop">form</span>.<span class="prop">email</span>.<span class="fn">includes</span>(<span class="str">"@"</span>)) <span class="prop">errors</span>.<span class="prop">email</span> = <span class="str">"Enter a valid email"</span>;
+    <span class="kwd">if</span> (!<span class="prop">form</span>.<span class="prop">age</span>) <span class="prop">errors</span>.<span class="prop">age</span> = <span class="str">"Age is required"</span>;
+    <span class="kwd">if</span> (!<span class="prop">form</span>.<span class="prop">course</span>) <span class="prop">errors</span>.<span class="prop">course</span> = <span class="str">"Select a course"</span>;
+    <span class="kwd">return</span> <span class="prop">errors</span>;
+  };
+
+  <span class="kwd">const</span> <span class="fn">handleSubmit</span> = (<span class="prop">e</span>) =&gt; {
+    <span class="prop">e</span>.<span class="fn">preventDefault</span>();
+    <span class="kwd">const</span> <span class="prop">validationErrors</span> = <span class="fn">validateForm</span>();
+    <span class="kwd">if</span> (<span class="type">Object</span>.<span class="fn">keys</span>(<span class="prop">validationErrors</span>).<span class="prop">length</span> &gt; <span class="num">0</span>) {
+      <span class="fn">setErrors</span>(<span class="prop">validationErrors</span>);
+      <span class="kwd">return</span>;
+    }
+    <span class="fn">setErrors</span>({});
+    <span class="fn">console</span>.<span class="fn">log</span>(<span class="prop">form</span>);
+  };
+
+  <span class="kwd">return</span> (
+    <span class="tag">&lt;form</span> <span class="attr">onSubmit</span>={<span class="fn">handleSubmit</span>}<span class="tag">&gt;</span>
+      {/* Inputs &amp; Error Messages */}
+    <span class="tag">&lt;/form&gt;</span>
+  );
+}
+
+<span class="kwd">export</span> <span class="kwd">default</span> <span class="fn">StudentForm</span>;</pre>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SECTION 4 — IMPORTING AND EXPORTING
+           SLIDE 27 — Why Import and Export?
+           ==================================================================== -->
+      <section class="slide" data-slide="27" id="slide-27">
+        <div class="slide-header">
+          <div class="slide-tag tag-amber">Section 4 — Import &amp; Export</div>
+          <h1 class="slide-title">Why Import and Export?</h1>
+          <p class="slide-subtitle">Modular programming: breaking large apps into clean, focused files</p>
+        </div>
+        <div class="slide-content">
+          <div class="grid-split-left-wide">
+            <div class="card card-highlight">
+              <div class="card-title"><span class="icon">🧩</span> The Single-File Trap</div>
+              <p>
+                As your React application grows, keeping the entire application inside <code class="prop">App.jsx</code> becomes unmaintainable, messy, and hard to collaborate on.
+              </p>
+              <p>
+                ES Modules (<code class="kwd">import</code> and <code class="kwd">export</code>) allow us to divide our codebase into independent files:
+              </p>
+              <ul style="list-style: none; display: flex; flex-direction: column; gap: 0.4rem; font-size: 0.85rem; color: var(--text-secondary); margin-top: 0.5rem;">
+                <li>• <strong>Reusability:</strong> Use the same component on multiple screens</li>
+                <li>• <strong>Readability:</strong> Each file has one clear job</li>
+                <li>• <strong>Maintenance:</strong> Bug fixes stay isolated</li>
+              </ul>
+            </div>
+
+            <div class="code-box">
+              <div class="code-header">
+                <div class="code-dots">
+                  <div class="code-dot red"></div>
+                  <div class="code-dot yellow"></div>
+                  <div class="code-dot green"></div>
+                </div>
+                <span class="code-title">Modular Structure</span>
+              </div>
+              <pre class="code-content"><span style="color: var(--react-cyan); font-weight: 700;">components/</span>
+├── <span style="color: var(--text-main);">Header.jsx</span>
+├── <span style="color: var(--text-main);">StudentForm.jsx</span>
+└── <span style="color: var(--text-main);">Button.jsx</span></pre>
+              <div class="callout callout-amber" style="margin: 0.75rem;">
+                <span class="callout-icon">💡</span>
+                <div>
+                  Export from the component file &rarr; Import where you need to render it!
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 28 — Exporting a Component
+           ==================================================================== -->
+      <section class="slide" data-slide="28" id="slide-28">
+        <div class="slide-header">
+          <div class="slide-tag tag-amber">Section 4 — Import &amp; Export</div>
+          <h1 class="slide-title">Exporting a Component (Default Export)</h1>
+          <p class="slide-subtitle">Making a component available to the rest of your React app</p>
+        </div>
+        <div class="slide-content">
+          <div class="grid-split-left-wide">
+            <div class="code-box">
+              <div class="code-header">
+                <div class="code-dots">
+                  <div class="code-dot red"></div>
+                  <div class="code-dot yellow"></div>
+                  <div class="code-dot green"></div>
+                </div>
+                <span class="code-title">src/components/Header.jsx</span>
+                <button class="copy-btn">
+                  <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                  </svg>
+                  Copy
+                </button>
+              </div>
+              <pre class="code-content"><span class="kwd">function</span> <span class="fn">Header</span>() {
+  <span class="kwd">return</span> (
+    <span class="tag">&lt;header&gt;</span>
+      <span class="tag">&lt;h1&gt;</span>Student App<span class="tag">&lt;/h1&gt;</span>
+    <span class="tag">&lt;/header&gt;</span>
+  );
+}
+
+<span class="comment">// export default makes this the primary export</span>
+<span class="kwd">export</span> <span class="kwd">default</span> <span class="fn">Header</span>;</pre>
+            </div>
+
+            <div class="flex-col">
+              <div class="card card-highlight">
+                <div class="card-title"><span class="icon">📦</span> What Does export default Do?</div>
+                <p>
+                  <code class="kwd">export default</code> marks this component as the main export of the file.
+                </p>
+                <p>
+                  Each JavaScript file can have <strong>only one</strong> default export.
+                </p>
+              </div>
+
+              <div class="callout">
+                <span class="callout-icon">💡</span>
+                <div>
+                  <strong>Standard Practice:</strong> In React, every component file typically has one main component as its <code class="kwd">export default</code>.
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 29 — Importing a Default Export
+           ==================================================================== -->
+      <section class="slide" data-slide="29" id="slide-29">
+        <div class="slide-header">
+          <div class="slide-tag tag-amber">Section 4 — Import &amp; Export</div>
+          <h1 class="slide-title">Importing a Default Export</h1>
+          <p class="slide-subtitle">Bringing a component into App.jsx without curly braces</p>
+        </div>
+        <div class="slide-content">
+          <div class="grid-split-left-wide">
+            <div class="code-box">
+              <div class="code-header">
+                <div class="code-dots">
+                  <div class="code-dot red"></div>
+                  <div class="code-dot yellow"></div>
+                  <div class="code-dot green"></div>
+                </div>
+                <span class="code-title">src/App.jsx</span>
+                <button class="copy-btn">
+                  <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                  </svg>
+                  Copy
+                </button>
+              </div>
+              <pre class="code-content"><span class="comment">// 1. Import default export (no curly braces!)</span>
+<span class="kwd">import</span> <span class="fn">Header</span> <span class="kwd">from</span> <span class="str">"./components/Header"</span>;
+
+<span class="kwd">function</span> <span class="fn">App</span>() {
+  <span class="kwd">return</span> (
+    <span class="tag">&lt;&gt;</span>
+      <span class="tag">&lt;<span class="fn">Header</span> /&gt;</span>
+    <span class="tag">&lt;/&gt;</span>
+  );
+}
+
+<span class="kwd">export</span> <span class="kwd">default</span> <span class="fn">App</span>;</pre>
+            </div>
+
+            <div class="card card-highlight flex-col" style="justify-content: center; text-align: center;">
+              <h3 style="font-size: 1rem; color: var(--react-cyan); margin-bottom: 0.5rem;">The Import/Export Link</h3>
+              <div class="flow-vertical">
+                <div class="flow-step-v">Header.jsx</div>
+                <div class="flow-arrow-v">↓</div>
+                <div class="flow-step-v" style="color: var(--accent-amber);">export default Header</div>
+                <div class="flow-arrow-v">↓</div>
+                <div class="flow-step-v">App.jsx</div>
+                <div class="flow-arrow-v">↓</div>
+                <div class="flow-step-v" style="color: var(--react-cyan);">import Header from "./Header"</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 30 — Named Export
+           ==================================================================== -->
+      <section class="slide" data-slide="30" id="slide-30">
+        <div class="slide-header">
+          <div class="slide-tag tag-amber">Section 4 — Import &amp; Export</div>
+          <h1 class="slide-title">Named Exports</h1>
+          <p class="slide-subtitle">Exporting specific functions or components using { curly braces }</p>
+        </div>
+        <div class="slide-content">
+          <div class="grid-split-left-wide">
+            <div class="code-box">
+              <div class="code-header">
+                <div class="code-dots">
+                  <div class="code-dot red"></div>
+                  <div class="code-dot yellow"></div>
+                  <div class="code-dot green"></div>
+                </div>
+                <span class="code-title">Named Export &amp; Import Syntax</span>
+                <button class="copy-btn">
+                  <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                  </svg>
+                  Copy
+                </button>
+              </div>
+              <pre class="code-content"><span class="comment">// In Header.jsx: Notice 'export' before function</span>
+<span class="kwd">export</span> <span class="kwd">function</span> <span class="fn">Header</span>() {
+  <span class="kwd">return</span> <span class="tag">&lt;h1&gt;</span>Student App<span class="tag">&lt;/h1&gt;</span>;
+}
+
+<span class="comment">// In App.jsx: Must use { curly braces } matching the name!</span>
+<span class="kwd">import</span> { <span class="fn">Header</span> } <span class="kwd">from</span> <span class="str">"./Header"</span>;</pre>
+            </div>
+
+            <div class="flex-col">
+              <div class="card card-highlight">
+                <div class="card-title"><span class="icon">🔑</span> Crucial Difference: Curly Braces</div>
+                <p>
+                  Named imports <strong>MUST</strong> use <code class="prop">{ }</code> curly braces.
+                </p>
+                <p>
+                  The name inside <code class="prop">{ Header }</code> must match the exported identifier exactly.
+                </p>
+              </div>
+
+              <div class="callout callout-rose">
+                <span class="callout-icon">⚠️</span>
+                <div>
+                  <strong>Common Trap:</strong> Writing <code class="prop">import Header from "./Header"</code> when the file used a named export will result in an <code class="str">undefined</code> import error!
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 31 — Multiple Named Exports
+           ==================================================================== -->
+      <section class="slide" data-slide="31" id="slide-31">
+        <div class="slide-header">
+          <div class="slide-tag tag-amber">Section 4 — Import &amp; Export</div>
+          <h1 class="slide-title">Multiple Named Exports in One File</h1>
+          <p class="slide-subtitle">Grouping multiple components or helpers into a single utility file</p>
+        </div>
+        <div class="slide-content">
+          <div class="grid-split-left-wide">
+            <div class="code-box">
+              <div class="code-header">
+                <div class="code-dots">
+                  <div class="code-dot red"></div>
+                  <div class="code-dot yellow"></div>
+                  <div class="code-dot green"></div>
+                </div>
+                <span class="code-title">src/components/Layout.jsx</span>
+                <button class="copy-btn">
+                  <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                  </svg>
+                  Copy
+                </button>
+              </div>
+              <pre class="code-content"><span class="comment">// Exporting multiple items from one file:</span>
+<span class="kwd">export</span> <span class="kwd">function</span> <span class="fn">Header</span>() {
+  <span class="kwd">return</span> <span class="tag">&lt;header&gt;&lt;h1&gt;</span>Header<span class="tag">&lt;/h1&gt;&lt;/header&gt;</span>;
+}
+
+<span class="kwd">export</span> <span class="kwd">function</span> <span class="fn">Footer</span>() {
+  <span class="kwd">return</span> <span class="tag">&lt;footer&gt;&lt;p&gt;</span>Footer<span class="tag">&lt;/p&gt;&lt;/footer&gt;</span>;
+}
+
+<span class="comment">// In App.jsx: Import both in one statement</span>
+<span class="kwd">import</span> { <span class="fn">Header</span>, <span class="fn">Footer</span> } <span class="kwd">from</span> <span class="str">"./Layout"</span>;</pre>
+            </div>
+
+            <div class="flex-col">
+              <div class="card card-highlight">
+                <div class="card-title"><span class="icon">📦</span> Single File, Multiple Exports</div>
+                <p>
+                  Unlike default exports (which allow only 1 per file), you can have as many named exports as you want in a single file!
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 32 — Default vs Named Export
+           ==================================================================== -->
+      <section class="slide" data-slide="32" id="slide-32">
+        <div class="slide-header">
+          <div class="slide-tag tag-amber">Section 4 — Import &amp; Export</div>
+          <h1 class="slide-title">Default vs Named Exports</h1>
+          <p class="slide-subtitle">Clear side-by-side comparison matrix</p>
+        </div>
+        <div class="slide-content">
+          <div class="table-wrapper">
+            <table class="styled-table">
+              <thead>
+                <tr>
+                  <th>Feature</th>
+                  <th>Default Export</th>
+                  <th>Named Export</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Quantity per file</strong></td>
+                  <td>Only <span style="color: var(--react-cyan); font-weight: 700;">ONE</span> default export per file</td>
+                  <td><span style="color: var(--accent-emerald); font-weight: 700;">MULTIPLE</span> named exports per file</td>
+                </tr>
+                <tr>
+                  <td><strong>Import syntax</strong></td>
+                  <td>Import <strong>WITHOUT</strong> curly braces: <code class="fn">import Header from "./Header"</code></td>
+                  <td>Import <strong>WITH</strong> curly braces: <code class="fn">import { Header } from "./Header"</code></td>
+                </tr>
+                <tr>
+                  <td><strong>Renaming flexibility</strong></td>
+                  <td>Can rename freely on import: <code class="fn">import MyHeader from "./Header"</code></td>
+                  <td>Must match exported name (or use <code class="kwd">as</code>)</td>
+                </tr>
+                <tr>
+                  <td><strong>Keywords</strong></td>
+                  <td><code class="kwd">export default Component</code></td>
+                  <td><code class="kwd">export function Component()</code></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 33 — Exporting Functions
+           ==================================================================== -->
+      <section class="slide" data-slide="33" id="slide-33">
+        <div class="slide-header">
+          <div class="slide-tag tag-amber">Section 4 — Import &amp; Export</div>
+          <h1 class="slide-title">Exporting Reusable Functions</h1>
+          <p class="slide-subtitle">Exports are not just for components—they power reusable helper libraries</p>
+        </div>
+        <div class="slide-content">
+          <div class="grid-split-left-wide">
+            <div class="code-box">
+              <div class="code-header">
+                <div class="code-dots">
+                  <div class="code-dot red"></div>
+                  <div class="code-dot yellow"></div>
+                  <div class="code-dot green"></div>
+                </div>
+                <span class="code-title">src/utils/validation.js</span>
+                <button class="copy-btn">
+                  <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                  </svg>
+                  Copy
+                </button>
+              </div>
+              <pre class="code-content"><span class="comment">// Pure JavaScript utility function</span>
+<span class="kwd">export</span> <span class="kwd">const</span> <span class="fn">validateEmail</span> = (<span class="prop">email</span>) =&gt; {
+  <span class="kwd">return</span> <span class="prop">email</span>.<span class="fn">includes</span>(<span class="str">"@"</span>);
+};
+
+<span class="kwd">export</span> <span class="kwd">const</span> <span class="fn">validateAge</span> = (<span class="prop">age</span>) =&gt; {
+  <span class="kwd">return</span> <span class="fn">Number</span>(<span class="prop">age</span>) &gt;= <span class="num">18</span>;
+};</pre>
+            </div>
+
+            <div class="code-box">
+              <div class="code-header">
+                <div class="code-dots">
+                  <div class="code-dot red"></div>
+                  <div class="code-dot yellow"></div>
+                  <div class="code-dot green"></div>
+                </div>
+                <span class="code-title">Importing in StudentForm.jsx</span>
+              </div>
+              <pre class="code-content"><span class="comment">// Import functions into component</span>
+<span class="kwd">import</span> { <span class="fn">validateEmail</span>, <span class="fn">validateAge</span> } <span class="kwd">from</span> <span class="str">"../utils/validation"</span>;</pre>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 34 — Organizing a Small React Project
+           ==================================================================== -->
+      <section class="slide" data-slide="34" id="slide-34">
+        <div class="slide-header">
+          <div class="slide-tag tag-amber">Section 4 — Import &amp; Export</div>
+          <h1 class="slide-title">Organizing a Small React Project</h1>
+          <p class="slide-subtitle">Industry-standard folder structure for modular component design</p>
+        </div>
+        <div class="slide-content">
+          <div class="grid-split-left-wide">
+            <div class="code-box">
+              <div class="code-header">
+                <div class="code-dots">
+                  <div class="code-dot red"></div>
+                  <div class="code-dot yellow"></div>
+                  <div class="code-dot green"></div>
+                </div>
+                <span class="code-title">Project Tree</span>
+              </div>
+              <pre class="code-content"><span style="color: var(--react-cyan); font-weight: 700;">src/</span>
+│
+├── <span style="color: var(--accent-amber); font-weight: 600;">components/</span>       <span class="comment">// Reusable UI components</span>
+│   ├── <span style="color: var(--text-main);">Header.jsx</span>
+│   └── <span style="color: var(--text-main);">StudentForm.jsx</span>
+│
+├── <span style="color: var(--accent-emerald); font-weight: 600;">utils/</span>            <span class="comment">// Reusable helper functions</span>
+│   └── <span style="color: var(--text-main);">validation.js</span>
+│
+├── <span style="color: var(--react-cyan); font-weight: 600;">App.jsx</span>           <span class="comment">// Root assembly component</span>
+└── <span style="color: var(--text-muted);">main.jsx</span>          <span class="comment">// Entry point mounting to root</span></pre>
+            </div>
+
+            <div class="flex-col">
+              <div class="card card-highlight">
+                <div class="card-title"><span class="icon">📁</span> Directory Roles</div>
+                <p><strong>components/:</strong> Stores JSX visual components.</p>
+                <p><strong>utils/:</strong> Stores non-visual pure JS logic and formulas.</p>
+                <p><strong>App.jsx:</strong> Combines components into a single interface.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SECTION 5 — PRACTICAL PROJECT
+           SLIDE 35 — Mini Project Requirements
+           ==================================================================== -->
+      <section class="slide" data-slide="35" id="slide-35">
+        <div class="slide-header">
+          <div class="slide-tag tag-emerald">Section 5 — Mini Project</div>
+          <h1 class="slide-title">Mini Project: Student Registration App</h1>
+          <p class="slide-subtitle">Requirements combining form submission, validation, and modular files</p>
+        </div>
+        <div class="slide-content">
+          <div class="grid-2">
+            <div class="card card-highlight">
+              <div class="card-title"><span class="icon">📝</span> Form &amp; Validation Requirements</div>
+              <ul style="list-style: none; display: flex; flex-direction: column; gap: 0.5rem; font-size: 0.85rem; color: var(--text-secondary);">
+                <li>• <strong>Controlled Inputs:</strong> Name, Email, Age, Course dropdown</li>
+                <li>• <strong>Name:</strong> Required &amp; non-empty after <code class="fn">.trim()</code></li>
+                <li>• <strong>Email:</strong> Required &amp; valid email format</li>
+                <li>• <strong>Age:</strong> Required &amp; minimum 18</li>
+                <li>• <strong>Course:</strong> Required selection</li>
+                <li>• <strong>Errors:</strong> Display inline under each field</li>
+              </ul>
+            </div>
+
+            <div class="card card-highlight-amber">
+              <div class="card-title"><span class="icon">📦</span> Modular Architecture Requirements</div>
+              <ul style="list-style: none; display: flex; flex-direction: column; gap: 0.5rem; font-size: 0.85rem; color: var(--text-secondary);">
+                <li>• Separate <code class="prop">Header.jsx</code> component (<code class="kwd">export default</code>)</li>
+                <li>• Separate <code class="prop">StudentForm.jsx</code> component (<code class="kwd">export default</code>)</li>
+                <li>• Separate <code class="prop">validation.js</code> with named exports</li>
+                <li>• Assembled cleanly inside <code class="prop">App.jsx</code></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 36 — Project Structure
+           ==================================================================== -->
+      <section class="slide" data-slide="36" id="slide-36">
+        <div class="slide-header">
+          <div class="slide-tag tag-emerald">Section 5 — Mini Project</div>
+          <h1 class="slide-title">Complete Mini Project Directory Layout</h1>
+          <p class="slide-subtitle">The standard file layout for your student registration repository</p>
+        </div>
+        <div class="slide-content">
+          <div class="code-box">
+            <div class="code-header">
+              <div class="code-dots">
+                <div class="code-dot red"></div>
+                <div class="code-dot yellow"></div>
+                <div class="code-dot green"></div>
+              </div>
+              <span class="code-title">student-registration-app/src/</span>
+            </div>
+            <pre class="code-content"><span style="color: var(--react-cyan); font-weight: 700;">src/</span>
+│
+├── <span style="color: var(--accent-amber); font-weight: 600;">components/</span>
+│   ├── <span style="color: var(--text-main); font-weight: 600;">Header.jsx</span>          <span class="comment">// Visual title banner (export default Header)</span>
+│   └── <span style="color: var(--text-main); font-weight: 600;">StudentForm.jsx</span>     <span class="comment">// Form state, submit handler, inputs, errors</span>
+│
+├── <span style="color: var(--accent-emerald); font-weight: 600;">utils/</span>
+│   └── <span style="color: var(--text-main); font-weight: 600;">validation.js</span>       <span class="comment">// Named exports: validateEmail, validateForm</span>
+│
+├── <span style="color: var(--react-cyan); font-weight: 600;">App.jsx</span>                 <span class="comment">// Imports Header and StudentForm</span>
+└── <span style="color: var(--text-muted);">main.jsx</span>                <span class="comment">// Mounts &lt;App /&gt; to DOM</span></pre>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 37 — Project Architecture (Interactive Diagram)
+           ==================================================================== -->
+      <section class="slide" data-slide="37" id="slide-37">
+        <div class="slide-header">
+          <div class="slide-tag tag-emerald">Section 5 — Mini Project</div>
+          <h1 class="slide-title">Interactive Project Architecture</h1>
+          <p class="slide-subtitle">Click any module node to inspect how it connects with the rest of the application</p>
+        </div>
+        <div class="slide-content">
+          <div class="module-tree-container">
+            <div class="module-row">
+              <div class="module-box active-module" data-module-key="header">
+                <span class="mod-name">Header.jsx</span>
+                <span class="mod-type">export default</span>
+              </div>
+              <span class="module-connector">&rarr;</span>
+              <div class="module-box" data-module-key="app">
+                <span class="mod-name">App.jsx</span>
+                <span class="mod-type">Root Assembly</span>
+              </div>
+              <span class="module-connector">&larr;</span>
+              <div class="module-box" data-module-key="studentForm">
+                <span class="mod-name">StudentForm.jsx</span>
+                <span class="mod-type">export default</span>
+              </div>
+            </div>
+
+            <div class="module-row">
+              <span class="module-connector" style="transform: rotate(90deg); margin-left: 280px;">&larr;</span>
+            </div>
+
+            <div class="module-row" style="justify-content: flex-end; padding-right: 50px;">
+              <div class="module-box" data-module-key="validation">
+                <span class="mod-name">utils/validation.js</span>
+                <span class="mod-type">named exports { validateForm }</span>
+              </div>
+            </div>
+
+            <div class="module-explanation-panel" id="moduleExplanationPanel">
+              <strong>Header.jsx:</strong> Exports the Header component via <code>export default Header;</code>. It defines the top visual banner of the student application.
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 38 — Common Mistakes
+           ==================================================================== -->
+      <section class="slide" data-slide="38" id="slide-38">
+        <div class="slide-header">
+          <div class="slide-tag tag-rose">Troubleshooting</div>
+          <h1 class="slide-title">Common Beginner Mistakes &amp; Fixes</h1>
+          <p class="slide-subtitle">Six frequent traps when working with React forms and module imports</p>
+        </div>
+        <div class="slide-content">
+          <div class="grid-3" style="max-height: 60vh; overflow-y: auto;">
+            <div class="card" style="border-left: 4px solid var(--accent-rose);">
+              <strong style="color: var(--accent-rose);">1. Forgetting e.preventDefault()</strong>
+              <p style="font-size: 0.8rem;">Causes the browser to immediately reload, wiping your React state.</p>
+              <div style="font-family: var(--font-mono); font-size: 0.75rem; color: var(--accent-emerald);">Fix: e.preventDefault() at top of submit handler.</div>
+            </div>
+
+            <div class="card" style="border-left: 4px solid var(--accent-rose);">
+              <strong style="color: var(--accent-rose);">2. onClick Instead of onSubmit</strong>
+              <p style="font-size: 0.8rem;">Attaching click handler to the button prevents submission when pressing Enter.</p>
+              <div style="font-family: var(--font-mono); font-size: 0.75rem; color: var(--accent-emerald);">Fix: Put onSubmit on &lt;form&gt;.</div>
+            </div>
+
+            <div class="card" style="border-left: 4px solid var(--accent-rose);">
+              <strong style="color: var(--accent-rose);">3. Missing name Attribute</strong>
+              <p style="font-size: 0.8rem;">Using <code>[name]: value</code> in handleChange fails if <code class="attr">name</code> is omitted.</p>
+              <div style="font-family: var(--font-mono); font-size: 0.75rem; color: var(--accent-emerald);">Fix: Add name="email" to input.</div>
+            </div>
+
+            <div class="card" style="border-left: 4px solid var(--accent-rose);">
+              <strong style="color: var(--accent-rose);">4. Forgetting { } on Named Imports</strong>
+              <p style="font-size: 0.8rem;">Writing <code>import Header from "./Header"</code> for a named export causes undefined error.</p>
+              <div style="font-family: var(--font-mono); font-size: 0.75rem; color: var(--accent-emerald);">Fix: import { Header } from "./Header".</div>
+            </div>
+
+            <div class="card" style="border-left: 4px solid var(--accent-rose);">
+              <strong style="color: var(--accent-rose);">5. Using { } on Default Exports</strong>
+              <p style="font-size: 0.8rem;">Adding curly braces to a file exported via <code class="kwd">export default</code>.</p>
+              <div style="font-family: var(--font-mono); font-size: 0.75rem; color: var(--accent-emerald);">Fix: import Header from "./Header".</div>
+            </div>
+
+            <div class="card" style="border-left: 4px solid var(--accent-rose);">
+              <strong style="color: var(--accent-rose);">6. Silently Failing Validation</strong>
+              <p style="font-size: 0.8rem;">Returning on error without rendering error messages in the JSX.</p>
+              <div style="font-family: var(--font-mono); font-size: 0.75rem; color: var(--accent-emerald);">Fix: {errors.name &amp;&amp; &lt;p&gt;{errors.name}&lt;/p&gt;}.</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 39 — Quick Quiz
+           ==================================================================== -->
+      <section class="slide" data-slide="39" id="slide-39">
+        <div class="slide-header">
+          <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem;">
+            <div>
+              <div class="slide-tag tag-amber">Review</div>
+              <h1 class="slide-title">Quick Classroom Quiz</h1>
+            </div>
+            <div style="display: flex; gap: 0.5rem;">
+              <button class="demo-btn" id="revealQuizAllBtn" style="font-size: 0.75rem; padding: 0.35rem 0.75rem;">Reveal All</button>
+              <button class="demo-btn btn-reset" id="hideQuizAllBtn" style="font-size: 0.75rem; padding: 0.35rem 0.75rem;">Hide All</button>
+            </div>
+          </div>
+          <p class="slide-subtitle">Test your understanding with 10 questions covering all Day 6 concepts</p>
+        </div>
+        <div class="slide-content">
+          <div class="quiz-list">
+            <!-- Q1 -->
+            <div class="quiz-card">
+              <div class="quiz-q"><span class="quiz-badge">Q1</span> What is onSubmit?</div>
+              <button class="quiz-btn">Show Answer</button>
+              <div class="quiz-ans">A React form event listener attached to the &lt;form&gt; element that fires whenever the form is submitted.</div>
+            </div>
+
+            <!-- Q2 -->
+            <div class="quiz-card">
+              <div class="quiz-q"><span class="quiz-badge">Q2</span> Why do we use preventDefault()?</div>
+              <button class="quiz-btn">Show Answer</button>
+              <div class="quiz-ans">It prevents the browser's native behavior of reloading the page and making a full HTTP request, allowing React to handle data in state.</div>
+            </div>
+
+            <!-- Q3 -->
+            <div class="quiz-card">
+              <div class="quiz-q"><span class="quiz-badge">Q3</span> What is form validation?</div>
+              <button class="quiz-btn">Show Answer</button>
+              <div class="quiz-ans">The process of checking whether user input satisfies defined constraints (required, email format, age limits) before processing.</div>
+            </div>
+
+            <!-- Q4 -->
+            <div class="quiz-card">
+              <div class="quiz-q"><span class="quiz-badge">Q4</span> Why do we use an errors object?</div>
+              <button class="quiz-btn">Show Answer</button>
+              <div class="quiz-ans">It maps specific field names to their respective error messages (e.g. { name: "Name is required" }), making it easy to display errors under the matching input.</div>
+            </div>
+
+            <!-- Q5 -->
+            <div class="quiz-card">
+              <div class="quiz-q"><span class="quiz-badge">Q5</span> What does Object.keys(errors).length tell us?</div>
+              <button class="quiz-btn">Show Answer</button>
+              <div class="quiz-ans">It returns the total number of validation errors. If length &gt; 0, errors exist and submission must be halted.</div>
+            </div>
+
+            <!-- Q6 -->
+            <div class="quiz-card">
+              <div class="quiz-q"><span class="quiz-badge">Q6</span> What is export default?</div>
+              <button class="quiz-btn">Show Answer</button>
+              <div class="quiz-ans">It marks the main entity exported from a file. Only one default export is permitted per file, and it is imported without curly braces.</div>
+            </div>
+
+            <!-- Q7 -->
+            <div class="quiz-card">
+              <div class="quiz-q"><span class="quiz-badge">Q7</span> What is a named export?</div>
+              <button class="quiz-btn">Show Answer</button>
+              <div class="quiz-ans">An export that exports variables or functions by their exact name. A single file can contain multiple named exports.</div>
+            </div>
+
+            <!-- Q8 -->
+            <div class="quiz-card">
+              <div class="quiz-q"><span class="quiz-badge">Q8</span> How do you import a named export?</div>
+              <button class="quiz-btn">Show Answer</button>
+              <div class="quiz-ans">By wrapping the imported name inside { curly braces }, e.g.: import { Header } from "./Header".</div>
+            </div>
+
+            <!-- Q9 -->
+            <div class="quiz-card">
+              <div class="quiz-q"><span class="quiz-badge">Q9</span> Difference between default and named export?</div>
+              <button class="quiz-btn">Show Answer</button>
+              <div class="quiz-ans">Default: 1 per file, imported without {}. Named: multiple per file, imported with {}.</div>
+            </div>
+
+            <!-- Q10 -->
+            <div class="quiz-card">
+              <div class="quiz-q"><span class="quiz-badge">Q10</span> Why split React code into multiple files?</div>
+              <button class="quiz-btn">Show Answer</button>
+              <div class="quiz-ans">For modularity, reusability, testability, and maintaining clean separation of concerns as the project scales.</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 40 — Final Summary
+           ==================================================================== -->
+      <section class="slide" data-slide="40" id="slide-40">
+        <div class="slide-header">
+          <div class="slide-tag tag-emerald">Conclusion</div>
+          <h1 class="slide-title">Final Summary: What We Learned Today</h1>
+          <p class="slide-subtitle">Mastering the trifecta of modern React form development</p>
+        </div>
+        <div class="slide-content">
+          <div class="grid-3">
+            <div class="card card-highlight">
+              <div class="card-title" style="color: var(--react-cyan);">1. Form Submission</div>
+              <ul style="list-style: none; display: flex; flex-direction: column; gap: 0.4rem; font-size: 0.82rem; color: var(--text-secondary);">
+                <li>• &lt;form onSubmit={handleSubmit}&gt;</li>
+                <li>• e.preventDefault() stops reload</li>
+                <li>• Controlled inputs via useState</li>
+                <li>• Unified [name]: value handler</li>
+              </ul>
+            </div>
+
+            <div class="card card-highlight-rose">
+              <div class="card-title" style="color: var(--accent-rose);">2. Form Validation</div>
+              <ul style="list-style: none; display: flex; flex-direction: column; gap: 0.4rem; font-size: 0.82rem; color: var(--text-secondary);">
+                <li>• Dedicated validateForm()</li>
+                <li>• Non-empty check with .trim()</li>
+                <li>• Email pattern test</li>
+                <li>• Number(age) &ge; 18 conversion</li>
+                <li>• {errors.name &amp;&amp; &lt;p&gt;...&lt;/p&gt;}</li>
+              </ul>
+            </div>
+
+            <div class="card card-highlight-amber">
+              <div class="card-title" style="color: var(--accent-amber);">3. Import &amp; Export</div>
+              <ul style="list-style: none; display: flex; flex-direction: column; gap: 0.4rem; font-size: 0.82rem; color: var(--text-secondary);">
+                <li>• export default Component</li>
+                <li>• import Component from "./..."</li>
+                <li>• export { namedHelper }</li>
+                <li>• import { namedHelper } with {}</li>
+                <li>• src/components/ &amp; src/utils/</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="callout" style="text-align: center; justify-content: center; margin-top: 0.5rem;">
+            <span class="callout-icon">🚀</span>
+            <div>
+              <strong>React Day 6 Complete!</strong> You are now fully equipped to build clean, validated, modular forms in React!
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- Bottom Footer Controls Bar -->
+    <footer class="bottom-footer">
+      <div class="footer-left">
+        <div class="slide-counter">
+          <span>Slide</span>
+          <span class="current-num" id="currentSlideNum">1</span>
+          <span class="total-num">/</span>
+          <span class="total-num" id="totalSlidesNum">40</span>
+        </div>
+      </div>
+
+      <div class="footer-center">
+        <button class="nav-btn" id="prevSlideBtn" disabled title="Previous Slide (Left Arrow)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="15 18 9 12 15 6"></polyline>
+          </svg>
+          Previous
+        </button>
+        <button class="nav-btn primary-nav" id="nextSlideBtn" title="Next Slide (Right Arrow / Space)">
+          Next
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="9 18 15 12 9 6"></polyline>
+          </svg>
+        </button>
+      </div>
+
+      <div class="footer-right">
+        <div class="nav-hint">
+          <span>Navigate:</span>
+          <kbd>&larr;</kbd>
+          <kbd>&rarr;</kbd>
+          <kbd>Space</kbd>
+        </div>
+      </div>
+    </footer>
+
+    <!-- Table of Contents Slide Index Drawer -->
+    <div class="drawer-backdrop" id="drawerBackdrop"></div>
+    <aside class="drawer" id="tocDrawer">
+      <div class="drawer-header">
+        <div style="font-weight: 700; font-size: 0.95rem; color: var(--text-main); display: flex; align-items: center; gap: 0.5rem;">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="3" y1="12" x2="21" y2="12"></line>
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <line x1="3" y1="18" x2="21" y2="18"></line>
+          </svg>
+          Table of Contents (40 Slides)
+        </div>
+        <button class="close-modal-btn" id="closeTocBtn" title="Close Drawer (Esc)">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+      <ul class="drawer-list" id="tocList"></ul>
+    </aside>
+
+    <!-- Keyboard Shortcuts Modal -->
+    <div class="modal-backdrop" id="shortcutsModal">
+      <div class="modal-window">
+        <div class="modal-header">
+          <div class="modal-title">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10"></circle>
+              <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+              <line x1="12" y1="17" x2="12.01" y2="17"></line>
+            </svg>
+            Keyboard Shortcuts
+          </div>
+          <button class="close-modal-btn" id="closeShortcutsBtn" title="Close (Esc)">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+          </button>
+        </div>
+        <div class="modal-content">
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; font-size: 0.85rem;">
+            <div style="display: flex; justify-content: space-between; padding: 0.4rem 0.6rem; background: var(--bg-card); border-radius: 4px;">
+              <span>Next Slide</span>
+              <span><kbd>&rarr;</kbd> or <kbd>Space</kbd></span>
+            </div>
+            <div style="display: flex; justify-content: space-between; padding: 0.4rem 0.6rem; background: var(--bg-card); border-radius: 4px;">
+              <span>Previous Slide</span>
+              <span><kbd>&larr;</kbd> or <kbd>PageUp</kbd></span>
+            </div>
+            <div style="display: flex; justify-content: space-between; padding: 0.4rem 0.6rem; background: var(--bg-card); border-radius: 4px;">
+              <span>First Slide</span>
+              <span><kbd>Home</kbd></span>
+            </div>
+            <div style="display: flex; justify-content: space-between; padding: 0.4rem 0.6rem; background: var(--bg-card); border-radius: 4px;">
+              <span>Last Slide</span>
+              <span><kbd>End</kbd></span>
+            </div>
+            <div style="display: flex; justify-content: space-between; padding: 0.4rem 0.6rem; background: var(--bg-card); border-radius: 4px;">
+              <span>Toggle Index Drawer</span>
+              <span><kbd>T</kbd></span>
+            </div>
+            <div style="display: flex; justify-content: space-between; padding: 0.4rem 0.6rem; background: var(--bg-card); border-radius: 4px;">
+              <span>Toggle Fullscreen</span>
+              <span><kbd>F</kbd></span>
+            </div>
+            <div style="display: flex; justify-content: space-between; padding: 0.4rem 0.6rem; background: var(--bg-card); border-radius: 4px;">
+              <span>Help Shortcuts</span>
+              <span><kbd>?</kbd></span>
+            </div>
+            <div style="display: flex; justify-content: space-between; padding: 0.4rem 0.6rem; background: var(--bg-card); border-radius: 4px;">
+              <span>Close Any Modal</span>
+              <span><kbd>Esc</kbd></span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Toast Notification Container -->
+    <div class="toast-container" id="toastContainer"></div>
+
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
