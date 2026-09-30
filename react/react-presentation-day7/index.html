@@ -1,0 +1,2236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>React Day 7 — React Lifecycle, useEffect &amp; Custom Hooks</title>
+  <meta name="description" content="Interactive developer presentation on React Lifecycle, useEffect, Cleanup functions, and creating Custom Hooks.">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Master App Shell -->
+  <div class="deck-container" id="deckContainer">
+
+    <!-- Top Progress Bar -->
+    <div class="progress-bar-container">
+      <div class="progress-bar" id="progressBar"></div>
+    </div>
+
+    <!-- Top Header Bar -->
+    <header class="top-header">
+      <div class="header-left">
+        <div class="brand-badge">
+          <svg viewBox="0 0 24 24">
+            <ellipse cx="12" cy="12" rx="10" ry="4.5"/>
+            <ellipse cx="12" cy="12" rx="10" ry="4.5" transform="rotate(60 12 12)"/>
+            <ellipse cx="12" cy="12" rx="10" ry="4.5" transform="rotate(120 12 12)"/>
+            <circle cx="12" cy="12" r="2" fill="currentColor"/>
+          </svg>
+          React Day 7
+        </div>
+        <div class="deck-title-badge">
+          <span>Lifecycle &amp; Hooks</span>
+          <span class="dot"></span>
+          <span class="deck-topic" id="headerTopic">React Lifecycle • useEffect • Custom Hooks</span>
+        </div>
+      </div>
+
+      <div class="header-right">
+        <!-- Table of Contents Drawer Button -->
+        <button class="header-btn" id="openTocBtn" title="View All 40 Slides (T)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="3" y1="12" x2="21" y2="12"></line>
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <line x1="3" y1="18" x2="21" y2="18"></line>
+          </svg>
+          Index
+          <kbd>T</kbd>
+        </button>
+
+        <!-- Keyboard Shortcuts Help -->
+        <button class="header-btn" id="openShortcutsBtn" title="Keyboard Shortcuts (?)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"></circle>
+            <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+            <line x1="12" y1="17" x2="12.01" y2="17"></line>
+          </svg>
+          <kbd>?</kbd>
+        </button>
+
+        <!-- Fullscreen Button -->
+        <button class="header-btn" id="fullscreenBtn" title="Toggle Fullscreen (F)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path>
+          </svg>
+          <kbd>F</kbd>
+        </button>
+      </div>
+    </header>
+
+    <!-- Slide Viewport -->
+    <main class="slide-viewport">
+
+      <!-- ====================================================================
+           SLIDE 1 — TITLE
+           ==================================================================== -->
+      <section class="slide active" data-slide="1" id="slide-1">
+        <div class="slide-content" style="justify-content: center; align-items: center; text-align: center; max-width: 880px; margin: 0 auto;">
+          <div class="slide-tag" style="margin-bottom: 0.75rem;">React Course • Day 7</div>
+          <h1 class="slide-title" style="font-size: 3rem; margin-bottom: 0.5rem; letter-spacing: -0.03em;">
+            React Lifecycle &amp; <span class="highlight">useEffect</span>
+          </h1>
+          <h2 style="font-size: 1.8rem; color: var(--text-secondary); font-weight: 600; margin-bottom: 1.25rem;">
+            Lifecycle Stages, Side Effects &amp; Creating Custom Hooks
+          </h2>
+          <p style="font-size: 1.15rem; color: var(--text-muted); max-width: 680px; margin-bottom: 2rem;">
+            A practical, classroom-focused guide to understanding component lifecycles, synchronizing with external systems, and extracting reusable stateful logic into custom Hooks.
+          </p>
+
+          <div style="display: flex; gap: 1rem; margin-bottom: 2.5rem; flex-wrap: wrap; justify-content: center;">
+            <div style="padding: 0.6rem 1.2rem; background: rgba(0, 216, 255, 0.1); border: 1px solid var(--react-border); border-radius: var(--radius-sm); font-family: var(--font-mono); font-size: 0.85rem; color: var(--react-cyan);">
+              <strong>🔄</strong> Component Lifecycle
+            </div>
+            <div style="padding: 0.6rem 1.2rem; background: var(--accent-emerald-bg); border: 1px solid var(--accent-emerald-border); border-radius: var(--radius-sm); font-family: var(--font-mono); font-size: 0.85rem; color: var(--accent-emerald);">
+              <strong>⚡</strong> useEffect &amp; Dependencies
+            </div>
+            <div style="padding: 0.6rem 1.2rem; background: var(--accent-amber-bg); border: 1px solid var(--accent-amber-border); border-radius: var(--radius-sm); font-family: var(--font-mono); font-size: 0.85rem; color: var(--accent-amber);">
+              <strong>🧹</strong> Effect Cleanup
+            </div>
+            <div style="padding: 0.6rem 1.2rem; background: var(--accent-purple-bg); border: 1px solid var(--accent-purple-border); border-radius: var(--radius-sm); font-family: var(--font-mono); font-size: 0.85rem; color: var(--accent-purple);">
+              <strong>🪝</strong> Custom Hooks
+            </div>
+          </div>
+
+          <div style="display: flex; gap: 1rem;">
+            <button class="nav-btn primary" onclick="Deck.goToSlide(2)">
+              Start Learning Lifecycle &amp; Effects →
+            </button>
+            <button class="nav-btn" onclick="Deck.openToc()">
+              Browse 40 Slides
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 2 — LEARNING OBJECTIVES
+           ==================================================================== -->
+      <section class="slide" data-slide="2" id="slide-2">
+        <div class="slide-content">
+          <div class="slide-header">
+            <span class="slide-tag">Session Overview</span>
+            <h1 class="slide-title">Learning <span class="highlight">Objectives</span></h1>
+            <p class="slide-subtitle">By the end of today's session, students will understand the life stages of components and how to write clean, bug-free effects and custom Hooks.</p>
+          </div>
+
+          <div class="grid-2">
+            <div class="card highlight-react">
+              <h3 class="card-title">1. Component Lifecycle &amp; Side Effects</h3>
+              <ul class="feature-list" style="margin-top: 0.75rem;">
+                <li><span class="feature-bullet">✓</span> <span><strong>Component Lifecycle:</strong> What happens from creation to removal.</span></li>
+                <li><span class="feature-bullet">✓</span> <span><strong>The 3 Main Stages:</strong> Mounting, Updating, and Unmounting.</span></li>
+                <li><span class="feature-bullet">✓</span> <span><strong>Side Effects:</strong> Why external synchronization is necessary in UI apps.</span></li>
+                <li><span class="feature-bullet">✓</span> <span><strong>What useEffect Does:</strong> Running logic after render commits.</span></li>
+              </ul>
+            </div>
+
+            <div class="card highlight-emerald">
+              <h3 class="card-title" style="color: var(--accent-emerald);">2. useEffect Mastery &amp; Cleanup</h3>
+              <ul class="feature-list" style="margin-top: 0.75rem;">
+                <li><span class="feature-bullet emerald">✓</span> <span><strong>The Dependency Array:</strong> Controlling when effects re-run (<code>[]</code> vs <code>[dep]</code>).</span></li>
+                <li><span class="feature-bullet emerald">✓</span> <span><strong>Effect Cleanup:</strong> Preventing memory leaks with <code>return () => { ... }</code>.</span></li>
+                <li><span class="feature-bullet emerald">✓</span> <span><strong>Common Mistakes:</strong> Avoiding infinite loops and missing dependencies.</span></li>
+                <li><span class="feature-bullet emerald">✓</span> <span><strong>Decision Guide:</strong> Knowing when an effect is truly needed.</span></li>
+              </ul>
+            </div>
+
+            <div class="card col-span-2 highlight-purple">
+              <h3 class="card-title" style="color: var(--accent-purple);">3. Custom Hooks &amp; Practical Mini Project</h3>
+              <div class="grid-3" style="margin-top: 0.5rem;">
+                <div>
+                  <strong style="color: var(--text-main); font-size: 0.9rem;">What Custom Hooks Are</strong>
+                  <p style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 0.2rem;">JavaScript functions starting with <code>use</code> that encapsulate and share stateful logic.</p>
+                </div>
+                <div>
+                  <strong style="color: var(--text-main); font-size: 0.9rem;">Reusing State Across Components</strong>
+                  <p style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 0.2rem;">Sharing counter and document title logic across independent UI elements.</p>
+                </div>
+                <div>
+                  <strong style="color: var(--text-main); font-size: 0.9rem;">Mini Project: Counter Dashboard</strong>
+                  <p style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 0.2rem;">Building a complete app using <code>useCounter</code> and <code>useDocumentTitle</code>.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 3 — WHAT IS THE REACT LIFECYCLE?
+           ==================================================================== -->
+      <section class="slide" data-slide="3" id="slide-3">
+        <div class="slide-content">
+          <div class="slide-header">
+            <span class="slide-tag">Section 1 — React Lifecycle</span>
+            <h1 class="slide-title">What Is the <span class="highlight">React Lifecycle</span>?</h1>
+            <p class="slide-subtitle">A React component goes through different stages during its existence on screen.</p>
+          </div>
+
+          <div class="grid-2">
+            <div class="card">
+              <h3 class="card-title">From Birth to Death of a Component</h3>
+              <p class="card-body" style="margin-bottom: 1rem;">
+                Just like humans are born, grow, and eventually pass away, every React component has a distinct lifecycle:
+              </p>
+              <ul class="feature-list">
+                <li><span class="feature-bullet">1</span> <span><strong>Birth (Mounting):</strong> The component is created and inserted into the browser DOM.</span></li>
+                <li><span class="feature-bullet">2</span> <span><strong>Growth / Changes (Updating):</strong> The component re-renders when state or props change.</span></li>
+                <li><span class="feature-bullet">3</span> <span><strong>Removal (Unmounting):</strong> The component is destroyed and removed from the DOM.</span></li>
+              </ul>
+            </div>
+
+            <div class="card highlight-react" style="display: flex; flex-direction: column; justify-content: center; align-items: center;">
+              <h3 class="card-title" style="align-self: flex-start;">Component Lifecycle Flow</h3>
+              <div class="vertical-flow" style="width: 100%; margin-top: 0.5rem;">
+                <div class="v-node">Component Created</div>
+                <div class="v-arrow">↓</div>
+                <div class="v-node cyan"><strong>Mounting</strong> (Added to DOM)</div>
+                <div class="v-arrow">↓</div>
+                <div class="v-node emerald"><strong>Updating</strong> (State / Props change)</div>
+                <div class="v-arrow">↓</div>
+                <div class="v-node amber"><strong>Unmounting</strong> (Removed from DOM)</div>
+                <div class="v-arrow">↓</div>
+                <div class="v-node" style="color: var(--accent-rose); border-color: var(--accent-rose-border);">Component Destroyed 🛑</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 4 — THREE MAIN LIFECYCLE STAGES
+           ==================================================================== -->
+      <section class="slide" data-slide="4" id="slide-4">
+        <div class="slide-content">
+          <div class="slide-header">
+            <span class="slide-tag">Section 1 — React Lifecycle</span>
+            <h1 class="slide-title">Three Main <span class="highlight">Lifecycle Stages</span></h1>
+            <p class="slide-subtitle">Understanding the three fundamental phases in any React component's life.</p>
+          </div>
+
+          <div class="grid-3">
+            <!-- Stage 1 -->
+            <div class="card highlight-react">
+              <div style="font-size: 2rem; margin-bottom: 0.5rem;">🌱</div>
+              <h3 class="card-title">1. Mounting</h3>
+              <p class="card-body">
+                The component appears for the very first time. It is created, rendered, and inserted into the browser's DOM.
+              </p>
+              <div style="margin-top: 1rem; font-family: var(--font-mono); font-size: 0.8rem; color: var(--react-cyan); background: var(--bg-canvas); padding: 0.5rem; border-radius: var(--radius-xs);">
+                Initial Render &amp; Setup
+              </div>
+            </div>
+
+            <!-- Stage 2 -->
+            <div class="card highlight-emerald">
+              <div style="font-size: 2rem; margin-bottom: 0.5rem;">🔄</div>
+              <h3 class="card-title" style="color: var(--accent-emerald);">2. Updating</h3>
+              <p class="card-body">
+                The component re-renders because its state or incoming props have changed. Can happen multiple times!
+              </p>
+              <div style="margin-top: 1rem; font-family: var(--font-mono); font-size: 0.8rem; color: var(--accent-emerald); background: var(--bg-canvas); padding: 0.5rem; border-radius: var(--radius-xs);">
+                Re-rendering Updated UI
+              </div>
+            </div>
+
+            <!-- Stage 3 -->
+            <div class="card highlight-amber">
+              <div style="font-size: 2rem; margin-bottom: 0.5rem;">🧹</div>
+              <h3 class="card-title" style="color: var(--accent-amber);">3. Unmounting</h3>
+              <p class="card-body">
+                The component is removed from the screen (e.g. conditional rendering turns off). Crucial phase for cleanup!
+              </p>
+              <div style="margin-top: 1rem; font-family: var(--font-mono); font-size: 0.8rem; color: var(--accent-amber); background: var(--bg-canvas); padding: 0.5rem; border-radius: var(--radius-xs);">
+                Cleanup &amp; Teardown
+              </div>
+            </div>
+
+            <div class="card col-span-2 highlight-react" style="grid-column: span 3; margin-top: 0.5rem;">
+              <div style="display: flex; justify-content: space-around; align-items: center; font-family: var(--font-mono); font-size: 0.9rem;">
+                <span style="color: var(--react-cyan); font-weight: 700;">Mount (Birth)</span>
+                <span style="color: var(--text-muted);">➔</span>
+                <span style="color: var(--accent-emerald); font-weight: 700;">Update (Life &amp; Changes)</span>
+                <span style="color: var(--text-muted);">➔</span>
+                <span style="color: var(--accent-amber); font-weight: 700;">Unmount (Death &amp; Cleanup)</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 5 — MOUNTING
+           ==================================================================== -->
+      <section class="slide" data-slide="5" id="slide-5">
+        <div class="slide-content">
+          <div class="slide-header">
+            <span class="slide-tag">Section 1 — React Lifecycle</span>
+            <h1 class="slide-title">Stage 1: <span class="highlight">Mounting</span></h1>
+            <p class="slide-subtitle">Mounting occurs when a component appears on the screen for the first time.</p>
+          </div>
+
+          <div class="grid-2">
+            <div>
+              <div class="code-window">
+                <div class="code-header">
+                  <div class="window-dots"><span class="window-dot red"></span><span class="window-dot yellow"></span><span class="window-dot green"></span></div>
+                  <span class="code-title">App.jsx</span>
+                  <button class="copy-btn" data-code="function App() {\n  return <h1>Hello React</h1>;\n}">Copy</button>
+                </div>
+                <div class="code-content"><span class="syn-kwd">function</span> <span class="syn-fn">App</span>() {
+  <span class="syn-kwd">return</span> &lt;<span class="syn-tag">h1</span>&gt;Hello React&lt;/<span class="syn-tag">h1</span>&gt;;
+}
+
+<span class="syn-comment">// Rendered on the page:</span>
+<span class="syn-comment">// &lt;App /&gt;</span></div>
+              </div>
+
+              <div class="card highlight-react" style="margin-top: 1rem;">
+                <p style="font-size: 0.9rem; color: var(--text-secondary);">
+                  💡 When <code>&lt;App /&gt;</code> is evaluated, React runs the function, creates the DOM nodes, and inserts them into the document.
+                </p>
+              </div>
+            </div>
+
+            <div class="card highlight-emerald" style="display: flex; flex-direction: column; justify-content: center; align-items: center;">
+              <h3 class="card-title" style="color: var(--accent-emerald); align-self: flex-start;">Mounting Flow</h3>
+              <div class="vertical-flow" style="width: 100%; margin-top: 1rem;">
+                <div class="v-node">Component Function Called</div>
+                <div class="v-arrow">↓</div>
+                <div class="v-node cyan">JSX Evaluated into Elements</div>
+                <div class="v-arrow">↓</div>
+                <div class="v-node emerald">DOM Nodes Inserted into Page</div>
+                <div class="v-arrow">↓</div>
+                <div class="v-node" style="color: var(--react-cyan); font-weight: 700;">Component Is Now Mounted! 🎉</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 6 — UPDATING
+           ==================================================================== -->
+      <section class="slide" data-slide="6" id="slide-6">
+        <div class="slide-content">
+          <div class="slide-header">
+            <span class="slide-tag">Section 1 — React Lifecycle</span>
+            <h1 class="slide-title">Stage 2: <span class="highlight">Updating</span></h1>
+            <p class="slide-subtitle">A component updates and re-renders whenever its state or incoming props change.</p>
+          </div>
+
+          <div class="grid-2">
+            <div>
+              <div class="code-window">
+                <div class="code-header">
+                  <div class="window-dots"><span class="window-dot red"></span><span class="window-dot yellow"></span><span class="window-dot green"></span></div>
+                  <span class="code-title">Counter.jsx</span>
+                  <button class="copy-btn" data-code="const [count, setCount] = useState(0);\n\n// When user clicks:\nsetCount(count + 1);">Copy</button>
+                </div>
+                <div class="code-content"><span class="syn-kwd">const</span> [<span class="syn-fn">count</span>, <span class="syn-fn">setCount</span>] = <span class="syn-fn">useState</span>(<span class="syn-num">0</span>);
+
+<span class="syn-comment">// Triggering an update:</span>
+<span class="syn-fn">setCount</span>(<span class="syn-fn">count</span> + <span class="syn-num">1</span>);</div>
+              </div>
+
+              <div class="card highlight-emerald" style="margin-top: 1rem;">
+                <h4 style="color: var(--accent-emerald); margin-bottom: 0.5rem; font-size: 0.95rem;">What Causes an Update?</h4>
+                <ul class="feature-list" style="font-size: 0.85rem;">
+                  <li><span class="feature-bullet emerald">1</span> <strong>State Change:</strong> Calling <code>setState()</code> triggers a re-render.</li>
+                  <li><span class="feature-bullet emerald">2</span> <strong>Prop Change:</strong> Parent passes new prop values to child.</li>
+                  <li><span class="feature-bullet emerald">3</span> <strong>Parent Re-render:</strong> When parent updates, children re-render by default.</li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="card highlight-react" style="display: flex; flex-direction: column; justify-content: center; align-items: center;">
+              <h3 class="card-title" style="align-self: flex-start;">Updating Sequence</h3>
+              <div class="vertical-flow" style="width: 100%; margin-top: 1rem;">
+                <div class="v-node">User clicks button / state changes</div>
+                <div class="v-arrow">↓</div>
+                <div class="v-node cyan">React calls Component function again</div>
+                <div class="v-arrow">↓</div>
+                <div class="v-node emerald">New JSX produced with updated values</div>
+                <div class="v-arrow">↓</div>
+                <div class="v-node" style="color: var(--react-cyan); font-weight: 700;">DOM Updated Efficiently 🔄</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 7 — UNMOUNTING
+           ==================================================================== -->
+      <section class="slide" data-slide="7" id="slide-7">
+        <div class="slide-content">
+          <div class="slide-header">
+            <span class="slide-tag">Section 1 — React Lifecycle</span>
+            <h1 class="slide-title">Stage 3: <span class="highlight">Unmounting</span></h1>
+            <p class="slide-subtitle">Unmounting occurs when a component is completely removed from the user interface.</p>
+          </div>
+
+          <div class="grid-2">
+            <div>
+              <div class="code-window">
+                <div class="code-header">
+                  <div class="window-dots"><span class="window-dot red"></span><span class="window-dot yellow"></span><span class="window-dot green"></span></div>
+                  <span class="code-title">ConditionalRender.jsx</span>
+                  <button class="copy-btn" data-code="{showTimer && <Timer />}\n\n// When user toggles off:\nsetShowTimer(false);">Copy</button>
+                </div>
+                <div class="code-content"><span class="syn-comment">// While showTimer is true, Timer is MOUNTED</span>
+{<span class="syn-fn">showTimer</span> &amp;&amp; &lt;<span class="syn-fn">Timer</span> /&gt;}
+
+<span class="syn-comment">// If we call:</span>
+<span class="syn-fn">setShowTimer</span>(<span class="syn-kwd">false</span>);
+
+<span class="syn-comment">// Timer is removed from DOM -> UNMOUNTED!</span></div>
+              </div>
+
+              <div class="card highlight-amber" style="margin-top: 1rem;">
+                <h4 style="color: var(--accent-amber); margin-bottom: 0.35rem; font-size: 0.95rem;">Why Unmounting Matters</h4>
+                <p style="font-size: 0.85rem; color: var(--text-secondary);">
+                  If the <code>&lt;Timer /&gt;</code> had an active <code>setInterval</code> running in the background, removing the component from screen does NOT automatically stop the timer! We must clean it up during unmount.
+                </p>
+              </div>
+            </div>
+
+            <div class="card highlight-rose" style="display: flex; flex-direction: column; justify-content: center; align-items: center;">
+              <h3 class="card-title" style="color: var(--accent-rose); align-self: flex-start;">Unmounting Flow</h3>
+              <div class="vertical-flow" style="width: 100%; margin-top: 1rem;">
+                <div class="v-node">Component visible in DOM</div>
+                <div class="v-arrow">↓</div>
+                <div class="v-node amber">Condition becomes false / Page changes</div>
+                <div class="v-arrow">↓</div>
+                <div class="v-node" style="color: var(--accent-rose); border-color: var(--accent-rose-border);">Cleanup function runs (Stops timers/events)</div>
+                <div class="v-arrow">↓</div>
+                <div class="v-node" style="color: var(--text-muted);">DOM element removed permanently 🛑</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 8 — LIFECYCLE VISUAL (INTERACTIVE)
+           ==================================================================== -->
+      <section class="slide" data-slide="8" id="slide-8">
+        <div class="slide-content">
+          <div class="slide-header">
+            <span class="slide-tag">Section 1 — React Lifecycle</span>
+            <h1 class="slide-title">Interactive <span class="highlight">Lifecycle Diagram</span></h1>
+            <p class="slide-subtitle">Click on each stage to understand what happens under the hood.</p>
+          </div>
+
+          <div class="demo-box">
+            <div class="lifecycle-nav">
+              <div class="lifecycle-tab active" id="tabMount" onclick="DemoLifecycle.showStage('mount')">
+                <div class="tab-title">1. MOUNTING</div>
+                <div class="tab-sub">Component Enters Screen</div>
+              </div>
+              <div class="lifecycle-tab" id="tabUpdate" onclick="DemoLifecycle.showStage('update')">
+                <div class="tab-title">2. UPDATING</div>
+                <div class="tab-sub">State or Props Change</div>
+              </div>
+              <div class="lifecycle-tab" id="tabUnmount" onclick="DemoLifecycle.showStage('unmount')">
+                <div class="tab-title">3. UNMOUNTING</div>
+                <div class="tab-sub">Component Removed</div>
+              </div>
+            </div>
+
+            <div class="grid-2" style="align-items: center;">
+              <div class="card highlight-react" id="lifecycleDetailsCard">
+                <h3 class="card-title" id="lifecycleStageTitle" style="color: var(--react-cyan);">Mounting Phase</h3>
+                <p class="card-body" id="lifecycleStageDesc" style="margin-bottom: 1rem;">
+                  The component is initialized and inserted into the DOM for the very first time.
+                </p>
+                <div style="background: var(--bg-canvas); padding: 0.75rem; border-radius: var(--radius-sm); border: 1px solid var(--border-subtle);">
+                  <strong style="color: var(--text-main); font-size: 0.85rem;">What Runs in this Phase:</strong>
+                  <ul class="feature-list" id="lifecycleStageItems" style="margin-top: 0.5rem; font-size: 0.8rem;">
+                    <li><span class="feature-bullet">✓</span> Function body executes (initial state set).</li>
+                    <li><span class="feature-bullet">✓</span> React inserts elements into the real DOM.</li>
+                    <li><span class="feature-bullet">✓</span> <code>useEffect(() => {}, [])</code> runs immediately after DOM commit.</li>
+                  </ul>
+                </div>
+              </div>
+
+              <div>
+                <div class="code-window">
+                  <div class="code-header">
+                    <span class="code-title">lifecycle-simulation.js</span>
+                  </div>
+                  <div class="code-content" id="lifecycleCodeDisplay"><span class="syn-comment">// 1. Mounting</span>
+<span class="syn-fn">useEffect</span>(() =&gt; {
+  <span class="syn-prop">console</span>.<span class="syn-fn">log</span>(<span class="syn-str">"Component has mounted into DOM!"</span>);
+}, []);</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 9 — WHAT IS A SIDE EFFECT?
+           ==================================================================== -->
+      <section class="slide" data-slide="9" id="slide-9">
+        <div class="slide-content">
+          <div class="slide-header">
+            <span class="slide-tag emerald">Section 2 — Side Effects</span>
+            <h1 class="slide-title">What Is a <span class="highlight" style="color: var(--accent-emerald);">Side Effect</span>?</h1>
+            <p class="slide-subtitle">A side effect is any operation that reaches outside the pure rendering calculation of JSX.</p>
+          </div>
+
+          <div class="grid-2">
+            <div class="card highlight-emerald">
+              <h3 class="card-title" style="color: var(--accent-emerald);">Pure Rendering vs. Side Effects</h3>
+              <p class="card-body" style="margin-bottom: 1rem;">
+                In React, a component's primary job is to be a <strong>pure function</strong>: take props and state, and return JSX. Anything else that interacts with the outside world is a <strong>side effect</strong>.
+              </p>
+              <div class="card" style="background: var(--bg-canvas); margin-bottom: 1rem;">
+                <strong style="color: var(--text-main); font-size: 0.85rem;">Pure JSX Calculation:</strong>
+                <pre style="font-family: var(--font-mono); font-size: 0.85rem; color: var(--accent-cyan); margin-top: 0.2rem;">return &lt;h1&gt;Count: {count}&lt;/h1&gt;;</pre>
+              </div>
+              <div class="card" style="background: var(--bg-canvas); border-color: var(--accent-amber-border);">
+                <strong style="color: var(--accent-amber); font-size: 0.85rem;">Side Effect Example:</strong>
+                <pre style="font-family: var(--font-mono); font-size: 0.85rem; color: var(--accent-amber); margin-top: 0.2rem;">document.title = `Count: ${count}`;</pre>
+              </div>
+            </div>
+
+            <div class="card">
+              <h3 class="card-title">Common Examples of Side Effects</h3>
+              <ul class="feature-list" style="margin-top: 0.75rem;">
+                <li><span class="feature-bullet emerald">🌐</span> <span><strong>Data Fetching:</strong> Calling a backend API with <code>fetch()</code> or Axios.</span></li>
+                <li><span class="feature-bullet emerald">⏱️</span> <span><strong>Timers:</strong> Starting a <code>setInterval</code> or <code>setTimeout</code>.</span></li>
+                <li><span class="feature-bullet emerald">🏷️</span> <span><strong>Document Title:</strong> Changing the browser tab title via <code>document.title</code>.</span></li>
+                <li><span class="feature-bullet emerald">👂</span> <span><strong>Event Listeners:</strong> Listening to window resize, scrolling, or keypresses.</span></li>
+                <li><span class="feature-bullet emerald">💾</span> <span><strong>Local Storage:</strong> Reading or saving data to <code>localStorage</code>.</span></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 10 — WHY DO WE NEED useEffect?
+           ==================================================================== -->
+      <section class="slide" data-slide="10" id="slide-10">
+        <div class="slide-content">
+          <div class="slide-header">
+            <span class="slide-tag emerald">Section 2 — Side Effects</span>
+            <h1 class="slide-title">Why Do We Need <span class="highlight">useEffect</span>?</h1>
+            <p class="slide-subtitle">React components describe the UI, but applications need to synchronize with external systems.</p>
+          </div>
+
+          <div class="grid-2">
+            <div class="card highlight-react">
+              <h3 class="card-title">The Synchronization Problem</h3>
+              <p class="card-body" style="margin-bottom: 1rem;">
+                If you run side effects directly inside the component body, they execute during rendering, which can slow down the UI, cause memory leaks, or trigger infinite re-render loops!
+              </p>
+              <div class="wrong-box" style="font-family: var(--font-sans); margin-bottom: 0.75rem;">
+                <strong>❌ NEVER do this directly in render:</strong><br>
+                <code>setInterval(() => { ... }, 1000);</code><br>
+                <span style="font-size: 0.75rem;">(Creates a new timer on EVERY single re-render!)</span>
+              </div>
+              <div class="correct-box" style="font-family: var(--font-sans);">
+                <strong>✅ Wrap side effects in useEffect():</strong><br>
+                React waits until the DOM is safely painted, then runs the effect cleanly!
+              </div>
+            </div>
+
+            <div class="card highlight-emerald" style="display: flex; flex-direction: column; justify-content: center;">
+              <h3 class="card-title" style="color: var(--accent-emerald);">Bridge to External Systems</h3>
+              <div class="vertical-flow" style="margin-top: 1rem;">
+                <div class="v-node cyan"><strong>React Component</strong> (State &amp; UI)</div>
+                <div class="v-arrow">↕ synchronized by <strong>useEffect()</strong></div>
+                <div class="v-node emerald">
+                  <strong>External Systems</strong>
+                  <div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 0.2rem;">
+                    Browser Title • Timers • Window Events • Web APIs
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 11 — WHAT IS useEffect?
+           ==================================================================== -->
+      <section class="slide" data-slide="11" id="slide-11">
+        <div class="slide-content">
+          <div class="slide-header">
+            <span class="slide-tag emerald">Section 2 — Side Effects</span>
+            <h1 class="slide-title">What Is <span class="highlight">useEffect</span>?</h1>
+            <p class="slide-subtitle"><code>useEffect</code> is a built-in React Hook that lets you synchronize a component with an external system.</p>
+          </div>
+
+          <div class="grid-2">
+            <div>
+              <div class="code-window">
+                <div class="code-header">
+                  <div class="window-dots"><span class="window-dot red"></span><span class="window-dot yellow"></span><span class="window-dot green"></span></div>
+                  <span class="code-title">use-effect-syntax.js</span>
+                  <button class="copy-btn" data-code="import { useEffect } from &quot;react&quot;;\n\nuseEffect(() => {\n  // 1. Side effect logic\n\n  return () => {\n    // 2. Optional cleanup logic\n  };\n}, [/* 3. Dependency array */]);">Copy</button>
+                </div>
+                <div class="code-content"><span class="syn-kwd">import</span> { <span class="syn-fn">useEffect</span> } <span class="syn-kwd">from</span> <span class="syn-str">"react"</span>;
+
+<span class="syn-fn">useEffect</span>(() =&gt; {
+  <span class="syn-comment">// 1. Side effect logic goes here</span>
+
+  <span class="syn-kwd">return</span> () =&gt; {
+    <span class="syn-comment">// 2. Optional cleanup logic</span>
+  };
+}, [ <span class="syn-comment">/* 3. Dependency array */</span> ]);</div>
+              </div>
+            </div>
+
+            <div class="card highlight-react">
+              <h3 class="card-title">Three Core Parts of useEffect</h3>
+              <ul class="feature-list" style="margin-top: 0.75rem;">
+                <li><span class="feature-bullet">1</span> <span><strong>The Effect Function:</strong> The callback function containing the side-effect logic to execute after render.</span></li>
+                <li><span class="feature-bullet emerald">2</span> <span><strong>The Cleanup Function:</strong> An optional function returned to tear down timers or listeners before unmount or next effect.</span></li>
+                <li><span class="feature-bullet amber">3</span> <span><strong>The Dependency Array:</strong> An array of reactive values that tells React when to re-execute this effect.</span></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 12 — BASIC useEffect
+           ==================================================================== -->
+      <section class="slide" data-slide="12" id="slide-12">
+        <div class="slide-content">
+          <div class="slide-header">
+            <span class="slide-tag emerald">Section 2 — Side Effects</span>
+            <h1 class="slide-title">Basic useEffect: <span class="highlight">No Dependencies</span></h1>
+            <p class="slide-subtitle">When called without a dependency array, useEffect runs after EVERY completed render.</p>
+          </div>
+
+          <div class="grid-2">
+            <div>
+              <div class="code-window">
+                <div class="code-header">
+                  <div class="window-dots"><span class="window-dot red"></span><span class="window-dot yellow"></span><span class="window-dot green"></span></div>
+                  <span class="code-title">App.jsx</span>
+                  <button class="copy-btn" data-code="import { useEffect } from &quot;react&quot;;\n\nfunction App() {\n  useEffect(() => {\n    console.log(&quot;Effect executed&quot;);\n  }); // No dependency array\n\n  return <h1>Hello React</h1>;\n}">Copy</button>
+                </div>
+                <div class="code-content"><span class="syn-kwd">import</span> { <span class="syn-fn">useEffect</span> } <span class="syn-kwd">from</span> <span class="syn-str">"react"</span>;
+
+<span class="syn-kwd">function</span> <span class="syn-fn">App</span>() {
+
+  <span class="syn-fn">useEffect</span>(() =&gt; {
+    <span class="syn-prop">console</span>.<span class="syn-fn">log</span>(<span class="syn-str">"Effect executed"</span>);
+  }); <span class="syn-comment">// Notice: No array here!</span>
+
+  <span class="syn-kwd">return</span> &lt;<span class="syn-tag">h1</span>&gt;Hello React&lt;/<span class="syn-tag">h1</span>&gt;;
+}</div>
+              </div>
+            </div>
+
+            <div class="card highlight-amber">
+              <h3 class="card-title" style="color: var(--accent-amber);">Execution Flow</h3>
+              <div class="vertical-flow" style="margin-top: 1rem;">
+                <div class="v-node">Component Renders</div>
+                <div class="v-arrow">↓</div>
+                <div class="v-node cyan">DOM Updated on Screen</div>
+                <div class="v-arrow">↓</div>
+                <div class="v-node emerald">Effect Runs: <code>"Effect executed"</code></div>
+              </div>
+              <p style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 1rem;">
+                ⚠️ <strong>Be careful:</strong> Because this runs on <em>every render</em>, updating state inside this effect will cause an infinite loop!
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 13 — useEffect WITH EMPTY DEPENDENCY ARRAY
+           ==================================================================== -->
+      <section class="slide" data-slide="13" id="slide-13">
+        <div class="slide-content">
+          <div class="slide-header">
+            <span class="slide-tag emerald">Section 2 — Side Effects</span>
+            <h1 class="slide-title">useEffect With <span class="highlight">Empty Array []</span></h1>
+            <p class="slide-subtitle">Passing an empty dependency array <code>[]</code> tells React to run the effect only once after mounting.</p>
+          </div>
+
+          <div class="grid-2">
+            <div>
+              <div class="code-window">
+                <div class="code-header">
+                  <div class="window-dots"><span class="window-dot red"></span><span class="window-dot yellow"></span><span class="window-dot green"></span></div>
+                  <span class="code-title">on-mount.js</span>
+                  <button class="copy-btn" data-code="useEffect(() => {\n  console.log(&quot;Component mounted&quot;);\n}, []); // Empty dependency array">Copy</button>
+                </div>
+                <div class="code-content"><span class="syn-fn">useEffect</span>(() =&gt; {
+  <span class="syn-prop">console</span>.<span class="syn-fn">log</span>(<span class="syn-str">"Component mounted"</span>);
+}, []); <span class="syn-comment">// Empty dependency array []</span></div>
+              </div>
+
+              <div class="card highlight-react" style="margin-top: 1rem;">
+                <h4 style="color: var(--react-cyan); margin-bottom: 0.5rem; font-size: 0.95rem;">Why Does It Only Run Once?</h4>
+                <p style="font-size: 0.85rem; color: var(--text-secondary);">
+                  The dependency array is empty, which means there are <strong>zero reactive values</strong> that can ever change. Therefore, React never re-runs the effect after subsequent renders.
+                </p>
+              </div>
+            </div>
+
+            <div class="card highlight-purple">
+              <h3 class="card-title" style="color: var(--accent-purple);">Important Strict Mode Note 🔍</h3>
+              <p style="font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 1rem;">
+                In development mode with React Strict Mode enabled:
+              </p>
+              <div style="background: var(--bg-canvas); padding: 0.75rem; border-radius: var(--radius-sm); border: 1px solid var(--border-subtle); font-size: 0.85rem;">
+                <p style="color: var(--accent-purple); font-weight: 600; margin-bottom: 0.35rem;">Mount ➔ Unmount ➔ Mount</p>
+                <p style="color: var(--text-muted);">
+                  React intentionally mounts, unmounts, and re-mounts your component one extra time in local development to help you verify that your cleanup logic works properly!
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 14 — useEffect WITH DEPENDENCIES
+           ==================================================================== -->
+      <section class="slide" data-slide="14" id="slide-14">
+        <div class="slide-content">
+          <div class="slide-header">
+            <span class="slide-tag emerald">Section 2 — Side Effects</span>
+            <h1 class="slide-title">useEffect With <span class="highlight">Dependencies [count]</span></h1>
+            <p class="slide-subtitle">When specific variables are listed in the dependency array, React only re-runs the effect when those values change.</p>
+          </div>
+
+          <div class="grid-2">
+            <div>
+              <div class="code-window">
+                <div class="code-header">
+                  <div class="window-dots"><span class="window-dot red"></span><span class="window-dot yellow"></span><span class="window-dot green"></span></div>
+                  <span class="code-title">dependency-example.js</span>
+                  <button class="copy-btn" data-code="useEffect(() => {\n  console.log(&quot;Count changed:&quot;, count);\n}, [count]);">Copy</button>
+                </div>
+                <div class="code-content"><span class="syn-fn">useEffect</span>(() =&gt; {
+  <span class="syn-prop">console</span>.<span class="syn-fn">log</span>(<span class="syn-str">"Count changed:"</span>, <span class="syn-fn">count</span>);
+}, [<span class="syn-fn">count</span>]); <span class="syn-comment">// Re-runs ONLY when count changes!</span></div>
+              </div>
+            </div>
+
+            <div class="card highlight-emerald">
+              <h3 class="card-title" style="color: var(--accent-emerald);">Step-by-Step State Tracking</h3>
+              <div class="vertical-flow" style="margin-top: 0.75rem;">
+                <div class="v-node">Mount: <code>count = 0</code> ➔ Effect runs (Initial)</div>
+                <div class="v-arrow">↓</div>
+                <div class="v-node">User clicks: <code>count = 1</code> ➔ Value changed ➔ Effect runs</div>
+                <div class="v-arrow">↓</div>
+                <div class="v-node">User clicks: <code>count = 2</code> ➔ Value changed ➔ Effect runs</div>
+                <div class="v-arrow">↓</div>
+                <div class="v-node" style="color: var(--text-muted);">Unrelated state changes ➔ <code>count</code> unchanged ➔ <strong>Effect skips!</strong></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 15 — THE DEPENDENCY ARRAY
+           ==================================================================== -->
+      <section class="slide" data-slide="15" id="slide-15">
+        <div class="slide-content">
+          <div class="slide-header">
+            <span class="slide-tag emerald">Section 2 — Side Effects</span>
+            <h1 class="slide-title">The <span class="highlight">Dependency Array</span> Rules</h1>
+            <p class="slide-subtitle">The dependency array tells React: <em>"Only re-run this effect if any of these values are different from the previous render."</em></p>
+          </div>
+
+          <div class="grid-3">
+            <div class="card highlight-amber">
+              <h4 style="color: var(--accent-amber); font-family: var(--font-mono); margin-bottom: 0.5rem;">No Array</h4>
+              <pre style="font-family: var(--font-mono); font-size: 0.8rem; color: var(--text-muted); background: var(--bg-canvas); padding: 0.5rem; border-radius: var(--radius-xs);">useEffect(() => { ... })</pre>
+              <p style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 0.75rem;">
+                Runs after <strong>every completed render</strong>. Rarely what you want for side effects.
+              </p>
+            </div>
+
+            <div class="card highlight-react">
+              <h4 style="color: var(--react-cyan); font-family: var(--font-mono); margin-bottom: 0.5rem;">Empty Array: []</h4>
+              <pre style="font-family: var(--font-mono); font-size: 0.8rem; color: var(--react-cyan); background: var(--bg-canvas); padding: 0.5rem; border-radius: var(--radius-xs);">useEffect(() => { ... }, [])</pre>
+              <p style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 0.75rem;">
+                Runs <strong>once on mount</strong>. Ideal for initial data fetching or global event listeners.
+              </p>
+            </div>
+
+            <div class="card highlight-emerald">
+              <h4 style="color: var(--accent-emerald); font-family: var(--font-mono); margin-bottom: 0.5rem;">Dependencies: [a, b]</h4>
+              <pre style="font-family: var(--font-mono); font-size: 0.8rem; color: var(--accent-emerald); background: var(--bg-canvas); padding: 0.5rem; border-radius: var(--radius-xs);">useEffect(() => { ... }, [count])</pre>
+              <p style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 0.75rem;">
+                Runs on mount + whenever <strong>count or listed items change</strong>.
+              </p>
+            </div>
+
+            <div class="card col-span-2 highlight-purple" style="grid-column: span 3; margin-top: 0.5rem;">
+              <strong style="color: var(--accent-purple);">Golden Rule of Dependencies:</strong>
+              <span style="font-size: 0.85rem; color: var(--text-secondary); margin-left: 0.5rem;">
+                If your effect uses any reactive value from the component scope (props, state, or variables derived from them), it <strong>must be included</strong> in the dependency array!
+              </span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 16 — THREE COMMON useEffect PATTERNS
+           ==================================================================== -->
+      <section class="slide" data-slide="16" id="slide-16">
+        <div class="slide-content">
+          <div class="slide-header">
+            <span class="slide-tag emerald">Section 2 — Side Effects</span>
+            <h1 class="slide-title">Three Common <span class="highlight">useEffect Patterns</span></h1>
+            <p class="slide-subtitle">A direct side-by-side comparison of the three fundamental dependency patterns.</p>
+          </div>
+
+          <div class="grid-3">
+            <div>
+              <div class="code-window">
+                <div class="code-header"><span class="code-title">Pattern 1: Every Render</span></div>
+                <div class="code-content"><span class="syn-fn">useEffect</span>(() =&gt; {
+  <span class="syn-prop">console</span>.<span class="syn-fn">log</span>(<span class="syn-str">"Runs after EVERY render"</span>);
+});</div>
+              </div>
+              <div class="card" style="padding: 0.75rem; background: var(--bg-canvas);">
+                <p style="font-size: 0.8rem; color: var(--text-muted);">
+                  <strong>When to use:</strong> Logging, measuring DOM dimensions after every paint.
+                </p>
+              </div>
+            </div>
+
+            <div>
+              <div class="code-window">
+                <div class="code-header"><span class="code-title">Pattern 2: Mount Only</span></div>
+                <div class="code-content"><span class="syn-fn">useEffect</span>(() =&gt; {
+  <span class="syn-prop">console</span>.<span class="syn-fn">log</span>(<span class="syn-str">"Runs ONCE on mount"</span>);
+}, []);</div>
+              </div>
+              <div class="card highlight-react" style="padding: 0.75rem; background: var(--bg-canvas);">
+                <p style="font-size: 0.8rem; color: var(--react-cyan);">
+                  <strong>When to use:</strong> Initial API calls, setting up event listeners, starting single timers.
+                </p>
+              </div>
+            </div>
+
+            <div>
+              <div class="code-window">
+                <div class="code-header"><span class="code-title">Pattern 3: On Change</span></div>
+                <div class="code-content"><span class="syn-fn">useEffect</span>(() =&gt; {
+  <span class="syn-prop">console</span>.<span class="syn-fn">log</span>(<span class="syn-str">"Runs when count changes"</span>);
+}, [<span class="syn-fn">count</span>]);</div>
+              </div>
+              <div class="card highlight-emerald" style="padding: 0.75rem; background: var(--bg-canvas);">
+                <p style="font-size: 0.8rem; color: var(--accent-emerald);">
+                  <strong>When to use:</strong> Auto-saving drafts, updating title, fetching details for an ID.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 17 — UPDATING DOCUMENT TITLE (INTERACTIVE DEMO)
+           ==================================================================== -->
+      <section class="slide" data-slide="17" id="slide-17">
+        <div class="slide-content">
+          <div class="slide-header">
+            <span class="slide-tag amber">Section 3 — Practical useEffect</span>
+            <h1 class="slide-title">Updating the <span class="highlight">Document Title</span></h1>
+            <p class="slide-subtitle">Synchronizing component state with the browser's document title tab in real time.</p>
+          </div>
+
+          <div class="demo-box">
+            <div class="grid-2">
+              <div>
+                <div class="code-window">
+                  <div class="code-header">
+                    <span class="code-title">TitleSync.jsx</span>
+                  </div>
+                  <div class="code-content"><span class="syn-kwd">const</span> [<span class="syn-fn">count</span>, <span class="syn-fn">setCount</span>] = <span class="syn-fn">useState</span>(<span class="syn-num">0</span>);
+
+<span class="syn-fn">useEffect</span>(() =&gt; {
+  <span class="syn-prop">document</span>.<span class="syn-prop">title</span> = <span class="syn-str">`Count: ${count}`</span>;
+}, [<span class="syn-fn">count</span>]);</div>
+                </div>
+
+                <div class="browser-mock" style="margin-top: 1rem;">
+                  <div class="browser-mock-header">
+                    <div class="window-dots"><span class="window-dot red"></span><span class="window-dot yellow"></span><span class="window-dot green"></span></div>
+                    <div class="browser-tab-pill">
+                      <span>🌐</span>
+                      <span id="mockBrowserTitle">Count: 0 | React Day 7</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="card highlight-react" style="display: flex; flex-direction: column; justify-content: space-between;">
+                <div>
+                  <h3 class="card-title">Live Counter &amp; Effect Simulation</h3>
+                  <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 1rem;">
+                    Click the buttons below to change <code>count</code>. Watch the simulated browser tab and effect log update!
+                  </p>
+
+                  <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;">
+                    <div style="font-family: var(--font-mono); font-size: 2.5rem; font-weight: 800; color: var(--react-cyan);" id="demo1CountDisplay">
+                      0
+                    </div>
+                    <div style="display: flex; gap: 0.5rem;">
+                      <button class="demo-btn" onclick="DemoCounterTitle.increment()">+ Increase</button>
+                      <button class="demo-btn secondary" onclick="DemoCounterTitle.decrement()">- Decrease</button>
+                      <button class="demo-btn secondary" onclick="DemoCounterTitle.reset()">Reset</button>
+                    </div>
+                  </div>
+                </div>
+
+                <div>
+                  <div style="font-family: var(--font-mono); font-size: 0.75rem; color: var(--text-muted); margin-bottom: 0.35rem;">
+                    EFFECT EXECUTION LOG:
+                  </div>
+                  <div class="log-box" id="demo1LogBox">
+                    <div class="log-entry mount">➔ Component Mounted: document.title set to "Count: 0"</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 18 — useEffect WITH TIMER
+           ==================================================================== -->
+      <section class="slide" data-slide="18" id="slide-18">
+        <div class="slide-content">
+          <div class="slide-header">
+            <span class="slide-tag amber">Section 3 — Practical useEffect</span>
+            <h1 class="slide-title">useEffect With a <span class="highlight">Timer</span></h1>
+            <p class="slide-subtitle">Setting up intervals and timeouts requires careful lifecycle management.</p>
+          </div>
+
+          <div class="grid-2">
+            <div>
+              <div class="code-window">
+                <div class="code-header">
+                  <div class="window-dots"><span class="window-dot red"></span><span class="window-dot yellow"></span><span class="window-dot green"></span></div>
+                  <span class="code-title">Timer.jsx</span>
+                  <button class="copy-btn" data-code="useEffect(() => {\n  const timer = setInterval(() => {\n    console.log(&quot;Timer running&quot;);\n  }, 1000);\n\n  return () => {\n    clearInterval(timer); // Cleanup!\n  };\n}, []);">Copy</button>
+                </div>
+                <div class="code-content"><span class="syn-fn">useEffect</span>(() =&gt; {
+  <span class="syn-comment">// 1. Setup: Start timer on mount</span>
+  <span class="syn-kwd">const</span> <span class="syn-prop">timer</span> = <span class="syn-fn">setInterval</span>(() =&gt; {
+    <span class="syn-prop">console</span>.<span class="syn-fn">log</span>(<span class="syn-str">"Timer running"</span>);
+  }, <span class="syn-num">1000</span>);
+
+  <span class="syn-comment">// 2. Cleanup: Stop timer on unmount</span>
+  <span class="syn-kwd">return</span> () =&gt; {
+    <span class="syn-fn">clearInterval</span>(<span class="syn-prop">timer</span>);
+  };
+}, []);</div>
+              </div>
+            </div>
+
+            <div class="card highlight-emerald">
+              <h3 class="card-title" style="color: var(--accent-emerald);">The Lifecycle of a Timer</h3>
+              <div class="vertical-flow" style="margin-top: 1rem;">
+                <div class="v-node cyan">Component Mounts</div>
+                <div class="v-arrow">↓</div>
+                <div class="v-node emerald"><code>setInterval()</code> starts ticking</div>
+                <div class="v-arrow">↓</div>
+                <div class="v-node amber">Component Unmounts</div>
+                <div class="v-arrow">↓</div>
+                <div class="v-node" style="color: var(--accent-rose); border-color: var(--accent-rose-border);">
+                  Cleanup runs: <code>clearInterval()</code> stops timer!
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 19 — WHAT IS CLEANUP?
+           ==================================================================== -->
+      <section class="slide" data-slide="19" id="slide-19">
+        <div class="slide-content">
+          <div class="slide-header">
+            <span class="slide-tag amber">Section 3 — Practical useEffect</span>
+            <h1 class="slide-title">What Is <span class="highlight">Effect Cleanup</span>?</h1>
+            <p class="slide-subtitle">Some side effects allocate system resources that MUST be released when the component leaves the screen.</p>
+          </div>
+
+          <div class="grid-2">
+            <div>
+              <div class="code-window">
+                <div class="code-header">
+                  <div class="window-dots"><span class="window-dot red"></span><span class="window-dot yellow"></span><span class="window-dot green"></span></div>
+                  <span class="code-title">cleanup-pattern.js</span>
+                  <button class="copy-btn" data-code="useEffect(() => {\n  // 1. Setup logic (runs after render)\n\n  return () => {\n    // 2. Cleanup logic (runs on unmount or before next effect)\n  };\n}, []);">Copy</button>
+                </div>
+                <div class="code-content"><span class="syn-fn">useEffect</span>(() =&gt; {
+  <span class="syn-comment">// 1. Setup logic</span>
+
+  <span class="syn-kwd">return</span> () =&gt; {
+    <span class="syn-comment">// 2. Cleanup function</span>
+    <span class="syn-comment">// Runs when component unmounts!</span>
+  };
+}, []);</div>
+              </div>
+
+              <div class="card highlight-amber" style="margin-top: 1rem;">
+                <p style="font-size: 0.85rem; color: var(--text-secondary);">
+                  💡 The function you <code>return</code> inside <code>useEffect</code> is called the <strong>cleanup function</strong>. React calls it when the component unmounts.
+                </p>
+              </div>
+            </div>
+
+            <div class="card highlight-react">
+              <h3 class="card-title">What Needs to Be Cleaned Up?</h3>
+              <ul class="feature-list" style="margin-top: 0.75rem;">
+                <li><span class="feature-bullet">1</span> <span><strong>Timers:</strong> <code>clearInterval(timer)</code> or <code>clearTimeout(id)</code>.</span></li>
+                <li><span class="feature-bullet emerald">2</span> <span><strong>Event Listeners:</strong> <code>window.removeEventListener("resize", fn)</code>.</span></li>
+                <li><span class="feature-bullet purple">3</span> <span><strong>WebSockets / Subscriptions:</strong> Closing active socket connections.</span></li>
+                <li><span class="feature-bullet amber">4</span> <span><strong>Preventing Memory Leaks:</strong> Avoiding background code attempting to update deleted components!</span></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 20 — CLEANUP EXAMPLE (LIVE SIMULATION)
+           ==================================================================== -->
+      <section class="slide" data-slide="20" id="slide-20">
+        <div class="slide-content">
+          <div class="slide-header">
+            <span class="slide-tag amber">Section 3 — Practical useEffect</span>
+            <h1 class="slide-title">Cleanup in Action: <span class="highlight">Live Timer Simulator</span></h1>
+            <p class="slide-subtitle">Mount and unmount a simulated Timer component to see the cleanup function execute in real time.</p>
+          </div>
+
+          <div class="demo-box">
+            <div class="demo-controls">
+              <button class="demo-btn emerald" id="mountTimerBtn" onclick="DemoTimerCleanup.mount()">▶ Mount &lt;Timer /&gt;</button>
+              <button class="demo-btn rose" id="unmountTimerBtn" onclick="DemoTimerCleanup.unmount()">⏹ Unmount &lt;Timer /&gt;</button>
+              <span id="timerStatusBadge" class="slide-tag" style="margin-left: auto;">Status: Unmounted</span>
+            </div>
+
+            <div class="grid-2">
+              <div class="card" style="display: flex; flex-direction: column; justify-content: center; align-items: center; min-height: 180px;">
+                <div style="font-size: 0.85rem; color: var(--text-muted); font-family: var(--font-mono); margin-bottom: 0.5rem;">
+                  TIMER COMPONENT STATE:
+                </div>
+                <div style="font-size: 3rem; font-family: var(--font-mono); font-weight: 800; color: var(--react-cyan);" id="timerSecondsDisplay">
+                  --
+                </div>
+                <div style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 0.5rem;" id="timerMessage">
+                  Component is currently unmounted.
+                </div>
+              </div>
+
+              <div>
+                <div style="font-family: var(--font-mono); font-size: 0.75rem; color: var(--text-muted); margin-bottom: 0.35rem;">
+                  LIFECYCLE &amp; CLEANUP LOG:
+                </div>
+                <div class="log-box" id="timerLogBox">
+                  <div class="log-entry">Waiting for user to Mount component...</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 21 — EVENT LISTENER EXAMPLE
+           ==================================================================== -->
+      <section class="slide" data-slide="21" id="slide-21">
+        <div class="slide-content">
+          <div class="slide-header">
+            <span class="slide-tag amber">Section 3 — Practical useEffect</span>
+            <h1 class="slide-title">Cleaning Up <span class="highlight">Event Listeners</span></h1>
+            <p class="slide-subtitle">Always pair <code>addEventListener</code> with <code>removeEventListener</code> inside your cleanup function.</p>
+          </div>
+
+          <div class="grid-2">
+            <div>
+              <div class="code-window">
+                <div class="code-header">
+                  <div class="window-dots"><span class="window-dot red"></span><span class="window-dot yellow"></span><span class="window-dot green"></span></div>
+                  <span class="code-title">WindowResize.jsx</span>
+                  <button class="copy-btn" data-code="useEffect(() => {\n  const handleResize = () => {\n    console.log(window.innerWidth);\n  };\n\n  // 1. Add listener on mount\n  window.addEventListener(&quot;resize&quot;, handleResize);\n\n  // 2. Remove listener on unmount\n  return () => {\n    window.removeEventListener(&quot;resize&quot;, handleResize);\n  };\n}, []);">Copy</button>
+                </div>
+                <div class="code-content"><span class="syn-fn">useEffect</span>(() =&gt; {
+  <span class="syn-kwd">const</span> <span class="syn-fn">handleResize</span> = () =&gt; {
+    <span class="syn-prop">console</span>.<span class="syn-fn">log</span>(<span class="syn-prop">window</span>.<span class="syn-prop">innerWidth</span>);
+  };
+
+  <span class="syn-comment">// 1. Attach listener</span>
+  <span class="syn-prop">window</span>.<span class="syn-fn">addEventListener</span>(<span class="syn-str">"resize"</span>, <span class="syn-fn">handleResize</span>);
+
+  <span class="syn-comment">// 2. Cleanup: remove listener</span>
+  <span class="syn-kwd">return</span> () =&gt; {
+    <span class="syn-prop">window</span>.<span class="syn-fn">removeEventListener</span>(<span class="syn-str">"resize"</span>, <span class="syn-fn">handleResize</span>);
+  };
+}, []);</div>
+              </div>
+            </div>
+
+            <div class="card highlight-amber">
+              <h3 class="card-title" style="color: var(--accent-amber);">The Cost of Forgetting Cleanup</h3>
+              <p style="font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 1rem;">
+                If a user navigates between pages 10 times and you forget <code>removeEventListener</code>:
+              </p>
+              <ul class="feature-list">
+                <li><span class="feature-bullet amber">⚠️</span> <span><strong>10 Zombie Listeners:</strong> All 10 listeners will continue firing in the background simultaneously!</span></li>
+                <li><span class="feature-bullet amber">⚠️</span> <span><strong>Memory Leaks:</strong> Garbage collector cannot free the component from memory.</span></li>
+                <li><span class="feature-bullet amber">⚠️</span> <span><strong>Rule of Thumb:</strong> If you add something in an effect, remove it in the cleanup function!</span></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 22 — COMMON useEffect MISTAKES
+           ==================================================================== -->
+      <section class="slide" data-slide="22" id="slide-22">
+        <div class="slide-content">
+          <div class="slide-header">
+            <span class="slide-tag rose">Section 4 — useEffect Mistakes</span>
+            <h1 class="slide-title">Common <span style="color: var(--accent-rose);">useEffect Mistakes</span></h1>
+            <p class="slide-subtitle">Three frequent mistakes beginner React developers make with side effects.</p>
+          </div>
+
+          <div class="grid-3">
+            <div class="card highlight-rose">
+              <h4 style="color: var(--accent-rose); font-size: 0.95rem; margin-bottom: 0.5rem;">Mistake 1: Missing Dependency</h4>
+              <div class="wrong-box" style="margin-bottom: 0.5rem;">
+                useEffect(() => {<br>
+                &nbsp;&nbsp;console.log(count);<br>
+                }, []); // ❌ Missing count
+              </div>
+              <p style="font-size: 0.8rem; color: var(--text-secondary);">
+                The effect captures stale values and never updates when <code>count</code> changes!
+              </p>
+            </div>
+
+            <div class="card highlight-amber">
+              <h4 style="color: var(--accent-amber); font-size: 0.95rem; margin-bottom: 0.5rem;">Mistake 2: Forgetting Cleanup</h4>
+              <div class="wrong-box" style="margin-bottom: 0.5rem;">
+                useEffect(() => {<br>
+                &nbsp;&nbsp;setInterval(tick, 1000);<br>
+                }, []); // ❌ No clearInterval
+              </div>
+              <p style="font-size: 0.8rem; color: var(--text-secondary);">
+                Timer keeps ticking forever in memory even after component is deleted.
+              </p>
+            </div>
+
+            <div class="card highlight-react">
+              <h4 style="color: var(--react-cyan); font-size: 0.95rem; margin-bottom: 0.5rem;">Mistake 3: Unnecessary Effects</h4>
+              <div class="wrong-box" style="margin-bottom: 0.5rem;">
+                useEffect(() => {<br>
+                &nbsp;&nbsp;setFullName(first + last);<br>
+                }, [first, last]); // ❌ Unneeded
+              </div>
+              <p style="font-size: 0.8rem; color: var(--text-secondary);">
+                Don't use effects to calculate values you can compute directly during render!
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 23 — INFINITE EFFECT LOOPS
+           ==================================================================== -->
+      <section class="slide" data-slide="23" id="slide-23">
+        <div class="slide-content">
+          <div class="slide-header">
+            <span class="slide-tag rose">Section 4 — useEffect Mistakes</span>
+            <h1 class="slide-title">The <span style="color: var(--accent-rose);">Infinite Effect Loop</span></h1>
+            <p class="slide-subtitle">What causes the dreaded browser crash and maximum update depth exceeded error?</p>
+          </div>
+
+          <div class="grid-2">
+            <div>
+              <div class="code-window">
+                <div class="code-header">
+                  <span class="code-title">infinite-loop.js (DANGEROUS)</span>
+                </div>
+                <div class="code-content"><span class="syn-comment">// ❌ CRITICAL BUG: Infinite Loop!</span>
+<span class="syn-fn">useEffect</span>(() =&gt; {
+  <span class="syn-fn">setCount</span>(<span class="syn-fn">count</span> + <span class="syn-num">1</span>);
+}, [<span class="syn-fn">count</span>]);</div>
+              </div>
+
+              <div class="card highlight-rose" style="margin-top: 1rem;">
+                <p style="font-size: 0.85rem; color: var(--text-secondary);">
+                  ⚠️ <strong>Why this happens:</strong> The effect updates <code>count</code>. Because <code>count</code> changed, the effect runs again. Which updates <code>count</code> again. An unstoppable infinite cycle!
+                </p>
+              </div>
+            </div>
+
+            <div class="card highlight-rose" style="display: flex; flex-direction: column; justify-content: center; align-items: center;">
+              <h3 class="card-title" style="color: var(--accent-rose); align-self: flex-start;">The Fatal Cycle</h3>
+              <div class="vertical-flow" style="margin-top: 0.5rem;">
+                <div class="v-node" style="border-color: var(--accent-rose-border); color: var(--accent-rose);">1. count Changes</div>
+                <div class="v-arrow" style="color: var(--accent-rose);">↓</div>
+                <div class="v-node" style="border-color: var(--accent-rose-border); color: var(--accent-rose);">2. Component Re-renders</div>
+                <div class="v-arrow" style="color: var(--accent-rose);">↓</div>
+                <div class="v-node" style="border-color: var(--accent-rose-border); color: var(--accent-rose);">3. useEffect([count]) Runs</div>
+                <div class="v-arrow" style="color: var(--accent-rose);">↓</div>
+                <div class="v-node" style="border-color: var(--accent-rose-border); color: var(--accent-rose);">4. setCount() Called Again!</div>
+                <div class="v-arrow" style="color: var(--accent-rose);">↺ repeats indefinitely</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 24 — useEffect DECISION GUIDE
+           ==================================================================== -->
+      <section class="slide" data-slide="24" id="slide-24">
+        <div class="slide-content">
+          <div class="slide-header">
+            <span class="slide-tag">Section 4 — useEffect Mistakes</span>
+            <h1 class="slide-title">useEffect <span class="highlight">Decision Guide</span></h1>
+            <p class="slide-subtitle">A simple rule of thumb: do you actually need an effect?</p>
+          </div>
+
+          <div class="card highlight-react" style="padding: 2rem;">
+            <div style="text-align: center; margin-bottom: 1.5rem;">
+              <h3 style="font-size: 1.4rem; color: var(--text-main); font-weight: 700;">
+                "Do I need to synchronize with something outside React?"
+              </h3>
+            </div>
+
+            <div class="grid-2">
+              <div class="card highlight-rose" style="text-align: center;">
+                <div style="font-size: 1.8rem; margin-bottom: 0.5rem;">❌ NO</div>
+                <h4 style="color: var(--accent-rose); font-size: 1rem; margin-bottom: 0.5rem;">You Probably Don't Need useEffect!</h4>
+                <p style="font-size: 0.85rem; color: var(--text-secondary);">
+                  • Transforming data for rendering<br>
+                  • Filtering a list<br>
+                  • Calculating totals (price * qty)<br>
+                  • Handling user click events
+                </p>
+                <div style="margin-top: 0.75rem; font-family: var(--font-mono); font-size: 0.8rem; color: var(--accent-rose);">
+                  Calculate directly in the component body!
+                </div>
+              </div>
+
+              <div class="card highlight-emerald" style="text-align: center;">
+                <div style="font-size: 1.8rem; margin-bottom: 0.5rem;">✅ YES</div>
+                <h4 style="color: var(--accent-emerald); font-size: 1rem; margin-bottom: 0.5rem;">Use useEffect!</h4>
+                <p style="font-size: 0.85rem; color: var(--text-secondary);">
+                  • Fetching API data<br>
+                  • Setting up a timer (setInterval)<br>
+                  • Changing document.title<br>
+                  • Adding window event listeners
+                </p>
+                <div style="margin-top: 0.75rem; font-family: var(--font-mono); font-size: 0.8rem; color: var(--accent-emerald);">
+                  Synchronize safely after DOM commits!
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 25 — WHAT IS A CUSTOM HOOK?
+           ==================================================================== -->
+      <section class="slide" data-slide="25" id="slide-25">
+        <div class="slide-content">
+          <div class="slide-header">
+            <span class="slide-tag purple">Section 5 — Custom Hooks</span>
+            <h1 class="slide-title">What Is a <span style="color: var(--accent-purple);">Custom Hook</span>?</h1>
+            <p class="slide-subtitle">A custom Hook is a standard JavaScript function that starts with <code>use</code> and can call other React Hooks.</p>
+          </div>
+
+          <div class="grid-2">
+            <div>
+              <div class="code-window">
+                <div class="code-header">
+                  <div class="window-dots"><span class="window-dot red"></span><span class="window-dot yellow"></span><span class="window-dot green"></span></div>
+                  <span class="code-title">useCounter.js</span>
+                  <button class="copy-btn" data-code="function useCounter() {\n  const [count, setCount] = useState(0);\n\n  // Reusable stateful logic\n  return { count, setCount };\n}">Copy</button>
+                </div>
+                <div class="code-content"><span class="syn-comment">// Custom Hook starts with "use"</span>
+<span class="syn-kwd">function</span> <span class="syn-hook">useCounter</span>() {
+  <span class="syn-kwd">const</span> [<span class="syn-fn">count</span>, <span class="syn-fn">setCount</span>] = <span class="syn-fn">useState</span>(<span class="syn-num">0</span>);
+
+  <span class="syn-comment">// Reusable stateful logic...</span>
+  <span class="syn-kwd">return</span> { <span class="syn-fn">count</span>, <span class="syn-fn">setCount</span> };
+}</div>
+              </div>
+            </div>
+
+            <div class="card highlight-purple">
+              <h3 class="card-title" style="color: var(--accent-purple);">Three Characteristics of Custom Hooks</h3>
+              <ul class="feature-list" style="margin-top: 0.75rem;">
+                <li><span class="feature-bullet purple">1</span> <span><strong>Starts with "use":</strong> React relies on this naming convention to enforce Hook rules.</span></li>
+                <li><span class="feature-bullet purple">2</span> <span><strong>Calls other Hooks:</strong> Can freely call <code>useState</code>, <code>useEffect</code>, or other custom Hooks.</span></li>
+                <li><span class="feature-bullet purple">3</span> <span><strong>Reuses Stateful Logic:</strong> Does NOT share state between components; each component calling the Hook gets its own independent state copy!</span></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 26 — WHY CREATE CUSTOM HOOKS?
+           ==================================================================== -->
+      <section class="slide" data-slide="26" id="slide-26">
+        <div class="slide-content">
+          <div class="slide-header">
+            <span class="slide-tag purple">Section 5 — Custom Hooks</span>
+            <h1 class="slide-title">Why Create <span style="color: var(--accent-purple);">Custom Hooks</span>?</h1>
+            <p class="slide-subtitle">Eliminating code duplication when multiple components need the exact same stateful logic.</p>
+          </div>
+
+          <div class="grid-2">
+            <div class="card highlight-rose">
+              <h3 class="card-title" style="color: var(--accent-rose);">❌ Without Custom Hooks (Code Duplication)</h3>
+              <div style="display: flex; flex-direction: column; gap: 0.75rem; margin-top: 0.5rem;">
+                <div style="background: var(--bg-canvas); padding: 0.6rem; border-radius: var(--radius-xs);">
+                  <strong style="color: var(--text-main); font-size: 0.85rem;">Header Cart Component:</strong>
+                  <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 0.2rem;">Writes count state, increment fn, decrement fn, reset fn.</p>
+                </div>
+                <div style="background: var(--bg-canvas); padding: 0.6rem; border-radius: var(--radius-xs);">
+                  <strong style="color: var(--text-main); font-size: 0.85rem;">Product Page Quantity Component:</strong>
+                  <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 0.2rem;">Copies and pastes the exact same counter code again!</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="card highlight-purple">
+              <h3 class="card-title" style="color: var(--accent-purple);">✅ With Custom Hooks (Single Source of Truth)</h3>
+              <div class="vertical-flow" style="margin-top: 0.5rem;">
+                <div class="v-node" style="color: var(--accent-purple); border-color: var(--accent-purple-border); font-weight: 700;">
+                  useCounter()
+                </div>
+                <div style="display: flex; gap: 2rem; width: 100%; justify-content: center;">
+                  <div style="text-align: center;">
+                    <div style="color: var(--accent-purple); font-size: 1.2rem;">↙</div>
+                    <div class="v-node cyan" style="min-width: 140px;">Header Cart</div>
+                  </div>
+                  <div style="text-align: center;">
+                    <div style="color: var(--accent-purple); font-size: 1.2rem;">↘</div>
+                    <div class="v-node emerald" style="min-width: 140px;">Product Page</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 27 — RULES FOR CUSTOM HOOKS
+           ==================================================================== -->
+      <section class="slide" data-slide="27" id="slide-27">
+        <div class="slide-content">
+          <div class="slide-header">
+            <span class="slide-tag purple">Section 5 — Custom Hooks</span>
+            <h1 class="slide-title">Rules for <span style="color: var(--accent-purple);">Custom Hooks</span></h1>
+            <p class="slide-subtitle">Four strict rules you must follow when designing custom Hooks.</p>
+          </div>
+
+          <div class="grid-2">
+            <div class="card highlight-purple">
+              <h3 class="card-title" style="color: var(--accent-purple);">The 4 Golden Rules</h3>
+              <ul class="feature-list" style="margin-top: 0.75rem;">
+                <li><span class="feature-bullet purple">1</span> <span><strong>Prefix with <code>use</code>:</strong> Always name your Hook <code>useSomething</code> (e.g. <code>useCounter</code>, <code>useDocumentTitle</code>).</span></li>
+                <li><span class="feature-bullet purple">2</span> <span><strong>Top Level Only:</strong> Never call Hooks inside loops, conditions (<code>if</code>), or nested functions.</span></li>
+                <li><span class="feature-bullet purple">3</span> <span><strong>Call from React Functions:</strong> Only call Hooks from React components or other custom Hooks.</span></li>
+                <li><span class="feature-bullet purple">4</span> <span><strong>Return Reusable Values:</strong> Return an object <code>{ count, increment }</code> or array <code>[val, setVal]</code> for the component to consume.</span></li>
+              </ul>
+            </div>
+
+            <div>
+              <div class="code-window">
+                <div class="code-header"><span class="code-title">useCounter-structure.js</span></div>
+                <div class="code-content"><span class="syn-kwd">function</span> <span class="syn-hook">useCounter</span>() {
+  <span class="syn-comment">// 1. State inside the Hook</span>
+  <span class="syn-kwd">const</span> [<span class="syn-fn">count</span>, <span class="syn-fn">setCount</span>] = <span class="syn-fn">useState</span>(<span class="syn-num">0</span>);
+
+  <span class="syn-comment">// 2. Handler functions</span>
+  <span class="syn-kwd">const</span> <span class="syn-fn">increment</span> = () =&gt; <span class="syn-fn">setCount</span>(<span class="syn-fn">c</span> =&gt; <span class="syn-fn">c</span> + <span class="syn-num">1</span>);
+
+  <span class="syn-comment">// 3. Return what component needs</span>
+  <span class="syn-kwd">return</span> {
+    <span class="syn-fn">count</span>,
+    <span class="syn-fn">increment</span>
+  };
+}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 28 — CREATE useCounter
+           ==================================================================== -->
+      <section class="slide" data-slide="28" id="slide-28">
+        <div class="slide-content">
+          <div class="slide-header">
+            <span class="slide-tag purple">Section 5 — Custom Hooks</span>
+            <h1 class="slide-title">Creating the <span style="color: var(--accent-purple);">useCounter Hook</span></h1>
+            <p class="slide-subtitle">Step-by-step implementation of a reusable counter Hook.</p>
+          </div>
+
+          <div class="grid-2">
+            <div>
+              <div class="code-window">
+                <div class="code-header">
+                  <div class="window-dots"><span class="window-dot red"></span><span class="window-dot yellow"></span><span class="window-dot green"></span></div>
+                  <span class="code-title">src/hooks/useCounter.js</span>
+                  <button class="copy-btn" data-code="import { useState } from &quot;react&quot;;\n\nfunction useCounter(initialValue = 0) {\n  const [count, setCount] = useState(initialValue);\n\n  const increment = () => setCount(prev => prev + 1);\n  const decrement = () => setCount(prev => prev - 1);\n  const reset = () => setCount(initialValue);\n\n  return {\n    count,\n    increment,\n    decrement,\n    reset\n  };\n}\n\nexport default useCounter;">Copy</button>
+                </div>
+                <div class="code-content"><span class="syn-kwd">import</span> { <span class="syn-fn">useState</span> } <span class="syn-kwd">from</span> <span class="syn-str">"react"</span>;
+
+<span class="syn-kwd">function</span> <span class="syn-hook">useCounter</span>(<span class="syn-fn">initialValue</span> = <span class="syn-num">0</span>) {
+  <span class="syn-kwd">const</span> [<span class="syn-fn">count</span>, <span class="syn-fn">setCount</span>] = <span class="syn-fn">useState</span>(<span class="syn-fn">initialValue</span>);
+
+  <span class="syn-kwd">const</span> <span class="syn-fn">increment</span> = () =&gt; {
+    <span class="syn-fn">setCount</span>(<span class="syn-fn">prev</span> =&gt; <span class="syn-fn">prev</span> + <span class="syn-num">1</span>);
+  };
+
+  <span class="syn-kwd">const</span> <span class="syn-fn">decrement</span> = () =&gt; {
+    <span class="syn-fn">setCount</span>(<span class="syn-fn">prev</span> =&gt; <span class="syn-fn">prev</span> - <span class="syn-num">1</span>);
+  };
+
+  <span class="syn-kwd">const</span> <span class="syn-fn">reset</span> = () =&gt; {
+    <span class="syn-fn">setCount</span>(<span class="syn-fn">initialValue</span>);
+  };
+
+  <span class="syn-kwd">return</span> {
+    <span class="syn-fn">count</span>,
+    <span class="syn-fn">increment</span>,
+    <span class="syn-fn">decrement</span>,
+    <span class="syn-fn">reset</span>
+  };
+}
+
+<span class="syn-kwd">export</span> <span class="syn-kwd">default</span> <span class="syn-hook">useCounter</span>;</div>
+              </div>
+            </div>
+
+            <div class="card highlight-purple">
+              <h3 class="card-title" style="color: var(--accent-purple);">Code Breakdown</h3>
+              <ul class="feature-list" style="margin-top: 0.75rem;">
+                <li><span class="feature-bullet purple">1</span> <span><code>initialValue = 0</code>: Allows components to customize where the counter begins.</span></li>
+                <li><span class="feature-bullet purple">2</span> <span><code>prev => prev + 1</code>: Uses functional state updates to prevent stale closures.</span></li>
+                <li><span class="feature-bullet purple">3</span> <span><code>return { count, increment, decrement, reset }</code>: Clean object export of state + helper actions.</span></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 29 — USING useCounter (LIVE DEMO)
+           ==================================================================== -->
+      <section class="slide" data-slide="29" id="slide-29">
+        <div class="slide-content">
+          <div class="slide-header">
+            <span class="slide-tag purple">Section 5 — Custom Hooks</span>
+            <h1 class="slide-title">Using <span style="color: var(--accent-purple);">useCounter</span> in a Component</h1>
+            <p class="slide-subtitle">Importing and consuming our custom Hook inside a UI component.</p>
+          </div>
+
+          <div class="grid-2">
+            <div>
+              <div class="code-window">
+                <div class="code-header">
+                  <div class="window-dots"><span class="window-dot red"></span><span class="window-dot yellow"></span><span class="window-dot green"></span></div>
+                  <span class="code-title">Counter.jsx</span>
+                  <button class="copy-btn" data-code="import useCounter from &quot;./hooks/useCounter&quot;;\n\nfunction Counter() {\n  const { count, increment, decrement } = useCounter();\n\n  return (\n    <>\n      <h2>{count}</h2>\n      <button onClick={increment}>+</button>\n      <button onClick={decrement}>-</button>\n    </>\n  );\n}">Copy</button>
+                </div>
+                <div class="code-content"><span class="syn-kwd">import</span> <span class="syn-hook">useCounter</span> <span class="syn-kwd">from</span> <span class="syn-str">"./hooks/useCounter"</span>;
+
+<span class="syn-kwd">function</span> <span class="syn-fn">Counter</span>() {
+  <span class="syn-comment">// Destructure functions &amp; state</span>
+  <span class="syn-kwd">const</span> {
+    <span class="syn-fn">count</span>,
+    <span class="syn-fn">increment</span>,
+    <span class="syn-fn">decrement</span>
+  } = <span class="syn-hook">useCounter</span>();
+
+  <span class="syn-kwd">return</span> (
+    &lt;&gt;
+      &lt;<span class="syn-tag">h2</span>&gt;{<span class="syn-fn">count</span>}&lt;/<span class="syn-tag">h2</span>&gt;
+      &lt;<span class="syn-tag">button</span> <span class="syn-attr">onClick</span>={<span class="syn-fn">increment</span>}&gt;+&lt;/<span class="syn-tag">button</span>&gt;
+      &lt;<span class="syn-tag">button</span> <span class="syn-attr">onClick</span>={<span class="syn-fn">decrement</span>}&gt;-&lt;/<span class="syn-tag">button</span>&gt;
+    &lt;/&gt;
+  );
+}</div>
+              </div>
+            </div>
+
+            <div class="card highlight-react" style="display: flex; flex-direction: column; justify-content: center; align-items: center;">
+              <h3 class="card-title">Live useCounter Component</h3>
+              <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 1rem; text-align: center;">
+                Notice how minimal the component code is! The stateful logic lives safely inside the Hook.
+              </p>
+              <div style="font-size: 3rem; font-family: var(--font-mono); color: var(--react-cyan); font-weight: 800; margin-bottom: 1rem;" id="demo2CountDisplay">
+                0
+              </div>
+              <div style="display: flex; gap: 0.75rem;">
+                <button class="demo-btn" onclick="DemoUseCounter.increment()" style="font-size: 1.1rem; padding: 0.5rem 1.25rem;">+ Increment</button>
+                <button class="demo-btn secondary" onclick="DemoUseCounter.decrement()" style="font-size: 1.1rem; padding: 0.5rem 1.25rem;">- Decrement</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 30 — CUSTOM HOOK DATA FLOW
+           ==================================================================== -->
+      <section class="slide" data-slide="30" id="slide-30">
+        <div class="slide-content">
+          <div class="slide-header">
+            <span class="slide-tag purple">Section 5 — Custom Hooks</span>
+            <h1 class="slide-title">Custom Hook <span style="color: var(--accent-purple);">Data Flow</span></h1>
+            <p class="slide-subtitle">The Hook manages the logic and state; the Component decides how to display the UI.</p>
+          </div>
+
+          <div class="grid-2">
+            <div class="card highlight-purple">
+              <h3 class="card-title" style="color: var(--accent-purple);">Separation of Concerns</h3>
+              <div class="vertical-flow" style="margin-top: 1rem;">
+                <div class="v-node">Component Calls <code>useCounter()</code></div>
+                <div class="v-arrow">↓</div>
+                <div class="v-node" style="color: var(--accent-purple); border-color: var(--accent-purple-border);">
+                  Hook calls <code>useState()</code> internally
+                </div>
+                <div class="v-arrow">↓</div>
+                <div class="v-node cyan">Returns: <code>{ count, increment, decrement }</code></div>
+                <div class="v-arrow">↓</div>
+                <div class="v-node emerald">Component renders JSX with values</div>
+              </div>
+            </div>
+
+            <div class="card highlight-react">
+              <h3 class="card-title">Key Mental Model</h3>
+              <div style="display: flex; flex-direction: column; gap: 1rem; margin-top: 0.75rem;">
+                <div style="padding: 0.75rem; background: var(--bg-canvas); border-radius: var(--radius-sm); border: 1px solid var(--border-subtle);">
+                  <strong style="color: var(--accent-purple);">🪝 The Hook is the Brain:</strong>
+                  <p style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 0.2rem;">
+                    Handles all math, state changes, validations, and effects.
+                  </p>
+                </div>
+                <div style="padding: 0.75rem; background: var(--bg-canvas); border-radius: var(--radius-sm); border: 1px solid var(--border-subtle);">
+                  <strong style="color: var(--react-cyan);">🎨 The Component is the Face:</strong>
+                  <p style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 0.2rem;">
+                    Decides what HTML elements, styling, and buttons to show the user.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 31 — CUSTOM HOOK WITH useEffect
+           ==================================================================== -->
+      <section class="slide" data-slide="31" id="slide-31">
+        <div class="slide-content">
+          <div class="slide-header">
+            <span class="slide-tag purple">Section 5 — Custom Hooks</span>
+            <h1 class="slide-title">Custom Hooks With <span class="highlight">useEffect</span></h1>
+            <p class="slide-subtitle">Custom Hooks can also encapsulate side-effect logic to share across components.</p>
+          </div>
+
+          <div class="grid-2">
+            <div>
+              <div class="code-window">
+                <div class="code-header">
+                  <div class="window-dots"><span class="window-dot red"></span><span class="window-dot yellow"></span><span class="window-dot green"></span></div>
+                  <span class="code-title">useDocumentTitle.js</span>
+                  <button class="copy-btn" data-code="import { useEffect } from &quot;react&quot;;\n\nfunction useDocumentTitle(title) {\n  useEffect(() => {\n    document.title = title;\n  }, [title]);\n}\n\nexport default useDocumentTitle;">Copy</button>
+                </div>
+                <div class="code-content"><span class="syn-kwd">import</span> { <span class="syn-fn">useEffect</span> } <span class="syn-kwd">from</span> <span class="syn-str">"react"</span>;
+
+<span class="syn-kwd">function</span> <span class="syn-hook">useDocumentTitle</span>(<span class="syn-fn">title</span>) {
+  <span class="syn-fn">useEffect</span>(() =&gt; {
+    <span class="syn-prop">document</span>.<span class="syn-prop">title</span> = <span class="syn-fn">title</span>;
+  }, [<span class="syn-fn">title</span>]);
+}
+
+<span class="syn-kwd">export</span> <span class="syn-kwd">default</span> <span class="syn-hook">useDocumentTitle</span>;</div>
+              </div>
+            </div>
+
+            <div>
+              <div class="code-window">
+                <div class="code-header">
+                  <div class="window-dots"><span class="window-dot red"></span><span class="window-dot yellow"></span><span class="window-dot green"></span></div>
+                  <span class="code-title">Dashboard.jsx</span>
+                  <button class="copy-btn" data-code="import useDocumentTitle from &quot;./hooks/useDocumentTitle&quot;;\n\nfunction Dashboard() {\n  useDocumentTitle(&quot;Admin Dashboard&quot;);\n\n  return <h1>Dashboard</h1>;\n}">Copy</button>
+                </div>
+                <div class="code-content"><span class="syn-kwd">import</span> <span class="syn-hook">useDocumentTitle</span> <span class="syn-kwd">from</span> <span class="syn-str">"./hooks/useDocumentTitle"</span>;
+
+<span class="syn-kwd">function</span> <span class="syn-fn">Dashboard</span>() {
+  <span class="syn-comment">// Just one clean line of code!</span>
+  <span class="syn-hook">useDocumentTitle</span>(<span class="syn-str">"Admin Dashboard"</span>);
+
+  <span class="syn-kwd">return</span> &lt;<span class="syn-tag">h1</span>&gt;Dashboard&lt;/<span class="syn-tag">h1</span>&gt;;
+}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 32 — CUSTOM HOOK PROJECT STRUCTURE
+           ==================================================================== -->
+      <section class="slide" data-slide="32" id="slide-32">
+        <div class="slide-content">
+          <div class="slide-header">
+            <span class="slide-tag purple">Section 5 — Custom Hooks</span>
+            <h1 class="slide-title">Custom Hook <span style="color: var(--accent-purple);">Project Structure</span></h1>
+            <p class="slide-subtitle">Standard organization for scalable React component and custom hook architecture.</p>
+          </div>
+
+          <div class="grid-2">
+            <div class="card highlight-purple">
+              <h3 class="card-title" style="color: var(--accent-purple);">Directory Layout</h3>
+              <pre style="font-family: var(--font-mono); font-size: 0.85rem; color: var(--accent-purple); line-height: 1.8; margin-top: 0.5rem;">
+src/
+│
+├── components/
+│   ├── Counter.jsx            <span style="color: var(--text-muted);">// UI component</span>
+│   └── Dashboard.jsx          <span style="color: var(--text-muted);">// Page view</span>
+│
+├── hooks/
+│   ├── useCounter.js          <span style="color: var(--text-muted);">// Counter state logic</span>
+│   └── useDocumentTitle.js    <span style="color: var(--text-muted);">// Document title effect</span>
+│
+├── App.jsx                    <span style="color: var(--text-muted);">// Master application</span>
+└── main.jsx                   <span style="color: var(--text-muted);">// React root DOM mounting</span>
+              </pre>
+            </div>
+
+            <div class="card highlight-react">
+              <h3 class="card-title">Clean Separation</h3>
+              <div style="display: flex; flex-direction: column; gap: 0.75rem; margin-top: 0.5rem;">
+                <div>
+                  <strong style="color: var(--react-cyan); font-size: 0.9rem;">src/components/</strong>
+                  <p style="font-size: 0.85rem; color: var(--text-secondary);">Focuses entirely on presentation, JSX structure, and CSS classes.</p>
+                </div>
+                <div>
+                  <strong style="color: var(--accent-purple); font-size: 0.9rem;">src/hooks/</strong>
+                  <p style="font-size: 0.85rem; color: var(--text-secondary);">Focuses purely on state management, math calculations, and side-effects.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 33 — MINI PROJECT: COUNTER DASHBOARD
+           ==================================================================== -->
+      <section class="slide" data-slide="33" id="slide-33">
+        <div class="slide-content">
+          <div class="slide-header">
+            <span class="slide-tag">Section 6 — Practical Project</span>
+            <h1 class="slide-title">Mini Project: <span class="highlight">Counter Dashboard</span></h1>
+            <p class="slide-subtitle">Building an end-to-end React project combining state, custom Hooks, and useEffect synchronization.</p>
+          </div>
+
+          <div class="grid-2">
+            <div class="card highlight-react">
+              <h3 class="card-title">Project Requirements</h3>
+              <ul class="feature-list" style="margin-top: 0.75rem;">
+                <li><span class="feature-bullet">1</span> <span><strong>Interactive Counter:</strong> Support Increase (<code>+</code>), Decrease (<code>-</code>), and Reset to initial value.</span></li>
+                <li><span class="feature-bullet">2</span> <span><strong>Document Title Synchronization:</strong> Keep the browser tab title in sync (<code>Count: {count}</code>).</span></li>
+                <li><span class="feature-bullet">3</span> <span><strong>Custom Hook 1:</strong> Encapsulate counter state in <code>useCounter()</code>.</span></li>
+                <li><span class="feature-bullet">4</span> <span><strong>Custom Hook 2:</strong> Encapsulate title effect in <code>useDocumentTitle()</code>.</span></li>
+              </ul>
+            </div>
+
+            <div class="card highlight-emerald">
+              <h3 class="card-title" style="color: var(--accent-emerald);">What Students Will Practice</h3>
+              <ul class="feature-list" style="margin-top: 0.75rem;">
+                <li><span class="feature-bullet emerald">✓</span> Writing reusable custom Hook functions from scratch.</li>
+                <li><span class="feature-bullet emerald">✓</span> Passing parameters to custom Hooks (e.g. initial count).</li>
+                <li><span class="feature-bullet emerald">✓</span> Synchronizing state with external browser APIs via <code>useEffect</code>.</li>
+                <li><span class="feature-bullet emerald">✓</span> Clean component composition without prop drilling or mess.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 34 — PROJECT ARCHITECTURE
+           ==================================================================== -->
+      <section class="slide" data-slide="34" id="slide-34">
+        <div class="slide-content">
+          <div class="slide-header">
+            <span class="slide-tag">Section 6 — Practical Project</span>
+            <h1 class="slide-title">Dashboard <span class="highlight">Architecture</span></h1>
+            <p class="slide-subtitle">Visualizing the structural component tree and hook data pipeline.</p>
+          </div>
+
+          <div class="card highlight-react" style="padding: 2rem;">
+            <div class="grid-2" style="align-items: center;">
+              <div>
+                <h4 style="font-family: var(--font-mono); color: var(--react-cyan); margin-bottom: 0.75rem;">COMPONENT &amp; HOOK TREE</h4>
+                <pre style="font-family: var(--font-mono); font-size: 0.9rem; line-height: 1.8; color: var(--text-main);">
+App
+ │
+ └── Counter
+       │
+       ├── useCounter(0)
+       │     ├── count
+       │     ├── increment()
+       │     ├── decrement()
+       │     └── reset()
+       │
+       └── useDocumentTitle(`Count: ${count}`)
+             └── document.title = "Count: X"
+                </pre>
+              </div>
+
+              <div class="card" style="background: var(--bg-canvas); border-color: var(--border-medium);">
+                <h4 style="font-size: 0.9rem; color: var(--accent-emerald); margin-bottom: 0.5rem;">How the Data Flows</h4>
+                <p style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.6;">
+                  1. <code>Counter</code> calls <code>useCounter(0)</code> to get state &amp; handlers.<br>
+                  2. User clicks a button ➔ calls <code>increment()</code>.<br>
+                  3. <code>useCounter</code> updates state ➔ component re-renders.<br>
+                  4. <code>useDocumentTitle</code> detects new count ➔ updates browser tab!
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 35 — useCounter IMPLEMENTATION
+           ==================================================================== -->
+      <section class="slide" data-slide="35" id="slide-35">
+        <div class="slide-content">
+          <div class="slide-header">
+            <span class="slide-tag">Section 6 — Practical Project</span>
+            <h1 class="slide-title">Step 1: <span style="color: var(--accent-purple);">useCounter</span> Code</h1>
+            <p class="slide-subtitle">Complete source code for <code>src/hooks/useCounter.js</code>.</p>
+          </div>
+
+          <div class="grid-2">
+            <div>
+              <div class="code-window">
+                <div class="code-header">
+                  <div class="window-dots"><span class="window-dot red"></span><span class="window-dot yellow"></span><span class="window-dot green"></span></div>
+                  <span class="code-title">src/hooks/useCounter.js</span>
+                  <button class="copy-btn" data-code="import { useState } from &quot;react&quot;;\n\nfunction useCounter(initialValue = 0) {\n  const [count, setCount] = useState(initialValue);\n\n  const increment = () => {\n    setCount(prev => prev + 1);\n  };\n\n  const decrement = () => {\n    setCount(prev => prev - 1);\n  };\n\n  const reset = () => {\n    setCount(initialValue);\n  };\n\n  return {\n    count,\n    increment,\n    decrement,\n    reset\n  };\n}\n\nexport default useCounter;">Copy</button>
+                </div>
+                <div class="code-content"><span class="syn-kwd">import</span> { <span class="syn-fn">useState</span> } <span class="syn-kwd">from</span> <span class="syn-str">"react"</span>;
+
+<span class="syn-kwd">function</span> <span class="syn-hook">useCounter</span>(<span class="syn-fn">initialValue</span> = <span class="syn-num">0</span>) {
+  <span class="syn-kwd">const</span> [<span class="syn-fn">count</span>, <span class="syn-fn">setCount</span>] =
+    <span class="syn-fn">useState</span>(<span class="syn-fn">initialValue</span>);
+
+  <span class="syn-kwd">const</span> <span class="syn-fn">increment</span> = () =&gt; {
+    <span class="syn-fn">setCount</span>(<span class="syn-fn">prev</span> =&gt; <span class="syn-fn">prev</span> + <span class="syn-num">1</span>);
+  };
+
+  <span class="syn-kwd">const</span> <span class="syn-fn">decrement</span> = () =&gt; {
+    <span class="syn-fn">setCount</span>(<span class="syn-fn">prev</span> =&gt; <span class="syn-fn">prev</span> - <span class="syn-num">1</span>);
+  };
+
+  <span class="syn-kwd">const</span> <span class="syn-fn">reset</span> = () =&gt; {
+    <span class="syn-fn">setCount</span>(<span class="syn-fn">initialValue</span>);
+  };
+
+  <span class="syn-kwd">return</span> {
+    <span class="syn-fn">count</span>,
+    <span class="syn-fn">increment</span>,
+    <span class="syn-fn">decrement</span>,
+    <span class="syn-fn">reset</span>
+  };
+}
+
+<span class="syn-kwd">export</span> <span class="syn-kwd">default</span> <span class="syn-hook">useCounter</span>;</div>
+              </div>
+            </div>
+
+            <div class="card highlight-purple">
+              <h3 class="card-title" style="color: var(--accent-purple);">Design Highlights</h3>
+              <ul class="feature-list" style="margin-top: 0.75rem;">
+                <li><span class="feature-bullet purple">✓</span> <strong>Configurable Initial State:</strong> Defaults to 0, but can start at any number.</li>
+                <li><span class="feature-bullet purple">✓</span> <strong>Safe Functional Updates:</strong> Uses <code>prev => prev + 1</code> for reliable state changes.</li>
+                <li><span class="feature-bullet purple">✓</span> <strong>Reset Action:</strong> Resets back to whatever <code>initialValue</code> was provided.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 36 — useDocumentTitle IMPLEMENTATION
+           ==================================================================== -->
+      <section class="slide" data-slide="36" id="slide-36">
+        <div class="slide-content">
+          <div class="slide-header">
+            <span class="slide-tag">Section 6 — Practical Project</span>
+            <h1 class="slide-title">Step 2: <span class="highlight">useDocumentTitle</span> Code</h1>
+            <p class="slide-subtitle">Complete source code for <code>src/hooks/useDocumentTitle.js</code>.</p>
+          </div>
+
+          <div class="grid-2">
+            <div>
+              <div class="code-window">
+                <div class="code-header">
+                  <div class="window-dots"><span class="window-dot red"></span><span class="window-dot yellow"></span><span class="window-dot green"></span></div>
+                  <span class="code-title">src/hooks/useDocumentTitle.js</span>
+                  <button class="copy-btn" data-code="import { useEffect } from &quot;react&quot;;\n\nfunction useDocumentTitle(title) {\n  useEffect(() => {\n    document.title = title;\n  }, [title]);\n}\n\nexport default useDocumentTitle;">Copy</button>
+                </div>
+                <div class="code-content"><span class="syn-kwd">import</span> { <span class="syn-fn">useEffect</span> } <span class="syn-kwd">from</span> <span class="syn-str">"react"</span>;
+
+<span class="syn-kwd">function</span> <span class="syn-hook">useDocumentTitle</span>(<span class="syn-fn">title</span>) {
+  <span class="syn-fn">useEffect</span>(() =&gt; {
+    <span class="syn-prop">document</span>.<span class="syn-prop">title</span> = <span class="syn-fn">title</span>;
+  }, [<span class="syn-fn">title</span>]);
+}
+
+<span class="syn-kwd">export</span> <span class="syn-kwd">default</span> <span class="syn-hook">useDocumentTitle</span>;</div>
+              </div>
+            </div>
+
+            <div class="card highlight-react">
+              <h3 class="card-title">Why This Custom Hook Is Powerful</h3>
+              <ul class="feature-list" style="margin-top: 0.75rem;">
+                <li><span class="feature-bullet">✓</span> <strong>Declarative Title Management:</strong> Components never touch <code>document.title</code> directly.</li>
+                <li><span class="feature-bullet">✓</span> <strong>Dependency Tracking:</strong> The effect only re-executes when the <code>title</code> string actually changes.</li>
+                <li><span class="feature-bullet">✓</span> <strong>Reusability:</strong> Any page or component in your whole application can set the browser title with 1 simple line of code!</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 37 — USING BOTH HOOKS TOGETHER (LIVE DEMO)
+           ==================================================================== -->
+      <section class="slide" data-slide="37" id="slide-37">
+        <div class="slide-content">
+          <div class="slide-header">
+            <span class="slide-tag">Section 6 — Practical Project</span>
+            <h1 class="slide-title">Step 3: <span class="highlight">Using Both Hooks Together</span></h1>
+            <p class="slide-subtitle">The final Counter component combining custom hooks seamlessly with a live interactive simulator.</p>
+          </div>
+
+          <div class="grid-2">
+            <div>
+              <div class="code-window">
+                <div class="code-header">
+                  <div class="window-dots"><span class="window-dot red"></span><span class="window-dot yellow"></span><span class="window-dot green"></span></div>
+                  <span class="code-title">Counter.jsx</span>
+                  <button class="copy-btn" data-code="import useCounter from &quot;./hooks/useCounter&quot;;\nimport useDocumentTitle from &quot;./hooks/useDocumentTitle&quot;;\n\nfunction Counter() {\n  const {\n    count,\n    increment,\n    decrement,\n    reset\n  } = useCounter(0);\n\n  useDocumentTitle(`Count: ${count}`);\n\n  return (\n    <div>\n      <h1>{count}</h1>\n      <button onClick={increment}>+</button>\n      <button onClick={decrement}>-</button>\n      <button onClick={reset}>Reset</button>\n    </div>\n  );\n}\n\nexport default Counter;">Copy</button>
+                </div>
+                <div class="code-content"><span class="syn-kwd">import</span> <span class="syn-hook">useCounter</span> <span class="syn-kwd">from</span> <span class="syn-str">"./hooks/useCounter"</span>;
+<span class="syn-kwd">import</span> <span class="syn-hook">useDocumentTitle</span> <span class="syn-kwd">from</span> <span class="syn-str">"./hooks/useDocumentTitle"</span>;
+
+<span class="syn-kwd">function</span> <span class="syn-fn">Counter</span>() {
+  <span class="syn-kwd">const</span> {
+    <span class="syn-fn">count</span>,
+    <span class="syn-fn">increment</span>,
+    <span class="syn-fn">decrement</span>,
+    <span class="syn-fn">reset</span>
+  } = <span class="syn-hook">useCounter</span>(<span class="syn-num">0</span>);
+
+  <span class="syn-hook">useDocumentTitle</span>(<span class="syn-str">`Count: ${count}`</span>);
+
+  <span class="syn-kwd">return</span> (
+    &lt;<span class="syn-tag">div</span>&gt;
+      &lt;<span class="syn-tag">h1</span>&gt;{<span class="syn-fn">count</span>}&lt;/<span class="syn-tag">h1</span>&gt;
+      &lt;<span class="syn-tag">button</span> <span class="syn-attr">onClick</span>={<span class="syn-fn">increment</span>}&gt;+&lt;/<span class="syn-tag">button</span>&gt;
+      &lt;<span class="syn-tag">button</span> <span class="syn-attr">onClick</span>={<span class="syn-fn">decrement</span>}&gt;-&lt;/<span class="syn-tag">button</span>&gt;
+      &lt;<span class="syn-tag">button</span> <span class="syn-attr">onClick</span>={<span class="syn-fn">reset</span>}&gt;Reset&lt;/<span class="syn-tag">button</span>&gt;
+    &lt;/<span class="syn-tag">div</span>&gt;
+  );
+}</div>
+              </div>
+            </div>
+
+            <!-- Live Project Demo Widget -->
+            <div class="card highlight-react" style="display: flex; flex-direction: column; justify-content: space-between;">
+              <div>
+                <h3 class="card-title">Live Project Demo</h3>
+                <div class="browser-mock" style="margin: 0.75rem 0;">
+                  <div class="browser-mock-header">
+                    <div class="window-dots"><span class="window-dot red"></span><span class="window-dot yellow"></span><span class="window-dot green"></span></div>
+                    <div class="browser-tab-pill">
+                      <span>🌐</span>
+                      <span id="projectMockTitle">Count: 0</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div style="text-align: center; margin: 1.5rem 0;">
+                  <div style="font-size: 3.5rem; font-family: var(--font-mono); font-weight: 900; color: var(--react-cyan);" id="projectCountDisplay">
+                    0
+                  </div>
+                  <div style="display: flex; justify-content: center; gap: 0.6rem; margin-top: 1rem;">
+                    <button class="demo-btn" onclick="DemoProjectDashboard.increment()">+ Increase</button>
+                    <button class="demo-btn secondary" onclick="DemoProjectDashboard.decrement()">- Decrease</button>
+                    <button class="demo-btn secondary" onclick="DemoProjectDashboard.reset()">Reset</button>
+                  </div>
+                </div>
+              </div>
+
+              <div class="card" style="background: var(--bg-canvas); padding: 0.75rem; border-color: var(--border-medium);">
+                <p style="font-size: 0.8rem; color: var(--text-muted);">
+                  💡 Both hooks are running concurrently. <code>useCounter</code> handles arithmetic and state, while <code>useDocumentTitle</code> synchronizes the browser title!
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 38 — COMMON MISTAKES
+           ==================================================================== -->
+      <section class="slide" data-slide="38" id="slide-38">
+        <div class="slide-content">
+          <div class="slide-header">
+            <span class="slide-tag rose">Section 7 — Review</span>
+            <h1 class="slide-title">Common <span style="color: var(--accent-rose);">Mistakes to Avoid</span></h1>
+            <p class="slide-subtitle">Watch out for these 6 pitfalls when working with React hooks and lifecycles.</p>
+          </div>
+
+          <div style="display: flex; flex-direction: column; gap: 0.75rem; max-height: calc(100vh - 220px); overflow-y: auto; padding-right: 0.5rem;">
+            <!-- Mistake 1 -->
+            <div class="mistake-card">
+              <div class="mistake-header">1. Calling Hooks Conditionally Inside if Statements</div>
+              <div class="mistake-comparison">
+                <div class="wrong-box">❌ WRONG: if (isLoggedIn) { useEffect(...); }</div>
+                <div class="correct-box">✅ CORRECT: Always call Hooks unconditionally at the top level of your component!</div>
+              </div>
+            </div>
+
+            <!-- Mistake 2 -->
+            <div class="mistake-card">
+              <div class="mistake-header">2. Calling Hooks Inside Loops</div>
+              <div class="mistake-comparison">
+                <div class="wrong-box">❌ WRONG: items.forEach(item => { useEffect(...); });</div>
+                <div class="correct-box">✅ CORRECT: Keep Hooks top-level. Loop inside the effect callback if needed.</div>
+              </div>
+            </div>
+
+            <!-- Mistake 3 -->
+            <div class="mistake-card">
+              <div class="mistake-header">3. Forgetting Dependencies in useEffect</div>
+              <div class="mistake-comparison">
+                <div class="wrong-box">❌ WRONG: Using props or state inside useEffect without adding them to [deps].</div>
+                <div class="correct-box">✅ CORRECT: Include every reactive value referenced by the effect in [deps].</div>
+              </div>
+            </div>
+
+            <!-- Mistake 4 -->
+            <div class="mistake-card">
+              <div class="mistake-header">4. Forgetting Cleanup for Timers and Event Listeners</div>
+              <div class="mistake-comparison">
+                <div class="wrong-box">❌ WRONG: setInterval() without return () => clearInterval().</div>
+                <div class="correct-box">✅ CORRECT: Always return a cleanup function to halt intervals on unmount.</div>
+              </div>
+            </div>
+
+            <!-- Mistake 5 -->
+            <div class="mistake-card">
+              <div class="mistake-header">5. Creating a Custom Hook Without the "use" Prefix</div>
+              <div class="mistake-comparison">
+                <div class="wrong-box">❌ WRONG: function createCounter() { const [c, setC] = useState(0); ... }</div>
+                <div class="correct-box">✅ CORRECT: function useCounter() { ... } (React requires "use" prefix!)</div>
+              </div>
+            </div>
+
+            <!-- Mistake 6 -->
+            <div class="mistake-card">
+              <div class="mistake-header">6. Putting UI Markup Inside a Custom Hook Unnecessarily</div>
+              <div class="mistake-comparison">
+                <div class="wrong-box">❌ WRONG: Having custom hooks return JSX markup like &lt;button&gt;.</div>
+                <div class="correct-box">✅ CORRECT: Hooks return state and logic; components return JSX!</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 39 — QUICK QUIZ
+           ==================================================================== -->
+      <section class="slide" data-slide="39" id="slide-39">
+        <div class="slide-content">
+          <div class="slide-header" style="display: flex; justify-content: space-between; align-items: flex-end;">
+            <div>
+              <span class="slide-tag">Classroom Check</span>
+              <h1 class="slide-title">Quick <span class="highlight">Classroom Quiz</span></h1>
+              <p class="slide-subtitle">10 quick check questions. Click "Show Answer" to reveal explanations.</p>
+            </div>
+            <div style="display: flex; gap: 0.5rem;">
+              <button class="demo-btn secondary" onclick="Quiz.revealAll()">Reveal All</button>
+              <button class="demo-btn secondary" onclick="Quiz.hideAll()">Hide All</button>
+            </div>
+          </div>
+
+          <div class="quiz-grid">
+            <!-- Q1 -->
+            <div class="quiz-card">
+              <div class="quiz-question"><span class="q-num">Q1</span> What are the three main lifecycle stages?</div>
+              <button class="quiz-toggle-btn" onclick="Quiz.toggle(this)">Show Answer</button>
+              <div class="quiz-answer">Mounting (creation/insert into DOM), Updating (re-rendering due to state/props), and Unmounting (removal from DOM).</div>
+            </div>
+
+            <!-- Q2 -->
+            <div class="quiz-card">
+              <div class="quiz-question"><span class="q-num">Q2</span> What happens during mounting?</div>
+              <button class="quiz-toggle-btn" onclick="Quiz.toggle(this)">Show Answer</button>
+              <div class="quiz-answer">The component is called, evaluates its JSX, inserts nodes into the real browser DOM, and runs initial mount effects.</div>
+            </div>
+
+            <!-- Q3 -->
+            <div class="quiz-card">
+              <div class="quiz-question"><span class="q-num">Q3</span> What causes a component to update?</div>
+              <button class="quiz-toggle-btn" onclick="Quiz.toggle(this)">Show Answer</button>
+              <div class="quiz-answer">A change in internal component state (setState), receiving updated props from a parent, or the parent re-rendering.</div>
+            </div>
+
+            <!-- Q4 -->
+            <div class="quiz-card">
+              <div class="quiz-question"><span class="q-num">Q4</span> What is useEffect() used for?</div>
+              <button class="quiz-toggle-btn" onclick="Quiz.toggle(this)">Show Answer</button>
+              <div class="quiz-answer">Synchronizing the component with external systems (timers, APIs, browser DOM, document.title, event listeners) after rendering.</div>
+            </div>
+
+            <!-- Q5 -->
+            <div class="quiz-card">
+              <div class="quiz-question"><span class="q-num">Q5</span> What does the dependency array do?</div>
+              <button class="quiz-toggle-btn" onclick="Quiz.toggle(this)">Show Answer</button>
+              <div class="quiz-answer">It tells React which reactive values the effect depends on, so React only re-runs the effect when those values change.</div>
+            </div>
+
+            <!-- Q6 -->
+            <div class="quiz-card">
+              <div class="quiz-question"><span class="q-num">Q6</span> What does [] mean in a useEffect?</div>
+              <button class="quiz-toggle-btn" onclick="Quiz.toggle(this)">Show Answer</button>
+              <div class="quiz-answer">It has zero dependencies, meaning the effect runs only once after the initial mount, and its cleanup runs on unmount.</div>
+            </div>
+
+            <!-- Q7 -->
+            <div class="quiz-card">
+              <div class="quiz-question"><span class="q-num">Q7</span> Why do we need cleanup functions?</div>
+              <button class="quiz-toggle-btn" onclick="Quiz.toggle(this)">Show Answer</button>
+              <div class="quiz-answer">To stop intervals, remove event listeners, cancel subscriptions, and prevent memory leaks when components are removed.</div>
+            </div>
+
+            <!-- Q8 -->
+            <div class="quiz-card">
+              <div class="quiz-question"><span class="q-num">Q8</span> What is a custom Hook?</div>
+              <button class="quiz-toggle-btn" onclick="Quiz.toggle(this)">Show Answer</button>
+              <div class="quiz-answer">A JavaScript function that begins with "use", can call other React hooks, and encapsulates reusable stateful logic.</div>
+            </div>
+
+            <!-- Q9 -->
+            <div class="quiz-card">
+              <div class="quiz-question"><span class="q-num">Q9</span> Why should custom Hooks start with "use"?</div>
+              <button class="quiz-toggle-btn" onclick="Quiz.toggle(this)">Show Answer</button>
+              <div class="quiz-answer">React's linter and runtime rely on the "use" prefix to identify and enforce the Rules of Hooks on that function.</div>
+            </div>
+
+            <!-- Q10 -->
+            <div class="quiz-card">
+              <div class="quiz-question"><span class="q-num">Q10</span> What is the benefit of custom Hooks?</div>
+              <button class="quiz-toggle-btn" onclick="Quiz.toggle(this)">Show Answer</button>
+              <div class="quiz-answer">Sharing complex stateful logic across multiple components cleanly without repeating code or violating separation of concerns.</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 40 — FINAL SUMMARY
+           ==================================================================== -->
+      <section class="slide" data-slide="40" id="slide-40">
+        <div class="slide-content" style="justify-content: center; align-items: center; text-align: center; max-width: 880px; margin: 0 auto;">
+          <div class="slide-tag" style="margin-bottom: 0.75rem;">Summary • Day 7 Completed</div>
+          <h1 class="slide-title" style="font-size: 2.6rem; margin-bottom: 0.5rem;">
+            Today We <span class="highlight">Mastered</span>
+          </h1>
+          <p style="font-size: 1.1rem; color: var(--text-secondary); max-width: 650px; margin-bottom: 1.75rem;">
+            Component lifecycles, synchronization with useEffect, cleanup patterns, and reusable custom Hooks!
+          </p>
+
+          <div class="grid-4" style="width: 100%; margin-bottom: 2rem;">
+            <div class="card" style="border-color: var(--react-border);">
+              <strong style="color: var(--react-cyan); font-family: var(--font-mono);">Lifecycle</strong>
+              <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 0.25rem;">Mount ➔ Update ➔ Unmount</p>
+            </div>
+            <div class="card" style="border-color: var(--accent-emerald-border);">
+              <strong style="color: var(--accent-emerald); font-family: var(--font-mono);">useEffect</strong>
+              <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 0.25rem;">Synchronize after render</p>
+            </div>
+            <div class="card" style="border-color: var(--accent-amber-border);">
+              <strong style="color: var(--accent-amber); font-family: var(--font-mono);">Cleanup</strong>
+              <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 0.25rem;">return () => clearInterval()</p>
+            </div>
+            <div class="card" style="border-color: var(--accent-purple-border);">
+              <strong style="color: var(--accent-purple); font-family: var(--font-mono);">Custom Hooks</strong>
+              <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 0.25rem;">Reusable stateful logic</p>
+            </div>
+          </div>
+
+          <div class="card highlight-react" style="padding: 1.25rem 2rem; margin-bottom: 1.5rem; max-width: 720px;">
+            <div style="font-family: var(--font-mono); font-size: 0.95rem; color: var(--text-main); line-height: 1.6;">
+              Lifecycle ➔ useEffect ➔ Side Effects ➔ Reusable Logic ➔ Custom Hooks
+            </div>
+          </div>
+
+          <div style="display: flex; gap: 1rem;">
+            <button class="nav-btn primary" onclick="Deck.goToSlide(1)">
+              ↺ Restart Presentation
+            </button>
+            <button class="nav-btn" onclick="Deck.openToc()">
+              View Slide Index
+            </button>
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- Bottom Navigation Footer -->
+    <footer class="bottom-footer">
+      <div class="footer-left">
+        <div class="slide-counter">
+          Slide <span class="current" id="currentSlideNum">1</span> / <span id="totalSlidesNum">40</span>
+        </div>
+      </div>
+
+      <div class="footer-center">
+        <button class="nav-btn" id="prevSlideBtn" title="Previous Slide (← / PageUp)">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M15 18l-6-6 6-6"/>
+          </svg>
+          Previous
+        </button>
+        <button class="nav-btn primary" id="nextSlideBtn" title="Next Slide (→ / Space / PageDown)">
+          Next
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M9 18l6-6-6-6"/>
+          </svg>
+        </button>
+      </div>
+
+      <div class="footer-right">
+        <span class="footer-hint">
+          Use <kbd>→</kbd> <kbd>←</kbd> or <kbd>Space</kbd> to navigate
+        </span>
+      </div>
+    </footer>
+
+    <!-- Table of Contents Drawer Backdrop & Drawer -->
+    <div class="drawer-backdrop" id="tocBackdrop"></div>
+    <div class="drawer" id="tocDrawer">
+      <div class="drawer-header">
+        <div class="drawer-title">Table of Contents (40 Slides)</div>
+        <button class="drawer-close" id="closeTocBtn" title="Close (Esc)">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+      <div class="drawer-body" id="tocList">
+        <!-- Rendered via JavaScript -->
+      </div>
+    </div>
+
+    <!-- Keyboard Shortcuts Modal -->
+    <div class="modal-dialog" id="shortcutsModal">
+      <div class="modal-header">
+        <div class="modal-title">Keyboard Shortcuts</div>
+        <button class="drawer-close" id="closeShortcutsBtn" title="Close">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+        <div class="shortcut-row">
+          <span>Next Slide</span>
+          <div class="key-combo"><kbd>→</kbd> / <kbd>Space</kbd> / <kbd>PageDown</kbd></div>
+        </div>
+        <div class="shortcut-row">
+          <span>Previous Slide</span>
+          <div class="key-combo"><kbd>←</kbd> / <kbd>PageUp</kbd></div>
+        </div>
+        <div class="shortcut-row">
+          <span>First Slide</span>
+          <div class="key-combo"><kbd>Home</kbd></div>
+        </div>
+        <div class="shortcut-row">
+          <span>Last Slide</span>
+          <div class="key-combo"><kbd>End</kbd></div>
+        </div>
+        <div class="shortcut-row">
+          <span>Table of Contents (Index)</span>
+          <div class="key-combo"><kbd>T</kbd></div>
+        </div>
+        <div class="shortcut-row">
+          <span>Toggle Fullscreen</span>
+          <div class="key-combo"><kbd>F</kbd></div>
+        </div>
+        <div class="shortcut-row">
+          <span>Help / Shortcuts Modal</span>
+          <div class="key-combo"><kbd>?</kbd></div>
+        </div>
+        <div class="shortcut-row">
+          <span>Close Drawers &amp; Modals</span>
+          <div class="key-combo"><kbd>Esc</kbd></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>

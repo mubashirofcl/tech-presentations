@@ -1,0 +1,2651 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MongoDB Day 7 — MongoDB Aggregation: $match, $group, $project, $sort</title>
+  <meta name="description" content="Interactive developer presentation on MongoDB Aggregation: Pipeline stages $match, $group, $project, $sort, accumulators, and real-world Mongoose examples.">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Master App Shell -->
+  <div class="deck-container" id="deckContainer">
+
+    <!-- Top Progress Bar -->
+    <div class="progress-bar-container">
+      <div class="progress-bar" id="progressBar"></div>
+    </div>
+
+    <!-- Top Header Bar -->
+    <header class="top-header">
+      <div class="header-left">
+        <div class="brand-badge">
+          <svg viewBox="0 0 24 24">
+            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/>
+          </svg>
+          MongoDB Day 7
+        </div>
+        <div class="deck-title-badge">
+          <span>Aggregation Pipeline</span>
+          <span class="dot"></span>
+          <span class="deck-topic" id="headerTopic">MongoDB Aggregation • $match, $group, $project, $sort</span>
+        </div>
+      </div>
+
+      <div class="header-right">
+        <!-- Table of Contents Drawer Button -->
+        <button class="header-btn" id="openTocBtn" title="View All 45 Slides (T)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="3" y1="12" x2="21" y2="12"></line>
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <line x1="3" y1="18" x2="21" y2="18"></line>
+          </svg>
+          Index
+          <kbd>T</kbd>
+        </button>
+
+        <!-- Keyboard Shortcuts Help -->
+        <button class="header-btn" id="openShortcutsBtn" title="Keyboard Shortcuts (?)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"></circle>
+            <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+            <line x1="12" y1="17" x2="12.01" y2="17"></line>
+          </svg>
+          <kbd>?</kbd>
+        </button>
+
+        <!-- Fullscreen Button -->
+        <button class="header-btn" id="fullscreenBtn" title="Toggle Fullscreen (F)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path>
+          </svg>
+          <kbd>F</kbd>
+        </button>
+      </div>
+    </header>
+
+    <!-- Slide Viewport -->
+    <main class="slide-viewport">
+
+      <!-- ====================================================================
+           SLIDE 1 — TITLE
+           ==================================================================== -->
+      <section class="slide active" data-slide="1" id="slide-1">
+        <div class="slide-content" style="justify-content: center; align-items: center; text-align: center; max-width: 880px; margin: 0 auto;">
+          <div class="slide-tag" style="margin-bottom: 0.75rem;">MongoDB Course • Day 7</div>
+          <h1 class="slide-title" style="font-size: 3rem; margin-bottom: 0.5rem; letter-spacing: -0.03em;">
+            MongoDB Aggregation
+          </h1>
+          <h2 style="font-size: 1.8rem; color: var(--mongo-green); font-weight: 700; margin-bottom: 1.25rem;">
+            $match, $group, $project, $sort &amp; Real-World Examples
+          </h2>
+          <p style="font-size: 1.15rem; color: var(--text-secondary); max-width: 680px; margin-bottom: 2rem;">
+            A practical first introduction to the MongoDB Aggregation Pipeline. Learn how to transform raw documents into business intelligence and analytical reports.
+          </p>
+
+          <div style="display: flex; gap: 1rem; margin-bottom: 2.5rem; flex-wrap: wrap; justify-content: center;">
+            <div style="padding: 0.6rem 1.2rem; background: rgba(0, 237, 100, 0.1); border: 1px solid var(--mongo-green-border); border-radius: var(--radius-sm); font-family: var(--font-mono); font-size: 0.85rem; color: var(--mongo-green);">
+              <strong>🔍</strong> $match (Filter)
+            </div>
+            <div style="padding: 0.6rem 1.2rem; background: var(--accent-cyan-bg); border: 1px solid var(--accent-cyan-border); border-radius: var(--radius-sm); font-family: var(--font-mono); font-size: 0.85rem; color: var(--accent-cyan);">
+              <strong>📊</strong> $group (Calculate)
+            </div>
+            <div style="padding: 0.6rem 1.2rem; background: var(--accent-purple-bg); border: 1px solid var(--accent-purple-border); border-radius: var(--radius-sm); font-family: var(--font-mono); font-size: 0.85rem; color: var(--accent-purple);">
+              <strong>📐</strong> $project (Reshape)
+            </div>
+            <div style="padding: 0.6rem 1.2rem; background: var(--accent-amber-bg); border: 1px solid var(--accent-amber-border); border-radius: var(--radius-sm); font-family: var(--font-mono); font-size: 0.85rem; color: var(--accent-amber);">
+              <strong>⚡</strong> $sort (Order)
+            </div>
+          </div>
+
+          <div style="display: flex; gap: 1rem;">
+            <button class="nav-btn primary" onclick="Deck.goToSlide(2)">
+              Start Learning Aggregation →
+            </button>
+            <button class="nav-btn" onclick="Deck.openToc()">
+              Browse 45 Slides
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 2 — LEARNING OBJECTIVES
+           ==================================================================== -->
+      <section class="slide" data-slide="2" id="slide-2">
+        <div class="slide-content">
+          <div class="slide-header">
+            <span class="slide-tag">Session Overview</span>
+            <h1 class="slide-title">Learning <span class="highlight">Objectives</span></h1>
+            <p class="slide-subtitle">By the end of this session, students will comfortably understand and build aggregation queries in MongoDB and Mongoose.</p>
+          </div>
+
+          <div class="grid-2">
+            <div class="card highlight-green">
+              <h3 class="card-title">Core Aggregation Concepts</h3>
+              <ul class="feature-list" style="margin-top: 0.75rem;">
+                <li><span class="feature-bullet">✓</span> <span><strong>What MongoDB Aggregation is:</strong> Processing multi-document data sets into aggregated results.</span></li>
+                <li><span class="feature-bullet">✓</span> <span><strong>The Aggregation Pipeline:</strong> Concept of sequential data processing stages.</span></li>
+                <li><span class="feature-bullet">✓</span> <span><strong>Pipeline Stage Flow:</strong> How each stage receives the output of the previous stage.</span></li>
+                <li><span class="feature-bullet">✓</span> <span><strong>Combining Multiple Stages:</strong> Chaining stages together to answer complex business questions.</span></li>
+              </ul>
+            </div>
+
+            <div class="card highlight-cyan">
+              <h3 class="card-title" style="color: var(--accent-cyan);">The Four Fundamental Stages</h3>
+              <ul class="feature-list" style="margin-top: 0.75rem;">
+                <li><span class="feature-bullet cyan">1</span> <span><strong style="color: var(--mongo-green); font-family: var(--font-mono);">$match:</strong> Filtering documents before processing (similar to <code>find()</code>).</span></li>
+                <li><span class="feature-bullet cyan">2</span> <span><strong style="color: var(--accent-cyan); font-family: var(--font-mono);">$group:</strong> Grouping documents by a key and calculating aggregates with <code>$sum</code>, <code>$avg</code>, <code>$min</code>, <code>$max</code>.</span></li>
+                <li><span class="feature-bullet cyan">3</span> <span><strong style="color: var(--accent-purple); font-family: var(--font-mono);">$project:</strong> Selecting, renaming, excluding, and creating computed output fields.</span></li>
+                <li><span class="feature-bullet cyan">4</span> <span><strong style="color: var(--accent-amber); font-family: var(--font-mono);">$sort:</strong> Ordering output in ascending (<code>1</code>) or descending (<code>-1</code>) order.</span></li>
+              </ul>
+            </div>
+
+            <div class="card col-span-2 highlight-amber">
+              <h3 class="card-title" style="color: var(--accent-amber);">Real-World Practice &amp; Mongoose Integration</h3>
+              <div class="grid-3" style="margin-top: 0.5rem;">
+                <div>
+                  <strong style="color: var(--text-primary); font-size: 0.9rem;">Real-World Use Cases</strong>
+                  <p style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 0.2rem;">Sales summaries, course performance metrics, top students, and revenue calculations.</p>
+                </div>
+                <div>
+                  <strong style="color: var(--text-primary); font-size: 0.9rem;">Mongoose Model.aggregate()</strong>
+                  <p style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 0.2rem;">Calling aggregation in Node.js and understanding why output returns plain JS objects.</p>
+                </div>
+                <div>
+                  <strong style="color: var(--text-primary); font-size: 0.9rem;">Hands-on Mini Project</strong>
+                  <p style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 0.2rem;">Student Analytics Dashboard tying all four stages together into a live report.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 3 — WHAT IS AGGREGATION?
+           ==================================================================== -->
+      <section class="slide" data-slide="3" id="slide-3">
+        <div class="slide-content">
+          <div class="slide-header">
+            <span class="slide-tag">Section 1 — Introduction</span>
+            <h1 class="slide-title">What Is <span class="highlight">Aggregation</span>?</h1>
+            <p class="slide-subtitle">Aggregation is used to process multiple documents and produce useful summary results.</p>
+          </div>
+
+          <div class="grid-2">
+            <div class="card">
+              <h3 class="card-title">From Raw Data to Business Insight</h3>
+              <p class="card-body" style="margin-bottom: 1rem;">
+                Instead of simply retrieving individual documents as-is, <strong>aggregation helps us analyze and summarize data</strong> directly inside MongoDB.
+              </p>
+              <div class="card highlight-green" style="background: rgba(0, 237, 100, 0.04); margin-bottom: 1rem;">
+                <p style="font-size: 0.9rem; color: var(--text-secondary);">
+                  💡 <strong>Key Difference:</strong><br>
+                  • <code>find()</code> fetches documents matching a filter.<br>
+                  • <code>aggregate()</code> transforms, calculates, groups, and summarizes data across many documents.
+                </p>
+              </div>
+              <ul class="feature-list">
+                <li><span class="feature-bullet">✓</span> <span>Calculate averages, totals, counts, minimums, and maximums.</span></li>
+                <li><span class="feature-bullet">✓</span> <span>Group documents by common categories (course, product, status).</span></li>
+                <li><span class="feature-bullet">✓</span> <span>Restructure the final output format for reports and dashboards.</span></li>
+              </ul>
+            </div>
+
+            <div class="card highlight-cyan" style="display: flex; flex-direction: column; justify-content: center; align-items: center;">
+              <h3 class="card-title" style="color: var(--accent-cyan); align-self: flex-start;">Typical Aggregation Flow</h3>
+              <div class="vertical-flow" style="width: 100%;">
+                <div class="v-node">Students Collection (Raw)</div>
+                <div class="v-arrow">↓</div>
+                <div class="v-node green">Filter Students ($match)</div>
+                <div class="v-arrow">↓</div>
+                <div class="v-node cyan">Group by Course ($group)</div>
+                <div class="v-arrow">↓</div>
+                <div class="v-node green">Calculate Average Marks ($avg)</div>
+                <div class="v-arrow">↓</div>
+                <div class="v-node cyan">Sort Results ($sort)</div>
+                <div class="v-arrow">↓</div>
+                <div class="v-node" style="border-color: var(--accent-amber-border); color: var(--accent-amber); font-weight: 700;">Final Course Report 🎉</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 4 — WHY DO WE NEED AGGREGATION?
+           ==================================================================== -->
+      <section class="slide" data-slide="4" id="slide-4">
+        <div class="slide-content">
+          <div class="slide-header">
+            <span class="slide-tag">Section 1 — Introduction</span>
+            <h1 class="slide-title">Why Do We Need <span class="highlight">Aggregation</span>?</h1>
+            <p class="slide-subtitle">Suppose your database contains 1,000 student documents. How do you answer big-picture questions?</p>
+          </div>
+
+          <div class="grid-2">
+            <div class="card highlight-amber">
+              <h3 class="card-title" style="color: var(--accent-amber);">Common Analytics Questions</h3>
+              <p style="font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 1rem;">
+                Imagine a school director asks you for answers from <strong>1,000 student documents</strong>:
+              </p>
+              <ul class="feature-list">
+                <li><span class="feature-bullet amber">?</span> <span>How many students are enrolled in each course?</span></li>
+                <li><span class="feature-bullet amber">?</span> <span>What is the average mark in the MERN course?</span></li>
+                <li><span class="feature-bullet amber">?</span> <span>Which course has the highest overall average mark?</span></li>
+                <li><span class="feature-bullet amber">?</span> <span>How many students scored 80 or above?</span></li>
+                <li><span class="feature-bullet amber">?</span> <span>What are the lowest and highest marks per department?</span></li>
+              </ul>
+            </div>
+
+            <div class="card highlight-green">
+              <h3 class="card-title">Manual JavaScript vs. MongoDB Aggregation</h3>
+              <div style="display: flex; flex-direction: column; gap: 1rem;">
+                <div class="wrong-box" style="font-family: var(--font-sans);">
+                  <strong style="color: var(--accent-rose);">❌ Doing this Manually in Node.js:</strong><br>
+                  1. Fetch all 1,000 documents across network into Node memory.<br>
+                  2. Write complex loops, <code>for</code> statements, and <code>reduce()</code> logic.<br>
+                  3. Slow, memory-heavy, and wastes server bandwidth.
+                </div>
+                <div class="correct-box" style="font-family: var(--font-sans);">
+                  <strong style="color: var(--mongo-green);">✅ Doing this with MongoDB Aggregation:</strong><br>
+                  1. MongoDB processes and calculates data directly on the database engine.<br>
+                  2. Only the lightweight calculated summary is returned to Node.js.<br>
+                  3. Incredibly fast, efficient, and simple to maintain.
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 5 — AGGREGATION USE CASES
+           ==================================================================== -->
+      <section class="slide" data-slide="5" id="slide-5">
+        <div class="slide-content">
+          <div class="slide-header">
+            <span class="slide-tag">Section 1 — Introduction</span>
+            <h1 class="slide-title">Real-World <span class="highlight">Use Cases</span></h1>
+            <p class="slide-subtitle">Aggregation powers analytics, reporting, and dashboard metrics across modern web applications.</p>
+          </div>
+
+          <div class="grid-4">
+            <!-- E-Commerce -->
+            <div class="card highlight-green">
+              <div style="font-size: 1.8rem; margin-bottom: 0.5rem;">🛒</div>
+              <h3 class="card-title">E-Commerce</h3>
+              <ul class="feature-list" style="margin-top: 0.5rem; font-size: 0.85rem;">
+                <li><span class="feature-bullet">✓</span> Total sales revenue</li>
+                <li><span class="feature-bullet">✓</span> Sales grouped by category</li>
+                <li><span class="feature-bullet">✓</span> Average order value (AOV)</li>
+                <li><span class="feature-bullet">✓</span> Top-selling products</li>
+              </ul>
+            </div>
+
+            <!-- Education -->
+            <div class="card highlight-cyan">
+              <div style="font-size: 1.8rem; margin-bottom: 0.5rem;">🎓</div>
+              <h3 class="card-title" style="color: var(--accent-cyan);">Education</h3>
+              <ul class="feature-list" style="margin-top: 0.5rem; font-size: 0.85rem;">
+                <li><span class="feature-bullet cyan">✓</span> Students per course</li>
+                <li><span class="feature-bullet cyan">✓</span> Average marks by batch</li>
+                <li><span class="feature-bullet cyan">✓</span> Pass/fail percentages</li>
+                <li><span class="feature-bullet cyan">✓</span> Highest &amp; lowest scores</li>
+              </ul>
+            </div>
+
+            <!-- Business -->
+            <div class="card highlight-amber">
+              <div style="font-size: 1.8rem; margin-bottom: 0.5rem;">💼</div>
+              <h3 class="card-title" style="color: var(--accent-amber);">Business</h3>
+              <ul class="feature-list" style="margin-top: 0.5rem; font-size: 0.85rem;">
+                <li><span class="feature-bullet amber">✓</span> Monthly revenue reports</li>
+                <li><span class="feature-bullet amber">✓</span> Customer spending metrics</li>
+                <li><span class="feature-bullet amber">✓</span> Employee performance</li>
+                <li><span class="feature-bullet amber">✓</span> Departmental budgets</li>
+              </ul>
+            </div>
+
+            <!-- Analytics -->
+            <div class="card highlight-purple">
+              <div style="font-size: 1.8rem; margin-bottom: 0.5rem;">📈</div>
+              <h3 class="card-title" style="color: var(--accent-purple);">Analytics</h3>
+              <ul class="feature-list" style="margin-top: 0.5rem; font-size: 0.85rem;">
+                <li><span class="feature-bullet" style="background: var(--accent-purple-bg); color: var(--accent-purple);">✓</span> Daily active users (DAU)</li>
+                <li><span class="feature-bullet" style="background: var(--accent-purple-bg); color: var(--accent-purple);">✓</span> Website traffic reports</li>
+                <li><span class="feature-bullet" style="background: var(--accent-purple-bg); color: var(--accent-purple);">✓</span> Conversion rate funnels</li>
+                <li><span class="feature-bullet" style="background: var(--accent-purple-bg); color: var(--accent-purple);">✓</span> Live admin dashboards</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 6 — WHAT IS AN AGGREGATION PIPELINE?
+           ==================================================================== -->
+      <section class="slide" data-slide="6" id="slide-6">
+        <div class="slide-content">
+          <div class="slide-header">
+            <span class="slide-tag cyan">Section 2 — Aggregation Pipeline</span>
+            <h1 class="slide-title">What Is an <span class="highlight-cyan">Aggregation Pipeline</span>?</h1>
+            <p class="slide-subtitle">An aggregation pipeline is a sequence of stages that process documents step by step.</p>
+          </div>
+
+          <div class="grid-2">
+            <div>
+              <div class="code-window">
+                <div class="code-header">
+                  <div class="window-dots"><span class="window-dot red"></span><span class="window-dot yellow"></span><span class="window-dot green"></span></div>
+                  <span class="code-title">pipeline-example.js</span>
+                  <button class="copy-btn" data-code="const result = await Student.aggregate([\n  { $match: { course: &quot;MERN&quot; } },\n  { $group: { _id: &quot;$course&quot;, count: { $sum: 1 } } },\n  { $sort: { count: -1 } }\n]);">Copy</button>
+                </div>
+                <div class="code-content"><span class="syn-kwd">const</span> <span class="syn-prop">result</span> = <span class="syn-kwd">await</span> <span class="syn-prop">Student</span>.<span class="syn-fn">aggregate</span>([
+  <span class="syn-comment">// Stage 1: Filter</span>
+  { <span class="syn-stage">$match</span>: { <span class="syn-prop">course</span>: <span class="syn-str">"MERN"</span> } },
+
+  <span class="syn-comment">// Stage 2: Group &amp; Count</span>
+  { <span class="syn-stage">$group</span>: { <span class="syn-prop">_id</span>: <span class="syn-str">"$course"</span>, <span class="syn-prop">count</span>: { <span class="syn-accum">$sum</span>: <span class="syn-num">1</span> } } },
+
+  <span class="syn-comment">// Stage 3: Order</span>
+  { <span class="syn-stage">$sort</span>: { <span class="syn-prop">count</span>: <span class="syn-num">-1</span> } }
+]);</div>
+              </div>
+            </div>
+
+            <div class="card highlight-green">
+              <h3 class="card-title">Think of It Like an Assembly Factory</h3>
+              <p class="card-body" style="margin-bottom: 1rem;">
+                Raw materials (documents) enter the factory conveyor belt. Each workstation (stage) performs a specific transformation:
+              </p>
+              <div class="vertical-flow">
+                <div class="v-node">Raw Documents Enter</div>
+                <div class="v-arrow">↓</div>
+                <div class="v-node green">Stage 1: Filter out unwanted items</div>
+                <div class="v-arrow">↓</div>
+                <div class="v-node cyan">Stage 2: Group and calculate totals</div>
+                <div class="v-arrow">↓</div>
+                <div class="v-node green">Stage 3: Sort the output</div>
+                <div class="v-arrow">↓</div>
+                <div class="v-node" style="color: var(--mongo-green); font-weight: 700;">Final Finished Report 📦</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 7 — PIPELINE STAGES RUN IN ORDER
+           ==================================================================== -->
+      <section class="slide" data-slide="7" id="slide-7">
+        <div class="slide-content">
+          <div class="slide-header">
+            <span class="slide-tag cyan">Section 2 — Aggregation Pipeline</span>
+            <h1 class="slide-title">Pipeline Stages <span class="highlight">Run in Order</span></h1>
+            <p class="slide-subtitle">Each stage receives the output of the previous stage. The order of stages matters fundamentally!</p>
+          </div>
+
+          <div class="grid-2">
+            <div class="card highlight-cyan">
+              <h3 class="card-title" style="color: var(--accent-cyan);">The Cascading Pipeline Flow</h3>
+              <div class="vertical-flow" style="margin-top: 1rem;">
+                <div class="v-node" style="font-weight: 600;">100 Student Documents</div>
+                <div class="v-arrow">↓ <span style="font-size: 0.75rem; color: var(--mongo-green); font-family: var(--font-mono);">$match: { course: "MERN" }</span></div>
+                <div class="v-node green">60 Filtered Documents</div>
+                <div class="v-arrow">↓ <span style="font-size: 0.75rem; color: var(--accent-cyan); font-family: var(--font-mono);">$group: { _id: "$course", count: { $sum: 1 } }</span></div>
+                <div class="v-node cyan">5 Grouped Summary Records</div>
+                <div class="v-arrow">↓ <span style="font-size: 0.75rem; color: var(--accent-amber); font-family: var(--font-mono);">$sort: { count: -1 }</span></div>
+                <div class="v-node" style="color: var(--accent-amber); border-color: var(--accent-amber-border); font-weight: 700;">5 Sorted Result Documents</div>
+              </div>
+            </div>
+
+            <div class="card">
+              <h3 class="card-title">Three Golden Rules of Stages</h3>
+              <ul class="feature-list" style="margin-top: 1rem;">
+                <li><span class="feature-bullet">1</span> <span><strong>Sequential Execution:</strong> Stage 2 only sees the documents passed down by Stage 1. It never touches raw collection data directly.</span></li>
+                <li><span class="feature-bullet">2</span> <span><strong>Document Reshaping:</strong> If Stage 2 groups documents into 5 groups, Stage 3 only operates on those 5 groups.</span></li>
+                <li><span class="feature-bullet">3</span> <span><strong>Filter Early for Efficiency:</strong> Placing <code>$match</code> first reduces the document count early, dramatically accelerating subsequent stages!</span></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 8 — BASIC AGGREGATION SYNTAX
+           ==================================================================== -->
+      <section class="slide" data-slide="8" id="slide-8">
+        <div class="slide-content">
+          <div class="slide-header">
+            <span class="slide-tag cyan">Section 2 — Aggregation Pipeline</span>
+            <h1 class="slide-title">Basic <span class="highlight">Aggregation Syntax</span></h1>
+            <p class="slide-subtitle">In Mongoose, aggregation is executed by passing an array of stage objects to <code>Model.aggregate()</code>.</p>
+          </div>
+
+          <div class="grid-2">
+            <div>
+              <div class="code-window">
+                <div class="code-header">
+                  <div class="window-dots"><span class="window-dot red"></span><span class="window-dot yellow"></span><span class="window-dot green"></span></div>
+                  <span class="code-title">general-syntax.js</span>
+                  <button class="copy-btn" data-code="Model.aggregate([\n  { stage1: { /* configuration */ } },\n  { stage2: { /* configuration */ } },\n  { stage3: { /* configuration */ } }\n]);">Copy</button>
+                </div>
+                <div class="code-content"><span class="syn-comment">// General structure</span>
+<span class="syn-prop">Model</span>.<span class="syn-fn">aggregate</span>([
+  { <span class="syn-stage">stage1</span>: { <span class="syn-comment">/* instructions */</span> } },
+  { <span class="syn-stage">stage2</span>: { <span class="syn-comment">/* instructions */</span> } },
+  { <span class="syn-stage">stage3</span>: { <span class="syn-comment">/* instructions */</span> } }
+]);</div>
+              </div>
+
+              <div class="code-window" style="margin-top: 1rem;">
+                <div class="code-header">
+                  <div class="window-dots"><span class="window-dot red"></span><span class="window-dot yellow"></span><span class="window-dot green"></span></div>
+                  <span class="code-title">concrete-example.js</span>
+                  <button class="copy-btn" data-code="const result = await Student.aggregate([\n  {\n    $match: {\n      course: &quot;MERN&quot;\n    }\n  }\n]);">Copy</button>
+                </div>
+                <div class="code-content"><span class="syn-kwd">const</span> <span class="syn-prop">result</span> = <span class="syn-kwd">await</span> <span class="syn-prop">Student</span>.<span class="syn-fn">aggregate</span>([
+  {
+    <span class="syn-stage">$match</span>: {
+      <span class="syn-prop">course</span>: <span class="syn-str">"MERN"</span>
+    }
+  }
+]);</div>
+              </div>
+            </div>
+
+            <div class="card highlight-green">
+              <h3 class="card-title">Key Syntax Elements</h3>
+              <ul class="feature-list" style="margin-top: 0.75rem;">
+                <li><span class="feature-bullet">1</span> <span><code>Model.aggregate([...])</code> always takes an <strong>Array</strong> <code>[]</code> of stages.</span></li>
+                <li><span class="feature-bullet">2</span> <span>Each stage is an <strong>Object</strong> <code>{}</code> starting with a dollar sign stage name like <code>$match</code> or <code>$group</code>.</span></li>
+                <li><span class="feature-bullet">3</span> <span>You can have as few as 1 stage, or chain 4, 5, or more stages together.</span></li>
+                <li><span class="feature-bullet">4</span> <span>Aggregation is <strong>asynchronous</strong> and returns a Promise, so we use <code>await</code>.</span></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 9 — WHAT IS $match?
+           ==================================================================== -->
+      <section class="slide" data-slide="9" id="slide-9">
+        <div class="slide-content">
+          <div class="slide-header">
+            <span class="slide-tag">Section 3 — $match</span>
+            <h1 class="slide-title">What Is <span class="highlight">$match</span>?</h1>
+            <p class="slide-subtitle">The <code>$match</code> stage filters documents so only those matching the condition proceed to the next stage.</p>
+          </div>
+
+          <div class="grid-2">
+            <div>
+              <div class="code-window">
+                <div class="code-header">
+                  <div class="window-dots"><span class="window-dot red"></span><span class="window-dot yellow"></span><span class="window-dot green"></span></div>
+                  <span class="code-title">match-stage.js</span>
+                  <button class="copy-btn" data-code="{\n  $match: {\n    course: &quot;MERN&quot;\n  }\n}">Copy</button>
+                </div>
+                <div class="code-content">{
+  <span class="syn-stage">$match</span>: {
+    <span class="syn-prop">course</span>: <span class="syn-str">"MERN"</span>
+  }
+}</div>
+              </div>
+
+              <div class="card highlight-green" style="margin-top: 1rem;">
+                <h4 style="color: var(--mongo-green); margin-bottom: 0.5rem; font-family: var(--font-mono); font-size: 0.95rem;">Concept: The Pipeline Bouncer 🛡️</h4>
+                <p style="font-size: 0.9rem; color: var(--text-secondary);">
+                  Think of <code>$match</code> as a gatekeeper. Any document that does not meet the specified condition is discarded from the pipeline right away.
+                </p>
+              </div>
+            </div>
+
+            <div class="card highlight-cyan">
+              <h3 class="card-title" style="color: var(--accent-cyan);">$match vs. find()</h3>
+              <p style="font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 1rem;">
+                The syntax inside <code>$match</code> is identical to the query selector in <code>find()</code>!
+              </p>
+              <div class="table-container">
+                <table class="data-table">
+                  <thead>
+                    <tr>
+                      <th>Feature</th>
+                      <th>Model.find()</th>
+                      <th>$match in aggregate()</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><strong>Purpose</strong></td>
+                      <td>Retrieves matching documents</td>
+                      <td>Filters documents for next stage</td>
+                    </tr>
+                    <tr>
+                      <td><strong>Context</strong></td>
+                      <td>Stand-alone query</td>
+                      <td>Part of an aggregation pipeline</td>
+                    </tr>
+                    <tr>
+                      <td><strong>Operators</strong></td>
+                      <td><code>$gte, $in, $eq</code>, etc.</td>
+                      <td>Same standard query operators</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 10 — $match EXAMPLE (INTERACTIVE DEMO)
+           ==================================================================== -->
+      <section class="slide" data-slide="10" id="slide-10">
+        <div class="slide-content">
+          <div class="slide-header">
+            <span class="slide-tag">Section 3 — $match</span>
+            <h1 class="slide-title">$match <span class="highlight">Interactive Example</span></h1>
+            <p class="slide-subtitle">Watch how $match filters raw student records in real time.</p>
+          </div>
+
+          <div class="demo-box">
+            <div class="demo-controls">
+              <span style="font-size: 0.85rem; color: var(--text-muted); font-weight: 600;">FILTER BY COURSE:</span>
+              <button class="demo-btn active" id="filterMernBtn" onclick="DemoMatch.setCourse('MERN')">MERN</button>
+              <button class="demo-btn secondary" id="filterPythonBtn" onclick="DemoMatch.setCourse('Python')">Python</button>
+              <button class="demo-btn secondary" id="filterJavaBtn" onclick="DemoMatch.setCourse('Java')">Java</button>
+              <button class="demo-btn secondary" id="filterAllBtn" onclick="DemoMatch.setCourse('ALL')">Show All</button>
+              <button class="demo-btn" style="margin-left: auto;" onclick="DemoMatch.run()">▶ Run $match</button>
+            </div>
+
+            <div class="grid-2">
+              <div>
+                <h4 style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.5rem; font-family: var(--font-mono);">
+                  INPUT: Raw Students Collection (4 documents)
+                </h4>
+                <div class="table-container">
+                  <table class="data-table">
+                    <thead>
+                      <tr><th>Name</th><th>Course</th><th>Status</th></tr>
+                    </thead>
+                    <tbody id="matchInputTable">
+                      <tr><td>Rahul</td><td><span class="pill-badge green">MERN</span></td><td>Included</td></tr>
+                      <tr><td>Arun</td><td><span class="pill-badge cyan">Python</span></td><td>Included</td></tr>
+                      <tr><td>Akhil</td><td><span class="pill-badge green">MERN</span></td><td>Included</td></tr>
+                      <tr><td>Neha</td><td><span class="pill-badge amber">Java</span></td><td>Included</td></tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              <div>
+                <h4 style="font-size: 0.85rem; color: var(--mongo-green); margin-bottom: 0.5rem; font-family: var(--font-mono);">
+                  OUTPUT: After $match Stage (<span id="matchResultCount">2</span> passed)
+                </h4>
+                <div class="table-container">
+                  <table class="data-table">
+                    <thead>
+                      <tr><th>Name</th><th>Course</th></tr>
+                    </thead>
+                    <tbody id="matchOutputTable">
+                      <tr><td>Rahul</td><td><span class="pill-badge green">MERN</span></td></tr>
+                      <tr><td>Akhil</td><td><span class="pill-badge green">MERN</span></td></tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 11 — $match WITH CONDITIONS
+           ==================================================================== -->
+      <section class="slide" data-slide="11" id="slide-11">
+        <div class="slide-content">
+          <div class="slide-header">
+            <span class="slide-tag">Section 3 — $match</span>
+            <h1 class="slide-title">$match With <span class="highlight">Query Conditions</span></h1>
+            <p class="slide-subtitle">You can use standard MongoDB comparison operators like <code>$gte</code>, <code>$lte</code>, and <code>$in</code>.</p>
+          </div>
+
+          <div class="grid-2">
+            <div>
+              <div class="code-window">
+                <div class="code-header">
+                  <div class="window-dots"><span class="window-dot red"></span><span class="window-dot yellow"></span><span class="window-dot green"></span></div>
+                  <span class="code-title">match-numeric-condition.js</span>
+                  <button class="copy-btn" data-code="{\n  $match: {\n    mark: {\n      $gte: 80\n    }\n  }\n}">Copy</button>
+                </div>
+                <div class="code-content">{
+  <span class="syn-stage">$match</span>: {
+    <span class="syn-prop">mark</span>: {
+      <span class="syn-stage">$gte</span>: <span class="syn-num">80</span>  <span class="syn-comment">// Mark >= 80</span>
+    }
+  }
+}</div>
+              </div>
+              <div class="card" style="margin-top: 0.75rem;">
+                <p style="font-size: 0.85rem; color: var(--text-secondary);">
+                  💡 Selects all high-performing students who scored <strong>80 or above</strong>.
+                </p>
+              </div>
+            </div>
+
+            <div>
+              <div class="code-window">
+                <div class="code-header">
+                  <div class="window-dots"><span class="window-dot red"></span><span class="window-dot yellow"></span><span class="window-dot green"></span></div>
+                  <span class="code-title">match-range-condition.js</span>
+                  <button class="copy-btn" data-code="{\n  $match: {\n    age: {\n      $gte: 18,\n      $lte: 25\n    }\n  }\n}">Copy</button>
+                </div>
+                <div class="code-content">{
+  <span class="syn-stage">$match</span>: {
+    <span class="syn-prop">age</span>: {
+      <span class="syn-stage">$gte</span>: <span class="syn-num">18</span>, <span class="syn-comment">// Age >= 18</span>
+      <span class="syn-stage">$lte</span>: <span class="syn-num">25</span>  <span class="syn-comment">// Age &lt;= 25</span>
+    }
+  }
+}</div>
+              </div>
+              <div class="card highlight-cyan" style="margin-top: 0.75rem;">
+                <p style="font-size: 0.85rem; color: var(--text-secondary);">
+                  💡 Combines multiple operators to match students aged <strong>between 18 and 25</strong> inclusive.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 12 — WHEN TO USE $match
+           ==================================================================== -->
+      <section class="slide" data-slide="12" id="slide-12">
+        <div class="slide-content">
+          <div class="slide-header">
+            <span class="slide-tag">Section 3 — $match</span>
+            <h1 class="slide-title">When Should We Use <span class="highlight">$match</span>?</h1>
+            <p class="slide-subtitle">Best practices on where and why $match should be placed in your aggregation pipelines.</p>
+          </div>
+
+          <div class="grid-2">
+            <div class="card highlight-green">
+              <h3 class="card-title">Primary Use Cases</h3>
+              <ul class="feature-list" style="margin-top: 0.75rem;">
+                <li><span class="feature-bullet">✓</span> <span><strong>Filter Records:</strong> Select only active students, valid orders, or verified accounts.</span></li>
+                <li><span class="feature-bullet">✓</span> <span><strong>Analyze Specific Categories:</strong> Restrict reports to a single department (e.g. <code>course: "MERN"</code>).</span></li>
+                <li><span class="feature-bullet">✓</span> <span><strong>Date Range Filtering:</strong> Filter transactions in the current month or quarter.</span></li>
+                <li><span class="feature-bullet">✓</span> <span><strong>Status Filtering:</strong> Only process orders with <code>status: "completed"</code>.</span></li>
+                <li><span class="feature-bullet">✓</span> <span><strong>Reduce Pipeline Load:</strong> Less data in memory means faster calculations downstream.</span></li>
+              </ul>
+            </div>
+
+            <div class="card highlight-cyan" style="display: flex; flex-direction: column; justify-content: center; align-items: center;">
+              <h3 class="card-title" style="color: var(--accent-cyan); align-self: flex-start;">Best Practice: Place $match Early</h3>
+              <div class="vertical-flow" style="width: 100%; margin-top: 1rem;">
+                <div class="v-node">All Orders (10,000 docs)</div>
+                <div class="v-arrow">↓</div>
+                <div class="v-node green">
+                  <strong>$match: { status: "completed" }</strong>
+                  <div style="font-size: 0.75rem; color: var(--text-muted);">Discards canceled &amp; pending orders early</div>
+                </div>
+                <div class="v-arrow">↓</div>
+                <div class="v-node cyan">Completed Orders Only (3,500 docs)</div>
+                <div class="v-arrow">↓</div>
+                <div class="v-node">Subsequent Heavier Stages ($group)</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 13 — WHAT IS $group?
+           ==================================================================== -->
+      <section class="slide" data-slide="13" id="slide-13">
+        <div class="slide-content">
+          <div class="slide-header">
+            <span class="slide-tag cyan">Section 4 — $group</span>
+            <h1 class="slide-title">What Is <span class="highlight-cyan">$group</span>?</h1>
+            <p class="slide-subtitle"><code>$group</code> combines documents into groups based on a specified key and performs calculations across each group.</p>
+          </div>
+
+          <div class="grid-2">
+            <div>
+              <div class="code-window">
+                <div class="code-header">
+                  <div class="window-dots"><span class="window-dot red"></span><span class="window-dot yellow"></span><span class="window-dot green"></span></div>
+                  <span class="code-title">group-stage.js</span>
+                  <button class="copy-btn" data-code="{\n  $group: {\n    _id: &quot;$course&quot;,\n    totalStudents: {\n      $sum: 1\n    }\n  }\n}">Copy</button>
+                </div>
+                <div class="code-content">{
+  <span class="syn-stage">$group</span>: {
+    <span class="syn-prop">_id</span>: <span class="syn-str">"$course"</span>,       <span class="syn-comment">// Grouping key</span>
+    <span class="syn-prop">totalStudents</span>: {
+      <span class="syn-accum">$sum</span>: <span class="syn-num">1</span>          <span class="syn-comment">// Accumulator (Count)</span>
+    }
+  }
+}</div>
+              </div>
+            </div>
+
+            <div class="card highlight-cyan">
+              <h3 class="card-title" style="color: var(--accent-cyan);">Supported Calculations (Accumulators)</h3>
+              <ul class="feature-list" style="margin-top: 0.75rem;">
+                <li><span class="feature-bullet cyan">1</span> <span><strong style="color: var(--mongo-green); font-family: var(--font-mono);">$sum:</strong> Count items (<code>$sum: 1</code>) or add numeric fields (<code>$sum: "$quantity"</code>).</span></li>
+                <li><span class="feature-bullet cyan">2</span> <span><strong style="color: var(--accent-cyan); font-family: var(--font-mono);">$avg:</strong> Calculate the mathematical average of a numeric field.</span></li>
+                <li><span class="feature-bullet cyan">3</span> <span><strong style="color: var(--accent-purple); font-family: var(--font-mono);">$min:</strong> Find the lowest value in the group.</span></li>
+                <li><span class="feature-bullet cyan">4</span> <span><strong style="color: var(--accent-amber); font-family: var(--font-mono);">$max:</strong> Find the highest value in the group.</span></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 14 — UNDERSTANDING _id IN $group
+           ==================================================================== -->
+      <section class="slide" data-slide="14" id="slide-14">
+        <div class="slide-content">
+          <div class="slide-header">
+            <span class="slide-tag cyan">Section 4 — $group</span>
+            <h1 class="slide-title">Understanding <span class="highlight-cyan">_id</span> in $group</h1>
+            <p class="slide-subtitle">In the $group stage, <code>_id</code> represents the grouping key. It defines how documents are clustered.</p>
+          </div>
+
+          <div class="grid-2">
+            <div class="card highlight-green">
+              <h3 class="card-title">What Does <code>_id: "$course"</code> Mean?</h3>
+              <p style="font-size: 0.95rem; color: var(--text-secondary); margin-bottom: 1rem;">
+                It tells MongoDB: <em>"Find every document with the same course name and place them into the same group bucket."</em>
+              </p>
+              <div class="card highlight-amber" style="background: rgba(251, 191, 36, 0.05); margin-bottom: 1rem;">
+                <p style="font-size: 0.85rem; color: var(--text-secondary);">
+                  ⚠️ <strong>Notice the <code>$</code> Sign:</strong><br>
+                  • <code>"$course"</code> refers to the <em>value</em> of the course field in each incoming document.<br>
+                  • If you write <code>_id: "course"</code> (without <code>$</code>), MongoDB literally groups everything under the literal word "course"!
+                </p>
+              </div>
+            </div>
+
+            <div class="card highlight-cyan" style="display: flex; flex-direction: column; justify-content: center; align-items: center;">
+              <h3 class="card-title" style="color: var(--accent-cyan); align-self: flex-start;">Visual Bucketing</h3>
+              <div style="display: flex; gap: 1.5rem; align-items: center; margin-top: 1rem;">
+                <div style="display: flex; flex-direction: column; gap: 0.35rem;">
+                  <span class="pill-badge green">MERN</span>
+                  <span class="pill-badge green">MERN</span>
+                  <span class="pill-badge cyan">Python</span>
+                  <span class="pill-badge cyan">Python</span>
+                  <span class="pill-badge amber">Java</span>
+                </div>
+                <div style="font-size: 1.5rem; color: var(--mongo-green);">➔</div>
+                <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+                  <div style="background: var(--mongo-green-deep); border: 1px solid var(--mongo-green-border); padding: 0.5rem 1rem; border-radius: var(--radius-sm); font-family: var(--font-mono); font-size: 0.85rem; color: var(--mongo-green);">
+                    Group _id: "MERN" (2 docs)
+                  </div>
+                  <div style="background: var(--accent-cyan-bg); border: 1px solid var(--accent-cyan-border); padding: 0.5rem 1rem; border-radius: var(--radius-sm); font-family: var(--font-mono); font-size: 0.85rem; color: var(--accent-cyan);">
+                    Group _id: "Python" (2 docs)
+                  </div>
+                  <div style="background: var(--accent-amber-bg); border: 1px solid var(--accent-amber-border); padding: 0.5rem 1rem; border-radius: var(--radius-sm); font-family: var(--font-mono); font-size: 0.85rem; color: var(--accent-amber);">
+                    Group _id: "Java" (1 doc)
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 15 — $sum
+           ==================================================================== -->
+      <section class="slide" data-slide="15" id="slide-15">
+        <div class="slide-content">
+          <div class="slide-header">
+            <span class="slide-tag cyan">Section 4 — $group</span>
+            <h1 class="slide-title">Counting Documents With <span class="highlight-cyan">$sum</span></h1>
+            <p class="slide-subtitle">How to count the total number of documents inside each group.</p>
+          </div>
+
+          <div class="grid-2">
+            <div>
+              <div class="code-window">
+                <div class="code-header">
+                  <div class="window-dots"><span class="window-dot red"></span><span class="window-dot yellow"></span><span class="window-dot green"></span></div>
+                  <span class="code-title">group-count.js</span>
+                  <button class="copy-btn" data-code="{\n  $group: {\n    _id: &quot;$course&quot;,\n    totalStudents: {\n      $sum: 1\n    }\n  }\n}">Copy</button>
+                </div>
+                <div class="code-content">{
+  <span class="syn-stage">$group</span>: {
+    <span class="syn-prop">_id</span>: <span class="syn-str">"$course"</span>,
+    <span class="syn-prop">totalStudents</span>: {
+      <span class="syn-accum">$sum</span>: <span class="syn-num">1</span>   <span class="syn-comment">// Add 1 for every document in the group</span>
+    }
+  }
+}</div>
+              </div>
+
+              <div class="card" style="margin-top: 1rem;">
+                <p style="font-size: 0.9rem; color: var(--text-secondary);">
+                  💡 <strong>How <code>$sum: 1</code> works:</strong><br>
+                  Whenever MongoDB encounters a document in the "MERN" group, it adds <code>1</code> to the accumulator. It's MongoDB's counter!
+                </p>
+              </div>
+            </div>
+
+            <div>
+              <div class="card highlight-green">
+                <h3 class="card-title">Example Result</h3>
+                <div class="table-container" style="margin-top: 0.75rem;">
+                  <table class="data-table">
+                    <thead>
+                      <tr><th>_id (Course)</th><th>totalStudents</th></tr>
+                    </thead>
+                    <tbody>
+                      <tr><td><span class="pill-badge green">MERN</span></td><td><strong>25</strong></td></tr>
+                      <tr><td><span class="pill-badge cyan">Python</span></td><td><strong>18</strong></td></tr>
+                      <tr><td><span class="pill-badge amber">Java</span></td><td><strong>12</strong></td></tr>
+                    </tbody>
+                  </table>
+                </div>
+                <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 0.75rem;">
+                  Notice how each unique course becomes a single output document with its counted total!
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 16 — $sum WITH NUMERIC VALUES
+           ==================================================================== -->
+      <section class="slide" data-slide="16" id="slide-16">
+        <div class="slide-content">
+          <div class="slide-header">
+            <span class="slide-tag cyan">Section 4 — $group</span>
+            <h1 class="slide-title">$sum With <span class="highlight-cyan">Numeric Values</span></h1>
+            <p class="slide-subtitle">Summing numerical field values vs. counting documents.</p>
+          </div>
+
+          <div class="grid-2">
+            <div>
+              <div class="code-window">
+                <div class="code-header">
+                  <div class="window-dots"><span class="window-dot red"></span><span class="window-dot yellow"></span><span class="window-dot green"></span></div>
+                  <span class="code-title">sum-field-value.js</span>
+                  <button class="copy-btn" data-code="{\n  $group: {\n    _id: &quot;$product&quot;,\n    totalQuantity: {\n      $sum: &quot;$quantity&quot;\n    }\n  }\n}">Copy</button>
+                </div>
+                <div class="code-content"><span class="syn-comment">// Sample document: { product: "Laptop", quantity: 3 }</span>
+{
+  <span class="syn-stage">$group</span>: {
+    <span class="syn-prop">_id</span>: <span class="syn-str">"$product"</span>,
+    <span class="syn-prop">totalQuantity</span>: {
+      <span class="syn-accum">$sum</span>: <span class="syn-str">"$quantity"</span>  <span class="syn-comment">// Adds the actual numbers in quantity!</span>
+    }
+  }
+}</div>
+              </div>
+            </div>
+
+            <div class="card highlight-amber">
+              <h3 class="card-title" style="color: var(--accent-amber);">The Crucial Difference</h3>
+              <div style="display: flex; flex-direction: column; gap: 1rem; margin-top: 0.75rem;">
+                <div style="padding: 0.75rem; background: var(--bg-canvas); border-radius: var(--radius-sm); border: 1px solid var(--border-subtle);">
+                  <strong style="color: var(--mongo-green); font-family: var(--font-mono);">$sum: 1</strong>
+                  <p style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 0.2rem;">
+                    Counts how many <strong>documents</strong> exist in the group.
+                  </p>
+                </div>
+                <div style="padding: 0.75rem; background: var(--bg-canvas); border-radius: var(--radius-sm); border: 1px solid var(--border-subtle);">
+                  <strong style="color: var(--accent-cyan); font-family: var(--font-mono);">$sum: "$quantity"</strong>
+                  <p style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 0.2rem;">
+                    Sums up the <strong>numerical values</strong> contained inside the <code>quantity</code> field across all documents.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 17 — $avg
+           ==================================================================== -->
+      <section class="slide" data-slide="17" id="slide-17">
+        <div class="slide-content">
+          <div class="slide-header">
+            <span class="slide-tag cyan">Section 4 — $group</span>
+            <h1 class="slide-title">Calculating Averages With <span class="highlight-cyan">$avg</span></h1>
+            <p class="slide-subtitle">The <code>$avg</code> accumulator computes the mathematical mean of a numeric field for each group.</p>
+          </div>
+
+          <div class="grid-2">
+            <div>
+              <div class="code-window">
+                <div class="code-header">
+                  <div class="window-dots"><span class="window-dot red"></span><span class="window-dot yellow"></span><span class="window-dot green"></span></div>
+                  <span class="code-title">average-marks.js</span>
+                  <button class="copy-btn" data-code="{\n  $group: {\n    _id: &quot;$course&quot;,\n    averageMark: {\n      $avg: &quot;$mark&quot;\n    }\n  }\n}">Copy</button>
+                </div>
+                <div class="code-content">{
+  <span class="syn-stage">$group</span>: {
+    <span class="syn-prop">_id</span>: <span class="syn-str">"$course"</span>,
+    <span class="syn-prop">averageMark</span>: {
+      <span class="syn-accum">$avg</span>: <span class="syn-str">"$mark"</span>  <span class="syn-comment">// Computes sum(marks) / count</span>
+    }
+  }
+}</div>
+              </div>
+              <div class="card" style="margin-top: 1rem;">
+                <p style="font-size: 0.85rem; color: var(--text-secondary);">
+                  MongoDB automatically handles null and non-numeric values by ignoring them during calculation.
+                </p>
+              </div>
+            </div>
+
+            <div class="card highlight-green">
+              <h3 class="card-title">Example Result</h3>
+              <div class="table-container" style="margin-top: 0.75rem;">
+                <table class="data-table">
+                  <thead>
+                    <tr><th>_id (Course)</th><th>averageMark</th></tr>
+                  </thead>
+                  <tbody>
+                    <tr><td><span class="pill-badge green">MERN</span></td><td><strong>82.5</strong></td></tr>
+                    <tr><td><span class="pill-badge cyan">Python</span></td><td><strong>76.8</strong></td></tr>
+                    <tr><td><span class="pill-badge amber">Java</span></td><td><strong>79.2</strong></td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 18 — $min AND $max
+           ==================================================================== -->
+      <section class="slide" data-slide="18" id="slide-18">
+        <div class="slide-content">
+          <div class="slide-header">
+            <span class="slide-tag cyan">Section 4 — $group</span>
+            <h1 class="slide-title">Finding Extremes: <span class="highlight-cyan">$min</span> &amp; <span class="highlight-cyan">$max</span></h1>
+            <p class="slide-subtitle">Identify the lowest and highest values in each group simultaneously.</p>
+          </div>
+
+          <div class="grid-2">
+            <div>
+              <div class="code-window">
+                <div class="code-header">
+                  <div class="window-dots"><span class="window-dot red"></span><span class="window-dot yellow"></span><span class="window-dot green"></span></div>
+                  <span class="code-title">min-max-group.js</span>
+                  <button class="copy-btn" data-code="{\n  $group: {\n    _id: &quot;$course&quot;,\n    averageMark: { $avg: &quot;$mark&quot; },\n    highestMark: { $max: &quot;$mark&quot; },\n    lowestMark: { $min: &quot;$mark&quot; }\n  }\n}">Copy</button>
+                </div>
+                <div class="code-content">{
+  <span class="syn-stage">$group</span>: {
+    <span class="syn-prop">_id</span>: <span class="syn-str">"$course"</span>,
+
+    <span class="syn-prop">averageMark</span>: {
+      <span class="syn-accum">$avg</span>: <span class="syn-str">"$mark"</span>
+    },
+
+    <span class="syn-prop">highestMark</span>: {
+      <span class="syn-accum">$max</span>: <span class="syn-str">"$mark"</span>   <span class="syn-comment">// Maximum mark</span>
+    },
+
+    <span class="syn-prop">lowestMark</span>: {
+      <span class="syn-accum">$min</span>: <span class="syn-str">"$mark"</span>   <span class="syn-comment">// Minimum mark</span>
+    }
+  }
+}</div>
+              </div>
+            </div>
+
+            <div class="card highlight-green">
+              <h3 class="card-title">Accumulator Reference</h3>
+              <div style="display: flex; flex-direction: column; gap: 0.75rem; margin-top: 0.5rem;">
+                <div class="card" style="padding: 0.75rem; background: var(--bg-canvas);">
+                  <strong style="color: var(--mongo-green); font-family: var(--font-mono);">$min: "$field"</strong>
+                  <p style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 0.2rem;">Returns lowest numerical or alphabetical value.</p>
+                </div>
+                <div class="card" style="padding: 0.75rem; background: var(--bg-canvas);">
+                  <strong style="color: var(--accent-cyan); font-family: var(--font-mono);">$max: "$field"</strong>
+                  <p style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 0.2rem;">Returns highest numerical or alphabetical value.</p>
+                </div>
+                <div class="card" style="padding: 0.75rem; background: var(--bg-canvas);">
+                  <strong style="color: var(--accent-amber); font-family: var(--font-mono);">$avg: "$field"</strong>
+                  <p style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 0.2rem;">Computes mathematical mean.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 19 — WHAT IS $project?
+           ==================================================================== -->
+      <section class="slide" data-slide="19" id="slide-19">
+        <div class="slide-content">
+          <div class="slide-header">
+            <span class="slide-tag purple">Section 5 — $project</span>
+            <h1 class="slide-title">What Is <span style="color: var(--accent-purple);">$project</span>?</h1>
+            <p class="slide-subtitle"><code>$project</code> controls which fields appear in the output, reshapes documents, and renames attributes.</p>
+          </div>
+
+          <div class="grid-2">
+            <div>
+              <div class="code-window">
+                <div class="code-header">
+                  <div class="window-dots"><span class="window-dot red"></span><span class="window-dot yellow"></span><span class="window-dot green"></span></div>
+                  <span class="code-title">project-basic.js</span>
+                  <button class="copy-btn" data-code="{\n  $project: {\n    name: 1,\n    email: 1,\n    _id: 0\n  }\n}">Copy</button>
+                </div>
+                <div class="code-content">{
+  <span class="syn-stage">$project</span>: {
+    <span class="syn-prop">name</span>: <span class="syn-num">1</span>,     <span class="syn-comment">// Include name</span>
+    <span class="syn-prop">email</span>: <span class="syn-num">1</span>,    <span class="syn-comment">// Include email</span>
+    <span class="syn-prop">_id</span>: <span class="syn-num">0</span>       <span class="syn-comment">// Exclude _id</span>
+  }
+}</div>
+              </div>
+            </div>
+
+            <div class="card highlight-purple">
+              <h3 class="card-title" style="color: var(--accent-purple);">Why Use $project?</h3>
+              <ul class="feature-list" style="margin-top: 0.75rem;">
+                <li><span class="feature-bullet" style="background: var(--accent-purple-bg); color: var(--accent-purple);">1</span> <span><strong>Remove Clutter:</strong> Hide internal MongoDB fields like <code>__v</code> and unwanted properties.</span></li>
+                <li><span class="feature-bullet" style="background: var(--accent-purple-bg); color: var(--accent-purple);">2</span> <span><strong>Rename Fields:</strong> Transform <code>_id</code> back into <code>course</code> for clean client APIs.</span></li>
+                <li><span class="feature-bullet" style="background: var(--accent-purple-bg); color: var(--accent-purple);">3</span> <span><strong>Calculated Fields:</strong> Multiply quantity by price to produce a <code>total</code> field.</span></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 20 — INCLUDE AND EXCLUDE FIELDS
+           ==================================================================== -->
+      <section class="slide" data-slide="20" id="slide-20">
+        <div class="slide-content">
+          <div class="slide-header">
+            <span class="slide-tag purple">Section 5 — $project</span>
+            <h1 class="slide-title">Include and <span style="color: var(--accent-purple);">Exclude Fields</span></h1>
+            <p class="slide-subtitle">Understanding the exact rules of <code>1</code> (include) and <code>0</code> (exclude) in MongoDB projection.</p>
+          </div>
+
+          <div class="grid-2">
+            <div>
+              <div class="code-window">
+                <div class="code-header">
+                  <div class="window-dots"><span class="window-dot red"></span><span class="window-dot yellow"></span><span class="window-dot green"></span></div>
+                  <span class="code-title">default-id-behavior.js</span>
+                  <button class="copy-btn" data-code="{\n  $project: {\n    name: 1,\n    mark: 1\n  }\n}">Copy</button>
+                </div>
+                <div class="code-content"><span class="syn-comment">// Example 1: _id is included by default</span>
+{
+  <span class="syn-stage">$project</span>: {
+    <span class="syn-prop">name</span>: <span class="syn-num">1</span>,
+    <span class="syn-prop">mark</span>: <span class="syn-num">1</span>
+  }
+}
+<span class="syn-comment">// Output: { _id: ObjectId("..."), name: "Rahul", mark: 85 }</span></div>
+              </div>
+
+              <div class="code-window" style="margin-top: 1rem;">
+                <div class="code-header">
+                  <div class="window-dots"><span class="window-dot red"></span><span class="window-dot yellow"></span><span class="window-dot green"></span></div>
+                  <span class="code-title">explicit-id-suppression.js</span>
+                  <button class="copy-btn" data-code="{\n  $project: {\n    name: 1,\n    mark: 1,\n    _id: 0\n  }\n}">Copy</button>
+                </div>
+                <div class="code-content"><span class="syn-comment">// Example 2: Explicitly suppress _id</span>
+{
+  <span class="syn-stage">$project</span>: {
+    <span class="syn-prop">name</span>: <span class="syn-num">1</span>,
+    <span class="syn-prop">mark</span>: <span class="syn-num">1</span>,
+    <span class="syn-prop">_id</span>: <span class="syn-num">0</span>    <span class="syn-comment">// Removes _id entirely</span>
+  }
+}
+<span class="syn-comment">// Output: { name: "Rahul", mark: 85 }</span></div>
+              </div>
+            </div>
+
+            <div class="card highlight-purple">
+              <h3 class="card-title" style="color: var(--accent-purple);">The Golden Projection Rule</h3>
+              <p style="font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 1rem;">
+                In MongoDB projection, <strong>1 means include</strong> and <strong>0 means exclude</strong>.
+              </p>
+              <div class="card highlight-amber" style="background: rgba(251, 191, 36, 0.05);">
+                <strong style="color: var(--accent-amber);">⚠️ Cannot Mix 1 and 0 (Except _id):</strong>
+                <p style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 0.35rem;">
+                  You cannot specify <code>{ name: 1, age: 0 }</code>. MongoDB does not allow mixing inclusions and exclusions in the same projection, with the <strong>only exception</strong> being <code>_id: 0</code>.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 21 — RENAMING FIELDS WITH $project
+           ==================================================================== -->
+      <section class="slide" data-slide="21" id="slide-21">
+        <div class="slide-content">
+          <div class="slide-header">
+            <span class="slide-tag purple">Section 5 — $project</span>
+            <h1 class="slide-title">Renaming Fields With <span style="color: var(--accent-purple);">$project</span></h1>
+            <p class="slide-subtitle">Use field paths like <code>"$name"</code> to assign existing values to brand new field names.</p>
+          </div>
+
+          <div class="grid-2">
+            <div>
+              <div class="code-window">
+                <div class="code-header">
+                  <div class="window-dots"><span class="window-dot red"></span><span class="window-dot yellow"></span><span class="window-dot green"></span></div>
+                  <span class="code-title">rename-fields.js</span>
+                  <button class="copy-btn" data-code="{\n  $project: {\n    _id: 0,\n    studentName: &quot;$name&quot;,\n    studentMark: &quot;$mark&quot;\n  }\n}">Copy</button>
+                </div>
+                <div class="code-content">{
+  <span class="syn-stage">$project</span>: {
+    <span class="syn-prop">_id</span>: <span class="syn-num">0</span>,
+    <span class="syn-prop">studentName</span>: <span class="syn-str">"$name"</span>,  <span class="syn-comment">// Renames "name" -> "studentName"</span>
+    <span class="syn-prop">studentMark</span>: <span class="syn-str">"$mark"</span>   <span class="syn-comment">// Renames "mark" -> "studentMark"</span>
+  }
+}</div>
+              </div>
+            </div>
+
+            <div>
+              <div class="card highlight-green">
+                <h3 class="card-title">Before &amp; After Transformation</h3>
+                <div style="display: flex; flex-direction: column; gap: 0.75rem; margin-top: 0.5rem;">
+                  <div class="card" style="padding: 0.75rem; background: var(--bg-canvas);">
+                    <strong style="color: var(--text-muted); font-size: 0.8rem; font-family: var(--font-mono);">INPUT DOCUMENT:</strong>
+                    <pre style="font-family: var(--font-mono); font-size: 0.85rem; color: var(--text-secondary); margin-top: 0.2rem;">{ _id: ObjectId("..."), name: "Rahul", mark: 85 }</pre>
+                  </div>
+                  <div style="text-align: center; color: var(--mongo-green); font-size: 1.2rem;">↓</div>
+                  <div class="card" style="padding: 0.75rem; background: var(--bg-canvas); border-color: var(--mongo-green-border);">
+                    <strong style="color: var(--mongo-green); font-size: 0.8rem; font-family: var(--font-mono);">OUTPUT DOCUMENT:</strong>
+                    <pre style="font-family: var(--font-mono); font-size: 0.85rem; color: var(--mongo-green); margin-top: 0.2rem;">{ studentName: "Rahul", studentMark: 85 }</pre>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 22 — CALCULATED FIELD WITH $project
+           ==================================================================== -->
+      <section class="slide" data-slide="22" id="slide-22">
+        <div class="slide-content">
+          <div class="slide-header">
+            <span class="slide-tag purple">Section 5 — $project</span>
+            <h1 class="slide-title">Creating <span style="color: var(--accent-purple);">Calculated Fields</span></h1>
+            <p class="slide-subtitle"><code>$project</code> can perform simple arithmetic calculations directly on document values.</p>
+          </div>
+
+          <div class="grid-2">
+            <div>
+              <div class="code-window">
+                <div class="code-header">
+                  <div class="window-dots"><span class="window-dot red"></span><span class="window-dot yellow"></span><span class="window-dot green"></span></div>
+                  <span class="code-title">calculated-field.js</span>
+                  <button class="copy-btn" data-code="{\n  $project: {\n    _id: 0,\n    name: 1,\n    total: {\n      $multiply: [&quot;$price&quot;, &quot;$quantity&quot;]\n    }\n  }\n}">Copy</button>
+                </div>
+                <div class="code-content">{
+  <span class="syn-stage">$project</span>: {
+    <span class="syn-prop">_id</span>: <span class="syn-num">0</span>,
+    <span class="syn-prop">name</span>: <span class="syn-num">1</span>,
+    <span class="syn-prop">total</span>: {
+      <span class="syn-accum">$multiply</span>: [<span class="syn-str">"$price"</span>, <span class="syn-str">"$quantity"</span>]
+    }
+  }
+}</div>
+              </div>
+            </div>
+
+            <div class="card highlight-green">
+              <h3 class="card-title">Computed Result</h3>
+              <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 0.75rem;">
+                Given an order with price <code>30000</code> and quantity <code>2</code>:
+              </p>
+              <div class="output-box" style="margin-bottom: 1rem;">
+{
+  "name": "Laptop",
+  "total": 60000
+}
+              </div>
+              <p style="font-size: 0.8rem; color: var(--text-muted);">
+                💡 <em>Note for beginners:</em> Keep arithmetic simple at first with basic expressions like <code>$multiply</code>. You will learn more complex expressions as you advance!
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 23 — WHAT IS $sort?
+           ==================================================================== -->
+      <section class="slide" data-slide="23" id="slide-23">
+        <div class="slide-content">
+          <div class="slide-header">
+            <span class="slide-tag amber">Section 6 — $sort</span>
+            <h1 class="slide-title">What Is <span class="highlight"> $sort</span>?</h1>
+            <p class="slide-subtitle">The <code>$sort</code> stage reorders documents as they pass through the aggregation pipeline.</p>
+          </div>
+
+          <div class="grid-2">
+            <div>
+              <div class="code-window">
+                <div class="code-header">
+                  <div class="window-dots"><span class="window-dot red"></span><span class="window-dot yellow"></span><span class="window-dot green"></span></div>
+                  <span class="code-title">sort-stage.js</span>
+                  <button class="copy-btn" data-code="{\n  $sort: {\n    mark: -1  // Descending (Highest to Lowest)\n  }\n}">Copy</button>
+                </div>
+                <div class="code-content"><span class="syn-comment">// Descending: Highest to lowest</span>
+{
+  <span class="syn-stage">$sort</span>: {
+    <span class="syn-prop">mark</span>: <span class="syn-num">-1</span>
+  }
+}
+
+<span class="syn-comment">// Ascending: Lowest to highest</span>
+{
+  <span class="syn-stage">$sort</span>: {
+    <span class="syn-prop">mark</span>: <span class="syn-num">1</span>
+  }
+}</div>
+              </div>
+            </div>
+
+            <div class="card highlight-amber">
+              <h3 class="card-title" style="color: var(--accent-amber);">Direction Values to Remember</h3>
+              <div style="display: flex; flex-direction: column; gap: 1rem; margin-top: 0.75rem;">
+                <div class="card highlight-green" style="background: var(--bg-canvas);">
+                  <strong style="color: var(--mongo-green); font-family: var(--font-mono); font-size: 1.1rem;">1 → Ascending Order</strong>
+                  <p style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 0.2rem;">
+                    Smallest to largest (0 → 100), alphabetical (A → Z), or oldest to newest date.
+                  </p>
+                </div>
+                <div class="card highlight-cyan" style="background: var(--bg-canvas);">
+                  <strong style="color: var(--accent-cyan); font-family: var(--font-mono); font-size: 1.1rem;">-1 → Descending Order</strong>
+                  <p style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 0.2rem;">
+                    Largest to smallest (100 → 0), reverse alphabetical (Z → A), or newest to oldest date.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 24 — $sort EXAMPLE (INTERACTIVE DEMO)
+           ==================================================================== -->
+      <section class="slide" data-slide="24" id="slide-24">
+        <div class="slide-content">
+          <div class="slide-header">
+            <span class="slide-tag amber">Section 6 — $sort</span>
+            <h1 class="slide-title">$sort <span class="highlight">Interactive Example</span></h1>
+            <p class="slide-subtitle">Watch how changing the sort direction instantly reorders the student dataset.</p>
+          </div>
+
+          <div class="demo-box">
+            <div class="demo-controls">
+              <span style="font-size: 0.85rem; color: var(--text-muted); font-weight: 600;">DIRECTION:</span>
+              <button class="demo-btn active" id="sortDescBtn" onclick="DemoSort.setDirection(-1)">Descending: mark: -1 (Highest First)</button>
+              <button class="demo-btn secondary" id="sortAscBtn" onclick="DemoSort.setDirection(1)">Ascending: mark: 1 (Lowest First)</button>
+              <button class="demo-btn" style="margin-left: auto;" onclick="DemoSort.run()">▶ Run $sort</button>
+            </div>
+
+            <div class="grid-2">
+              <div>
+                <h4 style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.5rem; font-family: var(--font-mono);">
+                  INPUT DATA (Unsorted)
+                </h4>
+                <div class="table-container">
+                  <table class="data-table">
+                    <thead><tr><th>Name</th><th>Mark</th></tr></thead>
+                    <tbody>
+                      <tr><td>Rahul</td><td><strong>85</strong></td></tr>
+                      <tr><td>Arun</td><td><strong>72</strong></td></tr>
+                      <tr><td>Neha</td><td><strong>95</strong></td></tr>
+                      <tr><td>Akhil</td><td><strong>80</strong></td></tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              <div>
+                <h4 style="font-size: 0.85rem; color: var(--accent-amber); margin-bottom: 0.5rem; font-family: var(--font-mono);">
+                  OUTPUT (Sorted by $sort)
+                </h4>
+                <div class="table-container">
+                  <table class="data-table">
+                    <thead><tr><th>Rank</th><th>Name</th><th>Mark</th></tr></thead>
+                    <tbody id="sortOutputTable">
+                      <tr><td>1</td><td>Neha</td><td><span class="pill-badge green">95</span></td></tr>
+                      <tr><td>2</td><td>Rahul</td><td><span class="pill-badge green">85</span></td></tr>
+                      <tr><td>3</td><td>Akhil</td><td><span class="pill-badge cyan">80</span></td></tr>
+                      <tr><td>4</td><td>Arun</td><td><span class="pill-badge amber">72</span></td></tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 25 — SORTING MULTIPLE FIELDS
+           ==================================================================== -->
+      <section class="slide" data-slide="25" id="slide-25">
+        <div class="slide-content">
+          <div class="slide-header">
+            <span class="slide-tag amber">Section 6 — $sort</span>
+            <h1 class="slide-title">Sorting by <span class="highlight">Multiple Fields</span></h1>
+            <p class="slide-subtitle">You can sort by primary and secondary criteria simultaneously.</p>
+          </div>
+
+          <div class="grid-2">
+            <div>
+              <div class="code-window">
+                <div class="code-header">
+                  <div class="window-dots"><span class="window-dot red"></span><span class="window-dot yellow"></span><span class="window-dot green"></span></div>
+                  <span class="code-title">multi-field-sort.js</span>
+                  <button class="copy-btn" data-code="{\n  $sort: {\n    course: 1,\n    mark: -1\n  }\n}">Copy</button>
+                </div>
+                <div class="code-content">{
+  <span class="syn-stage">$sort</span>: {
+    <span class="syn-prop">course</span>: <span class="syn-num">1</span>,   <span class="syn-comment">// 1. First sort courses alphabetically (A -> Z)</span>
+    <span class="syn-prop">mark</span>: <span class="syn-num">-1</span>     <span class="syn-comment">// 2. Within each course, highest marks first</span>
+  }
+}</div>
+              </div>
+            </div>
+
+            <div class="card highlight-green">
+              <h3 class="card-title">How Multi-Field Sorting Behaves</h3>
+              <p style="font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 1rem;">
+                Students are grouped alphabetically by course name first. If two students have the same course, MongoDB breaks the tie by ordering their marks from highest to lowest!
+              </p>
+              <div class="table-container">
+                <table class="data-table">
+                  <thead><tr><th>Course (Ascending)</th><th>Name</th><th>Mark (Descending)</th></tr></thead>
+                  <tbody>
+                    <tr><td>Java</td><td>Neha</td><td><strong>95</strong></td></tr>
+                    <tr><td>Java</td><td>Kiran</td><td><strong>74</strong></td></tr>
+                    <tr><td>MERN</td><td>Rahul</td><td><strong>85</strong></td></tr>
+                    <tr><td>MERN</td><td>Akhil</td><td><strong>80</strong></td></tr>
+                    <tr><td>Python</td><td>Arun</td><td><strong>72</strong></td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 26 — WHY COMBINE STAGES?
+           ==================================================================== -->
+      <section class="slide" data-slide="26" id="slide-26">
+        <div class="slide-content">
+          <div class="slide-header">
+            <span class="slide-tag">Section 7 — Combining Stages</span>
+            <h1 class="slide-title">Why <span class="highlight">Combine Stages</span>?</h1>
+            <p class="slide-subtitle">Individual stages are simple. The true power of MongoDB aggregation emerges when you connect them together.</p>
+          </div>
+
+          <div class="grid-2">
+            <div class="card highlight-green">
+              <h3 class="card-title">The Standard 4-Stage Reporting Formula</h3>
+              <div class="vertical-flow" style="margin-top: 1rem;">
+                <div class="v-node green">
+                  <strong>1. $match</strong>
+                  <div style="font-size: 0.75rem; color: var(--text-muted);">Filter only relevant records</div>
+                </div>
+                <div class="v-arrow">↓</div>
+                <div class="v-node cyan">
+                  <strong>2. $group</strong>
+                  <div style="font-size: 0.75rem; color: var(--text-muted);">Group &amp; compute mathematical summaries</div>
+                </div>
+                <div class="v-arrow">↓</div>
+                <div class="v-node" style="color: var(--accent-purple); border-color: var(--accent-purple-border);">
+                  <strong>3. $project</strong>
+                  <div style="font-size: 0.75rem; color: var(--text-muted);">Reshape fields &amp; remove internal _id</div>
+                </div>
+                <div class="v-arrow">↓</div>
+                <div class="v-node" style="color: var(--accent-amber); border-color: var(--accent-amber-border);">
+                  <strong>4. $sort</strong>
+                  <div style="font-size: 0.75rem; color: var(--text-muted);">Order results for leaderboards &amp; charts</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="card highlight-cyan">
+              <h3 class="card-title" style="color: var(--accent-cyan);">Real-World Scenario</h3>
+              <p style="font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 1rem;">
+                <em>"We want a clean report showing the average mark and student count for the MERN course, sorted by highest average."</em>
+              </p>
+              <ul class="feature-list">
+                <li><span class="feature-bullet">1</span> <span><code>$match</code> discards all non-MERN students first.</span></li>
+                <li><span class="feature-bullet cyan">2</span> <span><code>$group</code> calculates the average mark and counts total students.</span></li>
+                <li><span class="feature-bullet" style="background: var(--accent-purple-bg); color: var(--accent-purple);">3</span> <span><code>$project</code> renames <code>_id</code> to <code>course</code> and removes raw object metadata.</span></li>
+                <li><span class="feature-bullet amber">4</span> <span><code>$sort</code> ensures top performers rank first.</span></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 27 — COMPLETE PIPELINE EXAMPLE
+           ==================================================================== -->
+      <section class="slide" data-slide="27" id="slide-27">
+        <div class="slide-content">
+          <div class="slide-header">
+            <span class="slide-tag">Section 7 — Combining Stages</span>
+            <h1 class="slide-title">Complete <span class="highlight">Pipeline Example</span></h1>
+            <p class="slide-subtitle">Here is the full 4-stage aggregation query in Mongoose.</p>
+          </div>
+
+          <div class="grid-2">
+            <div>
+              <div class="code-window">
+                <div class="code-header">
+                  <div class="window-dots"><span class="window-dot red"></span><span class="window-dot yellow"></span><span class="window-dot green"></span></div>
+                  <span class="code-title">student-analytics-pipeline.js</span>
+                  <button class="copy-btn" data-code="const result = await Student.aggregate([\n  { $match: { course: &quot;MERN&quot; } },\n  {\n    $group: {\n      _id: &quot;$course&quot;,\n      averageMark: { $avg: &quot;$mark&quot; },\n      totalStudents: { $sum: 1 }\n    }\n  },\n  {\n    $project: {\n      _id: 0,\n      course: &quot;$_id&quot;,\n      averageMark: 1,\n      totalStudents: 1\n    }\n  },\n  { $sort: { averageMark: -1 } }\n]);">Copy</button>
+                </div>
+                <div class="code-content"><span class="syn-kwd">const</span> <span class="syn-prop">result</span> = <span class="syn-kwd">await</span> <span class="syn-prop">Student</span>.<span class="syn-fn">aggregate</span>([
+  <span class="syn-comment">// 1. Filter: only MERN students</span>
+  {
+    <span class="syn-stage">$match</span>: { <span class="syn-prop">course</span>: <span class="syn-str">"MERN"</span> }
+  },
+
+  <span class="syn-comment">// 2. Group: calculate stats</span>
+  {
+    <span class="syn-stage">$group</span>: {
+      <span class="syn-prop">_id</span>: <span class="syn-str">"$course"</span>,
+      <span class="syn-prop">averageMark</span>: { <span class="syn-accum">$avg</span>: <span class="syn-str">"$mark"</span> },
+      <span class="syn-prop">totalStudents</span>: { <span class="syn-accum">$sum</span>: <span class="syn-num">1</span> }
+    }
+  },
+
+  <span class="syn-comment">// 3. Project: clean up keys</span>
+  {
+    <span class="syn-stage">$project</span>: {
+      <span class="syn-prop">_id</span>: <span class="syn-num">0</span>,
+      <span class="syn-prop">course</span>: <span class="syn-str">"$_id"</span>,
+      <span class="syn-prop">averageMark</span>: <span class="syn-num">1</span>,
+      <span class="syn-prop">totalStudents</span>: <span class="syn-num">1</span>
+    }
+  },
+
+  <span class="syn-comment">// 4. Sort: highest avg first</span>
+  {
+    <span class="syn-stage">$sort</span>: { <span class="syn-prop">averageMark</span>: <span class="syn-num">-1</span> }
+  }
+]);</div>
+              </div>
+            </div>
+
+            <div class="card highlight-green">
+              <h3 class="card-title">Returned Result Object</h3>
+              <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 0.75rem;">
+                Mongoose sends this directly to MongoDB and returns a clean, plain JavaScript array:
+              </p>
+              <div class="output-box">
+[
+  {
+    "course": "MERN",
+    "averageMark": 84.5,
+    "totalStudents": 25
+  }
+]
+              </div>
+              <div class="card" style="margin-top: 1rem; background: var(--bg-canvas);">
+                <p style="font-size: 0.85rem; color: var(--text-secondary);">
+                  Notice how clean the result is: no <code>_id</code> field, descriptive keys, and pre-calculated statistics ready to send directly to your frontend dashboard!
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 28 — UNDERSTAND THE PIPELINE STEP-BY-STEP (INTERACTIVE)
+           ==================================================================== -->
+      <section class="slide" data-slide="28" id="slide-28">
+        <div class="slide-content">
+          <div class="slide-header">
+            <span class="slide-tag">Section 7 — Combining Stages</span>
+            <h1 class="slide-title">Understand the Pipeline <span class="highlight">Step-by-Step</span></h1>
+            <p class="slide-subtitle">Click through the pipeline stages to watch how the data transforms at each step.</p>
+          </div>
+
+          <div class="demo-box">
+            <div class="demo-controls" style="justify-content: space-between;">
+              <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                <button class="demo-btn active" id="pipeStep0Btn" onclick="DemoPipeline.setStep(0)">Raw Collection</button>
+                <button class="demo-btn secondary" id="pipeStep1Btn" onclick="DemoPipeline.setStep(1)">1. $match</button>
+                <button class="demo-btn secondary" id="pipeStep2Btn" onclick="DemoPipeline.setStep(2)">2. $group</button>
+                <button class="demo-btn secondary" id="pipeStep3Btn" onclick="DemoPipeline.setStep(3)">3. $project</button>
+                <button class="demo-btn secondary" id="pipeStep4Btn" onclick="DemoPipeline.setStep(4)">4. $sort</button>
+              </div>
+              <button class="demo-btn" onclick="DemoPipeline.nextStep()">Next Stage ➔</button>
+            </div>
+
+            <div class="grid-2" style="align-items: center;">
+              <div>
+                <div class="card" id="pipeStepCard" style="border-color: var(--mongo-green-border);">
+                  <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.5rem;">
+                    <span class="slide-tag" id="pipeStepTag">Stage 0 of 4</span>
+                    <span style="font-family: var(--font-mono); font-size: 0.8rem; color: var(--text-muted);" id="pipeDocCount">100 Documents</span>
+                  </div>
+                  <h3 class="card-title" id="pipeStepTitle">Raw Student Collection</h3>
+                  <p class="card-body" id="pipeStepDesc" style="margin-bottom: 0.75rem;">
+                    All documents currently in the MongoDB database before any pipeline stages execute.
+                  </p>
+                </div>
+              </div>
+
+              <div>
+                <h4 style="font-size: 0.85rem; color: var(--accent-cyan); margin-bottom: 0.5rem; font-family: var(--font-mono);">
+                  CURRENT DATASET STATE
+                </h4>
+                <div class="output-box" id="pipeStepOutput" style="min-height: 160px; max-height: 220px; overflow-y: auto;">
+[
+  { "name": "Rahul", "course": "MERN", "mark": 85 },
+  { "name": "Arun", "course": "Python", "mark": 72 },
+  { "name": "Akhil", "course": "MERN", "mark": 90 },
+  { "name": "Neha", "course": "Java", "mark": 95 },
+  ... 96 more documents
+]
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 29 — REAL-WORLD EXAMPLE 1: COURSE STATISTICS
+           ==================================================================== -->
+      <section class="slide" data-slide="29" id="slide-29">
+        <div class="slide-content">
+          <div class="slide-header">
+            <span class="slide-tag">Section 8 — Real-World Examples</span>
+            <h1 class="slide-title">Example 1: <span class="highlight">Course Statistics</span></h1>
+            <p class="slide-subtitle">Requirement: Show the total number of students and the average mark for each course.</p>
+          </div>
+
+          <div class="grid-2">
+            <div>
+              <div class="code-window">
+                <div class="code-header">
+                  <div class="window-dots"><span class="window-dot red"></span><span class="window-dot yellow"></span><span class="window-dot green"></span></div>
+                  <span class="code-title">course-stats.js</span>
+                  <button class="copy-btn" data-code="[\n  {\n    $group: {\n      _id: &quot;$course&quot;,\n      students: { $sum: 1 },\n      averageMark: { $avg: &quot;$mark&quot; }\n    }\n  }\n]">Copy</button>
+                </div>
+                <div class="code-content">[
+  {
+    <span class="syn-stage">$group</span>: {
+      <span class="syn-prop">_id</span>: <span class="syn-str">"$course"</span>,
+      <span class="syn-prop">students</span>: { <span class="syn-accum">$sum</span>: <span class="syn-num">1</span> },
+      <span class="syn-prop">averageMark</span>: { <span class="syn-accum">$avg</span>: <span class="syn-str">"$mark"</span> }
+    }
+  }
+]</div>
+              </div>
+            </div>
+
+            <div class="card highlight-green">
+              <h3 class="card-title">Produced Output</h3>
+              <div class="output-box">
+[
+  { "_id": "MERN", "students": 25, "averageMark": 82.5 },
+  { "_id": "Python", "students": 18, "averageMark": 76.8 },
+  { "_id": "Java", "students": 12, "averageMark": 79.2 }
+]
+              </div>
+              <div class="card" style="margin-top: 1rem; background: var(--bg-canvas);">
+                <p style="font-size: 0.85rem; color: var(--text-secondary);">
+                  💡 With just a single <code>$group</code> stage, MongoDB collapses 55 individual student records into 3 actionable course summaries.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 30 — REAL-WORLD EXAMPLE 2: TOP STUDENTS
+           ==================================================================== -->
+      <section class="slide" data-slide="30" id="slide-30">
+        <div class="slide-content">
+          <div class="slide-header">
+            <span class="slide-tag">Section 8 — Real-World Examples</span>
+            <h1 class="slide-title">Example 2: <span class="highlight">Top Performing Students</span></h1>
+            <p class="slide-subtitle">Requirement: Find students who scored 80 or above, clean up the fields, and sort them descending by mark.</p>
+          </div>
+
+          <div class="grid-2">
+            <div>
+              <div class="code-window">
+                <div class="code-header">
+                  <div class="window-dots"><span class="window-dot red"></span><span class="window-dot yellow"></span><span class="window-dot green"></span></div>
+                  <span class="code-title">top-students.js</span>
+                  <button class="copy-btn" data-code="[\n  { $match: { mark: { $gte: 80 } } },\n  {\n    $project: {\n      _id: 0,\n      name: 1,\n      course: 1,\n      mark: 1\n    }\n  },\n  { $sort: { mark: -1 } }\n]">Copy</button>
+                </div>
+                <div class="code-content">[
+  <span class="syn-comment">// 1. Filter: marks >= 80</span>
+  {
+    <span class="syn-stage">$match</span>: { <span class="syn-prop">mark</span>: { <span class="syn-stage">$gte</span>: <span class="syn-num">80</span> } }
+  },
+
+  <span class="syn-comment">// 2. Project: clean display</span>
+  {
+    <span class="syn-stage">$project</span>: {
+      <span class="syn-prop">_id</span>: <span class="syn-num">0</span>,
+      <span class="syn-prop">name</span>: <span class="syn-num">1</span>,
+      <span class="syn-prop">course</span>: <span class="syn-num">1</span>,
+      <span class="syn-prop">mark</span>: <span class="syn-num">1</span>
+    }
+  },
+
+  <span class="syn-comment">// 3. Sort: highest mark first</span>
+  {
+    <span class="syn-stage">$sort</span>: { <span class="syn-prop">mark</span>: <span class="syn-num">-1</span> }
+  }
+]</div>
+              </div>
+            </div>
+
+            <div class="card highlight-cyan">
+              <h3 class="card-title" style="color: var(--accent-cyan);">Honor Roll Leaderboard Output</h3>
+              <div class="table-container" style="margin-top: 0.75rem;">
+                <table class="data-table">
+                  <thead><tr><th>Name</th><th>Course</th><th>Mark</th></tr></thead>
+                  <tbody>
+                    <tr><td>Neha</td><td>Java</td><td><span class="pill-badge green">95</span></td></tr>
+                    <tr><td>Rahul</td><td>MERN</td><td><span class="pill-badge green">90</span></td></tr>
+                    <tr><td>Akhil</td><td>Python</td><td><span class="pill-badge green">88</span></td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 31 — REAL-WORLD EXAMPLE 3: E-COMMERCE SALES
+           ==================================================================== -->
+      <section class="slide" data-slide="31" id="slide-31">
+        <div class="slide-content">
+          <div class="slide-header">
+            <span class="slide-tag">Section 8 — Real-World Examples</span>
+            <h1 class="slide-title">Example 3: <span class="highlight">E-Commerce Sales by Category</span></h1>
+            <p class="slide-subtitle">Requirement: Find the total quantity of items sold for each product category and sort descending.</p>
+          </div>
+
+          <div class="grid-2">
+            <div>
+              <div class="code-window">
+                <div class="code-header">
+                  <div class="window-dots"><span class="window-dot red"></span><span class="window-dot yellow"></span><span class="window-dot green"></span></div>
+                  <span class="code-title">category-sales.js</span>
+                  <button class="copy-btn" data-code="[\n  {\n    $group: {\n      _id: &quot;$category&quot;,\n      totalQuantity: {\n        $sum: &quot;$quantity&quot;\n      }\n    }\n  },\n  {\n    $sort: {\n      totalQuantity: -1\n    }\n  }\n]">Copy</button>
+                </div>
+                <div class="code-content">[
+  <span class="syn-comment">// 1. Group by category and sum quantity field</span>
+  {
+    <span class="syn-stage">$group</span>: {
+      <span class="syn-prop">_id</span>: <span class="syn-str">"$category"</span>,
+      <span class="syn-prop">totalQuantity</span>: {
+        <span class="syn-accum">$sum</span>: <span class="syn-str">"$quantity"</span>
+      }
+    }
+  },
+
+  <span class="syn-comment">// 2. Sort highest selling category first</span>
+  {
+    <span class="syn-stage">$sort</span>: {
+      <span class="syn-prop">totalQuantity</span>: <span class="syn-num">-1</span>
+    }
+  }
+]</div>
+              </div>
+            </div>
+
+            <div class="card highlight-amber">
+              <h3 class="card-title" style="color: var(--accent-amber);">Sales Volume Summary</h3>
+              <div class="table-container" style="margin-top: 0.75rem;">
+                <table class="data-table">
+                  <thead><tr><th>_id (Category)</th><th>totalQuantity Sold</th></tr></thead>
+                  <tbody>
+                    <tr><td>Electronics</td><td><span class="pill-badge green">1,420 units</span></td></tr>
+                    <tr><td>Fashion</td><td><span class="pill-badge cyan">980 units</span></td></tr>
+                    <tr><td>Books</td><td><span class="pill-badge amber">350 units</span></td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 32 — REAL-WORLD EXAMPLE 4: REVENUE REPORT
+           ==================================================================== -->
+      <section class="slide" data-slide="32" id="slide-32">
+        <div class="slide-content">
+          <div class="slide-header">
+            <span class="slide-tag">Section 8 — Real-World Examples</span>
+            <h1 class="slide-title">Example 4: <span class="highlight">Revenue Calculation Report</span></h1>
+            <p class="slide-subtitle">Requirement: Calculate item revenue ($price * $quantity), then compute total revenue per category.</p>
+          </div>
+
+          <div class="grid-2">
+            <div>
+              <div class="code-window">
+                <div class="code-header">
+                  <div class="window-dots"><span class="window-dot red"></span><span class="window-dot yellow"></span><span class="window-dot green"></span></div>
+                  <span class="code-title">revenue-report.js</span>
+                  <button class="copy-btn" data-code="[\n  {\n    $project: {\n      category: 1,\n      revenue: {\n        $multiply: [&quot;$price&quot;, &quot;$quantity&quot;]\n      }\n    }\n  },\n  {\n    $group: {\n      _id: &quot;$category&quot;,\n      totalRevenue: {\n        $sum: &quot;$revenue&quot;\n      }\n    }\n  }\n]">Copy</button>
+                </div>
+                <div class="code-content">[
+  <span class="syn-comment">// Step 1: Calculate revenue per order</span>
+  {
+    <span class="syn-stage">$project</span>: {
+      <span class="syn-prop">category</span>: <span class="syn-num">1</span>,
+      <span class="syn-prop">revenue</span>: {
+        <span class="syn-accum">$multiply</span>: [<span class="syn-str">"$price"</span>, <span class="syn-str">"$quantity"</span>]
+      }
+    }
+  },
+
+  <span class="syn-comment">// Step 2: Sum calculated revenue per category</span>
+  {
+    <span class="syn-stage">$group</span>: {
+      <span class="syn-prop">_id</span>: <span class="syn-str">"$category"</span>,
+      <span class="syn-prop">totalRevenue</span>: {
+        <span class="syn-accum">$sum</span>: <span class="syn-str">"$revenue"</span>
+      }
+    }
+  }
+]</div>
+              </div>
+            </div>
+
+            <div class="card highlight-green" style="display: flex; flex-direction: column; justify-content: center; align-items: center;">
+              <h3 class="card-title" style="align-self: flex-start;">Revenue Pipeline Flow</h3>
+              <div class="vertical-flow" style="width: 100%; margin-top: 1rem;">
+                <div class="v-node">Raw Orders (price, quantity)</div>
+                <div class="v-arrow">↓</div>
+                <div class="v-node" style="color: var(--accent-purple); border-color: var(--accent-purple-border);">
+                  $project: revenue = price * quantity
+                </div>
+                <div class="v-arrow">↓</div>
+                <div class="v-node cyan">
+                  $group: sum all revenue by category
+                </div>
+                <div class="v-arrow">↓</div>
+                <div class="v-node green" style="font-weight: 700;">
+                  Total Revenue per Category 💰
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 33 — REAL-WORLD EXAMPLE 5: FILTER + GROUP + SORT
+           ==================================================================== -->
+      <section class="slide" data-slide="33" id="slide-33">
+        <div class="slide-content">
+          <div class="slide-header">
+            <span class="slide-tag">Section 8 — Real-World Examples</span>
+            <h1 class="slide-title">Example 5: <span class="highlight">Filter + Group + Sort</span></h1>
+            <p class="slide-subtitle">Requirement: Find only completed orders and show categories with the highest total revenue first.</p>
+          </div>
+
+          <div class="grid-2">
+            <div class="card highlight-green">
+              <h3 class="card-title">Full Multi-Stage Architecture</h3>
+              <div class="vertical-flow" style="margin-top: 0.75rem;">
+                <div class="v-node">All Orders (Pending, Completed, Canceled)</div>
+                <div class="v-arrow">↓</div>
+                <div class="v-node green">
+                  <strong>$match: { status: "completed" }</strong>
+                  <div style="font-size: 0.75rem; color: var(--text-muted);">Isolate only paid transactions</div>
+                </div>
+                <div class="v-arrow">↓</div>
+                <div class="v-node cyan">
+                  <strong>$group: { _id: "$category", revenue: { $sum: "$amount" } }</strong>
+                  <div style="font-size: 0.75rem; color: var(--text-muted);">Aggregate revenue per category</div>
+                </div>
+                <div class="v-arrow">↓</div>
+                <div class="v-node" style="color: var(--accent-amber); border-color: var(--accent-amber-border); font-weight: 700;">
+                  <strong>$sort: { revenue: -1 }</strong>
+                  <div style="font-size: 0.75rem; color: var(--text-muted);">Highest revenue category appears at top</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="card highlight-cyan">
+              <h3 class="card-title" style="color: var(--accent-cyan);">Why This Pipeline Is Elegant</h3>
+              <p style="font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 1rem;">
+                In just 3 compact stages, MongoDB performs filtering, grouped mathematics, and ordering simultaneously within milliseconds.
+              </p>
+              <ul class="feature-list">
+                <li><span class="feature-bullet">✓</span> <strong>Clean Code:</strong> No nested JavaScript loops or manual sorting in Node.js.</li>
+                <li><span class="feature-bullet cyan">✓</span> <strong>Minimal Bandwidth:</strong> Returns only category totals, not millions of individual orders.</li>
+                <li><span class="feature-bullet amber">✓</span> <strong>Scale-Ready:</strong> Works seamlessly whether you have 10 orders or 10 million orders.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 34 — AGGREGATION WITH MONGOOSE
+           ==================================================================== -->
+      <section class="slide" data-slide="34" id="slide-34">
+        <div class="slide-content">
+          <div class="slide-header">
+            <span class="slide-tag">Section 9 — Aggregation with Mongoose</span>
+            <h1 class="slide-title">Aggregation With <span class="highlight">Mongoose</span></h1>
+            <p class="slide-subtitle">Using <code>Model.aggregate()</code> inside your Node.js and Express backend applications.</p>
+          </div>
+
+          <div class="grid-2">
+            <div>
+              <div class="code-window">
+                <div class="code-header">
+                  <div class="window-dots"><span class="window-dot red"></span><span class="window-dot yellow"></span><span class="window-dot green"></span></div>
+                  <span class="code-title">mongoose-aggregate.js</span>
+                  <button class="copy-btn" data-code="const mongoose = require(&quot;mongoose&quot;);\nconst Student = require(&quot;./models/Student&quot;);\n\nasync function getTopStudents() {\n  const result = await Student.aggregate([\n    { $match: { mark: { $gte: 80 } } }\n  ]);\n\n  console.log(result);\n  return result;\n}">Copy</button>
+                </div>
+                <div class="code-content"><span class="syn-kwd">const</span> <span class="syn-prop">mongoose</span> = <span class="syn-fn">require</span>(<span class="syn-str">"mongoose"</span>);
+<span class="syn-kwd">const</span> <span class="syn-prop">Student</span> = <span class="syn-fn">require</span>(<span class="syn-str">"./models/Student"</span>);
+
+<span class="syn-kwd">async</span> <span class="syn-kwd">function</span> <span class="syn-fn">getTopStudents</span>() {
+  <span class="syn-kwd">const</span> <span class="syn-prop">result</span> = <span class="syn-kwd">await</span> <span class="syn-prop">Student</span>.<span class="syn-fn">aggregate</span>([
+    {
+      <span class="syn-stage">$match</span>: {
+        <span class="syn-prop">mark</span>: { <span class="syn-stage">$gte</span>: <span class="syn-num">80</span> }
+      }
+    }
+  ]);
+
+  <span class="syn-prop">console</span>.<span class="syn-fn">log</span>(<span class="syn-prop">result</span>);
+  <span class="syn-kwd">return</span> <span class="syn-prop">result</span>;
+}</div>
+              </div>
+            </div>
+
+            <div class="card highlight-green">
+              <h3 class="card-title">How Mongoose Handles aggregate()</h3>
+              <ul class="feature-list" style="margin-top: 0.75rem;">
+                <li><span class="feature-bullet">1</span> <span><strong>Direct Pass-through:</strong> Mongoose serializes your pipeline array and transmits it directly to the MongoDB server engine.</span></li>
+                <li><span class="feature-bullet">2</span> <span><strong>Returns a Promise:</strong> Always <code>await</code> the aggregation call or handle the Promise.</span></li>
+                <li><span class="feature-bullet">3</span> <span><strong>CommonJS Standard:</strong> Use <code>const mongoose = require("mongoose");</code> in standard Node backends.</span></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 35 — AGGREGATION VS FIND()
+           ==================================================================== -->
+      <section class="slide" data-slide="35" id="slide-35">
+        <div class="slide-content">
+          <div class="slide-header">
+            <span class="slide-tag">Section 9 — Aggregation with Mongoose</span>
+            <h1 class="slide-title">Aggregation <span class="highlight">vs. find()</span></h1>
+            <p class="slide-subtitle">When should you use <code>find()</code> and when should you use <code>aggregate()</code>?</p>
+          </div>
+
+          <div class="grid-2">
+            <div class="card highlight-cyan">
+              <h3 class="card-title" style="color: var(--accent-cyan);">Model.find()</h3>
+              <div class="code-window" style="margin: 0.75rem 0;">
+                <div class="code-content"><span class="syn-prop">Student</span>.<span class="syn-fn">find</span>({ <span class="syn-prop">course</span>: <span class="syn-str">"MERN"</span> });</div>
+              </div>
+              <ul class="feature-list">
+                <li><span class="feature-bullet cyan">✓</span> Primary purpose: Retrieve documents matching conditions.</li>
+                <li><span class="feature-bullet cyan">✓</span> Returns hydrated Mongoose documents (with <code>.save()</code>).</li>
+                <li><span class="feature-bullet cyan">✓</span> Simple queries, fetching user profiles, loading item details.</li>
+                <li><span class="feature-bullet cyan">❌</span> Cannot group documents or calculate mathematical sums/averages.</li>
+              </ul>
+            </div>
+
+            <div class="card highlight-green">
+              <h3 class="card-title">Model.aggregate()</h3>
+              <div class="code-window" style="margin: 0.75rem 0;">
+                <div class="code-content"><span class="syn-prop">Student</span>.<span class="syn-fn">aggregate</span>([ <span class="syn-comment">/* pipeline */</span> ]);</div>
+              </div>
+              <ul class="feature-list">
+                <li><span class="feature-bullet">✓</span> Primary purpose: Complex data processing and reports.</li>
+                <li><span class="feature-bullet">✓</span> Supports grouping (<code>$group</code>), filtering, reshaping, and sorting.</li>
+                <li><span class="feature-bullet">✓</span> Calculates <code>$avg</code>, <code>$sum</code>, <code>$min</code>, <code>$max</code>.</li>
+                <li><span class="feature-bullet">✓</span> Returns lightweight plain JavaScript objects (POJOs).</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 36 — IMPORTANT AGGREGATION NOTE
+           ==================================================================== -->
+      <section class="slide" data-slide="36" id="slide-36">
+        <div class="slide-content">
+          <div class="slide-header">
+            <span class="slide-tag amber">Section 9 — Aggregation with Mongoose</span>
+            <h1 class="slide-title">Important <span class="highlight">Aggregation Note</span></h1>
+            <p class="slide-subtitle">Aggregation results are returned as plain JavaScript objects, NOT normal Mongoose documents!</p>
+          </div>
+
+          <div class="grid-2">
+            <div class="card highlight-amber">
+              <h3 class="card-title" style="color: var(--accent-amber);">Plain JavaScript Objects (POJOs)</h3>
+              <p style="font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 1rem;">
+                When you run <code>Student.find()</code>, Mongoose wraps every document in a rich Mongoose Document class. But with <code>Student.aggregate()</code>, you receive raw JSON-like JavaScript objects:
+              </p>
+              <div class="wrong-box" style="font-family: var(--font-sans); margin-bottom: 0.75rem;">
+                <strong>❌ Do NOT Expect Mongoose Document Methods:</strong><br>
+                <code>result[0].save();</code> → <span style="color: #fff;">TypeError: result[0].save is not a function</span>
+              </div>
+              <div class="correct-box" style="font-family: var(--font-sans);">
+                <strong>✅ What This Means:</strong><br>
+                • No <code>.save()</code>, no <code>.validate()</code>, and no schema virtual getters.<br>
+                • Super fast, ultra lightweight, and ready for <code>res.json(result)</code>!
+              </div>
+            </div>
+
+            <div class="card highlight-green">
+              <h3 class="card-title">Why This Is an Advantage</h3>
+              <ul class="feature-list" style="margin-top: 0.75rem;">
+                <li><span class="feature-bullet">1</span> <span><strong>High Performance:</strong> No overhead from Mongoose hydration or tracking changes.</span></li>
+                <li><span class="feature-bullet">2</span> <span><strong>Arbitrary Shapes:</strong> Aggregations often return custom shapes (e.g. <code>{ averageMark, totalStudents }</code>) that do not match the original Student schema anyway!</span></li>
+                <li><span class="feature-bullet">3</span> <span><strong>Ready for APIs:</strong> Directly serializable to JSON for Express route responses.</span></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 37 — PRACTICAL MINI PROJECT
+           ==================================================================== -->
+      <section class="slide" data-slide="37" id="slide-37">
+        <div class="slide-content">
+          <div class="slide-header">
+            <span class="slide-tag">Section 10 — Practical Project</span>
+            <h1 class="slide-title">Mini Project: <span class="highlight">Student Analytics Dashboard</span></h1>
+            <p class="slide-subtitle">Build real-world aggregation reports from a live Student database.</p>
+          </div>
+
+          <div class="grid-2">
+            <div class="card highlight-green">
+              <h3 class="card-title">Student Schema Fields</h3>
+              <div class="table-container" style="margin-top: 0.75rem;">
+                <table class="data-table">
+                  <thead><tr><th>Field</th><th>Type</th><th>Example</th></tr></thead>
+                  <tbody>
+                    <tr><td><code>name</code></td><td>String</td><td>"Rahul"</td></tr>
+                    <tr><td><code>course</code></td><td>String</td><td>"MERN"</td></tr>
+                    <tr><td><code>mark</code></td><td>Number</td><td>85</td></tr>
+                    <tr><td><code>age</code></td><td>Number</td><td>22</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <div class="card highlight-cyan">
+              <h3 class="card-title" style="color: var(--accent-cyan);">Six Required Dashboard Reports</h3>
+              <ul class="feature-list" style="margin-top: 0.75rem;">
+                <li><span class="feature-bullet cyan">1</span> <span>Total count of students per course.</span></li>
+                <li><span class="feature-bullet cyan">2</span> <span>Average mark in each course.</span></li>
+                <li><span class="feature-bullet cyan">3</span> <span>Highest mark achieved in each course.</span></li>
+                <li><span class="feature-bullet cyan">4</span> <span>Lowest mark recorded in each course.</span></li>
+                <li><span class="feature-bullet cyan">5</span> <span>Top students list with marks >= 80.</span></li>
+                <li><span class="feature-bullet cyan">6</span> <span>Sort course statistics by highest average mark first.</span></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 38 — PROJECT STRUCTURE
+           ==================================================================== -->
+      <section class="slide" data-slide="38" id="slide-38">
+        <div class="slide-content">
+          <div class="slide-header">
+            <span class="slide-tag">Section 10 — Practical Project</span>
+            <h1 class="slide-title">Project <span class="highlight">Structure</span></h1>
+            <p class="slide-subtitle">Clean, professional file organization for the Student Analytics service.</p>
+          </div>
+
+          <div class="grid-2">
+            <div class="card highlight-green">
+              <h3 class="card-title">Directory Tree</h3>
+              <pre style="font-family: var(--font-mono); font-size: 0.85rem; color: var(--mongo-green); line-height: 1.8; margin-top: 0.5rem;">
+mongodb-day7/
+│
+├── src/
+│   ├── config/
+│   │   └── db.js            <span style="color: var(--text-muted);">// MongoDB connection logic</span>
+│   │
+│   ├── models/
+│   │   └── Student.js       <span style="color: var(--text-muted);">// Mongoose Student schema</span>
+│   │
+│   └── app.js               <span style="color: var(--text-muted);">// Aggregation reports &amp; execution</span>
+│
+├── .env                     <span style="color: var(--text-muted);">// MONGO_URI configuration</span>
+├── package.json             <span style="color: var(--text-muted);">// Dependencies (mongoose)</span>
+└── .gitignore               <span style="color: var(--text-muted);">// Ignore node_modules &amp; .env</span>
+              </pre>
+            </div>
+
+            <div class="card highlight-cyan">
+              <h3 class="card-title" style="color: var(--accent-cyan);">File Responsibilities</h3>
+              <div style="display: flex; flex-direction: column; gap: 0.75rem; margin-top: 0.5rem;">
+                <div>
+                  <strong style="color: var(--text-primary); font-size: 0.9rem;">src/config/db.js:</strong>
+                  <p style="font-size: 0.85rem; color: var(--text-secondary);">Establishes reliable connection to MongoDB using <code>mongoose.connect()</code>.</p>
+                </div>
+                <div>
+                  <strong style="color: var(--text-primary); font-size: 0.9rem;">src/models/Student.js:</strong>
+                  <p style="font-size: 0.85rem; color: var(--text-secondary);">Defines fields: <code>name</code>, <code>course</code>, <code>mark</code>, and <code>age</code>.</p>
+                </div>
+                <div>
+                  <strong style="color: var(--text-primary); font-size: 0.9rem;">src/app.js:</strong>
+                  <p style="font-size: 0.85rem; color: var(--text-secondary);">Executes our multi-stage aggregation pipeline and logs formatted reports.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 39 — PRACTICAL AGGREGATION CODE
+           ==================================================================== -->
+      <section class="slide" data-slide="39" id="slide-39">
+        <div class="slide-content">
+          <div class="slide-header">
+            <span class="slide-tag">Section 10 — Practical Project</span>
+            <h1 class="slide-title">Practical Aggregation <span class="highlight">Solution</span></h1>
+            <p class="slide-subtitle">The complete aggregation query answering all course analytics requirements.</p>
+          </div>
+
+          <div class="grid-2">
+            <div>
+              <div class="code-window">
+                <div class="code-header">
+                  <div class="window-dots"><span class="window-dot red"></span><span class="window-dot yellow"></span><span class="window-dot green"></span></div>
+                  <span class="code-title">analytics-solution.js</span>
+                  <button class="copy-btn" data-code="const result = await Student.aggregate([\n  {\n    $group: {\n      _id: &quot;$course&quot;,\n      totalStudents: { $sum: 1 },\n      averageMark: { $avg: &quot;$mark&quot; },\n      highestMark: { $max: &quot;$mark&quot; },\n      lowestMark: { $min: &quot;$mark&quot; }\n    }\n  },\n  {\n    $project: {\n      _id: 0,\n      course: &quot;$_id&quot;,\n      totalStudents: 1,\n      averageMark: 1,\n      highestMark: 1,\n      lowestMark: 1\n    }\n  },\n  {\n    $sort: {\n      averageMark: -1\n    }\n  }\n]);\nconsole.log(result);">Copy</button>
+                </div>
+                <div class="code-content"><span class="syn-kwd">const</span> <span class="syn-prop">result</span> = <span class="syn-kwd">await</span> <span class="syn-prop">Student</span>.<span class="syn-fn">aggregate</span>([
+  <span class="syn-comment">// Stage 1: Group and calculate all 4 metrics</span>
+  {
+    <span class="syn-stage">$group</span>: {
+      <span class="syn-prop">_id</span>: <span class="syn-str">"$course"</span>,
+      <span class="syn-prop">totalStudents</span>: { <span class="syn-accum">$sum</span>: <span class="syn-num">1</span> },
+      <span class="syn-prop">averageMark</span>: { <span class="syn-accum">$avg</span>: <span class="syn-str">"$mark"</span> },
+      <span class="syn-prop">highestMark</span>: { <span class="syn-accum">$max</span>: <span class="syn-str">"$mark"</span> },
+      <span class="syn-prop">lowestMark</span>: { <span class="syn-accum">$min</span>: <span class="syn-str">"$mark"</span> }
+    }
+  },
+
+  <span class="syn-comment">// Stage 2: Reshape for clean output</span>
+  {
+    <span class="syn-stage">$project</span>: {
+      <span class="syn-prop">_id</span>: <span class="syn-num">0</span>,
+      <span class="syn-prop">course</span>: <span class="syn-str">"$_id"</span>,
+      <span class="syn-prop">totalStudents</span>: <span class="syn-num">1</span>,
+      <span class="syn-prop">averageMark</span>: <span class="syn-num">1</span>,
+      <span class="syn-prop">highestMark</span>: <span class="syn-num">1</span>,
+      <span class="syn-prop">lowestMark</span>: <span class="syn-num">1</span>
+    }
+  },
+
+  <span class="syn-comment">// Stage 3: Order by average mark descending</span>
+  {
+    <span class="syn-stage">$sort</span>: {
+      <span class="syn-prop">averageMark</span>: <span class="syn-num">-1</span>
+    }
+  }
+]);</div>
+              </div>
+            </div>
+
+            <div class="card highlight-green">
+              <h3 class="card-title">Stage Highlights</h3>
+              <ul class="feature-list" style="margin-top: 0.75rem;">
+                <li><span class="feature-bullet cyan">1</span> <span><code>$group</code>: Computes count, average, max, and min in a single pass over the collection.</span></li>
+                <li><span class="feature-bullet" style="background: var(--accent-purple-bg); color: var(--accent-purple);">2</span> <span><code>$project</code>: Suppresses default <code>_id: 0</code> and maps <code>"$_id"</code> to <code>course</code>.</span></li>
+                <li><span class="feature-bullet amber">3</span> <span><code>$sort</code>: Places the highest-scoring course at index 0.</span></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 40 — EXPECTED RESULT
+           ==================================================================== -->
+      <section class="slide" data-slide="40" id="slide-40">
+        <div class="slide-content">
+          <div class="slide-header">
+            <span class="slide-tag">Section 10 — Practical Project</span>
+            <h1 class="slide-title">Expected <span class="highlight">Analytics Result</span></h1>
+            <p class="slide-subtitle">Here is the exact formatted report produced by our 3-stage aggregation pipeline.</p>
+          </div>
+
+          <div class="grid-3">
+            <!-- MERN Card -->
+            <div class="card highlight-green">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                <span class="pill-badge green" style="font-size: 0.85rem;">MERN</span>
+                <span style="font-size: 0.75rem; color: var(--mongo-green); font-family: var(--font-mono); font-weight: 700;">Rank #1</span>
+              </div>
+              <ul class="feature-list" style="margin-top: 0.5rem;">
+                <li><span>Students:</span> <strong style="margin-left: auto;">25</strong></li>
+                <li><span>Average:</span> <strong style="margin-left: auto; color: var(--mongo-green);">84.2</strong></li>
+                <li><span>Highest:</span> <strong style="margin-left: auto;">98</strong></li>
+                <li><span>Lowest:</span> <strong style="margin-left: auto;">62</strong></li>
+              </ul>
+            </div>
+
+            <!-- Python Card -->
+            <div class="card highlight-cyan">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                <span class="pill-badge cyan" style="font-size: 0.85rem;">Python</span>
+                <span style="font-size: 0.75rem; color: var(--accent-cyan); font-family: var(--font-mono); font-weight: 700;">Rank #2</span>
+              </div>
+              <ul class="feature-list" style="margin-top: 0.5rem;">
+                <li><span>Students:</span> <strong style="margin-left: auto;">18</strong></li>
+                <li><span>Average:</span> <strong style="margin-left: auto; color: var(--accent-cyan);">79.5</strong></li>
+                <li><span>Highest:</span> <strong style="margin-left: auto;">95</strong></li>
+                <li><span>Lowest:</span> <strong style="margin-left: auto;">60</strong></li>
+              </ul>
+            </div>
+
+            <!-- Java Card -->
+            <div class="card highlight-amber">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                <span class="pill-badge amber" style="font-size: 0.85rem;">Java</span>
+                <span style="font-size: 0.75rem; color: var(--accent-amber); font-family: var(--font-mono); font-weight: 700;">Rank #3</span>
+              </div>
+              <ul class="feature-list" style="margin-top: 0.5rem;">
+                <li><span>Students:</span> <strong style="margin-left: auto;">12</strong></li>
+                <li><span>Average:</span> <strong style="margin-left: auto; color: var(--accent-amber);">76.8</strong></li>
+                <li><span>Highest:</span> <strong style="margin-left: auto;">92</strong></li>
+                <li><span>Lowest:</span> <strong style="margin-left: auto;">55</strong></li>
+              </ul>
+            </div>
+
+            <div class="card col-span-2 highlight-green">
+              <h4 style="color: var(--mongo-green); margin-bottom: 0.35rem;">How Each Number Was Calculated</h4>
+              <p style="font-size: 0.85rem; color: var(--text-secondary);">
+                • <strong>Students (25):</strong> Counted via <code>{ $sum: 1 }</code>.<br>
+                • <strong>Average (84.2):</strong> Computed by summing all 25 student marks and dividing by 25 using <code>{ $avg: "$mark" }</code>.<br>
+                • <strong>Highest (98) &amp; Lowest (62):</strong> Found using <code>$max: "$mark"</code> and <code>$min: "$mark"</code>.
+              </p>
+            </div>
+
+            <div class="card highlight-amber">
+              <h4 style="color: var(--accent-amber); margin-bottom: 0.35rem;">Ordered Perfectly</h4>
+              <p style="font-size: 0.85rem; color: var(--text-secondary);">
+                Sorted automatically by <code>averageMark: -1</code> so the highest scoring batch is always at the top!
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 41 — COMMON MISTAKES
+           ==================================================================== -->
+      <section class="slide" data-slide="41" id="slide-41">
+        <div class="slide-content">
+          <div class="slide-header">
+            <span class="slide-tag rose">Section 11 — Common Mistakes</span>
+            <h1 class="slide-title">Common Beginner <span style="color: var(--accent-rose);">Mistakes</span></h1>
+            <p class="slide-subtitle">Watch out for these 5 common errors when writing aggregation pipelines in MongoDB.</p>
+          </div>
+
+          <div style="display: flex; flex-direction: column; gap: 0.75rem; max-height: calc(100vh - 220px); overflow-y: auto; padding-right: 0.5rem;">
+            <!-- Mistake 1 -->
+            <div class="mistake-card">
+              <div class="mistake-header">1. Forgetting the $ Sign When Referencing Document Fields</div>
+              <div class="mistake-comparison">
+                <div class="wrong-box">❌ WRONG: _id: "course" (Groups everything under the string word "course"!)</div>
+                <div class="correct-box">✅ CORRECT: _id: "$course" (Reads the value of the course field)</div>
+              </div>
+            </div>
+
+            <!-- Mistake 2 -->
+            <div class="mistake-card">
+              <div class="mistake-header">2. Forgetting That Each Stage Receives the Previous Stage's Output</div>
+              <div class="mistake-comparison">
+                <div class="wrong-box">❌ WRONG: Trying to reference a field in $sort that was dropped in $project.</div>
+                <div class="correct-box">✅ CORRECT: Make sure any field needed downstream is preserved in earlier stages.</div>
+              </div>
+            </div>
+
+            <!-- Mistake 3 -->
+            <div class="mistake-card">
+              <div class="mistake-header">3. Confusing $group With In-Memory JavaScript Grouping</div>
+              <div class="mistake-comparison">
+                <div class="wrong-box">❌ WRONG: Expecting raw document arrays to remain intact without accumulators.</div>
+                <div class="correct-box">✅ CORRECT: $group transforms documents into unique key records using accumulators.</div>
+              </div>
+            </div>
+
+            <!-- Mistake 4 -->
+            <div class="mistake-card">
+              <div class="mistake-header">4. Using the Wrong Sort Direction</div>
+              <div class="mistake-comparison">
+                <div class="wrong-box">❌ WRONG: $sort: { mark: 1 } when you want top marks first.</div>
+                <div class="correct-box">✅ CORRECT: $sort: { mark: -1 } (-1 is descending: highest first).</div>
+              </div>
+            </div>
+
+            <!-- Mistake 5 -->
+            <div class="mistake-card">
+              <div class="mistake-header">5. Forgetting _id: 0 When Removing _id in $project</div>
+              <div class="mistake-comparison">
+                <div class="wrong-box">❌ WRONG: { $project: { name: 1 } } (MongoDB still includes _id by default!)</div>
+                <div class="correct-box">✅ CORRECT: { $project: { name: 1, _id: 0 } } (Explicitly excludes _id).</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 42 — QUICK QUIZ
+           ==================================================================== -->
+      <section class="slide" data-slide="42" id="slide-42">
+        <div class="slide-content">
+          <div class="slide-header" style="display: flex; justify-content: space-between; align-items: flex-end;">
+            <div>
+              <span class="slide-tag">Classroom Check</span>
+              <h1 class="slide-title">Quick <span class="highlight">Classroom Quiz</span></h1>
+              <p class="slide-subtitle">10 quick check questions. Click "Show Answer" to reveal explanations.</p>
+            </div>
+            <div style="display: flex; gap: 0.5rem;">
+              <button class="demo-btn secondary" onclick="Quiz.revealAll()">Reveal All</button>
+              <button class="demo-btn secondary" onclick="Quiz.hideAll()">Hide All</button>
+            </div>
+          </div>
+
+          <div class="quiz-grid">
+            <!-- Q1 -->
+            <div class="quiz-card">
+              <div class="quiz-question"><span class="q-num">Q1</span> What is MongoDB aggregation?</div>
+              <button class="quiz-toggle-btn" onclick="Quiz.toggle(this)">Show Answer</button>
+              <div class="quiz-answer">A framework to process, transform, calculate, and summarize data across multiple documents to generate reports.</div>
+            </div>
+
+            <!-- Q2 -->
+            <div class="quiz-card">
+              <div class="quiz-question"><span class="q-num">Q2</span> What is an aggregation pipeline?</div>
+              <button class="quiz-toggle-btn" onclick="Quiz.toggle(this)">Show Answer</button>
+              <div class="quiz-answer">An ordered sequence of stages where each stage transforms documents and passes its output to the next stage.</div>
+            </div>
+
+            <!-- Q3 -->
+            <div class="quiz-card">
+              <div class="quiz-question"><span class="q-num">Q3</span> What does $match do?</div>
+              <button class="quiz-toggle-btn" onclick="Quiz.toggle(this)">Show Answer</button>
+              <div class="quiz-answer">Filters incoming documents so only documents matching the condition continue into later stages.</div>
+            </div>
+
+            <!-- Q4 -->
+            <div class="quiz-card">
+              <div class="quiz-question"><span class="q-num">Q4</span> What does $group do?</div>
+              <button class="quiz-toggle-btn" onclick="Quiz.toggle(this)">Show Answer</button>
+              <div class="quiz-answer">Combines documents into groups by an <code>_id</code> key and calculates statistics with accumulators ($sum, $avg, etc.).</div>
+            </div>
+
+            <!-- Q5 -->
+            <div class="quiz-card">
+              <div class="quiz-question"><span class="q-num">Q5</span> Why do we use $sum: 1?</div>
+              <button class="quiz-toggle-btn" onclick="Quiz.toggle(this)">Show Answer</button>
+              <div class="quiz-answer">It increments the counter by 1 for each document in the group, effectively counting total documents.</div>
+            </div>
+
+            <!-- Q6 -->
+            <div class="quiz-card">
+              <div class="quiz-question"><span class="q-num">Q6</span> What does $avg calculate?</div>
+              <button class="quiz-toggle-btn" onclick="Quiz.toggle(this)">Show Answer</button>
+              <div class="quiz-answer">Calculates the mathematical average (mean) of a numerical field across all documents in a group.</div>
+            </div>
+
+            <!-- Q7 -->
+            <div class="quiz-card">
+              <div class="quiz-question"><span class="q-num">Q7</span> What is $project used for?</div>
+              <button class="quiz-toggle-btn" onclick="Quiz.toggle(this)">Show Answer</button>
+              <div class="quiz-answer">Selects which fields to include/exclude, renames field names, and creates calculated output fields.</div>
+            </div>
+
+            <!-- Q8 -->
+            <div class="quiz-card">
+              <div class="quiz-question"><span class="q-num">Q8</span> What does $sort: { mark: -1 } mean?</div>
+              <button class="quiz-toggle-btn" onclick="Quiz.toggle(this)">Show Answer</button>
+              <div class="quiz-answer">Orders documents in descending order (highest mark to lowest mark). 1 is ascending, -1 is descending.</div>
+            </div>
+
+            <!-- Q9 -->
+            <div class="quiz-card">
+              <div class="quiz-question"><span class="q-num">Q9</span> Why does $ appear before field names in expressions?</div>
+              <button class="quiz-toggle-btn" onclick="Quiz.toggle(this)">Show Answer</button>
+              <div class="quiz-answer">The $ prefix (e.g. <code>"$mark"</code>) tells MongoDB to retrieve the *value* of that field from the current document.</div>
+            </div>
+
+            <!-- Q10 -->
+            <div class="quiz-card">
+              <div class="quiz-question"><span class="q-num">Q10</span> Why use aggregate() instead of find()?</div>
+              <button class="quiz-toggle-btn" onclick="Quiz.toggle(this)">Show Answer</button>
+              <div class="quiz-answer">Use aggregate() when you need grouping, accumulators, mathematical calculations, and multi-stage transformations on the DB server.</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 43 — AGGREGATION CHEAT SHEET
+           ==================================================================== -->
+      <section class="slide" data-slide="43" id="slide-43">
+        <div class="slide-content">
+          <div class="slide-header">
+            <span class="slide-tag">Reference</span>
+            <h1 class="slide-title">Aggregation <span class="highlight">Cheat Sheet</span></h1>
+            <p class="slide-subtitle">Keep these 4 core stages and essential accumulators handy at all times.</p>
+          </div>
+
+          <div class="grid-4">
+            <!-- Stage 1 -->
+            <div class="card highlight-green">
+              <div style="font-family: var(--font-mono); font-size: 1.25rem; color: var(--mongo-green); font-weight: 700; margin-bottom: 0.35rem;">$match</div>
+              <strong style="color: var(--text-primary); font-size: 0.9rem;">Filter Documents</strong>
+              <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 0.35rem;">
+                Passes only matching documents to the next stage.
+              </p>
+              <div style="font-family: var(--font-mono); font-size: 0.75rem; background: var(--bg-canvas); padding: 0.4rem; border-radius: var(--radius-xs); margin-top: 0.75rem; color: var(--mongo-green);">
+                { $match: { course: "MERN" } }
+              </div>
+            </div>
+
+            <!-- Stage 2 -->
+            <div class="card highlight-cyan">
+              <div style="font-family: var(--font-mono); font-size: 1.25rem; color: var(--accent-cyan); font-weight: 700; margin-bottom: 0.35rem;">$group</div>
+              <strong style="color: var(--text-primary); font-size: 0.9rem;">Group + Calculate</strong>
+              <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 0.35rem;">
+                Groups documents by key &amp; computes stats.
+              </p>
+              <div style="font-family: var(--font-mono); font-size: 0.75rem; background: var(--bg-canvas); padding: 0.4rem; border-radius: var(--radius-xs); margin-top: 0.75rem; color: var(--accent-cyan);">
+                { _id: "$course", count: { $sum: 1 } }
+              </div>
+            </div>
+
+            <!-- Stage 3 -->
+            <div class="card highlight-purple">
+              <div style="font-family: var(--font-mono); font-size: 1.25rem; color: var(--accent-purple); font-weight: 700; margin-bottom: 0.35rem;">$project</div>
+              <strong style="color: var(--text-primary); font-size: 0.9rem;">Reshape / Select</strong>
+              <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 0.35rem;">
+                Picks, excludes (1/0), and renames fields.
+              </p>
+              <div style="font-family: var(--font-mono); font-size: 0.75rem; background: var(--bg-canvas); padding: 0.4rem; border-radius: var(--radius-xs); margin-top: 0.75rem; color: var(--accent-purple);">
+                { name: 1, mark: 1, _id: 0 }
+              </div>
+            </div>
+
+            <!-- Stage 4 -->
+            <div class="card highlight-amber">
+              <div style="font-family: var(--font-mono); font-size: 1.25rem; color: var(--accent-amber); font-weight: 700; margin-bottom: 0.35rem;">$sort</div>
+              <strong style="color: var(--text-primary); font-size: 0.9rem;">Order Results</strong>
+              <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 0.35rem;">
+                Orders documents ascending or descending.
+              </p>
+              <div style="font-family: var(--font-mono); font-size: 0.75rem; background: var(--bg-canvas); padding: 0.4rem; border-radius: var(--radius-xs); margin-top: 0.75rem; color: var(--accent-amber);">
+                { mark: -1, name: 1 }
+              </div>
+            </div>
+          </div>
+
+          <div class="card highlight-green" style="margin-top: 1rem;">
+            <h4 style="color: var(--mongo-green); margin-bottom: 0.5rem; font-family: var(--font-mono);">Common Accumulators in $group</h4>
+            <div class="grid-4" style="font-family: var(--font-mono); font-size: 0.85rem;">
+              <div><strong style="color: var(--mongo-green);">$sum: 1</strong> <span style="color: var(--text-muted);">→ Count</span></div>
+              <div><strong style="color: var(--accent-cyan);">$avg: "$mark"</strong> <span style="color: var(--text-muted);">→ Average</span></div>
+              <div><strong style="color: var(--accent-purple);">$min: "$mark"</strong> <span style="color: var(--text-muted);">→ Minimum</span></div>
+              <div><strong style="color: var(--accent-amber);">$max: "$mark"</strong> <span style="color: var(--text-muted);">→ Maximum</span></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 44 — FINAL CONCEPT MAP
+           ==================================================================== -->
+      <section class="slide" data-slide="44" id="slide-44">
+        <div class="slide-content">
+          <div class="slide-header">
+            <span class="slide-tag">Visual Map</span>
+            <h1 class="slide-title">Final <span class="highlight">Concept Map</span></h1>
+            <p class="slide-subtitle">The complete visual architecture of MongoDB Aggregation.</p>
+          </div>
+
+          <div class="card highlight-green" style="display: flex; flex-direction: column; align-items: center; padding: 2rem;">
+            <div style="background: var(--mongo-green-deep); border: 2px solid var(--mongo-green); padding: 0.6rem 2rem; border-radius: var(--radius-sm); font-family: var(--font-mono); font-weight: 800; font-size: 1.2rem; color: var(--mongo-green); box-shadow: 0 0 20px var(--mongo-green-glow);">
+              AGGREGATION
+            </div>
+            <div style="font-size: 1.5rem; color: var(--text-dim); margin: 0.35rem 0;">│</div>
+            <div style="font-size: 1.2rem; color: var(--mongo-green);">↓</div>
+            <div style="background: var(--bg-card); border: 1px solid var(--border-medium); padding: 0.4rem 1.5rem; border-radius: var(--radius-sm); font-family: var(--font-mono); font-weight: 700; color: var(--text-primary); margin-bottom: 0.5rem;">
+              PIPELINE ([ stages ])
+            </div>
+
+            <div style="display: flex; justify-content: center; gap: 1.5rem; width: 100%; margin-top: 1rem; flex-wrap: wrap;">
+              <div style="flex: 1; min-width: 140px; background: var(--bg-canvas); border: 1px solid var(--mongo-green-border); border-radius: var(--radius-sm); padding: 0.75rem; text-align: center;">
+                <div style="font-family: var(--font-mono); font-weight: 700; color: var(--mongo-green);">$match</div>
+                <div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 0.2rem;">Filter Records</div>
+              </div>
+              <div style="flex: 1; min-width: 140px; background: var(--bg-canvas); border: 1px solid var(--accent-cyan-border); border-radius: var(--radius-sm); padding: 0.75rem; text-align: center;">
+                <div style="font-family: var(--font-mono); font-weight: 700; color: var(--accent-cyan);">$group</div>
+                <div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 0.2rem;">Group &amp; Calculate</div>
+              </div>
+              <div style="flex: 1; min-width: 140px; background: var(--bg-canvas); border: 1px solid var(--accent-purple-border); border-radius: var(--radius-sm); padding: 0.75rem; text-align: center;">
+                <div style="font-family: var(--font-mono); font-weight: 700; color: var(--accent-purple);">$project</div>
+                <div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 0.2rem;">Select &amp; Reshape</div>
+              </div>
+              <div style="flex: 1; min-width: 140px; background: var(--bg-canvas); border: 1px solid var(--accent-amber-border); border-radius: var(--radius-sm); padding: 0.75rem; text-align: center;">
+                <div style="font-family: var(--font-mono); font-weight: 700; color: var(--accent-amber);">$sort</div>
+                <div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 0.2rem;">Order Results</div>
+              </div>
+            </div>
+
+            <div style="font-size: 1.5rem; color: var(--text-dim); margin-top: 1rem;">│</div>
+            <div style="font-size: 1.2rem; color: var(--mongo-green);">↓</div>
+            <div style="background: var(--mongo-green-deep); border: 1px solid var(--mongo-green-border); padding: 0.5rem 2rem; border-radius: var(--radius-pill); font-family: var(--font-mono); color: var(--mongo-green); font-weight: 700;">
+              ✨ Final Business Intelligence Report
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 45 — FINAL SUMMARY
+           ==================================================================== -->
+      <section class="slide" data-slide="45" id="slide-45">
+        <div class="slide-content" style="justify-content: center; align-items: center; text-align: center; max-width: 880px; margin: 0 auto;">
+          <div class="slide-tag" style="margin-bottom: 0.75rem;">Summary • Day 7 Completed</div>
+          <h1 class="slide-title" style="font-size: 2.6rem; margin-bottom: 0.5rem;">
+            Today We <span class="highlight">Learned</span>
+          </h1>
+          <p style="font-size: 1.1rem; color: var(--text-secondary); max-width: 650px; margin-bottom: 1.75rem;">
+            You have mastered the foundational four pillars of the MongoDB Aggregation Pipeline!
+          </p>
+
+          <div class="grid-4" style="width: 100%; margin-bottom: 2rem;">
+            <div class="card" style="border-color: var(--mongo-green-border);">
+              <strong style="color: var(--mongo-green); font-family: var(--font-mono);">$match</strong>
+              <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 0.25rem;">Filter documents</p>
+            </div>
+            <div class="card" style="border-color: var(--accent-cyan-border);">
+              <strong style="color: var(--accent-cyan); font-family: var(--font-mono);">$group</strong>
+              <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 0.25rem;">Group &amp; calculate</p>
+            </div>
+            <div class="card" style="border-color: var(--accent-purple-border);">
+              <strong style="color: var(--accent-purple); font-family: var(--font-mono);">$project</strong>
+              <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 0.25rem;">Reshape output</p>
+            </div>
+            <div class="card" style="border-color: var(--accent-amber-border);">
+              <strong style="color: var(--accent-amber); font-family: var(--font-mono);">$sort</strong>
+              <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 0.25rem;">Order results</p>
+            </div>
+          </div>
+
+          <div class="card highlight-green" style="padding: 1.25rem 2rem; margin-bottom: 1.5rem; max-width: 720px;">
+            <p style="font-size: 1.15rem; font-weight: 600; color: var(--text-primary); line-height: 1.5;">
+              "Aggregation transforms raw MongoDB documents into useful information."
+            </p>
+          </div>
+
+          <div style="display: flex; gap: 1rem;">
+            <button class="nav-btn primary" onclick="Deck.goToSlide(1)">
+              ↺ Restart Presentation
+            </button>
+            <button class="nav-btn" onclick="Deck.openToc()">
+              View Slide Index
+            </button>
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- Bottom Navigation Footer -->
+    <footer class="bottom-footer">
+      <div class="footer-left">
+        <div class="slide-counter">
+          Slide <span class="current" id="currentSlideNum">1</span> / <span id="totalSlidesNum">45</span>
+        </div>
+      </div>
+
+      <div class="footer-center">
+        <button class="nav-btn" id="prevSlideBtn" title="Previous Slide (← / PageUp)">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M15 18l-6-6 6-6"/>
+          </svg>
+          Previous
+        </button>
+        <button class="nav-btn primary" id="nextSlideBtn" title="Next Slide (→ / Space / PageDown)">
+          Next
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M9 18l6-6-6-6"/>
+          </svg>
+        </button>
+      </div>
+
+      <div class="footer-right">
+        <span class="footer-hint">
+          Use <kbd>→</kbd> <kbd>←</kbd> or <kbd>Space</kbd> to navigate
+        </span>
+      </div>
+    </footer>
+
+    <!-- Table of Contents Drawer Backdrop & Drawer -->
+    <div class="drawer-backdrop" id="tocBackdrop"></div>
+    <div class="drawer" id="tocDrawer">
+      <div class="drawer-header">
+        <div class="drawer-title">Table of Contents (45 Slides)</div>
+        <button class="drawer-close" id="closeTocBtn" title="Close (Esc)">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+      <div class="drawer-body" id="tocList">
+        <!-- Rendered via JavaScript -->
+      </div>
+    </div>
+
+    <!-- Keyboard Shortcuts Modal -->
+    <div class="modal-dialog" id="shortcutsModal">
+      <div class="modal-header">
+        <div class="modal-title">Keyboard Shortcuts</div>
+        <button class="drawer-close" id="closeShortcutsBtn" title="Close">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+        <div class="shortcut-row">
+          <span>Next Slide</span>
+          <div class="key-combo"><kbd>→</kbd> / <kbd>Space</kbd> / <kbd>PageDown</kbd></div>
+        </div>
+        <div class="shortcut-row">
+          <span>Previous Slide</span>
+          <div class="key-combo"><kbd>←</kbd> / <kbd>PageUp</kbd></div>
+        </div>
+        <div class="shortcut-row">
+          <span>First Slide</span>
+          <div class="key-combo"><kbd>Home</kbd></div>
+        </div>
+        <div class="shortcut-row">
+          <span>Last Slide</span>
+          <div class="key-combo"><kbd>End</kbd></div>
+        </div>
+        <div class="shortcut-row">
+          <span>Table of Contents (Index)</span>
+          <div class="key-combo"><kbd>T</kbd></div>
+        </div>
+        <div class="shortcut-row">
+          <span>Toggle Fullscreen</span>
+          <div class="key-combo"><kbd>F</kbd></div>
+        </div>
+        <div class="shortcut-row">
+          <span>Help / Shortcuts Modal</span>
+          <div class="key-combo"><kbd>?</kbd></div>
+        </div>
+        <div class="shortcut-row">
+          <span>Close Drawers &amp; Modals</span>
+          <div class="key-combo"><kbd>Esc</kbd></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
