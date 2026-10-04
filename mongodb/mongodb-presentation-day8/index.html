@@ -1,0 +1,3266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MongoDB Day 8 — Search, Indexing &amp; Pagination</title>
+  <meta name="description" content="Interactive developer presentation on MongoDB Search ($text, textScore, $regex, Atlas Search Autocomplete), Database Indexing strategies, and Pagination (skip/limit vs Cursor-based).">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Master App Shell -->
+  <div class="deck-container" id="deckContainer">
+
+    <!-- Top Progress Bar -->
+    <div class="progress-bar-container">
+      <div class="progress-bar" id="progressBar"></div>
+    </div>
+
+    <!-- Top Header Bar -->
+    <header class="top-header">
+      <div class="header-left">
+        <div class="brand-badge">
+          <svg viewBox="0 0 24 24">
+            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/>
+          </svg>
+          MongoDB Day 8
+        </div>
+        <div class="deck-title-badge">
+          <span class="section-tag" id="headerSectionTag">FUNDAMENTALS</span>
+          <span class="dot"></span>
+          <span class="deck-topic" id="headerTopic">MongoDB Search &amp; Pagination</span>
+        </div>
+      </div>
+
+      <div class="header-right">
+        <!-- Table of Contents Drawer Button -->
+        <button class="header-btn" id="openTocBtn" title="View All 53 Slides (T)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="3" y1="12" x2="21" y2="12"></line>
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <line x1="3" y1="18" x2="21" y2="18"></line>
+          </svg>
+          Index
+          <kbd>T</kbd>
+        </button>
+
+        <!-- Keyboard Shortcuts Help -->
+        <button class="header-btn" id="openShortcutsBtn" title="Keyboard Shortcuts (?)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"></circle>
+            <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+            <line x1="12" y1="17" x2="12.01" y2="17"></line>
+          </svg>
+          <kbd>?</kbd>
+        </button>
+
+        <!-- Fullscreen Button -->
+        <button class="header-btn" id="fullscreenBtn" title="Toggle Fullscreen (F)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path>
+          </svg>
+          <kbd>F</kbd>
+        </button>
+      </div>
+    </header>
+
+    <!-- Slide Viewport -->
+    <main class="slide-viewport">
+
+      <!-- ====================================================================
+           SLIDE 1 — TITLE (Section 1)
+           ==================================================================== -->
+      <section class="slide active" data-slide="1" id="slide-1">
+        <div class="slide-content centered">
+          <div class="slide-tag" style="margin-bottom: 0.8rem;">MongoDB Course • Day 8</div>
+          <h1 class="slide-title" style="font-size: 3rem; margin-bottom: 0.6rem; letter-spacing: -0.03em;">
+            MongoDB Search &amp; Pagination
+          </h1>
+          <h2 style="font-size: 1.6rem; color: var(--mongo-green); font-weight: 700; margin-bottom: 1.25rem;">
+            Full-Text Search, Indexing Strategies &amp; Scalable Pagination
+          </h2>
+          <p style="font-size: 1.1rem; color: var(--text-secondary); max-width: 720px; margin-bottom: 2rem; line-height: 1.6;">
+            A practical, classroom-friendly deep dive into building performant search and pagination workflows. Learn when to use <code style="color:var(--mongo-green);">$text</code>, <code style="color:var(--accent-cyan);">$regex</code>, <code style="color:var(--accent-amber);">Atlas Search</code>, B-Tree indexes, and cursor range pagination.
+          </p>
+
+          <div style="display: flex; gap: 0.85rem; margin-bottom: 2.2rem; flex-wrap: wrap; justify-content: center;">
+            <div style="padding: 0.55rem 1rem; background: rgba(0, 237, 100, 0.1); border: 1px solid var(--mongo-green-border); border-radius: var(--radius-sm); font-family: var(--font-mono); font-size: 0.82rem; color: var(--mongo-green);">
+              🔍 Full-Text Search ($text)
+            </div>
+            <div style="padding: 0.55rem 1rem; background: var(--accent-cyan-bg); border: 1px solid var(--accent-cyan-border); border-radius: var(--radius-sm); font-family: var(--font-mono); font-size: 0.82rem; color: var(--accent-cyan);">
+              ✨ Partial Search ($regex)
+            </div>
+            <div style="padding: 0.55rem 1rem; background: var(--accent-purple-bg); border: 1px solid var(--accent-purple-border); border-radius: var(--radius-sm); font-family: var(--font-mono); font-size: 0.82rem; color: var(--accent-purple);">
+              ⚡ Atlas Autocomplete
+            </div>
+            <div style="padding: 0.55rem 1rem; background: var(--accent-amber-bg); border: 1px solid var(--accent-amber-border); border-radius: var(--radius-sm); font-family: var(--font-mono); font-size: 0.82rem; color: var(--accent-amber);">
+              🗂️ Database Indexing
+            </div>
+            <div style="padding: 0.55rem 1rem; background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.3); border-radius: var(--radius-sm); font-family: var(--font-mono); font-size: 0.82rem; color: #10B981;">
+              📑 Cursor Pagination
+            </div>
+          </div>
+
+          <div style="display: flex; gap: 1rem;">
+            <button class="nav-btn primary" onclick="Deck.goToSlide(2)">
+              Start Learning Search &amp; Pagination →
+            </button>
+            <button class="nav-btn" onclick="Deck.openToc()">
+              Browse 53 Slides (T)
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 2 — LEARNING OBJECTIVES
+           ==================================================================== -->
+      <section class="slide" data-slide="2" id="slide-2">
+        <div class="slide-content">
+          <div class="slide-header">
+            <span class="slide-tag">Session Roadmap</span>
+            <h1 class="slide-title">Learning <span class="highlight">Objectives</span></h1>
+            <p class="slide-subtitle">By the end of this session, you will understand how to search, index, and paginate MongoDB databases with production-grade performance.</p>
+          </div>
+
+          <div class="grid-2">
+            <div class="card highlight-card">
+              <div class="card-header">
+                <span class="card-icon">🎯</span>
+                <span class="card-title">Search Capabilities</span>
+              </div>
+              <ul>
+                <li><strong>What full-text search means:</strong> Searching complete words inside text fields efficiently.</li>
+                <li><strong>How MongoDB <code style="color:var(--mongo-green);">$text</code> search works:</strong> Creating text indexes and querying terms.</li>
+                <li><strong>How <code style="color:var(--accent-amber);">textScore</code> helps rank results:</strong> Sorting matches by statistical relevance.</li>
+                <li><strong>How <code style="color:var(--accent-cyan);">$regex</code> performs partial matching:</strong> Finding substrings and character patterns.</li>
+                <li><strong>Basics of Atlas Search autocomplete:</strong> Building search-as-you-type suggestion experiences.</li>
+              </ul>
+            </div>
+
+            <div class="card cyan-card">
+              <div class="card-header">
+                <span class="card-icon">⚡</span>
+                <span class="card-title">Performance &amp; Pagination</span>
+              </div>
+              <ul>
+                <li><strong>Why indexes are important:</strong> Eliminating full collection scans (<code style="color:var(--accent-rose);">COLLSCAN</code>).</li>
+                <li><strong>Common indexing strategies:</strong> Single field, compound, and multikey index design.</li>
+                <li><strong>How pagination works:</strong> Why web APIs slice datasets into small, digestible chunks.</li>
+                <li><strong>Problems with <code style="color:var(--accent-rose);">skip()</code>:</strong> The performance bottleneck of deep offset pagination.</li>
+                <li><strong>Cursor-based pagination basics:</strong> Range querying with <code style="color:var(--mongo-green);">$gt</code> on immutable IDs.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 3 — WHAT IS SEARCH?
+           ==================================================================== -->
+      <section class="slide" data-slide="3" id="slide-3">
+        <div class="slide-content">
+          <div class="slide-header">
+            <span class="slide-tag">Fundamentals</span>
+            <h1 class="slide-title">What Is <span class="highlight">Search?</span></h1>
+            <p class="slide-subtitle">Finding documents containing relevant words across textual fields without manually inspecting every character.</p>
+          </div>
+
+          <div class="grid-2-unequal">
+            <div>
+              <div class="card" style="margin-bottom: 1rem;">
+                <div class="card-header">
+                  <span class="card-icon">📄</span>
+                  <span class="card-title">Sample Document in Collection</span>
+                </div>
+                <div class="code-panel">
+                  <div class="code-body">{
+  <span class="prop">name</span>: <span class="str">"JavaScript Complete Guide"</span>,
+  <span class="prop">description</span>: <span class="str">"Learn JavaScript from basics to advanced concepts"</span>
+}</div>
+                </div>
+                <p style="margin-top: 0.8rem;">
+                  A user types: <code style="color:var(--mongo-green); font-size:1.1rem; font-weight:700;">"javascript"</code>
+                </p>
+                <p>We need MongoDB to find documents containing relevant words quickly and accurately.</p>
+              </div>
+
+              <div class="callout info">
+                <div class="callout-title">💡 The Core Takeaway</div>
+                <p>Different search requirements need completely different technical tools. One single operator cannot solve all search needs efficiently!</p>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-header">
+                <span class="card-icon">🔀</span>
+                <span class="card-title">The Search Spectrum</span>
+              </div>
+              <div class="vertical-flow">
+                <div class="v-node">
+                  <div><strong>1. Exact match</strong><div style="font-size:0.75rem; color:var(--text-muted);">Exact equality lookup</div></div>
+                  <span style="font-family:var(--font-mono); color:var(--text-secondary);">{ name: "..." }</span>
+                </div>
+                <div class="v-arrow">↓</div>
+                <div class="v-node">
+                  <div><strong>2. Partial match</strong><div style="font-size:0.75rem; color:var(--text-muted);">Character patterns &amp; substrings</div></div>
+                  <span style="font-family:var(--font-mono); color:var(--accent-cyan);">$regex</span>
+                </div>
+                <div class="v-arrow">↓</div>
+                <div class="v-node highlight">
+                  <div><strong>3. Word-based search</strong><div style="font-size:0.75rem; color:var(--text-muted);">Language words &amp; relevance score</div></div>
+                  <span style="font-family:var(--font-mono); color:var(--mongo-green);">$text + index</span>
+                </div>
+                <div class="v-arrow">↓</div>
+                <div class="v-node">
+                  <div><strong>4. Autocomplete</strong><div style="font-size:0.75rem; color:var(--text-muted);">Search-as-you-type suggestions</div></div>
+                  <span style="font-family:var(--font-mono); color:var(--accent-purple);">Atlas Search</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 4 — WHAT IS FULL-TEXT SEARCH? (Section 2)
+           ==================================================================== -->
+      <section class="slide" data-slide="4" id="slide-4">
+        <div class="slide-content">
+          <div class="slide-header">
+            <span class="slide-tag">Full-Text Search</span>
+            <h1 class="slide-title">What Is <span class="highlight">Full-Text Search?</span></h1>
+            <p class="slide-subtitle">Full-text search allows us to search words inside text fields using an inverted word index.</p>
+          </div>
+
+          <div class="grid-2">
+            <div class="card highlight-card">
+              <div class="card-header">
+                <span class="card-icon">🔍</span>
+                <span class="card-title">How It Works</span>
+              </div>
+              <p>When searching for a word like <code style="color:var(--mongo-green);">"javascript"</code>, possible matching documents include:</p>
+              <ul style="margin: 1rem 0;">
+                <li><strong>JavaScript Complete Guide</strong></li>
+                <li><strong>Learn JavaScript</strong></li>
+                <li><strong>Advanced JavaScript Programming</strong></li>
+              </ul>
+              <p>Instead of scanning every character of every document manually, MongoDB builds a specialized <strong>text index</strong> that maps words directly to document locations.</p>
+            </div>
+
+            <div class="card">
+              <div class="card-header">
+                <span class="card-icon">🧠</span>
+                <span class="card-title">The Mental Model: Book Index</span>
+              </div>
+              <p>Think of a textbook's back index:</p>
+              <div style="background:var(--bg-terminal); border:1px solid var(--border-subtle); border-radius:var(--radius-sm); padding:1rem; margin:1rem 0; font-family:var(--font-mono); font-size:0.85rem; line-height:1.7;">
+                <div><span style="color:var(--mongo-green);">"javascript"</span> → Pages: 12, 45, 98, 140</div>
+                <div><span style="color:var(--accent-cyan);">"database"</span> → Pages: 3, 22, 67</div>
+                <div><span style="color:var(--accent-amber);">"pagination"</span> → Pages: 88, 89, 90</div>
+              </div>
+              <p style="font-size:0.85rem; color:var(--text-muted);">You don't read the whole book from page 1 to find "javascript". You jump straight to the listed pages. That is what full-text search provides!</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 5 — WHY NOT USE NORMAL FIND?
+           ==================================================================== -->
+      <section class="slide" data-slide="5" id="slide-5">
+        <div class="slide-content">
+          <div class="slide-header">
+            <span class="slide-tag">Full-Text Search</span>
+            <h1 class="slide-title">Why Not Use <span class="highlight-cyan">Normal Find?</span></h1>
+            <p class="slide-subtitle">Standard equality queries test the entire field value, which fails when users search for keywords.</p>
+          </div>
+
+          <div class="grid-2">
+            <div>
+              <div class="code-panel">
+                <div class="code-header">
+                  <div class="window-dots"><span class="dot-btn red"></span><span class="dot-btn yellow"></span><span class="dot-btn green"></span></div>
+                  <span class="code-title">find-exact.js</span>
+                  <button class="copy-btn">Copy</button>
+                </div>
+                <div class="code-body"><span class="com">// Standard equality find</span>
+db.products.<span class="fn">find</span>({
+  <span class="prop">name</span>: <span class="str">"iphone"</span>
+})</div>
+              </div>
+
+              <div class="callout danger" style="margin-top: 1rem;">
+                <div class="callout-title">❌ Exact Match Limitation</div>
+                <p>This query only matches if the name is <em>strictly</em> <code>"iphone"</code>. If the product is named <code>"Apple iPhone 15 Pro"</code>, this query returns <strong>NOTHING</strong>!</p>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-header">
+                <span class="card-icon">🛒</span>
+                <span class="card-title">What Users Actually Expect</span>
+              </div>
+              <p>When an online shopper types <strong>"iphone"</strong>, they expect to discover:</p>
+              <ul style="margin: 0.8rem 0;">
+                <li><span style="color:var(--mongo-green);">✓</span> iPhone 15</li>
+                <li><span style="color:var(--mongo-green);">✓</span> Apple iPhone 15 Pro</li>
+                <li><span style="color:var(--mongo-green);">✓</span> iPhone 14 Case</li>
+                <li><span style="color:var(--mongo-green);">✓</span> Refurbished iPhone SE</li>
+              </ul>
+              <div class="callout info" style="margin-top: 1rem;">
+                <div class="callout-title">The Solution</div>
+                <p>For word-based text searching across fields, MongoDB provides <strong>text indexes</strong> and the <strong><code style="color:var(--mongo-green);">$text</code></strong> query operator.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 6 — CREATE A TEXT INDEX
+           ==================================================================== -->
+      <section class="slide" data-slide="6" id="slide-6">
+        <div class="slide-content">
+          <div class="slide-header">
+            <span class="slide-tag">Full-Text Search</span>
+            <h1 class="slide-title">Create a <span class="highlight">Text Index</span></h1>
+            <p class="slide-subtitle">Before executing a <code>$text</code> search, MongoDB requires a text index on the target fields.</p>
+          </div>
+
+          <div class="grid-2">
+            <div>
+              <div class="card" style="margin-bottom: 1.2rem;">
+                <div class="card-header">
+                  <span class="card-icon">1️⃣</span>
+                  <span class="card-title">Single-Field Text Index</span>
+                </div>
+                <div class="code-panel">
+                  <div class="code-header">
+                    <div class="window-dots"><span class="dot-btn red"></span><span class="dot-btn yellow"></span><span class="dot-btn green"></span></div>
+                    <span class="code-title">single-text-index.js</span>
+                    <button class="copy-btn">Copy</button>
+                  </div>
+                  <div class="code-body">db.products.<span class="fn">createIndex</span>({
+  <span class="prop">name</span>: <span class="str">"text"</span>
+})</div>
+                </div>
+                <p style="margin-top: 0.8rem; font-size: 0.88rem;">Now any words in the <code>name</code> field can be searched with <code>$text</code>.</p>
+              </div>
+            </div>
+
+            <div>
+              <div class="card">
+                <div class="card-header">
+                  <span class="card-icon">2️⃣</span>
+                  <span class="card-title">Multi-Field Compound Text Index</span>
+                </div>
+                <div class="code-panel">
+                  <div class="code-header">
+                    <div class="window-dots"><span class="dot-btn red"></span><span class="dot-btn yellow"></span><span class="dot-btn green"></span></div>
+                    <span class="code-title">multi-text-index.js</span>
+                    <button class="copy-btn">Copy</button>
+                  </div>
+                  <div class="code-body">db.products.<span class="fn">createIndex</span>({
+  <span class="prop">name</span>: <span class="str">"text"</span>,
+  <span class="prop">description</span>: <span class="str">"text"</span>
+})</div>
+                </div>
+                <p style="margin-top: 0.8rem; font-size: 0.88rem;">Searches will check <strong>both</strong> <code>name</code> and <code>description</code> simultaneously!</p>
+              </div>
+
+              <div class="callout warning" style="margin-top: 1rem;">
+                <div class="callout-title">⚠️ Rule of MongoDB Text Indexes</div>
+                <p>A collection can have at most <strong>ONE</strong> text index. To search multiple fields, combine them into a single multi-field text index as shown above.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 7 — USING $TEXT (with Interactive Demo 1)
+           ==================================================================== -->
+      <section class="slide" data-slide="7" id="slide-7">
+        <div class="slide-content">
+          <div class="slide-header">
+            <span class="slide-tag">Full-Text Search</span>
+            <h1 class="slide-title">Using <span class="highlight">$text</span> Operator</h1>
+            <p class="slide-subtitle">Querying fields covered by the text index using <code>$text: { $search: "term" }</code>.</p>
+          </div>
+
+          <div class="grid-2">
+            <div>
+              <div class="code-panel">
+                <div class="code-header">
+                  <div class="window-dots"><span class="dot-btn red"></span><span class="dot-btn yellow"></span><span class="dot-btn green"></span></div>
+                  <span class="code-title">text-search.js</span>
+                  <button class="copy-btn">Copy</button>
+                </div>
+                <div class="code-body">db.products.<span class="fn">find</span>({
+  <span class="op-mongo">$text</span>: {
+    <span class="op-mongo">$search</span>: <span class="str">"iphone"</span>
+  }
+})</div>
+              </div>
+
+              <div class="card" style="margin-top: 1rem;">
+                <div class="card-header">
+                  <span class="card-icon">⚡</span>
+                  <span class="card-title">How It Executes</span>
+                </div>
+                <div class="vertical-flow" style="margin: 0.5rem 0;">
+                  <div class="v-node"><span>1. Client issues $text query</span><span style="color:var(--mongo-green);">$search</span></div>
+                  <div class="v-arrow">↓</div>
+                  <div class="v-node"><span>2. MongoDB checks Text Index</span><span style="color:var(--accent-cyan);">Inverted Index</span></div>
+                  <div class="v-arrow">↓</div>
+                  <div class="v-node highlight"><span>3. Returns matching documents</span><span style="color:var(--mongo-green);">Fast Lookups</span></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- DEMO 1 WIDGET -->
+            <div class="demo-box">
+              <div class="demo-header">
+                <span class="demo-badge"><span>🎮</span> Interactive Demo 1 — $text Search</span>
+                <span style="font-size:0.75rem; color:var(--text-muted);" id="demo1Count">4 matching document(s)</span>
+              </div>
+              <div class="demo-body">
+                <div class="demo-input-row">
+                  <input type="text" id="demo1Input" class="demo-input" placeholder="Search words (e.g. iphone, laptop, shoes)..." value="iphone">
+                  <button class="demo-btn" id="demo1Btn">Search</button>
+                </div>
+
+                <div class="flow-container" style="margin-bottom: 0.8rem;">
+                  <div class="flow-step active-step" style="padding: 0.6rem;">
+                    <div style="font-size:0.75rem; color:var(--mongo-green); font-weight:700;">$text</div>
+                    <div style="font-size:0.68rem; color:var(--text-muted);">Query Term</div>
+                  </div>
+                  <div class="flow-arrow">→</div>
+                  <div class="flow-step" style="padding: 0.6rem;">
+                    <div style="font-size:0.75rem; color:var(--accent-cyan); font-weight:700;">Text Index</div>
+                    <div style="font-size:0.68rem; color:var(--text-muted);">B-Tree Scan</div>
+                  </div>
+                  <div class="flow-arrow">→</div>
+                  <div class="flow-step" style="padding: 0.6rem;">
+                    <div style="font-size:0.75rem; color:var(--accent-amber); font-weight:700;" id="demo1PipelineStep3">Matches</div>
+                    <div style="font-size:0.68rem; color:var(--text-muted);">Results</div>
+                  </div>
+                </div>
+
+                <div class="demo-results-list" id="demo1Results">
+                  <!-- Injected via script.js -->
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 8 — SEARCHING MULTIPLE WORDS
+           ==================================================================== -->
+      <section class="slide" data-slide="8" id="slide-8">
+        <div class="slide-content">
+          <div class="slide-header">
+            <span class="slide-tag">Full-Text Search</span>
+            <h1 class="slide-title">Searching <span class="highlight">Multiple Words</span></h1>
+            <p class="slide-subtitle">Passing multiple whitespace-separated terms performs an OR match across search words.</p>
+          </div>
+
+          <div class="grid-2">
+            <div>
+              <div class="code-panel">
+                <div class="code-header">
+                  <div class="window-dots"><span class="dot-btn red"></span><span class="dot-btn yellow"></span><span class="dot-btn green"></span></div>
+                  <span class="code-title">multi-word-search.js</span>
+                  <button class="copy-btn">Copy</button>
+                </div>
+                <div class="code-body">db.products.<span class="fn">find</span>({
+  <span class="op-mongo">$text</span>: {
+    <span class="op-mongo">$search</span>: <span class="str">"iphone case"</span>
+  }
+})</div>
+              </div>
+
+              <div class="card" style="margin-top: 1rem;">
+                <div class="card-header">
+                  <span class="card-icon">💡</span>
+                  <span class="card-title">Default Logical OR Behavior</span>
+                </div>
+                <p>By default, <code>"iphone case"</code> will find documents containing <strong>"iphone"</strong> OR <strong>"case"</strong>.</p>
+                <p style="margin-top: 0.5rem; font-size: 0.88rem; color: var(--text-muted);">Documents containing <em>both</em> terms are automatically ranked higher in relevance score!</p>
+              </div>
+            </div>
+
+            <div class="card highlight-card">
+              <div class="card-header">
+                <span class="card-icon">🚀</span>
+                <span class="card-title">Exact Phrase &amp; Exclusion Modifiers</span>
+              </div>
+              <p>You can fine-tune text search using quotation marks and minus signs:</p>
+
+              <div style="margin: 1rem 0;">
+                <strong style="color: var(--mongo-green);">Exact Phrase Match (Wrap in escaped quotes):</strong>
+                <div class="code-panel" style="margin: 0.4rem 0;">
+                  <div class="code-body"><span class="op-mongo">$search</span>: <span class="str">"\"iphone case\""</span></div>
+                </div>
+                <span style="font-size:0.8rem; color:var(--text-muted);">Matches only when "iphone case" appears consecutively.</span>
+              </div>
+
+              <div style="margin-top: 1rem;">
+                <strong style="color: var(--accent-rose);">Term Exclusion (Prefix with -):</strong>
+                <div class="code-panel" style="margin: 0.4rem 0;">
+                  <div class="code-body"><span class="op-mongo">$search</span>: <span class="str">"iphone -pro"</span></div>
+                </div>
+                <span style="font-size:0.8rem; color:var(--text-muted);">Matches documents with "iphone" but excludes any with "pro".</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 9 — TEXT SEARCH VS EXACT SEARCH
+           ==================================================================== -->
+      <section class="slide" data-slide="9" id="slide-9">
+        <div class="slide-content">
+          <div class="slide-header">
+            <span class="slide-tag">Full-Text Search</span>
+            <h1 class="slide-title">Text Search vs <span class="highlight-cyan">Exact Search</span></h1>
+            <p class="slide-subtitle">Understanding the technical distinction between full-text, exact equality, and character matching.</p>
+          </div>
+
+          <div class="table-container">
+            <table class="comp-table">
+              <thead>
+                <tr>
+                  <th>Search Requirement</th>
+                  <th>Example Input</th>
+                  <th>Technique</th>
+                  <th>How It Matches</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Exact Match</strong></td>
+                  <td><code>"iPhone 15"</code></td>
+                  <td><span style="color:var(--text-primary); font-family:var(--font-mono);">{ name: "iPhone 15" }</span></td>
+                  <td>Entire string must equal the query exactly.</td>
+                </tr>
+                <tr>
+                  <td><strong>Full-Text Search</strong></td>
+                  <td><code>"iphone"</code></td>
+                  <td><span style="color:var(--mongo-green); font-family:var(--font-mono);">$text: { $search: "iphone" }</span></td>
+                  <td>Matches independent complete words using an inverted text index.</td>
+                </tr>
+                <tr>
+                  <td><strong>Partial Character</strong></td>
+                  <td><code>"iph"</code></td>
+                  <td><span style="color:var(--accent-cyan); font-family:var(--font-mono);">$regex: "iph", $options: "i"</span></td>
+                  <td>Matches substring anywhere inside text without word boundaries.</td>
+                </tr>
+                <tr>
+                  <td><strong>Autocomplete</strong></td>
+                  <td><code>"iph..."</code></td>
+                  <td><span style="color:var(--accent-purple); font-family:var(--font-mono);">Atlas Search autocomplete</span></td>
+                  <td>N-gram tokenized index designed for search-as-you-type keystrokes.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="callout warning" style="margin-top: 1rem;">
+            <div class="callout-title">⚠️ Vital Teaching Note</div>
+            <p><strong><code>$text</code> is word-oriented, not a general substring search!</strong> If you search <code>"iph"</code> using <code>$text</code>, it will <strong>NOT</strong> match <code>"iPhone"</code> because "iph" is not a recognized whole word. For partial character matching, use <code>$regex</code> or Atlas Search autocomplete.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 10 — WHAT IS TEXTSCORE? (Section 3 & Demo 2)
+           ==================================================================== -->
+      <section class="slide" data-slide="10" id="slide-10">
+        <div class="slide-content">
+          <div class="slide-header">
+            <span class="slide-tag">Search Relevance</span>
+            <h1 class="slide-title">What Is <span class="highlight">textScore?</span></h1>
+            <p class="slide-subtitle">When multiple documents match a text search, we need a way to rank the most relevant results first.</p>
+          </div>
+
+          <div class="grid-2">
+            <div>
+              <div class="card highlight-card">
+                <div class="card-header">
+                  <span class="card-icon">📊</span>
+                  <span class="card-title">Relevance Measurement</span>
+                </div>
+                <p>MongoDB calculates a numeric relevance score for every matched document called:</p>
+                <div style="text-align: center; margin: 1.2rem 0;">
+                  <span style="font-family: var(--font-mono); font-size: 1.5rem; color: var(--mongo-green); font-weight: 800; background: var(--mongo-green-deep); padding: 0.4rem 1.2rem; border-radius: var(--radius-sm); border: 1px solid var(--mongo-green-border);">textScore</span>
+                </div>
+                <p>Factors that increase a document's <code>textScore</code>:</p>
+                <ul style="margin-top: 0.6rem;">
+                  <li>The frequency of search words in the document.</li>
+                  <li>Whether the words match the title vs description.</li>
+                  <li>How many different searched words are present.</li>
+                </ul>
+              </div>
+            </div>
+
+            <!-- DEMO 2 WIDGET -->
+            <div class="demo-box">
+              <div class="demo-header">
+                <span class="demo-badge"><span>🎮</span> Interactive Demo 2 — textScore Ranking</span>
+                <span style="font-size:0.75rem; color:var(--accent-amber);">Relevance Ranking</span>
+              </div>
+              <div class="demo-body">
+                <p style="font-size:0.82rem; color:var(--text-muted); margin-bottom: 0.8rem;">
+                  Type search terms to see real-time relevance scoring and star ratings:
+                </p>
+                <div class="demo-input-row">
+                  <input type="text" id="demo2Input" class="demo-input" placeholder="Type terms (e.g. iphone pro, running shoes)..." value="iphone pro">
+                </div>
+                <div class="demo-results-list" id="demo2Results">
+                  <!-- Injected via script.js -->
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 11 — GETTING TEXTSCORE
+           ==================================================================== -->
+      <section class="slide" data-slide="11" id="slide-11">
+        <div class="slide-content">
+          <div class="slide-header">
+            <span class="slide-tag">Search Relevance</span>
+            <h1 class="slide-title">Getting <span class="highlight">textScore</span> in Projection</h1>
+            <p class="slide-subtitle">Using the <code>$meta: "textScore"</code> projection operator to expose the calculated relevance score.</p>
+          </div>
+
+          <div class="grid-2">
+            <div>
+              <div class="code-panel">
+                <div class="code-header">
+                  <div class="window-dots"><span class="dot-btn red"></span><span class="dot-btn yellow"></span><span class="dot-btn green"></span></div>
+                  <span class="code-title">project-score.js</span>
+                  <button class="copy-btn">Copy</button>
+                </div>
+                <div class="code-body">db.products.<span class="fn">find</span>(
+  {
+    <span class="op-mongo">$text</span>: {
+      <span class="op-mongo">$search</span>: <span class="str">"iphone"</span>
+    }
+  },
+  {
+    <span class="prop">score</span>: {
+      <span class="op-mongo">$meta</span>: <span class="str">"textScore"</span>
+    }
+  }
+)</div>
+              </div>
+
+              <div class="callout info" style="margin-top: 1rem;">
+                <div class="callout-title">Projection Syntax</div>
+                <p>The second argument in <code>find()</code> is the projection document. <code>{ score: { $meta: "textScore" } }</code> adds a synthetic field named <code>score</code> to the output.</p>
+              </div>
+            </div>
+
+            <div>
+              <div class="card">
+                <div class="card-header">
+                  <span class="card-icon">📋</span>
+                  <span class="card-title">Sample Returned Document</span>
+                </div>
+                <div class="code-panel">
+                  <div class="code-header">
+                    <span class="code-title">output.json</span>
+                  </div>
+                  <div class="code-body">{
+  <span class="prop">_id</span>: ObjectId(<span class="str">"66f123450001"</span>),
+  <span class="prop">name</span>: <span class="str">"iPhone 15 Pro"</span>,
+  <span class="prop">description</span>: <span class="str">"Premium Apple smartphone"</span>,
+  <span class="prop">score</span>: <span class="num">1.5714285714285714</span>
+}</div>
+                </div>
+                <p style="margin-top: 0.8rem; font-size: 0.88rem; color: var(--text-secondary);">
+                  Notice the <code>score</code> field! By default, MongoDB returns results in natural insertion order. In the next slide, we will sort by this score to prioritize the best matches.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 12 — SORTING BY TEXTSCORE
+           ==================================================================== -->
+      <section class="slide" data-slide="12" id="slide-12">
+        <div class="slide-content">
+          <div class="slide-header">
+            <span class="slide-tag">Search Relevance</span>
+            <h1 class="slide-title">Sorting by <span class="highlight">textScore</span></h1>
+            <p class="slide-subtitle">Ensuring the most relevant documents appear at the very top of search results.</p>
+          </div>
+
+          <div class="grid-2-unequal">
+            <div>
+              <div class="code-panel">
+                <div class="code-header">
+                  <div class="window-dots"><span class="dot-btn red"></span><span class="dot-btn yellow"></span><span class="dot-btn green"></span></div>
+                  <span class="code-title">sort-score.js</span>
+                  <button class="copy-btn">Copy</button>
+                </div>
+                <div class="code-body">db.products.<span class="fn">find</span>(
+  {
+    <span class="op-mongo">$text</span>: {
+      <span class="op-mongo">$search</span>: <span class="str">"iphone"</span>
+    }
+  },
+  {
+    <span class="prop">score</span>: {
+      <span class="op-mongo">$meta</span>: <span class="str">"textScore"</span>
+    }
+  }
+).<span class="fn">sort</span>({
+  <span class="prop">score</span>: {
+    <span class="op-mongo">$meta</span>: <span class="str">"textScore"</span>
+  }
+})</div>
+              </div>
+
+              <div class="callout warning" style="margin-top: 1rem;">
+                <div class="callout-title">⚠️ Important Syntax Note</div>
+                <p>When sorting by textScore, you do <strong>not</strong> write <code>1</code> or <code>-1</code>. You write <code>{ score: { $meta: "textScore" } }</code>. MongoDB automatically sorts from highest score to lowest score.</p>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-header">
+                <span class="card-icon">🔄</span>
+                <span class="card-title">The Ranking Pipeline</span>
+              </div>
+              <div class="vertical-flow">
+                <div class="v-node"><span>1. User Search</span><span style="color:var(--mongo-green);">"iphone"</span></div>
+                <div class="v-arrow">↓</div>
+                <div class="v-node"><span>2. Calculate Relevance</span><span style="color:var(--accent-cyan);">TF-IDF Algorithm</span></div>
+                <div class="v-arrow">↓</div>
+                <div class="v-node"><span>3. Assign textScore</span><span style="color:var(--accent-amber);">2.2, 1.5, 0.7</span></div>
+                <div class="v-arrow">↓</div>
+                <div class="v-node highlight"><span>4. Sort Descending</span><span style="color:var(--mongo-green);">Most Relevant 1st</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 13 — REAL-WORLD $TEXT EXAMPLE
+           ==================================================================== -->
+      <section class="slide" data-slide="13" id="slide-13">
+        <div class="slide-content">
+          <div class="slide-header">
+            <span class="slide-tag">Full-Text Search</span>
+            <h1 class="slide-title">Real-World <span class="highlight">$text</span> Example</h1>
+            <p class="slide-subtitle">Searching product catalogs, blog articles, and educational courses in production.</p>
+          </div>
+
+          <div class="grid-2">
+            <div>
+              <div class="card" style="margin-bottom: 1rem;">
+                <div class="card-header">
+                  <span class="card-icon">👟</span>
+                  <span class="card-title">E-Commerce Product Collection</span>
+                </div>
+                <div class="code-panel">
+                  <div class="code-body">{
+  <span class="prop">name</span>: <span class="str">"Nike Running Shoes"</span>,
+  <span class="prop">description</span>: <span class="str">"Lightweight running shoes for marathons"</span>,
+  <span class="prop">category</span>: <span class="str">"Footwear"</span>,
+  <span class="prop">price</span>: <span class="num">120</span>
+}</div>
+                </div>
+              </div>
+
+              <div class="code-panel">
+                <div class="code-header">
+                  <span class="code-title">catalog-search.js</span>
+                  <button class="copy-btn">Copy</button>
+                </div>
+                <div class="code-body">db.products.<span class="fn">find</span>({
+  <span class="op-mongo">$text</span>: {
+    <span class="op-mongo">$search</span>: <span class="str">"running shoes"</span>
+  }
+})</div>
+              </div>
+            </div>
+
+            <div class="card cyan-card">
+              <div class="card-header">
+                <span class="card-icon">🌐</span>
+                <span class="card-title">Everyday Use Cases for $text</span>
+              </div>
+              <p>Whenever an application requires keyword discovery across large text columns:</p>
+              <ul style="margin: 1rem 0;">
+                <li><strong>E-Commerce Stores:</strong> Searching product names, tags, and specifications.</li>
+                <li><strong>Blog &amp; News Platforms:</strong> Searching articles, stories, and editorial tags.</li>
+                <li><strong>Course Portals:</strong> Searching course titles, syllabus notes, and instructor bios.</li>
+                <li><strong>Support Knowledgebases:</strong> Searching FAQ answers and troubleshooting guides.</li>
+                <li><strong>Job Boards:</strong> Matching resume skills and job descriptions.</li>
+              </ul>
+              <div class="callout info" style="margin-top: 1rem;">
+                <div class="callout-title">Next Question:</div>
+                <p>What if the user hasn't typed the whole word yet? Let's explore <strong>Partial Search</strong> with <code>$regex</code>!</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 14 — WHAT IS PARTIAL SEARCH? (Section 4)
+           ==================================================================== -->
+      <section class="slide" data-slide="14" id="slide-14">
+        <div class="slide-content">
+          <div class="slide-header">
+            <span class="slide-tag">Partial Search</span>
+            <h1 class="slide-title">What Is <span class="highlight-cyan">Partial Search?</span></h1>
+            <p class="slide-subtitle">Sometimes users don't type the complete word or only remember a fragment of a name.</p>
+          </div>
+
+          <div class="grid-2">
+            <div class="card highlight-card">
+              <div class="card-header">
+                <span class="card-icon">⌨️</span>
+                <span class="card-title">User Types 3 Letters: "iph"</span>
+              </div>
+              <p>The user has not completed typing "iphone", but we want to return:</p>
+              <ul style="margin: 1rem 0;">
+                <li><strong>iPhone 15</strong></li>
+                <li><strong>iPhone 15 Pro</strong></li>
+                <li><strong>iPhone 14</strong></li>
+              </ul>
+              <p>Because <code>"iph"</code> is not an isolated dictionary word, <code>$text</code> search will return nothing. We need <strong>pattern/substring matching</strong>!</p>
+            </div>
+
+            <div class="card">
+              <div class="card-header">
+                <span class="card-icon">🧩</span>
+                <span class="card-title">Substrings vs Complete Words</span>
+              </div>
+              <div style="background:var(--bg-terminal); border:1px solid var(--border-subtle); border-radius:var(--radius-sm); padding:1.2rem; margin:1rem 0; font-family:var(--font-mono); font-size:0.88rem; line-height:1.7;">
+                <div>Full String: <span style="color:var(--text-primary);">"Apple <span style="color:var(--accent-cyan); text-decoration:underline;">iPh</span>one 15 Pro"</span></div>
+                <div style="margin-top:0.4rem;">Search Substring: <span style="color:var(--accent-cyan); font-weight:700;">"iph"</span></div>
+                <div style="margin-top:0.4rem; color:var(--mongo-green);">Match found: Characters 7 to 9!</div>
+              </div>
+              <p style="font-size:0.88rem; color:var(--text-secondary);">
+                MongoDB provides the <strong><code style="color:var(--accent-cyan);">$regex</code></strong> operator to evaluate regular expression substring patterns directly against string fields.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 15 — BASIC $REGEX (with Interactive Demo 3)
+           ==================================================================== -->
+      <section class="slide" data-slide="15" id="slide-15">
+        <div class="slide-content">
+          <div class="slide-header">
+            <span class="slide-tag">Partial Search</span>
+            <h1 class="slide-title">Basic <span class="highlight-cyan">$regex</span> Operator</h1>
+            <p class="slide-subtitle">Pattern matching with the <code>$options: "i"</code> flag for case-insensitivity.</p>
+          </div>
+
+          <div class="grid-2">
+            <div>
+              <div class="code-panel">
+                <div class="code-header">
+                  <div class="window-dots"><span class="dot-btn red"></span><span class="dot-btn yellow"></span><span class="dot-btn green"></span></div>
+                  <span class="code-title">regex-search.js</span>
+                  <button class="copy-btn">Copy</button>
+                </div>
+                <div class="code-body">db.products.<span class="fn">find</span>({
+  <span class="prop">name</span>: {
+    <span class="op-mongo">$regex</span>: <span class="str">"iph"</span>,
+    <span class="op-mongo">$options</span>: <span class="str">"i"</span>
+  }
+})</div>
+              </div>
+
+              <div class="card" style="margin-top: 1rem;">
+                <div class="card-header">
+                  <span class="card-icon">🔤</span>
+                  <span class="card-title">What $options: "i" Does</span>
+                </div>
+                <p>The <code>"i"</code> option specifies <strong>case-insensitivity</strong>. This means:</p>
+                <div style="display:flex; gap:0.6rem; margin-top:0.6rem; font-family:var(--font-mono); font-size:0.85rem;">
+                  <span style="background:var(--bg-surface); padding:0.2rem 0.6rem; border-radius:4px; color:var(--mongo-green);">iph</span>
+                  <span style="background:var(--bg-surface); padding:0.2rem 0.6rem; border-radius:4px; color:var(--mongo-green);">IPH</span>
+                  <span style="background:var(--bg-surface); padding:0.2rem 0.6rem; border-radius:4px; color:var(--mongo-green);">Iph</span>
+                </div>
+                <p style="margin-top: 0.6rem; font-size: 0.85rem; color: var(--text-muted);">All three casings will successfully match!</p>
+              </div>
+            </div>
+
+            <!-- DEMO 3 WIDGET -->
+            <div class="demo-box">
+              <div class="demo-header">
+                <span class="demo-badge"><span>🎮</span> Interactive Demo 3 — $regex Partial Search</span>
+                <span style="font-size:0.75rem; color:var(--accent-cyan);">Live Filter</span>
+              </div>
+              <div class="demo-body">
+                <div class="demo-input-row" style="margin-bottom: 0.6rem;">
+                  <input type="text" id="demo3Input" class="demo-input" placeholder="Type characters (e.g. iph, lap, case)..." value="iph">
+                </div>
+
+                <div style="display: flex; gap: 0.5rem; margin-bottom: 0.8rem;">
+                  <button class="header-btn pattern-toggle-btn active" id="demo3ContBtn">Contains (default)</button>
+                  <button class="header-btn pattern-toggle-btn" id="demo3StartBtn">Starts-with (^)</button>
+                  <button class="header-btn pattern-toggle-btn" id="demo3EndBtn">Ends-with ($)</button>
+                </div>
+
+                <div style="font-family: var(--font-mono); font-size: 0.76rem; color: var(--text-muted); background: var(--bg-terminal); padding: 0.4rem 0.6rem; border-radius: var(--radius-xs); margin-bottom: 0.8rem;" id="demo3QueryDisplay">
+                  db.products.find({ name: { $regex: "iph", $options: "i" } })
+                </div>
+
+                <div class="demo-results-list" id="demo3Results">
+                  <!-- Injected via script.js -->
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 16 — REGEX PATTERNS
+           ==================================================================== -->
+      <section class="slide" data-slide="16" id="slide-16">
+        <div class="slide-content">
+          <div class="slide-header">
+            <span class="slide-tag">Partial Search</span>
+            <h1 class="slide-title">Common <span class="highlight-cyan">Regex Patterns</span></h1>
+            <p class="slide-subtitle">Anchoring searches to the beginning, ending, or interior of string fields.</p>
+          </div>
+
+          <div class="grid-3">
+            <div class="card">
+              <div class="card-header">
+                <span class="card-icon">^</span>
+                <span class="card-title">Starts With</span>
+              </div>
+              <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom:0.6rem;">The <code>^</code> anchor matches from the start:</p>
+              <div class="code-panel">
+                <div class="code-body">{
+  <span class="prop">name</span>: {
+    <span class="op-mongo">$regex</span>: <span class="str">"^iph"</span>,
+    <span class="op-mongo">$options</span>: <span class="str">"i"</span>
+  }
+}</div>
+              </div>
+              <p style="margin-top:0.6rem; font-size:0.82rem; color:var(--text-secondary);">
+                Matches: <code>"iPhone 15"</code><br>
+                Does NOT match: <code>"Apple iPhone"</code>
+              </p>
+            </div>
+
+            <div class="card">
+              <div class="card-header">
+                <span class="card-icon">$</span>
+                <span class="card-title">Ends With</span>
+              </div>
+              <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom:0.6rem;">The <code>$</code> anchor matches at the end:</p>
+              <div class="code-panel">
+                <div class="code-body">{
+  <span class="prop">name</span>: {
+    <span class="op-mongo">$regex</span>: <span class="str">"phone$"</span>,
+    <span class="op-mongo">$options</span>: <span class="str">"i"</span>
+  }
+}</div>
+              </div>
+              <p style="margin-top:0.6rem; font-size:0.82rem; color:var(--text-secondary);">
+                Matches: <code>"Smart Phone"</code><br>
+                Does NOT match: <code>"Phone Case"</code>
+              </p>
+            </div>
+
+            <div class="card">
+              <div class="card-header">
+                <span class="card-icon">*</span>
+                <span class="card-title">Contains Anywhere</span>
+              </div>
+              <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom:0.6rem;">No anchors — matches anywhere:</p>
+              <div class="code-panel">
+                <div class="code-body">{
+  <span class="prop">name</span>: {
+    <span class="op-mongo">$regex</span>: <span class="str">"phone"</span>,
+    <span class="op-mongo">$options</span>: <span class="str">"i"</span>
+  }
+}</div>
+              </div>
+              <p style="margin-top:0.6rem; font-size:0.82rem; color:var(--text-secondary);">
+                Matches: <code>"iPhone"</code>, <code>"Phone Case"</code>, <code>"Earphone"</code>
+              </p>
+            </div>
+          </div>
+
+          <div class="callout info" style="margin-top: 1.2rem;">
+            <div class="callout-title">💡 Indexing Note for Starts-With:</div>
+            <p>A regex pattern with a prefix anchor like <code>"^iph"</code> can utilize standard B-Tree indexes on <code>name</code>! However, a contains search (no anchor) cannot use the index efficiently.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 17 — $REGEX EXAMPLE
+           ==================================================================== -->
+      <section class="slide" data-slide="17" id="slide-17">
+        <div class="slide-content">
+          <div class="slide-header">
+            <span class="slide-tag">Partial Search</span>
+            <h1 class="slide-title">Practical <span class="highlight-cyan">$regex</span> Example</h1>
+            <p class="slide-subtitle">Searching with a 3-letter prefix <code>"lap"</code> to discover laptop-related gear.</p>
+          </div>
+
+          <div class="grid-2">
+            <div>
+              <div class="card">
+                <div class="card-header">
+                  <span class="card-icon">💻</span>
+                  <span class="card-title">The Search Query</span>
+                </div>
+                <div class="code-panel">
+                  <div class="code-header">
+                    <div class="window-dots"><span class="dot-btn red"></span><span class="dot-btn yellow"></span><span class="dot-btn green"></span></div>
+                    <span class="code-title">search-lap.js</span>
+                    <button class="copy-btn">Copy</button>
+                  </div>
+                  <div class="code-body">db.products.<span class="fn">find</span>({
+  <span class="prop">name</span>: {
+    <span class="op-mongo">$regex</span>: <span class="str">"lap"</span>,
+    <span class="op-mongo">$options</span>: <span class="str">"i"</span>
+  }
+})</div>
+                </div>
+                <p style="margin-top: 0.8rem; font-size: 0.88rem; color: var(--text-secondary);">
+                  This query scans strings to see if the character sequence <strong>"lap"</strong> appears in any casing.
+                </p>
+              </div>
+            </div>
+
+            <div class="card cyan-card">
+              <div class="card-header">
+                <span class="card-icon">📦</span>
+                <span class="card-title">Possible Results Returned</span>
+              </div>
+              <ul style="margin: 1rem 0;">
+                <li><strong style="color:var(--mongo-green);">Laptop</strong> (starts with "Lap")</li>
+                <li><strong style="color:var(--mongo-green);">Gaming Laptop</strong> (contains "Laptop")</li>
+                <li><strong style="color:var(--mongo-green);">Laptop Stand</strong> (starts with "Laptop")</li>
+                <li><strong style="color:var(--mongo-green);">Laptop Bag</strong> (starts with "Laptop")</li>
+              </ul>
+              <div class="callout info">
+                <div class="callout-title">Summary Rule</div>
+                <p>Use <code>$regex</code> when you need character-by-character substring matching where words may be incomplete or concatenated.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 18 — $TEXT VS $REGEX
+           ==================================================================== -->
+      <section class="slide" data-slide="18" id="slide-18">
+        <div class="slide-content">
+          <div class="slide-header">
+            <span class="slide-tag">Comparison</span>
+            <h1 class="slide-title"><span class="highlight">$text</span> vs <span class="highlight-cyan">$regex</span></h1>
+            <p class="slide-subtitle">Detailed architectural comparison between full-text indexing and regular expression filtering.</p>
+          </div>
+
+          <div class="table-container">
+            <table class="comp-table">
+              <thead>
+                <tr>
+                  <th>Feature</th>
+                  <th>$text (Full-Text Search)</th>
+                  <th>$regex (Partial Matching)</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Word Search</strong></td>
+                  <td><span class="badge-yes">✓ Excellent</span> Designed for words</td>
+                  <td><span class="badge-warn">Possible</span> Checks characters</td>
+                </tr>
+                <tr>
+                  <td><strong>Partial Characters ("iph")</strong></td>
+                  <td><span class="badge-no">✗ No</span> Needs whole words</td>
+                  <td><span class="badge-yes">✓ Yes</span> Matches any substring</td>
+                </tr>
+                <tr>
+                  <td><strong>Index Required?</strong></td>
+                  <td><span class="badge-yes">✓ Required</span> Fails without Text Index</td>
+                  <td><span class="badge-warn">Optional</span> Can run on unindexed fields</td>
+                </tr>
+                <tr>
+                  <td><strong>Relevance Score (textScore)</strong></td>
+                  <td><span class="badge-yes">✓ Yes</span> Returns calculated score</td>
+                  <td><span class="badge-no">✗ No</span> Binary match (true/false)</td>
+                </tr>
+                <tr>
+                  <td><strong>Autocomplete-like Search</strong></td>
+                  <td><span class="badge-no">✗ Limited</span> Not for partial typing</td>
+                  <td><span class="badge-yes">✓ Yes</span> Matches prefix patterns</td>
+                </tr>
+                <tr>
+                  <td><strong>Large-Scale Performance</strong></td>
+                  <td><span class="badge-yes">✓ Better Suited</span> Inverted index lookup</td>
+                  <td><span class="badge-no">✗ Can Become Expensive</span> Full scan overhead</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="card highlight-card" style="margin-top: 1rem; text-align: center; padding: 1rem;">
+            <div style="font-size: 1.1rem; font-weight: 700;">
+              <span style="color:var(--mongo-green);">Words → $text</span> &nbsp;|&nbsp; 
+              <span style="color:var(--accent-cyan);">Characters → $regex</span> &nbsp;|&nbsp; 
+              <span style="color:var(--accent-purple);">Advanced Autocomplete → Atlas Search</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 19 — $REGEX PERFORMANCE WARNING
+           ==================================================================== -->
+      <section class="slide" data-slide="19" id="slide-19">
+        <div class="slide-content">
+          <div class="slide-header">
+            <span class="slide-tag">Performance Warning</span>
+            <h1 class="slide-title">$regex <span style="color:var(--accent-rose);">Performance Warning</span></h1>
+            <p class="slide-subtitle">Unanchored regular expressions can trigger expensive full-collection table scans.</p>
+          </div>
+
+          <div class="grid-2">
+            <div>
+              <div class="card rose-card">
+                <div class="card-header">
+                  <span class="card-icon" style="color:var(--accent-rose);">⚠️</span>
+                  <span class="card-title">The Dangerous Query</span>
+                </div>
+                <div class="code-panel">
+                  <div class="code-body">{
+  <span class="prop">name</span>: {
+    <span class="op-mongo">$regex</span>: <span class="str">"phone"</span> <span class="com">// No ^ anchor!</span>
+  }
+}</div>
+                </div>
+                <p style="margin-top: 0.8rem; font-size: 0.9rem; color: var(--text-secondary);">
+                  Because the pattern can match anywhere in the string, MongoDB cannot use an index prefix to jump directly to candidates. It must inspect <strong>every single document</strong> in the collection!
+                </p>
+              </div>
+
+              <div class="callout danger" style="margin-top: 1rem;">
+                <div class="callout-title">🚨 Collection Scan (COLLSCAN)</div>
+                <p>On a collection of 500,000 products, this query will evaluate the regex 500,000 times, causing CPU spikes, high disk I/O, and query timeouts.</p>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-header">
+                <span class="card-icon">🛡️</span>
+                <span class="card-title">Best Practices for Regex in Production</span>
+              </div>
+              <ul>
+                <li><strong>Anchor with <code>^</code> whenever possible:</strong> <code>{ name: { $regex: "^iphone" } }</code> allows MongoDB to perform an indexed range scan.</li>
+                <li><strong>Combine with indexed filters:</strong> Filter by <code>category</code> or <code>userId</code> first, then run regex on the small subset.</li>
+                <li><strong>Always limit results:</strong> Always chain <code>.limit(20)</code> so MongoDB stops scanning once enough records are found.</li>
+                <li><strong>Upgrade to Atlas Search:</strong> For true search-as-you-type at scale, use Atlas Search instead of regex.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 20 — WHAT IS ATLAS SEARCH? (Section 5)
+           ==================================================================== -->
+      <section class="slide" data-slide="20" id="slide-20">
+        <div class="slide-content">
+          <div class="slide-header">
+            <span class="slide-tag">Atlas Search</span>
+            <h1 class="slide-title">What Is <span class="highlight-purple">Atlas Search?</span></h1>
+            <p class="slide-subtitle">MongoDB's dedicated search engine powered by Apache Lucene for rich discovery experiences.</p>
+          </div>
+
+          <div class="grid-2">
+            <div class="card highlight-card">
+              <div class="card-header">
+                <span class="card-icon">⚡</span>
+                <span class="card-title">Search Capabilities</span>
+              </div>
+              <p>Atlas Search integrates Lucene indexes natively with MongoDB collections, enabling:</p>
+              <ul style="margin: 0.8rem 0;">
+                <li><strong>Autocomplete:</strong> Fast search-as-you-type suggestions.</li>
+                <li><strong>Fuzzy Search:</strong> Tolerates spelling typos (e.g. "iphne" → "iPhone").</li>
+                <li><strong>Custom Relevance:</strong> Boosting specific fields (e.g. Title &gt; Description).</li>
+                <li><strong>Faceted Search:</strong> Amazon-style category, price, and rating counts.</li>
+              </ul>
+            </div>
+
+            <div class="card">
+              <div class="card-header">
+                <span class="card-icon">⚖️</span>
+                <span class="card-title">$text vs Atlas Search</span>
+              </div>
+              <div class="vertical-flow" style="margin: 0.6rem 0;">
+                <div class="v-node">
+                  <div><strong>$text Search</strong><div style="font-size:0.75rem; color:var(--text-muted);">Built into MongoDB core engine</div></div>
+                  <span style="font-size:0.75rem; color:var(--mongo-green);">Basic text search</span>
+                </div>
+                <div class="v-arrow">vs</div>
+                <div class="v-node highlight">
+                  <div><strong>Atlas Search</strong><div style="font-size:0.75rem; color:var(--text-muted);">Apache Lucene search engine</div></div>
+                  <span style="font-size:0.75rem; color:var(--accent-purple);">Enterprise Search &amp; Autocomplete</span>
+                </div>
+              </div>
+              <p style="font-size:0.85rem; color:var(--text-muted); margin-top:0.8rem;">
+                Think of <code>$text</code> as MongoDB's built-in basic dictionary search, and Atlas Search as Google-grade search infrastructure.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 21 — WHAT IS AUTOCOMPLETE? (with Interactive Demo 4)
+           ==================================================================== -->
+      <section class="slide" data-slide="21" id="slide-21">
+        <div class="slide-content">
+          <div class="slide-header">
+            <span class="slide-tag">Atlas Search</span>
+            <h1 class="slide-title">What Is <span class="highlight-purple">Autocomplete?</span></h1>
+            <p class="slide-subtitle">Providing real-time suggestions and matching terms as the user types each keystroke.</p>
+          </div>
+
+          <div class="grid-2">
+            <div>
+              <div class="card" style="margin-bottom: 1rem;">
+                <div class="card-header">
+                  <span class="card-icon">💡</span>
+                  <span class="card-title">The User Experience</span>
+                </div>
+                <p>When typing in a modern search bar, users expect instant dropdown feedback:</p>
+                <div style="margin: 0.8rem 0; font-family: var(--font-mono); font-size: 0.85rem; line-height: 1.6;">
+                  User types: <span style="color:var(--mongo-green); font-weight:700;">iph</span><br>
+                  Suggestions appear:
+                  <ul style="padding-left:1.2rem; color:var(--text-secondary); margin-top:0.3rem;">
+                    <li>iPhone</li>
+                    <li>iPhone 15</li>
+                    <li>iPhone 15 Pro</li>
+                    <li>iPhone Case</li>
+                  </ul>
+                </div>
+              </div>
+
+              <div class="callout info">
+                <div class="callout-title">Interactive Autocomplete Demo →</div>
+                <p>Test the simulation box on the right. Try typing <code>"iph"</code>, <code>"java"</code>, or <code>"lap"</code>!</p>
+              </div>
+            </div>
+
+            <!-- DEMO 4 WIDGET -->
+            <div class="demo-box">
+              <div class="demo-header">
+                <span class="demo-badge"><span>🎮</span> Interactive Demo 4 — Autocomplete</span>
+                <span style="font-size:0.72rem; color:var(--accent-purple); font-family:var(--font-mono);">Atlas Search Simulation</span>
+              </div>
+              <div class="demo-body">
+                <p style="font-size:0.82rem; color:var(--text-muted); margin-bottom: 0.6rem;">
+                  Type in the box below to see live autocomplete suggestions:
+                </p>
+
+                <div class="autocomplete-wrapper">
+                  <input type="text" id="demo4Input" class="demo-input" placeholder="Type: iph, java, lap..." autocomplete="off">
+                  <div class="autocomplete-dropdown" id="demo4Dropdown" style="display: none;">
+                    <!-- Injected via script.js -->
+                  </div>
+                </div>
+
+                <div style="margin-top: 1rem; font-size: 0.78rem; color: var(--text-dim); line-height: 1.5;">
+                  * Note: In MongoDB Atlas, this is powered by Lucene EdgeGram/N-Gram tokenizers in an Atlas Search index.
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 22 — AUTOCOMPLETE FLOW
+           ==================================================================== -->
+      <section class="slide" data-slide="22" id="slide-22">
+        <div class="slide-content">
+          <div class="slide-header">
+            <span class="slide-tag">Atlas Search</span>
+            <h1 class="slide-title">Autocomplete <span class="highlight-purple">Architecture Flow</span></h1>
+            <p class="slide-subtitle">How keystrokes travel from the client UI down to the search index and return suggestions in milliseconds.</p>
+          </div>
+
+          <div class="flow-container">
+            <div class="flow-step">
+              <div class="flow-step-num">1</div>
+              <div class="flow-step-title">User Types</div>
+              <div class="flow-step-desc">Keystroke "iph" entered in frontend input</div>
+            </div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-step">
+              <div class="flow-step-num">2</div>
+              <div class="flow-step-title">Search Request</div>
+              <div class="flow-step-desc">Debounced API call to backend service</div>
+            </div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-step active-step">
+              <div class="flow-step-num">3</div>
+              <div class="flow-step-title">Atlas Search</div>
+              <div class="flow-step-desc">Queries Lucene autocomplete index</div>
+            </div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-step">
+              <div class="flow-step-num">4</div>
+              <div class="flow-step-title">Return Matches</div>
+              <div class="flow-step-desc">Top 5 suggestions rendered in dropdown</div>
+            </div>
+          </div>
+
+          <div class="grid-2" style="margin-top: 1rem;">
+            <div class="card">
+              <div class="card-header">
+                <span class="card-icon">🏢</span>
+                <span class="card-title">Where You See This Everyday</span>
+              </div>
+              <ul>
+                <li><strong>Amazon / E-commerce:</strong> Product title completions while typing.</li>
+                <li><strong>Google Search Box:</strong> Query suggestions before hitting enter.</li>
+                <li><strong>Maps &amp; Ride-Hailing:</strong> Location and address autocomplete.</li>
+                <li><strong>Course Platforms:</strong> Search-as-you-type subject discovery.</li>
+              </ul>
+            </div>
+
+            <div class="card highlight-card">
+              <div class="card-header">
+                <span class="card-icon">⏱️</span>
+                <span class="card-title">Key Performance Requirement</span>
+              </div>
+              <p>Autocomplete must respond within <strong>&lt; 50ms</strong> per keystroke. Standard MongoDB <code>$regex</code> searches against large collections cannot sustain this load — which is why Atlas Search token indexes are used.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 23 — ATLAS SEARCH AUTOCOMPLETE CONCEPT
+           ==================================================================== -->
+      <section class="slide" data-slide="23" id="slide-23">
+        <div class="slide-content">
+          <div class="slide-header">
+            <span class="slide-tag">Atlas Search</span>
+            <h1 class="slide-title">Atlas Search <span class="highlight-purple">Autocomplete Concept</span></h1>
+            <p class="slide-subtitle">A conceptual look at executing an autocomplete query using the <code>$search</code> aggregation stage.</p>
+          </div>
+
+          <div class="grid-2">
+            <div>
+              <div class="code-panel">
+                <div class="code-header">
+                  <div class="window-dots"><span class="dot-btn red"></span><span class="dot-btn yellow"></span><span class="dot-btn green"></span></div>
+                  <span class="code-title">atlas-autocomplete.json</span>
+                  <button class="copy-btn">Copy</button>
+                </div>
+                <div class="code-body">[
+  {
+    <span class="op-mongo">$search</span>: {
+      <span class="prop">autocomplete</span>: {
+        <span class="prop">query</span>: <span class="str">"iph"</span>,
+        <span class="prop">path</span>: <span class="str">"name"</span>
+      }
+    }
+  },
+  {
+    <span class="op-mongo">$limit</span>: <span class="num">5</span>
+  }
+]</div>
+              </div>
+
+              <div class="callout info" style="margin-top: 1rem;">
+                <div class="callout-title">Field Anatomy</div>
+                <p><strong><code>query</code>:</strong> The user's input keystrokes.<br>
+                <strong><code>path</code>:</strong> The indexed document field to match against (e.g. <code>"name"</code>).</p>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-header">
+                <span class="card-icon">⚙️</span>
+                <span class="card-title">Requires a Search Index Definition</span>
+              </div>
+              <p>Atlas Search queries cannot run until an Atlas Search index with an <code>autocomplete</code> mapping is defined in the Atlas UI or via Atlas CLI:</p>
+              <div class="code-panel" style="margin: 0.8rem 0;">
+                <div class="code-body">{
+  <span class="prop">mappings</span>: {
+    <span class="prop">fields</span>: {
+      <span class="prop">name</span>: {
+        <span class="prop">type</span>: <span class="str">"autocomplete"</span>
+      }
+    }
+  }
+}</div>
+              </div>
+              <div class="callout warning">
+                <div class="callout-title">⚠️ Common Student Mistake</div>
+                <p>Atlas Search <code>$search</code> is only available on MongoDB Atlas clusters or local Atlas CLI containers — it is not present in standalone open-source mongod binary.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 24 — SEARCH STRATEGY
+           ==================================================================== -->
+      <section class="slide" data-slide="24" id="slide-24">
+        <div class="slide-content">
+          <div class="slide-header">
+            <span class="slide-tag">Architecture</span>
+            <h1 class="slide-title">Search Strategy: <span class="highlight">Choosing the Right Tool</span></h1>
+            <p class="slide-subtitle">How senior engineers choose search technology based on user experience and scale requirements.</p>
+          </div>
+
+          <div class="grid-3">
+            <div class="card highlight-card">
+              <div class="card-header">
+                <span class="card-icon">1️⃣</span>
+                <span class="card-title">Full-Text Search</span>
+              </div>
+              <div style="font-family:var(--font-mono); color:var(--mongo-green); margin-bottom:0.6rem; font-weight:700;">$text + Text Index</div>
+              <p><strong>When to use:</strong></p>
+              <ul style="font-size:0.85rem;">
+                <li>User enters complete search terms.</li>
+                <li>Catalog search, blog articles, courses.</li>
+                <li>Sorting by relevance score is needed.</li>
+                <li>Zero external search infrastructure desired.</li>
+              </ul>
+            </div>
+
+            <div class="card cyan-card">
+              <div class="card-header">
+                <span class="card-icon">2️⃣</span>
+                <span class="card-title">Partial Search</span>
+              </div>
+              <div style="font-family:var(--font-mono); color:var(--accent-cyan); margin-bottom:0.6rem; font-weight:700;">$regex</div>
+              <p><strong>When to use:</strong></p>
+              <ul style="font-size:0.85rem;">
+                <li>Filtering by partial character substrings.</li>
+                <li>Small or medium collections.</li>
+                <li>Internal admin panels &amp; dashboards.</li>
+                <li>Prefix matching with <code>^</code> anchor.</li>
+              </ul>
+            </div>
+
+            <div class="card purple-card">
+              <div class="card-header">
+                <span class="card-icon">3️⃣</span>
+                <span class="card-title">Search-as-you-type</span>
+              </div>
+              <div style="font-family:var(--font-mono); color:var(--accent-purple); margin-bottom:0.6rem; font-weight:700;">Atlas Search</div>
+              <p><strong>When to use:</strong></p>
+              <ul style="font-size:0.85rem;">
+                <li>Real-time autocomplete dropdowns.</li>
+                <li>Fuzzy search (typo tolerance).</li>
+                <li>Large-scale e-commerce storefronts.</li>
+                <li>Complex multi-criteria ranking.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 25 — WHAT IS AN INDEX? (Section 6 & Demo 5)
+           ==================================================================== -->
+      <section class="slide" data-slide="25" id="slide-25">
+        <div class="slide-content">
+          <div class="slide-header">
+            <span class="slide-tag">Database Indexing</span>
+            <h1 class="slide-title">What Is an <span class="highlight">Index?</span></h1>
+            <p class="slide-subtitle">A specialized data structure (B-Tree) that holds a sorted copy of selected fields to accelerate queries.</p>
+          </div>
+
+          <div class="grid-2">
+            <div>
+              <div class="card highlight-card" style="margin-bottom: 1rem;">
+                <div class="card-header">
+                  <span class="card-icon">📚</span>
+                  <span class="card-title">The Library Analogy</span>
+                </div>
+                <p>Imagine finding a book in a library with 100,000 volumes:</p>
+                <div style="margin: 0.8rem 0; font-size: 0.88rem; line-height: 1.6;">
+                  <strong style="color:var(--accent-rose);">Without Index (COLLSCAN):</strong> Walk through every aisle, reading every book cover one by one until you find it. (Exhausting &amp; slow!)<br>
+                  <strong style="color:var(--mongo-green); margin-top:0.4rem; display:inline-block;">With Index (IXSCAN):</strong> Consult the sorted card catalog, read the shelf number, and walk directly to the book in 2 seconds!
+                </div>
+              </div>
+
+              <div class="vis-controls">
+                <button class="vis-toggle-btn active" id="btnRunCollscan" onclick="DemoIndexVis.runCollscan()">
+                  Test Without Index (COLLSCAN)
+                </button>
+                <button class="vis-toggle-btn" id="btnRunIxscan" onclick="DemoIndexVis.runIxscan()">
+                  Test With Index (IXSCAN)
+                </button>
+              </div>
+            </div>
+
+            <!-- DEMO 5 WIDGET -->
+            <div class="demo-box">
+              <div class="demo-header">
+                <span class="demo-badge"><span>🎮</span> Interactive Demo 5 — Index Visualizer</span>
+                <span style="font-size:0.75rem; color:var(--text-muted);">Finding student@gmail.com</span>
+              </div>
+              <div class="demo-body">
+                <div class="vis-doc-grid" id="demo5DocGrid">
+                  <!-- Injected via script.js -->
+                </div>
+
+                <div class="vis-stats-bar" style="margin-top: 1rem;">
+                  <div>Stage: <span class="vis-stat-val" id="visStatStage" style="color:var(--accent-rose);">COLLSCAN</span></div>
+                  <div>Docs Examined: <span class="vis-stat-val" id="visStatExamined">0</span></div>
+                  <div>Returned: <span class="vis-stat-val" id="visStatReturned">0</span></div>
+                  <div>Time: <span class="vis-stat-val" id="visStatTime">--</span></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 26 — SIMPLE INDEX EXAMPLE
+           ==================================================================== -->
+      <section class="slide" data-slide="26" id="slide-26">
+        <div class="slide-content">
+          <div class="slide-header">
+            <span class="slide-tag">Database Indexing</span>
+            <h1 class="slide-title">Simple <span class="highlight">Index Example</span></h1>
+            <p class="slide-subtitle">Creating a single-field index on frequently queried fields like email or username.</p>
+          </div>
+
+          <div class="grid-2">
+            <div>
+              <div class="card" style="margin-bottom: 1rem;">
+                <div class="card-header">
+                  <span class="card-icon">1️⃣</span>
+                  <span class="card-title">The Target Query</span>
+                </div>
+                <div class="code-panel">
+                  <div class="code-body">db.students.<span class="fn">find</span>({
+  <span class="prop">email</span>: <span class="str">"student@gmail.com"</span>
+})</div>
+                </div>
+                <p style="margin-top: 0.8rem; font-size: 0.88rem; color: var(--text-secondary);">
+                  If the students collection has 200,000 records, this query scans 200,000 documents by default.
+                </p>
+              </div>
+
+              <div class="card highlight-card">
+                <div class="card-header">
+                  <span class="card-icon">2️⃣</span>
+                  <span class="card-title">Create the Index</span>
+                </div>
+                <div class="code-panel">
+                  <div class="code-header">
+                    <div class="window-dots"><span class="dot-btn red"></span><span class="dot-btn yellow"></span><span class="dot-btn green"></span></div>
+                    <span class="code-title">create-index.js</span>
+                    <button class="copy-btn">Copy</button>
+                  </div>
+                  <div class="code-body">db.students.<span class="fn">createIndex</span>({
+  <span class="prop">email</span>: <span class="num">1</span>
+})</div>
+                </div>
+                <p style="margin-top: 0.8rem; font-size: 0.88rem; color: var(--text-secondary);">
+                  Now MongoDB constructs a sorted B-Tree index on <code>email</code>. Future lookups complete in O(log N) steps!
+                </p>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-header">
+                <span class="card-icon">⚡</span>
+                <span class="card-title">Execution Comparison</span>
+              </div>
+              <div class="table-container">
+                <table class="comp-table">
+                  <thead>
+                    <tr>
+                      <th>Metric</th>
+                      <th>Before Index</th>
+                      <th>After Index</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><strong>Query Stage</strong></td>
+                      <td><span style="color:var(--accent-rose); font-weight:700;">COLLSCAN</span></td>
+                      <td><span style="color:var(--mongo-green); font-weight:700;">IXSCAN + FETCH</span></td>
+                    </tr>
+                    <tr>
+                      <td><strong>Documents Examined</strong></td>
+                      <td>200,000</td>
+                      <td><strong style="color:var(--mongo-green);">1</strong></td>
+                    </tr>
+                    <tr>
+                      <td><strong>Execution Time</strong></td>
+                      <td>~120 ms</td>
+                      <td><strong style="color:var(--mongo-green);">&lt; 1 ms</strong></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 27 — INDEX DIRECTION
+           ==================================================================== -->
+      <section class="slide" data-slide="27" id="slide-27">
+        <div class="slide-content">
+          <div class="slide-header">
+            <span class="slide-tag">Database Indexing</span>
+            <h1 class="slide-title">Index Direction: <span class="highlight">1 vs -1</span></h1>
+            <p class="slide-subtitle">Understanding ascending (1) and descending (-1) sort order in B-Tree index keys.</p>
+          </div>
+
+          <div class="grid-2">
+            <div class="card">
+              <div class="card-header">
+                <span class="card-icon">⬆️</span>
+                <span class="card-title">Ascending: { age: 1 }</span>
+              </div>
+              <p>Values are ordered from smallest to largest:</p>
+              <div style="background:var(--bg-terminal); border:1px solid var(--border-subtle); border-radius:var(--radius-sm); padding:0.8rem; margin:0.8rem 0; font-family:var(--font-mono); font-size:0.88rem; color:var(--mongo-green);">
+                18 → 19 → 20 → 21 → 22 → 25 → 30
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-header">
+                <span class="card-icon">⬇️</span>
+                <span class="card-title">Descending: { age: -1 }</span>
+              </div>
+              <p>Values are ordered from largest to smallest:</p>
+              <div style="background:var(--bg-terminal); border:1px solid var(--border-subtle); border-radius:var(--radius-sm); padding:0.8rem; margin:0.8rem 0; font-family:var(--font-mono); font-size:0.88rem; color:var(--accent-amber);">
+                30 → 25 → 22 → 21 → 20 → 19 → 18
+              </div>
+            </div>
+          </div>
+
+          <div class="callout warning" style="margin-top: 1.2rem;">
+            <div class="callout-title">⚠️ Essential Classroom Clarification</div>
+            <p><strong>For single-field equality lookups, direction does not matter!</strong> MongoDB can traverse a single-field B-tree in either direction with equal speed. Direction only becomes crucial when building <strong>compound indexes</strong> that support multi-field sorting (e.g. sort by course ASC and mark DESC).</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 28 — COMMON INDEX TYPES
+           ==================================================================== -->
+      <section class="slide" data-slide="28" id="slide-28">
+        <div class="slide-content">
+          <div class="slide-header">
+            <span class="slide-tag">Database Indexing</span>
+            <h1 class="slide-title">Common <span class="highlight">Index Types</span></h1>
+            <p class="slide-subtitle">The primary index types every MongoDB developer must know.</p>
+          </div>
+
+          <div class="grid-3">
+            <div class="card">
+              <div class="card-header">
+                <span class="card-icon">1️⃣</span>
+                <span class="card-title">Single Field</span>
+              </div>
+              <div class="code-panel">
+                <div class="code-body">{ <span class="prop">email</span>: <span class="num">1</span> }</div>
+              </div>
+              <p style="margin-top:0.6rem; font-size:0.82rem; color:var(--text-secondary);">
+                Indexes a single top-level field for equality and range filters.
+              </p>
+            </div>
+
+            <div class="card">
+              <div class="card-header">
+                <span class="card-icon">2️⃣</span>
+                <span class="card-title">Compound Index</span>
+              </div>
+              <div class="code-panel">
+                <div class="code-body">{ <span class="prop">course</span>: <span class="num">1</span>, <span class="prop">mark</span>: <span class="num">-1</span> }</div>
+              </div>
+              <p style="margin-top:0.6rem; font-size:0.82rem; color:var(--text-secondary);">
+                Indexes multiple fields together for compound queries and multi-field sorting.
+              </p>
+            </div>
+
+            <div class="card">
+              <div class="card-header">
+                <span class="card-icon">3️⃣</span>
+                <span class="card-title">Multikey Index</span>
+              </div>
+              <div class="code-panel">
+                <div class="code-body">{ <span class="prop">skills</span>: <span class="num">1</span> }</div>
+              </div>
+              <p style="margin-top:0.6rem; font-size:0.82rem; color:var(--text-secondary);">
+                Automatically created when indexing an array field (e.g. <code>skills: ["JS", "MongoDB"]</code>).
+              </p>
+            </div>
+
+            <div class="card">
+              <div class="card-header">
+                <span class="card-icon">4️⃣</span>
+                <span class="card-title">Text Index</span>
+              </div>
+              <div class="code-panel">
+                <div class="code-body">{ <span class="prop">name</span>: <span class="str">"text"</span> }</div>
+              </div>
+              <p style="margin-top:0.6rem; font-size:0.82rem; color:var(--text-secondary);">
+                Builds an inverted word index for the <code>$text</code> search operator.
+              </p>
+            </div>
+
+            <div class="card">
+              <div class="card-header">
+                <span class="card-icon">5️⃣</span>
+                <span class="card-title">Unique Index</span>
+              </div>
+              <div class="code-panel">
+                <div class="code-body">{ <span class="prop">email</span>: <span class="num">1</span> }, { <span class="prop">unique</span>: <span class="bool">true</span> }</div>
+              </div>
+              <p style="margin-top:0.6rem; font-size:0.82rem; color:var(--text-secondary);">
+                Rejects duplicate values, enforcing uniqueness at the database engine level.
+              </p>
+            </div>
+
+            <div class="card highlight-card">
+              <div class="card-header">
+                <span class="card-icon">6️⃣</span>
+                <span class="card-title">Default _id Index</span>
+              </div>
+              <div class="code-panel">
+                <div class="code-body">{ <span class="prop">_id</span>: <span class="num">1</span> }</div>
+              </div>
+              <p style="margin-top:0.6rem; font-size:0.82rem; color:var(--text-secondary);">
+                Created automatically on every MongoDB collection. Cannot be deleted.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 29 — COMPOUND INDEX
+           ==================================================================== -->
+      <section class="slide" data-slide="29" id="slide-29">
+        <div class="slide-content">
+          <div class="slide-header">
+            <span class="slide-tag">Database Indexing</span>
+            <h1 class="slide-title">Compound <span class="highlight">Indexes</span></h1>
+            <p class="slide-subtitle">Indexing multiple fields together to support combined filtering and sorting patterns.</p>
+          </div>
+
+          <div class="grid-2">
+            <div>
+              <div class="code-panel">
+                <div class="code-header">
+                  <div class="window-dots"><span class="dot-btn red"></span><span class="dot-btn yellow"></span><span class="dot-btn green"></span></div>
+                  <span class="code-title">compound-index.js</span>
+                  <button class="copy-btn">Copy</button>
+                </div>
+                <div class="code-body"><span class="com">// Create compound index</span>
+db.students.<span class="fn">createIndex</span>({
+  <span class="prop">course</span>: <span class="num">1</span>,
+  <span class="prop">mark</span>: <span class="num">-1</span>
+})</div>
+              </div>
+
+              <div class="card" style="margin-top: 1rem;">
+                <div class="card-header">
+                  <span class="card-icon">🎯</span>
+                  <span class="card-title">Perfect Query Match</span>
+                </div>
+                <div class="code-panel">
+                  <div class="code-body">db.students.<span class="fn">find</span>({
+  <span class="prop">course</span>: <span class="str">"MERN"</span>
+}).<span class="fn">sort</span>({
+  <span class="prop">mark</span>: <span class="num">-1</span>
+})</div>
+                </div>
+                <p style="margin-top: 0.8rem; font-size: 0.85rem; color: var(--text-secondary);">
+                  MongoDB filters by <code>course: "MERN"</code> and returns documents in sorted <code>mark</code> order directly from the index without an in-memory sort!
+                </p>
+              </div>
+            </div>
+
+            <div class="card highlight-card">
+              <div class="card-header">
+                <span class="card-icon">📐</span>
+                <span class="card-title">The ESR Rule (Equality, Sort, Range)</span>
+              </div>
+              <p>When designing compound indexes, order your fields using the <strong>ESR rule</strong>:</p>
+              <div class="vertical-flow" style="margin: 0.8rem 0;">
+                <div class="v-node">
+                  <div><strong>1. Equality (E)</strong></div>
+                  <span style="color:var(--mongo-green);">course: "MERN"</span>
+                </div>
+                <div class="v-arrow">↓</div>
+                <div class="v-node">
+                  <div><strong>2. Sort (S)</strong></div>
+                  <span style="color:var(--accent-cyan);">mark: -1</span>
+                </div>
+                <div class="v-arrow">↓</div>
+                <div class="v-node">
+                  <div><strong>3. Range (R)</strong></div>
+                  <span style="color:var(--accent-amber);">age: { $gte: 18 }</span>
+                </div>
+              </div>
+              <p style="font-size:0.82rem; color:var(--text-muted);">Following ESR guarantees that MongoDB narrows candidates before sorting, maximizing query throughput.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 30 — INDEXING STRATEGY
+           ==================================================================== -->
+      <section class="slide" data-slide="30" id="slide-30">
+        <div class="slide-content">
+          <div class="slide-header">
+            <span class="slide-tag">Database Indexing</span>
+            <h1 class="slide-title">Indexing <span class="highlight">Strategy</span></h1>
+            <p class="slide-subtitle">Don't create indexes for every field. Base your indexes on actual production query patterns.</p>
+          </div>
+
+          <div class="flow-container">
+            <div class="flow-step">
+              <div class="flow-step-num">1</div>
+              <div class="flow-step-title">Identify Queries</div>
+              <div class="flow-step-desc">List the most frequent API endpoints &amp; user searches</div>
+            </div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-step">
+              <div class="flow-step-num">2</div>
+              <div class="flow-step-title">Find Filter Fields</div>
+              <div class="flow-step-desc">Identify fields used in <code>find()</code> conditions</div>
+            </div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-step">
+              <div class="flow-step-num">3</div>
+              <div class="flow-step-title">Find Sort Fields</div>
+              <div class="flow-step-desc">Identify fields sorted by clients (e.g. price, date)</div>
+            </div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-step active-step">
+              <div class="flow-step-num">4</div>
+              <div class="flow-step-title">Create Index</div>
+              <div class="flow-step-desc">Build single or compound index</div>
+            </div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-step">
+              <div class="flow-step-num">5</div>
+              <div class="flow-step-title">Test Performance</div>
+              <div class="flow-step-desc">Verify with <code>.explain("executionStats")</code></div>
+            </div>
+          </div>
+
+          <div class="card highlight-card" style="margin-top: 1.2rem;">
+            <div class="card-header">
+              <span class="card-icon">🧠</span>
+              <span class="card-title">Golden Engineering Principle</span>
+            </div>
+            <p style="font-size: 1rem; color: var(--text-primary); line-height: 1.6;">
+              "Index for your <strong>queries</strong>, not for your schema." — Do not blindly add indexes to fields just because they exist in your Mongoose schema!
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 31 — TOO MANY INDEXES?
+           ==================================================================== -->
+      <section class="slide" data-slide="31" id="slide-31">
+        <div class="slide-content">
+          <div class="slide-header">
+            <span class="slide-tag">Performance Trade-offs</span>
+            <h1 class="slide-title">Too Many <span style="color:var(--accent-rose);">Indexes?</span></h1>
+            <p class="slide-subtitle">Indexes improve read speeds, but they carry significant maintenance and write costs.</p>
+          </div>
+
+          <div class="grid-2">
+            <div class="card rose-card">
+              <div class="card-header">
+                <span class="card-icon" style="color:var(--accent-rose);">📉</span>
+                <span class="card-title">The Costs of Every Index</span>
+              </div>
+              <ul style="margin: 0.8rem 0;">
+                <li><strong>RAM &amp; Storage Footprint:</strong> Every index must fit in wiredTiger cache (RAM). Large indexes evict active data pages.</li>
+                <li><strong>Write Overhead:</strong> On every <code>insert</code>, <code>update</code>, or <code>delete</code>, MongoDB must synchronously update <strong>every index</strong> on the collection.</li>
+                <li><strong>Index Maintenance:</strong> B-Tree node splitting and rebalancing consumes CPU cycles during heavy write bursts.</li>
+              </ul>
+            </div>
+
+            <div class="card highlight-card">
+              <div class="card-header">
+                <span class="card-icon">⚖️</span>
+                <span class="card-title">The Balance Formula</span>
+              </div>
+              <div style="background:var(--bg-terminal); border:1px solid var(--border-subtle); border-radius:var(--radius-sm); padding:1.2rem; font-family:var(--font-mono); font-size:0.95rem; text-align:center; line-height:1.8;">
+                <div style="color:var(--mongo-green);">Useful Indexes</div>
+                <div>+</div>
+                <div style="color:var(--accent-cyan);">Useful Query Patterns</div>
+                <div>=</div>
+                <div style="color:var(--mongo-green); font-size:1.15rem; font-weight:800;">Better System Performance</div>
+              </div>
+              <p style="margin-top:0.8rem; font-size:0.85rem; color:var(--text-muted);">
+                More indexes ≠ Always better! Audit unused indexes periodically using <code>$indexStats</code>.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 32 — CHECK QUERY PERFORMANCE
+           ==================================================================== -->
+      <section class="slide" data-slide="32" id="slide-32">
+        <div class="slide-content">
+          <div class="slide-header">
+            <span class="slide-tag">Diagnostics</span>
+            <h1 class="slide-title">Check Performance: <span class="highlight">.explain()</span></h1>
+            <p class="slide-subtitle">Using <code>.explain("executionStats")</code> to audit query plans and verify index usage.</p>
+          </div>
+
+          <div class="grid-2">
+            <div>
+              <div class="code-panel">
+                <div class="code-header">
+                  <div class="window-dots"><span class="dot-btn red"></span><span class="dot-btn yellow"></span><span class="dot-btn green"></span></div>
+                  <span class="code-title">explain-query.js</span>
+                  <button class="copy-btn">Copy</button>
+                </div>
+                <div class="code-body">db.students
+  .<span class="fn">find</span>({ <span class="prop">email</span>: <span class="str">"student@gmail.com"</span> })
+  .<span class="fn">explain</span>(<span class="str">"executionStats"</span>)</div>
+              </div>
+
+              <div class="callout info" style="margin-top: 1rem;">
+                <div class="callout-title">3 Questions Every Student Must Ask:</div>
+                <ul style="padding-left:1.2rem; margin-top:0.4rem; font-size:0.85rem;">
+                  <li>1. Did MongoDB use an index? (Look for <strong>IXSCAN</strong>, not COLLSCAN).</li>
+                  <li>2. How many documents were examined? (<code>totalDocsExamined</code>).</li>
+                  <li>3. How many documents were returned? (<code>nReturned</code>).</li>
+                </ul>
+              </div>
+            </div>
+
+            <div>
+              <div class="card">
+                <div class="card-header">
+                  <span class="card-icon">📊</span>
+                  <span class="card-title">Key Output Metrics to Inspect</span>
+                </div>
+                <div class="code-panel">
+                  <div class="code-body"><span class="prop">executionStats</span>: {
+  <span class="prop">executionSuccess</span>: <span class="bool">true</span>,
+  <span class="prop">nReturned</span>: <span class="num">1</span>,
+  <span class="prop">executionTimeMillis</span>: <span class="num">0</span>,
+  <span class="prop">totalKeysExamined</span>: <span class="num">1</span>,
+  <span class="prop">totalDocsExamined</span>: <span class="num">1</span>,
+  <span class="prop">executionStages</span>: {
+    <span class="prop">stage</span>: <span class="str">"FETCH"</span>,
+    <span class="prop">inputStage</span>: {
+      <span class="prop">stage</span>: <span class="str">"IXSCAN"</span>,
+      <span class="prop">indexName</span>: <span class="str">"email_1"</span>
+    }
+  }
+}</div>
+                </div>
+                <p style="margin-top:0.6rem; font-size:0.82rem; color:var(--text-muted);">
+                  If <code>totalDocsExamined</code> is close to <code>nReturned</code>, the index is highly efficient!
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 33 — WHAT IS PAGINATION? (Section 7 & Demo 6)
+           ==================================================================== -->
+      <section class="slide" data-slide="33" id="slide-33">
+        <div class="slide-content">
+          <div class="slide-header">
+            <span class="slide-tag">Pagination</span>
+            <h1 class="slide-title">What Is <span class="highlight">Pagination?</span></h1>
+            <p class="slide-subtitle">Dividing a large collection of documents into discrete, manageable subsets called pages.</p>
+          </div>
+
+          <div class="grid-2">
+            <div>
+              <div class="card highlight-card" style="margin-bottom: 1rem;">
+                <div class="card-header">
+                  <span class="card-icon">📦</span>
+                  <span class="card-title">The 100,000 Products Scenario</span>
+                </div>
+                <p>Imagine your database contains <strong>100,000 products</strong>. We never send all 100,000 records to the client in a single response!</p>
+                <div style="background:var(--bg-terminal); border:1px solid var(--border-subtle); border-radius:var(--radius-sm); padding:0.8rem; margin:0.8rem 0; font-family:var(--font-mono); font-size:0.85rem; line-height:1.7;">
+                  <div>Page 1 → <span style="color:var(--mongo-green);">20 products</span> (1 to 20)</div>
+                  <div>Page 2 → <span style="color:var(--mongo-green);">20 products</span> (21 to 40)</div>
+                  <div>Page 3 → <span style="color:var(--mongo-green);">20 products</span> (41 to 60)</div>
+                  <div style="color:var(--text-muted);">...</div>
+                </div>
+              </div>
+
+              <div class="callout info">
+                <div class="callout-title">Interactive Dataset Demo →</div>
+                <p>Test the working pagination table on the right. Navigate through 50 mock products 10 items at a time.</p>
+              </div>
+            </div>
+
+            <!-- DEMO 6 WIDGET -->
+            <div class="demo-box">
+              <div class="demo-header">
+                <span class="demo-badge"><span>🎮</span> Interactive Demo 6 — Pagination Table</span>
+                <span style="font-size:0.75rem; color:var(--text-muted);" id="demo6Info">Showing 1–10 of 50</span>
+              </div>
+              <div class="demo-body">
+                <div id="demo6List" style="min-height: 200px; overflow-x: auto;">
+                  <!-- Injected via script.js -->
+                </div>
+
+                <div class="pagination-controls">
+                  <button class="page-btn" id="demo6Prev" onclick="DemoPagination.goTo(DemoPagination.currentPage - 1)">«</button>
+                  <button class="page-btn active" id="demo6Page1" onclick="DemoPagination.goTo(1)">1</button>
+                  <button class="page-btn" id="demo6Page2" onclick="DemoPagination.goTo(2)">2</button>
+                  <button class="page-btn" id="demo6Page3" onclick="DemoPagination.goTo(3)">3</button>
+                  <button class="page-btn" id="demo6Page4" onclick="DemoPagination.goTo(4)">4</button>
+                  <button class="page-btn" id="demo6Page5" onclick="DemoPagination.goTo(5)">5</button>
+                  <button class="page-btn" id="demo6Next" onclick="DemoPagination.goTo(DemoPagination.currentPage + 1)">»</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 34 — WHY PAGINATION?
+           ==================================================================== -->
+      <section class="slide" data-slide="34" id="slide-34">
+        <div class="slide-content">
+          <div class="slide-header">
+            <span class="slide-tag">Pagination</span>
+            <h1 class="slide-title">Why <span class="highlight">Pagination?</span></h1>
+            <p class="slide-subtitle">Comparing network payload sizes, server memory consumption, and client render latency.</p>
+          </div>
+
+          <div class="grid-2">
+            <div class="card rose-card">
+              <div class="card-header">
+                <span class="card-icon" style="color:var(--accent-rose);">❌</span>
+                <span class="card-title">Without Pagination (Dump All)</span>
+              </div>
+              <div class="vertical-flow" style="margin: 0.8rem 0;">
+                <div class="v-node"><span>Database</span><span>Reads 100,000 documents</span></div>
+                <div class="v-arrow">↓</div>
+                <div class="v-node"><span>Backend Memory</span><span>Huge JSON payload (50+ MB)</span></div>
+                <div class="v-arrow">↓</div>
+                <div class="v-node"><span>Network</span><span>High latency (5-10s transfer)</span></div>
+                <div class="v-arrow">↓</div>
+                <div class="v-node" style="border-color:var(--accent-rose);"><span>Frontend UI</span><span>DOM freezes, browser crashes!</span></div>
+              </div>
+            </div>
+
+            <div class="card highlight-card">
+              <div class="card-header">
+                <span class="card-icon">✅</span>
+                <span class="card-title">With Pagination (Slices)</span>
+              </div>
+              <div class="vertical-flow" style="margin: 0.8rem 0;">
+                <div class="v-node highlight"><span>Database</span><span>Reads only 20 documents</span></div>
+                <div class="v-arrow">↓</div>
+                <div class="v-node highlight"><span>Backend Memory</span><span>Tiny JSON payload (&lt; 15 KB)</span></div>
+                <div class="v-arrow">↓</div>
+                <div class="v-node highlight"><span>Network</span><span>Instant transfer (&lt; 30 ms)</span></div>
+                <div class="v-arrow">↓</div>
+                <div class="v-node highlight"><span>Frontend UI</span><span>Silky smooth 60 FPS rendering!</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 35 — LIMIT()
+           ==================================================================== -->
+      <section class="slide" data-slide="35" id="slide-35">
+        <div class="slide-content">
+          <div class="slide-header">
+            <span class="slide-tag">Pagination</span>
+            <h1 class="slide-title">Understanding <span class="highlight">limit()</span></h1>
+            <p class="slide-subtitle">Restricting the maximum number of documents returned by a query cursor.</p>
+          </div>
+
+          <div class="grid-2">
+            <div>
+              <div class="code-panel">
+                <div class="code-header">
+                  <div class="window-dots"><span class="dot-btn red"></span><span class="dot-btn yellow"></span><span class="dot-btn green"></span></div>
+                  <span class="code-title">limit-example.js</span>
+                  <button class="copy-btn">Copy</button>
+                </div>
+                <div class="code-body">db.products
+  .<span class="fn">find</span>()
+  .<span class="fn">limit</span>(<span class="num">10</span>)</div>
+              </div>
+
+              <div class="card" style="margin-top: 1rem;">
+                <div class="card-header">
+                  <span class="card-icon">🎯</span>
+                  <span class="card-title">Behavior</span>
+                </div>
+                <p>Returns at most <strong>10 documents</strong>.</p>
+                <p style="margin-top: 0.5rem; font-size: 0.88rem; color: var(--text-muted);">
+                  If the collection only has 4 documents, it returns 4. If it has 50,000 documents, it stops after 10.
+                </p>
+              </div>
+            </div>
+
+            <div class="card cyan-card">
+              <div class="card-header">
+                <span class="card-icon">⚡</span>
+                <span class="card-title">Database Efficiency</span>
+              </div>
+              <p>When you attach <code>.limit(10)</code>, MongoDB stops reading as soon as the 10th document is reached. The database engine does not waste resources fetching the remaining records.</p>
+              <div class="callout info" style="margin-top: 1rem;">
+                <div class="callout-title">Next Step:</div>
+                <p><code>limit()</code> gives us page size. But how do we reach Page 2 or Page 3? That is where <strong><code>skip()</code></strong> comes in!</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 36 — SKIP()
+           ==================================================================== -->
+      <section class="slide" data-slide="36" id="slide-36">
+        <div class="slide-content">
+          <div class="slide-header">
+            <span class="slide-tag">Pagination</span>
+            <h1 class="slide-title">Understanding <span class="highlight">skip()</span></h1>
+            <p class="slide-subtitle">Ignoring a specified number of leading documents before returning results.</p>
+          </div>
+
+          <div class="grid-2">
+            <div>
+              <div class="code-panel">
+                <div class="code-header">
+                  <div class="window-dots"><span class="dot-btn red"></span><span class="dot-btn yellow"></span><span class="dot-btn green"></span></div>
+                  <span class="code-title">skip-limit.js</span>
+                  <button class="copy-btn">Copy</button>
+                </div>
+                <div class="code-body">db.products
+  .<span class="fn">find</span>()
+  .<span class="fn">skip</span>(<span class="num">10</span>)
+  .<span class="fn">limit</span>(<span class="num">10</span>)</div>
+              </div>
+
+              <div class="card" style="margin-top: 1rem;">
+                <div class="card-header">
+                  <span class="card-icon">🔀</span>
+                  <span class="card-title">Conceptually</span>
+                </div>
+                <div style="font-family: var(--font-mono); font-size: 0.95rem; line-height: 1.8;">
+                  <span style="color:var(--accent-rose);">Skip first 10 documents</span> (1 to 10)<br>
+                  <span style="color:var(--mongo-green);">Take next 10 documents</span> (11 to 20)
+                </div>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-header">
+                <span class="card-icon">📐</span>
+                <span class="card-title">Visualizing the Window</span>
+              </div>
+              <div style="display:flex; flex-direction:column; gap:0.5rem; margin:1rem 0;">
+                <div style="background:rgba(251,113,133,0.1); border:1px dashed var(--accent-rose-border); padding:0.6rem 0.8rem; border-radius:4px; font-family:var(--font-mono); font-size:0.82rem; color:var(--accent-rose);">
+                  [Docs 1 – 10] → Ignored by skip(10)
+                </div>
+                <div style="background:var(--mongo-green-deep); border:1px solid var(--mongo-green-border); padding:0.6rem 0.8rem; border-radius:4px; font-family:var(--font-mono); font-size:0.82rem; color:var(--mongo-green); font-weight:700;">
+                  [Docs 11 – 20] → Returned by limit(10) ✅
+                </div>
+                <div style="background:var(--bg-terminal); border:1px solid var(--border-subtle); padding:0.6rem 0.8rem; border-radius:4px; font-family:var(--font-mono); font-size:0.82rem; color:var(--text-dim);">
+                  [Docs 21 – ...] → Unread
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 37 — PAGE-BASED PAGINATION (with Interactive Demo 7)
+           ==================================================================== -->
+      <section class="slide" data-slide="37" id="slide-37">
+        <div class="slide-content">
+          <div class="slide-header">
+            <span class="slide-tag">Pagination</span>
+            <h1 class="slide-title">Page-Based <span class="highlight">Pagination Formula</span></h1>
+            <p class="slide-subtitle">The standard mathematical formula used in Express and Node.js APIs to calculate offset.</p>
+          </div>
+
+          <div class="grid-2">
+            <div>
+              <div class="card highlight-card" style="margin-bottom: 1rem;">
+                <div class="card-header">
+                  <span class="card-icon">🧮</span>
+                  <span class="card-title">The Formula</span>
+                </div>
+                <div class="code-panel">
+                  <div class="code-body"><span class="kwd">const</span> limit = <span class="num">10</span>;
+<span class="kwd">const</span> skip = (page - <span class="num">1</span>) * limit;</div>
+                </div>
+                <div style="margin-top: 0.8rem; font-family: var(--font-mono); font-size: 0.85rem; line-height: 1.6;">
+                  Page 1 → skip = (1 - 1) * 10 = <strong style="color:var(--mongo-green);">0</strong><br>
+                  Page 2 → skip = (2 - 1) * 10 = <strong style="color:var(--mongo-green);">10</strong><br>
+                  Page 3 → skip = (3 - 1) * 10 = <strong style="color:var(--mongo-green);">20</strong>
+                </div>
+              </div>
+
+              <div class="card">
+                <div class="card-header">
+                  <span class="card-icon">⚙️</span>
+                  <span class="card-title">Interactive Inputs</span>
+                </div>
+                <div style="display: flex; gap: 1rem; align-items: center; margin-top: 0.5rem;">
+                  <label style="font-size: 0.85rem; font-weight: 600;">Page:
+                    <input type="number" id="demo7PageInput" value="3" min="1" max="10" style="width: 70px; margin-left: 0.4rem; padding: 0.3rem 0.5rem; background: var(--bg-terminal); border: 1px solid var(--border-light); color: var(--text-primary); border-radius: 4px;">
+                  </label>
+                  <label style="font-size: 0.85rem; font-weight: 600;">Limit:
+                    <select id="demo7LimitInput" style="margin-left: 0.4rem; padding: 0.3rem 0.5rem; background: var(--bg-terminal); border: 1px solid var(--border-light); color: var(--text-primary); border-radius: 4px;">
+                      <option value="5">5</option>
+                      <option value="10" selected>10</option>
+                      <option value="20">20</option>
+                    </select>
+                  </label>
+                </div>
+                <div id="demo7FormulaDisplay" style="margin-top: 0.8rem; font-family: var(--font-mono); font-size: 0.95rem;">
+                  <!-- Injected via script.js -->
+                </div>
+              </div>
+            </div>
+
+            <!-- DEMO 7 WIDGET -->
+            <div class="demo-box">
+              <div class="demo-header">
+                <span class="demo-badge"><span>🎮</span> Interactive Demo 7 — Memory Block Slices</span>
+                <span style="font-size:0.75rem; color:var(--text-muted);">Visualizing skip + limit</span>
+              </div>
+              <div class="demo-body">
+                <div style="font-family: var(--font-mono); font-size: 0.78rem; color: var(--text-muted); background: var(--bg-terminal); padding: 0.45rem 0.7rem; border-radius: var(--radius-xs); margin-bottom: 0.8rem;" id="demo7QueryDisplay">
+                  db.products.find().skip(20).limit(10)
+                </div>
+
+                <div class="chunk-row" id="demo7Chunks">
+                  <!-- Injected via script.js -->
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 38 — MONGOOSE PAGINATION
+           ==================================================================== -->
+      <section class="slide" data-slide="38" id="slide-38">
+        <div class="slide-content">
+          <div class="slide-header">
+            <span class="slide-tag">Pagination</span>
+            <h1 class="slide-title">Mongoose <span class="highlight">Pagination in Express</span></h1>
+            <p class="slide-subtitle">Implementing a production-grade <code>GET /products?page=2&amp;limit=10</code> endpoint.</p>
+          </div>
+
+          <div class="grid-2">
+            <div>
+              <div class="code-panel">
+                <div class="code-header">
+                  <div class="window-dots"><span class="dot-btn red"></span><span class="dot-btn yellow"></span><span class="dot-btn green"></span></div>
+                  <span class="code-title">productController.js</span>
+                  <button class="copy-btn">Copy</button>
+                </div>
+                <div class="code-body"><span class="kwd">const</span> getProducts = <span class="kwd">async</span> (req, res) =&gt; {
+  <span class="kwd">const</span> page = Number(req.query.page) || <span class="num">1</span>;
+  <span class="kwd">const</span> limit = Number(req.query.limit) || <span class="num">10</span>;
+
+  <span class="kwd">const</span> skip = (page - <span class="num">1</span>) * limit;
+
+  <span class="kwd">const</span> products = <span class="kwd">await</span> Product.<span class="fn">find</span>()
+    .<span class="fn">sort</span>({ <span class="prop">createdAt</span>: <span class="num">-1</span> })
+    .<span class="fn">skip</span>(skip)
+    .<span class="fn">limit</span>(limit);
+
+  <span class="kwd">const</span> total = <span class="kwd">await</span> Product.<span class="fn">countDocuments</span>();
+
+  res.<span class="fn">json</span>({
+    <span class="prop">products</span>,
+    <span class="prop">page</span>,
+    <span class="prop">limit</span>,
+    <span class="prop">total</span>,
+    <span class="prop">totalPages</span>: Math.<span class="fn">ceil</span>(total / limit)
+  });
+};</div>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-header">
+                <span class="card-icon">🌐</span>
+                <span class="card-title">API Response Schema</span>
+              </div>
+              <div class="code-panel">
+                <div class="code-header">
+                  <span class="code-title">200 OK Response</span>
+                </div>
+                <div class="code-body">{
+  <span class="prop">"page"</span>: <span class="num">2</span>,
+  <span class="prop">"limit"</span>: <span class="num">10</span>,
+  <span class="prop">"total"</span>: <span class="num">150</span>,
+  <span class="prop">"totalPages"</span>: <span class="num">15</span>,
+  <span class="prop">"products"</span>: [
+    { <span class="prop">"_id"</span>: <span class="str">"66f1..."</span>, <span class="prop">"name"</span>: <span class="str">"Product 11"</span> }
+  ]
+}</div>
+              </div>
+              <div class="callout warning" style="margin-top: 0.8rem;">
+                <div class="callout-title">⚠️ Always Use a Stable Sort</div>
+                <p>Never call <code>skip()</code> without <code>.sort()</code>! Without an explicit sort order, document order is non-deterministic and records may duplicate across pages.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 39 — THE PROBLEM WITH LARGE SKIP()
+           ==================================================================== -->
+      <section class="slide" data-slide="39" id="slide-39">
+        <div class="slide-content">
+          <div class="slide-header">
+            <span class="slide-tag">Performance Bottleneck</span>
+            <h1 class="slide-title">The Problem With <span style="color:var(--accent-rose);">Large skip()</span></h1>
+            <p class="slide-subtitle">Why offset pagination deteriorates as users or bots request deep page numbers.</p>
+          </div>
+
+          <div class="grid-2">
+            <div>
+              <div class="card rose-card">
+                <div class="card-header">
+                  <span class="card-icon" style="color:var(--accent-rose);">💥</span>
+                  <span class="card-title">The Deep Page Scenario</span>
+                </div>
+                <div style="font-family: var(--font-mono); font-size: 0.92rem; line-height: 1.8;">
+                  Page = <span style="color:var(--text-primary); font-weight:700;">1,000</span><br>
+                  Limit = <span style="color:var(--text-primary); font-weight:700;">20</span><br>
+                  <div style="margin: 0.5rem 0; padding: 0.4rem 0.8rem; background: var(--bg-terminal); border-radius: 4px; color: var(--accent-rose);">
+                    skip = (1,000 - 1) × 20 = <strong>19,980</strong>
+                  </div>
+                </div>
+                <p style="margin-top: 0.8rem; font-size: 0.9rem; color: var(--text-secondary);">
+                  To fulfill <code>skip(19980).limit(20)</code>, MongoDB cannot teleport to row 19,980. <strong>It still has to traverse past all 19,980 documents and discard them</strong> before returning the 20 requested records!
+                </p>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-header">
+                <span class="card-icon">📈</span>
+                <span class="card-title">Performance Latency Curve</span>
+              </div>
+              <div style="display:flex; flex-direction:column; gap:0.6rem; margin:1rem 0; font-family:var(--font-mono); font-size:0.85rem;">
+                <div style="display:flex; justify-content:space-between; padding:0.45rem; background:rgba(0,237,100,0.1); border-radius:4px;">
+                  <span>Page 1 (skip: 0)</span><span style="color:var(--mongo-green);">~1 ms</span>
+                </div>
+                <div style="display:flex; justify-content:space-between; padding:0.45rem; background:rgba(56,189,248,0.1); border-radius:4px;">
+                  <span>Page 50 (skip: 1,000)</span><span style="color:var(--accent-cyan);">~15 ms</span>
+                </div>
+                <div style="display:flex; justify-content:space-between; padding:0.45rem; background:rgba(251,191,36,0.1); border-radius:4px;">
+                  <span>Page 500 (skip: 10,000)</span><span style="color:var(--accent-amber);">~180 ms</span>
+                </div>
+                <div style="display:flex; justify-content:space-between; padding:0.45rem; background:rgba(251,113,133,0.1); border-radius:4px;">
+                  <span>Page 2,500 (skip: 50,000)</span><span style="color:var(--accent-rose); font-weight:700;">~1,200 ms (Lag!)</span>
+                </div>
+              </div>
+              <div class="callout danger">
+                <div class="callout-title">The Flaw:</div>
+                <p>Offset pagination scale is <strong>O(N)</strong> where N is the offset. We need an <strong>O(1)</strong> solution: Cursor Pagination!</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 40 — BETTER APPROACH: CURSOR PAGINATION (Section 8)
+           ==================================================================== -->
+      <section class="slide" data-slide="40" id="slide-40">
+        <div class="slide-content">
+          <div class="slide-header">
+            <span class="slide-tag">Cursor Pagination</span>
+            <h1 class="slide-title">Better Approach: <span class="highlight">Cursor Pagination</span></h1>
+            <p class="slide-subtitle">Instead of counting offsets, we query for records sequentially after a known pointer.</p>
+          </div>
+
+          <div class="grid-2">
+            <div class="card rose-card">
+              <div class="card-header">
+                <span class="card-icon" style="color:var(--accent-rose);">❌</span>
+                <span class="card-title">The Offset Mindset (skip)</span>
+              </div>
+              <p style="font-size: 1.05rem; font-style: italic; color: var(--text-primary); margin: 0.8rem 0;">
+                "Please skip 19,980 documents, then give me the next 20."
+              </p>
+              <p style="font-size: 0.85rem; color: var(--text-muted);">
+                Forces the database to step through 19,980 records in index or memory before finding what you want.
+              </p>
+            </div>
+
+            <div class="card highlight-card">
+              <div class="card-header">
+                <span class="card-icon">✅</span>
+                <span class="card-title">The Cursor Mindset (range)</span>
+              </div>
+              <p style="font-size: 1.05rem; font-style: italic; color: var(--mongo-green); margin: 0.8rem 0;">
+                "Give me 20 documents whose _id is greater than the last document I saw."
+              </p>
+              <p style="font-size: 0.85rem; color: var(--text-muted);">
+                The B-Tree index jumps directly to that exact key in O(log N) steps and reads 20 documents. <strong>Zero documents are skipped!</strong>
+              </p>
+            </div>
+          </div>
+
+          <div class="callout info" style="margin-top: 1.2rem;">
+            <div class="callout-title">Also Known As:</div>
+            <p>Cursor-based pagination is also called <strong>Range-based pagination</strong>, <strong>Keyset pagination</strong>, or <strong>Token pagination</strong>.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 41 — CURSOR PAGINATION EXAMPLE
+           ==================================================================== -->
+      <section class="slide" data-slide="41" id="slide-41">
+        <div class="slide-content">
+          <div class="slide-header">
+            <span class="slide-tag">Cursor Pagination</span>
+            <h1 class="slide-title">Cursor Pagination <span class="highlight">API Example</span></h1>
+            <p class="slide-subtitle">How frontend and backend exchange cursor tokens across sequential requests.</p>
+          </div>
+
+          <div class="grid-2">
+            <div>
+              <div class="card">
+                <div class="card-header">
+                  <span class="card-icon">1️⃣</span>
+                  <span class="card-title">First Request (Page 1)</span>
+                </div>
+                <div class="code-panel">
+                  <div class="code-body">GET /products?<span class="prop">limit</span>=<span class="num">10</span></div>
+                </div>
+                <div class="code-panel" style="margin-top: 0.6rem;">
+                  <div class="code-header"><span class="code-title">Response</span></div>
+                  <div class="code-body">{
+  <span class="prop">products</span>: [ ...<span class="num">10</span> items... ],
+  <span class="prop">nextCursor</span>: <span class="str">"66f123450010"</span>,
+  <span class="prop">hasMore</span>: <span class="bool">true</span>
+}</div>
+                </div>
+              </div>
+            </div>
+
+            <div>
+              <div class="card highlight-card">
+                <div class="card-header">
+                  <span class="card-icon">2️⃣</span>
+                  <span class="card-title">Subsequent Request (Page 2)</span>
+                </div>
+                <div class="code-panel">
+                  <div class="code-body">GET /products?<span class="prop">limit</span>=<span class="num">10</span>&amp;<span class="prop">cursor</span>=<span class="str">66f123450010</span></div>
+                </div>
+                <div class="code-panel" style="margin-top: 0.6rem;">
+                  <div class="code-header"><span class="code-title">Response</span></div>
+                  <div class="code-body">{
+  <span class="prop">products</span>: [ ...next <span class="num">10</span> items... ],
+  <span class="prop">nextCursor</span>: <span class="str">"66f123450020"</span>,
+  <span class="prop">hasMore</span>: <span class="bool">true</span>
+}</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="callout info" style="margin-top: 1rem;">
+            <div class="callout-title">The Magic of nextCursor</div>
+            <p>The client simply passes the <code>nextCursor</code> back in the query string. The database uses it to resume immediately from that spot.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 42 — CURSOR QUERY CONCEPT (with Interactive Demo 8)
+           ==================================================================== -->
+      <section class="slide" data-slide="42" id="slide-42">
+        <div class="slide-content">
+          <div class="slide-header">
+            <span class="slide-tag">Cursor Pagination</span>
+            <h1 class="slide-title">Cursor Query <span class="highlight">Concept ($gt)</span></h1>
+            <p class="slide-subtitle">Under the hood, MongoDB uses an indexed range query: <code>_id: { $gt: lastId }</code>.</p>
+          </div>
+
+          <div class="grid-2">
+            <div>
+              <div class="code-panel">
+                <div class="code-header">
+                  <div class="window-dots"><span class="dot-btn red"></span><span class="dot-btn yellow"></span><span class="dot-btn green"></span></div>
+                  <span class="code-title">cursor-query.js</span>
+                  <button class="copy-btn">Copy</button>
+                </div>
+                <div class="code-body"><span class="com">// When cursor is provided:</span>
+db.products.<span class="fn">find</span>({
+  <span class="prop">_id</span>: {
+    <span class="op-mongo">$gt</span>: lastId
+  }
+})
+.<span class="fn">sort</span>({ <span class="prop">_id</span>: <span class="num">1</span> })
+.<span class="fn">limit</span>(<span class="num">10</span>)</div>
+              </div>
+
+              <div class="card" style="margin-top: 1rem;">
+                <div class="card-header">
+                  <span class="card-icon">⚡</span>
+                  <span class="card-title">Why ObjectId Works Naturally</span>
+                </div>
+                <p>MongoDB's default <code>_id</code> is a 12-byte <strong>ObjectId</strong> containing an embedded 4-byte creation timestamp. Because ObjectIds naturally increment over time, sorting by <code>_id: 1</code> automatically orders by insertion date!</p>
+              </div>
+            </div>
+
+            <!-- DEMO 8 WIDGET -->
+            <div class="demo-box">
+              <div class="demo-header">
+                <span class="demo-badge"><span>🎮</span> Interactive Demo 8 — Cursor Chain Simulator</span>
+                <button class="header-btn" id="demo8NextBtn" onclick="DemoCursor.nextBatch()">Fetch Batch #2 via Cursor →</button>
+              </div>
+              <div class="demo-body">
+                <div style="font-family: var(--font-mono); font-size: 0.78rem; color: var(--text-muted); background: var(--bg-terminal); padding: 0.45rem 0.7rem; border-radius: var(--radius-xs); margin-bottom: 0.8rem;" id="demo8Query">
+                  <!-- Injected via script.js -->
+                </div>
+
+                <div class="cursor-chain" id="demo8Chain">
+                  <!-- Injected via script.js -->
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 43 — OFFSET VS CURSOR PAGINATION
+           ==================================================================== -->
+      <section class="slide" data-slide="43" id="slide-43">
+        <div class="slide-content">
+          <div class="slide-header">
+            <span class="slide-tag">Comparison</span>
+            <h1 class="slide-title">Offset vs <span class="highlight">Cursor Pagination</span></h1>
+            <p class="slide-subtitle">A side-by-side decision matrix to choose the right pagination architecture.</p>
+          </div>
+
+          <div class="table-container">
+            <table class="comp-table">
+              <thead>
+                <tr>
+                  <th>Feature</th>
+                  <th>skip() + limit() (Offset)</th>
+                  <th>Cursor Pagination ($gt)</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Implementation Complexity</strong></td>
+                  <td><span class="badge-yes">✓ Simple</span> Easy math: (page - 1) * limit</td>
+                  <td><span class="badge-warn">Medium</span> Requires tracking cursor tokens</td>
+                </tr>
+                <tr>
+                  <td><strong>Jump to Arbitrary Page (Page 50)</strong></td>
+                  <td><span class="badge-yes">✓ Yes</span> Directly calculate offset</td>
+                  <td><span class="badge-no">✗ No</span> Can only navigate sequentially</td>
+                </tr>
+                <tr>
+                  <td><strong>Deep Page Performance</strong></td>
+                  <td><span class="badge-no">✗ Degrades (O(N))</span> Scans &amp; discards records</td>
+                  <td><span class="badge-yes">✓ Constant (O(1))</span> Instant indexed jump</td>
+                </tr>
+                <tr>
+                  <td><strong>Infinite Scroll Feeds</strong></td>
+                  <td><span class="badge-no">✗ Risky</span> Page shifts if new docs are inserted</td>
+                  <td><span class="badge-yes">✓ Perfect</span> Immune to item insertion shifts</td>
+                </tr>
+                <tr>
+                  <td><strong>Large Datasets (1M+ Docs)</strong></td>
+                  <td><span class="badge-no">✗ Less Suitable</span> High memory and query latency</td>
+                  <td><span class="badge-yes">✓ Highly Scalable</span> Industry standard</td>
+                </tr>
+                <tr>
+                  <td><strong>Display Total Page Numbers</strong></td>
+                  <td><span class="badge-yes">✓ Supported</span> Page [ 1 ] [ 2 ] [ 3 ]</td>
+                  <td><span class="badge-warn">Usually "Load More"</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="grid-2" style="margin-top: 1rem;">
+            <div class="card">
+              <strong>When to use skip + limit:</strong>
+              <p style="font-size:0.85rem; color:var(--text-muted); margin-top:0.3rem;">Internal admin dashboards, small collections (&lt; 10,000 docs), or tables requiring explicit page numbers.</p>
+            </div>
+            <div class="card highlight-card">
+              <strong>When to use Cursor pagination:</strong>
+              <p style="font-size:0.85rem; color:var(--text-muted); margin-top:0.3rem;">Social feeds, mobile infinite scroll, public developer APIs, and high-throughput real-time collections.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 44 — PRODUCT SEARCH API (Section 9)
+           ==================================================================== -->
+      <section class="slide" data-slide="44" id="slide-44">
+        <div class="slide-content">
+          <div class="slide-header">
+            <span class="slide-tag">Real-World API</span>
+            <h1 class="slide-title">Product Search &amp; <span class="highlight">Pagination API</span></h1>
+            <p class="slide-subtitle">Combining search keywords, category filtering, sorting, and pagination in a single endpoint.</p>
+          </div>
+
+          <div class="grid-2">
+            <div>
+              <div class="card" style="margin-bottom: 1rem;">
+                <div class="card-header">
+                  <span class="card-icon">🌐</span>
+                  <span class="card-title">The Target API Endpoint</span>
+                </div>
+                <div class="code-panel">
+                  <div class="code-body">GET /products?<span class="prop">q</span>=iphone&amp;<span class="prop">page</span>=<span class="num">2</span>&amp;<span class="prop">limit</span>=<span class="num">10</span></div>
+                </div>
+              </div>
+
+              <div class="card highlight-card">
+                <div class="card-header">
+                  <span class="card-icon">🛠️</span>
+                  <span class="card-title">Backend Responsibilities</span>
+                </div>
+                <ol style="padding-left:1.2rem; font-size:0.88rem; line-height:1.7; color:var(--text-secondary);">
+                  <li><strong>Read Query Params:</strong> Extract <code>q</code>, <code>page</code>, <code>limit</code> with safe fallbacks.</li>
+                  <li><strong>Search Products:</strong> Execute <code>$text</code> search on keyword if provided.</li>
+                  <li><strong>Sort Results:</strong> Prioritize by <code>textScore</code> or date.</li>
+                  <li><strong>Paginate Results:</strong> Calculate offset and slice with <code>skip()</code> and <code>limit()</code>.</li>
+                  <li><strong>Return Response:</strong> Wrap items with pagination metadata.</li>
+                </ol>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-header">
+                <span class="card-icon">📦</span>
+                <span class="card-title">Standard JSON Response</span>
+              </div>
+              <div class="code-panel">
+                <div class="code-body">{
+  <span class="prop">"page"</span>: <span class="num">2</span>,
+  <span class="prop">"limit"</span>: <span class="num">10</span>,
+  <span class="prop">"total"</span>: <span class="num">150</span>,
+  <span class="prop">"totalPages"</span>: <span class="num">15</span>,
+  <span class="prop">"products"</span>: [
+    {
+      <span class="prop">"_id"</span>: <span class="str">"66f123450001"</span>,
+      <span class="prop">"name"</span>: <span class="str">"iPhone 15 Pro"</span>,
+      <span class="prop">"price"</span>: <span class="num">999</span>,
+      <span class="prop">"score"</span>: <span class="num">1.5</span>
+    }
+  ]
+}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 45 — COMPLETE SEARCH FLOW
+           ==================================================================== -->
+      <section class="slide" data-slide="45" id="slide-45">
+        <div class="slide-content">
+          <div class="slide-header">
+            <span class="slide-tag">Real-World API</span>
+            <h1 class="slide-title">Complete <span class="highlight">Search Flow</span></h1>
+            <p class="slide-subtitle">End-to-end pipeline from user interaction down to database execution and response rendering.</p>
+          </div>
+
+          <div style="background:var(--bg-terminal); border:1px solid var(--border-subtle); border-radius:var(--radius-md); padding:1.5rem; display:flex; flex-direction:column; align-items:center; gap:0.6rem; font-family:var(--font-mono); font-size:0.85rem;">
+            <div style="background:var(--bg-card); border:1px solid var(--border-light); padding:0.4rem 1.4rem; border-radius:var(--radius-sm); color:var(--text-primary); font-weight:700;">
+              USER enters search "iphone"
+            </div>
+            <div style="color:var(--mongo-green);">↓</div>
+            <div style="background:var(--bg-card); border:1px solid var(--mongo-green-border); padding:0.5rem 1.6rem; border-radius:var(--radius-sm); color:var(--mongo-green); font-weight:700;">
+              ┌────────────────────────┐<br>
+              │ Search Engine Endpoint │<br>
+              └────────────────────────┘
+            </div>
+            <div style="display:flex; gap:3rem; margin:0.2rem 0;">
+              <span style="color:var(--mongo-green);">↙ $text (Words)</span>
+              <span style="color:var(--accent-cyan);">↘ $regex (Partial)</span>
+            </div>
+            <div style="background:var(--bg-surface); border:1px solid var(--border-medium); padding:0.4rem 1.2rem; border-radius:var(--radius-sm);">
+              Matching Results in B-Tree Index
+            </div>
+            <div style="color:var(--mongo-green);">↓</div>
+            <div style="background:var(--bg-surface); border:1px solid var(--border-medium); padding:0.4rem 1.2rem; border-radius:var(--radius-sm);">
+              Sorting (by textScore or price)
+            </div>
+            <div style="color:var(--mongo-green);">↓</div>
+            <div style="background:var(--bg-surface); border:1px solid var(--border-medium); padding:0.4rem 1.2rem; border-radius:var(--radius-sm);">
+              Pagination (skip &amp; limit applied)
+            </div>
+            <div style="color:var(--mongo-green);">↓</div>
+            <div style="background:var(--mongo-green-deep); border:1px solid var(--mongo-green-border); padding:0.4rem 1.4rem; border-radius:var(--radius-sm); color:var(--mongo-green); font-weight:700;">
+              Backend JSON Response → Frontend UI
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 46 — MINI PROJECT: PRODUCT SEARCH API (Section 10)
+           ==================================================================== -->
+      <section class="slide" data-slide="46" id="slide-46">
+        <div class="slide-content">
+          <div class="slide-header">
+            <span class="slide-tag">Practical Project</span>
+            <h1 class="slide-title">Mini Project: <span class="highlight">Product Search API</span></h1>
+            <p class="slide-subtitle">Building an integrated Product Search &amp; Pagination service in Node.js and Mongoose.</p>
+          </div>
+
+          <div class="grid-2">
+            <div class="card highlight-card">
+              <div class="card-header">
+                <span class="card-icon">📁</span>
+                <span class="card-title">Product Collection Schema</span>
+              </div>
+              <div class="code-panel">
+                <div class="code-body">{
+  <span class="prop">name</span>: String,
+  <span class="prop">description</span>: String,
+  <span class="prop">category</span>: String,
+  <span class="prop">price</span>: Number,
+  <span class="prop">stock</span>: Number
+}</div>
+              </div>
+            </div>
+
+            <div class="card cyan-card">
+              <div class="card-header">
+                <span class="card-icon">🎯</span>
+                <span class="card-title">Project Feature Requirements</span>
+              </div>
+              <ul>
+                <li><strong>Product Listing:</strong> Browse catalog with default page size of 10.</li>
+                <li><strong>Full-Text Search:</strong> Search words across <code>name</code> and <code>description</code>.</li>
+                <li><strong>Partial Search:</strong> Fallback to regex when queries are under 3 characters.</li>
+                <li><strong>Sorting:</strong> Sort by relevance score or price.</li>
+                <li><strong>Pagination:</strong> Safe calculation of skip, limit, and total pages.</li>
+                <li><strong>Indexes:</strong> Production-grade text and filter indexes.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 47 — PRODUCT SEARCH ENDPOINT
+           ==================================================================== -->
+      <section class="slide" data-slide="47" id="slide-47">
+        <div class="slide-content">
+          <div class="slide-header">
+            <span class="slide-tag">Practical Project</span>
+            <h1 class="slide-title">Search Endpoint: <span class="highlight">Implementation</span></h1>
+            <p class="slide-subtitle">Switching dynamically between <code>$text</code> and <code>$regex</code> based on input length.</p>
+          </div>
+
+          <div class="grid-2">
+            <div>
+              <div class="code-panel">
+                <div class="code-header">
+                  <div class="window-dots"><span class="dot-btn red"></span><span class="dot-btn yellow"></span><span class="dot-btn green"></span></div>
+                  <span class="code-title">searchProducts.js</span>
+                  <button class="copy-btn">Copy</button>
+                </div>
+                <div class="code-body"><span class="kwd">const</span> buildSearchQuery = (q) =&gt; {
+  <span class="kwd">if</span> (!q) <span class="kwd">return</span> {};
+
+  <span class="com">// If query is at least 3 chars, use full-text search</span>
+  <span class="kwd">if</span> (q.trim().length &gt;= <span class="num">3</span>) {
+    <span class="kwd">return</span> {
+      <span class="op-mongo">$text</span>: { <span class="op-mongo">$search</span>: q }
+    };
+  }
+
+  <span class="com">// For short inputs (e.g. "ph"), use partial regex</span>
+  <span class="kwd">return</span> {
+    <span class="prop">name</span>: { <span class="op-mongo">$regex</span>: q, <span class="op-mongo">$options</span>: <span class="str">"i"</span> }
+  };
+};</div>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-header">
+                <span class="card-icon">🧠</span>
+                <span class="card-title">Why This Hybrid Strategy Works</span>
+              </div>
+              <ul style="margin: 0.8rem 0;">
+                <li><strong>Complete Words:</strong> Queries like <code>q=phone</code> or <code>q=shoes</code> leverage the fast inverted text index with <code>textScore</code>.</li>
+                <li><strong>Partial Typing:</strong> Very short queries like <code>q=pho</code> gracefully fall back to <code>$regex</code> without erroring out.</li>
+                <li><strong>Safeguard:</strong> By restricting regex to short inputs and always adding <code>.limit()</code>, collection scan penalties remain controlled.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 48 — PAGINATION API IMPLEMENTATION
+           ==================================================================== -->
+      <section class="slide" data-slide="48" id="slide-48">
+        <div class="slide-content">
+          <div class="slide-header">
+            <span class="slide-tag">Practical Project</span>
+            <h1 class="slide-title">Pagination API: <span class="highlight">Implementation</span></h1>
+            <p class="slide-subtitle">Complete controller with input sanitization, query execution, and parallel counting.</p>
+          </div>
+
+          <div class="code-panel">
+            <div class="code-header">
+              <div class="window-dots"><span class="dot-btn red"></span><span class="dot-btn yellow"></span><span class="dot-btn green"></span></div>
+              <span class="code-title">getProductsController.js</span>
+              <button class="copy-btn">Copy</button>
+            </div>
+            <div class="code-body"><span class="kwd">export const</span> getProducts = <span class="kwd">async</span> (req, res) =&gt; {
+  <span class="kwd">const</span> page = Math.<span class="fn">max</span>(<span class="num">1</span>, parseInt(req.query.page, <span class="num">10</span>) || <span class="num">1</span>);
+  <span class="kwd">const</span> limit = Math.<span class="fn">min</span>(<span class="num">50</span>, Math.<span class="fn">max</span>(<span class="num">1</span>, parseInt(req.query.limit, <span class="num">10</span>) || <span class="num">10</span>));
+  <span class="kwd">const</span> skip = (page - <span class="num">1</span>) * limit;
+
+  <span class="kwd">const</span> filter = buildSearchQuery(req.query.q);
+
+  <span class="com">// Run query and total count in parallel for maximum speed</span>
+  <span class="kwd">const</span> [products, total] = <span class="kwd">await</span> Promise.<span class="fn">all</span>([
+    Product.<span class="fn">find</span>(filter).<span class="fn">sort</span>({ <span class="prop">createdAt</span>: <span class="num">-1</span> }).<span class="fn">skip</span>(skip).<span class="fn">limit</span>(limit),
+    Product.<span class="fn">countDocuments</span>(filter)
+  ]);
+
+  res.<span class="fn">json</span>({
+    <span class="prop">products</span>,
+    <span class="prop">page</span>,
+    <span class="prop">limit</span>,
+    <span class="prop">total</span>,
+    <span class="prop">totalPages</span>: Math.<span class="fn">ceil</span>(total / limit)
+  });
+};</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 49 — PRACTICAL INDEXES
+           ==================================================================== -->
+      <section class="slide" data-slide="49" id="slide-49">
+        <div class="slide-content">
+          <div class="slide-header">
+            <span class="slide-tag">Practical Project</span>
+            <h1 class="slide-title">Practical <span class="highlight">Indexes for Project</span></h1>
+            <p class="slide-subtitle">Creating exactly the indexes required by our project queries — and knowing why each exists.</p>
+          </div>
+
+          <div class="grid-3">
+            <div class="card highlight-card">
+              <div class="card-header">
+                <span class="card-icon">1️⃣</span>
+                <span class="card-title">Text Search Index</span>
+              </div>
+              <div class="code-panel">
+                <div class="code-body">db.products.<span class="fn">createIndex</span>({
+  <span class="prop">name</span>: <span class="str">"text"</span>,
+  <span class="prop">description</span>: <span class="str">"text"</span>
+})</div>
+              </div>
+              <p style="margin-top:0.8rem; font-size:0.82rem; color:var(--text-secondary);">
+                <strong>Why it exists:</strong> Powers all <code>$text: { $search: ... }</code> queries across product titles and details.
+              </p>
+            </div>
+
+            <div class="card cyan-card">
+              <div class="card-header">
+                <span class="card-icon">2️⃣</span>
+                <span class="card-title">Category Index</span>
+              </div>
+              <div class="code-panel">
+                <div class="code-body">db.products.<span class="fn">createIndex</span>({
+  <span class="prop">category</span>: <span class="num">1</span>
+})</div>
+              </div>
+              <p style="margin-top:0.8rem; font-size:0.82rem; color:var(--text-secondary);">
+                <strong>Why it exists:</strong> Users frequently filter by department (e.g. <code>category: "Footwear"</code>).
+              </p>
+            </div>
+
+            <div class="card amber-card">
+              <div class="card-header">
+                <span class="card-icon">3️⃣</span>
+                <span class="card-title">Price Sort Index</span>
+              </div>
+              <div class="code-panel">
+                <div class="code-body">db.products.<span class="fn">createIndex</span>({
+  <span class="prop">price</span>: <span class="num">1</span>
+})</div>
+              </div>
+              <p style="margin-top:0.8rem; font-size:0.82rem; color:var(--text-secondary);">
+                <strong>Why it exists:</strong> Allows sorting products by "Price: Low to High" without in-memory sort penalty.
+              </p>
+            </div>
+          </div>
+
+          <div class="callout info" style="margin-top: 1.2rem;">
+            <div class="callout-title">💡 The Indexing Takeaway</div>
+            <p>Notice how every single index corresponds to a specific user filter or sort! We didn't index <code>stock</code> or internal timestamps because queries don't filter on them.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 50 — COMMON MISTAKES (Section 11)
+           ==================================================================== -->
+      <section class="slide" data-slide="50" id="slide-50">
+        <div class="slide-content">
+          <div class="slide-header">
+            <span class="slide-tag">Anti-Patterns</span>
+            <h1 class="slide-title">Common <span style="color:var(--accent-rose);">Mistakes to Avoid</span></h1>
+            <p class="slide-subtitle">The 8 most frequent mistakes made by junior developers when implementing search &amp; pagination.</p>
+          </div>
+
+          <div class="mistakes-grid">
+            <div class="mistake-card">
+              <div class="mistake-badge">1</div>
+              <div class="mistake-body">
+                <h4>Expecting $text to Be Substring Search</h4>
+                <p>Searching "iph" with <code>$text</code> will return 0 results because <code>$text</code> searches whole word tokens, not character substrings.</p>
+              </div>
+            </div>
+
+            <div class="mistake-card">
+              <div class="mistake-badge">2</div>
+              <div class="mistake-body">
+                <h4>Using $regex Everywhere on Large Collections</h4>
+                <p>Unanchored regex (e.g. <code>/phone/</code>) triggers full collection scans, spiking CPU and crashing production databases.</p>
+              </div>
+            </div>
+
+            <div class="mistake-card">
+              <div class="mistake-badge">3</div>
+              <div class="mistake-body">
+                <h4>Creating Indexes on Every Single Field</h4>
+                <p>More indexes ≠ faster database. Every index slows down <code>insert</code>, <code>update</code>, and <code>delete</code> operations and consumes RAM.</p>
+              </div>
+            </div>
+
+            <div class="mistake-card">
+              <div class="mistake-badge">4</div>
+              <div class="mistake-body">
+                <h4>Returning the Entire Collection Without limit()</h4>
+                <p>Calling <code>Product.find()</code> without limits sends thousands of documents across the wire, exhausting memory and crashing frontends.</p>
+              </div>
+            </div>
+
+            <div class="mistake-card">
+              <div class="mistake-badge">5</div>
+              <div class="mistake-body">
+                <h4>Using Very Large skip() Values for Deep Pages</h4>
+                <p><code>skip(50000)</code> still iterates past 50,000 documents. For deep feeds or infinite scroll, always use cursor pagination.</p>
+              </div>
+            </div>
+
+            <div class="mistake-card">
+              <div class="mistake-badge">6</div>
+              <div class="mistake-body">
+                <h4>Forgetting a Stable Sort Order During Pagination</h4>
+                <p>Paginating without an explicit <code>.sort()</code> produces non-deterministic order, causing duplicate or missing records across pages.</p>
+              </div>
+            </div>
+
+            <div class="mistake-card">
+              <div class="mistake-badge">7</div>
+              <div class="mistake-body">
+                <h4>Assuming Atlas Autocomplete Works Without Search Index</h4>
+                <p>The <code>$search</code> stage will throw an error if an Atlas Search index with an autocomplete analyzer is not created first.</p>
+              </div>
+            </div>
+
+            <div class="mistake-card">
+              <div class="mistake-badge">8</div>
+              <div class="mistake-body">
+                <h4>Ignoring .explain("executionStats")</h4>
+                <p>Never guess whether a query is fast. Run <code>.explain()</code> to verify whether MongoDB used an index (IXSCAN) or scanned all docs (COLLSCAN).</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 51 — QUICK COMPARISON
+           ==================================================================== -->
+      <section class="slide" data-slide="51" id="slide-51">
+        <div class="slide-content">
+          <div class="slide-header">
+            <span class="slide-tag">Review</span>
+            <h1 class="slide-title">Quick <span class="highlight">Concept Comparison</span></h1>
+            <p class="slide-subtitle">A concise executive summary of the 7 core pillars covered today.</p>
+          </div>
+
+          <div class="grid-2">
+            <div class="card highlight-card">
+              <div class="card-header">
+                <span class="card-icon">🔍</span>
+                <span class="card-title">Search Pillars</span>
+              </div>
+              <ul style="margin: 0.8rem 0; font-size: 0.9rem; line-height: 1.7;">
+                <li><strong style="color:var(--mongo-green);">$text:</strong> Full-text word search with language tokenization.</li>
+                <li><strong style="color:var(--accent-amber);">textScore:</strong> Numeric relevance score for ranking best matches first.</li>
+                <li><strong style="color:var(--accent-cyan);">$regex:</strong> Partial substring pattern matching with options like <code>"i"</code>.</li>
+                <li><strong style="color:var(--accent-purple);">Atlas Search:</strong> Dedicated Apache Lucene engine for autocomplete &amp; fuzzy search.</li>
+              </ul>
+            </div>
+
+            <div class="card cyan-card">
+              <div class="card-header">
+                <span class="card-icon">⚡</span>
+                <span class="card-title">Performance &amp; Pagination Pillars</span>
+              </div>
+              <ul style="margin: 0.8rem 0; font-size: 0.9rem; line-height: 1.7;">
+                <li><strong style="color:var(--mongo-green);">Index:</strong> B-Tree data structure enabling O(log N) fast document lookups.</li>
+                <li><strong style="color:var(--accent-cyan);">skip + limit:</strong> Simple page-based pagination for small datasets &amp; tables.</li>
+                <li><strong style="color:var(--accent-amber);">Cursor pagination:</strong> Scalable range pagination using <code>_id &gt; lastId</code> for deep feeds.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 52 — QUICK QUIZ (Interactive Classroom Quiz)
+           ==================================================================== -->
+      <section class="slide" data-slide="52" id="slide-52">
+        <div class="slide-content">
+          <div class="slide-header">
+            <span class="slide-tag">Classroom Check</span>
+            <h1 class="slide-title">Quick <span class="highlight">Classroom Quiz</span></h1>
+            <p class="slide-subtitle">Test your understanding with 7 interactive multiple-choice questions.</p>
+          </div>
+
+          <!-- QUIZ COMPONENT CONTAINER -->
+          <div class="quiz-box" id="quizBox">
+            <!-- Injected via script.js -->
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 53 — SUMMARY & FINAL TAKEAWAYS
+           ==================================================================== -->
+      <section class="slide" data-slide="53" id="slide-53">
+        <div class="slide-content centered">
+          <div class="slide-tag" style="margin-bottom: 0.8rem;">MongoDB Course • Day 8 Complete</div>
+          <h1 class="slide-title" style="font-size: 2.8rem; margin-bottom: 1rem;">
+            Summary &amp; Key <span class="highlight">Takeaways</span>
+          </h1>
+
+          <div style="background:var(--bg-card); border:1px solid var(--border-medium); border-radius:var(--radius-lg); padding:2rem 2.5rem; max-width:820px; margin:0 auto 2rem auto; text-align:left; box-shadow:var(--shadow-md);">
+            <div class="vertical-flow" style="align-items:center;">
+              <div style="font-family:var(--font-mono); font-weight:700; color:var(--mongo-green); font-size:1.05rem;">
+                FULL-TEXT SEARCH → $text + Text Index + textScore
+              </div>
+              <div class="v-arrow">↓</div>
+              <div style="font-family:var(--font-mono); font-weight:700; color:var(--accent-cyan); font-size:1.05rem;">
+                PARTIAL SEARCH → $regex with ^ anchors
+              </div>
+              <div class="v-arrow">↓</div>
+              <div style="font-family:var(--font-mono); font-weight:700; color:var(--accent-purple); font-size:1.05rem;">
+                AUTOCOMPLETE → Atlas Search tokenizers
+              </div>
+              <div class="v-arrow">↓</div>
+              <div style="font-family:var(--font-mono); font-weight:700; color:var(--accent-amber); font-size:1.05rem;">
+                PERFORMANCE → Query-driven Indexes (ESR Rule)
+              </div>
+              <div class="v-arrow">↓</div>
+              <div style="font-family:var(--font-mono); font-weight:700; color:var(--mongo-green); font-size:1.05rem;">
+                PAGINATION → skip() + limit() &amp; Cursor Range ($gt)
+              </div>
+            </div>
+          </div>
+
+          <div style="background:var(--mongo-green-deep); border:1px solid var(--mongo-green-border); border-radius:var(--radius-md); padding:1.2rem 2rem; max-width:680px; margin:0 auto 2rem auto;">
+            <p style="font-size:1.25rem; font-weight:800; color:var(--mongo-green); letter-spacing:-0.01em; margin-bottom:0.4rem;">
+              Search smarter. Index wisely. Paginate efficiently.
+            </p>
+            <p style="font-size:0.92rem; color:var(--text-secondary); line-height:1.5;">
+              Good database performance is not only about writing queries — it is about choosing the right search strategy, indexes, and pagination technique for the way your application is actually used.
+            </p>
+          </div>
+
+          <div style="display:flex; gap:1rem; justify-content:center;">
+            <button class="nav-btn primary" onclick="Deck.goToSlide(1)">
+              ↺ Return to Beginning (Slide 1)
+            </button>
+            <button class="nav-btn" onclick="Deck.openToc()">
+              Browse Slide Index (T)
+            </button>
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- Bottom Navigation Footer -->
+    <footer class="bottom-footer">
+      <div class="footer-left">
+        <div class="slide-counter">
+          Slide <span class="current-num" id="currentSlideNum">1</span> / <span id="totalSlidesNum">53</span>
+        </div>
+      </div>
+
+      <div class="footer-center">
+        <button class="nav-btn" id="prevBtn" title="Previous Slide (Left Arrow)">
+          ← Previous
+        </button>
+        <button class="nav-btn primary" id="nextBtn" title="Next Slide (Right Arrow)">
+          Next →
+        </button>
+      </div>
+
+      <div class="footer-right">
+        <div class="footer-key-hint">
+          <kbd>→</kbd> <kbd>Space</kbd> Next
+        </div>
+        <div class="footer-key-hint">
+          <kbd>←</kbd> Prev
+        </div>
+        <div class="footer-key-hint">
+          <kbd>T</kbd> Index
+        </div>
+        <div class="footer-key-hint">
+          <kbd>F</kbd> Fullscreen
+        </div>
+      </div>
+    </footer>
+
+    <!-- Table of Contents Drawer -->
+    <aside class="toc-drawer" id="tocDrawer">
+      <div class="toc-header">
+        <div class="toc-title">
+          <span>📋</span> Slide Index (53 Slides)
+        </div>
+        <button class="toc-close-btn" id="closeTocBtn" title="Close Index (Esc)">&times;</button>
+      </div>
+      <div class="toc-search">
+        <input type="text" class="toc-search-input" id="tocSearchInput" placeholder="Filter slides by topic...">
+      </div>
+      <ul class="toc-list" id="tocList">
+        <!-- Injected via script.js -->
+      </ul>
+    </aside>
+    <div class="drawer-backdrop" id="drawerBackdrop"></div>
+
+    <!-- Shortcuts Modal -->
+    <div class="modal-overlay" id="shortcutsModal">
+      <div class="modal-box">
+        <div class="modal-header">
+          <div class="modal-title">⌨️ Keyboard Shortcuts</div>
+          <button class="toc-close-btn" id="closeShortcutsBtn">&times;</button>
+        </div>
+        <div class="modal-body">
+          <div class="shortcut-row">
+            <span>Next Slide</span>
+            <div class="shortcut-keys"><kbd>→</kbd> <kbd>Space</kbd> <kbd>PgDn</kbd></div>
+          </div>
+          <div class="shortcut-row">
+            <span>Previous Slide</span>
+            <div class="shortcut-keys"><kbd>←</kbd> <kbd>PgUp</kbd></div>
+          </div>
+          <div class="shortcut-row">
+            <span>First Slide (Title)</span>
+            <div class="shortcut-keys"><kbd>Home</kbd></div>
+          </div>
+          <div class="shortcut-row">
+            <span>Last Slide (Summary)</span>
+            <div class="shortcut-keys"><kbd>End</kbd></div>
+          </div>
+          <div class="shortcut-row">
+            <span>Toggle Fullscreen</span>
+            <div class="shortcut-keys"><kbd>F</kbd></div>
+          </div>
+          <div class="shortcut-row">
+            <span>Toggle Slide Index</span>
+            <div class="shortcut-keys"><kbd>T</kbd></div>
+          </div>
+          <div class="shortcut-row">
+            <span>Help / Shortcuts</span>
+            <div class="shortcut-keys"><kbd>?</kbd></div>
+          </div>
+          <div class="shortcut-row">
+            <span>Close Modal / Drawer</span>
+            <div class="shortcut-keys"><kbd>Esc</kbd></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>

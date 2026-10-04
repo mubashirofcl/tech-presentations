@@ -1,0 +1,2220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>React Day 8 — Context API</title>
+  <meta name="description" content="Interactive developer presentation on React Context API: solving prop drilling, creating contexts with createContext(), providing values, and consuming state with useContext().">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Master App Shell -->
+  <div class="deck-container" id="deckContainer">
+
+    <!-- Top Progress Bar -->
+    <div class="progress-bar-container">
+      <div class="progress-bar" id="progressBar"></div>
+    </div>
+
+    <!-- Top Header Bar -->
+    <header class="top-header">
+      <div class="header-left">
+        <div class="brand-badge">
+          <svg viewBox="0 0 24 24">
+            <ellipse cx="12" cy="12" rx="10" ry="4.5" transform="rotate(0 12 12)" fill="none" stroke="currentColor" stroke-width="1.6"/>
+            <ellipse cx="12" cy="12" rx="10" ry="4.5" transform="rotate(60 12 12)" fill="none" stroke="currentColor" stroke-width="1.6"/>
+            <ellipse cx="12" cy="12" rx="10" ry="4.5" transform="rotate(120 12 12)" fill="none" stroke="currentColor" stroke-width="1.6"/>
+            <circle cx="12" cy="12" r="2" fill="currentColor"/>
+          </svg>
+          React Day 8
+        </div>
+        <div class="deck-title-badge">
+          <span class="section-tag" id="headerSectionTag">INTRODUCTION</span>
+          <span class="dot"></span>
+          <span class="deck-topic" id="headerTopic">React Context API</span>
+        </div>
+      </div>
+
+      <div class="header-right">
+        <!-- Table of Contents Drawer Button -->
+        <button class="header-btn" id="openTocBtn" title="View All 40 Slides (T)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="3" y1="12" x2="21" y2="12"></line>
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <line x1="3" y1="18" x2="21" y2="18"></line>
+          </svg>
+          Index
+          <kbd>T</kbd>
+        </button>
+
+        <!-- Keyboard Shortcuts Help -->
+        <button class="header-btn" id="openShortcutsBtn" title="Keyboard Shortcuts (?)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"></circle>
+            <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+            <line x1="12" y1="17" x2="12.01" y2="17"></line>
+          </svg>
+          <kbd>?</kbd>
+        </button>
+
+        <!-- Fullscreen Button -->
+        <button class="header-btn" id="fullscreenBtn" title="Toggle Fullscreen (F)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path>
+          </svg>
+          <kbd>F</kbd>
+        </button>
+      </div>
+    </header>
+
+    <!-- Slide Viewport -->
+    <main class="slide-viewport">
+
+      <!-- ====================================================================
+           SLIDE 1 — TITLE (Section 1)
+           ==================================================================== -->
+      <section class="slide active" data-slide="1" id="slide-1">
+        <div class="slide-content centered">
+          <div class="slide-tag" style="margin-bottom: 0.8rem;">React Course • Day 8</div>
+          <h1 class="slide-title" style="font-size: 3.2rem; margin-bottom: 0.6rem; letter-spacing: -0.03em;">
+            React Context API
+          </h1>
+          <h2 style="font-size: 1.6rem; color: var(--react-cyan); font-weight: 700; margin-bottom: 1.25rem;">
+            Eliminating Prop Drilling with Global Component Context
+          </h2>
+          <p style="font-size: 1.15rem; color: var(--text-secondary); max-width: 720px; margin-bottom: 2rem; line-height: 1.6;">
+            A beginner-friendly, visual, and practical journey into sharing state across components without passing props through intermediate layers.
+          </p>
+
+          <div style="display: flex; gap: 0.85rem; margin-bottom: 2.2rem; flex-wrap: wrap; justify-content: center;">
+            <div style="padding: 0.55rem 1rem; background: var(--react-bg); border: 1px solid var(--react-border); border-radius: var(--radius-sm); font-family: var(--font-mono); font-size: 0.82rem; color: var(--react-cyan);">
+              🔍 Prop Drilling Problem
+            </div>
+            <div style="padding: 0.55rem 1rem; background: var(--accent-emerald-bg); border: 1px solid var(--accent-emerald-border); border-radius: var(--radius-sm); font-family: var(--font-mono); font-size: 0.82rem; color: var(--accent-emerald);">
+              ✨ createContext()
+            </div>
+            <div style="padding: 0.55rem 1rem; background: var(--accent-purple-bg); border: 1px solid var(--accent-purple-border); border-radius: var(--radius-sm); font-family: var(--font-mono); font-size: 0.82rem; color: var(--accent-purple);">
+              📡 Provider &amp; value
+            </div>
+            <div style="padding: 0.55rem 1rem; background: var(--accent-amber-bg); border: 1px solid var(--accent-amber-border); border-radius: var(--radius-sm); font-family: var(--font-mono); font-size: 0.82rem; color: var(--accent-amber);">
+              ⚡ useContext() Hook
+            </div>
+            <div style="padding: 0.55rem 1rem; background: rgba(56, 189, 248, 0.1); border: 1px solid rgba(56, 189, 248, 0.3); border-radius: var(--radius-sm); font-family: var(--font-mono); font-size: 0.82rem; color: #38BDF8;">
+              🚀 User Dashboard Project
+            </div>
+          </div>
+
+          <div style="display: flex; gap: 1rem;">
+            <button class="nav-btn primary" onclick="Deck.goToSlide(2)">
+              Start Learning Context API →
+            </button>
+            <button class="nav-btn" onclick="Deck.openToc()">
+              Browse 40 Slides (T)
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 2 — LEARNING OBJECTIVES
+           ==================================================================== -->
+      <section class="slide" data-slide="2" id="slide-2">
+        <div class="slide-content">
+          <div class="slide-header">
+            <span class="slide-tag">Session Roadmap</span>
+            <h1 class="slide-title">Learning <span class="highlight">Objectives</span></h1>
+            <p class="slide-subtitle">By the end of this session, students should be confident in designing and consuming React Context.</p>
+          </div>
+
+          <div class="grid-2">
+            <div class="card highlight-card">
+              <div class="card-header">
+                <span class="card-icon">🎯</span>
+                <span class="card-title">Core Concepts</span>
+              </div>
+              <ul>
+                <li><strong>Understand Prop Drilling:</strong> Why passing props through middle components makes applications brittle.</li>
+                <li><strong>Explain Context API:</strong> How React's built-in mechanism shares state without manual threading.</li>
+                <li><strong>Create a Context:</strong> Using <code>createContext()</code> and choosing default fallback values.</li>
+                <li><strong>Build a Provider:</strong> Wrapping component subtrees with <code>&lt;Context.Provider value={...}&gt;</code>.</li>
+              </ul>
+            </div>
+
+            <div class="card emerald-card">
+              <div class="card-header">
+                <span class="card-icon">⚡</span>
+                <span class="card-title">Practical Skills</span>
+              </div>
+              <ul>
+                <li><strong>Consume Context:</strong> Accessing shared data cleanly using the modern <code>useContext()</code> Hook.</li>
+                <li><strong>Multiple Values &amp; Functions:</strong> Passing state objects and handler functions (e.g. login/logout).</li>
+                <li><strong>Theme Context:</strong> Building a real-time reactive dark/light mode switcher.</li>
+                <li><strong>Mini Project:</strong> Developing an organized <strong>User Dashboard</strong> application from scratch.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 3 — PASSING DATA BETWEEN COMPONENTS
+           ==================================================================== -->
+      <section class="slide" data-slide="3" id="slide-3">
+        <div class="slide-content">
+          <div class="slide-header">
+            <span class="slide-tag">The Baseline</span>
+            <h1 class="slide-title">Passing Data <span class="highlight">Between Components</span></h1>
+            <p class="slide-subtitle">Normally in React, data travels top-down from parent to child via props.</p>
+          </div>
+
+          <div class="grid-2">
+            <div>
+              <div class="code-panel">
+                <div class="code-header">
+                  <div class="window-dots"><span class="dot-btn red"></span><span class="dot-btn yellow"></span><span class="dot-btn green"></span></div>
+                  <span class="code-title">App.jsx</span>
+                  <button class="copy-btn">Copy</button>
+                </div>
+                <div class="code-body"><span class="kwd">function</span> <span class="fn">App</span>() {
+  <span class="kwd">const</span> username = <span class="str">"Mubashir"</span>;
+
+  <span class="kwd">return</span> &lt;<span class="tag">Profile</span> <span class="prop">username</span>={username} /&gt;;
+}
+
+<span class="kwd">function</span> <span class="fn">Profile</span>({ <span class="prop">username</span> }) {
+  <span class="kwd">return</span> &lt;<span class="tag">User</span> <span class="prop">username</span>={username} /&gt;;
+}
+
+<span class="kwd">function</span> <span class="fn">User</span>({ <span class="prop">username</span> }) {
+  <span class="kwd">return</span> &lt;<span class="tag">h2</span>&gt;{username}&lt;/<span class="tag">h2</span>&gt;;
+}</div>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-header">
+                <span class="card-icon">🤔</span>
+                <span class="card-title">This Works Great, But...</span>
+              </div>
+              <p>For shallow, direct parent-to-child relationships, props are clean, explicit, and easy to track.</p>
+              <div class="callout warning" style="margin-top: 1.2rem;">
+                <div class="callout-title">The Question to Consider:</div>
+                <p>What happens when our component hierarchy grows 5, 8, or 10 levels deep, and a deeply nested leaf component needs data from the top?</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 4 — WHAT IS PROP DRILLING?
+           ==================================================================== -->
+      <section class="slide" data-slide="4" id="slide-4">
+        <div class="slide-content">
+          <div class="slide-header">
+            <span class="slide-tag">The Problem</span>
+            <h1 class="slide-title">What Is <span style="color:var(--accent-rose);">Prop Drilling?</span></h1>
+            <p class="slide-subtitle">Passing props through intermediate components that don't need the data themselves.</p>
+          </div>
+
+          <div class="grid-2">
+            <div class="card rose-card">
+              <div class="card-header">
+                <span class="card-icon" style="color:var(--accent-rose);">📦</span>
+                <span class="card-title">The "Bucket Brigade" Problem</span>
+              </div>
+              <p>Imagine passing a bucket of water down a line of 5 people just so the 5th person can drink:</p>
+              <div class="vertical-flow" style="margin: 0.8rem 0; font-family:var(--font-mono); font-size:0.85rem;">
+                <div class="v-node"><span>App</span><span style="color:var(--react-cyan);">holds user data</span></div>
+                <div class="v-arrow">↓ pass user</div>
+                <div class="v-node"><span>Navbar</span><span style="color:var(--accent-rose);">doesn't need user</span></div>
+                <div class="v-arrow">↓ pass user</div>
+                <div class="v-node"><span>UserMenu</span><span style="color:var(--accent-rose);">doesn't need user</span></div>
+                <div class="v-arrow">↓ pass user</div>
+                <div class="v-node"><span>Profile</span><span style="color:var(--accent-rose);">doesn't need user</span></div>
+                <div class="v-arrow">↓ pass user</div>
+                <div class="v-node" style="border-color:var(--accent-emerald);"><span>UserName</span><span style="color:var(--accent-emerald); font-weight:700;">ACTUALLY NEEDS USER!</span></div>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-header">
+                <span class="card-icon">⚠️</span>
+                <span class="card-title">Why Middle Components Suffer</span>
+              </div>
+              <ul style="margin: 0.8rem 0;">
+                <li><strong>Cluttered Component Signatures:</strong> Components accept and forward props they have no interest in.</li>
+                <li><strong>Tight Coupling:</strong> If the prop name changes, every single intermediary component must be edited.</li>
+                <li><strong>Unnecessary Re-renders:</strong> Intermediate components may re-render when forwarded props update.</li>
+                <li><strong>Difficult Refactoring:</strong> Moving components inside the tree requires rewiring the prop chain.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 5 — PROP DRILLING PROBLEM & DEMO
+           ==================================================================== -->
+      <section class="slide" data-slide="5" id="slide-5">
+        <div class="slide-content">
+          <div class="slide-header">
+            <span class="slide-tag">Interactive Simulation</span>
+            <h1 class="slide-title">Prop Drilling <span style="color:var(--accent-rose);">in Action</span></h1>
+            <p class="slide-subtitle">Watch data flow manually through every level of the component tree.</p>
+          </div>
+
+          <div class="grid-2">
+            <div>
+              <div class="card">
+                <div class="card-header">
+                  <span class="card-icon">🌳</span>
+                  <span class="card-title">Component Hierarchy</span>
+                </div>
+                <p style="font-size:0.88rem; color:var(--text-secondary); margin-bottom: 0.8rem;">
+                  Notice how <strong>Header</strong>, <strong>UserMenu</strong>, and <strong>Profile</strong> have to forward the <code>user</code> prop just so <strong>Avatar</strong> can display the profile picture:
+                </p>
+                <div style="display:flex; flex-direction:column; gap:0.45rem;">
+                  <div class="tree-node" id="drillApp">
+                    <span>App</span>
+                    <span class="prop-payload-badge drilling" id="drillAppBadge" style="display:none;">user="Mubashir"</span>
+                  </div>
+                  <div style="text-align:center; color:var(--text-dim); font-size:0.8rem;">↓ prop: user</div>
+                  <div class="tree-node" id="drillHeader">
+                    <span>Header</span>
+                    <span class="prop-payload-badge drilling" id="drillHeaderBadge" style="display:none;">forwards user</span>
+                  </div>
+                  <div style="text-align:center; color:var(--text-dim); font-size:0.8rem;">↓ prop: user</div>
+                  <div class="tree-node" id="drillMenu">
+                    <span>UserMenu</span>
+                    <span class="prop-payload-badge drilling" id="drillMenuBadge" style="display:none;">forwards user</span>
+                  </div>
+                  <div style="text-align:center; color:var(--text-dim); font-size:0.8rem;">↓ prop: user</div>
+                  <div class="tree-node" id="drillProfile">
+                    <span>Profile</span>
+                    <span class="prop-payload-badge drilling" id="drillProfileBadge" style="display:none;">forwards user</span>
+                  </div>
+                  <div style="text-align:center; color:var(--text-dim); font-size:0.8rem;">↓ prop: user</div>
+                  <div class="tree-node" id="drillAvatar">
+                    <span>Avatar (Target)</span>
+                    <span class="prop-payload-badge direct" id="drillAvatarBadge" style="display:none;">renders avatar!</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- DEMO 1 INTERACTION -->
+            <div class="demo-box">
+              <div class="demo-header">
+                <span class="demo-badge"><span>🎮</span> Interactive Demo 1 — Prop Drilling</span>
+                <span style="font-size:0.75rem; color:var(--accent-rose);" id="drillStatusText">Ready</span>
+              </div>
+              <div class="demo-body">
+                <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom: 1rem;">
+                  Click the button below to observe the user prop traveling down through every single intermediate component:
+                </p>
+                <button class="nav-btn primary" onclick="DemoPropDrilling.run()" style="width:100%; justify-content:center; margin-bottom:1.2rem;">
+                  ▶ Pass User Down Tree
+                </button>
+
+                <div class="callout danger" id="drillQuoteBox" style="opacity:0; transition:opacity 0.3s ease;">
+                  <strong>"Every intermediate component has to forward the prop."</strong>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 6 — THE SOLUTION: CONTEXT
+           ==================================================================== -->
+      <section class="slide" data-slide="6" id="slide-6">
+        <div class="slide-content">
+          <div class="slide-header">
+            <span class="slide-tag">The Breakthrough</span>
+            <h1 class="slide-title">The Solution: <span class="highlight">Context API</span></h1>
+            <p class="slide-subtitle">Sharing data directly with components without passing props through intermediate layers.</p>
+          </div>
+
+          <div class="grid-2">
+            <div>
+              <div class="card highlight-card">
+                <div class="card-header">
+                  <span class="card-icon">📡</span>
+                  <span class="card-title">The Teleportation Mental Model</span>
+                </div>
+                <p>Instead of passing props down hand-to-hand like a relay race, Context acts like a <strong>radio broadcast</strong>:</p>
+                <div style="background:var(--bg-terminal); border:1px solid var(--border-subtle); border-radius:var(--radius-sm); padding:1rem; margin:1rem 0; font-family:var(--font-mono); font-size:0.85rem; line-height:1.7;">
+                  <div style="color:var(--react-cyan); font-weight:700;">UserContext.Provider ("Transmitter")</div>
+                  <div style="color:var(--text-muted);">       │</div>
+                  <div style="color:var(--text-muted);">       ├── Header (ignores broadcast)</div>
+                  <div style="color:var(--text-muted);">       │     └── UserMenu (ignores broadcast)</div>
+                  <div style="color:var(--text-muted);">       └── Profile</div>
+                  <div style="color:var(--accent-emerald); font-weight:700;">             └── Avatar (tunes in via useContext()! 📻)</div>
+                </div>
+                <p style="font-size:0.85rem; color:var(--text-secondary);">
+                  Intermediate components never touch or forward the prop!
+                </p>
+              </div>
+            </div>
+
+            <!-- DEMO 2 INTERACTION -->
+            <div class="demo-box">
+              <div class="demo-header">
+                <span class="demo-badge"><span>🎮</span> Interactive Demo 2 — Context Broadcast</span>
+                <span style="font-size:0.75rem; color:var(--react-cyan);">Zero Props Passed</span>
+              </div>
+              <div class="demo-body">
+                <div style="display:flex; flex-direction:column; gap:0.6rem; margin-bottom:1rem;">
+                  <div class="tree-node active-context" id="ctxProviderNode">
+                    <span>UserContext.Provider</span>
+                    <span class="prop-payload-badge direct">value={user}</span>
+                  </div>
+                  <div style="display:flex; gap:0.8rem;">
+                    <div class="tree-node" style="flex:1;" id="ctxHeaderNode">
+                      <span>Header (Untouched)</span>
+                    </div>
+                    <div class="tree-node" style="flex:1;" id="ctxProfileNode">
+                      <span>Profile</span>
+                      <span class="prop-payload-badge direct" id="ctxProfileBadge" style="display:none;">useContext()</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div style="display:flex; gap:0.6rem; margin-bottom:1rem;">
+                  <button class="nav-btn primary" onclick="DemoContextDirect.run()" style="flex:1; justify-content:center;">
+                    ⚡ Provide User
+                  </button>
+                  <button class="nav-btn" onclick="DemoContextDirect.reset()">
+                    Reset
+                  </button>
+                </div>
+
+                <p id="ctxStatusText" style="font-size:0.82rem; color:var(--text-muted);">
+                  Click "Provide User" to observe direct context access.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 7 — WHAT IS CONTEXT API? (Section 2)
+           ==================================================================== -->
+      <section class="slide" data-slide="7" id="slide-7">
+        <div class="slide-content">
+          <div class="slide-header">
+            <span class="slide-tag">Context API</span>
+            <h1 class="slide-title">What Is <span class="highlight">Context API?</span></h1>
+            <p class="slide-subtitle">A built-in React feature for sharing values across component subtrees without manual prop threading.</p>
+          </div>
+
+          <div class="grid-2">
+            <div class="card highlight-card">
+              <div class="card-header">
+                <span class="card-icon">📖</span>
+                <span class="card-title">Official Definition</span>
+              </div>
+              <p style="font-size:1.05rem; line-height:1.6; color:var(--text-main); margin-bottom:1rem;">
+                Context provides a way to pass data through the component tree without having to pass props down manually at every level.
+              </p>
+              <p style="font-size:0.88rem; color:var(--text-secondary);">
+                It comes pre-installed in React core — no external libraries or npm packages are needed!
+              </p>
+            </div>
+
+            <div class="card">
+              <div class="card-header">
+                <span class="card-icon">🌟</span>
+                <span class="card-title">Everyday Real-World Examples</span>
+              </div>
+              <ul>
+                <li><strong>Current User Info:</strong> Username, avatar, user ID, auth status.</li>
+                <li><strong>UI Theme:</strong> Dark mode vs Light mode setting.</li>
+                <li><strong>Language / Localization:</strong> English, Spanish, Arabic translations.</li>
+                <li><strong>Shopping Cart:</strong> Cart items count and checkout totals in e-commerce.</li>
+                <li><strong>App Preferences:</strong> Sidebar collapsed/expanded state.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 8 — CONTEXT FLOW
+           ==================================================================== -->
+      <section class="slide" data-slide="8" id="slide-8">
+        <div class="slide-content">
+          <div class="slide-header">
+            <span class="slide-tag">Lifecycle</span>
+            <h1 class="slide-title">Interactive <span class="highlight">Context Flow</span></h1>
+            <p class="slide-subtitle">Click each step in the pipeline to inspect how React creates, provides, and consumes shared data.</p>
+          </div>
+
+          <div class="flow-container">
+            <div class="flow-step active-step" id="flowStep-create" onclick="DemoContextFlow.highlight('create')">
+              <div class="flow-step-num">1</div>
+              <div class="flow-step-title">Create Context</div>
+              <div class="flow-step-desc">createContext()</div>
+            </div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-step" id="flowStep-provider" onclick="DemoContextFlow.highlight('provider')">
+              <div class="flow-step-num">2</div>
+              <div class="flow-step-title">Create Provider</div>
+              <div class="flow-step-desc">&lt;Context.Provider&gt;</div>
+            </div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-step" id="flowStep-value" onclick="DemoContextFlow.highlight('value')">
+              <div class="flow-step-num">3</div>
+              <div class="flow-step-title">Provide Value</div>
+              <div class="flow-step-desc">value={data}</div>
+            </div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-step" id="flowStep-components" onclick="DemoContextFlow.highlight('components')">
+              <div class="flow-step-num">4</div>
+              <div class="flow-step-title">Wrap Tree</div>
+              <div class="flow-step-desc">&lt;Child /&gt;</div>
+            </div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-step" id="flowStep-hook" onclick="DemoContextFlow.highlight('hook')">
+              <div class="flow-step-num">5</div>
+              <div class="flow-step-title">Consume Context</div>
+              <div class="flow-step-desc">useContext()</div>
+            </div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-step" id="flowStep-data" onclick="DemoContextFlow.highlight('data')">
+              <div class="flow-step-num">6</div>
+              <div class="flow-step-title">Use Value</div>
+              <div class="flow-step-desc">{user.name}</div>
+            </div>
+          </div>
+
+          <div class="card highlight-card" style="margin-top:1.5rem;">
+            <div class="card-header">
+              <span class="card-icon">💡</span>
+              <span class="card-title">Step Explanation</span>
+            </div>
+            <p id="flowActiveDesc" style="font-size:1rem; color:var(--text-main); font-weight:500;">
+              Step 1: createContext() initializes the shared context container.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 9 — CONTEXT IS NOT AUTOMATICALLY GLOBAL STATE
+           ==================================================================== -->
+      <section class="slide" data-slide="9" id="slide-9">
+        <div class="slide-content">
+          <div class="slide-header">
+            <span class="slide-tag">Important Mythbuster</span>
+            <h1 class="slide-title">Context Is Not <span style="color:var(--accent-amber);">Automatically Global</span></h1>
+            <p class="slide-subtitle">Context makes a value available to a specific component tree, not magically to the entire universe.</p>
+          </div>
+
+          <div class="grid-2">
+            <div class="card amber-card">
+              <div class="card-header">
+                <span class="card-icon" style="color:var(--accent-amber);">⚠️</span>
+                <span class="card-title">Common Student Misconception</span>
+              </div>
+              <p style="font-style:italic; font-size:1rem; color:var(--text-main); margin-bottom:0.8rem;">
+                "I created a Context, so every single component in my entire project automatically has access to it!"
+              </p>
+              <p style="color:var(--accent-rose); font-weight:700;">FALSE!</p>
+              <p style="margin-top:0.4rem; font-size:0.88rem; color:var(--text-secondary);">
+                A Context object is just an empty container. Data is only accessible to components that are rendered <strong>inside that Context's matching Provider</strong>.
+              </p>
+            </div>
+
+            <div class="card">
+              <div class="card-header">
+                <span class="card-icon">🌳</span>
+                <span class="card-title">The Provider Controls Scope</span>
+              </div>
+              <div class="vertical-flow" style="margin: 0.8rem 0; font-family:var(--font-mono); font-size:0.85rem;">
+                <div class="v-node highlight"><span>&lt;UserContext.Provider value={user}&gt;</span><span>Provider Root</span></div>
+                <div style="padding-left:1.5rem; display:flex; flex-direction:column; gap:0.4rem;">
+                  <div class="v-node"><span>├── Component A</span><span style="color:var(--accent-emerald);">Can access ✅</span></div>
+                  <div class="v-node"><span>├── Component B</span><span style="color:var(--accent-emerald);">Can access ✅</span></div>
+                  <div class="v-node"><span>└── Component C</span><span style="color:var(--accent-emerald);">Can access ✅</span></div>
+                </div>
+              </div>
+              <p style="font-size:0.82rem; color:var(--text-muted);">
+                Any component outside this Provider tree receives only the default value or undefined.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 10 — CREATECONTEXT() (Section 3)
+           ==================================================================== -->
+      <section class="slide" data-slide="10" id="slide-10">
+        <div class="slide-content">
+          <div class="slide-header">
+            <span class="slide-tag">Creating Context</span>
+            <h1 class="slide-title">The <span class="highlight">createContext()</span> Function</h1>
+            <p class="slide-subtitle">Importing and invoking <code>createContext()</code> from React to create a context object.</p>
+          </div>
+
+          <div class="grid-2">
+            <div>
+              <div class="code-panel">
+                <div class="code-header">
+                  <div class="window-dots"><span class="dot-btn red"></span><span class="dot-btn yellow"></span><span class="dot-btn green"></span></div>
+                  <span class="code-title">UserContext.jsx</span>
+                  <button class="copy-btn">Copy</button>
+                </div>
+                <div class="code-body"><span class="kwd">import</span> { createContext } <span class="kwd">from</span> <span class="str">"react"</span>;
+
+<span class="kwd">const</span> UserContext = <span class="fn">createContext</span>();
+
+<span class="kwd">export default</span> UserContext;</div>
+              </div>
+
+              <div class="callout info" style="margin-top: 1rem;">
+                <div class="callout-title">Anatomy of createContext()</div>
+                <p>Calling <code>createContext()</code> returns a Context object with two key properties: <code>UserContext.Provider</code> and <code>UserContext.Consumer</code>.</p>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-header">
+                <span class="card-icon">💡</span>
+                <span class="card-title">Key Rules for createContext()</span>
+              </div>
+              <ul>
+                <li><strong>Always invoke outside components:</strong> Never call <code>createContext()</code> inside a component function or Hook.</li>
+                <li><strong>Capitalize Context Names:</strong> Context objects represent component providers (e.g. <code>UserContext.Provider</code>), so PascalCase is standard convention.</li>
+                <li><strong>Separate File:</strong> Keep context in its own file (e.g. <code>src/context/UserContext.jsx</code>) so multiple components can import it cleanly.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 11 — DEFAULT VALUES
+           ==================================================================== -->
+      <section class="slide" data-slide="11" id="slide-11">
+        <div class="slide-content">
+          <div class="slide-header">
+            <span class="slide-tag">Creating Context</span>
+            <h1 class="slide-title">Default Context <span class="highlight">Values</span></h1>
+            <p class="slide-subtitle">Providing a fallback value to guard against rendering components without a matching Provider.</p>
+          </div>
+
+          <div class="grid-2">
+            <div>
+              <div class="card highlight-card" style="margin-bottom:1rem;">
+                <div class="card-header">
+                  <span class="card-icon">🛡️</span>
+                  <span class="card-title">Default Fallback Object</span>
+                </div>
+                <div class="code-panel">
+                  <div class="code-body"><span class="kwd">const</span> UserContext = <span class="fn">createContext</span>({
+  <span class="prop">name</span>: <span class="str">"Guest"</span>,
+  <span class="prop">role</span>: <span class="str">"Visitor"</span>
+});</div>
+                </div>
+                <p style="margin-top:0.8rem; font-size:0.85rem; color:var(--text-secondary);">
+                  If a component calls <code>useContext(UserContext)</code> without any Provider above it, it safely receives this default object!
+                </p>
+              </div>
+
+              <div class="card">
+                <div class="card-header">
+                  <span class="card-icon">🎯</span>
+                  <span class="card-title">Common Practice for Beginners</span>
+                </div>
+                <div class="code-panel">
+                  <div class="code-body"><span class="kwd">const</span> UserContext = <span class="fn">createContext</span>(<span class="bool">null</span>);</div>
+                </div>
+                <p style="margin-top:0.8rem; font-size:0.85rem; color:var(--text-muted);">
+                  Setting default to <code>null</code> makes it obvious when a Provider was accidentally omitted.
+                </p>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-header">
+                <span class="card-icon">⚠️</span>
+                <span class="card-title">When Is Default Value Used?</span>
+              </div>
+              <p>The default argument is <strong>ONLY</strong> used as a fallback when a component is rendered without a matching Provider above it in the tree.</p>
+              <div class="callout warning" style="margin-top:1rem;">
+                <div class="callout-title">Common Confusion:</div>
+                <p>Passing <code>value={undefined}</code> to a Provider does <strong>NOT</strong> cause the default value to be used! The default value only activates when there is <strong>NO Provider at all</strong>.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 12 — CONTEXT FILE STRUCTURE
+           ==================================================================== -->
+      <section class="slide" data-slide="12" id="slide-12">
+        <div class="slide-content">
+          <div class="slide-header">
+            <span class="slide-tag">Project Organization</span>
+            <h1 class="slide-title">Interactive <span class="highlight">Project Structure</span></h1>
+            <p class="slide-subtitle">Click on any file to inspect its architectural responsibility in a React Context app.</p>
+          </div>
+
+          <div class="grid-2">
+            <div>
+              <div class="file-tree-container">
+                <div style="font-family:var(--font-mono); font-size:0.75rem; color:var(--text-muted); margin-bottom:0.6rem;">📁 PROJECT ROOT</div>
+                <div class="file-item active" id="fileItem-userContext" onclick="DemoFileExplorer.selectFile('userContext')">
+                  📄 src/context/UserContext.jsx
+                </div>
+                <div class="file-item" id="fileItem-app" onclick="DemoFileExplorer.selectFile('app')">
+                  📄 src/App.jsx (Provider)
+                </div>
+                <div class="file-item" id="fileItem-header" onclick="DemoFileExplorer.selectFile('header')">
+                  📄 src/components/Header.jsx
+                </div>
+                <div class="file-item" id="fileItem-sidebar" onclick="DemoFileExplorer.selectFile('sidebar')">
+                  📄 src/components/Sidebar.jsx
+                </div>
+                <div class="file-item" id="fileItem-dashboard" onclick="DemoFileExplorer.selectFile('dashboard')">
+                  📄 src/components/Dashboard.jsx
+                </div>
+                <div class="file-item" id="fileItem-profile" onclick="DemoFileExplorer.selectFile('profile')">
+                  📄 src/components/Profile.jsx (Consumer)
+                </div>
+                <div class="file-item" id="fileItem-main" onclick="DemoFileExplorer.selectFile('main')">
+                  📄 src/main.jsx
+                </div>
+              </div>
+            </div>
+
+            <div class="card highlight-card" id="fileDetailsBox">
+              <div style="font-family:var(--font-mono); font-size:0.85rem; color:var(--react-cyan); font-weight:700; margin-bottom:0.4rem;">src/context/UserContext.jsx</div>
+              <p style="font-size:0.85rem; color:var(--text-secondary); line-height:1.5; margin-bottom:0.75rem;">
+                Creates and exports the UserContext object using createContext(null). Cleanly separated from UI logic.
+              </p>
+              <div class="code-panel">
+                <div class="code-body" style="padding:0.6rem 0.8rem; font-size:0.8rem;">import { createContext } from "react";
+
+const UserContext = createContext(null);
+export default UserContext;</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 13 — WHAT IS A PROVIDER? (Section 4)
+           ==================================================================== -->
+      <section class="slide" data-slide="13" id="slide-13">
+        <div class="slide-content">
+          <div class="slide-header">
+            <span class="slide-tag">Provider Component</span>
+            <h1 class="slide-title">What Is a <span class="highlight">Provider?</span></h1>
+            <p class="slide-subtitle">A special React component automatically attached to every Context object.</p>
+          </div>
+
+          <div class="grid-2">
+            <div>
+              <div class="code-panel">
+                <div class="code-header">
+                  <div class="window-dots"><span class="dot-btn red"></span><span class="dot-btn yellow"></span><span class="dot-btn green"></span></div>
+                  <span class="code-title">Provider.jsx</span>
+                  <button class="copy-btn">Copy</button>
+                </div>
+                <div class="code-body">&lt;<span class="tag">UserContext.Provider</span> <span class="prop">value</span>={user}&gt;
+  &lt;<span class="tag">App</span> /&gt;
+&lt;/<span class="tag">UserContext.Provider</span>&gt;</div>
+              </div>
+
+              <div class="card" style="margin-top:1rem;">
+                <div class="card-header">
+                  <span class="card-icon">📢</span>
+                  <span class="card-title">The Mental Model</span>
+                </div>
+                <div class="vertical-flow">
+                  <div class="v-node highlight">
+                    <span>Provider</span>
+                    <span style="color:var(--react-cyan); font-weight:700;">"Here is the data!"</span>
+                  </div>
+                  <div class="v-arrow">↓ broadcast</div>
+                  <div class="v-node">
+                    <span>Child Components</span>
+                    <span style="color:var(--text-muted);">"We can read it whenever we want!"</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="card highlight-card">
+              <div class="card-header">
+                <span class="card-icon">🎯</span>
+                <span class="card-title">The value Prop Is Mandatory</span>
+              </div>
+              <p>Every Provider accepts a required prop named exactly <strong><code>value</code></strong>:</p>
+              <div style="background:var(--bg-terminal); border:1px solid var(--border-subtle); padding:0.8rem; border-radius:var(--radius-sm); margin:0.8rem 0; font-family:var(--font-mono); font-size:0.85rem;">
+                &lt;<span class="tag">Context.Provider</span> <span style="color:var(--accent-rose); font-weight:700;">value</span>={anything}&gt;
+              </div>
+              <p style="font-size:0.88rem; color:var(--text-secondary);">
+                You can pass strings, numbers, objects, arrays, or functions. Whatever you pass into <code>value</code> becomes accessible to all descendant components.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 14 — PROVIDING A VALUE
+           ==================================================================== -->
+      <section class="slide" data-slide="14" id="slide-14">
+        <div class="slide-content">
+          <div class="slide-header">
+            <span class="slide-tag">Provider Component</span>
+            <h1 class="slide-title">Providing a <span class="highlight">Value</span></h1>
+            <p class="slide-subtitle">Supplying objects and state down into the Provider's component subtree.</p>
+          </div>
+
+          <div class="grid-2">
+            <div>
+              <div class="code-panel">
+                <div class="code-header">
+                  <div class="window-dots"><span class="dot-btn red"></span><span class="dot-btn yellow"></span><span class="dot-btn green"></span></div>
+                  <span class="code-title">provide-value.jsx</span>
+                  <button class="copy-btn">Copy</button>
+                </div>
+                <div class="code-body"><span class="kwd">const</span> user = {
+  <span class="prop">name</span>: <span class="str">"Mubashir"</span>,
+  <span class="prop">role</span>: <span class="str">"Developer"</span>
+};
+
+<span class="kwd">return</span> (
+  &lt;<span class="tag">UserContext.Provider</span> <span class="prop">value</span>={user}&gt;
+    &lt;<span class="tag">Profile</span> /&gt;
+  &lt;/<span class="tag">UserContext.Provider</span>&gt;
+);</div>
+              </div>
+            </div>
+
+            <div class="card emerald-card">
+              <div class="card-header">
+                <span class="card-icon">✅</span>
+                <span class="card-title">What Just Happened?</span>
+              </div>
+              <ul style="margin: 0.8rem 0;">
+                <li>The <code>user</code> object is now held inside the <code>UserContext</code> pipeline.</li>
+                <li><strong>Profile</strong> and any child components rendered inside <strong>Profile</strong> (and its children) can now read <code>user</code> directly.</li>
+                <li>No <code>user={user}</code> prop had to be attached to <code>&lt;Profile /&gt;</code>!</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 15 — PROVIDER TREE
+           ==================================================================== -->
+      <section class="slide" data-slide="15" id="slide-15">
+        <div class="slide-content">
+          <div class="slide-header">
+            <span class="slide-tag">Provider Component</span>
+            <h1 class="slide-title">The Provider <span class="highlight">Tree Hierarchy</span></h1>
+            <p class="slide-subtitle">Visualizing multi-branch descendants all drinking from the same data source.</p>
+          </div>
+
+          <div class="grid-2">
+            <div class="card highlight-card">
+              <div class="card-header">
+                <span class="card-icon">🌳</span>
+                <span class="card-title">Hierarchy Layout</span>
+              </div>
+              <div style="background:var(--bg-terminal); border:1px solid var(--border-subtle); border-radius:var(--radius-sm); padding:1.2rem; font-family:var(--font-mono); font-size:0.88rem; line-height:1.8;">
+                <div style="color:var(--react-cyan); font-weight:700;">UserContext.Provider</div>
+                <div style="color:var(--text-muted); padding-left:1rem;">│</div>
+                <div style="color:var(--text-muted); padding-left:1rem;">├── Header</div>
+                <div style="color:var(--accent-emerald); padding-left:2.5rem;">└── Profile (Consumes user) ✅</div>
+                <div style="color:var(--text-muted); padding-left:1rem;">│</div>
+                <div style="color:var(--text-muted); padding-left:1rem;">└── Dashboard</div>
+                <div style="color:var(--accent-emerald); padding-left:2.5rem;">└── UserInfo (Consumes user) ✅</div>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-header">
+                <span class="card-icon">⚡</span>
+                <span class="card-title">Multiple Consumers Everywhere</span>
+              </div>
+              <p>Both <strong>Profile</strong> (under Header) and <strong>UserInfo</strong> (under Dashboard) can simultaneously consume the <code>UserContext</code>.</p>
+              <div class="callout info" style="margin-top:1rem;">
+                <div class="callout-title">No Common Parent Prop Wiring</div>
+                <p>Neither Header nor Dashboard needs to know or care that their children are reading user information!</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 16 — PROVIDER SCOPE
+           ==================================================================== -->
+      <section class="slide" data-slide="16" id="slide-16">
+        <div class="slide-content">
+          <div class="slide-header">
+            <span class="slide-tag">Provider Component</span>
+            <h1 class="slide-title">Provider <span class="highlight">Scope &amp; Boundaries</span></h1>
+            <p class="slide-subtitle">Context is available only to components positioned inside the Provider's boundary.</p>
+          </div>
+
+          <div class="grid-2">
+            <div>
+              <div class="scope-box">
+                <span class="scope-label">UserContext.Provider Boundary</span>
+                <div style="display:flex; flex-direction:column; gap:0.5rem; margin-top:0.4rem;">
+                  <div class="tree-node"><span>Header</span><span style="color:var(--accent-emerald); font-weight:700;">✅ Can Access</span></div>
+                  <div class="tree-node"><span>Dashboard</span><span style="color:var(--accent-emerald); font-weight:700;">✅ Can Access</span></div>
+                  <div class="tree-node"><span>Profile</span><span style="color:var(--accent-emerald); font-weight:700;">✅ Can Access</span></div>
+                </div>
+              </div>
+
+              <div style="margin-top:1.2rem; background:rgba(244,63,94,0.08); border:2px dashed var(--accent-rose); border-radius:var(--radius-md); padding:1rem;">
+                <span style="color:var(--accent-rose); font-family:var(--font-mono); font-size:0.75rem; font-weight:700;">Outside the Provider</span>
+                <div class="tree-node" style="margin-top:0.4rem;">
+                  <span>Footer</span>
+                  <span style="color:var(--accent-rose); font-weight:700;">❌ Cannot Access Provider Value</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="card highlight-card">
+              <div class="card-header">
+                <span class="card-icon">🛡️</span>
+                <span class="card-title">The Scope Rule</span>
+              </div>
+              <p style="font-size:0.95rem; line-height:1.6; color:var(--text-main);">
+                If a component calls <code>useContext(UserContext)</code> outside of the <code>&lt;UserContext.Provider&gt;</code>, it will receive the default fallback value specified in <code>createContext()</code> (or <code>null</code>).
+              </p>
+              <div class="callout warning" style="margin-top:1rem;">
+                <div class="callout-title">Golden Troubleshooting Tip:</div>
+                <p>If your context returns <code>undefined</code> or <code>null</code>, check your JSX tree to make sure the consuming component is truly rendered inside the Provider!</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 17 — WHAT IS USECONTEXT()? (Section 5)
+           ==================================================================== -->
+      <section class="slide" data-slide="17" id="slide-17">
+        <div class="slide-content">
+          <div class="slide-header">
+            <span class="slide-tag">Consuming Context</span>
+            <h1 class="slide-title">What Is <span class="highlight">useContext()?</span></h1>
+            <p class="slide-subtitle">The modern standard React Hook used to read and subscribe to a context value.</p>
+          </div>
+
+          <div class="grid-2">
+            <div>
+              <div class="code-panel">
+                <div class="code-header">
+                  <div class="window-dots"><span class="dot-btn red"></span><span class="dot-btn yellow"></span><span class="dot-btn green"></span></div>
+                  <span class="code-title">useContext-hook.jsx</span>
+                  <button class="copy-btn">Copy</button>
+                </div>
+                <div class="code-body"><span class="kwd">import</span> { useContext } <span class="kwd">from</span> <span class="str">"react"</span>;
+<span class="kwd">import</span> UserContext <span class="kwd">from</span> <span class="str">"../context/UserContext"</span>;
+
+<span class="kwd">const</span> user = <span class="fn">useContext</span>(UserContext);
+
+console.<span class="fn">log</span>(user.name); <span class="com">// "Mubashir"</span></div>
+              </div>
+
+              <div class="callout info" style="margin-top:1rem;">
+                <div class="callout-title">Pass the Entire Context Object</div>
+                <p>Always pass the context object itself (<code>UserContext</code>), not <code>UserContext.Provider</code> or a string.</p>
+              </div>
+            </div>
+
+            <div class="card highlight-card">
+              <div class="card-header">
+                <span class="card-icon">⚡</span>
+                <span class="card-title">Automatic Subscription</span>
+              </div>
+              <p>When the Provider's <code>value</code> prop changes in state, every component calling <code>useContext(UserContext)</code> <strong>automatically re-renders</strong> with the updated value.</p>
+              <ul style="margin-top:0.8rem;">
+                <li>No event listeners to set up.</li>
+                <li>No cleanup code required.</li>
+                <li>React manages subscriptions behind the scenes.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 18 — USING USECONTEXT()
+           ==================================================================== -->
+      <section class="slide" data-slide="18" id="slide-18">
+        <div class="slide-content">
+          <div class="slide-header">
+            <span class="slide-tag">Consuming Context</span>
+            <h1 class="slide-title">Using <span class="highlight">useContext()</span> in Components</h1>
+            <p class="slide-subtitle">A complete consumer component reading shared user state.</p>
+          </div>
+
+          <div class="grid-2">
+            <div>
+              <div class="code-panel">
+                <div class="code-header">
+                  <div class="window-dots"><span class="dot-btn red"></span><span class="dot-btn yellow"></span><span class="dot-btn green"></span></div>
+                  <span class="code-title">Profile.jsx</span>
+                  <button class="copy-btn">Copy</button>
+                </div>
+                <div class="code-body"><span class="kwd">import</span> { useContext } <span class="kwd">from</span> <span class="str">"react"</span>;
+<span class="kwd">import</span> UserContext <span class="kwd">from</span> <span class="str">"../context/UserContext"</span>;
+
+<span class="kwd">function</span> <span class="fn">Profile</span>() {
+  <span class="kwd">const</span> user = <span class="fn">useContext</span>(UserContext);
+
+  <span class="kwd">return</span> (
+    &lt;<span class="tag">div</span> <span class="prop">className</span>=<span class="str">"profile-card"</span>&gt;
+      &lt;<span class="tag">h2</span>&gt;{user.name}&lt;/<span class="tag">h2</span>&gt;
+      &lt;<span class="tag">p</span>&gt;{user.role}&lt;/<span class="tag">p</span>&gt;
+    &lt;/<span class="tag">div</span>&gt;
+  );
+}
+
+<span class="kwd">export default</span> Profile;</div>
+              </div>
+            </div>
+
+            <div class="card emerald-card">
+              <div class="card-header">
+                <span class="card-icon">🎉</span>
+                <span class="card-title">Notice What Is Missing!</span>
+              </div>
+              <p style="font-size:1.05rem; color:var(--text-main); line-height:1.6; margin-bottom:0.8rem;">
+                Look at the function signature:
+              </p>
+              <div class="code-panel" style="margin-bottom:0.8rem;">
+                <div class="code-body"><span class="kwd">function</span> <span class="fn">Profile</span>() { <span class="com">/* ZERO PROPS! */</span> }</div>
+              </div>
+              <p style="font-size:0.88rem; color:var(--text-secondary);">
+                There is <strong>no props parameter</strong>! The component accesses <code>UserContext</code> directly from the ether, freeing all parent components from passing props.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 19 — CONTEXT FLOW EXAMPLE
+           ==================================================================== -->
+      <section class="slide" data-slide="19" id="slide-19">
+        <div class="slide-content">
+          <div class="slide-header">
+            <span class="slide-tag">Consuming Context</span>
+            <h1 class="slide-title">Context <span class="highlight">Flow Example</span></h1>
+            <p class="slide-subtitle">Tracing the exact pipeline from definition down to rendered JSX.</p>
+          </div>
+
+          <div style="background:var(--bg-terminal); border:1px solid var(--border-subtle); border-radius:var(--radius-md); padding:1.5rem; display:flex; flex-direction:column; align-items:center; gap:0.5rem; font-family:var(--font-mono); font-size:0.88rem;">
+            <div style="background:var(--bg-card); border:1px solid var(--border-light); padding:0.4rem 1.4rem; border-radius:var(--radius-sm); color:var(--react-cyan); font-weight:700;">
+              UserContext = createContext(null)
+            </div>
+            <div style="color:var(--react-cyan);">│</div>
+            <div style="color:var(--react-cyan);">↓</div>
+            <div style="background:var(--bg-card); border:1px solid var(--react-border); padding:0.5rem 1.6rem; border-radius:var(--radius-sm); color:var(--text-main); font-weight:700;">
+              &lt;UserContext.Provider value={user}&gt;
+            </div>
+            <div style="color:var(--react-cyan);">│</div>
+            <div style="color:var(--react-cyan);">↓</div>
+            <div style="background:var(--bg-surface); border:1px solid var(--border-medium); padding:0.4rem 1.4rem; border-radius:var(--radius-sm);">
+              Profile Component
+            </div>
+            <div style="color:var(--react-cyan);">│</div>
+            <div style="color:var(--react-cyan);">↓</div>
+            <div style="background:var(--bg-card); border:1px solid var(--accent-emerald-border); padding:0.4rem 1.4rem; border-radius:var(--radius-sm); color:var(--accent-emerald); font-weight:700;">
+              const user = useContext(UserContext)
+            </div>
+            <div style="color:var(--accent-emerald);">│</div>
+            <div style="color:var(--accent-emerald);">↓</div>
+            <div style="background:var(--react-bg); border:1px solid var(--react-border); padding:0.4rem 1.4rem; border-radius:var(--radius-sm); color:var(--react-cyan); font-weight:700;">
+              &lt;h2&gt;{user.name}&lt;/h2&gt;
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 20 — PROPS VS CONTEXT
+           ==================================================================== -->
+      <section class="slide" data-slide="20" id="slide-20">
+        <div class="slide-content">
+          <div class="slide-header">
+            <span class="slide-tag">Comparison</span>
+            <h1 class="slide-title">Props vs <span class="highlight">Context</span></h1>
+            <p class="slide-subtitle">A balanced engineering comparison of React's two data passing approaches.</p>
+          </div>
+
+          <div class="table-container">
+            <table class="comp-table">
+              <thead>
+                <tr>
+                  <th>Criteria</th>
+                  <th>Props (Standard)</th>
+                  <th>Context API</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Data Nature</strong></td>
+                  <td>Explicit data passing</td>
+                  <td>Shared / broadcasted data</td>
+                </tr>
+                <tr>
+                  <td><strong>Flow</strong></td>
+                  <td>Parent → direct Child</td>
+                  <td>Provider → any descendant</td>
+                </tr>
+                <tr>
+                  <td><strong>Best Used For</strong></td>
+                  <td>Component-specific configuration</td>
+                  <td>Globally shared state (Theme, User, Auth)</td>
+                </tr>
+                <tr>
+                  <td><strong>Risk</strong></td>
+                  <td>Can cause tedious prop drilling</td>
+                  <td>Makes component reuse slightly less portable</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="card highlight-card" style="margin-top:1.2rem; text-align:center;">
+            <div style="font-size:1.15rem; font-weight:800; color:var(--react-cyan);">
+              "Context does not replace props. They are complementary tools!"
+            </div>
+            <p style="font-size:0.85rem; color:var(--text-muted); margin-top:0.4rem;">
+              Use props for direct relationships. Reach for Context when passing props through 3+ intermediate components that don't need the data.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 21 — USER CONTEXT (Section 6)
+           ==================================================================== -->
+      <section class="slide" data-slide="21" id="slide-21">
+        <div class="slide-content">
+          <div class="slide-header">
+            <span class="slide-tag">Step-by-Step Example</span>
+            <h1 class="slide-title">Step 1: <span class="highlight">UserContext.jsx</span></h1>
+            <p class="slide-subtitle">Defining the standalone context file.</p>
+          </div>
+
+          <div class="grid-2">
+            <div>
+              <div class="code-panel">
+                <div class="code-header">
+                  <div class="window-dots"><span class="dot-btn red"></span><span class="dot-btn yellow"></span><span class="dot-btn green"></span></div>
+                  <span class="code-title">src/context/UserContext.jsx</span>
+                  <button class="copy-btn">Copy</button>
+                </div>
+                <div class="code-body"><span class="kwd">import</span> { createContext } <span class="kwd">from</span> <span class="str">"react"</span>;
+
+<span class="kwd">const</span> UserContext = <span class="fn">createContext</span>(<span class="bool">null</span>);
+
+<span class="kwd">export default</span> UserContext;</div>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-header">
+                <span class="card-icon">1️⃣</span>
+                <span class="card-title">What This Step Accomplishes</span>
+              </div>
+              <ul style="margin:0.8rem 0;">
+                <li>Creates a new Context instance.</li>
+                <li>Sets the default fallback value to <code>null</code>.</li>
+                <li>Exports <code>UserContext</code> as default so both the Provider (in <code>App.jsx</code>) and Consumer (in <code>Profile.jsx</code>) can import it.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 22 — PROVIDER IN APP
+           ==================================================================== -->
+      <section class="slide" data-slide="22" id="slide-22">
+        <div class="slide-content">
+          <div class="slide-header">
+            <span class="slide-tag">Step-by-Step Example</span>
+            <h1 class="slide-title">Step 2: <span class="highlight">Provider in App.jsx</span></h1>
+            <p class="slide-subtitle">Wrapping the profile component and supplying the user data payload.</p>
+          </div>
+
+          <div class="grid-2">
+            <div>
+              <div class="code-panel">
+                <div class="code-header">
+                  <div class="window-dots"><span class="dot-btn red"></span><span class="dot-btn yellow"></span><span class="dot-btn green"></span></div>
+                  <span class="code-title">src/App.jsx</span>
+                  <button class="copy-btn">Copy</button>
+                </div>
+                <div class="code-body"><span class="kwd">import</span> UserContext <span class="kwd">from</span> <span class="str">"./context/UserContext"</span>;
+<span class="kwd">import</span> Profile <span class="kwd">from</span> <span class="str">"./components/Profile"</span>;
+
+<span class="kwd">function</span> <span class="fn">App</span>() {
+  <span class="kwd">const</span> user = {
+    <span class="prop">name</span>: <span class="str">"Mubashir"</span>,
+    <span class="prop">role</span>: <span class="str">"MERN Developer"</span>
+  };
+
+  <span class="kwd">return</span> (
+    &lt;<span class="tag">UserContext.Provider</span> <span class="prop">value</span>={user}&gt;
+      &lt;<span class="tag">Profile</span> /&gt;
+    &lt;/<span class="tag">UserContext.Provider</span>&gt;
+  );
+}
+
+<span class="kwd">export default</span> App;</div>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-header">
+                <span class="card-icon">2️⃣</span>
+                <span class="card-title">What This Step Accomplishes</span>
+              </div>
+              <ul style="margin:0.8rem 0;">
+                <li>Imports <code>UserContext</code> from our context file.</li>
+                <li>Creates a <code>user</code> data object with <code>name</code> and <code>role</code>.</li>
+                <li>Wraps <code>&lt;Profile /&gt;</code> in <code>&lt;UserContext.Provider&gt;</code>.</li>
+                <li>Passes <code>value={user}</code> to broadcast the user data.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 23 — CONSUME CONTEXT
+           ==================================================================== -->
+      <section class="slide" data-slide="23" id="slide-23">
+        <div class="slide-content">
+          <div class="slide-header">
+            <span class="slide-tag">Step-by-Step Example</span>
+            <h1 class="slide-title">Step 3: <span class="highlight">Consume in Profile.jsx</span></h1>
+            <p class="slide-subtitle">Calling <code>useContext()</code> to read user properties directly.</p>
+          </div>
+
+          <div class="grid-2">
+            <div>
+              <div class="code-panel">
+                <div class="code-header">
+                  <div class="window-dots"><span class="dot-btn red"></span><span class="dot-btn yellow"></span><span class="dot-btn green"></span></div>
+                  <span class="code-title">src/components/Profile.jsx</span>
+                  <button class="copy-btn">Copy</button>
+                </div>
+                <div class="code-body"><span class="kwd">import</span> { useContext } <span class="kwd">from</span> <span class="str">"react"</span>;
+<span class="kwd">import</span> UserContext <span class="kwd">from</span> <span class="str">"../context/UserContext"</span>;
+
+<span class="kwd">function</span> <span class="fn">Profile</span>() {
+  <span class="kwd">const</span> user = <span class="fn">useContext</span>(UserContext);
+
+  <span class="kwd">return</span> (
+    &lt;<span class="tag">div</span>&gt;
+      &lt;<span class="tag">h2</span>&gt;{user.name}&lt;/<span class="tag">h2</span>&gt;
+      &lt;<span class="tag">p</span>&gt;{user.role}&lt;/<span class="tag">p</span>&gt;
+    &lt;/<span class="tag">div</span>&gt;
+  );
+}
+
+<span class="kwd">export default</span> Profile;</div>
+              </div>
+            </div>
+
+            <div class="card emerald-card">
+              <div class="card-header">
+                <span class="card-icon">3️⃣</span>
+                <span class="card-title">What This Step Accomplishes</span>
+              </div>
+              <ul style="margin:0.8rem 0;">
+                <li>Imports <code>useContext</code> from React and <code>UserContext</code>.</li>
+                <li>Calls <code>useContext(UserContext)</code> inside the component body.</li>
+                <li>Extracts the <code>user</code> object without receiving a single prop!</li>
+                <li>Renders <code>Mubashir</code> and <code>MERN Developer</code> cleanly.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 24 — COMPLETE FLOW (with Interactive Demo 3)
+           ==================================================================== -->
+      <section class="slide" data-slide="24" id="slide-24">
+        <div class="slide-content">
+          <div class="slide-header">
+            <span class="slide-tag">Interactive Architecture</span>
+            <h1 class="slide-title">The Three Pillars: <span class="highlight">Create → Provide → Consume</span></h1>
+            <p class="slide-subtitle">Click each of the three stages to review its syntax and responsibilities.</p>
+          </div>
+
+          <!-- DEMO 3 INTERACTIVE STAGE CARDS -->
+          <div class="stage-card-grid">
+            <div class="stage-card active" id="stageCard-create" onclick="DemoThreeStages.select('create')">
+              <div class="stage-step-tag">STAGE 1</div>
+              <div class="stage-title">CREATE</div>
+              <div class="stage-code-snippet">createContext()</div>
+            </div>
+
+            <div class="stage-card" id="stageCard-provide" onclick="DemoThreeStages.select('provide')">
+              <div class="stage-step-tag">STAGE 2</div>
+              <div class="stage-title">PROVIDE</div>
+              <div class="stage-code-snippet">&lt;Provider value={data}&gt;</div>
+            </div>
+
+            <div class="stage-card" id="stageCard-consume" onclick="DemoThreeStages.select('consume')">
+              <div class="stage-step-tag">STAGE 3</div>
+              <div class="stage-title">CONSUME</div>
+              <div class="stage-code-snippet">useContext(Context)</div>
+            </div>
+          </div>
+
+          <div class="card highlight-card" style="margin-top:1rem;">
+            <div class="card-header">
+              <span class="card-icon">🔍</span>
+              <span class="card-title" id="stageDetailTitle">1. CREATE: createContext()</span>
+            </div>
+            <p id="stageDetailDesc" style="font-size:0.92rem; color:var(--text-secondary); margin-bottom:0.8rem;">
+              Creates a Context object. Call this outside your components, typically in its own dedicated file (e.g. UserContext.jsx).
+            </p>
+            <div class="code-panel">
+              <div class="code-body" id="stageDetailSnippet">import { createContext } from "react";
+
+const UserContext = createContext(null);
+export default UserContext;</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 25 — MULTIPLE VALUES (Section 7 & Demo 4)
+           ==================================================================== -->
+      <section class="slide" data-slide="25" id="slide-25">
+        <div class="slide-content">
+          <div class="slide-header">
+            <span class="slide-tag">Multiple Values</span>
+            <h1 class="slide-title">Providing <span class="highlight">Multiple Values</span></h1>
+            <p class="slide-subtitle">Passing rich data objects through the Provider's value prop.</p>
+          </div>
+
+          <div class="grid-2">
+            <div>
+              <div class="card" style="margin-bottom:1rem;">
+                <div class="card-header">
+                  <span class="card-icon">📦</span>
+                  <span class="card-title">Live Provider Code</span>
+                </div>
+                <div class="code-panel">
+                  <div class="code-body" id="simProviderSnippet">&lt;<span class="tag">UserContext.Provider</span> <span class="prop">value</span>={{
+  <span class="prop">name</span>: <span class="str">"Mubashir"</span>,
+  <span class="prop">role</span>: <span class="str">"MERN Developer"</span>,
+  <span class="prop">email</span>: <span class="str">"mubashir@gmail.com"</span>
+}}&gt;</div>
+                </div>
+              </div>
+
+              <!-- DEMO 4 INPUT SIMULATOR -->
+              <div class="card highlight-card">
+                <div class="card-header">
+                  <span class="card-icon">🎮</span>
+                  <span class="card-title">Interactive Demo 4 — Change Context Values</span>
+                </div>
+                <div class="sim-input-group">
+                  <label>Name:</label>
+                  <input type="text" id="simUserName" class="sim-input" value="Mubashir">
+                </div>
+                <div class="sim-input-group">
+                  <label>Role:</label>
+                  <input type="text" id="simUserRole" class="sim-input" value="MERN Developer">
+                </div>
+                <div class="sim-input-group">
+                  <label>Email:</label>
+                  <input type="text" id="simUserEmail" class="sim-input" value="mubashir@gmail.com">
+                </div>
+              </div>
+            </div>
+
+            <div>
+              <!-- REACTIVE CONSUMER PREVIEW -->
+              <div class="preview-consumer-card">
+                <span class="preview-tag">&lt;Profile /&gt; Consumer</span>
+                <div style="font-family:var(--font-mono); font-size:0.75rem; color:var(--text-muted); margin-bottom:0.8rem;">
+                  const user = useContext(UserContext);
+                </div>
+
+                <div style="border-top:1px solid var(--border-subtle); padding-top:0.8rem;">
+                  <h3 id="previewConsumerName" style="font-size:1.4rem; color:var(--react-cyan); margin-bottom:0.3rem;">Mubashir</h3>
+                  <div id="previewConsumerRole" style="font-size:0.95rem; font-weight:600; color:var(--text-main); margin-bottom:0.5rem;">MERN Developer</div>
+                  <div id="previewConsumerEmail" style="font-family:var(--font-mono); font-size:0.85rem; color:var(--text-muted);">mubashir@gmail.com</div>
+                </div>
+
+                <div class="callout emerald" style="margin-top:1.2rem; padding:0.6rem 0.8rem;">
+                  <div style="font-size:0.78rem; color:var(--accent-emerald);">
+                    ✓ Notice: As you type into the inputs, the consumer card updates reactively!
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 26 — CONTEXT WITH FUNCTIONS
+           ==================================================================== -->
+      <section class="slide" data-slide="26" id="slide-26">
+        <div class="slide-content">
+          <div class="slide-header">
+            <span class="slide-tag">Multiple Values</span>
+            <h1 class="slide-title">Context With <span class="highlight">Functions</span></h1>
+            <p class="slide-subtitle">Passing state update functions or action handlers through Context so child components can trigger actions.</p>
+          </div>
+
+          <div class="grid-2">
+            <div>
+              <div class="code-panel">
+                <div class="code-header">
+                  <div class="window-dots"><span class="dot-btn red"></span><span class="dot-btn yellow"></span><span class="dot-btn green"></span></div>
+                  <span class="code-title">App.jsx (Provider)</span>
+                  <button class="copy-btn">Copy</button>
+                </div>
+                <div class="code-body"><span class="kwd">const</span> value = {
+  user,
+  <span class="fn">logout</span>: () =&gt; {
+    console.<span class="fn">log</span>(<span class="str">"User logged out!"</span>);
+  }
+};
+
+<span class="kwd">return</span> (
+  &lt;<span class="tag">UserContext.Provider</span> <span class="prop">value</span>={value}&gt;
+    &lt;<span class="tag">App</span> /&gt;
+  &lt;/<span class="tag">UserContext.Provider</span>&gt;
+);</div>
+              </div>
+            </div>
+
+            <div>
+              <div class="code-panel">
+                <div class="code-header">
+                  <div class="window-dots"><span class="dot-btn red"></span><span class="dot-btn yellow"></span><span class="dot-btn green"></span></div>
+                  <span class="code-title">UserMenu.jsx (Consumer)</span>
+                  <button class="copy-btn">Copy</button>
+                </div>
+                <div class="code-body"><span class="kwd">import</span> { useContext } <span class="kwd">from</span> <span class="str">"react"</span>;
+<span class="kwd">import</span> UserContext <span class="kwd">from</span> <span class="str">"../context/UserContext"</span>;
+
+<span class="kwd">function</span> <span class="fn">UserMenu</span>() {
+  <span class="kwd">const</span> { user, logout } = <span class="fn">useContext</span>(UserContext);
+
+  <span class="kwd">return</span> (
+    &lt;<span class="tag">div</span>&gt;
+      &lt;<span class="tag">span</span>&gt;Welcome, {user.name}&lt;/<span class="tag">span</span>&gt;
+      &lt;<span class="tag">button</span> <span class="prop">onClick</span>={logout}&gt;Log Out&lt;/<span class="tag">button</span>&gt;
+    &lt;/<span class="tag">div</span>&gt;
+  );
+}</div>
+              </div>
+
+              <div class="callout info" style="margin-top:1rem;">
+                <div class="callout-title">Destructuring Context Objects</div>
+                <p>Because the context value is an object, consumers can cleanly destructure only the specific fields or functions they need: <code>const { user, logout } = useContext(UserContext);</code>.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 27 — THEME CONTEXT (Section 8)
+           ==================================================================== -->
+      <section class="slide" data-slide="27" id="slide-27">
+        <div class="slide-content">
+          <div class="slide-header">
+            <span class="slide-tag">Theme Context</span>
+            <h1 class="slide-title">The Classic <span class="highlight">Theme Context</span></h1>
+            <p class="slide-subtitle">One of the most widely used and intuitive applications of React Context.</p>
+          </div>
+
+          <div class="grid-2">
+            <div class="card highlight-card">
+              <div class="card-header">
+                <span class="card-icon">🎨</span>
+                <span class="card-title">Why Theme Is Perfect for Context</span>
+              </div>
+              <p>Almost every component on a page needs to know if the user preferred Dark Mode or Light Mode:</p>
+              <ul style="margin: 0.8rem 0;">
+                <li>The Navbar background and text.</li>
+                <li>The Sidebar and navigation links.</li>
+                <li>Cards, modals, and buttons.</li>
+              </ul>
+              <p>Passing <code>theme="dark"</code> manually through 20 different components is an anti-pattern. Context broadcasts it everywhere in one step!</p>
+            </div>
+
+            <div class="card">
+              <div class="card-header">
+                <span class="card-icon">🌐</span>
+                <span class="card-title">Theme Hierarchy</span>
+              </div>
+              <div style="background:var(--bg-terminal); border:1px solid var(--border-subtle); border-radius:var(--radius-sm); padding:1rem; font-family:var(--font-mono); font-size:0.85rem; line-height:1.7;">
+                <div style="color:var(--react-cyan); font-weight:700;">ThemeContext</div>
+                <div style="color:var(--text-muted);">      │</div>
+                <div style="color:var(--text-muted);">      ↓</div>
+                <div style="color:var(--text-main); font-weight:600;">     App</div>
+                <div style="color:var(--text-muted);">    /   \</div>
+                <div style="color:var(--text-main);">Header  Main</div>
+                <div style="color:var(--text-muted);">  │</div>
+                <div style="color:var(--accent-emerald);">Button (Reads Theme via Context!)</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 28 — CREATE THEME CONTEXT
+           ==================================================================== -->
+      <section class="slide" data-slide="28" id="slide-28">
+        <div class="slide-content">
+          <div class="slide-header">
+            <span class="slide-tag">Theme Context</span>
+            <h1 class="slide-title">Create <span class="highlight">ThemeContext.jsx</span></h1>
+            <p class="slide-subtitle">Initializing our Theme Context with a default "light" string fallback.</p>
+          </div>
+
+          <div class="grid-2">
+            <div>
+              <div class="code-panel">
+                <div class="code-header">
+                  <div class="window-dots"><span class="dot-btn red"></span><span class="dot-btn yellow"></span><span class="dot-btn green"></span></div>
+                  <span class="code-title">src/context/ThemeContext.jsx</span>
+                  <button class="copy-btn">Copy</button>
+                </div>
+                <div class="code-body"><span class="kwd">import</span> { createContext } <span class="kwd">from</span> <span class="str">"react"</span>;
+
+<span class="kwd">const</span> ThemeContext = <span class="fn">createContext</span>(<span class="str">"light"</span>);
+
+<span class="kwd">export default</span> ThemeContext;</div>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-header">
+                <span class="card-icon">💡</span>
+                <span class="card-title">Simple String Values</span>
+              </div>
+              <p>Context does not have to be an object. It can be a simple primitive string such as <code>"light"</code> or <code>"dark"</code>!</p>
+              <div class="callout info" style="margin-top:1rem;">
+                <div class="callout-title">The Fallback:</div>
+                <p>If any component reads <code>ThemeContext</code> without a Provider, it defaults gracefully to <code>"light"</code>.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 29 — PROVIDE THEME
+           ==================================================================== -->
+      <section class="slide" data-slide="29" id="slide-29">
+        <div class="slide-content">
+          <div class="slide-header">
+            <span class="slide-tag">Theme Context</span>
+            <h1 class="slide-title">Provide <span class="highlight">Theme in App.jsx</span></h1>
+            <p class="slide-subtitle">Wrapping the layout with <code>ThemeContext.Provider</code>.</p>
+          </div>
+
+          <div class="grid-2">
+            <div>
+              <div class="code-panel">
+                <div class="code-header">
+                  <div class="window-dots"><span class="dot-btn red"></span><span class="dot-btn yellow"></span><span class="dot-btn green"></span></div>
+                  <span class="code-title">src/App.jsx</span>
+                  <button class="copy-btn">Copy</button>
+                </div>
+                <div class="code-body"><span class="kwd">import</span> ThemeContext <span class="kwd">from</span> <span class="str">"./context/ThemeContext"</span>;
+<span class="kwd">import</span> Header <span class="kwd">from</span> <span class="str">"./components/Header"</span>;
+
+<span class="kwd">function</span> <span class="fn">App</span>() {
+  <span class="kwd">const</span> theme = <span class="str">"dark"</span>;
+
+  <span class="kwd">return</span> (
+    &lt;<span class="tag">ThemeContext.Provider</span> <span class="prop">value</span>={theme}&gt;
+      &lt;<span class="tag">Header</span> /&gt;
+    &lt;/<span class="tag">ThemeContext.Provider</span>&gt;
+  );
+}
+
+<span class="kwd">export default</span> App;</div>
+              </div>
+            </div>
+
+            <div class="card highlight-card">
+              <div class="card-header">
+                <span class="card-icon">⚙️</span>
+                <span class="card-title">Dynamic Theme Updates</span>
+              </div>
+              <p>In a full application, <code>theme</code> can be stored in React state (e.g. <code>const [theme, setTheme] = useState("dark")</code>).</p>
+              <p style="margin-top:0.6rem; font-size:0.88rem; color:var(--text-secondary);">
+                Whenever <code>setTheme</code> runs, the Provider automatically notifies all consumers to change their CSS classes!
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 30 — CONSUME THEME (with Interactive Demo 5)
+           ==================================================================== -->
+      <section class="slide" data-slide="30" id="slide-30">
+        <div class="slide-content">
+          <div class="slide-header">
+            <span class="slide-tag">Theme Context</span>
+            <h1 class="slide-title">Consume Theme &amp; <span class="highlight">Interactive Switcher</span></h1>
+            <p class="slide-subtitle">Using <code>useContext(ThemeContext)</code> to dynamically toggle CSS theme classes.</p>
+          </div>
+
+          <div class="grid-2">
+            <div>
+              <div class="code-panel">
+                <div class="code-header">
+                  <div class="window-dots"><span class="dot-btn red"></span><span class="dot-btn yellow"></span><span class="dot-btn green"></span></div>
+                  <span class="code-title">Header.jsx</span>
+                  <button class="copy-btn">Copy</button>
+                </div>
+                <div class="code-body"><span class="kwd">import</span> { useContext } <span class="kwd">from</span> <span class="str">"react"</span>;
+<span class="kwd">import</span> ThemeContext <span class="kwd">from</span> <span class="str">"../context/ThemeContext"</span>;
+
+<span class="kwd">function</span> <span class="fn">Header</span>() {
+  <span class="kwd">const</span> theme = <span class="fn">useContext</span>(ThemeContext);
+
+  <span class="kwd">return</span> (
+    &lt;<span class="tag">header</span> <span class="prop">className</span>={theme}&gt;
+      &lt;<span class="tag">h1</span>&gt;My App&lt;/<span class="tag">h1</span>&gt;
+    &lt;/<span class="tag">header</span>&gt;
+  );
+}</div>
+              </div>
+            </div>
+
+            <!-- DEMO 5 INTERACTIVE THEME SWITCHER -->
+            <div class="demo-box">
+              <div class="demo-header">
+                <span class="demo-badge"><span>🎮</span> Interactive Demo 5 — Theme Switcher</span>
+                <span style="font-size:0.75rem; color:var(--react-cyan);" id="themeDemoBadge">Theme: DARK</span>
+              </div>
+              <div class="demo-body">
+                <div style="font-family:var(--font-mono); font-size:0.78rem; color:var(--text-muted); background:var(--bg-terminal); padding:0.4rem 0.6rem; border-radius:var(--radius-xs); margin-bottom:0.8rem;" id="themeProviderSnippet">
+                  &lt;ThemeContext.Provider value="dark"&gt;
+                </div>
+
+                <div class="theme-switch-container theme-dark" id="themeDemoBox" style="margin-bottom:1rem;">
+                  <h3 style="font-size:1.15rem; margin-bottom:0.3rem;">Simulated App Header</h3>
+                  <p style="font-size:0.85rem; margin-bottom:0.8rem;">This container's styles adapt dynamically based on the current Context theme.</p>
+                  <button class="theme-toggle-btn" id="themeToggleBtn" onclick="DemoThemeSwitcher.toggle()">
+                    ☀️ Switch to Light Mode
+                  </button>
+                </div>
+
+                <p style="font-size:0.78rem; color:var(--text-dim);">
+                  * Note: In a production React app, ThemeContext provides both the theme value and the toggleTheme function.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 31 — MINI PROJECT: USER DASHBOARD (Section 9)
+           ==================================================================== -->
+      <section class="slide" data-slide="31" id="slide-31">
+        <div class="slide-content">
+          <div class="slide-header">
+            <span class="slide-tag">Practical Project</span>
+            <h1 class="slide-title">Mini Project: <span class="highlight">User Dashboard</span></h1>
+            <p class="slide-subtitle">Building an integrated dashboard app to master Context API in a real application structure.</p>
+          </div>
+
+          <div class="grid-2">
+            <div class="card highlight-card">
+              <div class="card-header">
+                <span class="card-icon">📊</span>
+                <span class="card-title">Application Requirements</span>
+              </div>
+              <p>We are building a responsive multi-component User Dashboard consisting of:</p>
+              <ul style="margin: 0.8rem 0;">
+                <li><strong>App:</strong> The top-level root holding user state and rendering <code>UserContext.Provider</code>.</li>
+                <li><strong>Header:</strong> Top navigation bar.</li>
+                <li><strong>Sidebar:</strong> Navigation menu on the left.</li>
+                <li><strong>Dashboard:</strong> Main content area containing <code>&lt;Profile /&gt;</code>.</li>
+                <li><strong>Profile:</strong> The leaf component that directly consumes and renders user info!</li>
+              </ul>
+            </div>
+
+            <div class="card emerald-card">
+              <div class="card-header">
+                <span class="card-icon">👤</span>
+                <span class="card-title">Shared Context Data</span>
+              </div>
+              <div class="code-panel">
+                <div class="code-body"><span class="kwd">const</span> user = {
+  <span class="prop">name</span>: <span class="str">"Mubashir"</span>,
+  <span class="prop">email</span>: <span class="str">"mubashir@gmail.com"</span>,
+  <span class="prop">role</span>: <span class="str">"MERN Developer"</span>
+};</div>
+              </div>
+              <p style="margin-top:0.8rem; font-size:0.85rem; color:var(--text-secondary);">
+                Goal: <strong>Profile</strong> will read <code>name</code>, <code>email</code>, and <code>role</code> directly from Context without receiving any props from Dashboard or App!
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 32 — PROJECT STRUCTURE
+           ==================================================================== -->
+      <section class="slide" data-slide="32" id="slide-32">
+        <div class="slide-content">
+          <div class="slide-header">
+            <span class="slide-tag">Practical Project</span>
+            <h1 class="slide-title">Dashboard <span class="highlight">Project Structure</span></h1>
+            <p class="slide-subtitle">Clean folder organization separating context definitions from presentation components.</p>
+          </div>
+
+          <div class="grid-2">
+            <div class="card">
+              <div class="card-header">
+                <span class="card-icon">📁</span>
+                <span class="card-title">File Tree</span>
+              </div>
+              <div style="background:var(--bg-terminal); border:1px solid var(--border-subtle); border-radius:var(--radius-sm); padding:1.2rem; font-family:var(--font-mono); font-size:0.88rem; line-height:1.7;">
+                <div>src/</div>
+                <div>├── <span style="color:var(--react-cyan); font-weight:700;">context/</span></div>
+                <div>│   └── <span style="color:var(--react-cyan);">UserContext.jsx</span></div>
+                <div>├── <span style="color:var(--text-main); font-weight:700;">components/</span></div>
+                <div>│   ├── Header.jsx</div>
+                <div>│   ├── Sidebar.jsx</div>
+                <div>│   ├── Dashboard.jsx</div>
+                <div>│   └── <span style="color:var(--accent-emerald);">Profile.jsx</span></div>
+                <div>├── <span style="color:var(--accent-amber);">App.jsx</span></div>
+                <div>└── main.jsx</div>
+              </div>
+            </div>
+
+            <div class="card highlight-card">
+              <div class="card-header">
+                <span class="card-icon">🛡️</span>
+                <span class="card-title">Why This Structure Wins</span>
+              </div>
+              <ul>
+                <li><strong>Dedicated context/ folder:</strong> Keeps shared context definitions modular and easily discoverable.</li>
+                <li><strong>Clean Components:</strong> <code>Header</code>, <code>Sidebar</code>, and <code>Dashboard</code> don't have to carry extra props on their signatures.</li>
+                <li><strong>Scale Ready:</strong> Adding a new context (like <code>ThemeContext</code>) is as simple as dropping a new file in <code>src/context/</code>.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 33 — PROJECT FLOW
+           ==================================================================== -->
+      <section class="slide" data-slide="33" id="slide-33">
+        <div class="slide-content">
+          <div class="slide-header">
+            <span class="slide-tag">Practical Project</span>
+            <h1 class="slide-title">Dashboard <span class="highlight">Architecture Flow</span></h1>
+            <p class="slide-subtitle">Observing how the UserContext provider bypasses Header, Sidebar, and Dashboard.</p>
+          </div>
+
+          <div style="background:var(--bg-terminal); border:1px solid var(--border-subtle); border-radius:var(--radius-md); padding:1.5rem; display:flex; flex-direction:column; align-items:center; gap:0.5rem; font-family:var(--font-mono); font-size:0.88rem;">
+            <div style="background:var(--bg-card); border:1px solid var(--react-border); padding:0.4rem 1.4rem; border-radius:var(--radius-sm); color:var(--react-cyan); font-weight:700;">
+              UserContext (createContext)
+            </div>
+            <div style="color:var(--react-cyan);">│</div>
+            <div style="color:var(--react-cyan);">↓</div>
+            <div style="background:var(--bg-card); border:1px solid var(--border-light); padding:0.5rem 1.6rem; border-radius:var(--radius-sm); color:var(--text-main); font-weight:700;">
+              App (&lt;UserContext.Provider value={user}&gt;)
+            </div>
+            <div style="color:var(--text-dim); margin-top:0.2rem;">
+              ┌────────────────────────┼────────────────────────┐
+            </div>
+            <div style="display:flex; gap:2.5rem; margin-top:0.2rem;">
+              <span style="color:var(--text-muted);">↓ Header</span>
+              <span style="color:var(--text-muted);">↓ Sidebar</span>
+              <span style="color:var(--text-main); font-weight:600;">↓ Dashboard</span>
+            </div>
+            <div style="color:var(--accent-emerald); margin-left:14rem;">
+              │
+            </div>
+            <div style="color:var(--accent-emerald); margin-left:14rem;">
+              ↓
+            </div>
+            <div style="background:var(--react-bg); border:1px solid var(--react-border); padding:0.4rem 1.4rem; border-radius:var(--radius-sm); color:var(--react-cyan); font-weight:700; margin-left:14rem;">
+              Profile (useContext(UserContext) ✅)
+            </div>
+          </div>
+
+          <div class="callout info" style="margin-top:1.2rem;">
+            <div class="callout-title">Key Insight</div>
+            <p>The <strong>Profile</strong> component receives user information directly from Context without needing props passed through Dashboard!</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 34 — USERCONTEXT (Project)
+           ==================================================================== -->
+      <section class="slide" data-slide="34" id="slide-34">
+        <div class="slide-content">
+          <div class="slide-header">
+            <span class="slide-tag">Project Code</span>
+            <h1 class="slide-title">1. Creating <span class="highlight">UserContext.jsx</span></h1>
+            <p class="slide-subtitle">Setting up the shared context object for our dashboard.</p>
+          </div>
+
+          <div class="grid-2">
+            <div>
+              <div class="code-panel">
+                <div class="code-header">
+                  <div class="window-dots"><span class="dot-btn red"></span><span class="dot-btn yellow"></span><span class="dot-btn green"></span></div>
+                  <span class="code-title">src/context/UserContext.jsx</span>
+                  <button class="copy-btn">Copy</button>
+                </div>
+                <div class="code-body"><span class="kwd">import</span> { createContext } <span class="kwd">from</span> <span class="str">"react"</span>;
+
+<span class="kwd">const</span> UserContext = <span class="fn">createContext</span>(<span class="bool">null</span>);
+
+<span class="kwd">export default</span> UserContext;</div>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-header">
+                <span class="card-icon">📝</span>
+                <span class="card-title">Code Notes</span>
+              </div>
+              <ul style="margin:0.8rem 0;">
+                <li>Only 4 lines of code!</li>
+                <li>Import <code>createContext</code> from <code>"react"</code>.</li>
+                <li>Initial default value is <code>null</code>.</li>
+                <li>Export as the default export.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 35 — PROVIDER IN APP (Project)
+           ==================================================================== -->
+      <section class="slide" data-slide="35" id="slide-35">
+        <div class="slide-content">
+          <div class="slide-header">
+            <span class="slide-tag">Project Code</span>
+            <h1 class="slide-title">2. Providing State in <span class="highlight">App.jsx</span></h1>
+            <p class="slide-subtitle">Wrapping Header, Sidebar, and Dashboard inside the Provider.</p>
+          </div>
+
+          <div class="code-panel">
+            <div class="code-header">
+              <div class="window-dots"><span class="dot-btn red"></span><span class="dot-btn yellow"></span><span class="dot-btn green"></span></div>
+              <span class="code-title">src/App.jsx</span>
+              <button class="copy-btn">Copy</button>
+            </div>
+            <div class="code-body"><span class="kwd">import</span> UserContext <span class="kwd">from</span> <span class="str">"./context/UserContext"</span>;
+<span class="kwd">import</span> Header <span class="kwd">from</span> <span class="str">"./components/Header"</span>;
+<span class="kwd">import</span> Sidebar <span class="kwd">from</span> <span class="str">"./components/Sidebar"</span>;
+<span class="kwd">import</span> Dashboard <span class="kwd">from</span> <span class="str">"./components/Dashboard"</span>;
+
+<span class="kwd">function</span> <span class="fn">App</span>() {
+  <span class="kwd">const</span> user = {
+    <span class="prop">name</span>: <span class="str">"Mubashir"</span>,
+    <span class="prop">email</span>: <span class="str">"mubashir@gmail.com"</span>,
+    <span class="prop">role</span>: <span class="str">"MERN Developer"</span>
+  };
+
+  <span class="kwd">return</span> (
+    &lt;<span class="tag">UserContext.Provider</span> <span class="prop">value</span>={user}&gt;
+      &lt;<span class="tag">Header</span> /&gt;
+      &lt;<span class="tag">div</span> <span class="prop">className</span>=<span class="str">"layout-body"</span>&gt;
+        &lt;<span class="tag">Sidebar</span> /&gt;
+        &lt;<span class="tag">Dashboard</span> /&gt;
+      &lt;/<span class="tag">div</span>&gt;
+    &lt;/<span class="tag">UserContext.Provider</span>&gt;
+  );
+}
+
+<span class="kwd">export default</span> App;</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 36 — PROFILE CONSUMER (Project)
+           ==================================================================== -->
+      <section class="slide" data-slide="36" id="slide-36">
+        <div class="slide-content">
+          <div class="slide-header">
+            <span class="slide-tag">Project Code</span>
+            <h1 class="slide-title">3. Consuming State in <span class="highlight">Profile.jsx</span></h1>
+            <p class="slide-subtitle">Calling <code>useContext()</code> to render user details directly.</p>
+          </div>
+
+          <div class="grid-2">
+            <div>
+              <div class="code-panel">
+                <div class="code-header">
+                  <div class="window-dots"><span class="dot-btn red"></span><span class="dot-btn yellow"></span><span class="dot-btn green"></span></div>
+                  <span class="code-title">src/components/Profile.jsx</span>
+                  <button class="copy-btn">Copy</button>
+                </div>
+                <div class="code-body"><span class="kwd">import</span> { useContext } <span class="kwd">from</span> <span class="str">"react"</span>;
+<span class="kwd">import</span> UserContext <span class="kwd">from</span> <span class="str">"../context/UserContext"</span>;
+
+<span class="kwd">function</span> <span class="fn">Profile</span>() {
+  <span class="kwd">const</span> user = <span class="fn">useContext</span>(UserContext);
+
+  <span class="kwd">return</span> (
+    &lt;<span class="tag">div</span> <span class="prop">className</span>=<span class="str">"profile-box"</span>&gt;
+      &lt;<span class="tag">h2</span>&gt;{user.name}&lt;/<span class="tag">h2</span>&gt;
+      &lt;<span class="tag">p</span>&gt;&lt;<span class="tag">strong</span>&gt;Email:&lt;/<span class="tag">strong</span>&gt; {user.email}&lt;/<span class="tag">p</span>&gt;
+      &lt;<span class="tag">p</span>&gt;&lt;<span class="tag">strong</span>&gt;Role:&lt;/<span class="tag">strong</span>&gt; {user.role}&lt;/<span class="tag">p</span>&gt;
+    &lt;/<span class="tag">div</span>&gt;
+  );
+}
+
+<span class="kwd">export default</span> Profile;</div>
+              </div>
+            </div>
+
+            <div class="card emerald-card">
+              <div class="card-header">
+                <span class="card-icon">🎉</span>
+                <span class="card-title">Project Completed!</span>
+              </div>
+              <p>You have built a fully functional React Context application!</p>
+              <ul style="margin: 0.8rem 0;">
+                <li><code>UserContext</code> created.</li>
+                <li>Provider mounted at root in <code>App.jsx</code>.</li>
+                <li><code>Profile</code> reads data with <code>useContext()</code>.</li>
+                <li>Zero prop drilling across Header, Sidebar, or Dashboard.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 37 — COMMON MISTAKES (Section 10)
+           ==================================================================== -->
+      <section class="slide" data-slide="37" id="slide-37">
+        <div class="slide-content">
+          <div class="slide-header">
+            <span class="slide-tag">Review &amp; Debugging</span>
+            <h1 class="slide-title">Common Context <span style="color:var(--accent-rose);">Mistakes</span></h1>
+            <p class="slide-subtitle">Watch out for these 6 frequent pitfalls when developing with Context API.</p>
+          </div>
+
+          <div class="mistakes-grid">
+            <div class="mistake-card">
+              <div class="mistake-badge">1</div>
+              <div class="mistake-body">
+                <h4>Forgetting to Import useContext</h4>
+                <p>Calling <code>useContext()</code> without <code>import { useContext } from "react";</code> produces a runtime <code>ReferenceError</code>.</p>
+              </div>
+            </div>
+
+            <div class="mistake-card">
+              <div class="mistake-badge">2</div>
+              <div class="mistake-body">
+                <h4>Forgetting the Provider</h4>
+                <p>Calling <code>useContext()</code> without rendering <code>&lt;Context.Provider&gt;</code> in the component tree returns only default/null.</p>
+              </div>
+            </div>
+
+            <div class="mistake-card">
+              <div class="mistake-badge">3</div>
+              <div class="mistake-body">
+                <h4>Consuming the Wrong Context</h4>
+                <p>Passing <code>useContext(ThemeContext)</code> when you meant <code>UserContext</code> will read the wrong data.</p>
+              </div>
+            </div>
+
+            <div class="mistake-card">
+              <div class="mistake-badge">4</div>
+              <div class="mistake-body">
+                <h4>Consuming Context Outside its Provider</h4>
+                <p>Rendering a consumer component outside the Provider boundary means it cannot read the provided value.</p>
+              </div>
+            </div>
+
+            <div class="mistake-card">
+              <div class="mistake-badge">5</div>
+              <div class="mistake-body">
+                <h4>Passing the Wrong Value Object Structure</h4>
+                <p>If you pass <code>value={{ name: "Mubashir" }}</code>, calling <code>user.email</code> will be <code>undefined</code>.</p>
+              </div>
+            </div>
+
+            <div class="mistake-card">
+              <div class="mistake-badge">6</div>
+              <div class="mistake-body">
+                <h4>Using Context for Simple Props</h4>
+                <p>Don't use Context when passing data directly from Parent to immediate Child. Plain props are cleaner for direct relationships!</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 38 — CONTEXT VS PROPS
+           ==================================================================== -->
+      <section class="slide" data-slide="38" id="slide-38">
+        <div class="slide-content">
+          <div class="slide-header">
+            <span class="slide-tag">Decision Guide</span>
+            <h1 class="slide-title">When to Use <span class="highlight">Context vs Props</span></h1>
+            <p class="slide-subtitle">A simple rule of thumb for React developers.</p>
+          </div>
+
+          <div class="grid-2">
+            <div class="card">
+              <div class="card-header">
+                <span class="card-icon">1️⃣</span>
+                <span class="card-title">Use Props When:</span>
+              </div>
+              <div class="vertical-flow" style="margin: 0.8rem 0;">
+                <div class="v-node"><span>Parent Component</span></div>
+                <div class="v-arrow">↓ 1 level</div>
+                <div class="v-node"><span>Immediate Child Component</span></div>
+              </div>
+              <ul style="font-size:0.88rem;">
+                <li>Data is only needed by direct children.</li>
+                <li>Component is a generic UI reusable atom (Button, Input).</li>
+                <li>Props make the component self-contained and easily testable.</li>
+              </ul>
+            </div>
+
+            <div class="card highlight-card">
+              <div class="card-header">
+                <span class="card-icon">2️⃣</span>
+                <span class="card-title">Consider Context When:</span>
+              </div>
+              <div class="vertical-flow" style="margin: 0.8rem 0;">
+                <div class="v-node highlight"><span>Provider Root</span></div>
+                <div class="v-arrow">↓ broadcasts to many branches</div>
+                <div style="display:flex; gap:0.5rem;">
+                  <div class="v-node" style="flex:1;"><span>Navbar</span></div>
+                  <div class="v-node" style="flex:1;"><span>Sidebar</span></div>
+                  <div class="v-node" style="flex:1;"><span>Footer</span></div>
+                </div>
+              </div>
+              <ul style="font-size:0.88rem;">
+                <li>Multiple distant components across branches need the same data.</li>
+                <li>Props would have to pass through 3+ intermediary components.</li>
+                <li>State represents global concerns: User, Theme, Cart, Language.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 39 — QUICK QUIZ
+           ==================================================================== -->
+      <section class="slide" data-slide="39" id="slide-39">
+        <div class="slide-content">
+          <div class="slide-header">
+            <span class="slide-tag">Classroom Check</span>
+            <h1 class="slide-title">Quick <span class="highlight">Classroom Quiz</span></h1>
+            <p class="slide-subtitle">Test your understanding with 5 interactive multiple-choice questions.</p>
+          </div>
+
+          <!-- QUIZ CONTAINER -->
+          <div class="quiz-box" id="quizBox">
+            <!-- Injected via script.js -->
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 40 — SUMMARY & KEY TAKEAWAYS
+           ==================================================================== -->
+      <section class="slide" data-slide="40" id="slide-40">
+        <div class="slide-content centered">
+          <div class="slide-tag" style="margin-bottom: 0.8rem;">React Course • Day 8 Complete</div>
+          <h1 class="slide-title" style="font-size: 2.8rem; margin-bottom: 1rem;">
+            Summary &amp; Key <span class="highlight">Takeaways</span>
+          </h1>
+
+          <div style="background:var(--bg-card); border:1px solid var(--border-medium); border-radius:var(--radius-lg); padding:1.8rem 2.5rem; max-width:820px; margin:0 auto 1.5rem auto; text-align:left; box-shadow:var(--shadow-md);">
+            <div class="vertical-flow" style="align-items:center;">
+              <div style="font-family:var(--font-mono); font-weight:700; color:var(--accent-rose); font-size:1.05rem;">
+                Props → Can cause prop drilling across deep trees
+              </div>
+              <div class="v-arrow">↓</div>
+              <div style="font-family:var(--font-mono); font-weight:700; color:var(--react-cyan); font-size:1.05rem;">
+                Context API → Solves prop drilling with shared broadcast state
+              </div>
+              <div class="v-arrow">↓</div>
+              <div style="font-family:var(--font-mono); font-weight:700; color:var(--text-main); font-size:1.05rem;">
+                createContext() → Initializes the context container
+              </div>
+              <div class="v-arrow">↓</div>
+              <div style="font-family:var(--font-mono); font-weight:700; color:var(--accent-amber); font-size:1.05rem;">
+                &lt;Context.Provider value={data}&gt; → Supplies the value to tree
+              </div>
+              <div class="v-arrow">↓</div>
+              <div style="font-family:var(--font-mono); font-weight:700; color:var(--accent-emerald); font-size:1.05rem;">
+                useContext(Context) → Consumes shared data directly!
+              </div>
+            </div>
+          </div>
+
+          <div style="background:var(--react-bg); border:1px solid var(--react-border); border-radius:var(--radius-md); padding:1.2rem 2rem; max-width:680px; margin:0 auto 1.8rem auto;">
+            <p style="font-size:1.35rem; font-weight:900; color:var(--react-cyan); letter-spacing:-0.01em; margin-bottom:0.4rem;">
+              Create → Provide → Consume
+            </p>
+            <p style="font-size:0.92rem; color:var(--text-secondary); line-height:1.5;">
+              createContext() → &lt;Provider value={...}&gt; → useContext(). That is the core of React Context API!
+            </p>
+          </div>
+
+          <div style="display:flex; gap:1rem; justify-content:center;">
+            <button class="nav-btn primary" onclick="Deck.goToSlide(1)">
+              ↺ Return to Beginning (Slide 1)
+            </button>
+            <button class="nav-btn" onclick="Deck.openToc()">
+              Browse Slide Index (T)
+            </button>
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- Bottom Navigation Footer -->
+    <footer class="bottom-footer">
+      <div class="footer-left">
+        <div class="slide-counter">
+          Slide <span class="current-num" id="currentSlideNum">1</span> / <span id="totalSlidesNum">40</span>
+        </div>
+      </div>
+
+      <div class="footer-center">
+        <button class="nav-btn" id="prevBtn" title="Previous Slide (Left Arrow)">
+          ← Previous
+        </button>
+        <button class="nav-btn primary" id="nextBtn" title="Next Slide (Right Arrow)">
+          Next →
+        </button>
+      </div>
+
+      <div class="footer-right">
+        <div class="footer-key-hint">
+          <kbd>→</kbd> <kbd>Space</kbd> Next
+        </div>
+        <div class="footer-key-hint">
+          <kbd>←</kbd> Prev
+        </div>
+        <div class="footer-key-hint">
+          <kbd>T</kbd> Index
+        </div>
+        <div class="footer-key-hint">
+          <kbd>F</kbd> Fullscreen
+        </div>
+      </div>
+    </footer>
+
+    <!-- Table of Contents Drawer -->
+    <aside class="toc-drawer" id="tocDrawer">
+      <div class="toc-header">
+        <div class="toc-title">
+          <span>📋</span> Slide Index (40 Slides)
+        </div>
+        <button class="toc-close-btn" id="closeTocBtn" title="Close Index (Esc)">&times;</button>
+      </div>
+      <div class="toc-search">
+        <input type="text" class="toc-search-input" id="tocSearchInput" placeholder="Filter slides by topic...">
+      </div>
+      <ul class="toc-list" id="tocList">
+        <!-- Injected via script.js -->
+      </ul>
+    </aside>
+    <div class="drawer-backdrop" id="drawerBackdrop"></div>
+
+    <!-- Shortcuts Modal -->
+    <div class="modal-overlay" id="shortcutsModal">
+      <div class="modal-box">
+        <div class="modal-header">
+          <div class="modal-title">⌨️ Keyboard Shortcuts</div>
+          <button class="toc-close-btn" id="closeShortcutsBtn">&times;</button>
+        </div>
+        <div class="modal-body">
+          <div class="shortcut-row">
+            <span>Next Slide</span>
+            <div class="shortcut-keys"><kbd>→</kbd> <kbd>Space</kbd> <kbd>PgDn</kbd></div>
+          </div>
+          <div class="shortcut-row">
+            <span>Previous Slide</span>
+            <div class="shortcut-keys"><kbd>←</kbd> <kbd>PgUp</kbd></div>
+          </div>
+          <div class="shortcut-row">
+            <span>First Slide (Title)</span>
+            <div class="shortcut-keys"><kbd>Home</kbd></div>
+          </div>
+          <div class="shortcut-row">
+            <span>Last Slide (Summary)</span>
+            <div class="shortcut-keys"><kbd>End</kbd></div>
+          </div>
+          <div class="shortcut-row">
+            <span>Toggle Fullscreen</span>
+            <div class="shortcut-keys"><kbd>F</kbd></div>
+          </div>
+          <div class="shortcut-row">
+            <span>Toggle Slide Index</span>
+            <div class="shortcut-keys"><kbd>T</kbd></div>
+          </div>
+          <div class="shortcut-row">
+            <span>Help / Shortcuts</span>
+            <div class="shortcut-keys"><kbd>?</kbd></div>
+          </div>
+          <div class="shortcut-row">
+            <span>Close Modal / Drawer</span>
+            <div class="shortcut-keys"><kbd>Esc</kbd></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
