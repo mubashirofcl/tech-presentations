@@ -1,0 +1,1725 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MongoDB Day 9 — Compass, Atlas &amp; Movie Watchlist API</title>
+  <meta name="description" content="A practical classroom presentation covering MongoDB Compass, MongoDB Atlas, and building a Node.js/Mongoose Movie Watchlist API.">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Master App Shell -->
+  <div class="deck-container" id="deckContainer">
+
+    <!-- Top Progress Bar -->
+    <div class="progress-bar-container">
+      <div class="progress-bar" id="progressBar"></div>
+    </div>
+
+    <!-- Top Header Bar -->
+    <header class="top-header">
+      <div class="header-left">
+        <div class="brand-badge">
+          <svg viewBox="0 0 24 24">
+            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/>
+          </svg>
+          MongoDB Day 9
+        </div>
+        <div class="deck-title-badge">
+          <span class="section-tag" id="headerSectionTag">GUI &amp; CLOUD</span>
+          <span class="dot"></span>
+          <span class="deck-topic" id="headerTopic">MongoDB Compass &amp; Atlas</span>
+        </div>
+      </div>
+
+      <div class="header-right">
+        <!-- Table of Contents Drawer Button -->
+        <button class="header-btn" id="openTocBtn" title="View All 22 Slides (T)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="3" y1="12" x2="21" y2="12"></line>
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <line x1="3" y1="18" x2="21" y2="18"></line>
+          </svg>
+          Index
+          <kbd>T</kbd>
+        </button>
+
+        <!-- Keyboard Shortcuts Help -->
+        <button class="header-btn" id="openShortcutsBtn" title="Keyboard Shortcuts (?)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"></circle>
+            <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+            <line x1="12" y1="17" x2="12.01" y2="17"></line>
+          </svg>
+          <kbd>?</kbd>
+        </button>
+
+        <!-- Fullscreen Button -->
+        <button class="header-btn" id="fullscreenBtn" title="Toggle Fullscreen (F)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path>
+          </svg>
+          <kbd>F</kbd>
+        </button>
+      </div>
+    </header>
+
+    <!-- Slide Viewport -->
+    <main class="slide-viewport">
+
+      <!-- ====================================================================
+           SLIDE 1 — TITLE
+           ==================================================================== -->
+      <section class="slide active" data-slide="1" id="slide-1">
+        <div class="slide-content centered">
+          <div class="slide-tag" style="margin-bottom: 0.8rem;">MongoDB Course • Day 9</div>
+          <h1 class="slide-title" style="font-size: 3rem; margin-bottom: 0.6rem; letter-spacing: -0.03em;">
+            MongoDB Compass, Atlas &amp; <span class="highlight">Movie Watchlist API</span>
+          </h1>
+          <h2 style="font-size: 1.5rem; color: var(--mongo-green); font-weight: 700; margin-bottom: 1.25rem;">
+            Visual GUI Management, Cloud Deployment &amp; Hands-On Project
+          </h2>
+          <p style="font-size: 1.05rem; color: var(--text-secondary); max-width: 760px; margin-bottom: 2rem; line-height: 1.6;">
+            A practical, hands-on workshop focused on visual database exploration with Compass, hosting in the MongoDB Atlas cloud, and building a clean Movie Watchlist REST API with Express &amp; Mongoose.
+          </p>
+
+          <div style="display: flex; gap: 0.85rem; margin-bottom: 2.2rem; flex-wrap: wrap; justify-content: center;">
+            <div style="padding: 0.55rem 1rem; background: rgba(0, 237, 100, 0.1); border: 1px solid var(--mongo-green-border); border-radius: var(--radius-sm); font-family: var(--font-mono); font-size: 0.82rem; color: var(--mongo-green);">
+              🧭 MongoDB Compass GUI
+            </div>
+            <div style="padding: 0.55rem 1rem; background: var(--accent-cyan-bg); border: 1px solid var(--accent-cyan-border); border-radius: var(--radius-sm); font-family: var(--font-mono); font-size: 0.82rem; color: var(--accent-cyan);">
+              ☁️ MongoDB Atlas Cloud
+            </div>
+            <div style="padding: 0.55rem 1rem; background: var(--accent-purple-bg); border: 1px solid var(--accent-purple-border); border-radius: var(--radius-sm); font-family: var(--font-mono); font-size: 0.82rem; color: var(--accent-purple);">
+              🔌 Connection Strings
+            </div>
+            <div style="padding: 0.55rem 1rem; background: var(--accent-amber-bg); border: 1px solid var(--accent-amber-border); border-radius: var(--radius-sm); font-family: var(--font-mono); font-size: 0.82rem; color: var(--accent-amber);">
+              🎬 Movie Watchlist API
+            </div>
+            <div style="padding: 0.55rem 1rem; background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.3); border-radius: var(--radius-sm); font-family: var(--font-mono); font-size: 0.82rem; color: #10B981;">
+              ⚡ Build → Test → Verify
+            </div>
+          </div>
+
+          <div style="display: flex; gap: 1rem; justify-content: center;">
+            <button class="nav-btn primary" onclick="Deck.goToSlide(2)" style="padding: 0.65rem 1.5rem; font-size: 0.95rem;">
+              Start Workshop →
+            </button>
+            <button class="nav-btn" onclick="Deck.openToc()" style="padding: 0.65rem 1.25rem; font-size: 0.95rem;">
+              Slide Index (T)
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 2 — LEARNING OBJECTIVES
+           ==================================================================== -->
+      <section class="slide" data-slide="2" id="slide-2">
+        <div class="slide-content">
+          <div class="slide-header">
+            <span class="slide-tag">SECTION 1 • COMPASS</span>
+            <h1 class="slide-title">Learning Objectives</h1>
+            <p class="slide-subtitle">By the end of this session, you will confidently master these practical milestones:</p>
+          </div>
+
+          <div class="grid-3" style="margin-top: 1rem;">
+            <div class="card highlight-green">
+              <div class="card-title green"><span>🧭</span> 1. MongoDB Compass</div>
+              <p class="card-desc">Understand how MongoDB's official desktop GUI helps developers visually navigate databases, view schema structures, and inspect raw documents.</p>
+            </div>
+
+            <div class="card highlight-cyan">
+              <div class="card-title cyan"><span>☁️</span> 2. MongoDB Atlas</div>
+              <p class="card-desc">Provision a cloud database cluster, configure database users, establish IP network access, and retrieve production connection strings.</p>
+            </div>
+
+            <div class="card highlight-amber">
+              <div class="card-title amber"><span>🔌</span> 3. Database Connectivity</div>
+              <p class="card-desc">Connect both local (<code>mongodb://127.0.0.1:27017</code>) and cloud (<code>mongodb+srv://</code>) instances to Compass and your Node.js apps.</p>
+            </div>
+
+            <div class="card">
+              <div class="card-title"><span>📂</span> 4. Visual Data Exploration</div>
+              <p class="card-desc">Create databases and collections visually, execute filter queries, sort results, and inspect document fields without writing terminal syntax.</p>
+            </div>
+
+            <div class="card">
+              <div class="card-title"><span>✏️</span> 5. GUI CRUD Operations</div>
+              <p class="card-desc">Insert, edit, clone, and delete JSON/BSON documents directly in Compass for rapid debugging and database seeding.</p>
+            </div>
+
+            <div class="card highlight-green">
+              <div class="card-title green"><span>🎬</span> 6. Movie Watchlist API</div>
+              <p class="card-desc">Build a full Node.js &amp; Mongoose REST API with CRUD routes (Add, Get, Update, Delete) and verify changes live in Compass.</p>
+            </div>
+          </div>
+
+          <div class="callout info" style="margin-top: 1.5rem;">
+            <div class="callout-icon">💡</div>
+            <div class="callout-content">
+              <strong>Core Classroom Principle:</strong> Today is 100% focused on practical developer workflows: write code in Express, store in Atlas, and verify instantly in Compass!
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 3 — WHAT IS MONGODB COMPASS?
+           ==================================================================== -->
+      <section class="slide" data-slide="3" id="slide-3">
+        <div class="slide-content">
+          <div class="slide-header">
+            <span class="slide-tag">SECTION 1 • COMPASS</span>
+            <h1 class="slide-title">What Is MongoDB Compass?</h1>
+            <p class="slide-subtitle">The official Graphical User Interface (GUI) for MongoDB database administration</p>
+          </div>
+
+          <div class="grid-2" style="margin-top: 0.5rem;">
+            <div>
+              <div class="card" style="margin-bottom: 1rem;">
+                <h3 style="font-size: 1.1rem; color: var(--mongo-green); margin-bottom: 0.6rem;">GUI vs Terminal Shell</h3>
+                <p style="font-size: 0.92rem; color: var(--text-secondary); line-height: 1.6;">
+                  Instead of typing shell commands into <code style="color:var(--accent-amber);">mongosh</code> in a black terminal window, MongoDB Compass gives you an intuitive desktop interface to visually manage your databases.
+                </p>
+              </div>
+
+              <div class="card">
+                <h3 style="font-size: 1.1rem; color: var(--accent-cyan); margin-bottom: 0.75rem;">Compass Capabilities</h3>
+                <ul class="feature-list">
+                  <li><span class="bullet">✓</span> <span><strong>View Databases:</strong> See all databases at a glance</span></li>
+                  <li><span class="bullet">✓</span> <span><strong>View Collections:</strong> Explore collections within any database</span></li>
+                  <li><span class="bullet">✓</span> <span><strong>Inspect Documents:</strong> View records in Tree, JSON, or Table view</span></li>
+                  <li><span class="bullet">✓</span> <span><strong>Insert &amp; Edit:</strong> Add new documents and edit fields point-and-click</span></li>
+                  <li><span class="bullet">✓</span> <span><strong>Delete Records:</strong> Safely remove documents with confirmation</span></li>
+                  <li><span class="bullet">✓</span> <span><strong>Run Visual Queries:</strong> Filter with <code>{ genre: "Sci-Fi" }</code> easily</span></li>
+                  <li><span class="bullet">✓</span> <span><strong>Inspect Indexes &amp; Schema:</strong> Analyze field distributions &amp; performance</span></li>
+                </ul>
+              </div>
+            </div>
+
+            <div>
+              <div class="code-panel">
+                <div class="code-header">
+                  <div class="code-header-left">
+                    <div class="traffic-dots"><div class="dot-red"></div><div class="dot-yellow"></div><div class="dot-green"></div></div>
+                    <span class="code-filename">Terminal (The Old Hard Way)</span>
+                  </div>
+                  <span class="code-badge json">mongosh</span>
+                </div>
+                <div class="code-body">
+<pre><span class="syn-comment">// You have to type everything by hand:</span>
+test&gt; <span class="syn-fn">use</span> movieDB
+switched to db movieDB
+
+movieDB&gt; <span class="syn-prop">db</span>.<span class="syn-prop">movies</span>.<span class="syn-fn">find</span>({ <span class="syn-prop">genre</span>: <span class="syn-str">"Sci-Fi"</span> }).<span class="syn-fn">pretty</span>()
+<span class="syn-comment">// Syntax errors, typo risks, hard to read multi-page JSON!</span></pre>
+                </div>
+              </div>
+
+              <div class="code-panel" style="border-color: var(--mongo-green-border);">
+                <div class="code-header">
+                  <div class="code-header-left">
+                    <div class="traffic-dots"><div class="dot-red"></div><div class="dot-yellow"></div><div class="dot-green"></div></div>
+                    <span class="code-filename">Compass (The Modern Visual Way)</span>
+                  </div>
+                  <span class="code-badge post">GUI</span>
+                </div>
+                <div class="code-body">
+<pre><span class="syn-comment">✨ MongoDB Compass GUI Advantage:</span>
+- Click on database: <span class="syn-str">"movieDB"</span>
+- Click on collection: <span class="syn-str">"movies"</span>
+- Type filter in box: <span class="syn-str">{ genre: "Sci-Fi" }</span>
+- Click [Find] ➔ Results show instantly with formatting &amp; edit buttons!</pre>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 4 — COMPASS INTERFACE (Feature 1: Compass Simulation)
+           ==================================================================== -->
+      <section class="slide" data-slide="4" id="slide-4">
+        <div class="slide-content">
+          <div class="slide-header">
+            <span class="slide-tag">SECTION 1 • COMPASS</span>
+            <h1 class="slide-title">Compass Interface &amp; Structure</h1>
+            <p class="slide-subtitle">Hierarchy: Connection ➔ Database ➔ Collection ➔ Document</p>
+          </div>
+
+          <!-- Compass Simulation Widget -->
+          <div class="compass-sim" id="compassSimulator">
+            <!-- Sidebar -->
+            <div class="compass-sidebar">
+              <div class="compass-sidebar-header">
+                <span>📁</span> Databases
+              </div>
+              <ul class="compass-tree">
+                <li class="tree-item" id="treeAdmin" onclick="CompassSim.selectDb('admin')">
+                  <span>▸</span> 🗄️ admin
+                </li>
+                <li class="tree-item" id="treeConfig" onclick="CompassSim.selectDb('config')">
+                  <span>▸</span> 🗄️ config
+                </li>
+                <li class="tree-item active" id="treeMovieDB" onclick="CompassSim.selectDb('movieDB')">
+                  <span>▾</span> 🗄️ <strong>movieDB</strong>
+                </li>
+                <li class="tree-item tree-subitem active" id="treeMoviesColl" onclick="CompassSim.selectCollection('movies')">
+                  <span>📄</span> <strong>movies</strong> <span style="font-size:0.7rem; color:var(--mongo-green); margin-left:auto;">3 docs</span>
+                </li>
+                <li class="tree-item tree-subitem" id="treeUsersColl" onclick="CompassSim.selectCollection('users')">
+                  <span>📄</span> users <span style="font-size:0.7rem; color:var(--text-dim); margin-left:auto;">0 docs</span>
+                </li>
+              </ul>
+            </div>
+
+            <!-- Main Panel -->
+            <div class="compass-main">
+              <!-- Tabs -->
+              <div class="compass-nav-tabs">
+                <button class="compass-tab-btn active" id="tabDocs" onclick="CompassSim.switchTab('documents')">
+                  📄 Documents (3)
+                </button>
+                <button class="compass-tab-btn" id="tabAggs" onclick="CompassSim.switchTab('aggregations')">
+                  ⚡ Aggregations
+                </button>
+                <button class="compass-tab-btn" id="tabIndexes" onclick="CompassSim.switchTab('indexes')">
+                  🗂️ Indexes (1)
+                </button>
+              </div>
+
+              <!-- Filter Bar -->
+              <div class="compass-filter-bar">
+                <span style="font-family:var(--font-mono); font-size:0.8rem; color:var(--text-muted);">FILTER:</span>
+                <input type="text" class="filter-input-box" id="compassFilterInput" placeholder='Type { genre: "Sci-Fi" } or leave empty' value="{}">
+                <button class="filter-apply-btn" onclick="CompassSim.applyFilter()">Find</button>
+                <button class="filter-apply-btn" style="background:var(--bg-surface); color:var(--text-secondary); border:1px solid var(--border-subtle);" onclick="CompassSim.resetFilter()">Reset</button>
+              </div>
+
+              <!-- Dynamic View Area -->
+              <div class="compass-view-content" id="compassViewArea">
+                <!-- Injected via JavaScript -->
+              </div>
+            </div>
+          </div>
+
+          <div style="margin-top: 1rem; display: flex; gap: 1rem; align-items: center; justify-content: space-between;">
+            <div style="font-size: 0.85rem; color: var(--text-muted); display:flex; align-items:center; gap:0.5rem;">
+              <span style="color:var(--mongo-green); font-weight:700;">Hierarchy:</span>
+              <span style="padding:0.2rem 0.5rem; background:var(--bg-card); border-radius:4px;">1. MongoDB Compass</span> ➔
+              <span style="padding:0.2rem 0.5rem; background:var(--bg-card); border-radius:4px;">2. Databases (movieDB)</span> ➔
+              <span style="padding:0.2rem 0.5rem; background:var(--bg-card); border-radius:4px;">3. Collections (movies)</span> ➔
+              <span style="padding:0.2rem 0.5rem; background:var(--bg-card); border-radius:4px;">4. Documents (JSON)</span>
+            </div>
+            <div style="font-size: 0.8rem; color: var(--accent-cyan);">
+              💡 Click the tabs above to explore Documents, Aggregations &amp; Indexes!
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 5 — CONNECTING TO LOCAL MONGODB
+           ==================================================================== -->
+      <section class="slide" data-slide="5" id="slide-5">
+        <div class="slide-content">
+          <div class="slide-header">
+            <span class="slide-tag">SECTION 1 • COMPASS</span>
+            <h1 class="slide-title">Connecting to Local MongoDB</h1>
+            <p class="slide-subtitle">Establishing a connection to your local MongoDB service (mongod)</p>
+          </div>
+
+          <div class="grid-2">
+            <div>
+              <div class="card highlight-green" style="margin-bottom: 1.25rem;">
+                <div class="card-title green">Standard Local Connection URI</div>
+                <div style="background: var(--bg-terminal); padding: 0.85rem 1rem; border-radius: var(--radius-sm); border: 1px solid var(--border-medium); font-family: var(--font-mono); font-size: 1.05rem; color: var(--mongo-green); display: flex; align-items: center; justify-content: space-between;">
+                  <span>mongodb://127.0.0.1:27017</span>
+                  <button class="copy-btn" onclick="navigator.clipboard.writeText('mongodb://127.0.0.1:27017'); this.innerText='Copied!'; setTimeout(()=>this.innerText='Copy', 1500);">Copy</button>
+                </div>
+                <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 0.6rem;">
+                  Can also use <code>mongodb://localhost:27017</code>. <code>127.0.0.1</code> avoids Node IPv6 address resolution glitches on Windows.
+                </p>
+              </div>
+
+              <div class="card">
+                <h3 style="font-size: 1rem; color: var(--accent-cyan); margin-bottom: 0.6rem;">URI Breakdown</h3>
+                <ul class="feature-list">
+                  <li><span class="bullet">•</span> <span><strong style="color:var(--syn-kwd);">mongodb://</strong> Protocol scheme for MongoDB driver</span></li>
+                  <li><span class="bullet">•</span> <span><strong style="color:var(--accent-cyan);">127.0.0.1</strong> Loopback IP address of your local computer</span></li>
+                  <li><span class="bullet">•</span> <span><strong style="color:var(--accent-amber);">27017</strong> Default network port where MongoDB listens</span></li>
+                </ul>
+              </div>
+            </div>
+
+            <div>
+              <div class="card">
+                <h3 style="font-size: 1.05rem; color: var(--text-primary); margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
+                  <span>⚡</span> 4-Step Connection Sequence
+                </h3>
+
+                <div style="display: flex; flex-direction: column; gap: 0.85rem;">
+                  <div style="display: flex; gap: 0.75rem; align-items: flex-start; background: var(--bg-surface); padding: 0.75rem; border-radius: var(--radius-sm); border-left: 3px solid var(--mongo-green);">
+                    <div style="font-family: var(--font-mono); font-weight: 700; color: var(--mongo-green);">01</div>
+                    <div style="font-size: 0.88rem; color: var(--text-secondary);"><strong>Open Compass:</strong> Launch MongoDB Compass desktop application on your PC.</div>
+                  </div>
+
+                  <div style="display: flex; gap: 0.75rem; align-items: flex-start; background: var(--bg-surface); padding: 0.75rem; border-radius: var(--radius-sm); border-left: 3px solid var(--accent-cyan);">
+                    <div style="font-family: var(--font-mono); font-weight: 700; color: var(--accent-cyan);">02</div>
+                    <div style="font-size: 0.88rem; color: var(--text-secondary);"><strong>Enter Connection String:</strong> Paste <code>mongodb://127.0.0.1:27017</code> into the input bar.</div>
+                  </div>
+
+                  <div style="display: flex; gap: 0.75rem; align-items: flex-start; background: var(--bg-surface); padding: 0.75rem; border-radius: var(--radius-sm); border-left: 3px solid var(--accent-amber);">
+                    <div style="font-family: var(--font-mono); font-weight: 700; color: var(--accent-amber);">03</div>
+                    <div style="font-size: 0.88rem; color: var(--text-secondary);"><strong>Click [Connect]:</strong> Compass establishes a socket handshake with your local service.</div>
+                  </div>
+
+                  <div style="display: flex; gap: 0.75rem; align-items: flex-start; background: var(--bg-surface); padding: 0.75rem; border-radius: var(--radius-sm); border-left: 3px solid var(--accent-purple);">
+                    <div style="font-family: var(--font-mono); font-weight: 700; color: var(--accent-purple);">04</div>
+                    <div style="font-size: 0.88rem; color: var(--text-secondary);"><strong>Explore Databases:</strong> View built-in databases and create your new <code>movieDB</code> database.</div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="callout warning" style="margin-top: 1rem;">
+                <div class="callout-icon">⚠️</div>
+                <div class="callout-content">
+                  If connection fails: Ensure your local MongoDB service is running (in Windows Services or run <code>net start MongoDB</code> in admin terminal).
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 6 — WORKING WITH DOCUMENTS (Feature 3: Movie Collection)
+           ==================================================================== -->
+      <section class="slide" data-slide="6" id="slide-6">
+        <div class="slide-content">
+          <div class="slide-header">
+            <span class="slide-tag">SECTION 1 • COMPASS</span>
+            <h1 class="slide-title">Working With Documents in Compass</h1>
+            <p class="slide-subtitle">Interactive Movie Collection: Search, Filter, and Toggle Watched Status</p>
+          </div>
+
+          <!-- Feature 3: Interactive Movie Collection Viewer -->
+          <div class="movie-manager">
+            <div class="movie-controls">
+              <input type="text" class="movie-search-input" id="movieSearchBox" placeholder="🔍 Search movie title (e.g., Inception)..." oninput="MovieManager.handleSearch(this.value)">
+              
+              <div style="display: flex; gap: 0.4rem;">
+                <button class="genre-filter-btn active" id="genreAll" onclick="MovieManager.filterGenre('all')">All Genres</button>
+                <button class="genre-filter-btn" id="genreSciFi" onclick="MovieManager.filterGenre('Sci-Fi')">Sci-Fi</button>
+                <button class="genre-filter-btn" id="genreAction" onclick="MovieManager.filterGenre('Action')">Action</button>
+              </div>
+
+              <button class="nav-btn primary" onclick="MovieManager.showAddPrompt()" style="margin-left: auto; padding: 0.45rem 0.9rem; font-size: 0.8rem;">
+                + Add Document
+              </button>
+            </div>
+
+            <!-- Movies Grid -->
+            <div class="movie-card-grid" id="movieCardsGrid">
+              <!-- Dynamically populated by JavaScript -->
+            </div>
+          </div>
+
+          <div class="grid-3" style="margin-top: 1.25rem;">
+            <div class="card" style="padding: 1rem;">
+              <div style="font-size: 0.95rem; font-weight: 700; color: var(--mongo-green); margin-bottom: 0.35rem;">➕ Insert Document</div>
+              <p style="font-size: 0.82rem; color: var(--text-secondary);">Click "ADD DATA" in Compass to paste raw JSON or use field-by-field form editor.</p>
+            </div>
+
+            <div class="card" style="padding: 1rem;">
+              <div style="font-size: 0.95rem; font-weight: 700; color: var(--accent-cyan); margin-bottom: 0.35rem;">✏️ Edit &amp; Update</div>
+              <p style="font-size: 0.82rem; color: var(--text-secondary);">Hover over any field, click the pencil icon, modify value, and hit [Update].</p>
+            </div>
+
+            <div class="card" style="padding: 1rem;">
+              <div style="font-size: 0.95rem; font-weight: 700; color: var(--accent-rose); margin-bottom: 0.35rem;">🗑️ Delete Document</div>
+              <p style="font-size: 0.82rem; color: var(--text-secondary);">Click trash icon on any document card to immediately remove it from collection.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 7 — WHAT IS MONGODB ATLAS?
+           ==================================================================== -->
+      <section class="slide" data-slide="7" id="slide-7">
+        <div class="slide-content">
+          <div class="slide-header">
+            <span class="slide-tag cyan">SECTION 2 • ATLAS</span>
+            <h1 class="slide-title">What Is MongoDB Atlas?</h1>
+            <p class="slide-subtitle">MongoDB's fully managed, multi-cloud database platform</p>
+          </div>
+
+          <div class="grid-2" style="margin-top: 0.5rem;">
+            <div class="card highlight-cyan">
+              <div class="card-title cyan"><span>☁️</span> Cloud vs Local Reality</div>
+              <p style="font-size: 0.95rem; color: var(--text-secondary); line-height: 1.6; margin-bottom: 1.25rem;">
+                When you run MongoDB locally, it only exists on your laptop. If your computer shuts down, your database goes offline. No one on the internet can reach it.
+              </p>
+              <p style="font-size: 0.95rem; color: var(--text-secondary); line-height: 1.6;">
+                <strong>MongoDB Atlas</strong> runs MongoDB in the cloud across world-class infrastructure (AWS, Google Cloud, Azure). It provides 24/7 uptime, automated backups, and global internet connectivity for web apps.
+              </p>
+            </div>
+
+            <div class="card" style="display: flex; flex-direction: column; justify-content: space-around;">
+              <!-- Local Diagram -->
+              <div style="background: var(--bg-terminal); padding: 1rem; border-radius: var(--radius-sm); border: 1px solid var(--border-medium);">
+                <div style="font-family: var(--font-mono); font-size: 0.85rem; color: var(--accent-amber); margin-bottom: 0.5rem; font-weight: 700;">
+                  💻 LOCAL MONGODB
+                </div>
+                <div style="font-size: 0.85rem; color: var(--text-secondary);">
+                  Runs strictly inside your computer hard drive. Accessible ONLY by your local machine.
+                </div>
+              </div>
+
+              <div style="text-align: center; color: var(--mongo-green); font-weight: 700; font-size: 1.2rem;">
+                VS
+              </div>
+
+              <!-- Atlas Diagram -->
+              <div style="background: var(--bg-terminal); padding: 1rem; border-radius: var(--radius-sm); border: 1px solid var(--mongo-green-border);">
+                <div style="font-family: var(--font-mono); font-size: 0.85rem; color: var(--mongo-green); margin-bottom: 0.5rem; font-weight: 700;">
+                  ☁️ MONGODB ATLAS (CLOUD)
+                </div>
+                <div style="font-size: 0.85rem; color: var(--text-secondary);">
+                  Runs in AWS/GCP cloud clusters. Accessible 24/7 from anywhere by your web servers and mobile apps!
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="grid-3" style="margin-top: 1.5rem;">
+            <div class="card">
+              <div style="font-weight: 700; color: var(--mongo-green); margin-bottom: 0.35rem;">🆓 Free Tier (M0 Sandbox)</div>
+              <p style="font-size: 0.85rem; color: var(--text-secondary);">512MB free storage forever. Ideal for learning, prototypes, and student projects.</p>
+            </div>
+            <div class="card">
+              <div style="font-weight: 700; color: var(--accent-cyan); margin-bottom: 0.35rem;">🛡️ Built-in Security</div>
+              <p style="font-size: 0.85rem; color: var(--text-secondary);">Role-based database users, IP address whitelisting, and automated SSL/TLS encryption.</p>
+            </div>
+            <div class="card">
+              <div style="font-weight: 700; color: var(--accent-purple); margin-bottom: 0.35rem;">🔄 Zero Maintenance</div>
+              <p style="font-size: 0.85rem; color: var(--text-secondary);">No server patching, no hard drive management, and point-in-time recovery built right in.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 8 — LOCAL MONGODB VS ATLAS
+           ==================================================================== -->
+      <section class="slide" data-slide="8" id="slide-8">
+        <div class="slide-content">
+          <div class="slide-header">
+            <span class="slide-tag cyan">SECTION 2 • ATLAS</span>
+            <h1 class="slide-title">Local MongoDB vs MongoDB Atlas</h1>
+            <p class="slide-subtitle">Clear side-by-side comparison for developer decision making</p>
+          </div>
+
+          <div class="table-container">
+            <table class="table-standard">
+              <thead>
+                <tr>
+                  <th>Feature / Dimension</th>
+                  <th>Local MongoDB</th>
+                  <th>MongoDB Atlas</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Where it Runs</strong></td>
+                  <td>Runs locally on your personal computer</td>
+                  <td style="color: var(--mongo-green);">Runs in the Cloud (AWS, Google Cloud, Azure)</td>
+                </tr>
+                <tr>
+                  <td><strong>Primary Use Case</strong></td>
+                  <td>Offline local development and experimentation</td>
+                  <td style="color: var(--accent-cyan);">Development, staging, team collaboration &amp; production deployment</td>
+                </tr>
+                <tr>
+                  <td><strong>Connection String</strong></td>
+                  <td><code>mongodb://127.0.0.1:27017</code></td>
+                  <td><code>mongodb+srv://user:pass@cluster.mongodb.net/db</code></td>
+                </tr>
+                <tr>
+                  <td><strong>Setup Requirement</strong></td>
+                  <td>Install software, configure background service manually</td>
+                  <td style="color: var(--mongo-green);">Zero install; provision managed cluster in 2 minutes</td>
+                </tr>
+                <tr>
+                  <td><strong>Accessibility</strong></td>
+                  <td>Only your local computer can access it</td>
+                  <td style="color: var(--accent-cyan);">Accessible from anywhere via secure connection string</td>
+                </tr>
+                <tr>
+                  <td><strong>Internet Dependency</strong></td>
+                  <td>Works 100% offline without internet</td>
+                  <td>Requires internet access to reach the cloud cluster</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="callout success" style="margin-top: 1.5rem;">
+            <div class="callout-icon">💡</div>
+            <div class="callout-content">
+              <strong>The Golden Mental Model:</strong><br>
+              <strong>Compass</strong> is a GUI tool (the vehicle). <strong>Atlas</strong> is a cloud database service (the destination).<br>
+              Compass connects to Atlas just as smoothly as it connects to local MongoDB!
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 9 — ATLAS BASIC WORKFLOW (Feature 2: Interactive Stepper)
+           ==================================================================== -->
+      <section class="slide" data-slide="9" id="slide-9">
+        <div class="slide-content">
+          <div class="slide-header">
+            <span class="slide-tag cyan">SECTION 2 • ATLAS</span>
+            <h1 class="slide-title">Atlas Setup Workflow</h1>
+            <p class="slide-subtitle">Interactive 6-step walkthrough from signup to application connectivity</p>
+          </div>
+
+          <!-- Feature 2: Interactive Stepper -->
+          <div class="stepper-container">
+            <div class="stepper-nav">
+              <div class="stepper-step active" id="stepNode1" onclick="AtlasWorkflow.goToStep(1)">
+                <div class="step-circle">1</div>
+                <div class="step-label">Account</div>
+              </div>
+              <div class="diagram-arrow">➔</div>
+
+              <div class="stepper-step" id="stepNode2" onclick="AtlasWorkflow.goToStep(2)">
+                <div class="step-circle">2</div>
+                <div class="step-label">Project</div>
+              </div>
+              <div class="diagram-arrow">➔</div>
+
+              <div class="stepper-step" id="stepNode3" onclick="AtlasWorkflow.goToStep(3)">
+                <div class="step-circle">3</div>
+                <div class="step-label">Cluster</div>
+              </div>
+              <div class="diagram-arrow">➔</div>
+
+              <div class="stepper-step" id="stepNode4" onclick="AtlasWorkflow.goToStep(4)">
+                <div class="step-circle">4</div>
+                <div class="step-label">DB User</div>
+              </div>
+              <div class="diagram-arrow">➔</div>
+
+              <div class="stepper-step" id="stepNode5" onclick="AtlasWorkflow.goToStep(5)">
+                <div class="step-circle">5</div>
+                <div class="step-label">Network</div>
+              </div>
+              <div class="diagram-arrow">➔</div>
+
+              <div class="stepper-step" id="stepNode6" onclick="AtlasWorkflow.goToStep(6)">
+                <div class="step-circle">6</div>
+                <div class="step-label">Connect</div>
+              </div>
+            </div>
+
+            <!-- Dynamic Step Details Card -->
+            <div class="step-card-display" id="stepDetailsPanel">
+              <!-- Injected by JavaScript -->
+            </div>
+          </div>
+
+          <div style="margin-top: 1rem; display: flex; justify-content: space-between; align-items: center;">
+            <div style="font-size: 0.85rem; color: var(--text-muted);">
+              Step <span id="currentStepIndicator" style="color:var(--mongo-green); font-weight:700;">1</span> of 6
+            </div>
+            <div style="display: flex; gap: 0.5rem;">
+              <button class="nav-btn" onclick="AtlasWorkflow.prevStep()">← Previous Step</button>
+              <button class="nav-btn primary" onclick="AtlasWorkflow.nextStep()">Next Step →</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 10 — ATLAS CONNECTION STRING & SECURITY
+           ==================================================================== -->
+      <section class="slide" data-slide="10" id="slide-10">
+        <div class="slide-content">
+          <div class="slide-header">
+            <span class="slide-tag cyan">SECTION 2 • ATLAS</span>
+            <h1 class="slide-title">Atlas Connection String &amp; Security</h1>
+            <p class="slide-subtitle">Connecting via standard URI and safeguarding production credentials</p>
+          </div>
+
+          <div class="grid-2">
+            <div>
+              <div class="card highlight-green" style="margin-bottom: 1.25rem;">
+                <div class="card-title green">Atlas Connection String Format</div>
+                <div style="background: var(--bg-terminal); padding: 0.85rem 1rem; border-radius: var(--radius-sm); border: 1px solid var(--border-medium); font-family: var(--font-mono); font-size: 0.88rem; color: var(--mongo-green); word-break: break-all;">
+                  mongodb+srv://<span style="color:var(--accent-amber);">admin</span>:<span style="color:var(--accent-rose);">p@ssword123</span>@<span style="color:var(--accent-cyan);">cluster0.mongodb.net</span>/<span style="color:var(--syn-str);">movieDB</span>
+                </div>
+              </div>
+
+              <div class="card">
+                <h3 style="font-size: 0.95rem; color: var(--text-primary); margin-bottom: 0.5rem;">Component Breakdown</h3>
+                <ul class="feature-list" style="font-size: 0.85rem;">
+                  <li><span class="bullet">•</span> <span><strong style="color:var(--syn-kwd);">mongodb+srv://</strong> DNS Seedlist protocol for cloud clusters</span></li>
+                  <li><span class="bullet">•</span> <span><strong style="color:var(--accent-amber);">username : password</strong> Database user credentials created in Step 4</span></li>
+                  <li><span class="bullet">•</span> <span><strong style="color:var(--accent-cyan);">cluster0.mongodb.net</strong> Cloud cluster domain hosted on Atlas</span></li>
+                  <li><span class="bullet">•</span> <span><strong style="color:var(--syn-str);">/movieDB</strong> The specific target database name</span></li>
+                </ul>
+              </div>
+            </div>
+
+            <div>
+              <div class="code-panel">
+                <div class="code-header">
+                  <div class="code-header-left">
+                    <div class="traffic-dots"><div class="dot-red"></div><div class="dot-yellow"></div><div class="dot-green"></div></div>
+                    <span class="code-filename">.env (Keep Secret!)</span>
+                  </div>
+                  <span class="code-badge json">ENV</span>
+                </div>
+                <div class="code-body">
+<pre><span class="syn-comment"># Never commit your database credentials to GitHub!</span>
+PORT=5000
+MONGO_URI=mongodb+srv://admin:secret123@cluster0.mongodb.net/movieDB</pre>
+                </div>
+              </div>
+
+              <div class="code-panel">
+                <div class="code-header">
+                  <div class="code-header-left">
+                    <div class="traffic-dots"><div class="dot-red"></div><div class="dot-yellow"></div><div class="dot-green"></div></div>
+                    <span class="code-filename">src/config/db.js</span>
+                  </div>
+                  <span class="code-badge post">NODE.JS</span>
+                </div>
+                <div class="code-body">
+<pre><span class="syn-kwd">const</span> mongoose = <span class="syn-fn">require</span>(<span class="syn-str">'mongoose'</span>);
+
+<span class="syn-kwd">const</span> connectDB = <span class="syn-kwd">async</span> () =&gt; {
+  <span class="syn-kwd">try</span> {
+    <span class="syn-kwd">await</span> mongoose.<span class="syn-fn">connect</span>(process.env.MONGO_URI);
+    console.<span class="syn-fn">log</span>(<span class="syn-str">'MongoDB Atlas Connected Successfully'</span>);
+  } <span class="syn-kwd">catch</span> (err) {
+    console.<span class="syn-fn">error</span>(err);
+    process.<span class="syn-fn">exit</span>(1);
+  }
+};</pre>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="callout warning" style="margin-top: 1rem;">
+            <div class="callout-icon">🚨</div>
+            <div class="callout-content">
+              <strong>CRITICAL SECURITY RULE:</strong> Never hard-code database passwords into JavaScript files! Always store connection strings in <code>.env</code> and add <code>.env</code> to your <code>.gitignore</code> file!
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 11 — COMPASS AND ATLAS TOGETHER
+           ==================================================================== -->
+      <section class="slide" data-slide="11" id="slide-11">
+        <div class="slide-content">
+          <div class="slide-header">
+            <span class="slide-tag purple">SECTION 3 • COMPASS + ATLAS</span>
+            <h1 class="slide-title">Compass and Atlas Together</h1>
+            <p class="slide-subtitle">Not competing tools — they form a powerful developer synergy</p>
+          </div>
+
+          <div class="card" style="padding: 2rem 1.5rem; margin-top: 0.5rem;">
+            <div style="display: flex; flex-direction: column; align-items: center; gap: 1.5rem;">
+              
+              <!-- Atlas Top Node -->
+              <div class="diagram-node active" style="min-width: 280px; border-color: var(--mongo-green);">
+                <div style="font-size: 1.6rem;">☁️</div>
+                <div class="node-title" style="font-size: 1.2rem; color: var(--mongo-green);">MongoDB Atlas</div>
+                <div class="node-desc">Managed Cloud Database Cluster</div>
+              </div>
+
+              <!-- Connecting Branch Lines -->
+              <div style="display: flex; align-items: center; justify-content: center; gap: 8rem; width: 100%;">
+                <div style="display: flex; flex-direction: column; align-items: center;">
+                  <div style="color: var(--accent-cyan); font-size: 1.5rem;">↙</div>
+                  <div style="font-family: var(--font-mono); font-size: 0.75rem; color: var(--accent-cyan);">GUI Connection</div>
+                </div>
+                <div style="display: flex; flex-direction: column; align-items: center;">
+                  <div style="color: var(--accent-amber); font-size: 1.5rem;">↘</div>
+                  <div style="font-family: var(--font-mono); font-size: 0.75rem; color: var(--accent-amber);">API Driver Connection</div>
+                </div>
+              </div>
+
+              <!-- Bottom Two Nodes -->
+              <div style="display: flex; justify-content: center; gap: 4rem; width: 100%; flex-wrap: wrap;">
+                <div class="diagram-node" style="min-width: 260px; border-color: var(--accent-cyan);">
+                  <div style="font-size: 1.5rem;">🧭</div>
+                  <div class="node-title" style="color: var(--accent-cyan);">MongoDB Compass</div>
+                  <div class="node-desc">Developer Inspection GUI</div>
+                  <div style="font-size: 0.8rem; color: var(--text-secondary); margin-top: 0.5rem;">
+                    • Inspect &amp; edit documents<br>
+                    • Test query performance<br>
+                    • Seed initial mock records
+                  </div>
+                </div>
+
+                <div class="diagram-node" style="min-width: 260px; border-color: var(--accent-amber);">
+                  <div style="font-size: 1.5rem;">⚙️</div>
+                  <div class="node-title" style="color: var(--accent-amber);">Node.js / Express API</div>
+                  <div class="node-desc">Live Application Server</div>
+                  <div style="font-size: 0.8rem; color: var(--text-secondary); margin-top: 0.5rem;">
+                    • Handles user requests<br>
+                    • Business logic validation<br>
+                    • RESTful JSON responses
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="callout info" style="margin-top: 1.25rem;">
+            <div class="callout-icon">💡</div>
+            <div class="callout-content">
+              <strong>Key Takeaway:</strong> Paste your Atlas SRV connection string directly into Compass! Compass will instantly connect to your cloud cluster so you can view live production data visually!
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 12 — GUI VS APPLICATION CODE
+           ==================================================================== -->
+      <section class="slide" data-slide="12" id="slide-12">
+        <div class="slide-content">
+          <div class="slide-header">
+            <span class="slide-tag purple">SECTION 3 • COMPASS + ATLAS</span>
+            <h1 class="slide-title">GUI vs Application Code</h1>
+            <p class="slide-subtitle">Understanding the complementary roles in modern software development</p>
+          </div>
+
+          <div class="grid-2" style="margin-top: 1rem;">
+            <div class="card highlight-cyan">
+              <div class="card-title cyan">
+                <span>🧭</span> MongoDB Compass (GUI Tool)
+              </div>
+              <p style="font-size: 0.88rem; color: var(--text-muted); margin-bottom: 0.85rem;">
+                Built for the developer while programming and debugging.
+              </p>
+              <ul class="feature-list">
+                <li><span class="bullet">🔍</span> <span><strong>Inspecting raw data:</strong> Verify what actually got saved to MongoDB</span></li>
+                <li><span class="bullet">🧪</span> <span><strong>Testing queries:</strong> Try complex filters before writing code</span></li>
+                <li><span class="bullet">✏️</span> <span><strong>Manually tweaking fields:</strong> Fix bad test data in 2 clicks</span></li>
+                <li><span class="bullet">🐛</span> <span><strong>Troubleshooting:</strong> Debug missing attributes or failed writes</span></li>
+                <li><span class="bullet">⚡</span> <span><strong>Checking indexes:</strong> Visually review collection execution plans</span></li>
+              </ul>
+            </div>
+
+            <div class="card highlight-amber">
+              <div class="card-title amber">
+                <span>💻</span> Application Code (Express + Mongoose)
+              </div>
+              <p style="font-size: 0.88rem; color: var(--text-muted); margin-bottom: 0.85rem;">
+                Built for the end-users and client devices 24 hours a day.
+              </p>
+              <ul class="feature-list">
+                <li><span class="bullet">🌐</span> <span><strong>Handling client requests:</strong> React, mobile, or Postman calls</span></li>
+                <li><span class="bullet">🔄</span> <span><strong>Automated CRUD:</strong> Create, Read, Update, Delete at scale</span></li>
+                <li><span class="bullet">🛡️</span> <span><strong>Validation &amp; Business Rules:</strong> Enforce required fields and permissions</span></li>
+                <li><span class="bullet">📦</span> <span><strong>API responses:</strong> Return clean JSON objects with HTTP status codes</span></li>
+                <li><span class="bullet">🔐</span> <span><strong>Authentication:</strong> Verify tokens and sanitize client input</span></li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="callout success" style="margin-top: 1.5rem;">
+            <div class="callout-icon">🎯</div>
+            <div class="callout-content">
+              <strong>Professional Habit:</strong> Keep Compass open on your second monitor while building your API. Whenever your code inserts or updates a document, refresh Compass to verify that the database looks exactly right!
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 13 — PROJECT INTRODUCTION
+           ==================================================================== -->
+      <section class="slide" data-slide="13" id="slide-13">
+        <div class="slide-content">
+          <div class="slide-header">
+            <span class="slide-tag amber">SECTION 4 • MOVIE WATCHLIST API</span>
+            <h1 class="slide-title">Project: Movie Watchlist API</h1>
+            <p class="slide-subtitle">A practical, beginner-friendly RESTful backend service</p>
+          </div>
+
+          <div class="grid-2-1" style="margin-top: 0.5rem;">
+            <div>
+              <div class="card highlight-green" style="margin-bottom: 1rem;">
+                <div class="card-title green">🎬 The Problem We Are Solving</div>
+                <p style="font-size: 0.95rem; color: var(--text-secondary); line-height: 1.6;">
+                  Movie lovers need a reliable backend service to track their favorite films, mark movies as watched once finished, update ratings, and remove movies they no longer care about.
+                </p>
+              </div>
+
+              <div class="card">
+                <h3 style="font-size: 1.05rem; color: var(--accent-cyan); margin-bottom: 0.75rem;">6 Core Project Capabilities</h3>
+                <div class="grid-2" style="gap: 0.75rem;">
+                  <div style="background: var(--bg-surface); padding: 0.75rem; border-radius: var(--radius-sm); border: 1px solid var(--border-subtle);">
+                    <strong style="color:var(--mongo-green);">1. Add Movie:</strong><br>
+                    <span style="font-size:0.82rem; color:var(--text-muted);">Insert title, genre, year, rating</span>
+                  </div>
+                  <div style="background: var(--bg-surface); padding: 0.75rem; border-radius: var(--radius-sm); border: 1px solid var(--border-subtle);">
+                    <strong style="color:var(--accent-cyan);">2. View Movies:</strong><br>
+                    <span style="font-size:0.82rem; color:var(--text-muted);">Retrieve all saved movies</span>
+                  </div>
+                  <div style="background: var(--bg-surface); padding: 0.75rem; border-radius: var(--radius-sm); border: 1px solid var(--border-subtle);">
+                    <strong style="color:var(--accent-amber);">3. View One Movie:</strong><br>
+                    <span style="font-size:0.82rem; color:var(--text-muted);">Fetch specific film by ID</span>
+                  </div>
+                  <div style="background: var(--bg-surface); padding: 0.75rem; border-radius: var(--radius-sm); border: 1px solid var(--border-subtle);">
+                    <strong style="color:var(--accent-purple);">4. Update Movie:</strong><br>
+                    <span style="font-size:0.82rem; color:var(--text-muted);">Modify rating or movie details</span>
+                  </div>
+                  <div style="background: var(--bg-surface); padding: 0.75rem; border-radius: var(--radius-sm); border: 1px solid var(--border-subtle);">
+                    <strong style="color:var(--accent-rose);">5. Delete Movie:</strong><br>
+                    <span style="font-size:0.82rem; color:var(--text-muted);">Remove movie from watchlist</span>
+                  </div>
+                  <div style="background: var(--bg-surface); padding: 0.75rem; border-radius: var(--radius-sm); border: 1px solid var(--border-subtle);">
+                    <strong style="color:var(--mongo-green);">6. Mark Watched:</strong><br>
+                    <span style="font-size:0.82rem; color:var(--text-muted);">Toggle watched Boolean flag</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div>
+              <div class="card" style="height: 100%; display: flex; flex-direction: column; justify-content: center; text-align: center;">
+                <div style="font-size: 2.5rem; margin-bottom: 0.5rem;">🍿</div>
+                <div style="font-weight: 700; font-size: 1.15rem; color: var(--text-primary);">Watchlist Tech Stack</div>
+                <div style="margin-top: 1rem; display: flex; flex-direction: column; gap: 0.6rem; font-family: var(--font-mono); font-size: 0.85rem;">
+                  <span style="background:var(--bg-terminal); padding:0.4rem; border-radius:4px; border:1px solid var(--border-subtle); color:var(--accent-cyan);">Node.js Runtime</span>
+                  <span style="background:var(--bg-terminal); padding:0.4rem; border-radius:4px; border:1px solid var(--border-subtle); color:var(--accent-amber);">Express.js Framework</span>
+                  <span style="background:var(--bg-terminal); padding:0.4rem; border-radius:4px; border:1px solid var(--border-subtle); color:var(--mongo-green);">Mongoose ODM</span>
+                  <span style="background:var(--bg-terminal); padding:0.4rem; border-radius:4px; border:1px solid var(--border-subtle); color:var(--accent-purple);">MongoDB Atlas Cloud</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 14 — MOVIE DATA MODEL
+           ==================================================================== -->
+      <section class="slide" data-slide="14" id="slide-14">
+        <div class="slide-content">
+          <div class="slide-header">
+            <span class="slide-tag amber">SECTION 4 • MOVIE WATCHLIST API</span>
+            <h1 class="slide-title">Movie Data Model &amp; Mongoose Schema</h1>
+            <p class="slide-subtitle">Defining the document shape for our movies collection</p>
+          </div>
+
+          <div class="grid-2">
+            <div>
+              <div class="code-panel">
+                <div class="code-header">
+                  <div class="code-header-left">
+                    <div class="traffic-dots"><div class="dot-red"></div><div class="dot-yellow"></div><div class="dot-green"></div></div>
+                    <span class="code-filename">Raw MongoDB Document (JSON / BSON)</span>
+                  </div>
+                  <span class="code-badge json">JSON</span>
+                </div>
+                <div class="code-body">
+<pre>{
+  <span class="syn-prop">"title"</span>: <span class="syn-str">"Interstellar"</span>,
+  <span class="syn-prop">"genre"</span>: <span class="syn-str">"Sci-Fi"</span>,
+  <span class="syn-prop">"year"</span>: <span class="syn-num">2014</span>,
+  <span class="syn-prop">"rating"</span>: <span class="syn-num">8.7</span>,
+  <span class="syn-prop">"watched"</span>: <span class="syn-bool">false</span>
+}</pre>
+                </div>
+              </div>
+
+              <div class="card">
+                <h3 style="font-size: 0.95rem; color: var(--accent-cyan); margin-bottom: 0.6rem;">Field Specifications</h3>
+                <ul class="feature-list" style="font-size: 0.85rem;">
+                  <li><span class="bullet">•</span> <span><code>title</code> (String) Name of the film (required)</span></li>
+                  <li><span class="bullet">•</span> <span><code>genre</code> (String) Category (Sci-Fi, Action, Drama)</span></li>
+                  <li><span class="bullet">•</span> <span><code>year</code> (Number) Release year (e.g. 2014)</span></li>
+                  <li><span class="bullet">•</span> <span><code>rating</code> (Number) Score out of 10 (e.g. 8.7)</span></li>
+                  <li><span class="bullet">•</span> <span><code>watched</code> (Boolean) Viewing status, defaults to <code>false</code></span></li>
+                </ul>
+              </div>
+            </div>
+
+            <div>
+              <div class="code-panel">
+                <div class="code-header">
+                  <div class="code-header-left">
+                    <div class="traffic-dots"><div class="dot-red"></div><div class="dot-yellow"></div><div class="dot-green"></div></div>
+                    <span class="code-filename">src/models/Movie.js</span>
+                  </div>
+                  <button class="copy-btn" onclick="navigator.clipboard.writeText(document.getElementById('codeMovieSchema').innerText); this.innerText='Copied!'; setTimeout(()=>this.innerText='Copy', 1500);">Copy</button>
+                </div>
+                <div class="code-body" id="codeMovieSchema">
+<pre><span class="syn-kwd">const</span> mongoose = <span class="syn-fn">require</span>(<span class="syn-str">'mongoose'</span>);
+
+<span class="syn-kwd">const</span> movieSchema = <span class="syn-kwd">new</span> mongoose.<span class="syn-fn">Schema</span>({
+  title: {
+    type: String,
+    required: <span class="syn-bool">true</span>
+  },
+  genre: {
+    type: String,
+    required: <span class="syn-bool">true</span>
+  },
+  year: {
+    type: Number
+  },
+  rating: {
+    type: Number,
+    default: <span class="syn-num">0</span>
+  },
+  watched: {
+    type: Boolean,
+    default: <span class="syn-bool">false</span>
+  }
+}, { timestamps: <span class="syn-bool">true</span> });
+
+module.exports = mongoose.<span class="syn-fn">model</span>(<span class="syn-str">'Movie'</span>, movieSchema);</pre>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 15 — PROJECT STRUCTURE
+           ==================================================================== -->
+      <section class="slide" data-slide="15" id="slide-15">
+        <div class="slide-content">
+          <div class="slide-header">
+            <span class="slide-tag amber">SECTION 4 • MOVIE WATCHLIST API</span>
+            <h1 class="slide-title">Clean Project Structure</h1>
+            <p class="slide-subtitle">Simple, beginner-friendly layout keeping concerns cleanly separated</p>
+          </div>
+
+          <div class="grid-2">
+            <div>
+              <div class="code-panel">
+                <div class="code-header">
+                  <div class="code-header-left">
+                    <div class="traffic-dots"><div class="dot-red"></div><div class="dot-yellow"></div><div class="dot-green"></div></div>
+                    <span class="code-filename">Directory Tree</span>
+                  </div>
+                  <span class="code-badge json">TREE</span>
+                </div>
+                <div class="code-body">
+<pre style="color:var(--syn-prop); line-height:1.7;">movie-watchlist/
+│
+├── <span style="color:var(--mongo-green);">src/</span>
+│   ├── <span style="color:var(--accent-cyan);">config/</span>
+│   │   └── <span style="color:var(--text-primary);">db.js</span>           <span class="syn-comment"># MongoDB Atlas connection</span>
+│   │
+│   ├── <span style="color:var(--accent-amber);">models/</span>
+│   │   └── <span style="color:var(--text-primary);">Movie.js</span>        <span class="syn-comment"># Mongoose Movie Schema</span>
+│   │
+│   └── <span style="color:var(--text-primary); font-weight:700;">server.js</span>           <span class="syn-comment"># Express App &amp; Route handlers</span>
+│
+├── <span style="color:var(--accent-rose);">.env</span>                    <span class="syn-comment"># Secret MONGO_URI string</span>
+├── <span style="color:var(--text-muted);">.gitignore</span>              <span class="syn-comment"># Ignores node_modules &amp; .env</span>
+└── <span style="color:var(--accent-purple);">package.json</span>            <span class="syn-comment"># Dependencies &amp; scripts</span></pre>
+                </div>
+              </div>
+            </div>
+
+            <div>
+              <div class="card" style="margin-bottom: 1rem;">
+                <h3 style="font-size: 1rem; color: var(--mongo-green); margin-bottom: 0.5rem;">Why this structure?</h3>
+                <p style="font-size: 0.88rem; color: var(--text-secondary); line-height: 1.55;">
+                  Keeping database configuration in <code>src/config/</code> and schemas in <code>src/models/</code> makes your codebase scalable and easy to explain to junior engineers.
+                </p>
+              </div>
+
+              <div class="card">
+                <h3 style="font-size: 1rem; color: var(--accent-cyan); margin-bottom: 0.6rem;">Minimal Dependencies Needed</h3>
+                <div class="code-panel" style="margin-bottom: 0;">
+                  <div class="code-body" style="padding: 0.75rem 1rem;">
+<pre><span class="syn-comment"># Run in terminal to initialize:</span>
+npm init -y
+npm install express mongoose dotenv</pre>
+                  </div>
+                </div>
+                <p style="font-size: 0.82rem; color: var(--text-muted); margin-top: 0.6rem;">
+                  No bulky frameworks required! Express handles the HTTP routes, and Mongoose handles MongoDB queries.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 16 — API ENDPOINTS
+           ==================================================================== -->
+      <section class="slide" data-slide="16" id="slide-16">
+        <div class="slide-content">
+          <div class="slide-header">
+            <span class="slide-tag amber">SECTION 4 • MOVIE WATCHLIST API</span>
+            <h1 class="slide-title">REST API Endpoints Specification</h1>
+            <p class="slide-subtitle">The standard HTTP contract between client apps and our server</p>
+          </div>
+
+          <div class="table-container" style="margin-top: 0.5rem;">
+            <table class="table-standard">
+              <thead>
+                <tr>
+                  <th>Method</th>
+                  <th>Endpoint</th>
+                  <th>Purpose</th>
+                  <th>Request Body</th>
+                  <th>Status Code</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><span class="method-tag post">POST</span></td>
+                  <td><code>/movies</code></td>
+                  <td>Add a new movie to watchlist</td>
+                  <td><code>{ title, genre, year, rating }</code></td>
+                  <td style="color:var(--mongo-green); font-family:var(--font-mono);">201 Created</td>
+                </tr>
+                <tr>
+                  <td><span class="method-tag get">GET</span></td>
+                  <td><code>/movies</code></td>
+                  <td>Retrieve all movies</td>
+                  <td>None</td>
+                  <td style="color:var(--accent-cyan); font-family:var(--font-mono);">200 OK</td>
+                </tr>
+                <tr>
+                  <td><span class="method-tag get">GET</span></td>
+                  <td><code>/movies/:id</code></td>
+                  <td>Get one movie by its MongoDB <code>_id</code></td>
+                  <td>None</td>
+                  <td style="color:var(--accent-cyan); font-family:var(--font-mono);">200 OK / 404</td>
+                </tr>
+                <tr>
+                  <td><span class="method-tag put">PUT</span></td>
+                  <td><code>/movies/:id</code></td>
+                  <td>Update movie details or set <code>watched: true</code></td>
+                  <td><code>{ rating: 9.2, watched: true }</code></td>
+                  <td style="color:var(--accent-amber); font-family:var(--font-mono);">200 OK / 404</td>
+                </tr>
+                <tr>
+                  <td><span class="method-tag delete">DELETE</span></td>
+                  <td><code>/movies/:id</code></td>
+                  <td>Remove a movie from watchlist</td>
+                  <td>None</td>
+                  <td style="color:var(--accent-rose); font-family:var(--font-mono);">200 OK / 404</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="callout info" style="margin-top: 1.5rem;">
+            <div class="callout-icon">💡</div>
+            <div class="callout-content">
+              <strong>REST Convention:</strong> Notice how every endpoint uses the plural resource name <code>/movies</code>. The HTTP verb determines whether we are adding, reading, updating, or deleting.
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 17 — ADD MOVIE (POST /movies)
+           ==================================================================== -->
+      <section class="slide" data-slide="17" id="slide-17">
+        <div class="slide-content">
+          <div class="slide-header">
+            <span class="slide-tag amber">SECTION 4 • MOVIE WATCHLIST API</span>
+            <h1 class="slide-title">Add Movie Endpoint (POST /movies)</h1>
+            <p class="slide-subtitle">Creating documents in MongoDB via Mongoose</p>
+          </div>
+
+          <div class="grid-2">
+            <div>
+              <div class="code-panel">
+                <div class="code-header">
+                  <div class="code-header-left">
+                    <div class="traffic-dots"><div class="dot-red"></div><div class="dot-yellow"></div><div class="dot-green"></div></div>
+                    <span class="code-filename">Client HTTP Request</span>
+                  </div>
+                  <span class="code-badge post">POST /movies</span>
+                </div>
+                <div class="code-body">
+<pre><span class="syn-comment">// Request Body sent from client:</span>
+{
+  <span class="syn-prop">"title"</span>: <span class="syn-str">"Interstellar"</span>,
+  <span class="syn-prop">"genre"</span>: <span class="syn-str">"Sci-Fi"</span>,
+  <span class="syn-prop">"year"</span>: <span class="syn-num">2014</span>,
+  <span class="syn-prop">"rating"</span>: <span class="syn-num">8.7</span>
+}</pre>
+                </div>
+              </div>
+
+              <div class="card highlight-green">
+                <h3 style="font-size: 0.95rem; color: var(--mongo-green); margin-bottom: 0.4rem;">What happens behind the scenes?</h3>
+                <p style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.55;">
+                  1. Express parses the incoming JSON using <code>express.json()</code>.<br>
+                  2. Mongoose validates the payload against <code>movieSchema</code>.<br>
+                  3. MongoDB inserts document, generates unique <code>_id</code>, and sets <code>watched: false</code>.
+                </p>
+              </div>
+            </div>
+
+            <div>
+              <div class="code-panel">
+                <div class="code-header">
+                  <div class="code-header-left">
+                    <div class="traffic-dots"><div class="dot-red"></div><div class="dot-yellow"></div><div class="dot-green"></div></div>
+                    <span class="code-filename">Express Route Handler</span>
+                  </div>
+                  <button class="copy-btn" onclick="navigator.clipboard.writeText(document.getElementById('codeAddMovie').innerText); this.innerText='Copied!'; setTimeout(()=>this.innerText='Copy', 1500);">Copy</button>
+                </div>
+                <div class="code-body" id="codeAddMovie">
+<pre><span class="syn-comment">// POST /movies - Add movie</span>
+app.<span class="syn-fn">post</span>(<span class="syn-str">'/movies'</span>, <span class="syn-kwd">async</span> (req, res) =&gt; {
+  <span class="syn-kwd">try</span> {
+    <span class="syn-comment">// Insert document into MongoDB Atlas:</span>
+    <span class="syn-kwd">const</span> movie = <span class="syn-kwd">await</span> Movie.<span class="syn-fn">create</span>(req.body);
+    
+    res.<span class="syn-fn">status</span>(<span class="syn-num">201</span>).<span class="syn-fn">json</span>(movie);
+  } <span class="syn-kwd">catch</span> (err) {
+    res.<span class="syn-fn">status</span>(<span class="syn-num">400</span>).<span class="syn-fn">json</span>({ error: err.message });
+  }
+});</pre>
+                </div>
+              </div>
+
+              <div class="callout success">
+                <div class="callout-icon">🧭</div>
+                <div class="callout-content">
+                  <strong>Compass Verification:</strong> Open Compass ➔ Open <code>movieDB.movies</code> ➔ Click <strong>Refresh</strong> button ➔ Your new movie document appears immediately!
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 18 — GET MOVIES (GET /movies)
+           ==================================================================== -->
+      <section class="slide" data-slide="18" id="slide-18">
+        <div class="slide-content">
+          <div class="slide-header">
+            <span class="slide-tag amber">SECTION 4 • MOVIE WATCHLIST API</span>
+            <h1 class="slide-title">Get Movies Endpoint (GET /movies)</h1>
+            <p class="slide-subtitle">Retrieving and returning documents from MongoDB</p>
+          </div>
+
+          <div class="grid-2">
+            <div>
+              <div class="code-panel">
+                <div class="code-header">
+                  <div class="code-header-left">
+                    <div class="traffic-dots"><div class="dot-red"></div><div class="dot-yellow"></div><div class="dot-green"></div></div>
+                    <span class="code-filename">Express Route Handler</span>
+                  </div>
+                  <button class="copy-btn" onclick="navigator.clipboard.writeText(document.getElementById('codeGetMovies').innerText); this.innerText='Copied!'; setTimeout(()=>this.innerText='Copy', 1500);">Copy</button>
+                </div>
+                <div class="code-body" id="codeGetMovies">
+<pre><span class="syn-comment">// GET /movies - Get all movies</span>
+app.<span class="syn-fn">get</span>(<span class="syn-str">'/movies'</span>, <span class="syn-kwd">async</span> (req, res) =&gt; {
+  <span class="syn-kwd">try</span> {
+    <span class="syn-comment">// Fetch all documents from movies collection:</span>
+    <span class="syn-kwd">const</span> movies = <span class="syn-kwd">await</span> Movie.<span class="syn-fn">find</span>();
+    
+    res.<span class="syn-fn">json</span>(movies);
+  } <span class="syn-kwd">catch</span> (err) {
+    res.<span class="syn-fn">status</span>(<span class="syn-num">500</span>).<span class="syn-fn">json</span>({ error: err.message });
+  }
+});</pre>
+                </div>
+              </div>
+
+              <div class="card highlight-cyan">
+                <div class="card-title cyan">⚡ Fetching One by ID</div>
+                <div class="code-panel" style="margin-bottom: 0;">
+                  <div class="code-body" style="padding: 0.6rem 0.85rem; font-size: 0.8rem;">
+<pre><span class="syn-comment">// GET /movies/:id</span>
+app.<span class="syn-fn">get</span>(<span class="syn-str">'/movies/:id'</span>, <span class="syn-kwd">async</span> (req, res) =&gt; {
+  <span class="syn-kwd">const</span> movie = <span class="syn-kwd">await</span> Movie.<span class="syn-fn">findById</span>(req.params.id);
+  <span class="syn-kwd">if</span> (!movie) <span class="syn-kwd">return</span> res.<span class="syn-fn">status</span>(<span class="syn-num">404</span>).<span class="syn-fn">json</span>({ error: <span class="syn-str">'Movie not found'</span> });
+  res.<span class="syn-fn">json</span>(movie);
+});</pre>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div>
+              <div class="code-panel">
+                <div class="code-header">
+                  <div class="code-header-left">
+                    <div class="traffic-dots"><div class="dot-red"></div><div class="dot-yellow"></div><div class="dot-green"></div></div>
+                    <span class="code-filename">Server JSON Response</span>
+                  </div>
+                  <span class="code-badge json">200 OK</span>
+                </div>
+                <div class="code-body">
+<pre>[
+  {
+    <span class="syn-prop">"_id"</span>: <span class="syn-str">"65f29a0b12c4..."</span>,
+    <span class="syn-prop">"title"</span>: <span class="syn-str">"Interstellar"</span>,
+    <span class="syn-prop">"genre"</span>: <span class="syn-str">"Sci-Fi"</span>,
+    <span class="syn-prop">"year"</span>: <span class="syn-num">2014</span>,
+    <span class="syn-prop">"rating"</span>: <span class="syn-num">8.7</span>,
+    <span class="syn-prop">"watched"</span>: <span class="syn-bool">false</span>
+  },
+  {
+    <span class="syn-prop">"_id"</span>: <span class="syn-str">"65f29a0b12c5..."</span>,
+    <span class="syn-prop">"title"</span>: <span class="syn-str">"Inception"</span>,
+    <span class="syn-prop">"genre"</span>: <span class="syn-str">"Sci-Fi"</span>,
+    <span class="syn-prop">"year"</span>: <span class="syn-num">2010</span>,
+    <span class="syn-prop">"rating"</span>: <span class="syn-num">8.8</span>,
+    <span class="syn-prop">"watched"</span>: <span class="syn-bool">true</span>
+  }
+]</pre>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 19 — UPDATE & DELETE
+           ==================================================================== -->
+      <section class="slide" data-slide="19" id="slide-19">
+        <div class="slide-content">
+          <div class="slide-header">
+            <span class="slide-tag amber">SECTION 4 • MOVIE WATCHLIST API</span>
+            <h1 class="slide-title">Update &amp; Delete Implementation</h1>
+            <p class="slide-subtitle">Modifying and removing documents by MongoDB ID</p>
+          </div>
+
+          <div class="grid-2">
+            <div>
+              <div class="code-panel">
+                <div class="code-header">
+                  <div class="code-header-left">
+                    <div class="traffic-dots"><div class="dot-red"></div><div class="dot-yellow"></div><div class="dot-green"></div></div>
+                    <span class="code-filename">PUT /movies/:id</span>
+                  </div>
+                  <span class="code-badge put">UPDATE</span>
+                </div>
+                <div class="code-body">
+<pre><span class="syn-comment">// Update movie details or mark watched</span>
+app.<span class="syn-fn">put</span>(<span class="syn-str">'/movies/:id'</span>, <span class="syn-kwd">async</span> (req, res) =&gt; {
+  <span class="syn-kwd">try</span> {
+    <span class="syn-kwd">const</span> movie = <span class="syn-kwd">await</span> Movie.<span class="syn-fn">findByIdAndUpdate</span>(
+      req.params.id,
+      req.body,
+      { new: <span class="syn-bool">true</span> } <span class="syn-comment">// Return modified doc</span>
+    );
+    <span class="syn-kwd">if</span> (!movie) <span class="syn-kwd">return</span> res.<span class="syn-fn">status</span>(<span class="syn-num">404</span>).<span class="syn-fn">json</span>({ error: <span class="syn-str">'Not found'</span> });
+    res.<span class="syn-fn">json</span>(movie);
+  } <span class="syn-kwd">catch</span> (err) {
+    res.<span class="syn-fn">status</span>(<span class="syn-num">400</span>).<span class="syn-fn">json</span>({ error: err.message });
+  }
+});</pre>
+                </div>
+              </div>
+              <p style="font-size: 0.85rem; color: var(--text-muted);">
+                💡 <code>{ new: true }</code> ensures Mongoose returns the updated document instead of the original one.
+              </p>
+            </div>
+
+            <div>
+              <div class="code-panel">
+                <div class="code-header">
+                  <div class="code-header-left">
+                    <div class="traffic-dots"><div class="dot-red"></div><div class="dot-yellow"></div><div class="dot-green"></div></div>
+                    <span class="code-filename">DELETE /movies/:id</span>
+                  </div>
+                  <span class="code-badge delete">DELETE</span>
+                </div>
+                <div class="code-body">
+<pre><span class="syn-comment">// Delete movie from collection</span>
+app.<span class="syn-fn">delete</span>(<span class="syn-str">'/movies/:id'</span>, <span class="syn-kwd">async</span> (req, res) =&gt; {
+  <span class="syn-kwd">try</span> {
+    <span class="syn-kwd">const</span> movie = <span class="syn-kwd">await</span> Movie.<span class="syn-fn">findByIdAndDelete</span>(
+      req.params.id
+    );
+    <span class="syn-kwd">if</span> (!movie) <span class="syn-kwd">return</span> res.<span class="syn-fn">status</span>(<span class="syn-num">404</span>).<span class="syn-fn">json</span>({ error: <span class="syn-str">'Not found'</span> });
+    res.<span class="syn-fn">json</span>({ message: <span class="syn-str">'Movie deleted successfully'</span> });
+  } <span class="syn-kwd">catch</span> (err) {
+    res.<span class="syn-fn">status</span>(<span class="syn-num">400</span>).<span class="syn-fn">json</span>({ error: err.message });
+  }
+});</pre>
+                </div>
+              </div>
+
+              <div class="callout warning">
+                <div class="callout-icon">🗑️</div>
+                <div class="callout-content">
+                  Once deleted via <code>findByIdAndDelete()</code>, the document is gone from the database permanently!
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 20 — COMPLETE PROJECT FLOW
+           ==================================================================== -->
+      <section class="slide" data-slide="20" id="slide-20">
+        <div class="slide-content">
+          <div class="slide-header">
+            <span class="slide-tag">SECTION 5 • PRACTICAL FLOW</span>
+            <h1 class="slide-title">Complete Project Architecture Flow</h1>
+            <p class="slide-subtitle">How every component connects in a modern production workflow</p>
+          </div>
+
+          <div class="card" style="padding: 1.75rem 1.25rem;">
+            <!-- Flow 1: Client to Database -->
+            <div style="font-family: var(--font-mono); font-size: 0.85rem; color: var(--accent-cyan); font-weight: 700; margin-bottom: 0.75rem;">
+              FLOW 1: APPLICATION WRITE &amp; READ PIPELINE
+            </div>
+            <div class="diagram-container" style="padding: 0.5rem 0 1.5rem 0;">
+              <div class="diagram-node">
+                <div style="font-size:1.3rem;">🌐</div>
+                <div class="node-title">Client</div>
+                <div class="node-desc">Postman / React</div>
+              </div>
+              <div class="diagram-arrow">➔</div>
+
+              <div class="diagram-node">
+                <div style="font-size:1.3rem;">⚡</div>
+                <div class="node-title">Express API</div>
+                <div class="node-desc">Route Handlers</div>
+              </div>
+              <div class="diagram-arrow">➔</div>
+
+              <div class="diagram-node">
+                <div style="font-size:1.3rem;">🦹</div>
+                <div class="node-title">Mongoose</div>
+                <div class="node-desc">Data Schema &amp; ODM</div>
+              </div>
+              <div class="diagram-arrow">➔</div>
+
+              <div class="diagram-node active">
+                <div style="font-size:1.3rem;">☁️</div>
+                <div class="node-title" style="color:var(--mongo-green);">MongoDB Atlas</div>
+                <div class="node-desc">Cloud Cluster</div>
+              </div>
+              <div class="diagram-arrow">➔</div>
+
+              <div class="diagram-node">
+                <div style="font-size:1.3rem;">📄</div>
+                <div class="node-title">Movie Collection</div>
+                <div class="node-desc">BSON Documents</div>
+              </div>
+            </div>
+
+            <!-- Divider -->
+            <div style="border-top: 1px dashed var(--border-medium); margin: 0.75rem 0 1.25rem 0;"></div>
+
+            <!-- Flow 2: Compass Verification -->
+            <div style="font-family: var(--font-mono); font-size: 0.85rem; color: var(--mongo-green); font-weight: 700; margin-bottom: 0.75rem;">
+              FLOW 2: DEVELOPER VISUAL INSPECTION PIPELINE
+            </div>
+            <div class="diagram-container" style="padding: 0.5rem 0;">
+              <div class="diagram-node active">
+                <div style="font-size:1.3rem;">☁️</div>
+                <div class="node-title" style="color:var(--mongo-green);">MongoDB Atlas</div>
+                <div class="node-desc">Cloud Cluster</div>
+              </div>
+              <div class="diagram-arrow">➔</div>
+
+              <div class="diagram-node">
+                <div style="font-size:1.3rem;">📄</div>
+                <div class="node-title">Movie Collection</div>
+                <div class="node-desc">BSON Documents</div>
+              </div>
+              <div class="diagram-arrow">➔</div>
+
+              <div class="diagram-node active" style="border-color:var(--mongo-green);">
+                <div style="font-size:1.3rem;">🧭</div>
+                <div class="node-title" style="color:var(--mongo-green);">MongoDB Compass</div>
+                <div class="node-desc">Desktop GUI</div>
+              </div>
+              <div class="diagram-arrow">➔</div>
+
+              <div class="diagram-node">
+                <div style="font-size:1.3rem;">👀</div>
+                <div class="node-title">View / Edit / Verify</div>
+                <div class="node-desc">Zero Guesswork</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="callout success" style="margin-top: 1rem;">
+            <div class="callout-icon">🚀</div>
+            <div class="callout-content">
+              <strong>The Professional Edge:</strong> Never wonder whether your API wrote the correct data. Test with your HTTP client, then glance at Compass to confirm the database state with your own eyes!
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 21 — TESTING THE API (Feature 4: CRUD Simulation)
+           ==================================================================== -->
+      <section class="slide" data-slide="21" id="slide-21">
+        <div class="slide-content">
+          <div class="slide-header">
+            <span class="slide-tag">SECTION 5 • PRACTICAL FLOW</span>
+            <h1 class="slide-title">Testing the API &amp; GUI Verification</h1>
+            <p class="slide-subtitle">Interactive CRUD Simulation: Execute endpoints and observe database updates</p>
+          </div>
+
+          <!-- Feature 4: Interactive CRUD Simulation Studio -->
+          <div class="crud-tester">
+            <!-- Left Action Triggers -->
+            <div class="crud-actions-pane">
+              <div style="font-size:0.75rem; font-family:var(--font-mono); color:var(--text-muted); text-transform:uppercase;">Click Operation to Simulate:</div>
+              
+              <button class="crud-btn active" id="crudBtnPost" onclick="CrudSim.runOp('POST')">
+                <span>➕ Add "Oppenheimer"</span>
+                <span class="method-tag post">POST</span>
+              </button>
+
+              <button class="crud-btn" id="crudBtnGet" onclick="CrudSim.runOp('GET')">
+                <span>📋 Fetch All Movies</span>
+                <span class="method-tag get">GET</span>
+              </button>
+
+              <button class="crud-btn" id="crudBtnPut" onclick="CrudSim.runOp('PUT')">
+                <span>✏️ Mark Watched</span>
+                <span class="method-tag put">PUT</span>
+              </button>
+
+              <button class="crud-btn" id="crudBtnDelete" onclick="CrudSim.runOp('DELETE')">
+                <span>🗑️ Remove Movie</span>
+                <span class="method-tag delete">DELETE</span>
+              </button>
+            </div>
+
+            <!-- Right Terminal / Visual Flow Output -->
+            <div class="crud-output-pane">
+              <div class="crud-flow-visualizer">
+                <span class="flow-step-pill" id="flowPillClient">1. Client Request</span> ➔
+                <span class="flow-step-pill" id="flowPillExpress">2. Express Router</span> ➔
+                <span class="flow-step-pill" id="flowPillAtlas">3. Atlas Database</span> ➔
+                <span class="flow-step-pill" id="flowPillCompass">4. Compass Verified</span>
+              </div>
+
+              <div class="code-panel" style="margin-bottom:0; flex:1; display:flex; flex-direction:column;">
+                <div class="code-header">
+                  <div class="code-header-left">
+                    <div class="traffic-dots"><div class="dot-red"></div><div class="dot-yellow"></div><div class="dot-green"></div></div>
+                    <span class="code-filename" id="crudTerminalFilename">POST /movies HTTP/1.1</span>
+                  </div>
+                  <span class="code-badge post" id="crudStatusBadge">201 Created</span>
+                </div>
+                <div class="code-body" id="crudTerminalBody" style="flex:1;">
+                  <!-- Injected via JavaScript -->
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div style="margin-top: 0.85rem; font-size: 0.82rem; color: var(--text-muted); display:flex; justify-content:space-between;">
+            <span>💡 Real-world clients to test your API: <strong>Postman</strong>, <strong>Thunder Client</strong> (VS Code extension), or <strong>curl</strong>.</span>
+            <span style="color:var(--mongo-green);">Status: Atlas &amp; Compass in sync ✓</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 22 — FINAL SUMMARY
+           ==================================================================== -->
+      <section class="slide" data-slide="22" id="slide-22">
+        <div class="slide-content centered">
+          <div class="slide-tag" style="margin-bottom: 0.8rem;">WORKSHOP RECAP • DAY 9</div>
+          <h1 class="slide-title" style="font-size: 2.8rem; margin-bottom: 0.6rem;">
+            MongoDB Day 9 <span class="highlight">Mastery Summary</span>
+          </h1>
+          <p class="slide-subtitle" style="margin-bottom: 2rem;">
+            The 4 fundamental pillars you mastered in today's practical session:
+          </p>
+
+          <div class="grid-4" style="margin-bottom: 2rem; width: 100%;">
+            <div class="card highlight-green" style="text-align: left; padding: 1.1rem;">
+              <div style="font-size: 1.8rem; margin-bottom: 0.35rem;">🧭</div>
+              <div style="font-weight: 700; color: var(--mongo-green); font-size: 1.05rem;">MongoDB Compass</div>
+              <p style="font-size: 0.82rem; color: var(--text-secondary); margin-top: 0.35rem;">
+                Official desktop GUI to inspect, filter, edit, and troubleshoot documents visually.
+              </p>
+            </div>
+
+            <div class="card highlight-cyan" style="text-align: left; padding: 1.1rem;">
+              <div style="font-size: 1.8rem; margin-bottom: 0.35rem;">☁️</div>
+              <div style="font-weight: 700; color: var(--accent-cyan); font-size: 1.05rem;">MongoDB Atlas</div>
+              <p style="font-size: 0.82rem; color: var(--text-secondary); margin-top: 0.35rem;">
+                Fully managed cloud database cluster with global availability and automated security.
+              </p>
+            </div>
+
+            <div class="card highlight-amber" style="text-align: left; padding: 1.1rem;">
+              <div style="font-size: 1.8rem; margin-bottom: 0.35rem;">🦹</div>
+              <div style="font-weight: 700; color: var(--accent-amber); font-size: 1.05rem;">Mongoose ODM</div>
+              <p style="font-size: 0.82rem; color: var(--text-secondary); margin-top: 0.35rem;">
+                Enforces structured schemas and connects Node.js seamlessly via <code>MONGO_URI</code>.
+              </p>
+            </div>
+
+            <div class="card highlight-purple" style="text-align: left; padding: 1.1rem;">
+              <div style="font-size: 1.8rem; margin-bottom: 0.35rem;">🎬</div>
+              <div style="font-weight: 700; color: var(--accent-purple); font-size: 1.05rem;">Movie Watchlist API</div>
+              <p style="font-size: 0.82rem; color: var(--text-secondary); margin-top: 0.35rem;">
+                Production-style REST CRUD endpoints (POST, GET, PUT, DELETE) verified in Compass.
+              </p>
+            </div>
+          </div>
+
+          <!-- Final Flow Banner -->
+          <div style="background: var(--bg-terminal); border: 1px solid var(--mongo-green-border); border-radius: var(--radius-md); padding: 1.25rem 2rem; width: 100%; margin-bottom: 2rem;">
+            <div style="font-family: var(--font-mono); font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.5rem; text-transform: uppercase;">
+              The Golden Developer Loop
+            </div>
+            <div style="display: flex; justify-content: center; align-items: center; gap: 2rem; font-weight: 800; font-size: 1.25rem;">
+              <span style="color: var(--accent-cyan);">BUILD API</span>
+              <span style="color: var(--mongo-green);">➔</span>
+              <span style="color: var(--accent-amber);">TEST IN CLIENT</span>
+              <span style="color: var(--mongo-green);">➔</span>
+              <span style="color: var(--mongo-green);">VERIFY IN COMPASS</span>
+            </div>
+          </div>
+
+          <div style="display: flex; gap: 1rem; justify-content: center;">
+            <button class="nav-btn primary" onclick="Deck.goToSlide(1)" style="padding: 0.65rem 1.5rem;">
+              ↺ Restart Workshop
+            </button>
+            <button class="nav-btn" onclick="Deck.openToc()" style="padding: 0.65rem 1.25rem;">
+              Browse Slide Index (T)
+            </button>
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- Bottom Navigation Footer -->
+    <footer class="bottom-footer">
+      <div class="footer-left">
+        <div class="slide-counter">
+          Slide <span class="current-num" id="currentSlideNum">1</span> / <span id="totalSlidesNum">22</span>
+        </div>
+      </div>
+
+      <div class="footer-center">
+        <button class="nav-btn" id="prevBtn" title="Previous Slide (Left Arrow)">
+          ← Previous
+        </button>
+        <button class="nav-btn primary" id="nextBtn" title="Next Slide (Right Arrow)">
+          Next →
+        </button>
+      </div>
+
+      <div class="footer-right">
+        <div class="footer-key-hint">
+          <kbd>→</kbd> <kbd>Space</kbd> Next
+        </div>
+        <div class="footer-key-hint">
+          <kbd>←</kbd> Prev
+        </div>
+        <div class="footer-key-hint">
+          <kbd>T</kbd> Index
+        </div>
+        <div class="footer-key-hint">
+          <kbd>F</kbd> Fullscreen
+        </div>
+      </div>
+    </footer>
+
+    <!-- Table of Contents Drawer -->
+    <aside class="toc-drawer" id="tocDrawer">
+      <div class="toc-header">
+        <div class="toc-title">
+          <span>📋</span> Slide Index (22 Slides)
+        </div>
+        <button class="toc-close-btn" id="closeTocBtn" title="Close Index (Esc)">&times;</button>
+      </div>
+      <div class="toc-search">
+        <input type="text" class="toc-search-input" id="tocSearchInput" placeholder="Filter slides by topic...">
+      </div>
+      <ul class="toc-list" id="tocList">
+        <!-- Injected via script.js -->
+      </ul>
+    </aside>
+    <div class="drawer-backdrop" id="drawerBackdrop"></div>
+
+    <!-- Shortcuts Modal -->
+    <div class="modal-overlay" id="shortcutsModal">
+      <div class="modal-box">
+        <div class="modal-header">
+          <div class="modal-title">⌨️ Keyboard Shortcuts</div>
+          <button class="toc-close-btn" id="closeShortcutsBtn">&times;</button>
+        </div>
+        <div class="modal-body">
+          <div class="shortcut-row">
+            <span>Next Slide</span>
+            <div class="shortcut-keys"><kbd>→</kbd> <kbd>Space</kbd> <kbd>PgDn</kbd></div>
+          </div>
+          <div class="shortcut-row">
+            <span>Previous Slide</span>
+            <div class="shortcut-keys"><kbd>←</kbd> <kbd>PgUp</kbd></div>
+          </div>
+          <div class="shortcut-row">
+            <span>First Slide (Title)</span>
+            <div class="shortcut-keys"><kbd>Home</kbd></div>
+          </div>
+          <div class="shortcut-row">
+            <span>Last Slide (Summary)</span>
+            <div class="shortcut-keys"><kbd>End</kbd></div>
+          </div>
+          <div class="shortcut-row">
+            <span>Toggle Fullscreen</span>
+            <div class="shortcut-keys"><kbd>F</kbd></div>
+          </div>
+          <div class="shortcut-row">
+            <span>Toggle Slide Index</span>
+            <div class="shortcut-keys"><kbd>T</kbd></div>
+          </div>
+          <div class="shortcut-row">
+            <span>Help / Shortcuts</span>
+            <div class="shortcut-keys"><kbd>?</kbd></div>
+          </div>
+          <div class="shortcut-row">
+            <span>Close Modal / Drawer</span>
+            <div class="shortcut-keys"><kbd>Esc</kbd></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
