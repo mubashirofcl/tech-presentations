@@ -1,0 +1,2730 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>React Day 9 — React Router</title>
+  <meta name="description" content="Interactive developer presentation on React Router: routing setup, Link & NavLink navigation, dynamic route parameters (useParams), query strings (useSearchParams), programmatic navigation (useNavigate), and protected routes.">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Master App Shell -->
+  <div class="deck-container" id="deckContainer">
+
+    <!-- Top Progress Bar -->
+    <div class="progress-bar-container">
+      <div class="progress-bar" id="progressBar"></div>
+    </div>
+
+    <!-- Top Header Bar -->
+    <header class="top-header">
+      <div class="header-left">
+        <div class="brand-badge">
+          <svg viewBox="0 0 24 24">
+            <ellipse cx="12" cy="12" rx="10" ry="4.5" transform="rotate(0 12 12)" fill="none" stroke="currentColor" stroke-width="1.6"/>
+            <ellipse cx="12" cy="12" rx="10" ry="4.5" transform="rotate(60 12 12)" fill="none" stroke="currentColor" stroke-width="1.6"/>
+            <ellipse cx="12" cy="12" rx="10" ry="4.5" transform="rotate(120 12 12)" fill="none" stroke="currentColor" stroke-width="1.6"/>
+            <circle cx="12" cy="12" r="2" fill="currentColor"/>
+          </svg>
+          React Day 9
+        </div>
+        <div class="deck-title-badge">
+          <span class="section-tag" id="headerSectionTag">INTRODUCTION</span>
+          <span class="dot"></span>
+          <span class="deck-topic" id="headerTopic">React Router</span>
+        </div>
+      </div>
+
+      <div class="header-right">
+        <!-- Table of Contents Drawer Button -->
+        <button class="header-btn" id="openTocBtn" title="View All 40 Slides (T)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="3" y1="12" x2="21" y2="12"></line>
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <line x1="3" y1="18" x2="21" y2="18"></line>
+          </svg>
+          Index
+          <kbd>T</kbd>
+        </button>
+
+        <!-- Keyboard Shortcuts Help -->
+        <button class="header-btn" id="openShortcutsBtn" title="Keyboard Shortcuts (?)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"></circle>
+            <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+            <line x1="12" y1="17" x2="12.01" y2="17"></line>
+          </svg>
+          <kbd>?</kbd>
+        </button>
+
+        <!-- Fullscreen Button -->
+        <button class="header-btn" id="fullscreenBtn" title="Toggle Fullscreen (F)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path>
+          </svg>
+          <kbd>F</kbd>
+        </button>
+      </div>
+    </header>
+
+    <!-- Slide Viewport -->
+    <main class="slide-viewport">
+
+      <!-- ====================================================================
+           SECTION 1 — INTRODUCTION (Slides 1 - 5)
+           ==================================================================== -->
+
+      <!-- Slide 1: React Router (Title) -->
+      <section class="slide active" data-slide="1" id="slide-1">
+        <div class="slide-content centered">
+          <div class="slide-tag">React Course • Day 9</div>
+          <h1 class="slide-title" style="font-size: 3.2rem; letter-spacing: -0.03em;">
+            React Day 9 — React Router
+          </h1>
+          <h2 style="font-size: 1.5rem; color: var(--react-cyan); font-weight: 700; margin-bottom: 1.25rem;">
+            Client-Side Routing, Dynamic URLs &amp; Route Protection
+          </h2>
+          <p style="font-size: 1.15rem; color: var(--text-secondary); max-width: 760px; margin-bottom: 2rem; line-height: 1.6;">
+            Master the core routing skills every modern React developer needs: from multi-page navigation to dynamic route parameters, query filtering, and authentication gates.
+          </p>
+
+          <div style="display: flex; gap: 0.85rem; margin-bottom: 2.2rem; flex-wrap: wrap; justify-content: center;">
+            <div style="padding: 0.55rem 1rem; background: var(--react-bg); border: 1px solid var(--react-border); border-radius: var(--radius-sm); font-family: var(--font-mono); font-size: 0.85rem; color: var(--react-cyan);">
+              🚀 react-router-dom
+            </div>
+            <div style="padding: 0.55rem 1rem; background: var(--accent-emerald-bg); border: 1px solid var(--accent-emerald-border); border-radius: var(--radius-sm); font-family: var(--font-mono); font-size: 0.85rem; color: var(--accent-emerald);">
+              🔗 Link &amp; NavLink
+            </div>
+            <div style="padding: 0.55rem 1rem; background: var(--accent-purple-bg); border: 1px solid var(--accent-purple-border); border-radius: var(--radius-sm); font-family: var(--font-mono); font-size: 0.85rem; color: var(--accent-purple);">
+              ⚡ useParams()
+            </div>
+            <div style="padding: 0.55rem 1rem; background: var(--accent-amber-bg); border: 1px solid var(--accent-amber-border); border-radius: var(--radius-sm); font-family: var(--font-mono); font-size: 0.85rem; color: var(--accent-amber);">
+              🔍 useSearchParams()
+            </div>
+            <div style="padding: 0.55rem 1rem; background: var(--accent-rose-bg); border: 1px solid var(--accent-rose-border); border-radius: var(--radius-sm); font-family: var(--font-mono); font-size: 0.85rem; color: var(--accent-rose);">
+              🛡️ Protected Routes
+            </div>
+          </div>
+
+          <div class="card" style="max-width: 800px; width: 100%; text-align: left;">
+            <div class="card-title" style="color: var(--react-cyan);">
+              <span>📌</span> Today's Topics
+            </div>
+            <div class="grid-2" style="margin-top: 0.75rem;">
+              <ul class="styled-list" style="margin: 0;">
+                <li><span class="bullet-icon">1</span> What is React Router?</li>
+                <li><span class="bullet-icon">2</span> Setting up routing in React</li>
+                <li><span class="bullet-icon">3</span> Routes and navigation (<code class="inline-code">&lt;Link&gt;</code>, <code class="inline-code">&lt;NavLink&gt;</code>)</li>
+                <li><span class="bullet-icon">4</span> Route parameters (<code class="inline-code">useParams</code>)</li>
+              </ul>
+              <ul class="styled-list" style="margin: 0;">
+                <li><span class="bullet-icon">5</span> Query strings (<code class="inline-code">useSearchParams</code>)</li>
+                <li><span class="bullet-icon">6</span> Programmatic navigation (<code class="inline-code">useNavigate</code>)</li>
+                <li><span class="bullet-icon">7</span> Protected routes &amp; redirects</li>
+                <li><span class="bullet-icon">8</span> Mini Project &amp; Common Mistakes</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Slide 2: Learning Objectives -->
+      <section class="slide" data-slide="2" id="slide-2">
+        <div class="slide-content">
+          <div class="slide-tag">Section 1 • Introduction</div>
+          <h2 class="slide-title">Learning Objectives</h2>
+          <p class="slide-subtitle">
+            By the end of this session, students will have hands-on command of the essential client-side routing concepts in React:
+          </p>
+
+          <div class="grid-2">
+            <div class="card highlight">
+              <div class="card-title">🎯 Core Competencies</div>
+              <ul class="styled-list">
+                <li>
+                  <span class="bullet-icon">✓</span>
+                  <div><strong>Understand Routing Need:</strong> Grasp why client-side routing is fundamental to modern SPAs.</div>
+                </li>
+                <li>
+                  <span class="bullet-icon">✓</span>
+                  <div><strong>Install &amp; Configure:</strong> Set up <code class="inline-code">react-router-dom</code> and wrap apps in <code class="inline-code">&lt;BrowserRouter&gt;</code>.</div>
+                </li>
+                <li>
+                  <span class="bullet-icon">✓</span>
+                  <div><strong>Create Multiple Routes:</strong> Map distinct URLs to dedicated React components using <code class="inline-code">&lt;Routes&gt;</code> and <code class="inline-code">&lt;Route&gt;</code>.</div>
+                </li>
+                <li>
+                  <span class="bullet-icon">✓</span>
+                  <div><strong>Navigate Smoothly:</strong> Use <code class="inline-code">&lt;Link&gt;</code> and <code class="inline-code">&lt;NavLink&gt;</code> without triggering browser page reloads.</div>
+                </li>
+              </ul>
+            </div>
+
+            <div class="card">
+              <div class="card-title">🚀 Advanced Route Handling</div>
+              <ul class="styled-list">
+                <li>
+                  <span class="bullet-icon">✓</span>
+                  <div><strong>Dynamic Parameters:</strong> Define dynamic paths like <code class="inline-code">/products/:id</code> and extract values with <code class="inline-code">useParams()</code>.</div>
+                </li>
+                <li>
+                  <span class="bullet-icon">✓</span>
+                  <div><strong>Read Query Strings:</strong> Extract search, sort, and filter tokens with <code class="inline-code">useSearchParams()</code>.</div>
+                </li>
+                <li>
+                  <span class="bullet-icon">✓</span>
+                  <div><strong>Programmatic Navigation:</strong> Redirect users imperatively after actions via <code class="inline-code">useNavigate()</code>.</div>
+                </li>
+                <li>
+                  <span class="bullet-icon">✓</span>
+                  <div><strong>Protect Private Routes:</strong> Gate private views (e.g., Dashboard) behind simple authentication checks.</div>
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="callout tip">
+            <div class="callout-icon">💡</div>
+            <div>
+              <strong>Classroom Focus:</strong> We strictly focus on practical, beginner-friendly client routing. We avoid distracting complexities like Redux, JWT setups, or server frameworks.
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Slide 3: What Is Routing? -->
+      <section class="slide" data-slide="3" id="slide-3">
+        <div class="slide-content">
+          <div class="slide-tag">Section 1 • Introduction</div>
+          <h2 class="slide-title">What Is Routing?</h2>
+          <p class="slide-subtitle">
+            Routing determines <strong>which UI should be displayed</strong> for a particular URL in the browser address bar.
+          </p>
+
+          <div class="grid-2">
+            <div class="card">
+              <div class="card-title">🌐 URL to UI Mapping</div>
+              <p class="card-body">
+                Instead of creating separate, detached HTML files (<code class="inline-code">about.html</code>, <code class="inline-code">contact.html</code>), React displays different component trees based on the URL path:
+              </p>
+              <div style="margin-top: 1.25rem; font-family: var(--font-mono); font-size: 0.95rem; line-height: 2;">
+                <div style="display: flex; justify-content: space-between; padding: 0.4rem 0.8rem; background: var(--bg-surface); border-radius: var(--radius-xs); margin-bottom: 0.4rem;">
+                  <span style="color: var(--react-cyan); font-weight: 600;">/</span>
+                  <span style="color: var(--text-dim);">→</span>
+                  <span style="color: var(--text-main);">Home Component</span>
+                </div>
+                <div style="display: flex; justify-content: space-between; padding: 0.4rem 0.8rem; background: var(--bg-surface); border-radius: var(--radius-xs); margin-bottom: 0.4rem;">
+                  <span style="color: var(--react-cyan); font-weight: 600;">/about</span>
+                  <span style="color: var(--text-dim);">→</span>
+                  <span style="color: var(--text-main);">About Component</span>
+                </div>
+                <div style="display: flex; justify-content: space-between; padding: 0.4rem 0.8rem; background: var(--bg-surface); border-radius: var(--radius-xs); margin-bottom: 0.4rem;">
+                  <span style="color: var(--react-cyan); font-weight: 600;">/products</span>
+                  <span style="color: var(--text-dim);">→</span>
+                  <span style="color: var(--text-main);">Products Component</span>
+                </div>
+                <div style="display: flex; justify-content: space-between; padding: 0.4rem 0.8rem; background: var(--bg-surface); border-radius: var(--radius-xs);">
+                  <span style="color: var(--react-cyan); font-weight: 600;">/contact</span>
+                  <span style="color: var(--text-dim);">→</span>
+                  <span style="color: var(--text-main);">Contact Component</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="card highlight">
+              <div class="card-title">✨ Key Concept</div>
+              <p class="card-body" style="font-size: 1rem; line-height: 1.7;">
+                In traditional websites, every URL requested an entire fresh HTML document from a remote server, triggering a full browser screen wipe and reload.
+              </p>
+              <div class="callout info" style="margin-top: 1rem;">
+                <div class="callout-icon">⚡</div>
+                <div>
+                  <strong>Client-Side Routing:</strong> React Router intercepts URL changes in the browser. It unmounts old components and mounts new ones <em>instantly in JavaScript memory</em> with zero page reload!
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Slide 4: Why Do We Need Routing? -->
+      <section class="slide" data-slide="4" id="slide-4">
+        <div class="slide-content">
+          <div class="slide-tag">Section 1 • Introduction</div>
+          <h2 class="slide-title">Why Do We Need Routing?</h2>
+          <p class="slide-subtitle">
+            Without routing, applications become monolithic, unshareable, and impossible to bookmark or navigate with browser history.
+          </p>
+
+          <div class="comparison-container">
+            <div class="comparison-box bad">
+              <div class="comparison-header">
+                <span class="comparison-title" style="color: var(--accent-rose);">❌ Without Routing</span>
+                <span style="font-size: 0.8rem; color: var(--accent-rose); font-weight: 700;">FLAT MONOLITH</span>
+              </div>
+              <div style="font-family: var(--font-mono); text-align: center; padding: 1.5rem 0; line-height: 2;">
+                <div style="color: var(--text-main); font-weight: 700; font-size: 1.1rem;">App Component</div>
+                <div style="color: var(--accent-rose); font-size: 1.3rem;">↓</div>
+                <div style="color: var(--text-muted); background: var(--bg-surface); padding: 0.75rem; border-radius: var(--radius-sm);">
+                  Everything stuffed into one component with messy <code class="inline-code">useState</code> conditional rendering!
+                </div>
+              </div>
+              <ul class="styled-list" style="margin-top: 1rem; font-size: 0.9rem;">
+                <li>❌ Cannot bookmark specific pages</li>
+                <li>❌ Browser Back/Forward buttons do not work</li>
+                <li>❌ Cannot share URLs to specific content</li>
+              </ul>
+            </div>
+
+            <div class="comparison-box good">
+              <div class="comparison-header">
+                <span class="comparison-title" style="color: var(--accent-emerald);">✅ With React Router</span>
+                <span style="font-size: 0.8rem; color: var(--accent-emerald); font-weight: 700;">CLEAN SEPARATION</span>
+              </div>
+              <div style="font-family: var(--font-mono); text-align: center; padding: 1rem 0; line-height: 1.8;">
+                <div style="color: var(--react-cyan); font-weight: 700;">URL (/products)</div>
+                <div style="color: var(--accent-emerald); font-size: 1.2rem;">↓</div>
+                <div style="color: var(--text-main); font-weight: 700;">React Router</div>
+                <div style="color: var(--accent-emerald); font-size: 1.2rem;">↓</div>
+                <div style="color: #34D399; background: var(--bg-surface); padding: 0.6rem; border-radius: var(--radius-sm); border: 1px solid var(--accent-emerald-border);">
+                  Matching &lt;Route&gt; renders &lt;Products /&gt;
+                </div>
+              </div>
+              <ul class="styled-list" style="margin-top: 0.85rem; font-size: 0.9rem;">
+                <li>✅ Bookmarkable and shareable URLs</li>
+                <li>✅ Full browser history integration (Back / Forward)</li>
+                <li>✅ Clean component separation of concerns</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Slide 5: SPA and Routing -->
+      <section class="slide" data-slide="5" id="slide-5">
+        <div class="slide-content">
+          <div class="slide-tag">Section 1 • Introduction</div>
+          <h2 class="slide-title">SPA and Routing</h2>
+          <p class="slide-subtitle">
+            React applications are fundamentally <strong>Single Page Applications (SPAs)</strong>.
+          </p>
+
+          <div class="grid-2">
+            <div class="card">
+              <div class="card-title">🔄 The SPA Navigation Lifecycle</div>
+              <div style="display: flex; flex-direction: column; gap: 0.85rem; margin-top: 1rem;">
+                <div class="flow-step-box active" style="text-align: left; padding: 0.85rem 1rem;">
+                  <div class="flow-step-title">1. Initial Page Load</div>
+                  <div style="font-size: 0.9rem; color: var(--text-secondary);">The browser loads <code class="inline-code">index.html</code>, CSS, and the React JS bundle once.</div>
+                </div>
+                <div class="flow-step-box" style="text-align: left; padding: 0.85rem 1rem;">
+                  <div class="flow-step-title">2. URL Changes</div>
+                  <div style="font-size: 0.9rem; color: var(--text-secondary);">User clicks a <code class="inline-code">&lt;Link&gt;</code> or triggers an action. React Router intercepts the event.</div>
+                </div>
+                <div class="flow-step-box" style="text-align: left; padding: 0.85rem 1rem;">
+                  <div class="flow-step-title">3. Component Swap</div>
+                  <div style="font-size: 0.9rem; color: var(--text-secondary);">React unmounts old page components and renders new ones in memory.</div>
+                </div>
+                <div class="flow-step-box" style="text-align: left; padding: 0.85rem 1rem;">
+                  <div class="flow-step-title">4. Zero Screen Flash</div>
+                  <div style="font-size: 0.9rem; color: var(--text-secondary);">No full page reload occurs. Header and state remain active and buttery smooth!</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="card highlight">
+              <div class="card-title">🏎️ Why Users Love SPAs</div>
+              <ul class="styled-list">
+                <li>
+                  <span class="bullet-icon">⚡</span>
+                  <div><strong>Instantaneous Transitions:</strong> Navigation feels as fast as a native desktop or mobile app.</div>
+                </li>
+                <li>
+                  <span class="bullet-icon">💾</span>
+                  <div><strong>Preserved Client State:</strong> Music players, shopping carts, and input drafts keep running in the background.</div>
+                </li>
+                <li>
+                  <span class="bullet-icon">🌐</span>
+                  <div><strong>HTML5 History API:</strong> Uses <code class="inline-code">window.history.pushState()</code> under the hood to keep browser address bars accurate.</div>
+                </li>
+              </ul>
+              <div class="callout tip">
+                <div class="callout-icon">💡</div>
+                <div><strong>Golden Rule:</strong> The browser never asks the server for another HTML page after the initial load!</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SECTION 2 — SETTING UP REACT ROUTER (Slides 6 - 10)
+           ==================================================================== -->
+
+      <!-- Slide 6: Installing React Router -->
+      <section class="slide" data-slide="6" id="slide-6">
+        <div class="slide-content">
+          <div class="slide-tag">Section 2 • Setting Up Router</div>
+          <h2 class="slide-title">Installing React Router</h2>
+          <p class="slide-subtitle">
+            React Router does not come pre-bundled with React. It is installed as an external package from npm.
+          </p>
+
+          <div class="grid-2">
+            <div>
+              <div class="card">
+                <div class="card-title">📦 Package Name: react-router-dom</div>
+                <p class="card-body">
+                  For web applications running in the browser, always install <strong><code class="inline-code">react-router-dom</code></strong>.
+                </p>
+                <div class="code-editor">
+                  <div class="code-header">
+                    <div class="code-window-controls">
+                      <span class="dot-btn dot-red"></span>
+                      <span class="dot-btn dot-yellow"></span>
+                      <span class="dot-btn dot-green"></span>
+                    </div>
+                    <div class="code-title">Terminal / Bash</div>
+                    <button class="copy-btn" data-copy="npm install react-router-dom">Copy</button>
+                  </div>
+                  <div class="code-body">
+                    <pre><code><span class="syn-comment"># In your React project folder:</span>
+<span class="syn-fn">npm</span> <span class="syn-prop">install</span> <span class="syn-str">react-router-dom</span></code></pre>
+                  </div>
+                </div>
+              </div>
+
+              <div class="callout info" style="margin-top: 1rem;">
+                <div class="callout-icon">ℹ️</div>
+                <div>
+                  <strong>Common Student Confusion:</strong> Why <code class="inline-code">react-router-dom</code> instead of <code class="inline-code">react-router</code>? <br>
+                  <code class="inline-code">react-router</code> contains the core routing logic, while <code class="inline-code">react-router-dom</code> adds web/browser-specific components like <code class="inline-code">&lt;BrowserRouter&gt;</code> and <code class="inline-code">&lt;Link&gt;</code>.
+                </div>
+              </div>
+            </div>
+
+            <div class="card highlight">
+              <div class="card-title">📋 What You Get in react-router-dom</div>
+              <ul class="styled-list">
+                <li>
+                  <span class="bullet-icon">🏛️</span>
+                  <div><strong>BrowserRouter:</strong> Connects React to browser history.</div>
+                </li>
+                <li>
+                  <span class="bullet-icon">🗺️</span>
+                  <div><strong>Routes &amp; Route:</strong> Declares route mappings.</div>
+                </li>
+                <li>
+                  <span class="bullet-icon">🔗</span>
+                  <div><strong>Link &amp; NavLink:</strong> Client-side navigation components.</div>
+                </li>
+                <li>
+                  <span class="bullet-icon">🎣</span>
+                  <div><strong>Hooks:</strong> <code class="inline-code">useParams</code>, <code class="inline-code">useSearchParams</code>, <code class="inline-code">useNavigate</code>.</div>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Slide 7: Basic Router Setup -->
+      <section class="slide" data-slide="7" id="slide-7">
+        <div class="slide-content">
+          <div class="slide-tag">Section 2 • Setting Up Router</div>
+          <h2 class="slide-title">Basic Router Setup</h2>
+          <p class="slide-subtitle">
+            To enable routing throughout your entire React tree, wrap the root application component in <code class="inline-code">&lt;BrowserRouter&gt;</code>.
+          </p>
+
+          <div class="grid-2">
+            <div>
+              <div class="code-editor">
+                <div class="code-header">
+                  <div class="code-window-controls">
+                    <span class="dot-btn dot-red"></span>
+                    <span class="dot-btn dot-yellow"></span>
+                    <span class="dot-btn dot-green"></span>
+                  </div>
+                  <div class="code-title">src/main.jsx</div>
+                  <button class="copy-btn" data-copy="import React from 'react';
+import ReactDOM from 'react-dom/client';
+import { BrowserRouter } from 'react-router-dom';
+import App from './App';
+
+ReactDOM.createRoot(document.getElementById('root')).render(
+  <React.StrictMode>
+    <BrowserRouter>
+      <App />
+    </BrowserRouter>
+  </React.StrictMode>
+);">Copy</button>
+                </div>
+                <div class="code-body">
+                  <pre><code><span class="syn-kwd">import</span> React <span class="syn-kwd">from</span> <span class="syn-str">'react'</span>;
+<span class="syn-kwd">import</span> ReactDOM <span class="syn-kwd">from</span> <span class="syn-str">'react-dom/client'</span>;
+<span class="syn-kwd">import</span> { <span class="syn-tag">BrowserRouter</span> } <span class="syn-kwd">from</span> <span class="syn-str">'react-router-dom'</span>;
+<span class="syn-kwd">import</span> App <span class="syn-kwd">from</span> <span class="syn-str">'./App'</span>;
+
+ReactDOM.<span class="syn-fn">createRoot</span>(document.<span class="syn-fn">getElementById</span>(<span class="syn-str">'root'</span>)).<span class="syn-fn">render</span>(
+  <span class="syn-tag">&lt;React.StrictMode&gt;</span>
+    <span class="syn-tag">&lt;BrowserRouter&gt;</span>
+      <span class="syn-tag">&lt;App /&gt;</span>
+    <span class="syn-tag">&lt;/BrowserRouter&gt;</span>
+  <span class="syn-tag">&lt;/React.StrictMode&gt;</span>
+);</code></pre>
+                </div>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-title">🔍 What Does BrowserRouter Do?</div>
+              <ul class="styled-list">
+                <li>
+                  <span class="bullet-icon">1</span>
+                  <div><strong>Top-Level Context Provider:</strong> Sets up the React context that stores current location and history.</div>
+                </li>
+                <li>
+                  <span class="bullet-icon">2</span>
+                  <div><strong>HTML5 History API:</strong> Listens to browser back/forward buttons and updates the UI accordingly.</div>
+                </li>
+                <li>
+                  <span class="bullet-icon">3</span>
+                  <div><strong>Enables Child Hooks:</strong> Any component inside <code class="inline-code">&lt;BrowserRouter&gt;</code> can now use <code class="inline-code">useParams</code>, <code class="inline-code">useNavigate</code>, etc.</div>
+                </li>
+              </ul>
+              <div class="callout warning">
+                <div class="callout-icon">⚠️</div>
+                <div><strong>Rule:</strong> You can only use Router components (<code class="inline-code">&lt;Routes&gt;</code>, <code class="inline-code">&lt;Link&gt;</code>) <em>inside</em> a <code class="inline-code">&lt;BrowserRouter&gt;</code>!</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Slide 8: Creating Routes -->
+      <section class="slide" data-slide="8" id="slide-8">
+        <div class="slide-content">
+          <div class="slide-tag">Section 2 • Setting Up Router</div>
+          <h2 class="slide-title">Creating Routes</h2>
+          <p class="slide-subtitle">
+            Use <code class="inline-code">&lt;Routes&gt;</code> as a container and individual <code class="inline-code">&lt;Route&gt;</code> components to connect paths to React components.
+          </p>
+
+          <div class="grid-2">
+            <div class="code-editor">
+              <div class="code-header">
+                <div class="code-window-controls">
+                  <span class="dot-btn dot-red"></span>
+                  <span class="dot-btn dot-yellow"></span>
+                  <span class="dot-btn dot-green"></span>
+                </div>
+                <div class="code-title">Route Definition Syntax</div>
+                <button class="copy-btn" data-copy="import { Routes, Route } from 'react-router-dom';
+import Home from './pages/Home';
+import About from './pages/About';
+import Products from './pages/Products';
+
+function App() {
+  return (
+    <Routes>
+      <Route path='/' element={<Home />} />
+      <Route path='/about' element={<About />} />
+      <Route path='/products' element={<Products />} />
+    </Routes>
+  );
+}">Copy</button>
+              </div>
+              <div class="code-body">
+                <pre><code><span class="syn-kwd">import</span> { <span class="syn-tag">Routes</span>, <span class="syn-tag">Route</span> } <span class="syn-kwd">from</span> <span class="syn-str">'react-router-dom'</span>;
+<span class="syn-kwd">import</span> Home <span class="syn-kwd">from</span> <span class="syn-str">'./pages/Home'</span>;
+<span class="syn-kwd">import</span> About <span class="syn-kwd">from</span> <span class="syn-str">'./pages/About'</span>;
+<span class="syn-kwd">import</span> Products <span class="syn-kwd">from</span> <span class="syn-str">'./pages/Products'</span>;
+
+<span class="syn-kwd">function</span> <span class="syn-fn">App</span>() {
+  <span class="syn-kwd">return</span> (
+    <span class="syn-tag">&lt;Routes&gt;</span>
+      <span class="syn-tag">&lt;Route</span> <span class="syn-prop">path</span>=<span class="syn-str">"/"</span> <span class="syn-prop">element</span>={<span class="syn-tag">&lt;Home /&gt;</span>} <span class="syn-tag">/&gt;</span>
+      <span class="syn-tag">&lt;Route</span> <span class="syn-prop">path</span>=<span class="syn-str">"/about"</span> <span class="syn-prop">element</span>={<span class="syn-tag">&lt;About /&gt;</span>} <span class="syn-tag">/&gt;</span>
+      <span class="syn-tag">&lt;Route</span> <span class="syn-prop">path</span>=<span class="syn-str">"/products"</span> <span class="syn-prop">element</span>={<span class="syn-tag">&lt;Products /&gt;</span>} <span class="syn-tag">/&gt;</span>
+    <span class="syn-tag">&lt;/Routes&gt;</span>
+  );
+}</code></pre>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-title">🔍 Props Breakdown</div>
+              <div style="display: flex; flex-direction: column; gap: 1rem; margin-top: 0.85rem;">
+                <div style="background: var(--bg-surface); padding: 1rem; border-radius: var(--radius-sm); border-left: 3px solid var(--react-cyan);">
+                  <div style="font-family: var(--font-mono); color: var(--react-cyan); font-weight: 700; margin-bottom: 0.35rem;">path="..."</div>
+                  <div style="font-size: 0.92rem; color: var(--text-secondary);">The URL pathname in the browser to match against (e.g. <code class="inline-code">"/"</code> or <code class="inline-code">"/products"</code>).</div>
+                </div>
+
+                <div style="background: var(--bg-surface); padding: 1rem; border-radius: var(--radius-sm); border-left: 3px solid #34D399;">
+                  <div style="font-family: var(--font-mono); color: #34D399; font-weight: 700; margin-bottom: 0.35rem;">element={&lt;Component /&gt;}</div>
+                  <div style="font-size: 0.92rem; color: var(--text-secondary);">The JSX component instance to render when the URL path matches.</div>
+                </div>
+
+                <div class="callout tip" style="margin: 0;">
+                  <div class="callout-icon">💡</div>
+                  <div>React Router v6 uses <strong>element={&lt;Component /&gt;}</strong> with JSX tags, NOT <s>component={Component}</s>.</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Slide 9: Route Structure -->
+      <section class="slide" data-slide="9" id="slide-9">
+        <div class="slide-content">
+          <div class="slide-tag">Section 2 • Setting Up Router</div>
+          <h2 class="slide-title">Route Structure</h2>
+          <p class="slide-subtitle">
+            Think of the routing hierarchy as a clean tree where <code class="inline-code">&lt;Routes&gt;</code> examines all child <code class="inline-code">&lt;Route&gt;</code> definitions and picks the best match.
+          </p>
+
+          <div class="tree-diagram" style="text-align: center; margin: 1.5rem 0;">
+            <div style="display: inline-block; text-align: left;">
+              <span class="tree-node-highlight">BrowserRouter</span> (Provides Router context)<br>
+              &nbsp;&nbsp;&nbsp;&nbsp;└── <span class="tree-node-highlight">&lt;Routes&gt;</span> (Matches the best child route)<br>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;├── <span style="color: #34D399;">&lt;Route path="/" element={&lt;Home /&gt;} /&gt;</span><br>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;├── <span style="color: #34D399;">&lt;Route path="/about" element={&lt;About /&gt;} /&gt;</span><br>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└── <span style="color: #34D399;">&lt;Route path="/products" element={&lt;Products /&gt;} /&gt;</span>
+            </div>
+          </div>
+
+          <div class="grid-3">
+            <div class="card">
+              <div class="card-title">1. BrowserRouter</div>
+              <p class="card-body">The root parent wrapper. Connects your React app to the browser's address bar history.</p>
+            </div>
+            <div class="card highlight">
+              <div class="card-title">2. &lt;Routes&gt;</div>
+              <p class="card-body">The switchboard container. Whenever the location changes, it scans its routes to find the matching path.</p>
+            </div>
+            <div class="card">
+              <div class="card-title">3. &lt;Route&gt;</div>
+              <p class="card-body">The individual rule. Binds a specific URL string directly to a specific UI React component.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Slide 10: Complete Basic Example + Interactive Demo 1 -->
+      <section class="slide" data-slide="10" id="slide-10">
+        <div class="slide-content">
+          <div class="slide-tag">Section 2 • Setting Up Router</div>
+          <h2 class="slide-title">Complete Basic Example &amp; Routing Simulator</h2>
+          <p class="slide-subtitle">
+            See client-side routing in action: clicking buttons switches views and address bar URLs instantly with zero reload!
+          </p>
+
+          <!-- Interactive Demo 1: Routing Simulator -->
+          <div class="sim-browser" id="routingSim1">
+            <div class="sim-browser-bar">
+              <div class="code-window-controls">
+                <span class="dot-btn dot-red"></span>
+                <span class="dot-btn dot-yellow"></span>
+                <span class="dot-btn dot-green"></span>
+              </div>
+              <div class="sim-url-bar">
+                <span style="color: var(--text-dim);">🔒</span>
+                <span class="host">http://localhost:5173</span><span class="path" id="sim1Path">/</span>
+              </div>
+            </div>
+
+            <!-- Clickable navigation inside simulated app -->
+            <div class="sim-nav-pills">
+              <span style="font-size: 0.8rem; color: var(--text-dim); text-transform: uppercase; font-weight: 700; margin-right: 0.5rem;">Routes:</span>
+              <button class="sim-nav-btn active" data-sim-path="/">Home (/)</button>
+              <button class="sim-nav-btn" data-sim-path="/about">About (/about)</button>
+              <button class="sim-nav-btn" data-sim-path="/products">Products (/products)</button>
+              <button class="sim-nav-btn" data-sim-path="/contact">Contact (/contact)</button>
+            </div>
+
+            <!-- Viewport displaying active component -->
+            <div class="sim-viewport">
+              <div class="sim-component-view active" id="simView-home">
+                <div style="font-size: 2.2rem; margin-bottom: 0.5rem;">🏠</div>
+                <h3 style="color: var(--react-cyan); margin-bottom: 0.35rem;">&lt;Home /&gt; Component</h3>
+                <p style="color: var(--text-secondary); max-width: 500px;">Welcome to the Home Page! This component is rendered when URL is exactly <code class="inline-code">/</code>.</p>
+              </div>
+
+              <div class="sim-component-view" id="simView-about">
+                <div style="font-size: 2.2rem; margin-bottom: 0.5rem;">📖</div>
+                <h3 style="color: #A78BFA; margin-bottom: 0.35rem;">&lt;About /&gt; Component</h3>
+                <p style="color: var(--text-secondary); max-width: 500px;">Learn about our company and mission. Rendered for <code class="inline-code">/about</code>.</p>
+              </div>
+
+              <div class="sim-component-view" id="simView-products">
+                <div style="font-size: 2.2rem; margin-bottom: 0.5rem;">🛍️</div>
+                <h3 style="color: #34D399; margin-bottom: 0.35rem;">&lt;Products /&gt; Component</h3>
+                <p style="color: var(--text-secondary); max-width: 500px;">Browse our full catalog of developer equipment. Rendered for <code class="inline-code">/products</code>.</p>
+              </div>
+
+              <div class="sim-component-view" id="simView-contact">
+                <div style="font-size: 2.2rem; margin-bottom: 0.5rem;">✉️</div>
+                <h3 style="color: #FBBF24; margin-bottom: 0.35rem;">&lt;Contact /&gt; Component</h3>
+                <p style="color: var(--text-secondary); max-width: 500px;">Have questions? Reach out to support. Rendered for <code class="inline-code">/contact</code>.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="callout tip">
+            <div class="callout-icon">💡</div>
+            <div>
+              <strong>Interactive Demo 1:</strong> Click the route buttons above to test live URL updates and instant component switching!
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SECTION 3 — NAVIGATION (Slides 11 - 14)
+           ==================================================================== -->
+
+      <!-- Slide 11: Link -->
+      <section class="slide" data-slide="11" id="slide-11">
+        <div class="slide-content">
+          <div class="slide-tag">Section 3 • Navigation</div>
+          <h2 class="slide-title">The &lt;Link&gt; Component</h2>
+          <p class="slide-subtitle">
+            Use <code class="inline-code">&lt;Link&gt;</code> to allow users to navigate between routes without reloading the browser window.
+          </p>
+
+          <div class="grid-2">
+            <div class="code-editor">
+              <div class="code-header">
+                <div class="code-window-controls">
+                  <span class="dot-btn dot-red"></span>
+                  <span class="dot-btn dot-yellow"></span>
+                  <span class="dot-btn dot-green"></span>
+                </div>
+                <div class="code-title">Link Usage</div>
+                <button class="copy-btn" data-copy="import { Link } from 'react-router-dom';
+
+function Navigation() {
+  return (
+    <nav>
+      <Link to='/'>Home</Link>
+      <Link to='/about'>About</Link>
+      <Link to='/products'>Products</Link>
+    </nav>
+  );
+}">Copy</button>
+              </div>
+              <div class="code-body">
+                <pre><code><span class="syn-kwd">import</span> { <span class="syn-tag">Link</span> } <span class="syn-kwd">from</span> <span class="syn-str">'react-router-dom'</span>;
+
+<span class="syn-kwd">function</span> <span class="syn-fn">Navigation</span>() {
+  <span class="syn-kwd">return</span> (
+    <span class="syn-tag">&lt;nav&gt;</span>
+      <span class="syn-tag">&lt;Link</span> <span class="syn-prop">to</span>=<span class="syn-str">"/"</span><span class="syn-tag">&gt;</span>Home<span class="syn-tag">&lt;/Link&gt;</span>
+      <span class="syn-tag">&lt;Link</span> <span class="syn-prop">to</span>=<span class="syn-str">"/about"</span><span class="syn-tag">&gt;</span>About<span class="syn-tag">&lt;/Link&gt;</span>
+      <span class="syn-tag">&lt;Link</span> <span class="syn-prop">to</span>=<span class="syn-str">"/products"</span><span class="syn-tag">&gt;</span>Products<span class="syn-tag">&lt;/Link&gt;</span>
+    <span class="syn-tag">&lt;/nav&gt;</span>
+  );
+}</code></pre>
+              </div>
+            </div>
+
+            <div class="card highlight">
+              <div class="card-title">🔑 How &lt;Link&gt; Works</div>
+              <ul class="styled-list">
+                <li>
+                  <span class="bullet-icon">📍</span>
+                  <div><strong>The to="..." Prop:</strong> Specifies the destination URL path (replaces HTML's <code class="inline-code">href</code>).</div>
+                </li>
+                <li>
+                  <span class="bullet-icon">🛑</span>
+                  <div><strong>Prevents Default:</strong> It internally intercepts the standard browser click event with <code class="inline-code">e.preventDefault()</code>.</div>
+                </li>
+                <li>
+                  <span class="bullet-icon">📜</span>
+                  <div><strong>Updates History:</strong> Calls <code class="inline-code">history.pushState()</code> and instructs React Router to render the target component.</div>
+                </li>
+              </ul>
+              <div class="callout tip">
+                <div class="callout-icon">💡</div>
+                <div>Under the hood, <code class="inline-code">&lt;Link&gt;</code> renders a regular HTML <code class="inline-code">&lt;a&gt;</code> tag with an accessible <code class="inline-code">href</code> attribute, so right-click "Open in New Tab" still works!</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Slide 12: Why Not Use <a>? -->
+      <section class="slide" data-slide="12" id="slide-12">
+        <div class="slide-content">
+          <div class="slide-tag">Section 3 • Navigation</div>
+          <h2 class="slide-title">Why Not Use &lt;a href="..."&gt;?</h2>
+          <p class="slide-subtitle">
+            Using standard anchor tags inside a React single-page app defeats the purpose of React!
+          </p>
+
+          <div class="comparison-container">
+            <div class="comparison-box bad">
+              <div class="comparison-header">
+                <span class="comparison-title" style="color: var(--accent-rose);">❌ Standard &lt;a href="/about"&gt;</span>
+              </div>
+              <div class="code-editor" style="margin: 0.5rem 0 1rem 0;">
+                <div class="code-body" style="padding: 0.75rem;">
+                  <pre><code><span class="syn-comment">&lt;!-- Traditional HTML anchor --&gt;</span>
+<span class="syn-tag">&lt;a</span> <span class="syn-prop">href</span>=<span class="syn-str">"/about"</span><span class="syn-tag">&gt;</span>About<span class="syn-tag">&lt;/a&gt;</span></code></pre>
+                </div>
+              </div>
+              <ul class="styled-list" style="font-size: 0.92rem;">
+                <li>💥 Browser makes an HTTP request to the web server</li>
+                <li>💥 <strong>Full page reload</strong> occurs with white flash</li>
+                <li>💥 All in-memory React state is wiped clean</li>
+                <li>💥 Slow, jerky user experience</li>
+              </ul>
+            </div>
+
+            <div class="comparison-box good">
+              <div class="comparison-header">
+                <span class="comparison-title" style="color: var(--accent-emerald);">✅ React Router &lt;Link to="/about"&gt;</span>
+              </div>
+              <div class="code-editor" style="margin: 0.5rem 0 1rem 0;">
+                <div class="code-body" style="padding: 0.75rem;">
+                  <pre><code><span class="syn-comment">// React Router Link component</span>
+<span class="syn-tag">&lt;Link</span> <span class="syn-prop">to</span>=<span class="syn-str">"/about"</span><span class="syn-tag">&gt;</span>About<span class="syn-tag">&lt;/Link&gt;</span></code></pre>
+                </div>
+              </div>
+              <ul class="styled-list" style="font-size: 0.92rem;">
+                <li>⚡ Client-side transition (zero HTTP page request)</li>
+                <li>⚡ <strong>No page reload</strong> or white flashing</li>
+                <li>⚡ React application state is completely preserved</li>
+                <li>⚡ Blazing fast, native-like app navigation</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="callout warning">
+            <div class="callout-icon">⚠️</div>
+            <div><strong>Rule of Thumb:</strong> Use <code class="inline-code">&lt;Link&gt;</code> for all internal routes. Only use <code class="inline-code">&lt;a href="..."&gt;</code> when linking to an external website (like Google or GitHub).</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Slide 13: Navigation Bar -->
+      <section class="slide" data-slide="13" id="slide-13">
+        <div class="slide-content">
+          <div class="slide-tag">Section 3 • Navigation</div>
+          <h2 class="slide-title">Building a Navigation Bar</h2>
+          <p class="slide-subtitle">
+            A navigation bar placed outside the <code class="inline-code">&lt;Routes&gt;</code> container stays visible across all pages!
+          </p>
+
+          <div class="grid-2">
+            <div>
+              <div class="code-editor">
+                <div class="code-header">
+                  <div class="code-window-controls">
+                    <span class="dot-btn dot-red"></span>
+                    <span class="dot-btn dot-yellow"></span>
+                    <span class="dot-btn dot-green"></span>
+                  </div>
+                  <div class="code-title">src/components/Navbar.jsx</div>
+                  <button class="copy-btn" data-copy="import { Link } from 'react-router-dom';
+
+function Navbar() {
+  return (
+    <nav className='navbar'>
+      <div className='logo'>DevStore</div>
+      <div className='nav-links'>
+        <Link to='/'>Home</Link>
+        <Link to='/products'>Products</Link>
+        <Link to='/about'>About</Link>
+      </div>
+    </nav>
+  );
+}
+
+export default Navbar;">Copy</button>
+                </div>
+                <div class="code-body">
+                  <pre><code><span class="syn-kwd">import</span> { <span class="syn-tag">Link</span> } <span class="syn-kwd">from</span> <span class="syn-str">'react-router-dom'</span>;
+
+<span class="syn-kwd">function</span> <span class="syn-fn">Navbar</span>() {
+  <span class="syn-kwd">return</span> (
+    <span class="syn-tag">&lt;nav</span> <span class="syn-prop">className</span>=<span class="syn-str">'navbar'</span><span class="syn-tag">&gt;</span>
+      <span class="syn-tag">&lt;div</span> <span class="syn-prop">className</span>=<span class="syn-str">'logo'</span><span class="syn-tag">&gt;</span>DevStore<span class="syn-tag">&lt;/div&gt;</span>
+      <span class="syn-tag">&lt;div</span> <span class="syn-prop">className</span>=<span class="syn-str">'nav-links'</span><span class="syn-tag">&gt;</span>
+        <span class="syn-tag">&lt;Link</span> <span class="syn-prop">to</span>=<span class="syn-str">"/"</span><span class="syn-tag">&gt;</span>Home<span class="syn-tag">&lt;/Link&gt;</span>
+        <span class="syn-tag">&lt;Link</span> <span class="syn-prop">to</span>=<span class="syn-str">"/products"</span><span class="syn-tag">&gt;</span>Products<span class="syn-tag">&lt;/Link&gt;</span>
+        <span class="syn-tag">&lt;Link</span> <span class="syn-prop">to</span>=<span class="syn-str">"/about"</span><span class="syn-tag">&gt;</span>About<span class="syn-tag">&lt;/Link&gt;</span>
+      <span class="syn-tag">&lt;/div&gt;</span>
+    <span class="syn-tag">&lt;/nav&gt;</span>
+  );
+}</code></pre>
+                </div>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-title">🖥️ Navbar Preview</div>
+              <div style="background: var(--bg-surface); border: 1px solid var(--border-medium); border-radius: var(--radius-sm); padding: 1.25rem; margin-top: 1rem;">
+                <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-subtle); padding-bottom: 0.75rem;">
+                  <strong style="color: var(--react-cyan); font-size: 1.1rem;">⚡ DevStore</strong>
+                  <div style="display: flex; gap: 1.25rem; font-size: 0.92rem;">
+                    <span style="color: var(--react-cyan); font-weight: 600; text-decoration: underline;">Home</span>
+                    <span style="color: var(--text-secondary); cursor: pointer;">Products</span>
+                    <span style="color: var(--text-secondary); cursor: pointer;">About</span>
+                  </div>
+                </div>
+                <div style="padding: 1.5rem 0; text-align: center; color: var(--text-muted); font-size: 0.88rem;">
+                  Page content updates below while Navbar stays static!
+                </div>
+              </div>
+
+              <div class="callout tip" style="margin-top: 1.25rem;">
+                <div class="callout-icon">💡</div>
+                <div>Place <code class="inline-code">&lt;Navbar /&gt;</code> directly above <code class="inline-code">&lt;Routes&gt;</code> in <code class="inline-code">App.jsx</code> so every view gets the persistent menu!</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Slide 14: NavLink -->
+      <section class="slide" data-slide="14" id="slide-14">
+        <div class="slide-content">
+          <div class="slide-tag">Section 3 • Navigation</div>
+          <h2 class="slide-title">The &lt;NavLink&gt; Component</h2>
+          <p class="slide-subtitle">
+            <code class="inline-code">&lt;NavLink&gt;</code> is a specialized version of <code class="inline-code">&lt;Link&gt;</code> that knows whether its route is currently active.
+          </p>
+
+          <div class="grid-2">
+            <div class="code-editor">
+              <div class="code-header">
+                <div class="code-window-controls">
+                  <span class="dot-btn dot-red"></span>
+                  <span class="dot-btn dot-yellow"></span>
+                  <span class="dot-btn dot-green"></span>
+                </div>
+                <div class="code-title">Active Styling with NavLink</div>
+                <button class="copy-btn" data-copy="import { NavLink } from 'react-router-dom';
+
+function Navbar() {
+  return (
+    <nav>
+      {/* Automatically receives .active CSS class when current URL matches */}
+      <NavLink
+        to='/products'
+        className={({ isActive }) => (isActive ? 'nav-active' : 'nav-idle')}
+      >
+        Products
+      </NavLink>
+    </nav>
+  );
+}">Copy</button>
+              </div>
+              <div class="code-body">
+                <pre><code><span class="syn-kwd">import</span> { <span class="syn-tag">NavLink</span> } <span class="syn-kwd">from</span> <span class="syn-str">'react-router-dom'</span>;
+
+<span class="syn-kwd">function</span> <span class="syn-fn">Navbar</span>() {
+  <span class="syn-kwd">return</span> (
+    <span class="syn-tag">&lt;nav&gt;</span>
+      <span class="syn-comment">{/* Receives isActive boolean automatically */}</span>
+      <span class="syn-tag">&lt;NavLink</span>
+        <span class="syn-prop">to</span>=<span class="syn-str">"/products"</span>
+        <span class="syn-prop">className</span>={({ <span class="syn-prop">isActive</span> }) =&gt;
+          <span class="syn-prop">isActive</span> ? <span class="syn-str">'nav-active'</span> : <span class="syn-str">'nav-idle'</span>
+        }
+      <span class="syn-tag">&gt;</span>
+        Products
+      <span class="syn-tag">&lt;/NavLink&gt;</span>
+    <span class="syn-tag">&lt;/nav&gt;</span>
+  );
+}</code></pre>
+              </div>
+            </div>
+
+            <div class="card highlight">
+              <div class="card-title">🌟 Key Benefits of NavLink</div>
+              <ul class="styled-list">
+                <li>
+                  <span class="bullet-icon">🎨</span>
+                  <div><strong>Automatic Active Class:</strong> By default, it adds an <code class="inline-code">active</code> CSS class to the rendered HTML anchor when selected.</div>
+                </li>
+                <li>
+                  <span class="bullet-icon">🎯</span>
+                  <div><strong>Dynamic Class / Style:</strong> Accepts a function with <code class="inline-code">({ isActive })</code> to conditionally apply styles.</div>
+                </li>
+                <li>
+                  <span class="bullet-icon">📱</span>
+                  <div><strong>Ideal For:</strong>
+                    <div style="margin-top: 0.35rem; display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                      <span class="section-tag">Top Navigation</span>
+                      <span class="section-tag">Sidebar Links</span>
+                      <span class="section-tag">Dashboard Menus</span>
+                    </div>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SECTION 4 — ROUTE PARAMETERS (Slides 15 - 18)
+           ==================================================================== -->
+
+      <!-- Slide 15: What Are Route Parameters? -->
+      <section class="slide" data-slide="15" id="slide-15">
+        <div class="slide-content">
+          <div class="slide-tag">Section 4 • Route Parameters</div>
+          <h2 class="slide-title">What Are Route Parameters?</h2>
+          <p class="slide-subtitle">
+            Web applications often need to display details for hundreds or thousands of unique items using a single template component.
+          </p>
+
+          <div class="grid-2">
+            <div class="comparison-box bad">
+              <div class="comparison-header">
+                <span class="comparison-title" style="color: var(--accent-rose);">❌ Hardcoding Each Item</span>
+              </div>
+              <div style="font-family: var(--font-mono); font-size: 0.88rem; line-height: 2; color: var(--text-secondary);">
+                /products/101 &nbsp;→ &lt;Product101 /&gt;<br>
+                /products/102 &nbsp;→ &lt;Product102 /&gt;<br>
+                /products/103 &nbsp;→ &lt;Product103 /&gt;<br>
+                /products/104 &nbsp;→ &lt;Product104 /&gt; ...
+              </div>
+              <p style="margin-top: 1rem; font-size: 0.88rem; color: var(--accent-rose);">
+                Impossible to maintain when you have hundreds or thousands of products in a database!
+              </p>
+            </div>
+
+            <div class="comparison-box good">
+              <div class="comparison-header">
+                <span class="comparison-title" style="color: var(--accent-emerald);">✅ Dynamic Route Parameter</span>
+              </div>
+              <div style="font-family: var(--font-mono); font-size: 0.95rem; line-height: 2; color: var(--text-main);">
+                <div style="background: var(--bg-surface); padding: 0.75rem 1rem; border-radius: var(--radius-sm); border: 1px solid var(--accent-emerald-border);">
+                  <span style="color: var(--react-cyan); font-weight: 700;">/products/:id</span>
+                  <span style="color: var(--text-dim); margin: 0 0.5rem;">→</span>
+                  <span style="color: #34D399;">&lt;ProductDetails /&gt;</span>
+                </div>
+              </div>
+              <p style="margin-top: 1rem; font-size: 0.88rem; color: var(--text-secondary);">
+                A single route pattern matches any product ID and passes it dynamically to one reusable component!
+              </p>
+            </div>
+          </div>
+
+          <div class="callout tip">
+            <div class="callout-icon">💡</div>
+            <div>The colon <code class="inline-code">:id</code> marks that segment of the URL as a <strong>wildcard variable</strong> instead of a literal word.</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Slide 16: Creating a Dynamic Route -->
+      <section class="slide" data-slide="16" id="slide-16">
+        <div class="slide-content">
+          <div class="slide-tag">Section 4 • Route Parameters</div>
+          <h2 class="slide-title">Creating a Dynamic Route</h2>
+          <p class="slide-subtitle">
+            Prefix a route segment with a colon <code class="inline-code">:</code> to define a parameter placeholder.
+          </p>
+
+          <div class="grid-2">
+            <div class="code-editor">
+              <div class="code-header">
+                <div class="code-window-controls">
+                  <span class="dot-btn dot-red"></span>
+                  <span class="dot-btn dot-yellow"></span>
+                  <span class="dot-btn dot-green"></span>
+                </div>
+                <div class="code-title">Defining Dynamic Path</div>
+                <button class="copy-btn" data-copy="<Routes>
+  {/* Static routes */}
+  <Route path='/' element={<Home />} />
+  <Route path='/products' element={<Products />} />
+
+  {/* Dynamic route with parameter */}
+  <Route path='/products/:id' element={<ProductDetails />} />
+</Routes>">Copy</button>
+              </div>
+              <div class="code-body">
+                <pre><code><span class="syn-tag">&lt;Routes&gt;</span>
+  <span class="syn-comment">{/* Static routes */}</span>
+  <span class="syn-tag">&lt;Route</span> <span class="syn-prop">path</span>=<span class="syn-str">"/"</span> <span class="syn-prop">element</span>={<span class="syn-tag">&lt;Home /&gt;</span>} <span class="syn-tag">/&gt;</span>
+  <span class="syn-tag">&lt;Route</span> <span class="syn-prop">path</span>=<span class="syn-str">"/products"</span> <span class="syn-prop">element</span>={<span class="syn-tag">&lt;Products /&gt;</span>} <span class="syn-tag">/&gt;</span>
+
+  <span class="syn-comment">{/* Dynamic route parameter: :id */}</span>
+  <span class="syn-tag">&lt;Route</span>
+    <span class="syn-prop">path</span>=<span class="syn-str">"/products/:id"</span>
+    <span class="syn-prop">element</span>={<span class="syn-tag">&lt;ProductDetails /&gt;</span>}
+  <span class="syn-tag">/&gt;</span>
+<span class="syn-tag">&lt;/Routes&gt;</span></code></pre>
+              </div>
+            </div>
+
+            <div class="card highlight">
+              <div class="card-title">🔍 URL Matching Examples</div>
+              <div style="font-family: var(--font-mono); font-size: 0.92rem; line-height: 2.2; margin-top: 0.75rem;">
+                <div style="display: flex; justify-content: space-between; border-bottom: 1px solid var(--border-subtle); padding: 0.35rem 0;">
+                  <span>/products/101</span>
+                  <span style="color: var(--react-cyan);">{ id: "101" }</span>
+                </div>
+                <div style="display: flex; justify-content: space-between; border-bottom: 1px solid var(--border-subtle); padding: 0.35rem 0;">
+                  <span>/products/macbook-pro</span>
+                  <span style="color: var(--react-cyan);">{ id: "macbook-pro" }</span>
+                </div>
+                <div style="display: flex; justify-content: space-between; padding: 0.35rem 0;">
+                  <span>/products/499</span>
+                  <span style="color: var(--react-cyan);">{ id: "499" }</span>
+                </div>
+              </div>
+              <div class="callout info" style="margin-top: 1.25rem;">
+                <div class="callout-icon">ℹ️</div>
+                <div>Whatever name follows the colon (<code class="inline-code">:id</code>, <code class="inline-code">:productId</code>, <code class="inline-code">:slug</code>) becomes the property key in the extracted object!</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Slide 17: Reading Route Parameters -->
+      <section class="slide" data-slide="17" id="slide-17">
+        <div class="slide-content">
+          <div class="slide-tag">Section 4 • Route Parameters</div>
+          <h2 class="slide-title">Reading Parameters with useParams()</h2>
+          <p class="slide-subtitle">
+            The <code class="inline-code">useParams()</code> Hook returns an object containing all dynamic route parameters extracted from the current URL.
+          </p>
+
+          <div class="grid-2">
+            <div class="code-editor">
+              <div class="code-header">
+                <div class="code-window-controls">
+                  <span class="dot-btn dot-red"></span>
+                  <span class="dot-btn dot-yellow"></span>
+                  <span class="dot-btn dot-green"></span>
+                </div>
+                <div class="code-title">src/pages/ProductDetails.jsx</div>
+                <button class="copy-btn" data-copy="import { useParams } from 'react-router-dom';
+
+function ProductDetails() {
+  // Destructure the parameter matching ':id' in the route definition
+  const { id } = useParams();
+
+  return (
+    <div className='product-details-page'>
+      <h2>Product Details</h2>
+      <p>Viewing details for Product ID: <strong>{id}</strong></p>
+    </div>
+  );
+}
+
+export default ProductDetails;">Copy</button>
+              </div>
+              <div class="code-body">
+                <pre><code><span class="syn-kwd">import</span> { <span class="syn-fn">useParams</span> } <span class="syn-kwd">from</span> <span class="syn-str">'react-router-dom'</span>;
+
+<span class="syn-kwd">function</span> <span class="syn-fn">ProductDetails</span>() {
+  <span class="syn-comment">// Extracts :id from the active URL path</span>
+  <span class="syn-kwd">const</span> { <span class="syn-prop">id</span> } = <span class="syn-fn">useParams</span>();
+
+  <span class="syn-kwd">return</span> (
+    <span class="syn-tag">&lt;div</span> <span class="syn-prop">className</span>=<span class="syn-str">'product-page'</span><span class="syn-tag">&gt;</span>
+      <span class="syn-tag">&lt;h2&gt;</span>Product Details<span class="syn-tag">&lt;/h2&gt;</span>
+      <span class="syn-tag">&lt;p&gt;</span>Product ID: <span class="syn-tag">&lt;strong&gt;</span>{<span class="syn-prop">id</span>}<span class="syn-tag">&lt;/strong&gt;&lt;/p&gt;</span>
+    <span class="syn-tag">&lt;/div&gt;</span>
+  );
+}
+
+<span class="syn-kwd">export</span> <span class="syn-kwd">default</span> ProductDetails;</code></pre>
+              </div>
+            </div>
+
+            <div class="card highlight">
+              <div class="card-title">📌 Important Technical Notes</div>
+              <ul class="styled-list">
+                <li>
+                  <span class="bullet-icon">🔡</span>
+                  <div><strong>Always a String:</strong> Route parameters are always returned as JavaScript strings (e.g., <code class="inline-code">"101"</code>).</div>
+                </li>
+                <li>
+                  <span class="bullet-icon">🔢</span>
+                  <div><strong>Converting to Number:</strong> If doing numeric lookups or math, parse it: <br>
+                    <code class="inline-code">const numericId = Number(id);</code>
+                  </div>
+                </li>
+                <li>
+                  <span class="bullet-icon">🏷️</span>
+                  <div><strong>Matching Names:</strong> If your route is <code class="inline-code">/movies/:movieId</code>, extract it as <code class="inline-code">const { movieId } = useParams()</code>.</div>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Slide 18: Real-World Parameter Example + Interactive Demo 2 -->
+      <section class="slide" data-slide="18" id="slide-18">
+        <div class="slide-content">
+          <div class="slide-tag">Section 4 • Route Parameters</div>
+          <h2 class="slide-title">Interactive Route Parameters Studio</h2>
+          <p class="slide-subtitle">
+            Click any product below to simulate parameter extraction in real time!
+          </p>
+
+          <!-- Interactive Demo 2: Route Parameters Simulator -->
+          <div class="param-demo-box" id="paramSimBox">
+            <div style="font-weight: 700; color: var(--text-muted); font-size: 0.82rem; text-transform: uppercase; margin-bottom: 0.75rem;">
+              Step 1: Select a Product to Navigate
+            </div>
+
+            <!-- Product Clickable Grid -->
+            <div class="product-pick-grid">
+              <div class="product-pick-card active" data-pid="101" data-pname="Wireless ANC Headphones" data-price="$199">
+                <div class="product-thumb-icon">🎧</div>
+                <div class="product-pick-title">Wireless ANC Headphones</div>
+                <div class="product-pick-id">Route: /products/101</div>
+              </div>
+              <div class="product-pick-card" data-pid="102" data-pname="Mechanical RGB Keyboard" data-price="$149">
+                <div class="product-thumb-icon">⌨️</div>
+                <div class="product-pick-title">Mechanical RGB Keyboard</div>
+                <div class="product-pick-id">Route: /products/102</div>
+              </div>
+              <div class="product-pick-card" data-pid="103" data-pname="UltraWide 4K Gaming Monitor" data-price="$499">
+                <div class="product-thumb-icon">🖥️</div>
+                <div class="product-pick-title">UltraWide 4K Gaming Monitor</div>
+                <div class="product-pick-id">Route: /products/103</div>
+              </div>
+            </div>
+
+            <!-- Pipeline display -->
+            <div class="param-pipeline">
+              <div class="param-badge-box">
+                <span>URL Path:</span>
+                <strong id="paramSimUrl">/products/101</strong>
+              </div>
+              <span class="flow-arrow-icon">→</span>
+              <div class="param-badge-box">
+                <span>useParams():</span>
+                <strong id="paramSimObj">{ id: "101" }</strong>
+              </div>
+              <span class="flow-arrow-icon">→</span>
+              <div class="param-badge-box" style="border-color: var(--accent-emerald-border); background: var(--accent-emerald-bg);">
+                <span style="color: #34D399;">Rendered ID:</span>
+                <strong style="color: #34D399;" id="paramSimIdDisplay">101</strong>
+              </div>
+            </div>
+
+            <!-- Rendered Component Preview -->
+            <div style="background: var(--bg-surface); border: 1px solid var(--border-medium); border-radius: var(--radius-sm); padding: 1.25rem; margin-top: 1rem; display: flex; align-items: center; justify-content: space-between;">
+              <div>
+                <span class="section-tag" style="margin-bottom: 0.35rem;">&lt;ProductDetails /&gt; Active View</span>
+                <h3 id="paramSimName" style="color: var(--text-main); font-size: 1.25rem;">Wireless ANC Headphones</h3>
+                <p style="color: var(--text-muted); font-size: 0.88rem; margin-top: 0.2rem;">
+                  Database record successfully fetched for <code class="inline-code">id = "<span id="paramSimInnerId">101</span>"</code>
+                </p>
+              </div>
+              <div style="font-size: 1.45rem; font-weight: 800; color: #34D399;" id="paramSimPrice">
+                $199
+              </div>
+            </div>
+          </div>
+
+          <div class="callout tip">
+            <div class="callout-icon">💡</div>
+            <div>
+              <strong>Interactive Demo 2:</strong> Notice how one component definition smoothly adapts to any URL parameter without duplicate routes!
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SECTION 5 — QUERY STRINGS (Slides 19 - 22)
+           ==================================================================== -->
+
+      <!-- Slide 19: What Is a Query String? -->
+      <section class="slide" data-slide="19" id="slide-19">
+        <div class="slide-content">
+          <div class="slide-tag">Section 5 • Query Strings</div>
+          <h2 class="slide-title">What Is a Query String?</h2>
+          <p class="slide-subtitle">
+            Query strings provide optional key-value pairs appended to the URL after a question mark <code class="inline-code">?</code>.
+          </p>
+
+          <div class="grid-2">
+            <div class="card">
+              <div class="card-title">🔍 URL Query Anatomy</div>
+              <div style="font-family: var(--font-mono); font-size: 0.95rem; line-height: 2.2; margin-top: 1rem; background: var(--bg-surface); padding: 1.25rem; border-radius: var(--radius-sm); border: 1px solid var(--border-subtle);">
+                <div style="color: var(--react-cyan); font-weight: 700;">/products</div>
+                <div style="color: var(--accent-amber); font-weight: 700;">&nbsp;&nbsp;? (Query Separator)</div>
+                <div style="color: #A78BFA;">&nbsp;&nbsp;category=shoes</div>
+                <div style="color: var(--accent-amber); font-weight: 700;">&nbsp;&nbsp;&amp; (Parameter Joiner)</div>
+                <div style="color: #34D399;">&nbsp;&nbsp;sort=price</div>
+              </div>
+              <p style="font-size: 0.9rem; color: var(--text-muted); margin-top: 1rem;">
+                Full URL: <code class="inline-code">/products?category=shoes&amp;sort=price</code>
+              </p>
+            </div>
+
+            <div class="card highlight">
+              <div class="card-title">✨ What Are Query Strings Used For?</div>
+              <ul class="styled-list">
+                <li>
+                  <span class="bullet-icon">🔎</span>
+                  <div><strong>Search Queries:</strong> <code class="inline-code">?search=iphone</code></div>
+                </li>
+                <li>
+                  <span class="bullet-icon">🏷️</span>
+                  <div><strong>Filtering Categories:</strong> <code class="inline-code">?category=electronics</code></div>
+                </li>
+                <li>
+                  <span class="bullet-icon">📊</span>
+                  <div><strong>Sorting Orders:</strong> <code class="inline-code">?sort=asc</code> or <code class="inline-code">?sort=price</code></div>
+                </li>
+                <li>
+                  <span class="bullet-icon">📄</span>
+                  <div><strong>Pagination:</strong> <code class="inline-code">?page=2&amp;limit=20</code></div>
+                </li>
+              </ul>
+              <div class="callout info">
+                <div class="callout-icon">ℹ️</div>
+                <div>Unlike route parameters, query strings are <strong>optional</strong> and do not alter the base route path matching.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Slide 20: Reading Query Strings -->
+      <section class="slide" data-slide="20" id="slide-20">
+        <div class="slide-content">
+          <div class="slide-tag">Section 5 • Query Strings</div>
+          <h2 class="slide-title">Reading Query Strings with useSearchParams()</h2>
+          <p class="slide-subtitle">
+            React Router provides the <code class="inline-code">useSearchParams()</code> Hook to easily read and set query values.
+          </p>
+
+          <div class="grid-2">
+            <div class="code-editor">
+              <div class="code-header">
+                <div class="code-window-controls">
+                  <span class="dot-btn dot-red"></span>
+                  <span class="dot-btn dot-yellow"></span>
+                  <span class="dot-btn dot-green"></span>
+                </div>
+                <div class="code-title">useSearchParams Hook</div>
+                <button class="copy-btn" data-copy="import { useSearchParams } from 'react-router-dom';
+
+function Products() {
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  // Read individual query parameters using .get()
+  const category = searchParams.get('category');
+  const sort = searchParams.get('sort');
+
+  return (
+    <div>
+      <h2>Products Catalog</h2>
+      <p>Filtering by category: <strong>{category || 'All'}</strong></p>
+      <p>Sorting by: <strong>{sort || 'Default'}</strong></p>
+    </div>
+  );
+}">Copy</button>
+              </div>
+              <div class="code-body">
+                <pre><code><span class="syn-kwd">import</span> { <span class="syn-fn">useSearchParams</span> } <span class="syn-kwd">from</span> <span class="syn-str">'react-router-dom'</span>;
+
+<span class="syn-kwd">function</span> <span class="syn-fn">Products</span>() {
+  <span class="syn-comment">// Similar to useState, returns [params, setParams]</span>
+  <span class="syn-kwd">const</span> [<span class="syn-prop">searchParams</span>] = <span class="syn-fn">useSearchParams</span>();
+
+  <span class="syn-comment">// Extract specific query values with .get(key)</span>
+  <span class="syn-kwd">const</span> <span class="syn-prop">category</span> = <span class="syn-prop">searchParams</span>.<span class="syn-fn">get</span>(<span class="syn-str">'category'</span>);
+  <span class="syn-kwd">const</span> <span class="syn-prop">sort</span> = <span class="syn-prop">searchParams</span>.<span class="syn-fn">get</span>(<span class="syn-str">'sort'</span>);
+
+  <span class="syn-kwd">return</span> (
+    <span class="syn-tag">&lt;div&gt;</span>
+      <span class="syn-tag">&lt;h2&gt;</span>Category: {<span class="syn-prop">category</span> || <span class="syn-str">'All'</span>}<span class="syn-tag">&lt;/h2&gt;</span>
+      <span class="syn-tag">&lt;h3&gt;</span>Sort: {<span class="syn-prop">sort</span> || <span class="syn-str">'None'</span>}<span class="syn-tag">&lt;/h3&gt;</span>
+    <span class="syn-tag">&lt;/div&gt;</span>
+  );
+}</code></pre>
+              </div>
+            </div>
+
+            <div class="card highlight">
+              <div class="card-title">🔑 How useSearchParams Works</div>
+              <ul class="styled-list">
+                <li>
+                  <span class="bullet-icon">📦</span>
+                  <div><strong>URLSearchParams Object:</strong> <code class="inline-code">searchParams</code> is an instance of the native browser URLSearchParams API.</div>
+                </li>
+                <li>
+                  <span class="bullet-icon">🔍</span>
+                  <div><strong>searchParams.get('key'):</strong> Returns the string value for that key, or <code class="inline-code">null</code> if the parameter does not exist.</div>
+                </li>
+                <li>
+                  <span class="bullet-icon">🔄</span>
+                  <div><strong>Reactive:</strong> If the URL query string changes, the component automatically re-renders with fresh values!</div>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Slide 21: Route Parameter vs Query String -->
+      <section class="slide" data-slide="21" id="slide-21">
+        <div class="slide-content">
+          <div class="slide-tag">Section 5 • Query Strings</div>
+          <h2 class="slide-title">Route Parameter vs Query String</h2>
+          <p class="slide-subtitle">
+            One of the most essential distinctions in web architecture. When should you use which?
+          </p>
+
+          <div class="comparison-container">
+            <div class="comparison-box param-box">
+              <div class="comparison-header">
+                <span class="comparison-title" style="color: var(--react-cyan);">🆔 Route Parameter</span>
+                <span class="section-tag">Required</span>
+              </div>
+              <div style="font-family: var(--font-mono); font-size: 1.1rem; padding: 1rem; background: var(--bg-surface); border-radius: var(--radius-sm); text-align: center;">
+                /products/<span style="color: var(--react-cyan); font-weight: 800; border-bottom: 2px solid var(--react-cyan);">101</span>
+              </div>
+              <div style="margin-top: 1rem;">
+                <p style="font-weight: 700; color: var(--text-main); margin-bottom: 0.5rem;">Purpose:</p>
+                <p style="color: var(--text-secondary); font-size: 0.92rem; line-height: 1.6;">
+                  Identifies a <strong>specific, unique resource</strong>. Without this ID, the page cannot exist or render the specific item.
+                </p>
+                <div style="margin-top: 0.75rem; font-size: 0.88rem; color: var(--text-muted);">
+                  <strong>Examples:</strong> <br>
+                  • <code class="inline-code">/users/42</code> (User #42) <br>
+                  • <code class="inline-code">/posts/hello-world</code> (Blog post)
+                </div>
+              </div>
+            </div>
+
+            <div class="comparison-box query-box">
+              <div class="comparison-header">
+                <span class="comparison-title" style="color: var(--accent-purple);">🔍 Query String</span>
+                <span class="section-tag" style="color: var(--accent-purple); border-color: var(--accent-purple-border);">Optional</span>
+              </div>
+              <div style="font-family: var(--font-mono); font-size: 1.1rem; padding: 1rem; background: var(--bg-surface); border-radius: var(--radius-sm); text-align: center;">
+                /products<span style="color: var(--accent-purple); font-weight: 800; border-bottom: 2px solid var(--accent-purple);">?category=shoes</span>
+              </div>
+              <div style="margin-top: 1rem;">
+                <p style="font-weight: 700; color: var(--text-main); margin-bottom: 0.5rem;">Purpose:</p>
+                <p style="color: var(--text-secondary); font-size: 0.92rem; line-height: 1.6;">
+                  <strong>Filters, sorts, searches, or paginates</strong> an existing list of items. If omitted, the page still renders default items.
+                </p>
+                <div style="margin-top: 0.75rem; font-size: 0.88rem; color: var(--text-muted);">
+                  <strong>Examples:</strong> <br>
+                  • <code class="inline-code">/products?search=phone</code> <br>
+                  • <code class="inline-code">/products?sort=price&amp;page=2</code>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="callout tip">
+            <div class="callout-icon">💡</div>
+            <div><strong>Rule of Thumb:</strong> Is the value essential to know *which single item* to show? Use a <strong>Route Param</strong>. Is it just modifying *how a list is displayed*? Use a <strong>Query String</strong>.</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Slide 22: Practical Example + Interactive Demo 3 -->
+      <section class="slide" data-slide="22" id="slide-22">
+        <div class="slide-content">
+          <div class="slide-tag">Section 5 • Query Strings</div>
+          <h2 class="slide-title">Interactive Query String Generator</h2>
+          <p class="slide-subtitle">
+            Type a search term, change the category, or select a sort order to observe real-time query URL construction and parameter extraction.
+          </p>
+
+          <!-- Interactive Demo 3: Query Strings Simulator -->
+          <div class="query-sim-container" id="querySimBox">
+            <div class="query-controls-row">
+              <div class="query-input-group">
+                <label for="queryInputSearch">Search Term:</label>
+                <input type="text" id="queryInputSearch" class="query-input" value="phone" placeholder="e.g. laptop, phone, mouse">
+              </div>
+
+              <div class="query-input-group">
+                <label for="querySelectCat">Category:</label>
+                <select id="querySelectCat" class="query-input">
+                  <option value="electronics" selected>Electronics</option>
+                  <option value="accessories">Accessories</option>
+                  <option value="audio">Audio</option>
+                  <option value="all">All Categories</option>
+                </select>
+              </div>
+
+              <div class="query-input-group">
+                <label for="querySelectSort">Sort By:</label>
+                <select id="querySelectSort" class="query-input">
+                  <option value="price" selected>Price (Lowest First)</option>
+                  <option value="rating">Customer Rating</option>
+                  <option value="newest">Newest Arrivals</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Live Simulated URL -->
+            <div style="background: var(--bg-terminal); border: 1px solid var(--border-medium); border-radius: var(--radius-sm); padding: 1rem; font-family: var(--font-mono); font-size: 0.95rem;">
+              <span style="color: var(--text-dim);">Generated URL:</span><br>
+              <span style="color: var(--react-cyan); font-weight: 700;">/products?</span><span style="color: #A78BFA;" id="querySimFullString">search=phone&amp;category=electronics&amp;sort=price</span>
+            </div>
+
+            <!-- Visual Extracted Badges -->
+            <div class="query-extracted-grid">
+              <div class="query-extract-card">
+                <div class="query-extract-key">searchParams.get("search")</div>
+                <div class="query-extract-val" id="extractSearchVal">phone</div>
+              </div>
+              <div class="query-extract-card">
+                <div class="query-extract-key">searchParams.get("category")</div>
+                <div class="query-extract-val" id="extractCatVal">electronics</div>
+              </div>
+              <div class="query-extract-card">
+                <div class="query-extract-key">searchParams.get("sort")</div>
+                <div class="query-extract-val" id="extractSortVal">price</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="callout tip">
+            <div class="callout-icon">💡</div>
+            <div>
+              <strong>Interactive Demo 3:</strong> Notice how <code class="inline-code">useSearchParams()</code> lets you parse complex, multi-variable filters effortlessly!
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SECTION 6 — PROGRAMMATIC NAVIGATION (Slides 23 - 24)
+           ==================================================================== -->
+
+      <!-- Slide 23: useNavigate() -->
+      <section class="slide" data-slide="23" id="slide-23">
+        <div class="slide-content">
+          <div class="slide-tag">Section 6 • Programmatic Navigation</div>
+          <h2 class="slide-title">Programmatic Navigation with useNavigate()</h2>
+          <p class="slide-subtitle">
+            Sometimes navigation should happen imperatively inside JavaScript code — for example after a login submission, checkout completion, or timer expiration.
+          </p>
+
+          <div class="grid-2">
+            <div class="code-editor">
+              <div class="code-header">
+                <div class="code-window-controls">
+                  <span class="dot-btn dot-red"></span>
+                  <span class="dot-btn dot-yellow"></span>
+                  <span class="dot-btn dot-green"></span>
+                </div>
+                <div class="code-title">useNavigate() Syntax</div>
+                <button class="copy-btn" data-copy="import { useNavigate } from 'react-router-dom';
+
+function Login() {
+  const navigate = useNavigate();
+
+  const handleLogin = (e) => {
+    e.preventDefault();
+    // 1. Authenticate user credentials...
+    // 2. On success, programmatically navigate to dashboard:
+    navigate('/dashboard');
+  };
+
+  return (
+    <form onSubmit={handleLogin}>
+      <button type='submit'>Log In</button>
+    </form>
+  );
+}">Copy</button>
+              </div>
+              <div class="code-body">
+                <pre><code><span class="syn-kwd">import</span> { <span class="syn-fn">useNavigate</span> } <span class="syn-kwd">from</span> <span class="syn-str">'react-router-dom'</span>;
+
+<span class="syn-kwd">function</span> <span class="syn-fn">Login</span>() {
+  <span class="syn-kwd">const</span> <span class="syn-prop">navigate</span> = <span class="syn-fn">useNavigate</span>();
+
+  <span class="syn-kwd">const</span> <span class="syn-fn">handleLogin</span> = () =&gt; {
+    <span class="syn-comment">// Perform authentication logic...</span>
+    <span class="syn-comment">// Navigate to protected area upon success:</span>
+    <span class="syn-fn">navigate</span>(<span class="syn-str">'/dashboard'</span>);
+  };
+
+  <span class="syn-kwd">return</span> (
+    <span class="syn-tag">&lt;button</span> <span class="syn-prop">onClick</span>={<span class="syn-fn">handleLogin</span>}<span class="syn-tag">&gt;</span>
+      Login
+    <span class="syn-tag">&lt;/button&gt;</span>
+  );
+}</code></pre>
+              </div>
+            </div>
+
+            <div class="card highlight">
+              <div class="card-title">🔄 The Execution Flow</div>
+              <div class="flow-diagram-container" style="flex-direction: column; align-items: stretch;">
+                <div class="flow-step-box" style="text-align: left;">
+                  <div class="flow-step-title">1. User Action</div>
+                  <div class="flow-step-desc">User clicks "Log In" button</div>
+                </div>
+                <div style="text-align: center; color: var(--text-dim); font-size: 1.2rem;">↓</div>
+                <div class="flow-step-box" style="text-align: left;">
+                  <div class="flow-step-title">2. Async Success</div>
+                  <div class="flow-step-desc">Auth checks pass and credentials verified</div>
+                </div>
+                <div style="text-align: center; color: var(--text-dim); font-size: 1.2rem;">↓</div>
+                <div class="flow-step-box active" style="text-align: left;">
+                  <div class="flow-step-title">3. Imperative Redirect</div>
+                  <div class="flow-step-desc">navigate('/dashboard') executes</div>
+                </div>
+                <div style="text-align: center; color: var(--text-dim); font-size: 1.2rem;">↓</div>
+                <div class="flow-step-box" style="text-align: left; border-color: var(--accent-emerald-border); background: var(--accent-emerald-bg);">
+                  <div class="flow-step-title" style="color: #34D399;">4. Destination Render</div>
+                  <div class="flow-step-desc" style="color: #34D399;">Dashboard component mounts</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Slide 24: Back and Forward Navigation -->
+      <section class="slide" data-slide="24" id="slide-24">
+        <div class="slide-content">
+          <div class="slide-tag">Section 6 • Programmatic Navigation</div>
+          <h2 class="slide-title">Back and Forward Navigation</h2>
+          <p class="slide-subtitle">
+            <code class="inline-code">useNavigate()</code> also accepts numeric delta integers to step backward or forward through browser history.
+          </p>
+
+          <div class="grid-2">
+            <div>
+              <div class="card">
+                <div class="card-title">⏮️ Stepping in History</div>
+                <div class="code-editor">
+                  <div class="code-body">
+                    <pre><code><span class="syn-comment">// Go back 1 page in history (like browser Back button)</span>
+<span class="syn-fn">navigate</span>(-<span class="syn-num">1</span>);
+
+<span class="syn-comment">// Go forward 1 page in history</span>
+<span class="syn-fn">navigate</span>(<span class="syn-num">1</span>);
+
+<span class="syn-comment">// Go back 2 pages in history</span>
+<span class="syn-fn">navigate</span>(-<span class="syn-num">2</span>);</code></pre>
+                  </div>
+                </div>
+              </div>
+
+              <div class="card highlight" style="margin-top: 1rem;">
+                <div class="card-title">💡 Replace Option</div>
+                <p class="card-body">
+                  You can pass <code class="inline-code">{ replace: true }</code> to replace the current history entry instead of pushing a new one:
+                </p>
+                <div style="font-family: var(--font-mono); font-size: 0.88rem; color: var(--react-cyan); margin-top: 0.5rem;">
+                  navigate('/login', { replace: true });
+                </div>
+                <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 0.5rem;">
+                  This prevents users from hitting "Back" and landing back on an unauthenticated or post-logout page!
+                </p>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-title">🎯 Common Real-World Use Cases</div>
+              <ul class="styled-list">
+                <li>
+                  <span class="bullet-icon">⬅️</span>
+                  <div><strong>Back / Cancel Buttons:</strong> Allow users to cancel a form and return to the previous screen without hardcoding the route.</div>
+                </li>
+                <li>
+                  <span class="bullet-icon">🛒</span>
+                  <div><strong>Multi-Step Wizards:</strong> Step backward through multi-phase checkout or onboarding forms.</div>
+                </li>
+                <li>
+                  <span class="bullet-icon">🚫</span>
+                  <div><strong>404 Return Home:</strong> Provide a "Go Back" button on error or not-found pages.</div>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SECTION 7 — PROTECTED ROUTES (Slides 25 - 29)
+           ==================================================================== -->
+
+      <!-- Slide 25: What Is a Protected Route? -->
+      <section class="slide" data-slide="25" id="slide-25">
+        <div class="slide-content">
+          <div class="slide-tag">Section 7 • Protected Routes</div>
+          <h2 class="slide-title">What Is a Protected Route?</h2>
+          <p class="slide-subtitle">
+            A protected route is a route that should <strong>only be accessible</strong> when a specific condition is satisfied (such as a logged-in user).
+          </p>
+
+          <div class="grid-2">
+            <div class="card highlight">
+              <div class="card-title">🛡️ Gating Access</div>
+              <p class="card-body">
+                If an unauthenticated visitor tries to access <code class="inline-code">/dashboard</code> directly, the application must immediately stop them and redirect them to <code class="inline-code">/login</code>.
+              </p>
+              <div class="flow-diagram-container" style="flex-direction: column; align-items: stretch; margin-top: 1.25rem;">
+                <div class="flow-step-box" style="text-align: left;">
+                  <div class="flow-step-title">1. User requests URL</div>
+                  <div class="flow-step-desc">/dashboard</div>
+                </div>
+                <div style="text-align: center; color: var(--text-dim); font-size: 1.2rem;">↓</div>
+                <div class="flow-step-box active" style="text-align: left;">
+                  <div class="flow-step-title">2. ProtectedRoute Check</div>
+                  <div class="flow-step-desc">Is user authenticated?</div>
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.85rem; margin-top: 0.5rem;">
+                  <div style="background: var(--accent-emerald-bg); border: 1px solid var(--accent-emerald-border); border-radius: var(--radius-sm); padding: 0.75rem; text-align: center;">
+                    <div style="color: #34D399; font-weight: 700;">YES ✅</div>
+                    <div style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 0.25rem;">Render &lt;Dashboard /&gt;</div>
+                  </div>
+                  <div style="background: var(--accent-rose-bg); border: 1px solid var(--accent-rose-border); border-radius: var(--radius-sm); padding: 0.75rem; text-align: center;">
+                    <div style="color: var(--accent-rose); font-weight: 700;">NO ❌</div>
+                    <div style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 0.25rem;">Redirect to &lt;Navigate to="/login" /&gt;</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-title">📌 Key Component: &lt;Navigate /&gt;</div>
+              <p class="card-body">
+                React Router provides the <strong><code class="inline-code">&lt;Navigate to="..." /&gt;</code></strong> component to trigger automatic component-based redirects during rendering.
+              </p>
+              <div class="code-editor" style="margin-top: 1rem;">
+                <div class="code-body">
+                  <pre><code><span class="syn-kwd">import</span> { <span class="syn-tag">Navigate</span> } <span class="syn-kwd">from</span> <span class="syn-str">'react-router-dom'</span>;
+
+<span class="syn-comment">// Immediately changes browser URL to /login</span>
+<span class="syn-kwd">return</span> <span class="syn-tag">&lt;Navigate</span> <span class="syn-prop">to</span>=<span class="syn-str">"/login"</span> <span class="syn-prop">replace</span> <span class="syn-tag">/&gt;</span>;</code></pre>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Slide 26: Why Protect Routes? -->
+      <section class="slide" data-slide="26" id="slide-26">
+        <div class="slide-content">
+          <div class="slide-tag">Section 7 • Protected Routes</div>
+          <h2 class="slide-title">Why Protect Routes?</h2>
+          <p class="slide-subtitle">
+            Modern web applications have distinct zones: public areas accessible to anyone, and private areas reserved for authorized users.
+          </p>
+
+          <div class="grid-2">
+            <div class="card" style="border-left: 4px solid var(--react-cyan);">
+              <div class="card-title" style="color: var(--react-cyan);">🌐 Public Routes</div>
+              <p class="card-body">Accessible to all visitors without logging in:</p>
+              <ul class="styled-list" style="margin-top: 0.75rem;">
+                <li><span class="bullet-icon">/</span> <strong>Home:</strong> Landing page and marketing</li>
+                <li><span class="bullet-icon">/about</span> <strong>About:</strong> Company profile</li>
+                <li><span class="bullet-icon">/products</span> <strong>Products:</strong> Public item catalog</li>
+                <li><span class="bullet-icon">/login</span> <strong>Login:</strong> Authentication entry point</li>
+              </ul>
+            </div>
+
+            <div class="card" style="border-left: 4px solid var(--accent-rose);">
+              <div class="card-title" style="color: var(--accent-rose);">🔒 Private / Protected Routes</div>
+              <p class="card-body">Strictly require valid user session:</p>
+              <ul class="styled-list" style="margin-top: 0.75rem;">
+                <li><span class="bullet-icon" style="border-color: var(--accent-rose-border); color: var(--accent-rose);">/dashboard</span> <strong>Dashboard:</strong> User analytics &amp; stats</li>
+                <li><span class="bullet-icon" style="border-color: var(--accent-rose-border); color: var(--accent-rose);">/profile</span> <strong>Profile:</strong> Personal settings &amp; email</li>
+                <li><span class="bullet-icon" style="border-color: var(--accent-rose-border); color: var(--accent-rose);">/orders</span> <strong>Orders:</strong> Purchase history</li>
+                <li><span class="bullet-icon" style="border-color: var(--accent-rose-border); color: var(--accent-rose);">/settings</span> <strong>Settings:</strong> Account configuration</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="callout warning">
+            <div class="callout-icon">⚠️</div>
+            <div><strong>Security Awareness Note:</strong> Frontend protected routes provide user experience protection. Sensitive database data must always also be verified and secured on the backend API!</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Slide 27: Basic Protected Route Concept -->
+      <section class="slide" data-slide="27" id="slide-27">
+        <div class="slide-content">
+          <div class="slide-tag">Section 7 • Protected Routes</div>
+          <h2 class="slide-title">Basic Protected Route Concept</h2>
+          <p class="slide-subtitle">
+            A protected route is simply a wrapper component that inspects an authentication condition and either renders its children or returns a redirect.
+          </p>
+
+          <div class="grid-2">
+            <div class="code-editor">
+              <div class="code-header">
+                <div class="code-window-controls">
+                  <span class="dot-btn dot-red"></span>
+                  <span class="dot-btn dot-yellow"></span>
+                  <span class="dot-btn dot-green"></span>
+                </div>
+                <div class="code-title">src/components/ProtectedRoute.jsx</div>
+                <button class="copy-btn" data-copy="import { Navigate } from 'react-router-dom';
+
+function ProtectedRoute({ children }) {
+  // Simple authentication condition (true or false)
+  const isAuthenticated = true;
+
+  if (!isAuthenticated) {
+    // If not authenticated, redirect to /login
+    return <Navigate to='/login' replace />;
+  }
+
+  // If authenticated, render the protected component
+  return children;
+}
+
+export default ProtectedRoute;">Copy</button>
+              </div>
+              <div class="code-body">
+                <pre><code><span class="syn-kwd">import</span> { <span class="syn-tag">Navigate</span> } <span class="syn-kwd">from</span> <span class="syn-str">'react-router-dom'</span>;
+
+<span class="syn-kwd">function</span> <span class="syn-fn">ProtectedRoute</span>({ <span class="syn-prop">children</span> }) {
+  <span class="syn-comment">// Simple auth condition check</span>
+  <span class="syn-kwd">const</span> <span class="syn-prop">isAuthenticated</span> = <span class="syn-bool">true</span>;
+
+  <span class="syn-kwd">if</span> (!<span class="syn-prop">isAuthenticated</span>) {
+    <span class="syn-comment">// Deny access &amp; redirect</span>
+    <span class="syn-kwd">return</span> <span class="syn-tag">&lt;Navigate</span> <span class="syn-prop">to</span>=<span class="syn-str">"/login"</span> <span class="syn-prop">replace</span> <span class="syn-tag">/&gt;</span>;
+  }
+
+  <span class="syn-comment">// Authorized: render the wrapped page</span>
+  <span class="syn-kwd">return</span> <span class="syn-prop">children</span>;
+}
+
+<span class="syn-kwd">export</span> <span class="syn-kwd">default</span> ProtectedRoute;</code></pre>
+              </div>
+            </div>
+
+            <div class="card highlight">
+              <div class="card-title">🧠 The Mental Model</div>
+              <ul class="styled-list">
+                <li>
+                  <span class="bullet-icon">1</span>
+                  <div><strong>The Guard:</strong> <code class="inline-code">&lt;ProtectedRoute&gt;</code> acts as a security guard standing at the door of private pages.</div>
+                </li>
+                <li>
+                  <span class="bullet-icon">2</span>
+                  <div><strong>children Prop:</strong> Whatever component is nested inside (<code class="inline-code">&lt;Dashboard /&gt;</code>) is passed as <code class="inline-code">children</code>.</div>
+                </li>
+                <li>
+                  <span class="bullet-icon">3</span>
+                  <div><strong>Clean Separation:</strong> The Dashboard component doesn't need ugly auth checking logic inside it — the wrapper handles everything!</div>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Slide 28: Using Protected Route -->
+      <section class="slide" data-slide="28" id="slide-28">
+        <div class="slide-content">
+          <div class="slide-tag">Section 7 • Protected Routes</div>
+          <h2 class="slide-title">Using Protected Route in App.jsx</h2>
+          <p class="slide-subtitle">
+            Wrap the target private component directly inside <code class="inline-code">&lt;ProtectedRoute&gt;</code> in your route table.
+          </p>
+
+          <div class="grid-2">
+            <div class="code-editor">
+              <div class="code-header">
+                <div class="code-window-controls">
+                  <span class="dot-btn dot-red"></span>
+                  <span class="dot-btn dot-yellow"></span>
+                  <span class="dot-btn dot-green"></span>
+                </div>
+                <div class="code-title">App.jsx with Protected Route</div>
+                <button class="copy-btn" data-copy="<Routes>
+  {/* Public Routes */}
+  <Route path='/' element={<Home />} />
+  <Route path='/login' element={<Login />} />
+
+  {/* Protected Route */}
+  <Route
+    path='/dashboard'
+    element={
+      <ProtectedRoute>
+        <Dashboard />
+      </ProtectedRoute>
+    }
+  />
+</Routes>">Copy</button>
+              </div>
+              <div class="code-body">
+                <pre><code><span class="syn-tag">&lt;Routes&gt;</span>
+  <span class="syn-comment">{/* Public routes */}</span>
+  <span class="syn-tag">&lt;Route</span> <span class="syn-prop">path</span>=<span class="syn-str">"/"</span> <span class="syn-prop">element</span>={<span class="syn-tag">&lt;Home /&gt;</span>} <span class="syn-tag">/&gt;</span>
+  <span class="syn-tag">&lt;Route</span> <span class="syn-prop">path</span>=<span class="syn-str">"/login"</span> <span class="syn-prop">element</span>={<span class="syn-tag">&lt;Login /&gt;</span>} <span class="syn-tag">/&gt;</span>
+
+  <span class="syn-comment">{/* Gated private route */}</span>
+  <span class="syn-tag">&lt;Route</span>
+    <span class="syn-prop">path</span>=<span class="syn-str">"/dashboard"</span>
+    <span class="syn-prop">element</span>={
+      <span class="syn-tag">&lt;ProtectedRoute&gt;</span>
+        <span class="syn-tag">&lt;Dashboard /&gt;</span>
+      <span class="syn-tag">&lt;/ProtectedRoute&gt;</span>
+    }
+  <span class="syn-tag">/&gt;</span>
+<span class="syn-tag">&lt;/Routes&gt;</span></code></pre>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-title">🔍 Step-by-Step Path Resolution</div>
+              <div style="font-family: var(--font-mono); font-size: 0.92rem; line-height: 2; margin-top: 1rem;">
+                <div style="padding: 0.5rem 0.75rem; background: var(--bg-surface); border-radius: var(--radius-xs); margin-bottom: 0.5rem;">
+                  1. User enters: <strong style="color: var(--react-cyan);">/dashboard</strong>
+                </div>
+                <div style="padding: 0.5rem 0.75rem; background: var(--bg-surface); border-radius: var(--radius-xs); margin-bottom: 0.5rem;">
+                  2. Route renders: <strong style="color: #A78BFA;">&lt;ProtectedRoute&gt;</strong>
+                </div>
+                <div style="padding: 0.5rem 0.75rem; background: var(--bg-surface); border-radius: var(--radius-xs); margin-bottom: 0.5rem;">
+                  3. If true → renders <strong style="color: #34D399;">&lt;Dashboard /&gt;</strong>
+                </div>
+                <div style="padding: 0.5rem 0.75rem; background: var(--bg-surface); border-radius: var(--radius-xs);">
+                  4. If false → redirects to <strong style="color: var(--accent-rose);">/login</strong>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Slide 29: Protected Route With Authentication + Interactive Demo 4 -->
+      <section class="slide" data-slide="29" id="slide-29">
+        <div class="slide-content">
+          <div class="slide-tag">Section 7 • Protected Routes</div>
+          <h2 class="slide-title">Interactive Protected Route Simulation</h2>
+          <p class="slide-subtitle">
+            Toggle authentication ON or OFF, then attempt to navigate to <code class="inline-code">/dashboard</code> to test the gate.
+          </p>
+
+          <!-- Interactive Demo 4: Protected Route Simulator -->
+          <div class="protected-sim-box" id="protectedSimBox">
+            <div class="auth-toggle-bar">
+              <div class="auth-state-display">
+                <span>Auth State:</span>
+                <span class="auth-pill off" id="simAuthBadge">OFF (Not Logged In)</span>
+              </div>
+              <div style="display: flex; gap: 0.75rem; align-items: center;">
+                <button class="toggle-switch-btn" id="simToggleAuthBtn">
+                  <span>Toggle Auth State</span>
+                </button>
+                <button class="nav-btn primary" id="simVisitDashboardBtn">
+                  Visit /dashboard 🚀
+                </button>
+              </div>
+            </div>
+
+            <!-- Dynamic Preview Panel -->
+            <div class="protected-preview-panel" id="simProtectedView">
+              <div id="simViewRedirectAlert" style="display: block;">
+                <div style="font-size: 2.2rem; margin-bottom: 0.5rem;">🔒</div>
+                <h3 style="color: var(--accent-rose); margin-bottom: 0.35rem;">Access Denied — Redirected to /login</h3>
+                <p style="color: var(--text-muted); max-width: 500px; font-size: 0.92rem;">
+                  <code class="inline-code">isAuthenticated = false</code>. <code class="inline-code">&lt;ProtectedRoute&gt;</code> stopped the visitor and triggered <code class="inline-code">&lt;Navigate to="/login" replace /&gt;</code>.
+                </p>
+                <div style="margin-top: 1rem; padding: 0.5rem 1rem; background: var(--bg-surface); border-radius: var(--radius-pill); font-family: var(--font-mono); font-size: 0.85rem; color: var(--accent-rose);">
+                  Current URL: /login
+                </div>
+              </div>
+
+              <div id="simViewAllowedDashboard" style="display: none;">
+                <div style="font-size: 2.2rem; margin-bottom: 0.5rem;">📊</div>
+                <h3 style="color: #34D399; margin-bottom: 0.35rem;">Welcome to the User Dashboard!</h3>
+                <p style="color: var(--text-secondary); max-width: 500px; font-size: 0.92rem;">
+                  <code class="inline-code">isAuthenticated = true</code>. The user passed security check and <code class="inline-code">&lt;Dashboard /&gt;</code> was permitted to render!
+                </p>
+                <div style="margin-top: 1rem; padding: 0.5rem 1rem; background: var(--bg-surface); border-radius: var(--radius-pill); font-family: var(--font-mono); font-size: 0.85rem; color: #34D399;">
+                  Current URL: /dashboard
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="callout tip">
+            <div class="callout-icon">💡</div>
+            <div>
+              <strong>Interactive Demo 4:</strong> Notice how protected route logic works cleanly without cluttering the target component with auth checks!
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SECTION 8 — MINI PROJECT (Slides 30 - 34)
+           ==================================================================== -->
+
+      <!-- Slide 30: Mini Project: Product Store -->
+      <section class="slide" data-slide="30" id="slide-30">
+        <div class="slide-content">
+          <div class="slide-tag">Section 8 • Mini Project</div>
+          <h2 class="slide-title">Mini Project: Product Store</h2>
+          <p class="slide-subtitle">
+            Let's synthesize all the concepts into a cohesive mini application: <strong>DevStore</strong>.
+          </p>
+
+          <!-- Interactive Mini Project Explorer -->
+          <div class="project-explorer" id="projectExplorerBox">
+            <div class="project-route-list">
+              <div style="font-size: 0.78rem; text-transform: uppercase; font-weight: 700; color: var(--text-muted); margin-bottom: 0.5rem;">
+                Click Route to Preview:
+              </div>
+              <div class="project-route-item active" data-proj-route="/">
+                <span class="project-route-path">/</span>
+                <span class="project-route-desc">Home page landing</span>
+              </div>
+              <div class="project-route-item" data-proj-route="/products">
+                <span class="project-route-path">/products</span>
+                <span class="project-route-desc">Full product catalog</span>
+              </div>
+              <div class="project-route-item" data-proj-route="/products/101">
+                <span class="project-route-path">/products/:id</span>
+                <span class="project-route-desc">Dynamic product details</span>
+              </div>
+              <div class="project-route-item" data-proj-route="/login">
+                <span class="project-route-path">/login</span>
+                <span class="project-route-desc">Sign in credentials</span>
+              </div>
+              <div class="project-route-item" data-proj-route="/dashboard">
+                <span class="project-route-path">/dashboard</span>
+                <span class="project-route-desc">Protected user dashboard</span>
+              </div>
+            </div>
+
+            <div class="project-preview-area">
+              <div id="projViewContent" style="background: var(--bg-surface); padding: 1.5rem; border-radius: var(--radius-sm); border: 1px solid var(--border-medium);">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                  <span class="section-tag" id="projViewTag">Active Route: /</span>
+                  <span style="font-family: var(--font-mono); font-size: 0.8rem; color: var(--text-muted);">Component: &lt;Home /&gt;</span>
+                </div>
+                <h3 id="projViewTitle" style="color: var(--react-cyan); margin-bottom: 0.5rem;">DevStore Home</h3>
+                <p id="projViewDesc" style="color: var(--text-secondary); line-height: 1.6; font-size: 0.95rem;">
+                  Welcome to DevStore! Browse the latest developer gear, manage orders, and customize your setup.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div class="callout tip">
+            <div class="callout-icon">💡</div>
+            <div>This project incorporates all 5 core router pillars: static routes, dynamic IDs, query filtering, imperative redirect, and route gating!</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Slide 31: Project Routes -->
+      <section class="slide" data-slide="31" id="slide-31">
+        <div class="slide-content">
+          <div class="slide-tag">Section 8 • Mini Project</div>
+          <h2 class="slide-title">Project Routes Configuration</h2>
+          <p class="slide-subtitle">
+            Here is the complete <code class="inline-code">App.jsx</code> routing matrix for the Product Store application.
+          </p>
+
+          <div class="grid-2">
+            <div class="code-editor">
+              <div class="code-header">
+                <div class="code-window-controls">
+                  <span class="dot-btn dot-red"></span>
+                  <span class="dot-btn dot-yellow"></span>
+                  <span class="dot-btn dot-green"></span>
+                </div>
+                <div class="code-title">src/App.jsx</div>
+                <button class="copy-btn" data-copy="import { Routes, Route } from 'react-router-dom';
+import Navbar from './components/Navbar';
+import ProtectedRoute from './components/ProtectedRoute';
+import Home from './pages/Home';
+import Products from './pages/Products';
+import ProductDetails from './pages/ProductDetails';
+import Login from './pages/Login';
+import Dashboard from './pages/Dashboard';
+
+function App() {
+  return (
+    <div>
+      <Navbar />
+      <Routes>
+        <Route path='/' element={<Home />} />
+        <Route path='/products' element={<Products />} />
+        <Route path='/products/:id' element={<ProductDetails />} />
+        <Route path='/login' element={<Login />} />
+        <Route
+          path='/dashboard'
+          element={
+            <ProtectedRoute>
+              <Dashboard />
+            </ProtectedRoute>
+          }
+        />
+      </Routes>
+    </div>
+  );
+}
+
+export default App;">Copy</button>
+              </div>
+              <div class="code-body">
+                <pre><code><span class="syn-kwd">import</span> { <span class="syn-tag">Routes</span>, <span class="syn-tag">Route</span> } <span class="syn-kwd">from</span> <span class="syn-str">'react-router-dom'</span>;
+<span class="syn-kwd">import</span> Navbar <span class="syn-kwd">from</span> <span class="syn-str">'./components/Navbar'</span>;
+<span class="syn-kwd">import</span> ProtectedRoute <span class="syn-kwd">from</span> <span class="syn-str">'./components/ProtectedRoute'</span>;
+<span class="syn-kwd">import</span> Home <span class="syn-kwd">from</span> <span class="syn-str">'./pages/Home'</span>;
+<span class="syn-kwd">import</span> Products <span class="syn-kwd">from</span> <span class="syn-str">'./pages/Products'</span>;
+<span class="syn-kwd">import</span> ProductDetails <span class="syn-kwd">from</span> <span class="syn-str">'./pages/ProductDetails'</span>;
+<span class="syn-kwd">import</span> Login <span class="syn-kwd">from</span> <span class="syn-str">'./pages/Login'</span>;
+<span class="syn-kwd">import</span> Dashboard <span class="syn-kwd">from</span> <span class="syn-str">'./pages/Dashboard'</span>;
+
+<span class="syn-kwd">function</span> <span class="syn-fn">App</span>() {
+  <span class="syn-kwd">return</span> (
+    <span class="syn-tag">&lt;div&gt;</span>
+      <span class="syn-tag">&lt;Navbar /&gt;</span>
+      <span class="syn-tag">&lt;Routes&gt;</span>
+        <span class="syn-tag">&lt;Route</span> <span class="syn-prop">path</span>=<span class="syn-str">"/"</span> <span class="syn-prop">element</span>={<span class="syn-tag">&lt;Home /&gt;</span>} <span class="syn-tag">/&gt;</span>
+        <span class="syn-tag">&lt;Route</span> <span class="syn-prop">path</span>=<span class="syn-str">"/products"</span> <span class="syn-prop">element</span>={<span class="syn-tag">&lt;Products /&gt;</span>} <span class="syn-tag">/&gt;</span>
+        <span class="syn-tag">&lt;Route</span> <span class="syn-prop">path</span>=<span class="syn-str">"/products/:id"</span> <span class="syn-prop">element</span>={<span class="syn-tag">&lt;ProductDetails /&gt;</span>} <span class="syn-tag">/&gt;</span>
+        <span class="syn-tag">&lt;Route</span> <span class="syn-prop">path</span>=<span class="syn-str">"/login"</span> <span class="syn-prop">element</span>={<span class="syn-tag">&lt;Login /&gt;</span>} <span class="syn-tag">/&gt;</span>
+        <span class="syn-tag">&lt;Route</span>
+          <span class="syn-prop">path</span>=<span class="syn-str">"/dashboard"</span>
+          <span class="syn-prop">element</span>={
+            <span class="syn-tag">&lt;ProtectedRoute&gt;</span>
+              <span class="syn-tag">&lt;Dashboard /&gt;</span>
+            <span class="syn-tag">&lt;/ProtectedRoute&gt;</span>
+          }
+        <span class="syn-tag">/&gt;</span>
+      <span class="syn-tag">&lt;/Routes&gt;</span>
+    <span class="syn-tag">&lt;/div&gt;</span>
+  );
+}</code></pre>
+              </div>
+            </div>
+
+            <div class="card highlight">
+              <div class="card-title">📋 Summary Table of Routes</div>
+              <div style="font-family: var(--font-mono); font-size: 0.88rem; line-height: 2.2;">
+                <div style="display: flex; justify-content: space-between; border-bottom: 1px solid var(--border-subtle); padding: 0.35rem 0;">
+                  <span style="color: var(--react-cyan);">/</span>
+                  <span>Home Component (Public)</span>
+                </div>
+                <div style="display: flex; justify-content: space-between; border-bottom: 1px solid var(--border-subtle); padding: 0.35rem 0;">
+                  <span style="color: var(--react-cyan);">/products</span>
+                  <span>Products Catalog (Public)</span>
+                </div>
+                <div style="display: flex; justify-content: space-between; border-bottom: 1px solid var(--border-subtle); padding: 0.35rem 0;">
+                  <span style="color: var(--react-cyan);">/products/:id</span>
+                  <span>Dynamic Product (Public)</span>
+                </div>
+                <div style="display: flex; justify-content: space-between; border-bottom: 1px solid var(--border-subtle); padding: 0.35rem 0;">
+                  <span style="color: var(--react-cyan);">/login</span>
+                  <span>Login Component (Public)</span>
+                </div>
+                <div style="display: flex; justify-content: space-between; padding: 0.35rem 0;">
+                  <span style="color: var(--accent-rose);">/dashboard</span>
+                  <span style="color: var(--accent-rose);">Dashboard (Protected)</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Slide 32: Product Details Flow -->
+      <section class="slide" data-slide="32" id="slide-32">
+        <div class="slide-content">
+          <div class="slide-tag">Section 8 • Mini Project</div>
+          <h2 class="slide-title">Product Details Flow</h2>
+          <p class="slide-subtitle">
+            How a click on a product card transitions all the way to parameter extraction and rendering.
+          </p>
+
+          <div class="flow-diagram-container" style="margin: 2rem 0;">
+            <div class="flow-step-box">
+              <div class="flow-step-title">1. Products View</div>
+              <div class="flow-step-desc">&lt;Products /&gt;</div>
+            </div>
+            <span class="flow-arrow-icon">→</span>
+            <div class="flow-step-box">
+              <div class="flow-step-title">2. User Clicks Link</div>
+              <div class="flow-step-desc">&lt;Link to="/products/101"&gt;</div>
+            </div>
+            <span class="flow-arrow-icon">→</span>
+            <div class="flow-step-box active">
+              <div class="flow-step-title">3. URL Updates</div>
+              <div class="flow-step-desc">/products/101</div>
+            </div>
+            <span class="flow-arrow-icon">→</span>
+            <div class="flow-step-box">
+              <div class="flow-step-title">4. useParams()</div>
+              <div class="flow-step-desc">const { id } = useParams()</div>
+            </div>
+            <span class="flow-arrow-icon">→</span>
+            <div class="flow-step-box" style="border-color: var(--accent-emerald-border); background: var(--accent-emerald-bg);">
+              <div class="flow-step-title" style="color: #34D399;">5. Details Mounts</div>
+              <div class="flow-step-desc" style="color: #34D399;">id = "101" Rendered</div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-title">🔍 The Implementation In Products.jsx</div>
+            <div class="code-editor" style="margin-top: 0.75rem;">
+              <div class="code-body">
+                <pre><code><span class="syn-comment">// Inside Products.jsx listing cards:</span>
+{products.<span class="syn-fn">map</span>((item) =&gt; (
+  <span class="syn-tag">&lt;div</span> <span class="syn-prop">key</span>={item.<span class="syn-prop">id</span>} <span class="syn-prop">className</span>=<span class="syn-str">'product-card'</span><span class="syn-tag">&gt;</span>
+    <span class="syn-tag">&lt;h3&gt;</span>{item.<span class="syn-prop">name</span>}<span class="syn-tag">&lt;/h3&gt;</span>
+    <span class="syn-tag">&lt;Link</span> <span class="syn-prop">to</span>={<span class="syn-str">`/products/${item.id}`</span>}<span class="syn-tag">&gt;</span>
+      View Product Details →
+    <span class="syn-tag">&lt;/Link&gt;</span>
+  <span class="syn-tag">&lt;/div&gt;</span>
+))}</code></pre>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Slide 33: Product Search Flow -->
+      <section class="slide" data-slide="33" id="slide-33">
+        <div class="slide-content">
+          <div class="slide-tag">Section 8 • Mini Project</div>
+          <h2 class="slide-title">Product Search Flow</h2>
+          <p class="slide-subtitle">
+            How search inputs and filter selects leverage query strings to keep filters bookmarkable and shareable.
+          </p>
+
+          <div class="grid-2">
+            <div class="card">
+              <div class="card-title">🔗 URL Query Pipeline</div>
+              <div style="font-family: var(--font-mono); font-size: 0.95rem; line-height: 2; margin-top: 1rem; background: var(--bg-surface); padding: 1.25rem; border-radius: var(--radius-sm); border: 1px solid var(--border-subtle);">
+                <div style="color: var(--text-dim);">1. User types in search box</div>
+                <div style="color: var(--text-dim);">2. URL updates:</div>
+                <div style="color: var(--react-cyan); font-weight: 700;">/products?search=phone&amp;sort=price</div>
+                <div style="color: var(--text-dim);">3. useSearchParams() reads:</div>
+                <div style="color: #A78BFA;">search → "phone"</div>
+                <div style="color: #34D399;">sort &nbsp;&nbsp;→ "price"</div>
+                <div style="color: var(--text-dim);">4. React filters array and renders filtered grid!</div>
+              </div>
+            </div>
+
+            <div class="card highlight">
+              <div class="card-title">💡 Why Store Filters in the URL?</div>
+              <ul class="styled-list">
+                <li>
+                  <span class="bullet-icon">📤</span>
+                  <div><strong>Shareability:</strong> A customer can copy the URL and send it to a friend: the friend sees the exact same filtered product list!</div>
+                </li>
+                <li>
+                  <span class="bullet-icon">🔖</span>
+                  <div><strong>Bookmarks:</strong> Users can bookmark "electronics sorted by price" directly in their browser.</div>
+                </li>
+                <li>
+                  <span class="bullet-icon">🔙</span>
+                  <div><strong>Back Button Compatibility:</strong> Pressing "Back" returns to the previous filter state automatically.</div>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Slide 34: Project Architecture -->
+      <section class="slide" data-slide="34" id="slide-34">
+        <div class="slide-content">
+          <div class="slide-tag">Section 8 • Mini Project</div>
+          <h2 class="slide-title">Project Architecture &amp; File Structure</h2>
+          <p class="slide-subtitle">
+            A clean, beginner-friendly directory structure for multi-page React applications.
+          </p>
+
+          <div class="grid-2">
+            <div class="tree-diagram">
+              <span class="tree-node-highlight">src/</span><br>
+              │<br>
+              ├── <span style="color: #34D399; font-weight: 700;">pages/</span> (One component per routed page)<br>
+              │&nbsp;&nbsp;&nbsp;├── Home.jsx<br>
+              │&nbsp;&nbsp;&nbsp;├── Products.jsx<br>
+              │&nbsp;&nbsp;&nbsp;├── ProductDetails.jsx<br>
+              │&nbsp;&nbsp;&nbsp;├── Login.jsx<br>
+              │&nbsp;&nbsp;&nbsp;└── Dashboard.jsx<br>
+              │<br>
+              ├── <span style="color: #A78BFA; font-weight: 700;">components/</span> (Reusable elements &amp; guards)<br>
+              │&nbsp;&nbsp;&nbsp;├── Navbar.jsx<br>
+              │&nbsp;&nbsp;&nbsp;└── ProtectedRoute.jsx<br>
+              │<br>
+              ├── <span style="color: var(--react-cyan); font-weight: 700;">App.jsx</span> (Main route table container)<br>
+              └── <span style="color: var(--react-cyan); font-weight: 700;">main.jsx</span> (Wraps App in BrowserRouter)
+            </div>
+
+            <div class="card highlight">
+              <div class="card-title">📁 Separation of Concerns</div>
+              <ul class="styled-list">
+                <li>
+                  <span class="bullet-icon">📄</span>
+                  <div><strong>src/pages/:</strong> Full-screen page views that correspond to top-level URLs.</div>
+                </li>
+                <li>
+                  <span class="bullet-icon">🧩</span>
+                  <div><strong>src/components/:</strong> Reusable UI blocks (headers, cards, footers, route guards).</div>
+                </li>
+                <li>
+                  <span class="bullet-icon">🗺️</span>
+                  <div><strong>App.jsx:</strong> Acts as the single central route manifest for the entire app.</div>
+                </li>
+              </ul>
+              <div class="callout tip">
+                <div class="callout-icon">💡</div>
+                <div>Keep it simple! You don't need complex subdirectories or state management for standard client-side routing.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SECTION 9 — REVIEW & MASTERY (Slides 35 - 40)
+           ==================================================================== -->
+
+      <!-- Slide 35: Common React Router Mistakes -->
+      <section class="slide" data-slide="35" id="slide-35">
+        <div class="slide-content">
+          <div class="slide-tag">Section 9 • Review</div>
+          <h2 class="slide-title">Common React Router Mistakes</h2>
+          <p class="slide-subtitle">
+            Watch out for these 7 beginner traps when building React Router applications:
+          </p>
+
+          <div class="grid-2">
+            <div class="card" style="border-left: 3px solid var(--accent-rose);">
+              <div class="card-title" style="color: var(--accent-rose); font-size: 1.05rem;">
+                ❌ 1. Forgetting &lt;BrowserRouter&gt;
+              </div>
+              <p class="card-body">
+                Using <code class="inline-code">&lt;Routes&gt;</code>, <code class="inline-code">&lt;Link&gt;</code>, or hooks without wrapping the app in <code class="inline-code">&lt;BrowserRouter&gt;</code> throws an error: <em>"useRoutes() may be used only in the context of a Router component"</em>.
+              </p>
+            </div>
+
+            <div class="card" style="border-left: 3px solid var(--accent-rose);">
+              <div class="card-title" style="color: var(--accent-rose); font-size: 1.05rem;">
+                ❌ 2. Forgetting the Leading Slash in Paths
+              </div>
+              <p class="card-body">
+                Writing <code class="inline-code">path="products"</code> instead of <code class="inline-code">path="/products"</code> can cause unexpected relative path stacking like <code class="inline-code">/about/products</code>.
+              </p>
+            </div>
+
+            <div class="card" style="border-left: 3px solid var(--accent-rose);">
+              <div class="card-title" style="color: var(--accent-rose); font-size: 1.05rem;">
+                ❌ 3. Parameter Name Mismatch
+              </div>
+              <p class="card-body">
+                Declaring <code class="inline-code">path="/products/:id"</code> in Route, but trying to read <code class="inline-code">const { productId } = useParams()</code> in the component! The key must match the route string exactly.
+              </p>
+            </div>
+
+            <div class="card" style="border-left: 3px solid var(--accent-rose);">
+              <div class="card-title" style="color: var(--accent-rose); font-size: 1.05rem;">
+                ❌ 4. Using useParams() for Query Strings
+              </div>
+              <p class="card-body">
+                <code class="inline-code">useParams()</code> only reads colon placeholders (<code class="inline-code">:id</code>). To read queries like <code class="inline-code">?sort=price</code>, you must use <code class="inline-code">useSearchParams()</code>!
+              </p>
+            </div>
+
+            <div class="card" style="border-left: 3px solid var(--accent-rose);">
+              <div class="card-title" style="color: var(--accent-rose); font-size: 1.05rem;">
+                ❌ 5. Using &lt;a href&gt; for Internal Links
+              </div>
+              <p class="card-body">
+                Forces full browser reloads, resetting state and ruining SPA speed. Always use <code class="inline-code">&lt;Link to="..."&gt;</code> or <code class="inline-code">&lt;NavLink&gt;</code>.
+              </p>
+            </div>
+
+            <div class="card" style="border-left: 3px solid var(--accent-rose);">
+              <div class="card-title" style="color: var(--accent-rose); font-size: 1.05rem;">
+                ❌ 6. Forgetting to Protect Private Routes
+              </div>
+              <p class="card-body">
+                Leaving <code class="inline-code">&lt;Route path="/dashboard" element={&lt;Dashboard /&gt;} /&gt;</code> exposed without wrapping in <code class="inline-code">&lt;ProtectedRoute&gt;</code>.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Slide 36: Route Parameter vs Query String (Visual Breakdown) -->
+      <section class="slide" data-slide="36" id="slide-36">
+        <div class="slide-content">
+          <div class="slide-tag">Section 9 • Review</div>
+          <h2 class="slide-title">Visual Breakdown: Param vs Query</h2>
+          <p class="slide-subtitle">
+            Study this side-by-side memory anchor to never confuse parameters and query strings again.
+          </p>
+
+          <div class="comparison-container">
+            <div class="comparison-box param-box">
+              <div class="comparison-header">
+                <span class="comparison-title" style="color: var(--react-cyan);">Route Parameter</span>
+                <span class="section-tag">RESOURCE IDENTIFIER</span>
+              </div>
+              <div style="font-family: var(--font-mono); font-size: 1.35rem; padding: 1.25rem; background: var(--bg-terminal); border-radius: var(--radius-sm); text-align: center; border: 1px solid var(--border-medium);">
+                /products/<span style="color: var(--react-cyan); font-weight: 800; background: var(--react-bg); padding: 0.15rem 0.5rem; border-radius: 4px;">101</span>
+              </div>
+              <div style="margin-top: 1.25rem;">
+                <div style="font-weight: 700; color: var(--text-main); margin-bottom: 0.4rem;">How it is defined:</div>
+                <div style="font-family: var(--font-mono); color: var(--text-muted); font-size: 0.88rem; background: var(--bg-surface); padding: 0.5rem; border-radius: 4px;">
+                  &lt;Route path="/products/:id" /&gt;
+                </div>
+                <div style="font-weight: 700; color: var(--text-main); margin: 0.85rem 0 0.4rem 0;">How it is read:</div>
+                <div style="font-family: var(--font-mono); color: var(--react-cyan); font-size: 0.88rem; background: var(--bg-surface); padding: 0.5rem; border-radius: 4px;">
+                  const { id } = useParams();
+                </div>
+                <div style="margin-top: 1rem; font-size: 0.9rem; color: var(--text-secondary); line-height: 1.5;">
+                  <strong>Best for:</strong> Product ID, User ID, Blog Slug, Invoice Number.
+                </div>
+              </div>
+            </div>
+
+            <div class="comparison-box query-box">
+              <div class="comparison-header">
+                <span class="comparison-title" style="color: var(--accent-purple);">Query String</span>
+                <span class="section-tag" style="color: var(--accent-purple); border-color: var(--accent-purple-border);">MODIFIER / FILTER</span>
+              </div>
+              <div style="font-family: var(--font-mono); font-size: 1.35rem; padding: 1.25rem; background: var(--bg-terminal); border-radius: var(--radius-sm); text-align: center; border: 1px solid var(--border-medium);">
+                /products<span style="color: var(--accent-purple); font-weight: 800; background: var(--accent-purple-bg); padding: 0.15rem 0.5rem; border-radius: 4px;">?category=shoes</span>
+              </div>
+              <div style="margin-top: 1.25rem;">
+                <div style="font-weight: 700; color: var(--text-main); margin-bottom: 0.4rem;">How it is defined:</div>
+                <div style="font-family: var(--font-mono); color: var(--text-muted); font-size: 0.88rem; background: var(--bg-surface); padding: 0.5rem; border-radius: 4px;">
+                  &lt;Route path="/products" /&gt; (No special syntax!)
+                </div>
+                <div style="font-weight: 700; color: var(--text-main); margin: 0.85rem 0 0.4rem 0;">How it is read:</div>
+                <div style="font-family: var(--font-mono); color: var(--accent-purple); font-size: 0.88rem; background: var(--bg-surface); padding: 0.5rem; border-radius: 4px;">
+                  const category = searchParams.get('category');
+                </div>
+                <div style="margin-top: 1rem; font-size: 0.9rem; color: var(--text-secondary); line-height: 1.5;">
+                  <strong>Best for:</strong> Filtering, Searching, Sorting, Page Numbers.
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Slide 37: Quick Quiz -->
+      <section class="slide" data-slide="37" id="slide-37">
+        <div class="slide-content">
+          <div class="slide-tag">Section 9 • Review</div>
+          <h2 class="slide-title">Quick Classroom Quiz</h2>
+          <p class="slide-subtitle">
+            Test your comprehension of React Router fundamentals with these 5 interactive questions:
+          </p>
+
+          <!-- Interactive Quiz Component -->
+          <div class="quiz-container" id="quizContainer">
+            <div class="quiz-header">
+              <div class="quiz-badge" id="quizProgressBadge">Question 1 of 5</div>
+              <div style="font-family: var(--font-mono); font-size: 0.85rem; color: var(--text-muted);">
+                Score: <span id="quizScoreText" style="color: var(--react-cyan); font-weight: 700;">0</span> / 5
+              </div>
+            </div>
+
+            <div class="quiz-question-text" id="quizQuestionTitle">
+              Which package is commonly used for browser-based routing in React?
+            </div>
+
+            <div class="quiz-options-grid" id="quizOptionsContainer">
+              <!-- Dynamically injected via script.js -->
+            </div>
+
+            <div class="quiz-feedback-box" id="quizFeedbackBox">
+              <!-- Feedback injected via script.js -->
+            </div>
+
+            <button class="quiz-next-btn" id="quizNextBtn" style="display: none;">
+              Next Question →
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Slide 38: Quick Reference -->
+      <section class="slide" data-slide="38" id="slide-38">
+        <div class="slide-content">
+          <div class="slide-tag">Section 9 • Review</div>
+          <h2 class="slide-title">Quick Reference Cheat Sheet</h2>
+          <p class="slide-subtitle">
+            All 9 core React Router building blocks summarized for quick revision:
+          </p>
+
+          <div class="grid-3" style="font-size: 0.9rem;">
+            <div class="card">
+              <div class="card-title" style="color: var(--react-cyan); font-family: var(--font-mono); font-size: 1rem;">
+                &lt;BrowserRouter&gt;
+              </div>
+              <p class="card-body">Root provider enabling HTML5 browser history synchronization.</p>
+            </div>
+
+            <div class="card">
+              <div class="card-title" style="color: var(--react-cyan); font-family: var(--font-mono); font-size: 1rem;">
+                &lt;Routes&gt;
+              </div>
+              <p class="card-body">Container switchboard that matches the current location to a child route.</p>
+            </div>
+
+            <div class="card">
+              <div class="card-title" style="color: var(--react-cyan); font-family: var(--font-mono); font-size: 1rem;">
+                &lt;Route&gt;
+              </div>
+              <p class="card-body">Declares a single URL-to-component mapping (<code class="inline-code">path</code> and <code class="inline-code">element</code>).</p>
+            </div>
+
+            <div class="card">
+              <div class="card-title" style="color: #34D399; font-family: var(--font-mono); font-size: 1rem;">
+                &lt;Link&gt;
+              </div>
+              <p class="card-body">Client-side navigation link that intercepts clicks and prevents page reload.</p>
+            </div>
+
+            <div class="card">
+              <div class="card-title" style="color: #34D399; font-family: var(--font-mono); font-size: 1rem;">
+                &lt;NavLink&gt;
+              </div>
+              <p class="card-body">Navigation link with built-in active status detection for styling navbars.</p>
+            </div>
+
+            <div class="card">
+              <div class="card-title" style="color: #A78BFA; font-family: var(--font-mono); font-size: 1rem;">
+                useParams()
+              </div>
+              <p class="card-body">Hook that reads dynamic route parameters (e.g., <code class="inline-code">:id</code>) from the URL.</p>
+            </div>
+
+            <div class="card">
+              <div class="card-title" style="color: #F59E0B; font-family: var(--font-mono); font-size: 1rem;">
+                useSearchParams()
+              </div>
+              <p class="card-body">Hook to read and manipulate URL query strings (<code class="inline-code">?key=val</code>).</p>
+            </div>
+
+            <div class="card">
+              <div class="card-title" style="color: #60A5FA; font-family: var(--font-mono); font-size: 1rem;">
+                useNavigate()
+              </div>
+              <p class="card-body">Hook returning a function to navigate imperatively in event handlers.</p>
+            </div>
+
+            <div class="card">
+              <div class="card-title" style="color: var(--accent-rose); font-family: var(--font-mono); font-size: 1rem;">
+                &lt;Navigate&gt;
+              </div>
+              <p class="card-body">JSX element that triggers an immediate client-side redirect when rendered.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Slide 39: Routing Flow -->
+      <section class="slide" data-slide="39" id="slide-39">
+        <div class="slide-content">
+          <div class="slide-tag">Section 9 • Review</div>
+          <h2 class="slide-title">Complete Routing Flow Architecture</h2>
+          <p class="slide-subtitle">
+            The end-to-end lifecycle of a client-side route request in React Router:
+          </p>
+
+          <div style="background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); padding: 2rem; font-family: var(--font-mono); text-align: center; margin: 1.5rem 0;">
+            <div style="font-size: 1.15rem; color: var(--text-main); font-weight: 700;">Browser URL Changed (e.g. /products/101)</div>
+            <div style="color: var(--react-cyan); font-size: 1.5rem; margin: 0.35rem 0;">↓</div>
+            <div style="display: inline-block; background: var(--bg-surface); border: 1px solid var(--border-medium); padding: 0.5rem 1.25rem; border-radius: var(--radius-sm); color: var(--react-cyan); font-weight: 700;">
+              React Router detects change via HTML5 History API
+            </div>
+            <div style="color: var(--react-cyan); font-size: 1.5rem; margin: 0.35rem 0;">↓</div>
+            <div style="display: inline-block; background: var(--bg-surface); border: 1px solid var(--border-medium); padding: 0.5rem 1.25rem; border-radius: var(--radius-sm); color: #A78BFA; font-weight: 700;">
+              &lt;Routes&gt; scans &amp; matches the best &lt;Route&gt;
+            </div>
+            <div style="color: var(--react-cyan); font-size: 1.5rem; margin: 0.35rem 0;">↓</div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; text-align: center; max-width: 800px; margin: 0 auto;">
+              <div style="background: var(--bg-surface); border: 1px solid var(--border-subtle); padding: 1rem; border-radius: var(--radius-sm);">
+                <div style="color: #34D399; font-weight: 700; margin-bottom: 0.35rem;">Static Route (/)</div>
+                <div style="font-size: 0.88rem; color: var(--text-muted);">Directly mounts &lt;Home /&gt;</div>
+              </div>
+              <div style="background: var(--bg-surface); border: 1px solid var(--border-subtle); padding: 1rem; border-radius: var(--radius-sm);">
+                <div style="color: var(--react-cyan); font-weight: 700; margin-bottom: 0.35rem;">Dynamic Route (/:id)</div>
+                <div style="font-size: 0.88rem; color: var(--text-muted);"><code class="inline-code">useParams()</code> extracts id → fetch data → render</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Slide 40: Summary & Golden Rule -->
+      <section class="slide" data-slide="40" id="slide-40">
+        <div class="slide-content centered">
+          <div class="slide-tag" style="margin-bottom: 0.8rem;">React Course • Day 9 Completed</div>
+          <h1 class="slide-title" style="font-size: 3rem; margin-bottom: 0.6rem;">
+            React Day 9 — Summary &amp; Mastery
+          </h1>
+          <p style="font-size: 1.15rem; color: var(--text-secondary); max-width: 750px; margin-bottom: 2rem; line-height: 1.6;">
+            You have mastered the foundational routing mechanisms that power every modern React single-page application.
+          </p>
+
+          <!-- Golden Rule Banner -->
+          <div style="background: linear-gradient(135deg, rgba(0, 216, 255, 0.12) 0%, rgba(2, 132, 199, 0.05) 100%); border: 2px solid var(--react-border); border-radius: var(--radius-md); padding: 1.5rem 2rem; margin-bottom: 2rem; max-width: 820px; width: 100%; box-shadow: var(--shadow-glow);">
+            <div style="font-size: 0.82rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); margin-bottom: 0.5rem;">
+              The Developer Golden Flow:
+            </div>
+            <div style="font-size: 1.85rem; font-weight: 900; letter-spacing: -0.02em; color: var(--react-cyan); font-family: var(--font-mono);">
+              ROUTE → NAVIGATE → READ → PROTECT
+            </div>
+          </div>
+
+          <div class="grid-4" style="max-width: 1000px; width: 100%; text-align: left; margin-bottom: 2rem;">
+            <div class="card" style="padding: 1rem;">
+              <div style="font-weight: 700; color: var(--react-cyan); margin-bottom: 0.25rem;">1. ROUTE</div>
+              <p style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.5;">BrowserRouter, Routes, Route connect URLs to components.</p>
+            </div>
+            <div class="card" style="padding: 1rem;">
+              <div style="font-weight: 700; color: #34D399; margin-bottom: 0.25rem;">2. NAVIGATE</div>
+              <p style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.5;">Link &amp; NavLink for declarative links; useNavigate for code actions.</p>
+            </div>
+            <div class="card" style="padding: 1rem;">
+              <div style="font-weight: 700; color: #A78BFA; margin-bottom: 0.25rem;">3. READ</div>
+              <p style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.5;">useParams for resource IDs; useSearchParams for query filters.</p>
+            </div>
+            <div class="card" style="padding: 1rem;">
+              <div style="font-weight: 700; color: var(--accent-rose); margin-bottom: 0.25rem;">4. PROTECT</div>
+              <p style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.5;">Wrap private views in ProtectedRoute with &lt;Navigate&gt; redirect.</p>
+            </div>
+          </div>
+
+          <div style="font-size: 0.95rem; color: var(--text-muted);">
+            🎉 Congratulations! You are now ready to build multi-page, secure React web applications.
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- Bottom Navigation Footer -->
+    <footer class="bottom-footer">
+      <div class="footer-left">
+        <div class="slide-counter">
+          Slide <span class="current-num" id="currentSlideNum">1</span> / <span id="totalSlidesNum">40</span>
+        </div>
+      </div>
+
+      <div class="footer-center">
+        <button class="nav-btn" id="prevBtn" title="Previous Slide (Left Arrow)">
+          ← Previous
+        </button>
+        <button class="nav-btn primary" id="nextBtn" title="Next Slide (Right Arrow)">
+          Next →
+        </button>
+      </div>
+
+      <div class="footer-right">
+        <div class="footer-key-hint">
+          <kbd>→</kbd> <kbd>Space</kbd> Next
+        </div>
+        <div class="footer-key-hint">
+          <kbd>←</kbd> Prev
+        </div>
+        <div class="footer-key-hint">
+          <kbd>T</kbd> Index
+        </div>
+        <div class="footer-key-hint">
+          <kbd>F</kbd> Fullscreen
+        </div>
+      </div>
+    </footer>
+
+    <!-- Table of Contents Drawer -->
+    <aside class="toc-drawer" id="tocDrawer">
+      <div class="toc-header">
+        <div class="toc-title">
+          <span>📋</span> Slide Index (40 Slides)
+        </div>
+        <button class="toc-close-btn" id="closeTocBtn" title="Close Index (Esc)">&times;</button>
+      </div>
+      <div class="toc-search">
+        <input type="text" class="toc-search-input" id="tocSearchInput" placeholder="Filter slides by topic...">
+      </div>
+      <ul class="toc-list" id="tocList">
+        <!-- Injected via script.js -->
+      </ul>
+    </aside>
+    <div class="drawer-backdrop" id="drawerBackdrop"></div>
+
+    <!-- Shortcuts Modal -->
+    <div class="modal-overlay" id="shortcutsModal">
+      <div class="modal-box">
+        <div class="modal-header">
+          <div class="modal-title">⌨️ Keyboard Shortcuts</div>
+          <button class="toc-close-btn" id="closeShortcutsBtn">&times;</button>
+        </div>
+        <div class="modal-body">
+          <div class="shortcut-row">
+            <span>Next Slide</span>
+            <div class="shortcut-keys"><kbd>→</kbd> <kbd>Space</kbd> <kbd>PgDn</kbd></div>
+          </div>
+          <div class="shortcut-row">
+            <span>Previous Slide</span>
+            <div class="shortcut-keys"><kbd>←</kbd> <kbd>PgUp</kbd></div>
+          </div>
+          <div class="shortcut-row">
+            <span>First Slide (Title)</span>
+            <div class="shortcut-keys"><kbd>Home</kbd></div>
+          </div>
+          <div class="shortcut-row">
+            <span>Last Slide (Summary)</span>
+            <div class="shortcut-keys"><kbd>End</kbd></div>
+          </div>
+          <div class="shortcut-row">
+            <span>Toggle Fullscreen</span>
+            <div class="shortcut-keys"><kbd>F</kbd></div>
+          </div>
+          <div class="shortcut-row">
+            <span>Toggle Slide Index</span>
+            <div class="shortcut-keys"><kbd>T</kbd></div>
+          </div>
+          <div class="shortcut-row">
+            <span>Help / Shortcuts</span>
+            <div class="shortcut-keys"><kbd>?</kbd></div>
+          </div>
+          <div class="shortcut-row">
+            <span>Close Modal / Drawer</span>
+            <div class="shortcut-keys"><kbd>Esc</kbd></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Toast Notification for Code Copy -->
+    <div class="toast" id="copyToast">
+      <span>✓</span> Code copied to clipboard!
+    </div>
+
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
