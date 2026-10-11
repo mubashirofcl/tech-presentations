@@ -118,12 +118,17 @@ const Deck = {
     if (topicEl) topicEl.textContent = meta.topic;
 
     // Update active state in Table of Contents drawer
+    const drawer = document.getElementById('tocDrawer');
+    const isDrawerOpen = drawer && drawer.classList.contains('open');
+
     const tocItems = document.querySelectorAll('.toc-item');
     tocItems.forEach((item) => {
       const num = parseInt(item.dataset.slideNum, 10);
       if (num === this.currentSlide) {
         item.classList.add('active');
-        item.scrollIntoView({ block: 'nearest' });
+        if (isDrawerOpen) {
+          item.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+        }
       } else {
         item.classList.remove('active');
       }
@@ -183,6 +188,12 @@ const Deck = {
   openTocDrawer() {
     document.getElementById('tocDrawer')?.classList.add('open');
     document.getElementById('drawerBackdrop')?.classList.add('open');
+
+    const activeItem = document.querySelector('.toc-item.active');
+    if (activeItem) {
+      activeItem.scrollIntoView({ block: 'nearest' });
+    }
+
     setTimeout(() => {
       document.getElementById('tocSearchInput')?.focus();
     }, 150);

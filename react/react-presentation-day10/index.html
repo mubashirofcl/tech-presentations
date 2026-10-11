@@ -1,0 +1,2055 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>React Day 10 — Introduction to Redux & Setting Up Redux with React</title>
+  <meta name="description" content="Classroom presentation for React Day 10: Introduction to Redux, Redux Toolkit (RTK), React Redux, store configuration, slices, Provider, useSelector, and useDispatch with a practical Counter application.">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Master App Shell -->
+  <div class="deck-container" id="deckContainer">
+
+    <!-- Top Progress Bar -->
+    <div class="progress-bar-container">
+      <div class="progress-bar" id="progressBar"></div>
+    </div>
+
+    <!-- Top Header Bar -->
+    <header class="top-header">
+      <div class="header-left">
+        <div class="brand-badge">
+          <!-- Redux Icon -->
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
+          </svg>
+          React Day 10
+        </div>
+        <div class="deck-title-badge">
+          <span class="section-tag" id="headerSectionTag">INTRODUCTION</span>
+          <span class="dot"></span>
+          <span class="deck-topic" id="headerTopic">Introduction to Redux</span>
+        </div>
+      </div>
+
+      <div class="header-right">
+        <!-- Table of Contents Drawer Button -->
+        <button class="header-btn" id="openTocBtn" title="View All 22 Slides (T)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="3" y1="12" x2="21" y2="12"></line>
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <line x1="3" y1="18" x2="21" y2="18"></line>
+          </svg>
+          Index
+          <kbd>T</kbd>
+        </button>
+
+        <!-- Keyboard Shortcuts Help -->
+        <button class="header-btn" id="openShortcutsBtn" title="Keyboard Shortcuts (?)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"></circle>
+            <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+            <line x1="12" y1="17" x2="12.01" y2="17"></line>
+          </svg>
+          <kbd>?</kbd>
+        </button>
+
+        <!-- Fullscreen Button -->
+        <button class="header-btn" id="fullscreenBtn" title="Toggle Fullscreen (F)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path>
+          </svg>
+          <kbd>F</kbd>
+        </button>
+      </div>
+    </header>
+
+    <!-- Slide Viewport -->
+    <main class="slide-viewport">
+
+      <!-- ====================================================================
+           SLIDE 1 — TITLE SLIDE
+           ==================================================================== -->
+      <section class="slide active" data-slide="1" id="slide-1">
+        <div class="slide-content centered">
+          <div class="slide-tag">React Course • Day 10</div>
+          <h1 class="slide-title" style="font-size: 3.2rem; letter-spacing: -0.03em;">
+            React Day 10
+          </h1>
+          <h2 style="font-size: 1.55rem; color: var(--redux-purple-light); font-weight: 700; margin-bottom: 1.25rem;">
+            Introduction to Redux &amp; Setting Up Redux with React
+          </h2>
+          <p style="font-size: 1.15rem; color: var(--text-secondary); max-width: 780px; margin-bottom: 2rem; line-height: 1.6;">
+            Learn why Redux is needed, solve shared state challenges without prop drilling, and master modern Redux setup using Redux Toolkit and React Redux.
+          </p>
+
+          <!-- Technology Badges -->
+          <div style="display: flex; gap: 0.9rem; margin-bottom: 2.2rem; flex-wrap: wrap; justify-content: center;">
+            <div style="padding: 0.55rem 1.1rem; background: var(--react-bg); border: 1px solid var(--react-border); border-radius: var(--radius-sm); font-family: var(--font-mono); font-size: 0.88rem; color: var(--react-cyan);">
+              ⚛️ React
+            </div>
+            <div style="padding: 0.55rem 1.1rem; background: var(--redux-purple-bg); border: 1px solid var(--redux-purple-border); border-radius: var(--radius-sm); font-family: var(--font-mono); font-size: 0.88rem; color: var(--redux-purple-light);">
+              🟣 Redux
+            </div>
+            <div style="padding: 0.55rem 1.1rem; background: rgba(16, 185, 129, 0.12); border: 1px solid var(--accent-emerald-border); border-radius: var(--radius-sm); font-family: var(--font-mono); font-size: 0.88rem; color: var(--accent-emerald);">
+              🧰 Redux Toolkit
+            </div>
+            <div style="padding: 0.55rem 1.1rem; background: rgba(245, 158, 11, 0.12); border: 1px solid var(--accent-amber-border); border-radius: var(--radius-sm); font-family: var(--font-mono); font-size: 0.88rem; color: var(--accent-amber);">
+              🔌 React Redux
+            </div>
+          </div>
+
+          <!-- Session Topics Overview Card -->
+          <div class="card" style="max-width: 820px; width: 100%; text-align: left;">
+            <div class="card-title" style="color: var(--react-cyan);">
+              <span class="icon">📌</span> Today's Topics
+            </div>
+            <div class="grid-2" style="margin-top: 0.75rem;">
+              <ul class="styled-list">
+                <li><span class="bullet-icon">1</span> Understanding Redux</li>
+                <li><span class="bullet-icon">2</span> Why do we need Redux?</li>
+                <li><span class="bullet-icon">3</span> Introduction to Redux Toolkit</li>
+              </ul>
+              <ul class="styled-list">
+                <li><span class="bullet-icon">4</span> Setting up Redux with React</li>
+                <li><span class="bullet-icon">5</span> Building a Counter Application</li>
+                <li><span class="bullet-icon cyan">✓</span> 22 Slides • 45–60 Minutes</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 2 — LEARNING OBJECTIVES
+           ==================================================================== -->
+      <section class="slide" data-slide="2" id="slide-2">
+        <div class="slide-content">
+          <div class="slide-tag">Classroom Roadmap</div>
+          <h2 class="slide-title">Learning Objectives</h2>
+          <p class="slide-subtitle">By the end of this session, students will be able to:</p>
+
+          <div class="grid-2" style="gap: 1.1rem;">
+            <div class="card">
+              <div class="card-title">
+                <span class="bullet-icon cyan">1</span> Understand What Redux Is
+              </div>
+              <p class="card-text">Define Redux as a predictable, centralized state container for shared JavaScript applications.</p>
+            </div>
+
+            <div class="card">
+              <div class="card-title">
+                <span class="bullet-icon cyan">2</span> Explain Why Redux Is Useful
+              </div>
+              <p class="card-text">Understand when centralized state management is beneficial compared to isolated component states.</p>
+            </div>
+
+            <div class="card">
+              <div class="card-title">
+                <span class="bullet-icon rose">3</span> Understand Prop Drilling Problems
+              </div>
+              <p class="card-text">Identify why passing data through multiple intermediate layers causes tight coupling and maintenance headaches.</p>
+            </div>
+
+            <div class="card">
+              <div class="card-title">
+                <span class="bullet-icon">4</span> Identify Main Redux Components
+              </div>
+              <p class="card-text">Clearly differentiate the Store (state container), Actions (event descriptors), and Reducers (state updates).</p>
+            </div>
+
+            <div class="card">
+              <div class="card-title">
+                <span class="bullet-icon">5</span> Install Redux Toolkit &amp; React Redux
+              </div>
+              <p class="card-text">Know exactly how to install <code class="inline-code">@reduxjs/toolkit</code> and <code class="inline-code">react-redux</code> in a modern project.</p>
+            </div>
+
+            <div class="card">
+              <div class="card-title">
+                <span class="bullet-icon emerald">6</span> Configure a Redux Store
+              </div>
+              <p class="card-text">Create and register state slices using modern <code class="inline-code">configureStore()</code> and <code class="inline-code">createSlice()</code>.</p>
+            </div>
+
+            <div class="card">
+              <div class="card-title">
+                <span class="bullet-icon emerald">7</span> Connect React via Provider
+              </div>
+              <p class="card-text">Wrap the root component tree with <code class="inline-code">&lt;Provider store={store}&gt;</code> to provide store access.</p>
+            </div>
+
+            <div class="card">
+              <div class="card-title">
+                <span class="bullet-icon cyan">8</span> Read &amp; Update Redux State
+              </div>
+              <p class="card-text">Use <code class="inline-code">useSelector()</code> to read state and <code class="inline-code">useDispatch()</code> to trigger state actions.</p>
+            </div>
+          </div>
+
+          <div class="alert-box redux" style="margin-top: 1.25rem;">
+            <div class="alert-icon">💡</div>
+            <div>
+              <strong>Practical Focus:</strong> Today we will build a complete, working <strong>Counter Application</strong> step by step. No unnecessary theory or advanced bloat!
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 3 — WHAT IS STATE IN REACT?
+           ==================================================================== -->
+      <section class="slide" data-slide="3" id="slide-3">
+        <div class="slide-content">
+          <div class="slide-tag">Foundation</div>
+          <h2 class="slide-title">What Is State in React?</h2>
+          <p class="slide-subtitle">State is data that a component remembers and uses to render its UI.</p>
+
+          <div class="grid-1-2">
+            <!-- Left: Concepts & Examples -->
+            <div style="display: flex; flex-direction: column; gap: 1rem;">
+              <div class="card">
+                <div class="card-title" style="color: var(--react-cyan);">
+                  <span class="icon">🧠</span> Component Memory
+                </div>
+                <p class="card-text">
+                  Unlike normal JavaScript variables that disappear when a function finishes executing, React <strong>state</strong> persists between renders. When state changes, React automatically re-renders the component.
+                </p>
+              </div>
+
+              <div class="card">
+                <div class="card-title">
+                  <span class="icon">📋</span> Common Examples of State
+                </div>
+                <ul class="styled-list">
+                  <li><span class="bullet-icon cyan">•</span> Counter value</li>
+                  <li><span class="bullet-icon cyan">•</span> Logged-in user information</li>
+                  <li><span class="bullet-icon cyan">•</span> Shopping cart items</li>
+                  <li><span class="bullet-icon cyan">•</span> Selected UI theme (dark/light)</li>
+                  <li><span class="bullet-icon cyan">•</span> Product search filters</li>
+                </ul>
+              </div>
+
+              <div class="alert-box info">
+                <div class="alert-icon">📌</div>
+                <div>
+                  <strong>Key point:</strong> React's built-in <code class="inline-code">useState</code> is sufficient for managing state inside an individual component.
+                </div>
+              </div>
+            </div>
+
+            <!-- Right: Code Block Example -->
+            <div class="code-window">
+              <div class="code-header">
+                <div class="code-header-left">
+                  <div class="code-dots">
+                    <span class="code-dot red"></span>
+                    <span class="code-dot yellow"></span>
+                    <span class="code-dot green"></span>
+                  </div>
+                  <span class="code-filename">Counter.jsx (Local Component State)</span>
+                </div>
+                <div class="code-header-right">
+                  <span class="code-lang-tag">JSX</span>
+                  <button class="copy-btn" data-target="code-slide-3" title="Copy code">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                    Copy
+                  </button>
+                </div>
+              </div>
+              <div class="code-body">
+<pre id="code-slide-3"><span class="syn-kwd">import</span> { <span class="syn-fn">useState</span> } <span class="syn-kwd">from</span> <span class="syn-str">"react"</span>;
+
+<span class="syn-kwd">function</span> <span class="syn-fn">Counter</span>() {
+  <span class="syn-comment">// count is stored locally inside this component</span>
+  <span class="syn-kwd">const</span> [<span class="syn-prop">count</span>, <span class="syn-fn">setCount</span>] = <span class="syn-fn">useState</span>(<span class="syn-num">0</span>);
+
+  <span class="syn-kwd">return</span> (
+    <span class="syn-tag">&lt;div&gt;</span>
+      <span class="syn-tag">&lt;h2&gt;</span>Count: {<span class="syn-prop">count</span>}<span class="syn-tag">&lt;/h2&gt;</span>
+      <span class="syn-tag">&lt;button</span> <span class="syn-prop">onClick</span>={() =&gt; <span class="syn-fn">setCount</span>(<span class="syn-prop">count</span> + <span class="syn-num">1</span>)}<span class="syn-tag">&gt;</span>
+        Increment
+      <span class="syn-tag">&lt;/button&gt;</span>
+    <span class="syn-tag">&lt;/div&gt;</span>
+  );
+}
+
+<span class="syn-kwd">export default</span> <span class="syn-fn">Counter</span>;</pre>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 4 — WHEN DOES STATE MANAGEMENT BECOME DIFFICULT?
+           ==================================================================== -->
+      <section class="slide" data-slide="4" id="slide-4">
+        <div class="slide-content">
+          <div class="slide-tag">The Challenge</div>
+          <h2 class="slide-title">When Does State Management Become Difficult?</h2>
+          <p class="slide-subtitle">Imagine building an e-commerce application with multiple separate pages and components.</p>
+
+          <!-- E-Commerce Components Grid -->
+          <div class="grid-4" style="margin-bottom: 1.5rem;">
+            <div class="card" style="border-top: 3px solid var(--react-cyan);">
+              <div class="card-title">
+                <span class="icon">🧭</span> Navbar
+              </div>
+              <p class="card-text">
+                Needs the <strong>cart count</strong> to display how many items are in the shopping cart badge (e.g. 🛒 3).
+              </p>
+            </div>
+
+            <div class="card" style="border-top: 3px solid var(--accent-emerald);">
+              <div class="card-title">
+                <span class="icon">📦</span> Product Page
+              </div>
+              <p class="card-text">
+                Needs to <strong>add items</strong> into the cart when a user clicks the "Add to Cart" button.
+              </p>
+            </div>
+
+            <div class="card" style="border-top: 3px solid var(--accent-amber);">
+              <div class="card-title">
+                <span class="icon">🛒</span> Cart Page
+              </div>
+              <p class="card-text">
+                Needs the <strong>cart items</strong> to show item names, images, and allow quantity adjustments.
+              </p>
+            </div>
+
+            <div class="card" style="border-top: 3px solid var(--redux-purple-light);">
+              <div class="card-title">
+                <span class="icon">💳</span> Checkout Page
+              </div>
+              <p class="card-text">
+                Needs the <strong>cart total</strong> and taxes to process final payment and order confirmation.
+              </p>
+            </div>
+          </div>
+
+          <!-- Problem Breakdown -->
+          <div class="grid-2">
+            <div class="card" style="background: rgba(244, 63, 94, 0.05); border-color: var(--accent-rose-border);">
+              <div class="card-title" style="color: var(--accent-rose);">
+                <span class="icon">⚠️</span> If Each Component Manages Its Own State
+              </div>
+              <p class="card-text">
+                If every component keeps its own cart state, data gets out of sync. Adding a product in Product Page won't update the Navbar badge, and Checkout won't see the latest items. The app quickly becomes fragmented and difficult to maintain.
+              </p>
+            </div>
+
+            <div class="card" style="background: rgba(0, 216, 255, 0.05); border-color: var(--react-border);">
+              <div class="card-title" style="color: var(--react-cyan);">
+                <span class="icon">🎯</span> The Core Problem &amp; Solution
+              </div>
+              <p class="card-text">
+                <strong>The Problem:</strong> How can multiple components across different branches of the component tree share and update the same state efficiently?<br><br>
+                <strong>The Solution:</strong> This is where <strong>centralized state management</strong> can help!
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 5 — WHAT IS PROP DRILLING?
+           ==================================================================== -->
+      <section class="slide" data-slide="5" id="slide-5">
+        <div class="slide-content">
+          <div class="slide-tag">Anti-Pattern</div>
+          <h2 class="slide-title">What Is Prop Drilling?</h2>
+          <p class="slide-subtitle">Prop drilling happens when data is passed through multiple intermediate components just to reach a component that needs it.</p>
+
+          <!-- Visual Chain Diagram -->
+          <div class="drilling-chain">
+            <div class="drill-box source">
+              <span style="font-size: 1.4rem;">🏠</span>
+              <strong>App</strong>
+              <span style="font-size: 0.76rem; color: var(--accent-emerald);">Holds state: user = "Mubashir"</span>
+            </div>
+
+            <div class="drill-arrow">
+              <span class="drill-prop-tag">user={user}</span>
+              ➔
+            </div>
+
+            <div class="drill-box middle">
+              <span style="font-size: 1.4rem;">📦</span>
+              <strong>Parent</strong>
+              <span style="font-size: 0.76rem; color: var(--text-muted);">Doesn't need user</span>
+            </div>
+
+            <div class="drill-arrow">
+              <span class="drill-prop-tag">user={user}</span>
+              ➔
+            </div>
+
+            <div class="drill-box middle">
+              <span style="font-size: 1.4rem;">📦</span>
+              <strong>Child</strong>
+              <span style="font-size: 0.76rem; color: var(--text-muted);">Doesn't need user</span>
+            </div>
+
+            <div class="drill-arrow">
+              <span class="drill-prop-tag">user={user}</span>
+              ➔
+            </div>
+
+            <div class="drill-box target">
+              <span style="font-size: 1.4rem;">👤</span>
+              <strong>Profile</strong>
+              <span style="font-size: 0.76rem; color: var(--react-cyan);">Displays: Welcome, {user}</span>
+            </div>
+          </div>
+
+          <div class="grid-1-2">
+            <!-- Left: Problems list -->
+            <div style="display: flex; flex-direction: column; gap: 0.9rem;">
+              <div class="card">
+                <div class="card-title" style="color: var(--accent-rose);">
+                  <span class="icon">❌</span> Why Prop Drilling Hurts
+                </div>
+                <ul class="styled-list">
+                  <li><span class="bullet-icon rose">1</span> <strong>Too many props:</strong> Components get cluttered with props they never consume.</li>
+                  <li><span class="bullet-icon rose">2</span> <strong>Tightly connected:</strong> Intermediate components become fragile and harder to reuse.</li>
+                  <li><span class="bullet-icon rose">3</span> <strong>Refactoring nightmare:</strong> Changing component hierarchy requires updating props across every layer.</li>
+                </ul>
+              </div>
+
+              <div class="alert-box warning">
+                <div class="alert-icon">💡</div>
+                <div>
+                  <strong>Important:</strong> Prop drilling is <em>not always bad</em>. For small applications with 1 or 2 layers, passing props is completely normal and fine!
+                </div>
+              </div>
+            </div>
+
+            <!-- Right: Code Example -->
+            <div class="code-window">
+              <div class="code-header">
+                <div class="code-header-left">
+                  <div class="code-dots">
+                    <span class="code-dot red"></span>
+                    <span class="code-dot yellow"></span>
+                    <span class="code-dot green"></span>
+                  </div>
+                  <span class="code-filename">PropDrillingExample.jsx</span>
+                </div>
+                <div class="code-header-right">
+                  <button class="copy-btn" data-target="code-slide-5" title="Copy code">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                    Copy
+                  </button>
+                </div>
+              </div>
+              <div class="code-body">
+<pre id="code-slide-5"><span class="syn-kwd">function</span> <span class="syn-fn">App</span>() {
+  <span class="syn-kwd">const</span> [<span class="syn-prop">user</span>, <span class="syn-fn">setUser</span>] = <span class="syn-fn">useState</span>(<span class="syn-str">"Mubashir"</span>);
+  <span class="syn-kwd">return</span> <span class="syn-tag">&lt;Parent</span> <span class="syn-prop">user</span>={<span class="syn-prop">user</span>} <span class="syn-tag">/&gt;</span>;
+}
+
+<span class="syn-comment">// Parent passes user, but doesn't need it!</span>
+<span class="syn-kwd">function</span> <span class="syn-fn">Parent</span>({ <span class="syn-prop">user</span> }) {
+  <span class="syn-kwd">return</span> <span class="syn-tag">&lt;Child</span> <span class="syn-prop">user</span>={<span class="syn-prop">user</span>} <span class="syn-tag">/&gt;</span>;
+}
+
+<span class="syn-comment">// Child passes user, but doesn't need it!</span>
+<span class="syn-kwd">function</span> <span class="syn-fn">Child</span>({ <span class="syn-prop">user</span> }) {
+  <span class="syn-kwd">return</span> <span class="syn-tag">&lt;Profile</span> <span class="syn-prop">user</span>={<span class="syn-prop">user</span>} <span class="syn-tag">/&gt;</span>;
+}
+
+<span class="syn-comment">// Profile finally uses user!</span>
+<span class="syn-kwd">function</span> <span class="syn-fn">Profile</span>({ <span class="syn-prop">user</span> }) {
+  <span class="syn-kwd">return</span> <span class="syn-tag">&lt;h2&gt;</span>Welcome, {<span class="syn-prop">user</span>}<span class="syn-tag">&lt;/h2&gt;</span>;
+}</pre>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 6 — WHAT IS REDUX?
+           ==================================================================== -->
+      <section class="slide" data-slide="6" id="slide-6">
+        <div class="slide-content">
+          <div class="slide-tag">Core Definition</div>
+          <h2 class="slide-title">What Is Redux?</h2>
+          <p class="slide-subtitle">Redux is a state management library that helps applications manage shared state in a predictable way.</p>
+
+          <div class="grid-2" style="margin-bottom: 1.25rem;">
+            <!-- Left: Concept card -->
+            <div class="card" style="border-color: var(--redux-purple-border);">
+              <div class="card-title" style="color: var(--redux-purple-light);">
+                <span class="icon">🟣</span> Centralized Store
+              </div>
+              <p class="card-text" style="margin-bottom: 0.9rem;">
+                In a React application, Redux provides a <strong>single centralized store</strong> for state that multiple components need to access across different parts of the application.
+              </p>
+              <div style="background: var(--bg-surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: 1rem;">
+                <div style="font-weight: 700; color: var(--text-main); margin-bottom: 0.4rem; font-size: 0.9rem;">
+                  Simple Idea:
+                </div>
+                <p style="font-size: 0.88rem; color: var(--text-secondary); line-height: 1.5;">
+                  Instead of passing shared data through many layers of components, any component can access the state directly from the <strong>Redux store</strong>!
+                </p>
+              </div>
+            </div>
+
+            <!-- Right: Common Shared State Examples -->
+            <div class="card">
+              <div class="card-title" style="color: var(--react-cyan);">
+                <span class="icon">🌐</span> Typical Shared State in Redux
+              </div>
+              <ul class="styled-list">
+                <li>
+                  <span class="bullet-icon cyan">1</span>
+                  <div><strong>Authentication Information:</strong> User profile, login tokens, permissions.</div>
+                </li>
+                <li>
+                  <span class="bullet-icon cyan">2</span>
+                  <div><strong>Shopping Cart:</strong> Items selected, quantity, discount codes.</div>
+                </li>
+                <li>
+                  <span class="bullet-icon cyan">3</span>
+                  <div><strong>User Preferences:</strong> Dark mode / Light mode, language, currency.</div>
+                </li>
+                <li>
+                  <span class="bullet-icon cyan">4</span>
+                  <div><strong>Application-Wide Filters:</strong> Search queries, sorting rules across pages.</div>
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- Bottom Remember Banner -->
+          <div class="alert-box redux">
+            <div class="alert-icon">⚡</div>
+            <div>
+              <strong style="font-size: 1rem;">Remember:</strong> 
+              <strong>Redux</strong> manages the application state. <strong>React</strong> is responsible for rendering the UI.
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 7 — WHY USE REDUX?
+           ==================================================================== -->
+      <section class="slide" data-slide="7" id="slide-7">
+        <div class="slide-content">
+          <div class="slide-tag">Decision Framework</div>
+          <h2 class="slide-title">Why Use Redux?</h2>
+          <p class="slide-subtitle">Redux can be useful when an application grows in size and shared state complexity.</p>
+
+          <div class="grid-2" style="margin-bottom: 1.25rem;">
+            <!-- Left: When Redux is useful -->
+            <div class="card">
+              <div class="card-title" style="color: var(--accent-emerald);">
+                <span class="icon">✅</span> Redux Can Be Useful When:
+              </div>
+              <ul class="styled-list">
+                <li><span class="bullet-icon emerald">✓</span> Multiple components in different places need the same state.</li>
+                <li><span class="bullet-icon emerald">✓</span> Many components need to update the same shared data.</li>
+                <li><span class="bullet-icon emerald">✓</span> State update logic is becoming large and difficult to maintain.</li>
+                <li><span class="bullet-icon emerald">✓</span> You want predictable, centralized, and traceable state updates.</li>
+                <li><span class="bullet-icon emerald">✓</span> You need easier debugging and time-travel inspection of state changes.</li>
+              </ul>
+            </div>
+
+            <!-- Right: E-Commerce State Matrix Table -->
+            <div class="card" style="padding: 0; overflow: hidden;">
+              <div style="padding: 1rem 1.25rem; background: var(--bg-surface); border-bottom: 1px solid var(--border-medium); font-weight: 700; color: var(--react-cyan); font-size: 0.95rem; display: flex; align-items: center; gap: 0.5rem;">
+                <span>🛒</span> E-Commerce Shared State Example
+              </div>
+              <table class="styled-table">
+                <thead>
+                  <tr>
+                    <th>Component</th>
+                    <th>Shared State Needed</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><strong style="color: var(--text-main);">Navbar</strong></td>
+                    <td>Cart count badge</td>
+                  </tr>
+                  <tr>
+                    <td><strong style="color: var(--text-main);">Product Page</strong></td>
+                    <td>Cart items (adds new items)</td>
+                  </tr>
+                  <tr>
+                    <td><strong style="color: var(--text-main);">Cart Page</strong></td>
+                    <td>Cart items and calculated total</td>
+                  </tr>
+                  <tr>
+                    <td><strong style="color: var(--text-main);">Checkout Page</strong></td>
+                    <td>Cart details &amp; order pricing</td>
+                  </tr>
+                </tbody>
+              </table>
+              <div style="padding: 0.75rem 1.25rem; font-size: 0.8rem; color: var(--text-muted); background: var(--bg-card);">
+                Redux provides a single <strong>shared source of truth</strong> for all these components.
+              </div>
+            </div>
+          </div>
+
+          <!-- Bottom Note -->
+          <div class="alert-box warning">
+            <div class="alert-icon">⚠️</div>
+            <div>
+              <strong>Note:</strong> Not every React application needs Redux! Local component state (<code class="inline-code">useState</code>) and React's Context API are completely sufficient for many small-to-medium applications.
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 8 — WHAT IS REDUX TOOLKIT?
+           ==================================================================== -->
+      <section class="slide" data-slide="8" id="slide-8">
+        <div class="slide-content">
+          <div class="slide-tag">Modern Standard</div>
+          <h2 class="slide-title">What Is Redux Toolkit (RTK)?</h2>
+          <p class="slide-subtitle">Redux Toolkit is the official, recommended way to write Redux logic today.</p>
+
+          <div class="grid-2" style="margin-bottom: 1.25rem;">
+            <!-- Left: Purpose of RTK -->
+            <div class="card" style="border-color: var(--redux-purple-border);">
+              <div class="card-title" style="color: var(--redux-purple-light);">
+                <span class="icon">🧰</span> Why Redux Toolkit Exists
+              </div>
+              <p class="card-text" style="margin-bottom: 0.9rem;">
+                Without Redux Toolkit, traditional "vanilla" Redux code required lots of repetitive boilerplate: action types, action creators, handwritten immutable spreads, and complex store configs.
+              </p>
+              <p class="card-text">
+                <strong>Redux Toolkit (RTK)</strong> was created by the Redux team to eliminate boilerplate and make writing Redux logic fast, simple, and clean.
+              </p>
+            </div>
+
+            <!-- Right: What RTK Simplifies -->
+            <div class="card">
+              <div class="card-title" style="color: var(--react-cyan);">
+                <span class="icon">✨</span> What RTK Simplifies
+              </div>
+              <ul class="styled-list">
+                <li><span class="bullet-icon cyan">•</span> <strong>Creating a Redux store:</strong> One simple function handles everything.</li>
+                <li><span class="bullet-icon cyan">•</span> <strong>Writing reducers:</strong> Update state cleanly without manual cloning.</li>
+                <li><span class="bullet-icon cyan">•</span> <strong>Defining actions:</strong> Automatically generates action creators.</li>
+                <li><span class="bullet-icon cyan">•</span> <strong>Organizing Redux logic:</strong> Groups logic into clean "slices".</li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- Two Main RTK Functions Callout -->
+          <div class="grid-2" style="gap: 1.25rem;">
+            <div class="card" style="background: var(--bg-surface);">
+              <div class="card-title" style="font-family: var(--font-mono); color: var(--syn-fn); font-size: 1rem;">
+                configureStore()
+              </div>
+              <p class="card-text">
+                Creates and configures the Redux store with sensible defaults, including Redux DevTools extension support automatically.
+              </p>
+            </div>
+
+            <div class="card" style="background: var(--bg-surface);">
+              <div class="card-title" style="font-family: var(--font-mono); color: var(--syn-fn); font-size: 1rem;">
+                createSlice()
+              </div>
+              <p class="card-text">
+                Accepts a name, initial state, and reducer functions. It automatically generates action creators and action types for you!
+              </p>
+            </div>
+          </div>
+
+          <div class="alert-box success" style="margin-top: 1.25rem;">
+            <div class="alert-icon">⭐</div>
+            <div>
+              <strong>Golden Rule:</strong> For any new Redux application, always use <strong>Redux Toolkit</strong> instead of setting up traditional Redux manually.
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 9 — REDUX VS REDUX TOOLKIT VS REACT REDUX
+           ==================================================================== -->
+      <section class="slide" data-slide="9" id="slide-9">
+        <div class="slide-content">
+          <div class="slide-tag">Ecosystem Breakdown</div>
+          <h2 class="slide-title">Redux vs Redux Toolkit vs React Redux</h2>
+          <p class="slide-subtitle">Beginners often get confused by these three names. They have very distinct roles.</p>
+
+          <!-- 3 Columns -->
+          <div class="grid-3" style="margin-bottom: 1.5rem;">
+            <!-- Column 1: Redux -->
+            <div class="comp-card redux">
+              <div class="comp-badge" style="background: rgba(168, 85, 247, 0.15); color: #C084FC; border: 1px solid var(--redux-purple-border);">
+                1. Redux
+              </div>
+              <div style="font-weight: 700; font-size: 1.1rem; color: var(--text-main);">
+                Core State Library
+              </div>
+              <p class="card-text" style="font-size: 0.88rem;">
+                The foundational state management library. It provides the architectural concepts: the store, actions, and reducers.
+              </p>
+              <div style="margin-top: auto; padding-top: 0.6rem; border-top: 1px solid var(--border-subtle); font-size: 0.8rem; color: var(--text-muted);">
+                <strong>Role:</strong> State management engine (UI-independent).
+              </div>
+            </div>
+
+            <!-- Column 2: Redux Toolkit -->
+            <div class="comp-card rtk">
+              <div class="comp-badge" style="background: var(--react-bg); color: var(--react-cyan); border: 1px solid var(--react-border);">
+                2. Redux Toolkit
+              </div>
+              <div style="font-weight: 700; font-size: 1.1rem; color: var(--text-main);">
+                Recommended Toolset
+              </div>
+              <p class="card-text" style="font-size: 0.88rem;">
+                The official package that simplifies Redux. It provides <code class="inline-code">configureStore()</code> and <code class="inline-code">createSlice()</code>.
+              </p>
+              <div style="margin-top: auto; padding-top: 0.6rem; border-top: 1px solid var(--border-subtle); font-size: 0.8rem; color: var(--text-muted);">
+                <strong>Role:</strong> Makes writing Redux logic fast and painless.
+              </div>
+            </div>
+
+            <!-- Column 3: React Redux -->
+            <div class="comp-card react-redux">
+              <div class="comp-badge" style="background: var(--accent-emerald-bg); color: var(--accent-emerald); border: 1px solid var(--accent-emerald-border);">
+                3. React Redux
+              </div>
+              <div style="font-weight: 700; font-size: 1.1rem; color: var(--text-main);">
+                React UI Bridge
+              </div>
+              <p class="card-text" style="font-size: 0.88rem;">
+                The official bridge connecting Redux to React. Provides the <code class="inline-code">&lt;Provider&gt;</code> component and React hooks like <code class="inline-code">useSelector()</code> and <code class="inline-code">useDispatch()</code>.
+              </p>
+              <div style="margin-top: auto; padding-top: 0.6rem; border-top: 1px solid var(--border-subtle); font-size: 0.8rem; color: var(--text-muted);">
+                <strong>Role:</strong> Lets React components talk to Redux.
+              </div>
+            </div>
+          </div>
+
+          <!-- Working Together Summary -->
+          <div class="card" style="background: var(--bg-surface); border-color: var(--border-light);">
+            <div class="card-title" style="color: var(--text-main);">
+              <span class="icon">🤝</span> How They Work Together Today:
+            </div>
+            <div class="grid-3" style="gap: 1rem; margin-top: 0.5rem; font-size: 0.9rem; color: var(--text-secondary);">
+              <div>🔹 <strong>Redux</strong> gives us the state management concept.</div>
+              <div>🔹 <strong>Redux Toolkit</strong> helps us create the store and reducers.</div>
+              <div>🔹 <strong>React Redux</strong> connects the store into our React components.</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 10 — UNDERSTANDING THE REDUX DATA FLOW
+           ==================================================================== -->
+      <section class="slide" data-slide="10" id="slide-10">
+        <div class="slide-content">
+          <div class="slide-tag">Architecture</div>
+          <h2 class="slide-title">Understanding the Redux Data Flow</h2>
+          <p class="slide-subtitle">Redux follows a strict, predictable unidirectional data flow cycle.</p>
+
+          <!-- Large Flow Diagram for Classroom Projection -->
+          <div class="data-flow-container" id="dataFlowDiagram" style="margin-bottom: 1.5rem;">
+            <!-- Step 1 -->
+            <div class="flow-node active" id="flowStep1">
+              <div class="flow-node-step">Step 1</div>
+              <div class="flow-node-icon">👆</div>
+              <div class="flow-node-title">User Interaction</div>
+              <div class="flow-node-desc">User clicks a button in React (e.g., Increment)</div>
+            </div>
+
+            <div class="flow-arrow-next">➔</div>
+
+            <!-- Step 2 -->
+            <div class="flow-node" id="flowStep2">
+              <div class="flow-node-step">Step 2</div>
+              <div class="flow-node-icon">⚡</div>
+              <div class="flow-node-title">Dispatch Action</div>
+              <div class="flow-node-desc">Component dispatches an action object</div>
+            </div>
+
+            <div class="flow-arrow-next">➔</div>
+
+            <!-- Step 3 -->
+            <div class="flow-node" id="flowStep3">
+              <div class="flow-node-step">Step 3</div>
+              <div class="flow-node-icon">⚙️</div>
+              <div class="flow-node-title">Reducer Executes</div>
+              <div class="flow-node-desc">Reducer receives action and calculates new state</div>
+            </div>
+
+            <div class="flow-arrow-next">➔</div>
+
+            <!-- Step 4 -->
+            <div class="flow-node" id="flowStep4">
+              <div class="flow-node-step">Step 4</div>
+              <div class="flow-node-icon">🏬</div>
+              <div class="flow-node-title">Store Updates</div>
+              <div class="flow-node-desc">Redux store saves the updated state object</div>
+            </div>
+
+            <div class="flow-arrow-next">➔</div>
+
+            <!-- Step 5 -->
+            <div class="flow-node" id="flowStep5">
+              <div class="flow-node-step">Step 5</div>
+              <div class="flow-node-icon">🔄</div>
+              <div class="flow-node-title">React UI Updates</div>
+              <div class="flow-node-desc">Subscribed components re-render with new data</div>
+            </div>
+          </div>
+
+          <!-- Example Walkthrough & Controls -->
+          <div class="grid-2">
+            <div class="card">
+              <div class="card-title" style="color: var(--react-cyan);">
+                <span class="icon">🔍</span> Example Walkthrough
+              </div>
+              <p class="card-text" style="font-family: var(--font-mono); font-size: 0.88rem; line-height: 1.8; color: var(--text-main);">
+                1. Click "Increment" button<br>
+                2. <span style="color: var(--syn-fn);">dispatch</span>(<span style="color: var(--syn-kwd);">increment</span>())<br>
+                3. Reducer: <span style="color: var(--syn-prop);">state.count</span> += 1<br>
+                4. Redux Store count updates (0 ➔ 1)<br>
+                5. React displays the new count 1!
+              </p>
+            </div>
+
+            <div class="card" style="display: flex; flex-direction: column; justify-content: space-between;">
+              <div>
+                <div class="card-title" style="color: var(--accent-amber);">
+                  <span class="icon">🛑</span> Unidirectional Rule
+                </div>
+                <p class="card-text">
+                  Redux state is <strong>read-only</strong> to components. Components cannot directly write <code class="inline-code">state.count = 5</code>. Every state change MUST follow this explicit cycle!
+                </p>
+              </div>
+              <button class="nav-btn primary" id="simulateFlowBtn" style="width: fit-content; margin-top: 0.85rem;">
+                ▶ Animate Flow Step-by-Step
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 11 — THE THREE MAIN REDUX CONCEPTS
+           ==================================================================== -->
+      <section class="slide" data-slide="11" id="slide-11">
+        <div class="slide-content">
+          <div class="slide-tag">Core Building Blocks</div>
+          <h2 class="slide-title">The Three Main Redux Concepts</h2>
+          <p class="slide-subtitle">Master these three terms and you understand the foundation of Redux.</p>
+
+          <div class="grid-3" style="margin-bottom: 1.4rem;">
+            <!-- 1. Store -->
+            <div class="card" style="border-top: 4px solid var(--redux-purple-light);">
+              <div class="card-title" style="color: var(--redux-purple-light); font-size: 1.15rem;">
+                <span class="icon">1. 🏬</span> Store
+              </div>
+              <p class="card-text" style="margin-bottom: 0.75rem;">
+                The <strong>Store</strong> holds the entire application's Redux state in a centralized location.
+              </p>
+              <div style="background: var(--bg-terminal); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: 0.65rem 0.85rem; font-family: var(--font-mono); font-size: 0.82rem;">
+                <span class="syn-comment">// Example Store State:</span><br>
+                {<br>
+                &nbsp;&nbsp;<span class="syn-prop">counter</span>: {<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="syn-prop">count</span>: <span class="syn-num">5</span><br>
+                &nbsp;&nbsp;}<br>
+                }
+              </div>
+            </div>
+
+            <!-- 2. Action -->
+            <div class="card" style="border-top: 4px solid var(--accent-amber);">
+              <div class="card-title" style="color: var(--accent-amber); font-size: 1.15rem;">
+                <span class="icon">2. ⚡</span> Action
+              </div>
+              <p class="card-text" style="margin-bottom: 0.75rem;">
+                An <strong>Action</strong> is an object that describes <em>something that happened</em> in the application.
+              </p>
+              <div style="background: var(--bg-terminal); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: 0.65rem 0.85rem; font-family: var(--font-mono); font-size: 0.82rem;">
+                <span class="syn-comment">// Examples:</span><br>
+                • Increment the counter<br>
+                • Decrement the counter<br>
+                • Reset the counter<br>
+                <span class="syn-prop">type</span>: <span class="syn-str">"counter/increment"</span>
+              </div>
+            </div>
+
+            <!-- 3. Reducer -->
+            <div class="card" style="border-top: 4px solid var(--accent-emerald);">
+              <div class="card-title" style="color: var(--accent-emerald); font-size: 1.15rem;">
+                <span class="icon">3. ⚙️</span> Reducer
+              </div>
+              <p class="card-text" style="margin-bottom: 0.75rem;">
+                A <strong>Reducer</strong> defines <em>how the state changes</em> in response to an action.
+              </p>
+              <div style="background: var(--bg-terminal); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: 0.65rem 0.85rem; font-family: var(--font-mono); font-size: 0.82rem;">
+                <span class="syn-comment">// Reducer logic:</span><br>
+                (<span class="syn-prop">state</span>, <span class="syn-prop">action</span>) =&gt; {<br>
+                &nbsp;&nbsp;<span class="syn-comment">// returns updated state</span><br>
+                &nbsp;&nbsp;<span class="syn-prop">state.count</span> += <span class="syn-num">1</span>;<br>
+                }
+              </div>
+            </div>
+          </div>
+
+          <!-- Summary Formula Callout -->
+          <div class="alert-box info">
+            <div class="alert-icon">🧠</div>
+            <div>
+              <strong style="font-size: 0.95rem;">Quick Formula to Remember:</strong><br>
+              The <strong>Store</strong> holds state, <strong>Actions</strong> describe events, and <strong>Reducers</strong> define state updates.
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 12 — WHAT IS A REDUX SLICE?
+           ==================================================================== -->
+      <section class="slide" data-slide="12" id="slide-12">
+        <div class="slide-content">
+          <div class="slide-tag">RTK Building Block</div>
+          <h2 class="slide-title">What Is a Redux Slice?</h2>
+          <p class="slide-subtitle">A slice represents one part of the Redux state, packaging its initial state and reducers together.</p>
+
+          <div class="grid-1-2">
+            <!-- Left: Slice Responsibilities & Immer note -->
+            <div style="display: flex; flex-direction: column; gap: 1rem;">
+              <div class="card">
+                <div class="card-title" style="color: var(--react-cyan);">
+                  <span class="icon">🍰</span> What a Slice Bundles:
+                </div>
+                <ul class="styled-list">
+                  <li><span class="bullet-icon cyan">1</span> <strong>Slice Name:</strong> Used as action type prefix (e.g. <code class="inline-code">"counter"</code>).</li>
+                  <li><span class="bullet-icon cyan">2</span> <strong>Initial State:</strong> Starting value (<code class="inline-code">count: 0</code>).</li>
+                  <li><span class="bullet-icon cyan">3</span> <strong>Reducers:</strong> Functions for increment, decrement, and reset.</li>
+                  <li><span class="bullet-icon cyan">4</span> <strong>Action Creators:</strong> Automatically created and exported!</li>
+                </ul>
+              </div>
+
+              <!-- Immer Magic Box -->
+              <div class="alert-box redux">
+                <div class="alert-icon">✨</div>
+                <div>
+                  <strong>Important: Immer Magic</strong><br>
+                  Redux Toolkit uses <strong>Immer</strong> internally. This allows us to write updates like <code class="inline-code purple">state.count += 1</code> while preserving Redux's strict immutable update behavior under the hood!
+                </div>
+              </div>
+
+              <div class="alert-box danger" style="margin-top: 0;">
+                <div class="alert-icon">⚠️</div>
+                <div>
+                  Never mutate state directly outside Redux Toolkit's reducer functions.
+                </div>
+              </div>
+            </div>
+
+            <!-- Right: Slice Code Block Preview -->
+            <div class="code-window">
+              <div class="code-header">
+                <div class="code-header-left">
+                  <div class="code-dots">
+                    <span class="code-dot red"></span>
+                    <span class="code-dot yellow"></span>
+                    <span class="code-dot green"></span>
+                  </div>
+                  <span class="code-filename">counterSlice.js</span>
+                </div>
+                <div class="code-header-right">
+                  <span class="code-lang-tag">JS</span>
+                  <button class="copy-btn" data-target="code-slide-12" title="Copy code">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                    Copy
+                  </button>
+                </div>
+              </div>
+              <div class="code-body">
+<pre id="code-slide-12"><span class="syn-kwd">import</span> { <span class="syn-fn">createSlice</span> } <span class="syn-kwd">from</span> <span class="syn-str">"@reduxjs/toolkit"</span>;
+
+<span class="syn-kwd">const</span> <span class="syn-prop">counterSlice</span> = <span class="syn-fn">createSlice</span>({
+  <span class="syn-prop">name</span>: <span class="syn-str">"counter"</span>,
+
+  <span class="syn-prop">initialState</span>: {
+    <span class="syn-prop">count</span>: <span class="syn-num">0</span>,
+  },
+
+  <span class="syn-prop">reducers</span>: {
+    <span class="syn-fn">increment</span>: (<span class="syn-prop">state</span>) =&gt; {
+      <span class="syn-prop">state.count</span> += <span class="syn-num">1</span>;
+    },
+
+    <span class="syn-fn">decrement</span>: (<span class="syn-prop">state</span>) =&gt; {
+      <span class="syn-prop">state.count</span> -= <span class="syn-num">1</span>;
+    },
+
+    <span class="syn-fn">reset</span>: (<span class="syn-prop">state</span>) =&gt; {
+      <span class="syn-prop">state.count</span> = <span class="syn-num">0</span>;
+    },
+  },
+});
+
+<span class="syn-comment">// Automatically generated action creators:</span>
+<span class="syn-kwd">export const</span> { <span class="syn-prop">increment</span>, <span class="syn-prop">decrement</span>, <span class="syn-prop">reset</span> } =
+  <span class="syn-prop">counterSlice.actions</span>;
+
+<span class="syn-kwd">export default</span> <span class="syn-prop">counterSlice.reducer</span>;</pre>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 13 — SETTING UP A REACT PROJECT
+           ==================================================================== -->
+      <section class="slide" data-slide="13" id="slide-13">
+        <div class="slide-content">
+          <div class="slide-tag">Hands-On Setup • Step 0</div>
+          <h2 class="slide-title">Setting Up a React Project</h2>
+          <p class="slide-subtitle">We will use Vite to create a clean, modern, fast React starter project.</p>
+
+          <div class="grid-2" style="margin-bottom: 1.25rem;">
+            <!-- Left: Terminal Commands Card -->
+            <div class="card" style="padding: 0; overflow: hidden; background: var(--bg-terminal);">
+              <div style="padding: 0.75rem 1rem; background: var(--bg-terminal-header); border-bottom: 1px solid var(--border-subtle); display: flex; align-items: center; justify-content: space-between;">
+                <span style="font-family: var(--font-mono); font-size: 0.8rem; color: var(--text-secondary);">Terminal / Command Prompt</span>
+                <button class="copy-btn" data-target="code-slide-13" title="Copy commands">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                  Copy
+                </button>
+              </div>
+              <div style="padding: 1.25rem 1.4rem; font-family: var(--font-mono); font-size: 0.92rem; line-height: 1.9;" id="code-slide-13">
+                <span class="syn-comment"># Step 1: Create the React project using Vite</span><br>
+                <span style="color: var(--react-cyan);">$</span> npm create vite@latest redux-demo -- --template react<br><br>
+                <span class="syn-comment"># Step 2: Open the project folder</span><br>
+                <span style="color: var(--react-cyan);">$</span> cd redux-demo<br><br>
+                <span class="syn-comment"># Step 3: Install default packages</span><br>
+                <span style="color: var(--react-cyan);">$</span> npm install<br><br>
+                <span class="syn-comment"># Step 4: Start development server</span><br>
+                <span style="color: var(--react-cyan);">$</span> npm run dev
+              </div>
+            </div>
+
+            <!-- Right: Step-by-Step Explanation -->
+            <div style="display: flex; flex-direction: column; gap: 0.85rem;">
+              <div class="card">
+                <div class="card-title">
+                  <span class="bullet-icon cyan">1</span> npm create vite@latest redux-demo
+                </div>
+                <p class="card-text">
+                  Downloads and runs Vite's official project scaffolder. Specifying <code class="inline-code">--template react</code> chooses the standard React setup.
+                </p>
+              </div>
+
+              <div class="card">
+                <div class="card-title">
+                  <span class="bullet-icon cyan">2</span> cd redux-demo &amp; npm install
+                </div>
+                <p class="card-text">
+                  Navigates into your newly created project folder and installs the required packages listed in <code class="inline-code">package.json</code>.
+                </p>
+              </div>
+
+              <div class="card">
+                <div class="card-title">
+                  <span class="bullet-icon emerald">3</span> npm run dev
+                </div>
+                <p class="card-text">
+                  Starts the Vite local development server on <code class="inline-code">http://localhost:5173</code> with instant hot module replacement.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div class="alert-box success">
+            <div class="alert-icon">✓</div>
+            <div>
+              <strong>Checkpoint:</strong> The React application is now running. Next, let's install Redux!
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 14 — INSTALLING REDUX DEPENDENCIES
+           ==================================================================== -->
+      <section class="slide" data-slide="14" id="slide-14">
+        <div class="slide-content">
+          <div class="slide-tag">Dependencies</div>
+          <h2 class="slide-title">Installing Redux Dependencies</h2>
+          <p class="slide-subtitle">Open your terminal in the project directory and run the installation command.</p>
+
+          <!-- Install Command Card -->
+          <div class="card" style="background: var(--bg-terminal); border-color: var(--redux-purple-border); padding: 1.25rem 1.5rem; margin-bottom: 1.5rem; display: flex; align-items: center; justify-content: space-between;">
+            <div style="display: flex; align-items: center; gap: 0.75rem; font-family: var(--font-mono); font-size: 1.15rem;">
+              <span style="color: var(--redux-purple-light);">$</span>
+              <span style="color: var(--text-main);" id="code-slide-14">npm install @reduxjs/toolkit react-redux</span>
+            </div>
+            <button class="copy-btn" data-target="code-slide-14" title="Copy install command">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+              Copy
+            </button>
+          </div>
+
+          <!-- Package Roles Breakdown -->
+          <div class="grid-2" style="margin-bottom: 1.25rem;">
+            <!-- Package 1: Redux Toolkit -->
+            <div class="card" style="border-top: 3px solid var(--redux-purple-light);">
+              <div class="card-title" style="color: var(--redux-purple-light);">
+                <span class="icon">🧰</span> @reduxjs/toolkit
+              </div>
+              <ul class="styled-list">
+                <li><span class="bullet-icon">•</span> Used to create the Redux store.</li>
+                <li><span class="bullet-icon">•</span> Provides <code class="inline-code">configureStore()</code> to initialize store.</li>
+                <li><span class="bullet-icon">•</span> Provides <code class="inline-code">createSlice()</code> to write reducers &amp; actions.</li>
+                <li><span class="bullet-icon">•</span> Includes Immer for easy mutable-style state updates.</li>
+              </ul>
+            </div>
+
+            <!-- Package 2: React Redux -->
+            <div class="card" style="border-top: 3px solid var(--react-cyan);">
+              <div class="card-title" style="color: var(--react-cyan);">
+                <span class="icon">🔌</span> react-redux
+              </div>
+              <ul class="styled-list">
+                <li><span class="bullet-icon cyan">•</span> Connects the Redux store to React components.</li>
+                <li><span class="bullet-icon cyan">•</span> Provides the <code class="inline-code">&lt;Provider&gt;</code> wrapper component.</li>
+                <li><span class="bullet-icon cyan">•</span> Provides <code class="inline-code">useSelector()</code> to read state data.</li>
+                <li><span class="bullet-icon cyan">•</span> Provides <code class="inline-code">useDispatch()</code> to trigger state actions.</li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- Bottom Summary Box -->
+          <div class="alert-box info">
+            <div class="alert-icon">💡</div>
+            <div>
+              <strong>Why Both?</strong> Redux Toolkit provides the state management machinery, while React Redux provides the React components and hooks to communicate with that machinery. We need both packages to build modern Redux apps.
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 15 — RECOMMENDED PROJECT STRUCTURE
+           ==================================================================== -->
+      <section class="slide" data-slide="15" id="slide-15">
+        <div class="slide-content">
+          <div class="slide-tag">Architecture Pattern</div>
+          <h2 class="slide-title">Recommended Project Structure</h2>
+          <p class="slide-subtitle">A clean, feature-driven folder structure keeps Redux code organized and scalable.</p>
+
+          <div class="grid-1-2">
+            <!-- Left: Styled File Tree -->
+            <div class="file-tree">
+              <div class="tree-item"><span class="tree-folder">📁 redux-demo/</span></div>
+              <div class="tree-item" style="padding-left: 1.2rem;"><span class="tree-folder">📁 src/</span></div>
+              <div class="tree-item" style="padding-left: 2.4rem;">
+                <span class="tree-folder">📁 app/</span>
+              </div>
+              <div class="tree-item" style="padding-left: 3.6rem;">
+                <span class="tree-file highlight">📄 store.js</span>
+                <span class="tree-badge store">Redux Store</span>
+              </div>
+              <div class="tree-item" style="padding-left: 2.4rem;">
+                <span class="tree-folder">📁 features/</span>
+              </div>
+              <div class="tree-item" style="padding-left: 3.6rem;">
+                <span class="tree-folder">📁 counter/</span>
+              </div>
+              <div class="tree-item" style="padding-left: 4.8rem;">
+                <span class="tree-file highlight">📄 counterSlice.js</span>
+                <span class="tree-badge slice">Slice Logic</span>
+              </div>
+              <div class="tree-item" style="padding-left: 2.4rem;">
+                <span class="tree-folder">📁 components/</span>
+              </div>
+              <div class="tree-item" style="padding-left: 3.6rem;">
+                <span class="tree-file">📄 Counter.jsx</span>
+                <span class="tree-badge component">UI Component</span>
+              </div>
+              <div class="tree-item" style="padding-left: 2.4rem;">
+                <span class="tree-file">📄 App.jsx</span>
+              </div>
+              <div class="tree-item" style="padding-left: 2.4rem;">
+                <span class="tree-file">📄 main.jsx</span>
+              </div>
+              <div class="tree-item" style="padding-left: 1.2rem;"><span class="tree-file">📄 package.json</span></div>
+              <div class="tree-item" style="padding-left: 1.2rem;"><span class="tree-file">📄 index.html</span></div>
+            </div>
+
+            <!-- Right: Responsibilities Breakdown -->
+            <div style="display: flex; flex-direction: column; gap: 0.85rem;">
+              <div class="card">
+                <div class="card-title" style="color: var(--redux-purple-light);">
+                  <span class="icon">⚙️</span> src/app/store.js
+                </div>
+                <p class="card-text">Configures and exports the central Redux store instance.</p>
+              </div>
+
+              <div class="card">
+                <div class="card-title" style="color: var(--accent-emerald);">
+                  <span class="icon">🍰</span> src/features/counter/counterSlice.js
+                </div>
+                <p class="card-text">Manages the counter feature's initial state, reducers, and generated actions.</p>
+              </div>
+
+              <div class="card">
+                <div class="card-title" style="color: var(--react-cyan);">
+                  <span class="icon">🖥️</span> src/components/Counter.jsx
+                </div>
+                <p class="card-text">The React presentation component that displays the count and triggers actions.</p>
+              </div>
+
+              <div class="card">
+                <div class="card-title" style="color: var(--text-main);">
+                  <span class="icon">🚀</span> src/App.jsx &amp; src/main.jsx
+                </div>
+                <p class="card-text">
+                  <code class="inline-code">App.jsx</code> renders the layout. <code class="inline-code">main.jsx</code> wraps the app inside Redux's <code class="inline-code">&lt;Provider&gt;</code>.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 16 — STEP 1 — CREATE THE COUNTER SLICE
+           ==================================================================== -->
+      <section class="slide" data-slide="16" id="slide-16">
+        <div class="slide-content">
+          <div class="slide-tag">Implementation Step 1</div>
+          <h2 class="slide-title">Step 1 — Create the Counter Slice</h2>
+          <p class="slide-subtitle">File: <code class="inline-code purple">src/features/counter/counterSlice.js</code></p>
+
+          <div class="grid-1-2">
+            <!-- Left: Detailed Explanations -->
+            <div style="display: flex; flex-direction: column; gap: 0.9rem;">
+              <div class="card">
+                <div class="card-title" style="color: var(--redux-purple-light);">
+                  <span class="icon">🔍</span> What Happens Here?
+                </div>
+                <ul class="styled-list">
+                  <li>
+                    <span class="bullet-icon">1</span>
+                    <div><strong>createSlice():</strong> Creates the slice with a single configuration object.</div>
+                  </li>
+                  <li>
+                    <span class="bullet-icon">2</span>
+                    <div><strong>initialState:</strong> Sets the starting count value to <code class="inline-code">0</code>.</div>
+                  </li>
+                  <li>
+                    <span class="bullet-icon">3</span>
+                    <div><strong>reducers:</strong> Defines available state updates (<code class="inline-code">increment</code>, <code class="inline-code">decrement</code>, <code class="inline-code">reset</code>).</div>
+                  </li>
+                  <li>
+                    <span class="bullet-icon">4</span>
+                    <div><strong>counterSlice.actions:</strong> Automatically generated actions exported for React components.</div>
+                  </li>
+                  <li>
+                    <span class="bullet-icon">5</span>
+                    <div><strong>counterSlice.reducer:</strong> Exported as default to be registered in the Redux store.</div>
+                  </li>
+                </ul>
+              </div>
+
+              <div class="alert-box redux">
+                <div class="alert-icon">💡</div>
+                <div>
+                  Notice how clean this is! We did <strong>not</strong> write any action constants or complex <code class="inline-code">switch</code> statements!
+                </div>
+              </div>
+            </div>
+
+            <!-- Right: Complete Code Window -->
+            <div class="code-window">
+              <div class="code-header">
+                <div class="code-header-left">
+                  <div class="code-dots">
+                    <span class="code-dot red"></span>
+                    <span class="code-dot yellow"></span>
+                    <span class="code-dot green"></span>
+                  </div>
+                  <span class="code-filename">src/features/counter/counterSlice.js</span>
+                </div>
+                <div class="code-header-right">
+                  <span class="code-lang-tag">JS</span>
+                  <button class="copy-btn" data-target="code-slide-16" title="Copy code">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                    Copy
+                  </button>
+                </div>
+              </div>
+              <div class="code-body">
+<pre id="code-slide-16"><span class="syn-kwd">import</span> { <span class="syn-fn">createSlice</span> } <span class="syn-kwd">from</span> <span class="syn-str">"@reduxjs/toolkit"</span>;
+
+<span class="syn-kwd">const</span> <span class="syn-prop">counterSlice</span> = <span class="syn-fn">createSlice</span>({
+  <span class="syn-prop">name</span>: <span class="syn-str">"counter"</span>,
+
+  <span class="syn-prop">initialState</span>: {
+    <span class="syn-prop">count</span>: <span class="syn-num">0</span>,
+  },
+
+  <span class="syn-prop">reducers</span>: {
+    <span class="syn-fn">increment</span>: (<span class="syn-prop">state</span>) =&gt; {
+      <span class="syn-prop">state.count</span> += <span class="syn-num">1</span>;
+    },
+
+    <span class="syn-fn">decrement</span>: (<span class="syn-prop">state</span>) =&gt; {
+      <span class="syn-prop">state.count</span> -= <span class="syn-num">1</span>;
+    },
+
+    <span class="syn-fn">reset</span>: (<span class="syn-prop">state</span>) =&gt; {
+      <span class="syn-prop">state.count</span> = <span class="syn-num">0</span>;
+    },
+  },
+});
+
+<span class="syn-kwd">export const</span> { <span class="syn-prop">increment</span>, <span class="syn-prop">decrement</span>, <span class="syn-prop">reset</span> } =
+  <span class="syn-prop">counterSlice.actions</span>;
+
+<span class="syn-kwd">export default</span> <span class="syn-prop">counterSlice.reducer</span>;</pre>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 17 — STEP 2 — CONFIGURE THE REDUX STORE
+           ==================================================================== -->
+      <section class="slide" data-slide="17" id="slide-17">
+        <div class="slide-content">
+          <div class="slide-tag">Implementation Step 2</div>
+          <h2 class="slide-title">Step 2 — Configure the Redux Store</h2>
+          <p class="slide-subtitle">File: <code class="inline-code purple">src/app/store.js</code></p>
+
+          <div class="grid-1-2">
+            <!-- Left: Explanations & Resulting State Shape -->
+            <div style="display: flex; flex-direction: column; gap: 1rem;">
+              <div class="card">
+                <div class="card-title" style="color: var(--react-cyan);">
+                  <span class="icon">⚙️</span> Key Explanations
+                </div>
+                <ul class="styled-list">
+                  <li>
+                    <span class="bullet-icon cyan">1</span>
+                    <div><strong>configureStore():</strong> Creates and configures the centralized Redux store.</div>
+                  </li>
+                  <li>
+                    <span class="bullet-icon cyan">2</span>
+                    <div><strong>reducer:</strong> An object that registers all reducers used across the application.</div>
+                  </li>
+                  <li>
+                    <span class="bullet-icon cyan">3</span>
+                    <div><strong>counter: counterReducer:</strong> Defines the state key under which this slice's data will be stored.</div>
+                  </li>
+                </ul>
+              </div>
+
+              <!-- State Tree Shape Display -->
+              <div class="card" style="background: var(--bg-surface); border-color: var(--redux-purple-border);">
+                <div class="card-title" style="color: var(--redux-purple-light); font-size: 0.95rem;">
+                  <span class="icon">📦</span> Resulting Redux State Shape:
+                </div>
+                <div style="background: var(--bg-terminal); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: 0.75rem 1rem; font-family: var(--font-mono); font-size: 0.9rem; margin-top: 0.4rem;">
+                  {<br>
+                  &nbsp;&nbsp;<span class="syn-prop">counter</span>: {<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span class="syn-prop">count</span>: <span class="syn-num">0</span><br>
+                  &nbsp;&nbsp;}<br>
+                  }
+                </div>
+                <p style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 0.75rem;">
+                  Therefore, any React component can access this value using:
+                  <code class="inline-code">state.counter.count</code>
+                </p>
+              </div>
+            </div>
+
+            <!-- Right: Store Code Block -->
+            <div class="code-window">
+              <div class="code-header">
+                <div class="code-header-left">
+                  <div class="code-dots">
+                    <span class="code-dot red"></span>
+                    <span class="code-dot yellow"></span>
+                    <span class="code-dot green"></span>
+                  </div>
+                  <span class="code-filename">src/app/store.js</span>
+                </div>
+                <div class="code-header-right">
+                  <span class="code-lang-tag">JS</span>
+                  <button class="copy-btn" data-target="code-slide-17" title="Copy code">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                    Copy
+                  </button>
+                </div>
+              </div>
+              <div class="code-body">
+<pre id="code-slide-17"><span class="syn-kwd">import</span> { <span class="syn-fn">configureStore</span> } <span class="syn-kwd">from</span> <span class="syn-str">"@reduxjs/toolkit"</span>;
+<span class="syn-kwd">import</span> <span class="syn-prop">counterReducer</span> <span class="syn-kwd">from</span> <span class="syn-str">"../features/counter/counterSlice"</span>;
+
+<span class="syn-kwd">export const</span> <span class="syn-prop">store</span> = <span class="syn-fn">configureStore</span>({
+  <span class="syn-prop">reducer</span>: {
+    <span class="syn-comment">// Registered under the key "counter"</span>
+    <span class="syn-prop">counter</span>: <span class="syn-prop">counterReducer</span>,
+  },
+});</pre>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 18 — STEP 3 — CONNECT REDUX TO REACT USING PROVIDER
+           ==================================================================== -->
+      <section class="slide" data-slide="18" id="slide-18">
+        <div class="slide-content">
+          <div class="slide-tag">Implementation Step 3</div>
+          <h2 class="slide-title">Step 3 — Connect Redux to React Using Provider</h2>
+          <p class="slide-subtitle">File: <code class="inline-code purple">src/main.jsx</code></p>
+
+          <div class="grid-1-2">
+            <!-- Left: Provider Explanation -->
+            <div style="display: flex; flex-direction: column; gap: 1rem;">
+              <div class="card">
+                <div class="card-title" style="color: var(--react-cyan);">
+                  <span class="icon">🔌</span> What Does Provider Do?
+                </div>
+                <p class="card-text">
+                  The <code class="inline-code">&lt;Provider&gt;</code> component makes the Redux store available to the entire React component tree nested inside it.
+                </p>
+              </div>
+
+              <div class="card">
+                <div class="card-title">
+                  <span class="icon">📋</span> Important Points:
+                </div>
+                <ul class="styled-list">
+                  <li><span class="bullet-icon cyan">1</span> Import <code class="inline-code">Provider</code> from <code class="inline-code">react-redux</code>.</li>
+                  <li><span class="bullet-icon cyan">2</span> Import the configured <code class="inline-code">store</code> from <code class="inline-code">./app/store</code>.</li>
+                  <li><span class="bullet-icon cyan">3</span> Pass the store via the <code class="inline-code">store={store}</code> prop.</li>
+                  <li><span class="bullet-icon cyan">4</span> Wrap the <code class="inline-code">&lt;App /&gt;</code> component inside <code class="inline-code">&lt;Provider&gt;</code>.</li>
+                </ul>
+              </div>
+
+              <div class="alert-box danger">
+                <div class="alert-icon">⚠️</div>
+                <div>
+                  Without the correct Provider setup, components cannot use the store through React Redux hooks (<code class="inline-code">useSelector</code> &amp; <code class="inline-code">useDispatch</code> will throw an error).
+                </div>
+              </div>
+            </div>
+
+            <!-- Right: main.jsx Code -->
+            <div class="code-window">
+              <div class="code-header">
+                <div class="code-header-left">
+                  <div class="code-dots">
+                    <span class="code-dot red"></span>
+                    <span class="code-dot yellow"></span>
+                    <span class="code-dot green"></span>
+                  </div>
+                  <span class="code-filename">src/main.jsx</span>
+                </div>
+                <div class="code-header-right">
+                  <span class="code-lang-tag">JSX</span>
+                  <button class="copy-btn" data-target="code-slide-18" title="Copy code">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                    Copy
+                  </button>
+                </div>
+              </div>
+              <div class="code-body">
+<pre id="code-slide-18"><span class="syn-kwd">import</span> { <span class="syn-prop">StrictMode</span> } <span class="syn-kwd">from</span> <span class="syn-str">"react"</span>;
+<span class="syn-kwd">import</span> { <span class="syn-fn">createRoot</span> } <span class="syn-kwd">from</span> <span class="syn-str">"react-dom/client"</span>;
+<span class="syn-kwd">import</span> { <span class="syn-prop">Provider</span> } <span class="syn-kwd">from</span> <span class="syn-str">"react-redux"</span>;
+
+<span class="syn-kwd">import</span> <span class="syn-prop">App</span> <span class="syn-kwd">from</span> <span class="syn-str">"./App"</span>;
+<span class="syn-kwd">import</span> { <span class="syn-prop">store</span> } <span class="syn-kwd">from</span> <span class="syn-str">"./app/store"</span>;
+
+<span class="syn-fn">createRoot</span>(<span class="syn-prop">document</span>.<span class="syn-fn">getElementById</span>(<span class="syn-str">"root"</span>)).<span class="syn-fn">render</span>(
+  <span class="syn-tag">&lt;StrictMode&gt;</span>
+    <span class="syn-comment">{/* Provider makes Redux available to all components */}</span>
+    <span class="syn-tag">&lt;Provider</span> <span class="syn-prop">store</span>={<span class="syn-prop">store</span>}<span class="syn-tag">&gt;</span>
+      <span class="syn-tag">&lt;App /&gt;</span>
+    <span class="syn-tag">&lt;/Provider&gt;</span>
+  <span class="syn-tag">&lt;/StrictMode&gt;</span>
+);</pre>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 19 — STEP 4 — READ AND UPDATE REDUX STATE
+           ==================================================================== -->
+      <section class="slide" data-slide="19" id="slide-19">
+        <div class="slide-content">
+          <div class="slide-tag">Implementation Step 4</div>
+          <h2 class="slide-title">Step 4 — Read and Update Redux State</h2>
+          <p class="slide-subtitle">File: <code class="inline-code purple">src/components/Counter.jsx</code></p>
+
+          <div class="grid-1-2">
+            <!-- Left: Hooks Explanation -->
+            <div style="display: flex; flex-direction: column; gap: 1rem;">
+              <div class="card" style="border-top: 3px solid var(--react-cyan);">
+                <div class="card-title" style="color: var(--react-cyan);">
+                  <span class="icon">👀</span> 1. useSelector()
+                </div>
+                <p class="card-text" style="margin-bottom: 0.5rem;">
+                  Reads data directly from the Redux store.
+                </p>
+                <div style="background: var(--bg-terminal); padding: 0.5rem 0.75rem; border-radius: var(--radius-xs); font-family: var(--font-mono); font-size: 0.8rem; color: var(--text-main);">
+                  const count = useSelector((state) =&gt; state.counter.count);
+                </div>
+                <p class="card-text" style="font-size: 0.82rem; margin-top: 0.5rem; color: var(--text-muted);">
+                  It automatically subscribes the component to updates: when count changes, Counter re-renders!
+                </p>
+              </div>
+
+              <div class="card" style="border-top: 3px solid var(--accent-amber);">
+                <div class="card-title" style="color: var(--accent-amber);">
+                  <span class="icon">⚡</span> 2. useDispatch()
+                </div>
+                <p class="card-text" style="margin-bottom: 0.5rem;">
+                  Returns the Redux <code class="inline-code">dispatch</code> function.
+                </p>
+                <div style="background: var(--bg-terminal); padding: 0.5rem 0.75rem; border-radius: var(--radius-xs); font-family: var(--font-mono); font-size: 0.8rem; color: var(--text-main);">
+                  const dispatch = useDispatch();<br>
+                  dispatch(increment());
+                </div>
+                <p class="card-text" style="font-size: 0.82rem; margin-top: 0.5rem; color: var(--text-muted);">
+                  Allows the component to trigger actions and update state.
+                </p>
+              </div>
+            </div>
+
+            <!-- Right: Counter.jsx Code -->
+            <div class="code-window">
+              <div class="code-header">
+                <div class="code-header-left">
+                  <div class="code-dots">
+                    <span class="code-dot red"></span>
+                    <span class="code-dot yellow"></span>
+                    <span class="code-dot green"></span>
+                  </div>
+                  <span class="code-filename">src/components/Counter.jsx</span>
+                </div>
+                <div class="code-header-right">
+                  <span class="code-lang-tag">JSX</span>
+                  <button class="copy-btn" data-target="code-slide-19" title="Copy code">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                    Copy
+                  </button>
+                </div>
+              </div>
+              <div class="code-body">
+<pre id="code-slide-19"><span class="syn-kwd">import</span> { <span class="syn-fn">useSelector</span>, <span class="syn-fn">useDispatch</span> } <span class="syn-kwd">from</span> <span class="syn-str">"react-redux"</span>;
+
+<span class="syn-kwd">import</span> {
+  <span class="syn-prop">increment</span>,
+  <span class="syn-prop">decrement</span>,
+  <span class="syn-prop">reset</span>,
+} <span class="syn-kwd">from</span> <span class="syn-str">"../features/counter/counterSlice"</span>;
+
+<span class="syn-kwd">function</span> <span class="syn-fn">Counter</span>() {
+  <span class="syn-comment">// Read count from Redux store</span>
+  <span class="syn-kwd">const</span> <span class="syn-prop">count</span> = <span class="syn-fn">useSelector</span>((<span class="syn-prop">state</span>) =&gt; <span class="syn-prop">state.counter.count</span>);
+
+  <span class="syn-comment">// Get dispatch function</span>
+  <span class="syn-kwd">const</span> <span class="syn-fn">dispatch</span> = <span class="syn-fn">useDispatch</span>();
+
+  <span class="syn-kwd">return</span> (
+    <span class="syn-tag">&lt;div&gt;</span>
+      <span class="syn-tag">&lt;h2&gt;</span>Count: {<span class="syn-prop">count</span>}<span class="syn-tag">&lt;/h2&gt;</span>
+
+      <span class="syn-tag">&lt;button</span> <span class="syn-prop">onClick</span>={() =&gt; <span class="syn-fn">dispatch</span>(<span class="syn-fn">increment</span>())}<span class="syn-tag">&gt;</span>
+        Increment
+      <span class="syn-tag">&lt;/button&gt;</span>
+
+      <span class="syn-tag">&lt;button</span> <span class="syn-prop">onClick</span>={() =&gt; <span class="syn-fn">dispatch</span>(<span class="syn-fn">decrement</span>())}<span class="syn-tag">&gt;</span>
+        Decrement
+      <span class="syn-tag">&lt;/button&gt;</span>
+
+      <span class="syn-tag">&lt;button</span> <span class="syn-prop">onClick</span>={() =&gt; <span class="syn-fn">dispatch</span>(<span class="syn-fn">reset</span>())}<span class="syn-tag">&gt;</span>
+        Reset
+      <span class="syn-tag">&lt;/button&gt;</span>
+    <span class="syn-tag">&lt;/div&gt;</span>
+  );
+}
+
+<span class="syn-kwd">export default</span> <span class="syn-fn">Counter</span>;</pre>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 20 — STEP 5 — DISPLAY THE COUNTER COMPONENT & LIVE DEMO
+           ==================================================================== -->
+      <section class="slide" data-slide="20" id="slide-20">
+        <div class="slide-content">
+          <div class="slide-tag">Implementation Step 5</div>
+          <h2 class="slide-title">Step 5 — Display the Counter Component</h2>
+          <p class="slide-subtitle">File: <code class="inline-code purple">src/App.jsx</code> — Mounting the component &amp; testing behavior.</p>
+
+          <div class="grid-2" style="margin-bottom: 1.25rem;">
+            <!-- Left: App.jsx Code Block -->
+            <div class="code-window">
+              <div class="code-header">
+                <div class="code-header-left">
+                  <div class="code-dots">
+                    <span class="code-dot red"></span>
+                    <span class="code-dot yellow"></span>
+                    <span class="code-dot green"></span>
+                  </div>
+                  <span class="code-filename">src/App.jsx</span>
+                </div>
+                <div class="code-header-right">
+                  <span class="code-lang-tag">JSX</span>
+                  <button class="copy-btn" data-target="code-slide-20" title="Copy code">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                    Copy
+                  </button>
+                </div>
+              </div>
+              <div class="code-body">
+<pre id="code-slide-20"><span class="syn-kwd">import</span> <span class="syn-prop">Counter</span> <span class="syn-kwd">from</span> <span class="syn-str">"./components/Counter"</span>;
+
+<span class="syn-kwd">function</span> <span class="syn-fn">App</span>() {
+  <span class="syn-kwd">return</span> (
+    <span class="syn-tag">&lt;div&gt;</span>
+      <span class="syn-tag">&lt;h1&gt;</span>Redux Counter App<span class="syn-tag">&lt;/h1&gt;</span>
+      <span class="syn-tag">&lt;Counter /&gt;</span>
+    <span class="syn-tag">&lt;/div&gt;</span>
+  );
+}
+
+<span class="syn-kwd">export default</span> <span class="syn-fn">App</span>;</pre>
+              </div>
+            </div>
+
+            <!-- Right: Expected Behavior Checklist -->
+            <div class="card" style="display: flex; flex-direction: column; justify-content: space-between;">
+              <div>
+                <div class="card-title" style="color: var(--accent-emerald);">
+                  <span class="icon">🚀</span> Run &amp; Verify
+                </div>
+                <div style="background: var(--bg-terminal); padding: 0.5rem 0.85rem; border-radius: var(--radius-xs); font-family: var(--font-mono); font-size: 0.85rem; color: var(--react-cyan); margin-bottom: 0.85rem;">
+                  $ npm run dev
+                </div>
+                <div style="font-weight: 700; font-size: 0.9rem; color: var(--text-main); margin-bottom: 0.4rem;">
+                  Expected Classroom Behavior:
+                </div>
+                <ul class="styled-list" style="font-size: 0.88rem;">
+                  <li><span class="bullet-icon emerald">1</span> Initial value loaded from store: <strong>0</strong></li>
+                  <li><span class="bullet-icon emerald">2</span> Click Increment: increases to <strong>1</strong></li>
+                  <li><span class="bullet-icon emerald">3</span> Click Increment again: increases to <strong>2</strong></li>
+                  <li><span class="bullet-icon emerald">4</span> Click Decrement: decreases back to <strong>1</strong></li>
+                  <li><span class="bullet-icon emerald">5</span> Click Reset: returns immediately to <strong>0</strong></li>
+                </ul>
+              </div>
+              <div class="alert-box success" style="margin-top: 0.75rem; padding: 0.65rem 0.85rem;">
+                The state is stored safely in Redux, and React updates the UI seamlessly!
+              </div>
+            </div>
+          </div>
+
+          <!-- Live Interactive Counter Simulation Sandbox -->
+          <div class="sim-container">
+            <div class="sim-ui-panel">
+              <span style="font-size: 0.8rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em;">Interactive Live Demo</span>
+              <div class="sim-counter-display" id="simCountDisplay">0</div>
+              <div class="sim-buttons">
+                <button class="sim-btn inc" id="simIncBtn">➕ Increment</button>
+                <button class="sim-btn dec" id="simDecBtn">➖ Decrement</button>
+                <button class="sim-btn rst" id="simResetBtn">🔄 Reset</button>
+              </div>
+            </div>
+
+            <div class="sim-log-panel">
+              <div class="sim-log-header">
+                <span class="sim-log-title">
+                  <span>⚡</span> Live Redux Action &amp; State Stream
+                </span>
+                <span style="font-size: 0.75rem; color: var(--text-dim); font-family: var(--font-mono);">dispatch() logger</span>
+              </div>
+              <div class="sim-log-entries" id="simLogEntries">
+                <div class="log-entry">
+                  <span style="color: var(--text-dim);">[init]</span>
+                  <span class="log-action">@@INIT</span>
+                  <span class="log-state">{ count: 0 }</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 21 — HOW THE COMPLETE APPLICATION WORKS
+           ==================================================================== -->
+      <section class="slide" data-slide="21" id="slide-21">
+        <div class="slide-content">
+          <div class="slide-tag">Full Architecture Cycle</div>
+          <h2 class="slide-title">How the Complete Application Works</h2>
+          <p class="slide-subtitle">Let's connect every single moving part from user action to visual render.</p>
+
+          <!-- 6-Step Visual Sequence -->
+          <div class="grid-3" style="gap: 1rem; margin-bottom: 1.5rem;">
+            <div class="card" style="border-left: 3px solid var(--react-cyan);">
+              <div class="card-title">
+                <span class="bullet-icon cyan">1</span> User Clicks Button
+              </div>
+              <p class="card-text" style="font-size: 0.88rem;">
+                The user clicks the <strong>Increment</strong> button inside the <code class="inline-code">&lt;Counter /&gt;</code> component.
+              </p>
+            </div>
+
+            <div class="card" style="border-left: 3px solid var(--accent-amber);">
+              <div class="card-title">
+                <span class="bullet-icon" style="background: var(--accent-amber-bg); color: var(--accent-amber); border-color: var(--accent-amber-border);">2</span> Dispatches Action
+              </div>
+              <p class="card-text" style="font-size: 0.88rem;">
+                The component calls <code class="inline-code">dispatch(increment())</code> sending <code class="inline-code">{ type: "counter/increment" }</code>.
+              </p>
+            </div>
+
+            <div class="card" style="border-left: 3px solid var(--redux-purple-light);">
+              <div class="card-title">
+                <span class="bullet-icon">3</span> Reducer Updates
+              </div>
+              <p class="card-text" style="font-size: 0.88rem;">
+                The <code class="inline-code">counterSlice</code> reducer receives the action and runs <code class="inline-code">state.count += 1</code>.
+              </p>
+            </div>
+
+            <div class="card" style="border-left: 3px solid var(--accent-emerald);">
+              <div class="card-title">
+                <span class="bullet-icon emerald">4</span> Store Holds State
+              </div>
+              <p class="card-text" style="font-size: 0.88rem;">
+                The central Redux store now holds the new updated state: <code class="inline-code">{ counter: { count: 1 } }</code>.
+              </p>
+            </div>
+
+            <div class="card" style="border-left: 3px solid var(--react-cyan);">
+              <div class="card-title">
+                <span class="bullet-icon cyan">5</span> useSelector() Reads
+              </div>
+              <p class="card-text" style="font-size: 0.88rem;">
+                <code class="inline-code">useSelector()</code> detects that <code class="inline-code">state.counter.count</code> has changed.
+              </p>
+            </div>
+
+            <div class="card" style="border-left: 3px solid var(--accent-emerald);">
+              <div class="card-title">
+                <span class="bullet-icon emerald">6</span> React Updates UI
+              </div>
+              <p class="card-text" style="font-size: 0.88rem;">
+                React re-renders the <code class="inline-code">&lt;Counter /&gt;</code> component to display the new number <strong>1</strong>!
+              </p>
+            </div>
+          </div>
+
+          <!-- Visual Summary Flow Chart -->
+          <div class="card" style="background: var(--bg-surface); border-color: var(--border-light); text-align: center;">
+            <div style="font-family: var(--font-mono); font-size: 0.88rem; color: var(--text-main); display: flex; align-items: center; justify-content: center; gap: 0.6rem; flex-wrap: wrap;">
+              <span style="color: var(--react-cyan); font-weight: 700;">User Clicks</span>
+              <span style="color: var(--text-dim);">➔</span>
+              <span style="color: var(--accent-amber); font-weight: 700;">dispatch(increment())</span>
+              <span style="color: var(--text-dim);">➔</span>
+              <span style="color: var(--redux-purple-light); font-weight: 700;">Counter Reducer</span>
+              <span style="color: var(--text-dim);">➔</span>
+              <span style="color: var(--accent-emerald); font-weight: 700;">Redux Store</span>
+              <span style="color: var(--text-dim);">➔</span>
+              <span style="color: var(--react-cyan); font-weight: 700;">useSelector()</span>
+              <span style="color: var(--text-dim);">➔</span>
+              <span style="color: #38BDF8; font-weight: 700;">React Re-renders</span>
+            </div>
+          </div>
+
+          <!-- Bottom Key Takeaway -->
+          <div class="alert-box redux" style="margin-top: 1rem;">
+            <div class="alert-icon">💎</div>
+            <div>
+              <strong>Key Takeaway:</strong> <strong>Redux Toolkit</strong> manages shared state, and <strong>React Redux</strong> helps React components read and update it with clean hooks.
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 22 — SUMMARY AND QUICK QUESTIONS
+           ==================================================================== -->
+      <section class="slide" data-slide="22" id="slide-22">
+        <div class="slide-content">
+          <div class="slide-tag">Classroom Review &amp; Practice</div>
+          <h2 class="slide-title">Summary and Quick Questions</h2>
+          <p class="slide-subtitle">Consolidate today's core concepts and test student comprehension.</p>
+
+          <!-- Today's Summary Highlights -->
+          <div class="card" style="margin-bottom: 1.25rem;">
+            <div class="card-title" style="color: var(--react-cyan);">
+              <span class="icon">📝</span> Today's Summary
+            </div>
+            <div class="grid-2" style="font-size: 0.88rem;">
+              <ul class="styled-list">
+                <li><span class="bullet-icon cyan">✓</span> State is component memory in React.</li>
+                <li><span class="bullet-icon cyan">✓</span> Prop drilling causes unnecessary intermediate coupling.</li>
+                <li><span class="bullet-icon cyan">✓</span> Redux provides a centralized, predictable state store.</li>
+                <li><span class="bullet-icon cyan">✓</span> Redux Toolkit (RTK) eliminates legacy Redux boilerplate.</li>
+              </ul>
+              <ul class="styled-list">
+                <li><span class="bullet-icon cyan">✓</span> Slices group initial state, reducers, and actions together.</li>
+                <li><span class="bullet-icon cyan">✓</span> <code class="inline-code">configureStore()</code> sets up the central store.</li>
+                <li><span class="bullet-icon cyan">✓</span> <code class="inline-code">&lt;Provider&gt;</code> connects Redux into the React tree.</li>
+                <li><span class="bullet-icon cyan">✓</span> <code class="inline-code">useSelector()</code> reads; <code class="inline-code">useDispatch()</code> updates.</li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- Interactive Classroom Quick Questions Grid -->
+          <div class="qa-grid">
+            <!-- Q1 -->
+            <div class="qa-card" data-qa="1">
+              <div class="qa-question">
+                <span>1. What is Redux?</span>
+                <span class="qa-toggle-icon">▼</span>
+              </div>
+              <div class="qa-answer">
+                A predictable, centralized state management library for JavaScript applications that stores shared state in a single store.
+              </div>
+            </div>
+
+            <!-- Q2 -->
+            <div class="qa-card" data-qa="2">
+              <div class="qa-question">
+                <span>2. What problem does Redux solve?</span>
+                <span class="qa-toggle-icon">▼</span>
+              </div>
+              <div class="qa-answer">
+                It solves prop drilling and state synchronization issues across multiple distant components that need access to the same shared data.
+              </div>
+            </div>
+
+            <!-- Q3 -->
+            <div class="qa-card" data-qa="3">
+              <div class="qa-question">
+                <span>3. What is a Redux store?</span>
+                <span class="qa-toggle-icon">▼</span>
+              </div>
+              <div class="qa-answer">
+                The centralized container that holds the entire application's Redux state tree as a single source of truth.
+              </div>
+            </div>
+
+            <!-- Q4 -->
+            <div class="qa-card" data-qa="4">
+              <div class="qa-question">
+                <span>4. What is a slice?</span>
+                <span class="qa-toggle-icon">▼</span>
+              </div>
+              <div class="qa-answer">
+                A module created with <code class="inline-code">createSlice()</code> that bundles initial state, reducer logic, and generated actions for a specific feature.
+              </div>
+            </div>
+
+            <!-- Q5 -->
+            <div class="qa-card" data-qa="5">
+              <div class="qa-question">
+                <span>5. What does configureStore() do?</span>
+                <span class="qa-toggle-icon">▼</span>
+              </div>
+              <div class="qa-answer">
+                Initializes and configures the Redux store, combines reducers, and enables Redux DevTools automatically.
+              </div>
+            </div>
+
+            <!-- Q6 -->
+            <div class="qa-card" data-qa="6">
+              <div class="qa-question">
+                <span>6. Why do we use Provider?</span>
+                <span class="qa-toggle-icon">▼</span>
+              </div>
+              <div class="qa-answer">
+                It wraps the React app and uses React Context internally to make the Redux store accessible to all nested components.
+              </div>
+            </div>
+
+            <!-- Q7 -->
+            <div class="qa-card" data-qa="7">
+              <div class="qa-question">
+                <span>7. useSelector() vs useDispatch()?</span>
+                <span class="qa-toggle-icon">▼</span>
+              </div>
+              <div class="qa-answer">
+                <code class="inline-code">useSelector()</code> reads state from the store and subscribes to changes. <code class="inline-code">useDispatch()</code> sends actions to update state.
+              </div>
+            </div>
+
+            <!-- Q8 -->
+            <div class="qa-card" data-qa="8">
+              <div class="qa-question">
+                <span>8. Which package provides createSlice()?</span>
+                <span class="qa-toggle-icon">▼</span>
+              </div>
+              <div class="qa-answer">
+                <code class="inline-code">@reduxjs/toolkit</code> (Redux Toolkit), <em>not</em> <code class="inline-code">react-redux</code>!
+              </div>
+            </div>
+          </div>
+
+          <!-- Small Practice Task Card -->
+          <div class="card" style="border-color: var(--accent-emerald-border); background: rgba(16, 185, 129, 0.05);">
+            <div class="card-title" style="color: var(--accent-emerald);">
+              <span class="icon">🎯</span> Small Classroom Practice Task
+            </div>
+            <p class="card-text" style="margin-bottom: 0.5rem;">
+              Modify today's counter application to include:
+            </p>
+            <div style="display: flex; gap: 0.85rem; flex-wrap: wrap; margin-bottom: 0.6rem;">
+              <span class="inline-code">1. Increment (+1)</span>
+              <span class="inline-code">2. Decrement (-1)</span>
+              <span class="inline-code">3. Reset (0)</span>
+              <span class="inline-code" style="border-color: var(--accent-emerald-border); color: var(--accent-emerald); font-weight: 700;">4. Increment by 5 (+5)</span>
+            </div>
+            <p style="font-size: 0.85rem; color: var(--text-muted); font-style: italic;">
+              <strong>Requirement:</strong> All counter updates must be handled through Redux (add an <code class="inline-code">incrementBy5</code> reducer inside <code class="inline-code">counterSlice.js</code>)!
+            </p>
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- Bottom Footer Controls -->
+    <footer class="bottom-footer">
+      <div class="footer-left">
+        <div class="slide-counter">
+          <span class="current" id="currentSlideNum">1</span>
+          <span class="divider">/</span>
+          <span class="total" id="totalSlidesNum">22</span>
+        </div>
+      </div>
+
+      <div class="footer-center">
+        <button class="nav-btn" id="prevBtn" title="Previous Slide (← or PgUp)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="15 18 9 12 15 6"></polyline>
+          </svg>
+          Previous
+        </button>
+
+        <button class="nav-btn primary" id="nextBtn" title="Next Slide (→, Space, or PgDn)">
+          Next
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="9 18 15 12 9 6"></polyline>
+          </svg>
+        </button>
+      </div>
+
+      <div class="footer-right">
+        <div class="footer-key-hint">
+          <kbd>→</kbd> <kbd>Space</kbd> Next
+        </div>
+        <div class="footer-key-hint">
+          <kbd>←</kbd> Prev
+        </div>
+        <div class="footer-key-hint">
+          <kbd>T</kbd> Index
+        </div>
+        <div class="footer-key-hint">
+          <kbd>F</kbd> Fullscreen
+        </div>
+      </div>
+    </footer>
+
+    <!-- Table of Contents Drawer -->
+    <aside class="toc-drawer" id="tocDrawer">
+      <div class="toc-header">
+        <div class="toc-title">
+          <span>📋</span> Slide Index (22 Slides)
+        </div>
+        <button class="toc-close-btn" id="closeTocBtn" title="Close Index (Esc)">&times;</button>
+      </div>
+      <div class="toc-search">
+        <input type="text" class="toc-search-input" id="tocSearchInput" placeholder="Filter slides by topic...">
+      </div>
+      <ul class="toc-list" id="tocList">
+        <!-- Injected dynamically via script.js -->
+      </ul>
+    </aside>
+    <div class="drawer-backdrop" id="drawerBackdrop"></div>
+
+    <!-- Shortcuts Modal -->
+    <div class="modal-overlay" id="shortcutsModal">
+      <div class="modal-box">
+        <div class="modal-header">
+          <div class="modal-title">⌨️ Keyboard Shortcuts</div>
+          <button class="toc-close-btn" id="closeShortcutsBtn">&times;</button>
+        </div>
+        <div class="modal-body">
+          <div class="shortcut-row">
+            <span>Next Slide</span>
+            <div class="shortcut-keys"><kbd>→</kbd> <kbd>Space</kbd> <kbd>PgDn</kbd></div>
+          </div>
+          <div class="shortcut-row">
+            <span>Previous Slide</span>
+            <div class="shortcut-keys"><kbd>←</kbd> <kbd>PgUp</kbd></div>
+          </div>
+          <div class="shortcut-row">
+            <span>First Slide (Title)</span>
+            <div class="shortcut-keys"><kbd>Home</kbd></div>
+          </div>
+          <div class="shortcut-row">
+            <span>Last Slide (Summary)</span>
+            <div class="shortcut-keys"><kbd>End</kbd></div>
+          </div>
+          <div class="shortcut-row">
+            <span>Toggle Fullscreen</span>
+            <div class="shortcut-keys"><kbd>F</kbd></div>
+          </div>
+          <div class="shortcut-row">
+            <span>Toggle Slide Index</span>
+            <div class="shortcut-keys"><kbd>T</kbd></div>
+          </div>
+          <div class="shortcut-row">
+            <span>Help / Shortcuts</span>
+            <div class="shortcut-keys"><kbd>?</kbd></div>
+          </div>
+          <div class="shortcut-row">
+            <span>Close Modal / Drawer</span>
+            <div class="shortcut-keys"><kbd>Esc</kbd></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Toast Notification for Code Copy -->
+    <div class="toast" id="copyToast">
+      <span>✓</span> Code copied to clipboard!
+    </div>
+
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
