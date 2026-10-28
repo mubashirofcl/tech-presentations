@@ -1,0 +1,3014 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Node.js Fundamentals & Modern JavaScript — Day 1 Presentation</title>
+  <meta name="description" content="Day 1 Node.js Module: Modern JavaScript, Runtime Architecture, npm, ES Modules, Arrays, Environment Variables, Smart Student Performance Analyzer, and AI/LLM Integration.">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Presentation App Shell -->
+  <div id="presentation-app">
+
+    <!-- Top Continuous Progress Bar -->
+    <div class="progress-container">
+      <div id="progress-bar" class="progress-bar"></div>
+    </div>
+
+    <!-- Top Navigation Header -->
+    <header class="top-nav">
+      <div class="brand-badge">
+        <div class="icon-box">
+          <!-- Node.js Hexagon Icon SVG -->
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <polygon points="12 2 2 8.5 2 15.5 12 22 22 15.5 22 8.5 12 2"></polygon>
+            <line x1="12" y1="22" x2="12" y2="15.5"></line>
+            <polyline points="22 8.5 12 15.5 2 8.5"></polyline>
+          </svg>
+        </div>
+        <span>Node.js Module</span>
+        <span class="brand-tag">Day 1</span>
+      </div>
+
+      <div class="deck-section-indicator">
+        <span id="section-indicator" class="section-pill">Section 1: Introduction to Node.js &amp; Architecture</span>
+      </div>
+
+      <div class="top-actions">
+        <button id="toc-btn" class="nav-btn" title="Open Table of Contents (Press 'T' or 'M')">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="3" y1="12" x2="21" y2="12"></line>
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <line x1="3" y1="18" x2="21" y2="18"></line>
+          </svg>
+          <span>Contents</span>
+        </button>
+
+        <button id="help-btn" class="nav-btn" title="Keyboard Shortcuts (Press '?')">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"></circle>
+            <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+            <line x1="12" y1="17" x2="12.01" y2="17"></line>
+          </svg>
+          <span>Shortcuts</span>
+        </button>
+
+        <button id="fullscreen-btn" class="nav-btn" title="Toggle Fullscreen (Press 'F')">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path>
+          </svg>
+          <span>Fullscreen</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Slide Viewport -->
+    <main class="slide-viewport">
+      <div class="slide-container">
+
+        <!-- ===================================================================
+             SLIDE 1: Title Slide
+             =================================================================== -->
+        <section id="slide-1" class="slide active" data-slide-num="1">
+          <div class="title-slide-content">
+            <div class="title-badge-row">
+              <span class="pill-badge">Classroom Presentation</span>
+              <span class="pill-badge" style="background:#e0f2fe; color:#0369a1; border-color:#bae6fd;">Day 1 — Node.js Module</span>
+            </div>
+
+            <h1 class="hero-main-title">
+              Node.js Fundamentals &amp; <br><span class="highlight">Modern JavaScript</span>
+            </h1>
+
+            <p class="hero-subtitle">
+              From JavaScript Fundamentals to Backend Development
+            </p>
+
+            <div class="logos-container">
+              <!-- Node.js Logo Card -->
+              <div class="logo-card">
+                <svg viewBox="0 0 256 288" width="46" height="46">
+                  <path fill="#539E43" d="M128 0L24.7 59.6v119.2L128 238.4l103.3-59.6V59.6L128 0z"/>
+                  <path fill="#FFFFFF" d="M128 32.4l75.2 43.4v86.8L128 206l-75.2-43.4V75.8L128 32.4z"/>
+                  <path fill="#333333" d="M128 47.8L68.7 82.1v68.6L128 185l59.3-34.3V82.1L128 47.8z"/>
+                  <path fill="#539E43" d="M115.8 98.4h24.4v40.3h-24.4z"/>
+                </svg>
+                <div class="logo-text">
+                  <div class="logo-text-title">Node.js</div>
+                  <div class="logo-text-sub">Server Runtime</div>
+                </div>
+              </div>
+
+              <!-- JavaScript Logo Card -->
+              <div class="logo-card">
+                <svg viewBox="0 0 256 256" width="46" height="46">
+                  <rect width="256" height="256" rx="20" fill="#F7DF1E"/>
+                  <path d="M67 207c7 11 18 19 33 19 18 0 30-9 30-31v-87h-28v86c0 8-3 12-9 12-5 0-8-4-11-9l-15 10zm86-3c9 14 26 22 47 22 28 0 45-15 45-36 0-21-13-30-35-39l-7-3c-13-5-18-9-18-17 0-7 6-13 16-13 9 0 16 4 21 13l21-14c-8-15-22-21-41-21-25 0-42 14-42 35 0 19 12 28 32 37l7 3c14 6 21 10 21 18 0 8-7 14-19 14-13 0-23-7-28-17l-19 16z" fill="#000000"/>
+                </svg>
+                <div class="logo-text">
+                  <div class="logo-text-title">JavaScript</div>
+                  <div class="logo-text-sub">Modern ES6+</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="instructor-footer">
+              <div>👨‍🏫 Instructor: <strong>Full Stack Mentor</strong></div>
+              <div>📚 Course: <strong>MERN Backend Engineering</strong></div>
+              <div>🗓️ Session: <strong>Day 1 Foundations</strong></div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ===================================================================
+             SLIDE 2: Learning Objectives
+             =================================================================== -->
+        <section id="slide-2" class="slide" data-slide-num="2">
+          <div class="slide-header">
+            <div class="slide-title-wrap">
+              <span class="slide-category">Roadmap</span>
+              <h2 class="slide-title">Learning Objectives</h2>
+              <p class="slide-subtitle">Core competencies and backend outcomes by the end of this session</p>
+            </div>
+            <span class="slide-num-pill">02 / 37</span>
+          </div>
+
+          <div class="slide-body">
+            <div class="grid-2">
+              <div class="card card-blue">
+                <div class="card-title blue">
+                  <span>🎯</span> Node.js &amp; Architecture Foundations
+                </div>
+                <ul class="feature-list checkmarks">
+                  <li><strong>What Node.js is:</strong> Understand the V8 engine runtime and its core architecture.</li>
+                  <li><strong>Why We Need Node.js:</strong> Execute JavaScript server-side to power full-stack apps.</li>
+                  <li><strong>Execution Flow:</strong> V8 engine, libuv, Node APIs, and operating system interaction.</li>
+                  <li><strong>Sync vs Async I/O:</strong> Understand why asynchronous I/O prevents server blocking.</li>
+                  <li><strong>The Event Loop:</strong> Understand the single-threaded call stack, timers, and callbacks.</li>
+                  <li><strong>Non-Blocking I/O:</strong> Restaurant analogy and handling thousands of concurrent requests.</li>
+                </ul>
+              </div>
+
+              <div class="card card-blue">
+                <div class="card-title blue">
+                  <span>⚡</span> Modern JavaScript &amp; Practical Projects
+                </div>
+                <ul class="feature-list checkmarks">
+                  <li><strong>Project Setup &amp; npm:</strong> Initialize projects, manage <code class="inline-code">package.json</code>, and dependencies.</li>
+                  <li><strong>Module Systems:</strong> Import and export built-in, local, and third-party modules via ESM.</li>
+                  <li><strong>Modern ES6+ Features:</strong> Destructuring, spread operator, arrow functions, and templates.</li>
+                  <li><strong>Functional Pipelines:</strong> Transform datasets with <code class="inline-code">map()</code>, <code class="inline-code">filter()</code>, and <code class="inline-code">reduce()</code>.</li>
+                  <li><strong>Environment Isolation:</strong> Read secrets safely using <code class="inline-code">dotenv</code> and <code class="inline-code">process.env</code>.</li>
+                  <li><strong>Student Performance Analyzer:</strong> Build a complete data processing application with watch mode.</li>
+                  <li><strong>AI &amp; LLM Foundations:</strong> Understand Node.js as the backend integration layer for AI APIs.</li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="callout tip">
+              <span class="callout-icon">💡</span>
+              <div>
+                <strong>Pedagogical Strategy:</strong> You already know JavaScript from frontend development. Today, we bridge that syntax to server execution, asynchronous I/O, backend data processing, and AI integrations.
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ===================================================================
+             SLIDE 3: What Is Node.js?
+             =================================================================== -->
+        <section id="slide-3" class="slide" data-slide-num="3">
+          <div class="slide-header">
+            <div class="slide-title-wrap">
+              <span class="slide-category">Section 1: Introduction to Node.js &amp; Architecture</span>
+              <h2 class="slide-title">What Is Node.js?</h2>
+              <p class="slide-subtitle">A high-performance JavaScript runtime environment built on Google Chrome's V8 engine</p>
+            </div>
+            <span class="slide-num-pill">03 / 37</span>
+          </div>
+
+          <div class="slide-body">
+            <div class="grid-2-1">
+              <div style="display:flex; flex-direction:column; gap:1rem;">
+                <div class="card card-blue">
+                  <div class="card-title blue">Runtime Definition</div>
+                  <p class="card-desc">
+                    Node.js is <strong>not</strong> a programming language and <strong>not</strong> a framework. It is an open-source, cross-platform <strong>runtime environment</strong> that allows developers to run JavaScript code outside of web browsers on servers and local machines.
+                  </p>
+                </div>
+
+                <div class="table-wrapper">
+                  <table class="presentation-table">
+                    <thead>
+                      <tr>
+                        <th>Browser JavaScript</th>
+                        <th>Node.js Runtime</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>Runs inside web browsers (Chrome, Edge, Safari)</td>
+                        <td>Runs directly on OS (Windows, macOS, Linux)</td>
+                      </tr>
+                      <tr>
+                        <td>Can access &amp; manipulate webpage DOM</td>
+                        <td>Can interact with filesystem, OS, &amp; network</td>
+                      </tr>
+                      <tr>
+                        <td>Uses Web APIs (<code class="inline-code">document</code>, <code class="inline-code">window</code>)</td>
+                        <td>Uses Node APIs (<code class="inline-code">fs</code>, <code class="inline-code">os</code>, <code class="inline-code">process</code>)</td>
+                      </tr>
+                      <tr>
+                        <td>Frontend rendering &amp; client interactions</td>
+                        <td>Backend web APIs, automation scripts, tools</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+
+                <ul class="feature-list">
+                  <li><strong>V8 JavaScript Engine:</strong> Compiles JavaScript directly into native machine code for maximum execution speed.</li>
+                  <li><strong>Full Stack Unity:</strong> Write frontend client logic and backend server logic in the same language.</li>
+                </ul>
+              </div>
+
+              <!-- Code Box -->
+              <div class="code-container">
+                <div class="code-header">
+                  <div class="code-file-badge">
+                    <span class="file-dot"></span>
+                    <span>app.js</span>
+                  </div>
+                  <button class="copy-btn" title="Copy code">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                      <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                    </svg>
+                    <span>Copy</span>
+                  </button>
+                </div>
+                <pre class="code-block"><span class="tok-fn">console</span>.<span class="tok-fn">log</span>(<span class="tok-str">"Hello from Node.js!"</span>);
+
+<span class="tok-kw">const</span> <span class="tok-var">user</span> = {
+  <span class="tok-prop">name</span>: <span class="tok-str">"Abhiram"</span>,
+  <span class="tok-prop">role</span>: <span class="tok-str">"MERN Developer"</span>,
+};
+
+<span class="tok-fn">console</span>.<span class="tok-fn">log</span>(<span class="tok-var">user</span>);</pre>
+                <div class="terminal-output">
+                  <div class="terminal-header">Terminal Command</div>
+                  <div class="terminal-text" style="color:#f8fafc;"><span class="tok-cmd">$ node app.js</span></div>
+                  <div class="terminal-header" style="margin-top:0.5rem;">Expected Output</div>
+                  <div class="terminal-text">Hello from Node.js!
+{ name: 'Abhiram', role: 'MERN Developer' }</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ===================================================================
+             SLIDE 4: Why Do We Need Node.js? (NEW)
+             =================================================================== -->
+        <section id="slide-4" class="slide" data-slide-num="4">
+          <div class="slide-header">
+            <div class="slide-title-wrap">
+              <span class="slide-category">Section 1: Introduction to Node.js &amp; Architecture</span>
+              <h2 class="slide-title">Why Do We Need Node.js?</h2>
+              <p class="slide-subtitle">Solving the frontend-backend divide: bringing JavaScript to servers and systems</p>
+            </div>
+            <span class="slide-num-pill">04 / 37</span>
+          </div>
+
+          <div class="slide-body">
+            <div class="grid-2">
+              <div style="display:flex; flex-direction:column; gap:0.9rem;">
+                <div class="card card-blue">
+                  <div class="card-title blue">The Problem Node.js Solved</div>
+                  <p class="card-desc">
+                    Traditionally, JavaScript was confined to web browsers for UI animations and button clicks. Backend servers required entirely different languages (Python, Java, PHP, Ruby). This required teams to switch mental models, split codebases, and maintain duplicate data models.
+                  </p>
+                </div>
+
+                <div class="card">
+                  <div class="card-title">How Node.js Changes Everything</div>
+                  <ul class="feature-list checkmarks">
+                    <li><strong>Universal Language:</strong> Full-stack engineers can use JavaScript across frontend and backend.</li>
+                    <li><strong>Server Capabilities:</strong> Access filesystems, databases, network sockets, and environment secrets.</li>
+                    <li><strong>Industry Proven:</strong> Used by industry giants including Netflix, Uber, LinkedIn, PayPal, and NASA.</li>
+                  </ul>
+                </div>
+
+                <div class="callout warning">
+                  <span class="callout-icon">ℹ️</span>
+                  <div>
+                    <strong>Important Distinction:</strong> Node.js can communicate with databases and external APIs, but a database or web framework (like Express) is <strong>not</strong> built into every Node.js app out-of-the-box. Node.js is the foundation upon which frameworks are built!
+                  </div>
+                </div>
+              </div>
+
+              <div style="display:flex; flex-direction:column; gap:0.9rem;">
+                <!-- Full Stack Architecture Diagram -->
+                <div class="diagram-container">
+                  <div style="font-weight:700; font-size:0.88rem; color:var(--primary-dark); margin-bottom:0.2rem;">
+                    Full-Stack Client-Server Data Flow
+                  </div>
+                  <div class="flow-row">
+                    <div class="flow-node react">
+                      <div class="flow-node-title">React Frontend</div>
+                      <div class="flow-node-sub">Browser UI</div>
+                    </div>
+                    <div class="flow-arrow">
+                      <span>HTTP Request</span>
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                        <polyline points="12 5 19 12 12 19"></polyline>
+                      </svg>
+                      <span>JSON Response</span>
+                    </div>
+                    <div class="flow-node node">
+                      <div class="flow-node-title">Node.js Server</div>
+                      <div class="flow-node-sub">Backend Logic</div>
+                    </div>
+                    <div class="flow-arrow">
+                      <span>Query / API</span>
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                        <polyline points="12 5 19 12 12 19"></polyline>
+                      </svg>
+                      <span>Data</span>
+                    </div>
+                    <div class="flow-node db">
+                      <div class="flow-node-title">Database / APIs</div>
+                      <div class="flow-node-sub">MongoDB / REST</div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Practical Terminal Example -->
+                <div class="code-container">
+                  <div class="code-header">
+                    <div class="code-file-badge"><span>server-hello.js</span></div>
+                    <button class="copy-btn"><span>Copy</span></button>
+                  </div>
+                  <pre class="code-block"><span class="tok-cmt">// Running JavaScript directly on your computer</span>
+<span class="tok-kw">const</span> <span class="tok-var">appName</span> = <span class="tok-str">"Student Backend Service"</span>;
+<span class="tok-kw">const</span> <span class="tok-var">timestamp</span> = <span class="tok-kw">new</span> <span class="tok-fn">Date</span>().<span class="tok-fn">toLocaleTimeString</span>();
+
+<span class="tok-fn">console</span>.<span class="tok-fn">log</span>(<span class="tok-str">`[<span class="tok-var">${timestamp}</span>] <span class="tok-var">${appName}</span> initialized successfully!`</span>);</pre>
+                  <div class="terminal-output">
+                    <div class="terminal-header">Terminal Command &amp; Output</div>
+                    <div class="terminal-text" style="color:#f8fafc;"><span class="tok-cmd">$ node server-hello.js</span></div>
+                    <div class="terminal-text" style="margin-top:0.25rem;">[10:30:00 AM] Student Backend Service initialized successfully!</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ===================================================================
+             SLIDE 5: What Happens When We Run a Node.js Program? (NEW)
+             =================================================================== -->
+        <section id="slide-5" class="slide" data-slide-num="5">
+          <div class="slide-header">
+            <div class="slide-title-wrap">
+              <span class="slide-category">Section 1: Introduction to Node.js &amp; Architecture</span>
+              <h2 class="slide-title">What Happens When We Run a Program?</h2>
+              <p class="slide-subtitle">The inner anatomy of Node.js execution: V8, Node APIs, libuv, and the OS</p>
+            </div>
+            <span class="slide-num-pill">05 / 37</span>
+          </div>
+
+          <div class="slide-body">
+            <div class="grid-2-1">
+              <div style="display:flex; flex-direction:column; gap:0.9rem;">
+                <div class="card card-blue">
+                  <div class="card-title blue">The 6-Step Execution Flow</div>
+                  <ol style="margin-left:1.2rem; font-size:0.88rem; color:var(--text-main); display:flex; flex-direction:column; gap:0.35rem;">
+                    <li><strong>Write Code:</strong> The developer writes standard JavaScript in a <code class="inline-code">.js</code> file.</li>
+                    <li><strong>Runtime Starts:</strong> Running <code class="inline-code">node app.js</code> launches the Node process.</li>
+                    <li><strong>V8 Executes:</strong> V8 compiles JS to machine code and manages call stack execution.</li>
+                    <li><strong>Node APIs Bridge:</strong> Built-in bindings provide access to disk, network, and timers.</li>
+                    <li><strong>Asynchronous I/O:</strong> Tasks delegate to <strong>libuv</strong> without blocking the main thread.</li>
+                    <li><strong>Event Loop Delivers:</strong> Callbacks execute as I/O finishes or the server keeps listening.</li>
+                  </ol>
+                </div>
+
+                <!-- Clean Architecture Diagram -->
+                <div class="diagram-container">
+                  <div style="font-weight:700; font-size:0.88rem; color:var(--primary-dark); margin-bottom:0.2rem;">
+                    Node.js Runtime Architecture
+                  </div>
+                  <div class="flow-row">
+                    <div class="flow-node">
+                      <div class="flow-node-title">Your JS Code</div>
+                      <div class="flow-node-sub">app.js / server.js</div>
+                    </div>
+                    <div class="flow-arrow">➔</div>
+                    <div class="flow-node node">
+                      <div class="flow-node-title">Node.js Bindings</div>
+                      <div class="flow-node-sub">fs, path, os, http</div>
+                    </div>
+                    <div class="flow-arrow">➔</div>
+                    <div class="flow-node v8">
+                      <div class="flow-node-title">V8 Engine</div>
+                      <div class="flow-node-sub">JS Execution</div>
+                    </div>
+                    <div class="flow-arrow">+</div>
+                    <div class="flow-node libuv">
+                      <div class="flow-node-title">libuv</div>
+                      <div class="flow-node-sub">Event Loop &amp; I/O</div>
+                    </div>
+                    <div class="flow-arrow">➔</div>
+                    <div class="flow-node os">
+                      <div class="flow-node-title">Operating System</div>
+                      <div class="flow-node-sub">Kernel / Hardware</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Terminology Breakdown -->
+              <div style="display:flex; flex-direction:column; gap:0.75rem;">
+                <div class="card" style="padding:0.85rem 1rem;">
+                  <div style="font-weight:700; color:var(--primary-dark); font-size:0.92rem;">1. Node.js Runtime</div>
+                  <div style="font-size:0.84rem; color:var(--text-muted); margin-top:0.2rem;">
+                    The complete ecosystem combining V8, libuv, and system bindings to run JS outside browsers.
+                  </div>
+                </div>
+
+                <div class="card" style="padding:0.85rem 1rem;">
+                  <div style="font-weight:700; color:#d97706; font-size:0.92rem;">2. V8 JavaScript Engine</div>
+                  <div style="font-size:0.84rem; color:var(--text-muted); margin-top:0.2rem;">
+                    Google's C++ engine that executes JavaScript code, allocates memory, and does garbage collection.
+                  </div>
+                </div>
+
+                <div class="card" style="padding:0.85rem 1rem;">
+                  <div style="font-weight:700; color:#059669; font-size:0.92rem;">3. libuv Library</div>
+                  <div style="font-size:0.84rem; color:var(--text-muted); margin-top:0.2rem;">
+                    A multi-platform C library that provides the event loop, thread pool, and non-blocking asynchronous I/O.
+                  </div>
+                </div>
+
+                <div class="callout warning" style="padding:0.6rem 0.8rem;">
+                  <span class="callout-icon">💡</span>
+                  <div style="font-size:0.82rem;">
+                    <strong>Common Mistake:</strong> Never call Node.js a "programming language" or assume V8 is the entire runtime. Node.js is the runtime; V8 is only the engine inside it!
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ===================================================================
+             SLIDE 6: Synchronous vs Asynchronous Operations (NEW)
+             =================================================================== -->
+        <section id="slide-6" class="slide" data-slide-num="6">
+          <div class="slide-header">
+            <div class="slide-title-wrap">
+              <span class="slide-category">Section 1: Introduction to Node.js &amp; Architecture</span>
+              <h2 class="slide-title">Synchronous vs Asynchronous I/O</h2>
+              <p class="slide-subtitle">Comparing blocking file operations with non-blocking event-driven execution</p>
+            </div>
+            <span class="slide-num-pill">06 / 37</span>
+          </div>
+
+          <div class="slide-body">
+            <div class="grid-2">
+              <!-- Sync Code Box -->
+              <div class="code-container">
+                <div class="code-header">
+                  <div class="code-file-badge">
+                    <span class="file-dot" style="background:#f43f5e;"></span>
+                    <span>sync-demo.js (Blocking)</span>
+                  </div>
+                  <button class="copy-btn"><span>Copy</span></button>
+                </div>
+                <pre class="code-block"><span class="tok-kw">import</span> <span class="tok-var">fs</span> <span class="tok-kw">from</span> <span class="tok-str">"node:fs"</span>;
+
+<span class="tok-cmt">// readFileSync BLOCKS execution until file is fully read</span>
+<span class="tok-kw">const</span> <span class="tok-var">data</span> = <span class="tok-var">fs</span>.<span class="tok-fn">readFileSync</span>(<span class="tok-str">"message.txt"</span>, <span class="tok-str">"utf8"</span>);
+
+<span class="tok-fn">console</span>.<span class="tok-fn">log</span>(<span class="tok-var">data</span>);
+<span class="tok-fn">console</span>.<span class="tok-fn">log</span>(<span class="tok-str">"Finished"</span>);</pre>
+                <div class="terminal-output">
+                  <div class="terminal-header">Terminal Output</div>
+                  <div class="terminal-text" style="color:#f8fafc;">Hello from Node.js file!
+Finished</div>
+                </div>
+                <div style="padding:0.6rem 0.8rem; font-size:0.82rem; color:#cbd5e1; border-top:1px solid rgba(255,255,255,0.08);">
+                  ⏸️ <strong>Synchronous:</strong> Steps run in strict order. The thread pauses and freezes while waiting for disk bytes.
+                </div>
+              </div>
+
+              <!-- Async Code Box -->
+              <div class="code-container">
+                <div class="code-header">
+                  <div class="code-file-badge">
+                    <span class="file-dot" style="background:#10b981;"></span>
+                    <span>async-demo.js (Non-Blocking)</span>
+                  </div>
+                  <button class="copy-btn"><span>Copy</span></button>
+                </div>
+                <pre class="code-block"><span class="tok-kw">import</span> <span class="tok-var">fs</span> <span class="tok-kw">from</span> <span class="tok-str">"node:fs"</span>;
+
+<span class="tok-cmt">// readFile starts reading in background and continues immediately!</span>
+<span class="tok-var">fs</span>.<span class="tok-fn">readFile</span>(<span class="tok-str">"message.txt"</span>, <span class="tok-str">"utf8"</span>, (<span class="tok-var">error</span>, <span class="tok-var">data</span>) =&gt; {
+  <span class="tok-kw">if</span> (<span class="tok-var">error</span>) {
+    <span class="tok-fn">console</span>.<span class="tok-fn">error</span>(<span class="tok-var">error</span>.<span class="tok-prop">message</span>);
+    <span class="tok-kw">return</span>;
+  }
+  <span class="tok-fn">console</span>.<span class="tok-fn">log</span>(<span class="tok-var">data</span>);
+});
+
+<span class="tok-fn">console</span>.<span class="tok-fn">log</span>(<span class="tok-str">"Finished"</span>);</pre>
+                <div class="terminal-output">
+                  <div class="terminal-header">Terminal Output (Notice Order!)</div>
+                  <div class="terminal-text" style="color:#a5f3fc;">Finished
+Hello from Node.js file!</div>
+                </div>
+                <div style="padding:0.6rem 0.8rem; font-size:0.82rem; color:#cbd5e1; border-top:1px solid rgba(255,255,255,0.08);">
+                  ⚡ <strong>Asynchronous:</strong> <code class="inline-code" style="background:#1e293b; color:#38bdf8;">"Finished"</code> prints first! Node didn't wait; the callback runs once disk I/O completes.
+                </div>
+              </div>
+            </div>
+
+            <div class="callout tip">
+              <span class="callout-icon">💡</span>
+              <div>
+                <strong>Why "Finished" prints first:</strong> Node offloads disk reading to the OS/libuv thread pool. The main JavaScript thread immediately executes the next line (<code class="inline-code">console.log("Finished")</code>). When the file is ready, the callback is dispatched to the event loop!
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ===================================================================
+             SLIDE 7: Understanding the Event Loop (NEW)
+             =================================================================== -->
+        <section id="slide-7" class="slide" data-slide-num="7">
+          <div class="slide-header">
+            <div class="slide-title-wrap">
+              <span class="slide-category">Section 1: Introduction to Node.js &amp; Architecture</span>
+              <h2 class="slide-title">Understanding the Event Loop</h2>
+              <p class="slide-subtitle">How a single-threaded runtime efficiently handles thousands of concurrent operations</p>
+            </div>
+            <span class="slide-num-pill">07 / 37</span>
+          </div>
+
+          <div class="slide-body">
+            <div class="grid-2">
+              <div style="display:flex; flex-direction:column; gap:0.9rem;">
+                <div class="card card-blue">
+                  <div class="card-title blue">How the Loop Works</div>
+                  <ul class="feature-list">
+                    <li><strong>Single-Threaded Call Stack:</strong> JavaScript executes one function at a time (LIFO stack).</li>
+                    <li><strong>Asynchronous Delegation:</strong> Long operations (file reads, timers, database queries) are sent to libuv.</li>
+                    <li><strong>Callback Queue:</strong> When background tasks finish, their callbacks wait in a queue.</li>
+                    <li><strong>The Event Loop:</strong> Continually checks if the Call Stack is empty. When empty, it pushes the next callback onto the stack.</li>
+                  </ul>
+                </div>
+
+                <!-- Event Loop Flow Diagram -->
+                <div class="diagram-container">
+                  <div style="font-weight:700; font-size:0.88rem; color:var(--primary-dark); margin-bottom:0.2rem;">
+                    Asynchronous Event Loop Flow
+                  </div>
+                  <div class="flow-row">
+                    <div class="flow-node">
+                      <div class="flow-node-title">JS Code</div>
+                      <div class="flow-node-sub">Call Stack</div>
+                    </div>
+                    <div class="flow-arrow">➔</div>
+                    <div class="flow-node libuv">
+                      <div class="flow-node-title">Start Async I/O</div>
+                      <div class="flow-node-sub">libuv Thread</div>
+                    </div>
+                    <div class="flow-arrow">➔</div>
+                    <div class="flow-node node">
+                      <div class="flow-node-title">Continue Code</div>
+                      <div class="flow-node-sub">No Blocking!</div>
+                    </div>
+                    <div class="flow-arrow">➔</div>
+                    <div class="flow-node v8">
+                      <div class="flow-node-title">Callback Runs</div>
+                      <div class="flow-node-sub">Stack Cleared</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Practical Timer Demonstration -->
+              <div class="code-container">
+                <div class="code-header">
+                  <div class="code-file-badge"><span>event-loop-demo.js</span></div>
+                  <button class="copy-btn"><span>Copy</span></button>
+                </div>
+                <pre class="code-block"><span class="tok-fn">console</span>.<span class="tok-fn">log</span>(<span class="tok-str">"Start"</span>);
+
+<span class="tok-cmt">// setTimeout with 0ms delay delegates to the timer queue</span>
+<span class="tok-fn">setTimeout</span>(() =&gt; {
+  <span class="tok-fn">console</span>.<span class="tok-fn">log</span>(<span class="tok-str">"Timer callback"</span>);
+}, <span class="tok-num">0</span>);
+
+<span class="tok-fn">console</span>.<span class="tok-fn">log</span>(<span class="tok-str">"End"</span>);</pre>
+                <div class="terminal-output">
+                  <div class="terminal-header">Terminal Command &amp; Output</div>
+                  <div class="terminal-text" style="color:#f8fafc;"><span class="tok-cmd">$ node event-loop-demo.js</span></div>
+                  <div class="terminal-text" style="margin-top:0.25rem;">Start
+End
+Timer callback</div>
+                </div>
+                <div style="padding:0.75rem 1rem; font-size:0.84rem; color:#cbd5e1; border-top:1px solid rgba(255,255,255,0.08);">
+                  💡 <strong>Explanation:</strong> Even though the timer delay is <code class="inline-code" style="background:#1e293b; color:#38bdf8;">0ms</code>, its callback must wait in the queue until all synchronous statements (<code class="inline-code">"Start"</code> and <code class="inline-code">"End"</code>) finish executing on the Call Stack.
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ===================================================================
+             SLIDE 8: What Does Non-Blocking I/O Mean? (NEW)
+             =================================================================== -->
+        <section id="slide-8" class="slide" data-slide-num="8">
+          <div class="slide-header">
+            <div class="slide-title-wrap">
+              <span class="slide-category">Section 1: Introduction to Node.js &amp; Architecture</span>
+              <h2 class="slide-title">What Does Non-Blocking I/O Mean?</h2>
+              <p class="slide-subtitle">The real-world restaurant analogy and where Node.js excels</p>
+            </div>
+            <span class="slide-num-pill">08 / 37</span>
+          </div>
+
+          <div class="slide-body">
+            <div class="grid-2">
+              <!-- Everyday Analogy -->
+              <div class="card card-blue">
+                <div class="card-title blue">
+                  <span>🍽️</span> The Restaurant Analogy
+                </div>
+                <div style="display:flex; flex-direction:column; gap:0.6rem; font-size:0.88rem;">
+                  <div style="background:#ffffff; border:1px solid var(--border-subtle); border-radius:6px; padding:0.75rem;">
+                    <strong style="color:#e11d48;">Blocking System (Traditional Model):</strong><br>
+                    A waiter takes Table 1's order, walks into the kitchen, stands next to the chef for 20 minutes waiting for food to cook, serves Table 1, and only <em>then</em> talks to Table 2. Everyone in line is stuck waiting!
+                  </div>
+                  <div style="background:#ffffff; border:1px solid var(--primary-border); border-radius:6px; padding:0.75rem;">
+                    <strong style="color:var(--primary-dark);">Non-Blocking System (Node.js Model):</strong><br>
+                    The waiter takes Table 1's order, hands the ticket to the kitchen (I/O offload), immediately walks to Table 2, then Table 3. When the kitchen bell dings (event callback), the waiter delivers Table 1's dish!
+                  </div>
+                </div>
+              </div>
+
+              <!-- When Node.js Shines & Crucial Caveat -->
+              <div style="display:flex; flex-direction:column; gap:0.9rem;">
+                <div class="card">
+                  <div class="card-title">Where Node.js Shines (I/O-Bound Tasks)</div>
+                  <ul class="feature-list checkmarks">
+                    <li><strong>API Gateways &amp; REST Services:</strong> Handling incoming JSON requests.</li>
+                    <li><strong>Database Queries:</strong> Waiting for MongoDB or PostgreSQL responses.</li>
+                    <li><strong>File Operations:</strong> Uploading, reading, and streaming media files.</li>
+                  </ul>
+                </div>
+
+                <div class="callout warning">
+                  <span class="callout-icon">⚠️</span>
+                  <div>
+                    <strong>Crucial Caveat:</strong> Node.js does <strong>not</strong> make CPU-heavy operations non-blocking. If you run a massive synchronous loop (e.g. video rendering or complex cryptography) on the main thread, the entire event loop will freeze! Node.js is optimized for I/O, not raw CPU number-crunching.
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ===================================================================
+             SLIDE 9: Why Is Node.js Popular for Backend Development? (NEW)
+             =================================================================== -->
+        <section id="slide-9" class="slide" data-slide-num="9">
+          <div class="slide-header">
+            <div class="slide-title-wrap">
+              <span class="slide-category">Section 1: Introduction to Node.js &amp; Architecture</span>
+              <h2 class="slide-title">Why Is Node.js Popular for Backend?</h2>
+              <p class="slide-subtitle">The 7 core architectural advantages that made Node.js an industry standard</p>
+            </div>
+            <span class="slide-num-pill">09 / 37</span>
+          </div>
+
+          <div class="slide-body">
+            <div class="grid-3">
+              <div class="card card-blue">
+                <div class="card-title blue">1. Unified Language</div>
+                <p class="card-desc">Write JavaScript on frontend and backend. Share validation logic, TypeScript types, and utility functions across the stack.</p>
+              </div>
+
+              <div class="card card-blue">
+                <div class="card-title blue">2. Vast npm Ecosystem</div>
+                <p class="card-desc">Over 2 million open-source packages available instantly. Ready-made solutions for authentication, databases, and APIs.</p>
+              </div>
+
+              <div class="card card-blue">
+                <div class="card-title blue">3. Asynchronous I/O</div>
+                <p class="card-desc">Handles thousands of simultaneous client connections with minimal RAM and thread-overhead compared to multi-threaded servers.</p>
+              </div>
+
+              <div class="card card-blue">
+                <div class="card-title blue">4. Fast API Development</div>
+                <p class="card-desc">Native JSON handling makes building RESTful endpoints and microservices intuitive, lightweight, and blazingly fast.</p>
+              </div>
+
+              <div class="card card-blue">
+                <div class="card-title blue">5. Real-Time Apps</div>
+                <p class="card-desc">Exceptional event-driven architecture makes WebSockets, live chat, collaboration tools, and multiplayer games easy to build.</p>
+              </div>
+
+              <div class="card card-blue">
+                <div class="card-title blue">6. AI &amp; LLM Orchestration</div>
+                <p class="card-desc">Ideal integration layer to securely call AI provider APIs (OpenAI, Gemini), stream tokens, and forward answers to web apps.</p>
+              </div>
+            </div>
+
+            <div class="callout tip">
+              <span class="callout-icon">🚀</span>
+              <div>
+                <strong>7. Developer Tooling Dominance:</strong> Modern frontend development itself relies completely on Node.js! Build tools like Vite, Next.js, Webpack, Tailwind, and ESLint all execute inside Node.js.
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ===================================================================
+             SLIDE 10: Node.js Runtime and npm
+             =================================================================== -->
+        <section id="slide-10" class="slide" data-slide-num="10">
+          <div class="slide-header">
+            <div class="slide-title-wrap">
+              <span class="slide-category">Section 2: Runtime, npm &amp; Project Setup</span>
+              <h2 class="slide-title">Node.js Runtime and npm</h2>
+              <p class="slide-subtitle">Understanding the execution engine, package manager, and process globals</p>
+            </div>
+            <span class="slide-num-pill">10 / 37</span>
+          </div>
+
+          <div class="slide-body">
+            <div class="grid-3">
+              <div class="card card-blue">
+                <div class="card-title blue">1. Node.js Runtime</div>
+                <p class="card-desc">
+                  The host environment that executes JavaScript outside the browser. It exposes the global <code class="inline-code">process</code> object and system-level bindings.
+                </p>
+              </div>
+              <div class="card card-blue">
+                <div class="card-title blue">2. npm (Package Manager)</div>
+                <p class="card-desc">
+                  The world's largest software registry. Bundled automatically with Node.js to install, version, and manage project dependencies and libraries.
+                </p>
+              </div>
+              <div class="card card-blue">
+                <div class="card-title blue">3. Node Application</div>
+                <p class="card-desc">
+                  Your custom JavaScript source files executed by Node.js, utilizing built-in or downloaded modules to implement backend functionality.
+                </p>
+              </div>
+            </div>
+
+            <div class="grid-2">
+              <div class="card">
+                <div class="card-title">Checking Installation in Terminal</div>
+                <p class="card-desc">Before starting any project, verify that Node and npm are accessible in your PATH:</p>
+                <div class="terminal-output" style="border-radius:6px; margin-top:0.4rem;">
+                  <div class="terminal-text"><span class="tok-cmd">$ node --version</span>
+v20.12.0
+
+<span class="tok-cmd">$ npm --version</span>
+10.5.0</div>
+                </div>
+                <p style="font-size:0.85rem; color:var(--text-muted); margin-top:0.4rem;">
+                  Tip: Modern Node.js LTS (v18+ or v20+) includes native ES Module support and the native watch flag.
+                </p>
+              </div>
+
+              <!-- Code Box -->
+              <div class="code-container">
+                <div class="code-header">
+                  <div class="code-file-badge">
+                    <span class="file-dot"></span>
+                    <span>runtime.js</span>
+                  </div>
+                  <button class="copy-btn" title="Copy code">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                      <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                    </svg>
+                    <span>Copy</span>
+                  </button>
+                </div>
+                <pre class="code-block"><span class="tok-fn">console</span>.<span class="tok-fn">log</span>(<span class="tok-str">"Node.js is running"</span>);
+
+<span class="tok-cmt">// process is a global object providing runtime metadata</span>
+<span class="tok-fn">console</span>.<span class="tok-fn">log</span>(<span class="tok-str">"Node version:"</span>, <span class="tok-var">process</span>.<span class="tok-prop">version</span>);
+<span class="tok-fn">console</span>.<span class="tok-fn">log</span>(<span class="tok-str">"Platform:"</span>, <span class="tok-var">process</span>.<span class="tok-prop">platform</span>);</pre>
+                <div class="terminal-output">
+                  <div class="terminal-header">Terminal Command &amp; Output</div>
+                  <div class="terminal-text" style="color:#f8fafc;"><span class="tok-cmd">$ node runtime.js</span></div>
+                  <div class="terminal-text" style="margin-top:0.25rem;">Node.js is running
+Node version: v20.12.0
+Platform: win32</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ===================================================================
+             SLIDE 11: Create a Node.js Project
+             =================================================================== -->
+        <section id="slide-11" class="slide" data-slide-num="11">
+          <div class="slide-header">
+            <div class="slide-title-wrap">
+              <span class="slide-category">Section 2: Runtime, npm &amp; Project Setup</span>
+              <h2 class="slide-title">Creating a Node.js Project</h2>
+              <p class="slide-subtitle">Step-by-step project initialization from the command line</p>
+            </div>
+            <span class="slide-num-pill">11 / 37</span>
+          </div>
+
+          <div class="slide-body">
+            <div class="grid-2">
+              <div style="display:flex; flex-direction:column; gap:1rem;">
+                <div class="card card-blue">
+                  <div class="card-title blue">Initialization Steps</div>
+                  <div class="terminal-output" style="border-radius:6px;">
+                    <div class="terminal-text"><span class="tok-cmt"># 1. Create a project directory</span>
+<span class="tok-cmd">$ mkdir node-day1</span>
+
+<span class="tok-cmt"># 2. Navigate into the directory</span>
+<span class="tok-cmd">$ cd node-day1</span>
+
+<span class="tok-cmt"># 3. Initialize default package.json</span>
+<span class="tok-cmd">$ npm init -y</span></div>
+                  </div>
+                </div>
+
+                <div class="card">
+                  <div class="card-title">What Each Command Does</div>
+                  <ul class="feature-list">
+                    <li><code class="inline-code">mkdir node-day1</code>: Creates a dedicated folder for your backend project.</li>
+                    <li><code class="inline-code">cd node-day1</code>: Changes working directory to the newly created folder.</li>
+                    <li><code class="inline-code">npm init -y</code>: Generates a standard <code class="inline-code">package.json</code> file answering "yes" to all defaults without prompts.</li>
+                  </ul>
+                </div>
+              </div>
+
+              <div style="display:flex; flex-direction:column; gap:1rem;">
+                <div class="card">
+                  <div class="card-title">Initial Project Structure</div>
+                  <div class="terminal-output" style="background:#0b1329; border-radius:6px; color:#e2e8f0;">
+                    <pre style="margin:0; font-family:var(--font-mono); font-size:0.9rem;">node-day1/
+├── package.json    <span class="tok-cmt">← Project manifest &amp; config</span>
+└── app.js          <span class="tok-cmt">← Main entry point script</span></pre>
+                  </div>
+                </div>
+
+                <div class="code-container">
+                  <div class="code-header">
+                    <div class="code-file-badge">
+                      <span class="file-dot"></span>
+                      <span>app.js</span>
+                    </div>
+                    <button class="copy-btn" title="Copy code">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                        <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                      </svg>
+                      <span>Copy</span>
+                    </button>
+                  </div>
+                  <pre class="code-block"><span class="tok-fn">console</span>.<span class="tok-fn">log</span>(<span class="tok-str">"My first Node.js project"</span>);</pre>
+                  <div class="terminal-output">
+                    <div class="terminal-header">Terminal Command &amp; Output</div>
+                    <div class="terminal-text" style="color:#f8fafc;"><span class="tok-cmd">$ node app.js</span></div>
+                    <div class="terminal-text" style="margin-top:0.25rem;">My first Node.js project</div>
+                  </div>
+                </div>
+
+                <div class="callout tip">
+                  <span class="callout-icon">💡</span>
+                  <div>
+                    <strong>Teaching Point:</strong> Every backend application starts here. An organized structure and a central manifest (<code class="inline-code">package.json</code>) are fundamental to professional software engineering.
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ===================================================================
+             SLIDE 12: Understanding package.json
+             =================================================================== -->
+        <section id="slide-12" class="slide" data-slide-num="12">
+          <div class="slide-header">
+            <div class="slide-title-wrap">
+              <span class="slide-category">Section 2: Runtime, npm &amp; Project Setup</span>
+              <h2 class="slide-title">Understanding package.json</h2>
+              <p class="slide-subtitle">The central manifest defining metadata, dependencies, and execution scripts</p>
+            </div>
+            <span class="slide-num-pill">12 / 37</span>
+          </div>
+
+          <div class="slide-body">
+            <div class="grid-2-1">
+              <div style="display:flex; flex-direction:column; gap:1rem;">
+                <div class="table-wrapper">
+                  <table class="presentation-table">
+                    <thead>
+                      <tr>
+                        <th>Field</th>
+                        <th>Purpose &amp; Description</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td><code>name</code></td>
+                        <td>Unique project name (lowercase, no spaces).</td>
+                      </tr>
+                      <tr>
+                        <td><code>version</code></td>
+                        <td>Semantic versioning (e.g. <code>1.0.0</code>).</td>
+                      </tr>
+                      <tr>
+                        <td><code>description</code></td>
+                        <td>Short project overview for documentation.</td>
+                      </tr>
+                      <tr>
+                        <td><code>type</code></td>
+                        <td>Setting to <code>"module"</code> enables modern ES Module syntax (<code>import</code>/<code>export</code>).</td>
+                      </tr>
+                      <tr>
+                        <td><code>scripts</code></td>
+                        <td>Defines reusable CLI aliases (e.g. <code>npm run start</code>).</td>
+                      </tr>
+                      <tr>
+                        <td><code>dependencies</code></td>
+                        <td>Packages required by the application in production.</td>
+                      </tr>
+                      <tr>
+                        <td><code>devDependencies</code></td>
+                        <td>Packages needed only during development (e.g. linters).</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+
+                <div class="callout warning">
+                  <span class="callout-icon">⚠️</span>
+                  <div>
+                    <strong>Crucial Setting:</strong> By default, Node.js uses CommonJS (<code class="inline-code">require</code>). Adding <code class="inline-code">"type": "module"</code> enables standard ECMAScript modules (<code class="inline-code">import</code> / <code class="inline-code">export</code>).
+                  </div>
+                </div>
+              </div>
+
+              <!-- package.json Code Box -->
+              <div class="code-container">
+                <div class="code-header">
+                  <div class="code-file-badge">
+                    <span class="file-dot"></span>
+                    <span>package.json</span>
+                  </div>
+                  <button class="copy-btn" title="Copy code">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                      <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                    </svg>
+                    <span>Copy</span>
+                  </button>
+                </div>
+                <pre class="code-block">{
+  <span class="tok-prop">"name"</span>: <span class="tok-str">"node-day1"</span>,
+  <span class="tok-prop">"version"</span>: <span class="tok-str">"1.0.0"</span>,
+  <span class="tok-prop">"description"</span>: <span class="tok-str">"Node.js Day 1 examples"</span>,
+  <span class="tok-prop">"type"</span>: <span class="tok-str">"module"</span>,
+  <span class="tok-prop">"scripts"</span>: {
+    <span class="tok-prop">"start"</span>: <span class="tok-str">"node app.js"</span>,
+    <span class="tok-prop">"dev"</span>: <span class="tok-str">"node --watch app.js"</span>
+  }
+}</pre>
+                <div class="terminal-output">
+                  <div class="terminal-header">Executing Configured Scripts</div>
+                  <div class="terminal-text"><span class="tok-cmd">$ npm run start</span>
+<span class="tok-cmt"># Runs: node app.js</span>
+
+<span class="tok-cmd">$ npm run dev</span>
+<span class="tok-cmt"># Runs: node --watch app.js</span></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ===================================================================
+             SLIDE 13: Installing Dependencies
+             =================================================================== -->
+        <section id="slide-13" class="slide" data-slide-num="13">
+          <div class="slide-header">
+            <div class="slide-title-wrap">
+              <span class="slide-category">Section 2: Runtime, npm &amp; Project Setup</span>
+              <h2 class="slide-title">Installing Dependencies</h2>
+              <p class="slide-subtitle">Understanding package categories and how npm manages packages on disk</p>
+            </div>
+            <span class="slide-num-pill">13 / 37</span>
+          </div>
+
+          <div class="slide-body">
+            <div class="grid-3">
+              <div class="card card-blue">
+                <div class="card-title blue">1. Built-in Modules</div>
+                <p class="card-desc">
+                  Shipped natively inside the Node.js binary (<code class="inline-code">fs</code>, <code class="inline-code">path</code>, <code class="inline-code">os</code>). No installation needed!
+                </p>
+              </div>
+
+              <div class="card card-blue">
+                <div class="card-title blue">2. Third-Party Packages</div>
+                <p class="card-desc">
+                  Published on npmjs.com (<code class="inline-code">dotenv</code>). Installed using <code class="inline-code">npm install</code> into <code class="inline-code">node_modules/</code>.
+                </p>
+              </div>
+
+              <div class="card card-blue">
+                <div class="card-title blue">3. Local Modules</div>
+                <p class="card-desc">
+                  Custom files written by you inside the project directory (e.g. <code class="inline-code">./math.js</code>).
+                </p>
+              </div>
+            </div>
+
+            <div class="grid-2">
+              <div style="display:flex; flex-direction:column; gap:0.9rem;">
+                <div class="card">
+                  <div class="card-title">Installing a Dependency</div>
+                  <div class="terminal-output" style="border-radius:6px;">
+                    <div class="terminal-text"><span class="tok-cmd">$ npm install dotenv</span></div>
+                  </div>
+                  <ul class="feature-list" style="margin-top:0.4rem;">
+                    <li><strong>npm downloads:</strong> Fetches the package and its dependencies from npm registry.</li>
+                    <li><strong>package.json updated:</strong> Records <code class="inline-code">"dotenv": "^16.4.5"</code> under <code class="inline-code">dependencies</code>.</li>
+                    <li><strong>package-lock.json created:</strong> Locks exact versions, download hashes, and dependency tree for deterministic builds.</li>
+                    <li><strong>node_modules/ populated:</strong> Contains the physical downloaded JavaScript files.</li>
+                  </ul>
+                </div>
+              </div>
+
+              <div style="display:flex; flex-direction:column; gap:0.9rem;">
+                <div class="card">
+                  <div class="card-title">Project Structure After Installation</div>
+                  <div class="terminal-output" style="background:#0b1329; border-radius:6px; color:#e2e8f0;">
+                    <pre style="margin:0; font-family:var(--font-mono); font-size:0.88rem;">node-day1/
+├── node_modules/      <span class="tok-cmt">← Downloaded third-party packages</span>
+├── package.json       <span class="tok-cmt">← Project manifest &amp; dependency list</span>
+├── package-lock.json  <span class="tok-cmt">← Exact versions &amp; integrity hashes</span>
+└── app.js             <span class="tok-cmt">← Your application code</span></pre>
+                  </div>
+                </div>
+
+                <div class="callout warning">
+                  <span class="callout-icon">⚠️</span>
+                  <div>
+                    <strong>Golden Rule:</strong> Never edit or touch files inside <code class="inline-code">node_modules/</code> manually. Never commit <code class="inline-code">node_modules/</code> to Git; always add it to your <code class="inline-code">.gitignore</code> file!
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ===================================================================
+             SLIDE 14: Understanding Node.js Modules
+             =================================================================== -->
+        <section id="slide-14" class="slide" data-slide-num="14">
+          <div class="slide-header">
+            <div class="slide-title-wrap">
+              <span class="slide-category">Section 3: Node.js Modules</span>
+              <h2 class="slide-title">Understanding Node.js Modules</h2>
+              <p class="slide-subtitle">Modular programming: breaking applications into decoupled, reusable units</p>
+            </div>
+            <span class="slide-num-pill">14 / 37</span>
+          </div>
+
+          <div class="slide-body">
+            <div class="card card-blue">
+              <div class="card-title blue">What Is a Module?</div>
+              <p class="card-desc">
+                A <strong>module</strong> is an isolated, reusable block of code whose functions, objects, or variables can be made available to other files using export and import. Instead of writing monolithic 3,000-line files, developers divide responsibilities into clean files.
+              </p>
+            </div>
+
+            <div class="grid-3">
+              <!-- Category 1 -->
+              <div class="card" style="border-top: 4px solid var(--primary);">
+                <div class="card-title" style="color:var(--primary-dark);">1. Built-in Modules</div>
+                <p class="card-desc">Pre-packaged with Node.js runtime.</p>
+                <div style="margin-top:0.3rem;">
+                  <code class="inline-code">node:fs</code><br>
+                  <code class="inline-code">node:path</code><br>
+                  <code class="inline-code">node:os</code><br>
+                  <code class="inline-code">node:crypto</code>
+                </div>
+                <p style="font-size:0.82rem; color:var(--text-muted); margin-top:0.5rem;">
+                  No npm install required. Ready out-of-the-box.
+                </p>
+              </div>
+
+              <!-- Category 2 -->
+              <div class="card" style="border-top: 4px solid var(--accent-green);">
+                <div class="card-title" style="color:var(--accent-green);">2. Local Modules</div>
+                <p class="card-desc">Written by you within your project.</p>
+                <div style="margin-top:0.3rem;">
+                  <code class="inline-code">./math.js</code><br>
+                  <code class="inline-code">./services/user.js</code><br>
+                  <code class="inline-code">./utils/helpers.js</code>
+                </div>
+                <p style="font-size:0.82rem; color:var(--text-muted); margin-top:0.5rem;">
+                  Relative paths required. Must include <code class="inline-code">.js</code> in ESM.
+                </p>
+              </div>
+
+              <!-- Category 3 -->
+              <div class="card" style="border-top: 4px solid var(--accent-purple);">
+                <div class="card-title" style="color:var(--accent-purple);">3. Third-Party Modules</div>
+                <p class="card-desc">Community packages downloaded via npm.</p>
+                <div style="margin-top:0.3rem;">
+                  <code class="inline-code">dotenv</code><br>
+                  <code class="inline-code">express</code><br>
+                  <code class="inline-code">mongoose</code><br>
+                  <code class="inline-code">cors</code>
+                </div>
+                <p style="font-size:0.82rem; color:var(--text-muted); margin-top:0.5rem;">
+                  Installed into <code class="inline-code">node_modules</code> and listed in <code class="inline-code">package.json</code>.
+                </p>
+              </div>
+            </div>
+
+            <div class="callout tip">
+              <span class="callout-icon">🌟</span>
+              <div>
+                <strong>Core Architectural Benefits:</strong> Code reusability, isolation of concerns, easier team collaboration, simplified automated testing, and clear maintainability boundaries.
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ===================================================================
+             SLIDE 15: Built-in Modules
+             =================================================================== -->
+        <section id="slide-15" class="slide" data-slide-num="15">
+          <div class="slide-header">
+            <div class="slide-title-wrap">
+              <span class="slide-category">Section 3: Node.js Modules</span>
+              <h2 class="slide-title">Built-in Modules: The os Module</h2>
+              <p class="slide-subtitle">Accessing operating system details directly without external dependencies</p>
+            </div>
+            <span class="slide-num-pill">15 / 37</span>
+          </div>
+
+          <div class="slide-body">
+            <div class="grid-2-1">
+              <div style="display:flex; flex-direction:column; gap:1rem;">
+                <div class="table-wrapper">
+                  <table class="presentation-table">
+                    <thead>
+                      <tr>
+                        <th>Module</th>
+                        <th>Core Functionality</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td><code>fs</code></td>
+                        <td>Read, write, append, and delete files on disk.</td>
+                      </tr>
+                      <tr>
+                        <td><code>path</code></td>
+                        <td>Handle cross-platform file and folder directory paths safely.</td>
+                      </tr>
+                      <tr>
+                        <td><code>os</code></td>
+                        <td>Query CPU architecture, OS platform, memory, and uptime.</td>
+                      </tr>
+                      <tr>
+                        <td><code>crypto</code></td>
+                        <td>Generate cryptographic hashes, tokens, and UUIDs.</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+
+                <div class="card card-blue">
+                  <div class="card-title blue">Why the "node:" Prefix?</div>
+                  <p class="card-desc">
+                    Modern Node.js best practice uses <code class="inline-code">import os from "node:os"</code>. The <code class="inline-code">node:</code> prefix clarifies that this is a built-in core module, preventing namespace conflicts with third-party npm packages.
+                  </p>
+                </div>
+              </div>
+
+              <!-- Practical os Example -->
+              <div class="code-container">
+                <div class="code-header">
+                  <div class="code-file-badge">
+                    <span class="file-dot"></span>
+                    <span>app.js</span>
+                  </div>
+                  <button class="copy-btn" title="Copy code">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                      <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                    </svg>
+                    <span>Copy</span>
+                  </button>
+                </div>
+                <pre class="code-block"><span class="tok-kw">import</span> <span class="tok-var">os</span> <span class="tok-kw">from</span> <span class="tok-str">"node:os"</span>;
+
+<span class="tok-fn">console</span>.<span class="tok-fn">log</span>(<span class="tok-str">"Operating System:"</span>, <span class="tok-var">os</span>.<span class="tok-fn">platform</span>());
+<span class="tok-fn">console</span>.<span class="tok-fn">log</span>(<span class="tok-str">"Architecture:"</span>, <span class="tok-var">os</span>.<span class="tok-fn">arch</span>());
+<span class="tok-fn">console</span>.<span class="tok-fn">log</span>(<span class="tok-str">"Free Memory:"</span>, <span class="tok-var">os</span>.<span class="tok-fn">freemem</span>());
+<span class="tok-fn">console</span>.<span class="tok-fn">log</span>(<span class="tok-str">"Total Memory:"</span>, <span class="tok-var">os</span>.<span class="tok-fn">totalmem</span>());</pre>
+                <div class="terminal-output">
+                  <div class="terminal-header">Terminal Command &amp; Output</div>
+                  <div class="terminal-text" style="color:#f8fafc;"><span class="tok-cmd">$ node app.js</span></div>
+                  <div class="terminal-text" style="margin-top:0.25rem;">Operating System: win32
+Architecture: x64
+Free Memory: 6842347520
+Total Memory: 17042898944</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ===================================================================
+             SLIDE 16: Local Modules: Import and Export
+             =================================================================== -->
+        <section id="slide-16" class="slide" data-slide-num="16">
+          <div class="slide-header">
+            <div class="slide-title-wrap">
+              <span class="slide-category">Section 3: Node.js Modules</span>
+              <h2 class="slide-title">Local Modules: Import and Export</h2>
+              <p class="slide-subtitle">Creating custom helper modules and consuming them with ES Module syntax</p>
+            </div>
+            <span class="slide-num-pill">16 / 37</span>
+          </div>
+
+          <div class="slide-body">
+            <div class="grid-2">
+              <!-- Panel 1: math.js -->
+              <div class="code-container">
+                <div class="code-header">
+                  <div class="code-file-badge">
+                    <span class="file-dot"></span>
+                    <span>math.js (Exporter)</span>
+                  </div>
+                  <button class="copy-btn" title="Copy code">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                      <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                    </svg>
+                    <span>Copy</span>
+                  </button>
+                </div>
+                <pre class="code-block"><span class="tok-cmt">// Named exports make functions public</span>
+<span class="tok-kw">export</span> <span class="tok-kw">function</span> <span class="tok-fn">add</span>(<span class="tok-var">a</span>, <span class="tok-var">b</span>) {
+  <span class="tok-kw">return</span> <span class="tok-var">a</span> + <span class="tok-var">b</span>;
+}
+
+<span class="tok-kw">export</span> <span class="tok-kw">function</span> <span class="tok-fn">multiply</span>(<span class="tok-var">a</span>, <span class="tok-var">b</span>) {
+  <span class="tok-kw">return</span> <span class="tok-var">a</span> * <span class="tok-var">b</span>;
+}</pre>
+                <div class="terminal-output">
+                  <div class="terminal-header">Module Design Notes</div>
+                  <div class="terminal-text" style="color:#cbd5e1;">
+                    • Uses standard <code class="inline-code">export</code> keyword.<br>
+                    • Encapsulates arithmetic calculations cleanly.<br>
+                    • Keeps logic testable and decoupled.
+                  </div>
+                </div>
+              </div>
+
+              <!-- Panel 2: app.js -->
+              <div class="code-container">
+                <div class="code-header">
+                  <div class="code-file-badge">
+                    <span class="file-dot"></span>
+                    <span>app.js (Consumer)</span>
+                  </div>
+                  <button class="copy-btn" title="Copy code">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                      <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                    </svg>
+                    <span>Copy</span>
+                  </button>
+                </div>
+                <pre class="code-block"><span class="tok-cmt">// Import specific named functions from local file</span>
+<span class="tok-kw">import</span> { <span class="tok-fn">add</span>, <span class="tok-fn">multiply</span> } <span class="tok-kw">from</span> <span class="tok-str">"./math.js"</span>;
+
+<span class="tok-fn">console</span>.<span class="tok-fn">log</span>(<span class="tok-fn">add</span>(<span class="tok-num">10</span>, <span class="tok-num">5</span>));
+<span class="tok-fn">console</span>.<span class="tok-fn">log</span>(<span class="tok-fn">multiply</span>(<span class="tok-num">10</span>, <span class="tok-num">5</span>));</pre>
+                <div class="terminal-output">
+                  <div class="terminal-header">Terminal Command &amp; Output</div>
+                  <div class="terminal-text" style="color:#f8fafc;"><span class="tok-cmd">$ node app.js</span></div>
+                  <div class="terminal-text" style="margin-top:0.25rem;">15
+50</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="callout warning">
+              <span class="callout-icon">⚠️</span>
+              <div>
+                <strong>Crucial Node.js ESM Rule:</strong> When importing local files in Node.js ES Modules, you <strong>must include the file extension</strong> (<code class="inline-code">./math.js</code>). Unlike bundlers (webpack/Vite), pure Node.js does not automatically resolve extensionless relative imports.
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ===================================================================
+             SLIDE 17: Third-Party Modules
+             =================================================================== -->
+        <section id="slide-17" class="slide" data-slide-num="17">
+          <div class="slide-header">
+            <div class="slide-title-wrap">
+              <span class="slide-category">Section 3: Node.js Modules</span>
+              <h2 class="slide-title">Third-Party Modules: Using dotenv</h2>
+              <p class="slide-subtitle">Installing and loading external community packages from the npm registry</p>
+            </div>
+            <span class="slide-num-pill">17 / 37</span>
+          </div>
+
+          <div class="slide-body">
+            <div class="grid-2-1">
+              <div style="display:flex; flex-direction:column; gap:1rem;">
+                <div class="card card-blue">
+                  <div class="card-title blue">What Are Third-Party Modules?</div>
+                  <p class="card-desc">
+                    Third-party modules are open-source libraries published by developers worldwide to npm. Examples include <code class="inline-code">dotenv</code> (environment variables), <code class="inline-code">express</code> (web server), and <code class="inline-code">mongoose</code> (MongoDB database modeling).
+                  </p>
+                </div>
+
+                <div class="card">
+                  <div class="card-title">1. Installation via npm</div>
+                  <div class="terminal-output" style="border-radius:6px;">
+                    <div class="terminal-text"><span class="tok-cmd">$ npm install dotenv</span></div>
+                  </div>
+                </div>
+
+                <div class="card">
+                  <div class="card-title">2. Configuration File (.env)</div>
+                  <div class="code-container" style="height:auto;">
+                    <div class="code-header">
+                      <div class="code-file-badge"><span>.env</span></div>
+                    </div>
+                    <pre class="code-block" style="padding:0.75rem 1rem;"><span class="tok-prop">APP_NAME</span>=<span class="tok-str">NodeDay1</span>
+<span class="tok-prop">PORT</span>=<span class="tok-num">3000</span></pre>
+                  </div>
+                </div>
+
+                <div class="callout danger">
+                  <span class="callout-icon">🔒</span>
+                  <div>
+                    <strong>Security Best Practice:</strong> Never commit <code class="inline-code">.env</code> files containing database passwords or API keys to GitHub. Add <code class="inline-code">.env</code> to your <code class="inline-code">.gitignore</code>!
+                  </div>
+                </div>
+              </div>
+
+              <!-- app.js loading dotenv -->
+              <div class="code-container">
+                <div class="code-header">
+                  <div class="code-file-badge">
+                    <span class="file-dot"></span>
+                    <span>app.js</span>
+                  </div>
+                  <button class="copy-btn" title="Copy code">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                      <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                    </svg>
+                    <span>Copy</span>
+                  </button>
+                </div>
+                <pre class="code-block"><span class="tok-cmt">// "dotenv/config" automatically loads .env into process.env</span>
+<span class="tok-kw">import</span> <span class="tok-str">"dotenv/config"</span>;
+
+<span class="tok-fn">console</span>.<span class="tok-fn">log</span>(<span class="tok-str">"App:"</span>, <span class="tok-var">process</span>.<span class="tok-prop">env</span>.<span class="tok-prop">APP_NAME</span>);
+<span class="tok-fn">console</span>.<span class="tok-fn">log</span>(<span class="tok-str">"Port:"</span>, <span class="tok-var">process</span>.<span class="tok-prop">env</span>.<span class="tok-prop">PORT</span>);</pre>
+                <div class="terminal-output">
+                  <div class="terminal-header">Terminal Command &amp; Output</div>
+                  <div class="terminal-text" style="color:#f8fafc;"><span class="tok-cmd">$ node app.js</span></div>
+                  <div class="terminal-text" style="margin-top:0.25rem;">App: NodeDay1
+Port: 3000</div>
+                </div>
+                <div style="padding:0.75rem 1rem; font-size:0.83rem; color:#94a3b8; border-top:1px solid rgba(255,255,255,0.08);">
+                  📌 Note: All environment variable values loaded into <code class="inline-code" style="background:#1e293b; color:#38bdf8;">process.env</code> are returned as <strong>strings</strong>.
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ===================================================================
+             SLIDE 18: let, const, Arrow Functions, and Template Literals
+             =================================================================== -->
+        <section id="slide-18" class="slide" data-slide-num="18">
+          <div class="slide-header">
+            <div class="slide-title-wrap">
+              <span class="slide-category">Section 4: Modern JavaScript for Backend</span>
+              <h2 class="slide-title">Modern JavaScript Essentials</h2>
+              <p class="slide-subtitle">let vs const, arrow functions, and dynamic template literals in Node.js</p>
+            </div>
+            <span class="slide-num-pill">18 / 37</span>
+          </div>
+
+          <div class="slide-body">
+            <div class="grid-2">
+              <div style="display:flex; flex-direction:column; gap:1rem;">
+                <div class="code-container">
+                  <div class="code-header">
+                    <div class="code-file-badge"><span>let &amp; const Variables</span></div>
+                    <button class="copy-btn"><span>Copy</span></button>
+                  </div>
+                  <pre class="code-block"><span class="tok-cmt">// let allows reassignment when state changes</span>
+<span class="tok-kw">let</span> <span class="tok-var">age</span> = <span class="tok-num">22</span>;
+<span class="tok-var">age</span> = <span class="tok-num">23</span>; <span class="tok-cmt">// Allowed</span>
+
+<span class="tok-cmt">// const prevents variable reassignment</span>
+<span class="tok-kw">const</span> <span class="tok-var">name</span> = <span class="tok-str">"Rahul"</span>;
+<span class="tok-cmt">// name = "Priya"; // Error: Assignment to constant</span>
+
+<span class="tok-fn">console</span>.<span class="tok-fn">log</span>(<span class="tok-var">name</span>, <span class="tok-var">age</span>); <span class="tok-cmt">// Rahul 23</span></pre>
+                </div>
+
+                <div class="callout warning">
+                  <span class="callout-icon">💡</span>
+                  <div>
+                    <strong>Important Gotcha:</strong> <code class="inline-code">const</code> creates an immutable binding, but does <strong>not</strong> make the contents of objects or arrays immutable:
+                    <div style="font-family:var(--font-mono); font-size:0.83rem; margin-top:0.25rem;">
+                      const config = { port: 3000 };<br>
+                      config.port = 8080; // Valid! Property updated.
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div style="display:flex; flex-direction:column; gap:1rem;">
+                <div class="code-container">
+                  <div class="code-header">
+                    <div class="code-file-badge"><span>Arrow Functions</span></div>
+                    <button class="copy-btn"><span>Copy</span></button>
+                  </div>
+                  <pre class="code-block"><span class="tok-cmt">// Concise syntax for backend utilities</span>
+<span class="tok-kw">const</span> <span class="tok-fn">greet</span> = (<span class="tok-var">name</span>) =&gt; {
+  <span class="tok-kw">return</span> <span class="tok-str">`Hello, <span class="tok-var">${name}</span>`</span>;
+};
+
+<span class="tok-fn">console</span>.<span class="tok-fn">log</span>(<span class="tok-fn">greet</span>(<span class="tok-str">"Rahul"</span>)); <span class="tok-cmt">// Hello, Rahul</span></pre>
+                </div>
+
+                <div class="code-container">
+                  <div class="code-header">
+                    <div class="code-file-badge"><span>Template Literals</span></div>
+                    <button class="copy-btn"><span>Copy</span></button>
+                  </div>
+                  <pre class="code-block"><span class="tok-kw">const</span> <span class="tok-var">product</span> = <span class="tok-str">"Laptop"</span>;
+<span class="tok-kw">const</span> <span class="tok-var">price</span> = <span class="tok-num">50000</span>;
+
+<span class="tok-cmt">// Embed expressions easily using backticks and ${}</span>
+<span class="tok-fn">console</span>.<span class="tok-fn">log</span>(<span class="tok-str">`<span class="tok-var">${product}</span> costs ₹<span class="tok-var">${price}</span>`</span>);
+<span class="tok-cmt">// Output: Laptop costs ₹50000</span></pre>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ===================================================================
+             SLIDE 19: Destructuring and Spread Operator
+             =================================================================== -->
+        <section id="slide-19" class="slide" data-slide-num="19">
+          <div class="slide-header">
+            <div class="slide-title-wrap">
+              <span class="slide-category">Section 4: Modern JavaScript for Backend</span>
+              <h2 class="slide-title">Destructuring &amp; Spread Operator</h2>
+              <p class="slide-subtitle">Unpacking values and creating immutable data structures</p>
+            </div>
+            <span class="slide-num-pill">19 / 37</span>
+          </div>
+
+          <div class="slide-body">
+            <div class="grid-2">
+              <div class="code-container">
+                <div class="code-header">
+                  <div class="code-file-badge"><span>Destructuring (Extracting Values)</span></div>
+                  <button class="copy-btn"><span>Copy</span></button>
+                </div>
+                <pre class="code-block"><span class="tok-cmt">// 1. Object Destructuring</span>
+<span class="tok-kw">const</span> <span class="tok-var">student</span> = {
+  <span class="tok-prop">name</span>: <span class="tok-str">"Anu"</span>,
+  <span class="tok-prop">age</span>: <span class="tok-num">21</span>,
+  <span class="tok-prop">course</span>: <span class="tok-str">"MERN"</span>,
+};
+
+<span class="tok-kw">const</span> { <span class="tok-var">name</span>, <span class="tok-var">course</span> } = <span class="tok-var">student</span>;
+<span class="tok-fn">console</span>.<span class="tok-fn">log</span>(<span class="tok-var">name</span>);   <span class="tok-cmt">// Anu</span>
+<span class="tok-fn">console</span>.<span class="tok-fn">log</span>(<span class="tok-var">course</span>); <span class="tok-cmt">// MERN</span>
+
+<span class="tok-cmt">// 2. Array Destructuring</span>
+<span class="tok-kw">const</span> <span class="tok-var">colors</span> = [<span class="tok-str">"red"</span>, <span class="tok-str">"blue"</span>, <span class="tok-str">"green"</span>];
+<span class="tok-kw">const</span> [<span class="tok-var">first</span>, <span class="tok-var">second</span>] = <span class="tok-var">colors</span>;
+
+<span class="tok-fn">console</span>.<span class="tok-fn">log</span>(<span class="tok-var">first</span>, <span class="tok-var">second</span>); <span class="tok-cmt">// red blue</span></pre>
+              </div>
+
+              <div style="display:flex; flex-direction:column; gap:1rem;">
+                <div class="code-container">
+                  <div class="code-header">
+                    <div class="code-file-badge"><span>Spread Operator (Expanding Values)</span></div>
+                    <button class="copy-btn"><span>Copy</span></button>
+                  </div>
+                  <pre class="code-block"><span class="tok-cmt">// Expanding elements into a new array without mutation</span>
+<span class="tok-kw">const</span> <span class="tok-var">numbers</span> = [<span class="tok-num">10</span>, <span class="tok-num">20</span>, <span class="tok-num">30</span>];
+
+<span class="tok-kw">const</span> <span class="tok-var">updatedNumbers</span> = [...<span class="tok-var">numbers</span>, <span class="tok-num">40</span>];
+
+<span class="tok-fn">console</span>.<span class="tok-fn">log</span>(<span class="tok-var">updatedNumbers</span>);
+<span class="tok-cmt">// Output: [10, 20, 30, 40]</span></pre>
+                </div>
+
+                <div class="card card-blue">
+                  <div class="card-title blue">Teaching Point: Extract vs Expand</div>
+                  <ul class="feature-list">
+                    <li><strong>Destructuring extracts:</strong> Unpacks specific properties from an object or array into individual variables.</li>
+                    <li><strong>Spread expands:</strong> Spreads existing items into a new array or object literal, leaving the original array completely untouched (immutability).</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ===================================================================
+             SLIDE 20: map(), filter(), and reduce()
+             =================================================================== -->
+        <section id="slide-20" class="slide" data-slide-num="20">
+          <div class="slide-header">
+            <div class="slide-title-wrap">
+              <span class="slide-category">Section 4: Modern JavaScript for Backend</span>
+              <h2 class="slide-title">Array Methods: map(), filter(), reduce()</h2>
+              <p class="slide-subtitle">Transforming, filtering, and accumulating dataset collections in backend pipelines</p>
+            </div>
+            <span class="slide-num-pill">20 / 37</span>
+          </div>
+
+          <div class="slide-body">
+            <div class="grid-2-1">
+              <div class="code-container">
+                <div class="code-header">
+                  <div class="code-file-badge"><span>array-pipeline.js</span></div>
+                  <button class="copy-btn"><span>Copy</span></button>
+                </div>
+                <pre class="code-block"><span class="tok-kw">const</span> <span class="tok-var">students</span> = [
+  { <span class="tok-prop">name</span>: <span class="tok-str">"Anu"</span>, <span class="tok-prop">marks</span>: <span class="tok-num">80</span> },
+  { <span class="tok-prop">name</span>: <span class="tok-str">"Rahul"</span>, <span class="tok-prop">marks</span>: <span class="tok-num">45</span> },
+  { <span class="tok-prop">name</span>: <span class="tok-str">"Meera"</span>, <span class="tok-prop">marks</span>: <span class="tok-num">90</span> },
+];
+
+<span class="tok-cmt">// 1. map() — Transform each element (extract names)</span>
+<span class="tok-kw">const</span> <span class="tok-var">names</span> = <span class="tok-var">students</span>.<span class="tok-fn">map</span>((<span class="tok-var">s</span>) =&gt; <span class="tok-var">s</span>.<span class="tok-prop">name</span>);
+<span class="tok-fn">console</span>.<span class="tok-fn">log</span>(<span class="tok-var">names</span>); <span class="tok-cmt">// ["Anu", "Rahul", "Meera"]</span>
+
+<span class="tok-cmt">// 2. filter() — Select matching elements (marks &gt;= 50)</span>
+<span class="tok-kw">const</span> <span class="tok-var">passed</span> = <span class="tok-var">students</span>.<span class="tok-fn">filter</span>((<span class="tok-var">s</span>) =&gt; <span class="tok-var">s</span>.<span class="tok-prop">marks</span> &gt;= <span class="tok-num">50</span>);
+<span class="tok-fn">console</span>.<span class="tok-fn">log</span>(<span class="tok-var">passed</span>); <span class="tok-cmt">// [{Anu: 80}, {Meera: 90}]</span>
+
+<span class="tok-cmt">// 3. reduce() — Combine elements into a single accumulated result</span>
+<span class="tok-kw">const</span> <span class="tok-var">totalMarks</span> = <span class="tok-var">students</span>.<span class="tok-fn">reduce</span>(
+  (<span class="tok-var">total</span>, <span class="tok-var">s</span>) =&gt; <span class="tok-var">total</span> + <span class="tok-var">s</span>.<span class="tok-prop">marks</span>,
+  <span class="tok-num">0</span>
+);
+<span class="tok-fn">console</span>.<span class="tok-fn">log</span>(<span class="tok-var">totalMarks</span>); <span class="tok-cmt">// 215</span></pre>
+              </div>
+
+              <div style="display:flex; flex-direction:column; gap:1rem;">
+                <div class="table-wrapper">
+                  <table class="presentation-table">
+                    <thead>
+                      <tr>
+                        <th>Method</th>
+                        <th>Main Purpose</th>
+                        <th>Returns</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td><code>map()</code></td>
+                        <td>Transform 1-to-1</td>
+                        <td>New array of same length</td>
+                      </tr>
+                      <tr>
+                        <td><code>filter()</code></td>
+                        <td>Select criteria matches</td>
+                        <td>New filtered array</td>
+                      </tr>
+                      <tr>
+                        <td><code>reduce()</code></td>
+                        <td>Aggregate &amp; calculate</td>
+                        <td>Single accumulated value</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+
+                <div class="callout tip">
+                  <span class="callout-icon">💡</span>
+                  <div>
+                    <strong>Purity Guarantee:</strong> None of these three methods mutate the original array! They return brand new structures, protecting against accidental state corruption in backend logic.
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ===================================================================
+             SLIDE 21: JavaScript Objects vs Python Dictionaries
+             =================================================================== -->
+        <section id="slide-21" class="slide" data-slide-num="21">
+          <div class="slide-header">
+            <div class="slide-title-wrap">
+              <span class="slide-category">Section 5: Objects &amp; JavaScript Pitfalls</span>
+              <h2 class="slide-title">JavaScript Objects vs Python Dictionaries</h2>
+              <p class="slide-subtitle">Bridging mental models for students transitioning from Python to Node.js</p>
+            </div>
+            <span class="slide-num-pill">21 / 37</span>
+          </div>
+
+          <div class="slide-body">
+            <div class="grid-2-1">
+              <div class="table-wrapper">
+                <table class="presentation-table">
+                  <thead>
+                    <tr>
+                      <th>Feature</th>
+                      <th>JavaScript Object</th>
+                      <th>Python Dictionary</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><strong>Syntax</strong></td>
+                      <td><code>{ name: "Anu" }</code></td>
+                      <td><code>{"name": "Anu"}</code></td>
+                    </tr>
+                    <tr>
+                      <td><strong>Key Types</strong></td>
+                      <td>Strings, Symbols (unquoted ok)</td>
+                      <td>Any hashable type (quotes req)</td>
+                    </tr>
+                    <tr>
+                      <td><strong>Access</strong></td>
+                      <td><code>student.name</code> or <code>student["name"]</code></td>
+                      <td><code>student["name"]</code> (dot not allowed)</td>
+                    </tr>
+                    <tr>
+                      <td><strong>Update</strong></td>
+                      <td><code>student.marks = 90</code></td>
+                      <td><code>student["marks"] = 90</code></td>
+                    </tr>
+                    <tr>
+                      <td><strong>Delete</strong></td>
+                      <td><code>delete student.marks</code></td>
+                      <td><code>del student["marks"]</code></td>
+                    </tr>
+                    <tr>
+                      <td><strong>Typical Role</strong></td>
+                      <td>Structured models, methods, JSON</td>
+                      <td>Hash map / key-value dictionary</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <!-- Practical Object Code -->
+              <div class="code-container">
+                <div class="code-header">
+                  <div class="code-file-badge"><span>objects.js</span></div>
+                  <button class="copy-btn"><span>Copy</span></button>
+                </div>
+                <pre class="code-block"><span class="tok-kw">const</span> <span class="tok-var">student</span> = {
+  <span class="tok-prop">name</span>: <span class="tok-str">"Anu"</span>,
+  <span class="tok-prop">marks</span>: <span class="tok-num">85</span>,
+};
+
+<span class="tok-cmt">// Access via dot &amp; bracket notation</span>
+<span class="tok-fn">console</span>.<span class="tok-fn">log</span>(<span class="tok-var">student</span>.<span class="tok-prop">name</span>);
+<span class="tok-fn">console</span>.<span class="tok-fn">log</span>(<span class="tok-var">student</span>[<span class="tok-str">"marks"</span>]);
+
+<span class="tok-cmt">// Updating properties</span>
+<span class="tok-var">student</span>.<span class="tok-prop">marks</span> = <span class="tok-num">90</span>;
+<span class="tok-fn">console</span>.<span class="tok-fn">log</span>(<span class="tok-var">student</span>.<span class="tok-prop">marks</span>); <span class="tok-cmt">// 90</span>
+
+<span class="tok-cmt">// Deleting properties</span>
+<span class="tok-kw">delete</span> <span class="tok-var">student</span>.<span class="tok-prop">marks</span>;
+<span class="tok-fn">console</span>.<span class="tok-fn">log</span>(<span class="tok-var">student</span>.<span class="tok-prop">marks</span>); <span class="tok-cmt">// undefined</span></pre>
+                <div class="terminal-output">
+                  <div class="terminal-header">Key Insight</div>
+                  <div class="terminal-text" style="color:#cbd5e1;">
+                    JavaScript objects can use dot notation directly (<code class="inline-code">obj.property</code>), which is cleaner for backend JSON payload models!
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ===================================================================
+             SLIDE 22: ==, ===, Truthy, and Falsy
+             =================================================================== -->
+        <section id="slide-22" class="slide" data-slide-num="22">
+          <div class="slide-header">
+            <div class="slide-title-wrap">
+              <span class="slide-category">Section 5: Objects &amp; JavaScript Pitfalls</span>
+              <h2 class="slide-title">== vs === &amp; Truthy / Falsy</h2>
+              <p class="slide-subtitle">Strict comparison rules and JavaScript truthiness evaluation</p>
+            </div>
+            <span class="slide-num-pill">22 / 37</span>
+          </div>
+
+          <div class="slide-body">
+            <div class="grid-2">
+              <div style="display:flex; flex-direction:column; gap:1rem;">
+                <div class="card card-blue">
+                  <div class="card-title blue">Equality Comparison</div>
+                  <div style="font-family:var(--font-mono); font-size:0.88rem; line-height:1.7;">
+                    <span class="tok-fn">console</span>.<span class="tok-fn">log</span>(<span class="tok-num">5</span> == <span class="tok-str">"5"</span>); &nbsp;<span class="tok-cmt">// true (coerces string to number)</span><br>
+                    <span class="tok-fn">console</span>.<span class="tok-fn">log</span>(<span class="tok-num">5</span> === <span class="tok-str">"5"</span>); <span class="tok-cmt">// false (different types: number vs string)</span>
+                  </div>
+                  <p style="font-size:0.85rem; color:var(--text-muted); margin-top:0.3rem;">
+                    <strong>Best Practice:</strong> Always use <code class="inline-code">===</code> (strict equality) in backend engineering to prevent subtle security &amp; type coercion bugs.
+                  </p>
+                </div>
+
+                <div class="card">
+                  <div class="card-title">The Exact 8 Falsy Values in JavaScript</div>
+                  <div style="display:flex; flex-wrap:wrap; gap:0.4rem; margin-top:0.25rem;">
+                    <code class="inline-code" style="background:#fee2e2; color:#b91c1c;">false</code>
+                    <code class="inline-code" style="background:#fee2e2; color:#b91c1c;">0</code>
+                    <code class="inline-code" style="background:#fee2e2; color:#b91c1c;">-0</code>
+                    <code class="inline-code" style="background:#fee2e2; color:#b91c1c;">0n (BigInt)</code>
+                    <code class="inline-code" style="background:#fee2e2; color:#b91c1c;">"" (empty str)</code>
+                    <code class="inline-code" style="background:#fee2e2; color:#b91c1c;">null</code>
+                    <code class="inline-code" style="background:#fee2e2; color:#b91c1c;">undefined</code>
+                    <code class="inline-code" style="background:#fee2e2; color:#b91c1c;">NaN</code>
+                  </div>
+                  <div class="callout warning" style="margin-top:0.6rem; padding:0.6rem 0.8rem;">
+                    <span class="callout-icon">⚠️</span>
+                    <div>
+                      <strong>Critical Trap for Python Devs:</strong> In JavaScript, <code class="inline-code">[]</code> (empty array) and <code class="inline-code">{}</code> (empty object) are <strong>TRUTHY</strong>!
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Interactive Tester Widget -->
+              <div class="card" style="border:2px solid var(--primary-border); background:#ffffff;">
+                <div class="card-title blue" style="justify-content:space-between;">
+                  <span>Interactive Truthy / Falsy Tester</span>
+                  <span style="font-size:0.75rem; font-weight:600; background:var(--primary-light); padding:0.15rem 0.5rem; border-radius:12px;">Live Sandbox</span>
+                </div>
+                <p style="font-size:0.86rem; color:var(--text-muted);">
+                  Click any value to inspect its boolean truthiness in real-time:
+                </p>
+
+                <div style="display:grid; grid-template-columns:repeat(4, 1fr); gap:0.4rem; margin:0.4rem 0;">
+                  <button class="nav-btn test-val-btn" data-type="empty-string" style="font-size:0.75rem; justify-content:center;">""</button>
+                  <button class="nav-btn test-val-btn" data-type="zero" style="font-size:0.75rem; justify-content:center;">0</button>
+                  <button class="nav-btn test-val-btn" data-type="empty-array" style="font-size:0.75rem; justify-content:center; font-weight:700; color:var(--primary-dark);">[] (Array)</button>
+                  <button class="nav-btn test-val-btn" data-type="empty-object" style="font-size:0.75rem; justify-content:center; font-weight:700; color:var(--primary-dark);">{} (Object)</button>
+                  <button class="nav-btn test-val-btn" data-type="null" style="font-size:0.75rem; justify-content:center;">null</button>
+                  <button class="nav-btn test-val-btn" data-type="undefined" style="font-size:0.75rem; justify-content:center;">undefined</button>
+                  <button class="nav-btn test-val-btn" data-type="nan" style="font-size:0.75rem; justify-content:center;">NaN</button>
+                  <button class="nav-btn test-val-btn" data-type="str-hello" style="font-size:0.75rem; justify-content:center;">"Hello"</button>
+                </div>
+
+                <div id="tester-output-box" class="card" style="background:var(--bg-canvas); border:1px solid var(--border-subtle); min-height:85px; justify-content:center;">
+                  <span style="font-size:0.85rem; color:var(--text-subtle); text-align:center;">
+                    👈 Click any button above to inspect how Node.js evaluates it
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ===================================================================
+             SLIDE 23: null vs undefined
+             =================================================================== -->
+        <section id="slide-23" class="slide" data-slide-num="23">
+          <div class="slide-header">
+            <div class="slide-title-wrap">
+              <span class="slide-category">Section 5: Objects &amp; JavaScript Pitfalls</span>
+              <h2 class="slide-title">null vs undefined</h2>
+              <p class="slide-subtitle">Distinguishing intentional absence of value from unassigned variables</p>
+            </div>
+            <span class="slide-num-pill">23 / 37</span>
+          </div>
+
+          <div class="slide-body">
+            <div class="grid-2">
+              <div class="card card-blue">
+                <div class="card-title blue">undefined (Absence / Unassigned)</div>
+                <p class="card-desc">
+                  A variable that has been declared but not assigned a value, or an object property that simply does not exist. It is the engine's default placeholder.
+                </p>
+                <div class="terminal-output" style="border-radius:6px; margin-top:0.4rem;">
+                  <div class="terminal-text"><span class="tok-kw">let</span> username;
+<span class="tok-fn">console</span>.<span class="tok-fn">log</span>(username); <span class="tok-cmt">// undefined</span></div>
+                </div>
+              </div>
+
+              <div class="card card-blue">
+                <div class="card-title blue">null (Intentional Empty Value)</div>
+                <p class="card-desc">
+                  An explicit assignment representing the intentional absence of any object value. It means "this field is purposefully blank" (e.g. user without email).
+                </p>
+                <div class="terminal-output" style="border-radius:6px; margin-top:0.4rem;">
+                  <div class="terminal-text"><span class="tok-kw">const</span> selectedUser = <span class="tok-kw">null</span>;
+<span class="tok-fn">console</span>.<span class="tok-fn">log</span>(selectedUser); <span class="tok-cmt">// null</span></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Practical Example -->
+            <div class="code-container">
+              <div class="code-header">
+                <div class="code-file-badge"><span>user-check.js</span></div>
+                <button class="copy-btn"><span>Copy</span></button>
+              </div>
+              <pre class="code-block"><span class="tok-kw">const</span> <span class="tok-var">user</span> = {
+  <span class="tok-prop">name</span>: <span class="tok-str">"Rahul"</span>,
+  <span class="tok-prop">email</span>: <span class="tok-kw">null</span>, <span class="tok-cmt">// Intentionally blank email</span>
+};
+
+<span class="tok-fn">console</span>.<span class="tok-fn">log</span>(<span class="tok-var">user</span>.<span class="tok-prop">name</span>);  <span class="tok-cmt">// Rahul</span>
+<span class="tok-fn">console</span>.<span class="tok-fn">log</span>(<span class="tok-var">user</span>.<span class="tok-prop">email</span>); <span class="tok-cmt">// null (explicitly assigned absence)</span>
+<span class="tok-fn">console</span>.<span class="tok-fn">log</span>(<span class="tok-var">user</span>.<span class="tok-prop">phone</span>); <span class="tok-cmt">// undefined (property does not exist on object)</span></pre>
+              <div class="terminal-output">
+                <div class="terminal-header">Terminal Command &amp; Output</div>
+                <div class="terminal-text" style="color:#f8fafc;"><span class="tok-cmd">$ node user-check.js</span></div>
+                <div class="terminal-text" style="margin-top:0.25rem;">Rahul
+null
+undefined</div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ===================================================================
+             SLIDE 24: dotenv and process.env
+             =================================================================== -->
+        <section id="slide-24" class="slide" data-slide-num="24">
+          <div class="slide-header">
+            <div class="slide-title-wrap">
+              <span class="slide-category">Section 6: Environment Variables &amp; Watch Mode</span>
+              <h2 class="slide-title">dotenv &amp; process.env Workflow</h2>
+              <p class="slide-subtitle">The standard 3-step configuration pipeline for backend applications</p>
+            </div>
+            <span class="slide-num-pill">24 / 37</span>
+          </div>
+
+          <div class="slide-body">
+            <div class="grid-3">
+              <div class="card card-blue">
+                <div class="card-title blue">Step 1: Install dotenv</div>
+                <p class="card-desc">Install the library from npm:</p>
+                <div class="terminal-output" style="border-radius:6px; margin-top:0.3rem;">
+                  <div class="terminal-text"><span class="tok-cmd">$ npm install dotenv</span></div>
+                </div>
+              </div>
+
+              <div class="card card-blue">
+                <div class="card-title blue">Step 2: Create .env</div>
+                <p class="card-desc">Store key-value pairs at project root:</p>
+                <div class="terminal-output" style="border-radius:6px; margin-top:0.3rem;">
+                  <div class="terminal-text"><span class="tok-prop">APP_NAME</span>=StudentManager
+<span class="tok-prop">PORT</span>=4000
+<span class="tok-prop">NODE_ENV</span>=development</div>
+                </div>
+              </div>
+
+              <div class="card card-blue">
+                <div class="card-title blue">Step 3: Access in Code</div>
+                <p class="card-desc">Import config and read properties:</p>
+                <div class="terminal-output" style="border-radius:6px; margin-top:0.3rem;">
+                  <div class="terminal-text"><span class="tok-kw">import</span> <span class="tok-str">"dotenv/config"</span>;
+<span class="tok-kw">const</span> port = <span class="tok-fn">Number</span>(process.env.PORT);</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Complete Example -->
+            <div class="grid-2-1">
+              <div class="code-container">
+                <div class="code-header">
+                  <div class="code-file-badge"><span>app.js</span></div>
+                  <button class="copy-btn"><span>Copy</span></button>
+                </div>
+                <pre class="code-block"><span class="tok-kw">import</span> <span class="tok-str">"dotenv/config"</span>;
+
+<span class="tok-kw">const</span> <span class="tok-var">appName</span> = <span class="tok-var">process</span>.<span class="tok-prop">env</span>.<span class="tok-prop">APP_NAME</span>;
+<span class="tok-kw">const</span> <span class="tok-var">port</span> = <span class="tok-var">process</span>.<span class="tok-prop">env</span>.<span class="tok-prop">PORT</span>;
+<span class="tok-kw">const</span> <span class="tok-var">environment</span> = <span class="tok-var">process</span>.<span class="tok-prop">env</span>.<span class="tok-prop">NODE_ENV</span>;
+
+<span class="tok-fn">console</span>.<span class="tok-fn">log</span>(<span class="tok-str">"Application:"</span>, <span class="tok-var">appName</span>);
+<span class="tok-fn">console</span>.<span class="tok-fn">log</span>(<span class="tok-str">"Port:"</span>, <span class="tok-var">port</span>);
+<span class="tok-fn">console</span>.<span class="tok-fn">log</span>(<span class="tok-str">"Environment:"</span>, <span class="tok-var">environment</span>);</pre>
+                <div class="terminal-output">
+                  <div class="terminal-header">Terminal Command &amp; Output</div>
+                  <div class="terminal-text" style="color:#f8fafc;"><span class="tok-cmd">$ node app.js</span></div>
+                  <div class="terminal-text" style="margin-top:0.25rem;">Application: StudentManager
+Port: 4000
+Environment: development</div>
+                </div>
+              </div>
+
+              <div style="display:flex; flex-direction:column; gap:0.8rem;">
+                <div class="callout tip">
+                  <span class="callout-icon">💡</span>
+                  <div>
+                    <strong>Type Conversion Tip:</strong> Remember that <code class="inline-code">process.env.PORT</code> is a string (<code class="inline-code">"4000"</code>). When passing ports or numeric thresholds, wrap with <code class="inline-code">Number(process.env.PORT)</code>!
+                  </div>
+                </div>
+
+                <div class="callout danger">
+                  <span class="callout-icon">🔒</span>
+                  <div>
+                    <strong>Security Rule:</strong> Never expose real secrets or API keys in client-side code or commit <code class="inline-code">.env</code> to version control.
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ===================================================================
+             SLIDE 25: node --watch
+             =================================================================== -->
+        <section id="slide-25" class="slide" data-slide-num="25">
+          <div class="slide-header">
+            <div class="slide-title-wrap">
+              <span class="slide-category">Section 6: Environment Variables &amp; Watch Mode</span>
+              <h2 class="slide-title">Running Node.js with node --watch</h2>
+              <p class="slide-subtitle">Instant developer feedback: automatic server reloading without nodemon</p>
+            </div>
+            <span class="slide-num-pill">25 / 37</span>
+          </div>
+
+          <div class="slide-body">
+            <div class="grid-2">
+              <div style="display:flex; flex-direction:column; gap:1rem;">
+                <div class="card card-blue">
+                  <div class="card-title blue">Native Watch Mode (Node.js v18.11+)</div>
+                  <p class="card-desc">
+                    Historically, developers had to install third-party packages like <code class="inline-code">nodemon</code>. Modern Node.js provides native file watching out-of-the-box using the <code class="inline-code">--watch</code> flag!
+                  </p>
+                  <div class="terminal-output" style="border-radius:6px; margin-top:0.4rem;">
+                    <div class="terminal-text"><span class="tok-cmt"># Run directly in terminal</span>
+<span class="tok-cmd">$ node --watch app.js</span></div>
+                  </div>
+                </div>
+
+                <div class="card">
+                  <div class="card-title">How It Works in Practice</div>
+                  <ol style="margin-left:1.2rem; font-size:0.9rem; color:var(--text-main); display:flex; flex-direction:column; gap:0.4rem;">
+                    <li>You start <code class="inline-code">node --watch app.js</code>.</li>
+                    <li>Node monitors all imported files in the dependency graph.</li>
+                    <li>You make a change to <code class="inline-code">app.js</code> and press <strong>Save</strong> (Ctrl+S / Cmd+S).</li>
+                    <li>Node instantly terminates and restarts the process with fresh code!</li>
+                  </ol>
+                </div>
+              </div>
+
+              <!-- npm scripts configuration -->
+              <div style="display:flex; flex-direction:column; gap:1rem;">
+                <div class="code-container">
+                  <div class="code-header">
+                    <div class="code-file-badge"><span>package.json (Recommended Workflow)</span></div>
+                    <button class="copy-btn"><span>Copy</span></button>
+                  </div>
+                  <pre class="code-block">{
+  <span class="tok-prop">"type"</span>: <span class="tok-str">"module"</span>,
+  <span class="tok-prop">"scripts"</span>: {
+    <span class="tok-prop">"start"</span>: <span class="tok-str">"node app.js"</span>,
+    <span class="tok-prop">"dev"</span>: <span class="tok-str">"node --watch app.js"</span>
+  }
+}</pre>
+                  <div class="terminal-output">
+                    <div class="terminal-header">Developer Command</div>
+                    <div class="terminal-text" style="color:#f8fafc;"><span class="tok-cmd">$ npm run dev</span></div>
+                    <div class="terminal-text" style="margin-top:0.25rem;">Node.js watch mode is active
+Restarting 'app.js'
+Updated Node.js application</div>
+                  </div>
+                </div>
+
+                <div class="callout tip">
+                  <span class="callout-icon">💡</span>
+                  <div>
+                    <strong>Classroom Tip:</strong> Keep <code class="inline-code">npm run dev</code> running in one terminal window while editing code during hands-on exercises!
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ===================================================================
+             SLIDE 26: Practical Project: Smart Student Performance Analyzer (NEW PRACTICAL 1)
+             =================================================================== -->
+        <section id="slide-26" class="slide" data-slide-num="26">
+          <div class="slide-header">
+            <div class="slide-title-wrap">
+              <span class="slide-category">Section 7: Practical — Smart Student Analyzer</span>
+              <h2 class="slide-title">Capstone: Student Performance Analyzer</h2>
+              <p class="slide-subtitle">A complete hands-on backend data processing project combining all Day 1 topics</p>
+            </div>
+            <span class="slide-num-pill">26 / 37</span>
+          </div>
+
+          <div class="slide-body">
+            <div class="card card-primary-soft">
+              <div class="card-title blue" style="font-size:1.15rem;">
+                📊 The Practical Problem: Automating Classroom Performance Reports
+              </div>
+              <p class="card-desc">
+                A teacher has an array of student examination records. Instead of manually inspecting scores, we will write a Node.js program that reads configuration from <code class="inline-code">.env</code>, extracts names, filters passing students, calculates the class average, identifies the top scorer, and prints an analytical summary report!
+              </p>
+            </div>
+
+            <!-- Workflow Pipeline Diagram -->
+            <div class="diagram-container">
+              <div style="font-weight:700; font-size:0.88rem; color:var(--primary-dark); margin-bottom:0.2rem;">
+                Student Performance Analyzer Execution Pipeline
+              </div>
+              <div class="flow-row">
+                <div class="flow-node">
+                  <div class="flow-node-title">.env Config</div>
+                  <div class="flow-node-sub">PASS_MARK &amp; CLASS</div>
+                </div>
+                <div class="flow-arrow">➔</div>
+                <div class="flow-node node">
+                  <div class="flow-node-title">Student Records</div>
+                  <div class="flow-node-sub">Array of Objects</div>
+                </div>
+                <div class="flow-arrow">➔</div>
+                <div class="flow-node v8">
+                  <div class="flow-node-title">map() &amp; filter()</div>
+                  <div class="flow-node-sub">Names &amp; Pass List</div>
+                </div>
+                <div class="flow-arrow">➔</div>
+                <div class="flow-node libuv">
+                  <div class="flow-node-title">reduce() Aggregation</div>
+                  <div class="flow-node-sub">Sum, Avg, Top Scorer</div>
+                </div>
+                <div class="flow-arrow">➔</div>
+                <div class="flow-node db">
+                  <div class="flow-node-title">Terminal Report</div>
+                  <div class="flow-node-sub">Formatted Summary</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="grid-2">
+              <div class="card">
+                <div class="card-title">What the Program Accomplishes</div>
+                <ul class="feature-list checkmarks">
+                  <li>Loads <code class="inline-code">PASS_MARK</code> and <code class="inline-code">CLASS_NAME</code> dynamically from <code class="inline-code">.env</code>.</li>
+                  <li>Extracts all student names using <code class="inline-code">map()</code>.</li>
+                  <li>Filters students meeting the passing criteria using <code class="inline-code">filter()</code>.</li>
+                  <li>Calculates class total and average marks using <code class="inline-code">reduce()</code>.</li>
+                  <li>Finds the highest-scoring student using an accumulator in <code class="inline-code">reduce()</code>.</li>
+                  <li>Calculates and displays the exact class pass rate percentage.</li>
+                </ul>
+              </div>
+
+              <div class="card card-blue">
+                <div class="card-title blue">Why This Is Realistic Backend Logic</div>
+                <p class="card-desc">
+                  In production backend engineering, servers constantly receive JSON collections from databases or API webhooks. Mastering <code class="inline-code">map</code>, <code class="inline-code">filter</code>, and <code class="inline-code">reduce</code> to aggregate statistics is the fundamental building block of all dashboard and reporting APIs!
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ===================================================================
+             SLIDE 27: Project Setup (NEW PRACTICAL 2)
+             =================================================================== -->
+        <section id="slide-27" class="slide" data-slide-num="27">
+          <div class="slide-header">
+            <div class="slide-title-wrap">
+              <span class="slide-category">Section 7: Practical — Smart Student Analyzer</span>
+              <h2 class="slide-title">Project Setup &amp; Configuration</h2>
+              <p class="slide-subtitle">Initializing the student-analyzer project directory and configuring package.json</p>
+            </div>
+            <span class="slide-num-pill">27 / 37</span>
+          </div>
+
+          <div class="slide-body">
+            <div class="grid-2">
+              <div style="display:flex; flex-direction:column; gap:1rem;">
+                <div class="card card-blue">
+                  <div class="card-title blue">Step 1: Terminal Setup Commands</div>
+                  <div class="terminal-output" style="border-radius:6px;">
+                    <div class="terminal-text"><span class="tok-cmt"># 1. Create a dedicated project folder</span>
+<span class="tok-cmd">$ mkdir student-analyzer</span>
+
+<span class="tok-cmt"># 2. Move into the directory</span>
+<span class="tok-cmd">$ cd student-analyzer</span>
+
+<span class="tok-cmt"># 3. Initialize default package.json</span>
+<span class="tok-cmd">$ npm init -y</span>
+
+<span class="tok-cmt"># 4. Install dotenv for environment variables</span>
+<span class="tok-cmd">$ npm install dotenv</span></div>
+                  </div>
+                </div>
+
+                <div class="card">
+                  <div class="card-title">Project Directory Structure</div>
+                  <div class="terminal-output" style="background:#0b1329; border-radius:6px; color:#e2e8f0;">
+                    <pre style="margin:0; font-family:var(--font-mono); font-size:0.88rem;">student-analyzer/
+├── node_modules/     <span class="tok-cmt">← Downloaded packages (auto-generated)</span>
+├── .env              <span class="tok-cmt">← Environment configuration</span>
+├── .gitignore        <span class="tok-cmt">← Git exclusions</span>
+├── app.js            <span class="tok-cmt">← Main calculation &amp; report script</span>
+├── package.json      <span class="tok-cmt">← Project manifest</span>
+└── package-lock.json <span class="tok-cmt">← Exact dependency versions</span></pre>
+                  </div>
+                </div>
+              </div>
+
+              <!-- package.json -->
+              <div class="code-container">
+                <div class="code-header">
+                  <div class="code-file-badge"><span>package.json</span></div>
+                  <button class="copy-btn"><span>Copy</span></button>
+                </div>
+                <pre class="code-block">{
+  <span class="tok-prop">"name"</span>: <span class="tok-str">"student-analyzer"</span>,
+  <span class="tok-prop">"version"</span>: <span class="tok-str">"1.0.0"</span>,
+  <span class="tok-prop">"type"</span>: <span class="tok-str">"module"</span>,
+  <span class="tok-prop">"scripts"</span>: {
+    <span class="tok-prop">"start"</span>: <span class="tok-str">"node app.js"</span>,
+    <span class="tok-prop">"dev"</span>: <span class="tok-str">"node --watch app.js"</span>
+  },
+  <span class="tok-prop">"dependencies"</span>: {
+    <span class="tok-prop">"dotenv"</span>: <span class="tok-str">"^16.4.5"</span>
+  }
+}</pre>
+                <div class="callout tip" style="margin:0.75rem;">
+                  <span class="callout-icon">💡</span>
+                  <div>
+                    <strong>Configuration Tip:</strong> Merge <code class="inline-code">"type": "module"</code> and the <code class="inline-code">scripts</code> section into the npm-generated file rather than replacing unrelated metadata.
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ===================================================================
+             SLIDE 28: Environment Configuration (NEW PRACTICAL 3)
+             =================================================================== -->
+        <section id="slide-28" class="slide" data-slide-num="28">
+          <div class="slide-header">
+            <div class="slide-title-wrap">
+              <span class="slide-category">Section 7: Practical — Smart Student Analyzer</span>
+              <h2 class="slide-title">Environment Configuration (.env)</h2>
+              <p class="slide-subtitle">Isolating application settings from source code and configuring .gitignore</p>
+            </div>
+            <span class="slide-num-pill">28 / 37</span>
+          </div>
+
+          <div class="slide-body">
+            <div class="grid-2">
+              <div style="display:flex; flex-direction:column; gap:1rem;">
+                <div class="code-container" style="height:auto;">
+                  <div class="code-header">
+                    <div class="code-file-badge"><span>.env</span></div>
+                    <button class="copy-btn"><span>Copy</span></button>
+                  </div>
+                  <pre class="code-block" style="padding:1rem;"><span class="tok-prop">PASS_MARK</span>=<span class="tok-num">50</span>
+<span class="tok-prop">CLASS_NAME</span>=<span class="tok-str">MERN Batch</span></pre>
+                </div>
+
+                <div class="card card-blue">
+                  <div class="card-title blue">Why Use These Variables?</div>
+                  <ul class="feature-list">
+                    <li><strong>PASS_MARK:</strong> Controls the passing threshold. If the passing score changes from 50 to 60, we change the <code class="inline-code">.env</code> file—not the JavaScript code!</li>
+                    <li><strong>CLASS_NAME:</strong> Names the class dynamically for the generated terminal report.</li>
+                  </ul>
+                </div>
+              </div>
+
+              <div style="display:flex; flex-direction:column; gap:1rem;">
+                <div class="code-container" style="height:auto;">
+                  <div class="code-header">
+                    <div class="code-file-badge"><span>.gitignore</span></div>
+                    <button class="copy-btn"><span>Copy</span></button>
+                  </div>
+                  <pre class="code-block" style="padding:1rem;">node_modules/
+.env</pre>
+                </div>
+
+                <div class="callout danger">
+                  <span class="callout-icon">🔒</span>
+                  <div>
+                    <strong>Security Rule:</strong> Always exclude <code class="inline-code">.env</code> from version control! In real-world projects, <code class="inline-code">.env</code> holds database passwords, JWT secrets, and AI API keys. Committing secrets to GitHub leads to immediate security breaches.
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ===================================================================
+             SLIDE 29: Student Data Structure (NEW PRACTICAL 4)
+             =================================================================== -->
+        <section id="slide-29" class="slide" data-slide-num="29">
+          <div class="slide-header">
+            <div class="slide-title-wrap">
+              <span class="slide-category">Section 7: Practical — Smart Student Analyzer</span>
+              <h2 class="slide-title">The Student Dataset</h2>
+              <p class="slide-subtitle">Modeling realistic classroom records using arrays of JavaScript objects</p>
+            </div>
+            <span class="slide-num-pill">29 / 37</span>
+          </div>
+
+          <div class="slide-body">
+            <div class="grid-2-1">
+              <div class="code-container">
+                <div class="code-header">
+                  <div class="code-file-badge"><span>data-model.js</span></div>
+                  <button class="copy-btn"><span>Copy</span></button>
+                </div>
+                <pre class="code-block"><span class="tok-kw">const</span> <span class="tok-var">students</span> = [
+  { <span class="tok-prop">name</span>: <span class="tok-str">"Anu"</span>, <span class="tok-prop">marks</span>: <span class="tok-num">85</span> },
+  { <span class="tok-prop">name</span>: <span class="tok-str">"Rahul"</span>, <span class="tok-prop">marks</span>: <span class="tok-num">42</span> },
+  { <span class="tok-prop">name</span>: <span class="tok-str">"Meera"</span>, <span class="tok-prop">marks</span>: <span class="tok-num">92</span> },
+  { <span class="tok-prop">name</span>: <span class="tok-str">"Arjun"</span>, <span class="tok-prop">marks</span>: <span class="tok-num">65</span> },
+  { <span class="tok-prop">name</span>: <span class="tok-str">"Diya"</span>, <span class="tok-prop">marks</span>: <span class="tok-num">35</span> },
+];</pre>
+                <div class="terminal-output">
+                  <div class="terminal-header">Dataset Overview</div>
+                  <div class="terminal-text" style="color:#a5f3fc;">Total Students: 5
+Scores: 85 (Anu), 42 (Rahul), 92 (Meera), 65 (Arjun), 35 (Diya)</div>
+                </div>
+              </div>
+
+              <div style="display:flex; flex-direction:column; gap:0.9rem;">
+                <div class="card card-blue">
+                  <div class="card-title blue">Data Structure Principles</div>
+                  <ul class="feature-list checkmarks">
+                    <li><strong>Object per Record:</strong> Each student is an entity object with descriptive key-value properties.</li>
+                    <li><strong>Array Collection:</strong> Stored in an array for easy iteration with functional methods.</li>
+                    <li><strong>API Resemblance:</strong> This structure is identical to what a REST API or MongoDB query returns when querying student documents!</li>
+                  </ul>
+                </div>
+
+                <div class="callout tip">
+                  <span class="callout-icon">💡</span>
+                  <div>
+                    Notice that we do not need a complex database to practice real backend logic. Pure JavaScript arrays give you the exact same computational experience.
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ===================================================================
+             SLIDE 30: Complete Program (NEW PRACTICAL 5)
+             =================================================================== -->
+        <section id="slide-30" class="slide" data-slide-num="30">
+          <div class="slide-header">
+            <div class="slide-title-wrap">
+              <span class="slide-category">Section 7: Practical — Smart Student Analyzer</span>
+              <h2 class="slide-title">Complete Program (app.js)</h2>
+              <p class="slide-subtitle">The complete backend script integrating dotenv, validation, map, filter, and reduce</p>
+            </div>
+            <span class="slide-num-pill">30 / 37</span>
+          </div>
+
+          <div class="slide-body">
+            <div class="grid-2-1">
+              <!-- Code Box -->
+              <div class="code-container" style="max-height:510px;">
+                <div class="code-header">
+                  <div class="code-file-badge">
+                    <span class="file-dot"></span>
+                    <span>app.js</span>
+                  </div>
+                  <button class="copy-btn" title="Copy complete script">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                      <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                    </svg>
+                    <span>Copy Full Code</span>
+                  </button>
+                </div>
+                <pre class="code-block" style="font-size:0.79rem; line-height:1.45;"><span class="tok-kw">import</span> <span class="tok-str">"dotenv/config"</span>;
+
+<span class="tok-kw">const</span> <span class="tok-var">passMark</span> = <span class="tok-fn">Number</span>(<span class="tok-var">process</span>.<span class="tok-prop">env</span>.<span class="tok-prop">PASS_MARK</span>);
+<span class="tok-kw">const</span> <span class="tok-var">className</span> = <span class="tok-var">process</span>.<span class="tok-prop">env</span>.<span class="tok-prop">CLASS_NAME</span> || <span class="tok-str">"Unnamed Class"</span>;
+
+<span class="tok-kw">const</span> <span class="tok-var">students</span> = [
+  { <span class="tok-prop">name</span>: <span class="tok-str">"Anu"</span>, <span class="tok-prop">marks</span>: <span class="tok-num">85</span> },
+  { <span class="tok-prop">name</span>: <span class="tok-str">"Rahul"</span>, <span class="tok-prop">marks</span>: <span class="tok-num">42</span> },
+  { <span class="tok-prop">name</span>: <span class="tok-str">"Meera"</span>, <span class="tok-prop">marks</span>: <span class="tok-num">92</span> },
+  { <span class="tok-prop">name</span>: <span class="tok-str">"Arjun"</span>, <span class="tok-prop">marks</span>: <span class="tok-num">65</span> },
+  { <span class="tok-prop">name</span>: <span class="tok-str">"Diya"</span>, <span class="tok-prop">marks</span>: <span class="tok-num">35</span> },
+];
+
+<span class="tok-kw">if</span> (!<span class="tok-fn">Number</span>.<span class="tok-fn">isFinite</span>(<span class="tok-var">passMark</span>)) {
+  <span class="tok-kw">throw new</span> <span class="tok-fn">Error</span>(<span class="tok-str">"PASS_MARK must be a valid number in .env"</span>);
+}
+
+<span class="tok-kw">const</span> <span class="tok-var">studentNames</span> = <span class="tok-var">students</span>.<span class="tok-fn">map</span>((<span class="tok-var">student</span>) =&gt; <span class="tok-var">student</span>.<span class="tok-prop">name</span>);
+
+<span class="tok-kw">const</span> <span class="tok-var">passedStudents</span> = <span class="tok-var">students</span>.<span class="tok-fn">filter</span>(
+  (<span class="tok-var">student</span>) =&gt; <span class="tok-var">student</span>.<span class="tok-prop">marks</span> &gt;= <span class="tok-var">passMark</span>
+);
+
+<span class="tok-kw">const</span> <span class="tok-var">totalMarks</span> = <span class="tok-var">students</span>.<span class="tok-fn">reduce</span>(
+  (<span class="tok-var">total</span>, <span class="tok-var">student</span>) =&gt; <span class="tok-var">total</span> + <span class="tok-var">student</span>.<span class="tok-prop">marks</span>,
+  <span class="tok-num">0</span>
+);
+
+<span class="tok-kw">const</span> <span class="tok-var">averageMarks</span> = <span class="tok-var">totalMarks</span> / <span class="tok-var">students</span>.<span class="tok-prop">length</span>;
+
+<span class="tok-kw">const</span> <span class="tok-var">topStudent</span> = <span class="tok-var">students</span>.<span class="tok-fn">reduce</span>((<span class="tok-var">top</span>, <span class="tok-var">student</span>) =&gt; {
+  <span class="tok-kw">return</span> <span class="tok-var">student</span>.<span class="tok-prop">marks</span> &gt; <span class="tok-var">top</span>.<span class="tok-prop">marks</span> ? <span class="tok-var">student</span> : <span class="tok-var">top</span>;
+});
+
+<span class="tok-fn">console</span>.<span class="tok-fn">log</span>(<span class="tok-str">`Class: <span class="tok-var">${className}</span>`</span>);
+<span class="tok-fn">console</span>.<span class="tok-fn">log</span>(<span class="tok-str">"All Students:"</span>, <span class="tok-var">studentNames</span>);
+
+<span class="tok-fn">console</span>.<span class="tok-fn">log</span>(
+  <span class="tok-str">"Passed Students:"</span>,
+  <span class="tok-var">passedStudents</span>.<span class="tok-fn">map</span>((<span class="tok-var">student</span>) =&gt; <span class="tok-var">student</span>.<span class="tok-prop">name</span>)
+);
+
+<span class="tok-fn">console</span>.<span class="tok-fn">log</span>(<span class="tok-str">"Total Marks:"</span>, <span class="tok-var">totalMarks</span>);
+<span class="tok-fn">console</span>.<span class="tok-fn">log</span>(<span class="tok-str">"Average Marks:"</span>, <span class="tok-var">averageMarks</span>.<span class="tok-fn">toFixed</span>(<span class="tok-num">2</span>));
+
+<span class="tok-fn">console</span>.<span class="tok-fn">log</span>(
+  <span class="tok-str">`Top Performer: <span class="tok-var">${topStudent.name}</span> (<span class="tok-var">${topStudent.marks}</span> marks)`</span>
+);
+
+<span class="tok-fn">console</span>.<span class="tok-fn">log</span>(
+  <span class="tok-str">`Pass Rate: <span class="tok-var">${((passedStudents.length / students.length) * 100).toFixed(1)}</span>%`</span>
+);</pre>
+              </div>
+
+              <!-- 10-Step Code Breakdown -->
+              <div style="display:flex; flex-direction:column; gap:0.5rem; overflow-y:auto; max-height:510px; padding-right:0.3rem;">
+                <div class="card card-blue" style="padding:0.7rem;">
+                  <div style="font-weight:700; font-size:0.86rem; color:var(--primary-dark);">1 &amp; 2. dotenv &amp; Config</div>
+                  <div style="font-size:0.8rem; color:var(--text-muted);">Loads variables; explicitly parses <code class="inline-code">passMark</code> via <code class="inline-code">Number()</code> with fallback for class name.</div>
+                </div>
+
+                <div class="card card-blue" style="padding:0.7rem;">
+                  <div style="font-weight:700; font-size:0.86rem; color:var(--primary-dark);">3. Validation Check</div>
+                  <div style="font-size:0.8rem; color:var(--text-muted);"><code class="inline-code">Number.isFinite()</code> ensures <code class="inline-code">PASS_MARK</code> was configured properly in <code class="inline-code">.env</code>.</div>
+                </div>
+
+                <div class="card card-blue" style="padding:0.7rem;">
+                  <div style="font-weight:700; font-size:0.86rem; color:var(--primary-dark);">4. map() for Names</div>
+                  <div style="font-size:0.8rem; color:var(--text-muted);">Extracts an array of student names: <code class="inline-code">['Anu', 'Rahul', ...]</code>.</div>
+                </div>
+
+                <div class="card card-blue" style="padding:0.7rem;">
+                  <div style="font-weight:700; font-size:0.86rem; color:var(--primary-dark);">5. filter() for Pass List</div>
+                  <div style="font-size:0.8rem; color:var(--text-muted);">Retains students whose <code class="inline-code">marks &gt;= passMark</code>.</div>
+                </div>
+
+                <div class="card card-blue" style="padding:0.7rem;">
+                  <div style="font-weight:700; font-size:0.86rem; color:var(--primary-dark);">6 &amp; 7. reduce() &amp; Average</div>
+                  <div style="font-size:0.8rem; color:var(--text-muted);">Sums all student marks starting from 0, then divides by count.</div>
+                </div>
+
+                <div class="card card-blue" style="padding:0.7rem;">
+                  <div style="font-weight:700; font-size:0.86rem; color:var(--primary-dark);">8. Top Student Selection</div>
+                  <div style="font-size:0.8rem; color:var(--text-muted);"><code class="inline-code">reduce()</code> compares each student's score against current highest.</div>
+                </div>
+
+                <div class="card card-blue" style="padding:0.7rem;">
+                  <div style="font-weight:700; font-size:0.86rem; color:var(--primary-dark);">9 &amp; 10. Pass Rate &amp; Output</div>
+                  <div style="font-size:0.8rem; color:var(--text-muted);">Computes percentage ratio and formats via <code class="inline-code">toFixed()</code>.</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ===================================================================
+             SLIDE 31: Expected Output & Analysis (NEW PRACTICAL 6)
+             =================================================================== -->
+        <section id="slide-31" class="slide" data-slide-num="31">
+          <div class="slide-header">
+            <div class="slide-title-wrap">
+              <span class="slide-category">Section 7: Practical — Smart Student Analyzer</span>
+              <h2 class="slide-title">Expected Output &amp; Verification</h2>
+              <p class="slide-subtitle">Verifying mathematical calculations and testing dynamic environment changes</p>
+            </div>
+            <span class="slide-num-pill">31 / 37</span>
+          </div>
+
+          <div class="slide-body">
+            <div class="grid-2">
+              <div style="display:flex; flex-direction:column; gap:0.9rem;">
+                <div class="card">
+                  <div class="card-title">Console Output Analysis</div>
+                  <div class="terminal-output" style="border-radius:6px;">
+                    <div class="terminal-text" style="font-size:0.86rem; line-height:1.55;">Class: MERN Batch
+All Students: [ 'Anu', 'Rahul', 'Meera', 'Arjun', 'Diya' ]
+Passed Students: [ 'Anu', 'Meera', 'Arjun' ]
+Total Marks: 319
+Average Marks: 63.80
+Top Performer: Meera (92 marks)
+Pass Rate: 60.0%</div>
+                  </div>
+                </div>
+
+                <div class="metric-grid">
+                  <div class="metric-card">
+                    <div class="metric-card-label">Total Marks</div>
+                    <div class="metric-card-val">319</div>
+                  </div>
+                  <div class="metric-card">
+                    <div class="metric-card-label">Class Average</div>
+                    <div class="metric-card-val">63.80</div>
+                  </div>
+                  <div class="metric-card">
+                    <div class="metric-card-label">Pass Rate</div>
+                    <div class="metric-card-val">60.0%</div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Interactive Simulator Sandbox -->
+              <div class="card" style="border:2px solid var(--primary-border); background:#ffffff;">
+                <div class="card-title blue" style="justify-content:space-between;">
+                  <span>Dynamic Pass Mark Simulator</span>
+                  <span style="font-size:0.75rem; font-weight:600; background:var(--primary-light); padding:0.15rem 0.5rem; border-radius:12px;">Live .env Test</span>
+                </div>
+                <p style="font-size:0.85rem; color:var(--text-muted);">
+                  Simulate changing <code class="inline-code">PASS_MARK</code> in your <code class="inline-code">.env</code> file:
+                </p>
+
+                <div style="display:flex; gap:0.5rem; margin:0.4rem 0;">
+                  <button class="nav-btn pass-preset-btn" data-pass="40" style="font-size:0.78rem;">Pass: 40</button>
+                  <button class="nav-btn pass-preset-btn" data-pass="50" style="font-size:0.78rem; font-weight:700; color:var(--primary-dark);">Pass: 50 (Default)</button>
+                  <button class="nav-btn pass-preset-btn" data-pass="65" style="font-size:0.78rem;">Pass: 65</button>
+                  <button class="nav-btn pass-preset-btn" data-pass="90" style="font-size:0.78rem;">Pass: 90</button>
+                </div>
+
+                <div style="display:flex; align-items:center; gap:0.6rem; margin-top:0.4rem;">
+                  <label style="font-size:0.82rem; font-weight:700;">Custom Pass Mark:</label>
+                  <input id="analyzer-pass-input" type="number" value="50" min="0" max="100" style="width:70px; padding:0.35rem; border:1px solid #cbd5e1; border-radius:5px; font-family:var(--font-mono);">
+                  <button id="analyzer-apply-btn" class="nav-btn primary" style="font-size:0.8rem; padding:0.35rem 0.75rem;">Recalculate</button>
+                </div>
+
+                <div class="math-steps-list" style="margin-top:0.7rem;">
+                  <div class="math-step-item">
+                    <span class="math-step-label">Passing Students:</span>
+                    <span id="analyzer-passed-list" class="math-step-val">Anu, Meera, Arjun</span>
+                  </div>
+                  <div class="math-step-item" style="background:#ecfdf5; border-color:#a7f3d0;">
+                    <span class="math-step-label" style="font-weight:700; color:#065f46;">Calculated Pass Rate:</span>
+                    <span id="analyzer-pass-rate" class="math-step-val" style="background:#10b981; color:#ffffff;">60.0% (3/5)</span>
+                  </div>
+                </div>
+
+                <div style="font-size:0.82rem; color:var(--text-muted); margin-top:0.5rem;">
+                  💡 <strong>Teaching Insight:</strong> Notice how changing only <code class="inline-code">PASS_MARK</code> in <code class="inline-code">.env</code> immediately reconfigures who passes and updates the overall pass rate!
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ===================================================================
+             SLIDE 32: Run the Program (NEW PRACTICAL 7)
+             =================================================================== -->
+        <section id="slide-32" class="slide" data-slide-num="32">
+          <div class="slide-header">
+            <div class="slide-title-wrap">
+              <span class="slide-category">Section 7: Practical — Smart Student Analyzer</span>
+              <h2 class="slide-title">Running the Program in Development</h2>
+              <p class="slide-subtitle">Executing scripts and leveraging watch mode for live application reloads</p>
+            </div>
+            <span class="slide-num-pill">32 / 37</span>
+          </div>
+
+          <div class="slide-body">
+            <div class="grid-2">
+              <div style="display:flex; flex-direction:column; gap:1rem;">
+                <div class="card card-blue">
+                  <div class="card-title blue">1. Standard Start Execution</div>
+                  <p class="card-desc">Run once through the npm script defined in <code class="inline-code">package.json</code>:</p>
+                  <div class="terminal-output" style="border-radius:6px; margin-top:0.3rem;">
+                    <div class="terminal-text"><span class="tok-cmd">$ npm start</span>
+<span class="tok-cmt"># Executes: node app.js</span></div>
+                  </div>
+                </div>
+
+                <div class="card card-blue">
+                  <div class="card-title blue">2. Development Watch Execution</div>
+                  <p class="card-desc">Run with automatic file monitoring:</p>
+                  <div class="terminal-output" style="border-radius:6px; margin-top:0.3rem;">
+                    <div class="terminal-text"><span class="tok-cmd">$ npm run dev</span>
+<span class="tok-cmt"># Executes: node --watch app.js</span></div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Live Reload Flow -->
+              <div style="display:flex; flex-direction:column; gap:1rem;">
+                <div class="card">
+                  <div class="card-title">Testing Live Reloads</div>
+                  <ol style="margin-left:1.2rem; font-size:0.88rem; color:var(--text-main); display:flex; flex-direction:column; gap:0.4rem;">
+                    <li>Keep <code class="inline-code">npm run dev</code> active in your terminal.</li>
+                    <li>Open <code class="inline-code">app.js</code> in your code editor.</li>
+                    <li>Update Rahul's score from <code class="inline-code">42</code> to <code class="inline-code">75</code>.</li>
+                    <li>Save the file (<kbd class="kbd-badge">Ctrl+S</kbd> / <kbd class="kbd-badge">Cmd+S</kbd>).</li>
+                    <li>Observe Node instantly restarting and reprinting:
+                      <div style="font-family:var(--font-mono); font-size:0.82rem; color:var(--primary-dark); margin-top:0.2rem;">
+                        Passed Students: [ 'Anu', 'Rahul', 'Meera', 'Arjun' ]<br>
+                        Pass Rate: 80.0%
+                      </div>
+                    </li>
+                  </ol>
+                </div>
+
+                <div class="callout tip">
+                  <span class="callout-icon">💡</span>
+                  <div>
+                    <strong>Classroom Workflow:</strong> Watch mode gives you the exact same fast feedback loop you enjoy in frontend Vite/Webpack development!
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ===================================================================
+             SLIDE 33: Student Practice Exercises (NEW PRACTICAL 8)
+             =================================================================== -->
+        <section id="slide-33" class="slide" data-slide-num="33">
+          <div class="slide-header">
+            <div class="slide-title-wrap">
+              <span class="slide-category">Section 7: Practical — Smart Student Analyzer</span>
+              <h2 class="slide-title">Student Practice Exercises</h2>
+              <p class="slide-subtitle">8 hands-on classroom modification challenges to reinforce backend data processing</p>
+            </div>
+            <span class="slide-num-pill">33 / 37</span>
+          </div>
+
+          <div class="slide-body">
+            <div class="grid-2">
+              <div class="card card-blue">
+                <div class="card-title blue">
+                  <span>📝</span> Hands-on Challenges
+                </div>
+                <ol style="margin-left:1.3rem; font-size:0.86rem; color:var(--text-main); display:flex; flex-direction:column; gap:0.45rem;">
+                  <li><strong>Add 2 More Students:</strong> Add <code class="inline-code">{ name: "Kavya", marks: 78 }</code> and <code class="inline-code">{ name: "Suresh", marks: 54 }</code>.</li>
+                  <li><strong>Change Pass Mark:</strong> Change <code class="inline-code">PASS_MARK=60</code> in <code class="inline-code">.env</code> and inspect the output.</li>
+                  <li><strong>Honor Roll Filter:</strong> Use <code class="inline-code">filter()</code> to display students who scored 80 or above.</li>
+                  <li><strong>Pass vs Fail Counts:</strong> Calculate and print total count of passed and failed students.</li>
+                  <li><strong>Lowest Scorer:</strong> Use <code class="inline-code">reduce()</code> to find the student with the lowest marks.</li>
+                  <li><strong>Failure Rate:</strong> Calculate and display the percentage of students who failed.</li>
+                  <li><strong>Add Letter Grade:</strong> Use <code class="inline-code">map()</code> to add a <code class="inline-code">grade</code> property (A for &gt;=90, B for &gt;=75, C for &gt;=50, F for &lt;50).</li>
+                  <li><strong>Conditional Message:</strong> Print a custom celebratory message if the class average is &gt;= 60.</li>
+                </ol>
+              </div>
+
+              <div style="display:flex; flex-direction:column; gap:0.9rem;">
+                <div class="card">
+                  <div class="card-title">💡 Helpful Hints</div>
+                  <ul class="feature-list" style="font-size:0.85rem; gap:0.45rem;">
+                    <li><strong>Finding lowest student:</strong> Similar to <code class="inline-code">topStudent</code>, invert the comparison: <code class="inline-code">student.marks &lt; lowest.marks ? student : lowest</code>.</li>
+                    <li><strong>Calculating fail count:</strong> <code class="inline-code">const failedCount = students.length - passedStudents.length;</code></li>
+                    <li><strong>Failure rate:</strong> <code class="inline-code">((failedCount / students.length) * 100).toFixed(1)</code>.</li>
+                    <li><strong>Adding grade with map:</strong> Return a new object spreading existing properties: <code class="inline-code">{ ...student, grade: student.marks &gt;= 90 ? 'A' : ... }</code>.</li>
+                  </ul>
+                </div>
+
+                <div class="callout tip">
+                  <span class="callout-icon">⭐</span>
+                  <div>
+                    <strong>Instructor Guidance:</strong> Allow students 10 minutes to try modifications 1 through 4 live in watch mode!
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ===================================================================
+             SLIDE 34: Introduction to AI & LLMs (NEW AI 1)
+             =================================================================== -->
+        <section id="slide-34" class="slide" data-slide-num="34">
+          <div class="slide-header">
+            <div class="slide-title-wrap">
+              <span class="slide-category">Section 8: Node.js for AI &amp; LLM Applications</span>
+              <h2 class="slide-title">What Is a Large Language Model (LLM)?</h2>
+              <p class="slide-subtitle">Understanding generative AI capabilities, prompt engineering, and output validation</p>
+            </div>
+            <span class="slide-num-pill">34 / 37</span>
+          </div>
+
+          <div class="slide-body">
+            <div class="grid-2">
+              <div style="display:flex; flex-direction:column; gap:0.9rem;">
+                <div class="card card-blue">
+                  <div class="card-title blue">LLM Definition &amp; Capabilities</div>
+                  <ul class="feature-list checkmarks">
+                    <li><strong>LLM Stands For:</strong> <em>Large Language Model</em>.</li>
+                    <li><strong>Training:</strong> Advanced neural networks trained on massive datasets to understand and generate human language.</li>
+                    <li><strong>Popular Examples:</strong> OpenAI GPT-4, Google Gemini, Anthropic Claude, Meta LLaMA.</li>
+                    <li><strong>Core Use Cases:</strong> Conversational chatbots, code generation, summarization, Q&amp;A assistants, information extraction, and translation.</li>
+                  </ul>
+                </div>
+
+                <div class="callout warning">
+                  <span class="callout-icon">⚠️</span>
+                  <div>
+                    <strong>Hallucination &amp; Accuracy:</strong> LLMs generate probability-based text. Responses can be inaccurate or fabricated ("hallucinated"). Backend software must validate and verify critical outputs!
+                  </div>
+                </div>
+              </div>
+
+              <div style="display:flex; flex-direction:column; gap:0.9rem;">
+                <!-- Simple AI Prompt Flow -->
+                <div class="diagram-container">
+                  <div style="font-weight:700; font-size:0.88rem; color:var(--primary-dark); margin-bottom:0.2rem;">
+                    Basic Generative AI Interaction Flow
+                  </div>
+                  <div class="flow-row">
+                    <div class="flow-node">
+                      <div class="flow-node-title">User Prompt</div>
+                      <div class="flow-node-sub">"Summarize this"</div>
+                    </div>
+                    <div class="flow-arrow">➔</div>
+                    <div class="flow-node node">
+                      <div class="flow-node-title">Application</div>
+                      <div class="flow-node-sub">Formats Request</div>
+                    </div>
+                    <div class="flow-arrow">➔</div>
+                    <div class="flow-node llm">
+                      <div class="flow-node-title">LLM Model</div>
+                      <div class="flow-node-sub">Generates Text</div>
+                    </div>
+                    <div class="flow-arrow">➔</div>
+                    <div class="flow-node react">
+                      <div class="flow-node-title">UI Display</div>
+                      <div class="flow-node-sub">Shows Answer</div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="card">
+                  <div class="card-title">Simple Interaction Example</div>
+                  <div style="font-size:0.86rem; line-height:1.5; color:var(--text-main);">
+                    <strong>User:</strong> <em>"Summarize this paragraph in 2 bullet points."</em><br>
+                    <strong>Node.js Backend:</strong> Formats payload, attaches API key, calls model.<br>
+                    <strong>LLM:</strong> Evaluates prompt tokens and returns summary.<br>
+                    <strong>Frontend:</strong> Renders formatted response on screen.
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ===================================================================
+             SLIDE 35: Why Do We Use Node.js for LLM Applications? (NEW AI 2)
+             =================================================================== -->
+        <section id="slide-35" class="slide" data-slide-num="35">
+          <div class="slide-header">
+            <div class="slide-title-wrap">
+              <span class="slide-category">Section 8: Node.js for AI &amp; LLM Applications</span>
+              <h2 class="slide-title">Why Node.js for LLM Applications?</h2>
+              <p class="slide-subtitle">Node.js as the secure API gateway and asynchronous orchestration layer for AI</p>
+            </div>
+            <span class="slide-num-pill">35 / 37</span>
+          </div>
+
+          <div class="slide-body">
+            <!-- Full AI Architecture Diagram -->
+            <div class="diagram-container">
+              <div style="font-weight:700; font-size:0.88rem; color:var(--primary-dark); margin-bottom:0.2rem;">
+                Production Architecture: Full-Stack Web App with LLM Integration
+              </div>
+              <div class="flow-row">
+                <div class="flow-node react">
+                  <div class="flow-node-title">React Frontend</div>
+                  <div class="flow-node-sub">User Enters Prompt</div>
+                </div>
+                <div class="flow-arrow">
+                  <span>1. POST /api/chat</span>
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                    <polyline points="12 5 19 12 12 19"></polyline>
+                  </svg>
+                </div>
+                <div class="flow-node node">
+                  <div class="flow-node-title">Node.js Backend</div>
+                  <div class="flow-node-sub">Orchestrator &amp; .env Keys</div>
+                </div>
+                <div class="flow-arrow">
+                  <span>2. HTTPS Request</span>
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                    <polyline points="12 5 19 12 12 19"></polyline>
+                  </svg>
+                </div>
+                <div class="flow-node llm">
+                  <div class="flow-node-title">LLM Provider API</div>
+                  <div class="flow-node-sub">Gemini / OpenAI / Anthropic</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="grid-3">
+              <div class="card card-blue">
+                <div class="card-title blue">1. Secret Protection</div>
+                <p class="card-desc">AI API keys must never be exposed in frontend React code. Node.js holds credentials safely on the server inside <code class="inline-code">.env</code>.</p>
+              </div>
+
+              <div class="card card-blue">
+                <div class="card-title blue">2. Non-Blocking Waiting</div>
+                <p class="card-desc">LLMs take several seconds to stream responses. Node's async I/O lets hundreds of users query AI simultaneously without freezing the server.</p>
+              </div>
+
+              <div class="card card-blue">
+                <div class="card-title blue">3. Official npm SDKs</div>
+                <p class="card-desc">Every AI lab (Google, OpenAI, LangChain) provides official, first-class JavaScript/TypeScript SDKs on npm for rapid integration.</p>
+              </div>
+            </div>
+
+            <div class="callout tip">
+              <span class="callout-icon">💡</span>
+              <div>
+                <strong>Key Takeaway:</strong> Node.js is the <strong>application runtime and integration layer</strong>. It does not represent the AI model itself; rather, it coordinates requests between users, databases, and AI models!
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ===================================================================
+             SLIDE 36: Communicating with an LLM in Node.js (NEW AI 3)
+             =================================================================== -->
+        <section id="slide-36" class="slide" data-slide-num="36">
+          <div class="slide-header">
+            <div class="slide-title-wrap">
+              <span class="slide-category">Section 8: Node.js for AI &amp; LLM Applications</span>
+              <h2 class="slide-title">Communicating with an LLM in Node.js</h2>
+              <p class="slide-subtitle">Understanding the 6-step backend communication lifecycle and security guidelines</p>
+            </div>
+            <span class="slide-num-pill">36 / 37</span>
+          </div>
+
+          <div class="slide-body">
+            <div class="grid-2">
+              <div style="display:flex; flex-direction:column; gap:0.9rem;">
+                <div class="card card-blue">
+                  <div class="card-title blue">The 6-Step LLM Backend Lifecycle</div>
+                  <ol style="margin-left:1.2rem; font-size:0.86rem; color:var(--text-main); display:flex; flex-direction:column; gap:0.35rem;">
+                    <li><strong>Prompt Input:</strong> User enters a question or command in the web frontend.</li>
+                    <li><strong>Send to Backend:</strong> The browser sends the prompt via HTTP POST to Node.js.</li>
+                    <li><strong>Validate on Server:</strong> Node.js sanitizes input and checks rate limits.</li>
+                    <li><strong>Request to LLM:</strong> Node.js attaches the secret API key and calls the LLM API.</li>
+                    <li><strong>Model Generates:</strong> The LLM computes the response and streams tokens back.</li>
+                    <li><strong>Return to Client:</strong> Node.js handles the response and sends clean JSON to React.</li>
+                  </ol>
+                </div>
+
+                <div class="callout danger">
+                  <span class="callout-icon">🔒</span>
+                  <div>
+                    <strong>Core Security Best Practices:</strong>
+                    <ul style="margin-left:1.1rem; margin-top:0.25rem; font-size:0.82rem;">
+                      <li>Never expose private AI keys (e.g. <code class="inline-code">AI_API_KEY</code>) in client-side React code.</li>
+                      <li>Store keys strictly in server-side <code class="inline-code">.env</code>.</li>
+                      <li>Avoid logging confidential user passwords or sensitive documents in server logs.</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Conceptual Code Example -->
+              <div style="display:flex; flex-direction:column; gap:0.9rem;">
+                <div class="code-container">
+                  <div class="code-header">
+                    <div class="code-file-badge"><span>ai-orchestration-concept.js</span></div>
+                    <button class="copy-btn"><span>Copy</span></button>
+                  </div>
+                  <pre class="code-block"><span class="tok-cmt">// CONCEPTUAL EXAMPLE (Not a live SDK integration)</span>
+<span class="tok-cmt">// In real applications, you install an official SDK (e.g. @google/genai)</span>
+
+<span class="tok-kw">const</span> <span class="tok-var">prompt</span> = <span class="tok-str">"Explain Node.js in simple words"</span>;
+
+<span class="tok-cmt">// A Node.js backend receives this prompt from a React client</span>
+<span class="tok-fn">console</span>.<span class="tok-fn">log</span>(<span class="tok-str">"Prompt received:"</span>, <span class="tok-var">prompt</span>);
+
+<span class="tok-cmt">// The backend would then forward this to an LLM provider:</span>
+<span class="tok-cmt">// const response = await aiClient.generateContent(prompt);</span>
+<span class="tok-cmt">// res.json({ answer: response.text });</span></pre>
+                  <div class="terminal-output">
+                    <div class="terminal-header">Terminal Output</div>
+                    <div class="terminal-text" style="color:#f8fafc;"><span class="tok-cmd">$ node ai-orchestration-concept.js</span></div>
+                    <div class="terminal-text" style="margin-top:0.25rem;">Prompt received: Explain Node.js in simple words</div>
+                  </div>
+                </div>
+
+                <div class="card">
+                  <div style="font-size:0.84rem; color:var(--text-muted);">
+                    📌 <strong>Note for Day 1:</strong> Today, we focus on mastering Node.js runtime fundamentals, modules, and data handling. Once you master Node.js, integrating real AI SDKs is as simple as installing a package and calling a function!
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ===================================================================
+             SLIDE 37: Final Revision and Oral Questions (FINAL REVISION)
+             =================================================================== -->
+        <section id="slide-37" class="slide" data-slide-num="37">
+          <div class="slide-header">
+            <div class="slide-title-wrap">
+              <span class="slide-category">Section 9: Final Revision &amp; Oral Questions</span>
+              <h2 class="slide-title">Day 1 Revision &amp; Key Takeaways</h2>
+              <p class="slide-subtitle">Summary of core architecture, modern JavaScript, practical capstone, and oral check questions</p>
+            </div>
+            <span class="slide-num-pill">37 / 37</span>
+          </div>
+
+          <div class="slide-body">
+            <div class="card card-primary-soft" style="padding:0.9rem 1.2rem;">
+              <div class="card-title blue" style="font-size:1.05rem;">
+                🎓 Day 1 Comprehensive Summary: The 12 Pillars
+              </div>
+              <div style="display:grid; grid-template-columns:repeat(4, 1fr); gap:0.5rem; font-size:0.83rem; margin-top:0.3rem;">
+                <div>• <strong>Node.js Runtime:</strong> V8 + libuv</div>
+                <div>• <strong>Event Loop:</strong> Non-blocking I/O</div>
+                <div>• <strong>npm Ecosystem:</strong> <code class="inline-code">package.json</code></div>
+                <div>• <strong>ES Modules:</strong> <code class="inline-code">import</code> / <code class="inline-code">export</code></div>
+                <div>• <strong>Modern JS:</strong> Arrow, Spread, Destruct</div>
+                <div>• <strong>Array Pipelines:</strong> map, filter, reduce</div>
+                <div>• <strong>Comparisons:</strong> Strict <code class="inline-code">===</code> &amp; Truthy</div>
+                <div>• <strong>Nullish Types:</strong> <code class="inline-code">null</code> vs <code class="inline-code">undefined</code></div>
+                <div>• <strong>Config Isolation:</strong> <code class="inline-code">dotenv</code> &amp; secrets</div>
+                <div>• <strong>Developer Speed:</strong> <code class="inline-code">node --watch</code></div>
+                <div>• <strong>Smart Analyzer:</strong> Data report logic</div>
+                <div>• <strong>AI Foundations:</strong> LLM integration layer</div>
+              </div>
+            </div>
+
+            <!-- 3 Oral Revision Questions -->
+            <div>
+              <div style="font-size:0.95rem; font-weight:800; color:var(--primary-dark); margin-bottom:0.5rem;">
+                🗣️ Classroom Oral Revision Questions
+              </div>
+              <div class="oral-q-grid">
+                <!-- Question 1 -->
+                <div class="oral-q-card">
+                  <span class="oral-q-badge">Question 1</span>
+                  <div class="oral-q-title">What is the difference between Node.js and JavaScript?</div>
+                  <div class="oral-q-answer">
+                    <strong>Answer:</strong> JavaScript is the programming language. Node.js is the runtime environment built on Google's V8 engine that allows JavaScript to execute outside the browser with direct access to filesystem, networking, and OS APIs.
+                  </div>
+                </div>
+
+                <!-- Question 2 -->
+                <div class="oral-q-card">
+                  <span class="oral-q-badge">Question 2</span>
+                  <div class="oral-q-title">What is the difference between map(), filter(), and reduce()?</div>
+                  <div class="oral-q-answer">
+                    <strong>Answer:</strong> <code class="inline-code">map()</code> transforms every element 1-to-1 into a new array; <code class="inline-code">filter()</code> selects elements matching a boolean condition; and <code class="inline-code">reduce()</code> accumulates array items into a single final value (such as a sum, average, or top object).
+                  </div>
+                </div>
+
+                <!-- Question 3 -->
+                <div class="oral-q-card">
+                  <span class="oral-q-badge">Question 3</span>
+                  <div class="oral-q-title">Why should an LLM API key be kept on the backend?</div>
+                  <div class="oral-q-answer">
+                    <strong>Answer:</strong> Frontend React code runs publicly in the user's browser, where anyone can open DevTools and steal private keys. Storing keys on the Node.js backend inside <code class="inline-code">.env</code> prevents unauthorized access, quota theft, and unexpected billing.
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+      </div>
+    </main>
+
+    <!-- Bottom Navigation Bar -->
+    <footer class="bottom-bar">
+      <div class="bottom-left">
+        <button id="prev-btn" class="control-btn btn-text" title="Previous Slide (Left Arrow)">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <polyline points="15 18 9 12 15 6"></polyline>
+          </svg>
+          <span>Prev</span>
+        </button>
+      </div>
+
+      <div class="nav-controls-center">
+        <span id="slide-counter" class="slide-counter">01 / 37</span>
+      </div>
+
+      <div class="bottom-right">
+        <button id="next-btn" class="control-btn btn-text primary" title="Next Slide (Right Arrow or Space)">
+          <span>Next</span>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <polyline points="9 18 15 12 9 6"></polyline>
+          </svg>
+        </button>
+      </div>
+    </footer>
+
+    <!-- Table of Contents Slide Drawer -->
+    <div id="toc-overlay" class="toc-overlay">
+      <aside class="toc-drawer">
+        <div class="toc-header">
+          <div class="toc-title">Table of Contents (37 Slides)</div>
+          <button id="toc-close" class="toc-close" title="Close Drawer (Esc)">&times;</button>
+        </div>
+        <div id="toc-list" class="toc-list">
+          <!-- Dynamically populated by script.js -->
+        </div>
+      </aside>
+    </div>
+
+    <!-- Keyboard Shortcuts Help Modal -->
+    <div id="help-modal-overlay" class="help-modal-overlay">
+      <div class="help-modal">
+        <div class="help-modal-header">
+          <div class="help-modal-title">⌨️ Keyboard Shortcuts</div>
+          <button id="help-modal-close" class="toc-close">&times;</button>
+        </div>
+        <div class="help-modal-body">
+          <div class="shortcut-row">
+            <span>Next Slide</span>
+            <div><span class="kbd-badge">→</span> or <span class="kbd-badge">Space</span> or <span class="kbd-badge">PgDn</span></div>
+          </div>
+          <div class="shortcut-row">
+            <span>Previous Slide</span>
+            <div><span class="kbd-badge">←</span> or <span class="kbd-badge">PgUp</span></div>
+          </div>
+          <div class="shortcut-row">
+            <span>First Slide (Title)</span>
+            <span class="kbd-badge">Home</span>
+          </div>
+          <div class="shortcut-row">
+            <span>Last Slide (Revision)</span>
+            <span class="kbd-badge">End</span>
+          </div>
+          <div class="shortcut-row">
+            <span>Toggle Fullscreen</span>
+            <span class="kbd-badge">F</span>
+          </div>
+          <div class="shortcut-row">
+            <span>Table of Contents</span>
+            <div><span class="kbd-badge">T</span> or <span class="kbd-badge">M</span></div>
+          </div>
+          <div class="shortcut-row">
+            <span>Close Modal / Drawer</span>
+            <span class="kbd-badge">Esc</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
