@@ -1,0 +1,1464 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Node.js Asynchronous Programming — Timers, Callbacks &amp; Callback Hell</title>
+  <meta name="description" content="Day 2 MERN Stack Development: Timer Functions (setTimeout, clearTimeout, setInterval, clearInterval), Callbacks, Error-First Patterns, and Callback Hell.">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Presentation App Shell -->
+  <div id="presentation-app">
+
+    <!-- Top Continuous Progress Bar -->
+    <div class="progress-container">
+      <div id="progress-bar" class="progress-bar"></div>
+    </div>
+
+    <!-- Top Navigation Header -->
+    <header class="top-nav">
+      <div class="brand-badge">
+        <div class="icon-box">
+          <!-- Node.js Hexagon Icon SVG -->
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <polygon points="12 2 2 8.5 2 15.5 12 22 22 15.5 22 8.5 12 2"></polygon>
+            <line x1="12" y1="22" x2="12" y2="15.5"></line>
+            <polyline points="22 8.5 12 15.5 2 8.5"></polyline>
+          </svg>
+        </div>
+        <span>MERN Node.js</span>
+        <span class="brand-tag mern-pill">Day 2</span>
+      </div>
+
+      <div class="deck-section-indicator">
+        <span id="section-indicator" class="section-pill">Section 1: Timer Functions in Node.js</span>
+      </div>
+
+      <div class="top-actions">
+        <button id="toc-btn" class="nav-btn" title="Open Table of Contents (Press 'T' or 'M')">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="3" y1="12" x2="21" y2="12"></line>
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <line x1="3" y1="18" x2="21" y2="18"></line>
+          </svg>
+          <span>Contents</span>
+        </button>
+
+        <button id="help-btn" class="nav-btn" title="Keyboard Shortcuts (Press '?')">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"></circle>
+            <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+            <line x1="12" y1="17" x2="12.01" y2="17"></line>
+          </svg>
+          <span>Shortcuts</span>
+        </button>
+
+        <button id="fullscreen-btn" class="nav-btn" title="Toggle Fullscreen (Press 'F')">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path>
+          </svg>
+          <span>Fullscreen</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Slide Viewport -->
+    <main class="slide-viewport">
+      <div class="slide-container">
+
+        <!-- ===================================================================
+             SLIDE 1: Title Slide
+             =================================================================== -->
+        <section id="slide-1" class="slide active" data-slide-num="1">
+          <div class="title-slide-content">
+            <div class="title-badge-row">
+              <span class="pill-badge">MERN Stack Curriculum</span>
+              <span class="pill-badge mern-badge">Day 2 — Node.js Asynchronous Foundations</span>
+            </div>
+
+            <h1 class="hero-main-title">
+              Node.js Asynchronous Programming: <br><span class="highlight">Timers, Callbacks &amp; Callback Hell</span>
+            </h1>
+
+            <p class="hero-subtitle">
+              Understanding Asynchronous Code Through Practical Examples
+            </p>
+
+            <div class="logos-container">
+              <div class="logo-card">
+                <svg viewBox="0 0 256 288" width="44" height="44">
+                  <path fill="#539E43" d="M128 0L24.7 59.6v119.2L128 238.4l103.3-59.6V59.6L128 0z"/>
+                  <path fill="#FFFFFF" d="M128 32.4l75.2 43.4v86.8L128 206l-75.2-43.4V75.8L128 32.4z"/>
+                  <path fill="#333333" d="M128 47.8L68.7 82.1v68.6L128 185l59.3-34.3V82.1L128 47.8z"/>
+                  <path fill="#539E43" d="M115.8 98.4h24.4v40.3h-24.4z"/>
+                </svg>
+                <div class="logo-text">
+                  <div class="logo-text-title">Node.js Runtime</div>
+                  <div class="logo-text-sub">Asynchronous Event Loop</div>
+                </div>
+              </div>
+
+              <div class="logo-card">
+                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#0284c7" stroke-width="2">
+                  <circle cx="12" cy="12" r="10"></circle>
+                  <polyline points="12 6 12 12 16 14"></polyline>
+                </svg>
+                <div class="logo-text">
+                  <div class="logo-text-title">Timer APIs</div>
+                  <div class="logo-text-sub">setTimeout &amp; setInterval</div>
+                </div>
+              </div>
+
+              <div class="logo-card">
+                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#8b5cf6" stroke-width="2">
+                  <polyline points="16 18 22 12 16 6"></polyline>
+                  <polyline points="8 6 2 12 8 18"></polyline>
+                </svg>
+                <div class="logo-text">
+                  <div class="logo-text-title">Callbacks</div>
+                  <div class="logo-text-sub">Higher-Order Functions</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="meta-footer">
+              <div class="meta-item">
+                <span>📚 <strong>Course:</strong> Full-Stack MERN Development</span>
+              </div>
+              <div class="meta-item">
+                <span>👨‍🏫 <strong>Instructor:</strong> Senior MERN / Node.js Instructor</span>
+              </div>
+              <div class="meta-item">
+                <span>⚡ <strong>Prerequisites:</strong> Day 1 JavaScript &amp; Node.js Basics</span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ===================================================================
+             SLIDE 2: Learning Objectives
+             =================================================================== -->
+        <section id="slide-2" class="slide" data-slide-num="2">
+          <div class="slide-header">
+            <div class="slide-title-wrap">
+              <span class="slide-category">Section 1: Timer Functions</span>
+              <h2 class="slide-title">Learning Objectives</h2>
+              <p class="slide-subtitle">By the end of this session, students should be able to master these core competencies:</p>
+            </div>
+            <span class="slide-num-pill">Slide 02 / 15</span>
+          </div>
+
+          <div class="slide-body">
+            <div class="objectives-grid">
+              <div class="objective-item">
+                <div class="objective-num">1</div>
+                <div class="objective-text">Understand the difference between synchronous and asynchronous execution.</div>
+              </div>
+              <div class="objective-item">
+                <div class="objective-num">2</div>
+                <div class="objective-text">Use <code>setTimeout()</code> to delay execution of code blocks.</div>
+              </div>
+              <div class="objective-item">
+                <div class="objective-num">3</div>
+                <div class="objective-text">Use <code>setInterval()</code> to repeat execution at regular intervals.</div>
+              </div>
+              <div class="objective-item">
+                <div class="objective-num">4</div>
+                <div class="objective-text">Stop pending timers using <code>clearTimeout()</code> and <code>clearInterval()</code>.</div>
+              </div>
+              <div class="objective-item">
+                <div class="objective-num">5</div>
+                <div class="objective-text">Understand what callbacks are and how to pass function references.</div>
+              </div>
+              <div class="objective-item">
+                <div class="objective-num">6</div>
+                <div class="objective-text">Write callback-based functions and pass parameters to callbacks.</div>
+              </div>
+              <div class="objective-item">
+                <div class="objective-num">7</div>
+                <div class="objective-text">Handle errors using Node's standard error-first callback pattern.</div>
+              </div>
+              <div class="objective-item">
+                <div class="objective-num">8</div>
+                <div class="objective-text">Identify callback hell and understand why Promises &amp; async/await are needed.</div>
+              </div>
+            </div>
+
+            <div class="callout tip">
+              <span class="callout-icon">💡</span>
+              <div>
+                <strong>Classroom Focus:</strong> Today we build a rock-solid mental model of asynchronous execution through hands-on timers and callbacks before advancing to Promises in later sessions.
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ===================================================================
+             SLIDE 3: Synchronous vs Asynchronous Execution
+             =================================================================== -->
+        <section id="slide-3" class="slide" data-slide-num="3">
+          <div class="slide-header">
+            <div class="slide-title-wrap">
+              <span class="slide-category">Section 1: Timer Functions</span>
+              <h2 class="slide-title">Synchronous vs Asynchronous Execution</h2>
+              <p class="slide-subtitle">Understanding execution order and the non-blocking JavaScript thread</p>
+            </div>
+            <span class="slide-num-pill">Slide 03 / 15</span>
+          </div>
+
+          <div class="slide-body grid-2">
+            <!-- Left Column: Concepts & Breakdown -->
+            <div style="display:flex; flex-direction:column; gap:0.9rem;">
+              <div class="card highlight">
+                <div class="card-title">
+                  <span class="card-icon">🔄</span>
+                  <span>Execution Models</span>
+                </div>
+                <p>
+                  <strong>Synchronous execution:</strong> Statements execute sequentially one after another. Each statement must finish completely before the next statement begins.
+                </p>
+                <p style="margin-top:0.4rem;">
+                  <strong>Asynchronous execution:</strong> Certain operations allow the program to continue executing remaining statements while waiting for a scheduled callback or I/O operation.
+                </p>
+              </div>
+
+              <div class="card">
+                <div class="card-title">
+                  <span class="card-icon">🔍</span>
+                  <span>How This Example Executes</span>
+                </div>
+                <div class="step-breakdown">
+                  <div class="step-item">
+                    <span class="num-bullet">1</span>
+                    <span><code>console.log("1. Start")</code> executes immediately.</span>
+                  </div>
+                  <div class="step-item">
+                    <span class="num-bullet">2</span>
+                    <span><code>setTimeout()</code> schedules a callback in Node.js timer phase for ~2000ms later.</span>
+                  </div>
+                  <div class="step-item">
+                    <span class="num-bullet">3</span>
+                    <span><code>console.log("3. End")</code> executes immediately without waiting for the timer!</span>
+                  </div>
+                  <div class="step-item">
+                    <span class="num-bullet">4</span>
+                    <span>After ~2 seconds, the timer callback executes when the thread is available.</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="callout note">
+                <span class="callout-icon">📌</span>
+                <div>
+                  <strong>Teaching Point:</strong> A timer schedules future work; it does <em>not</em> guarantee execution at an exact millisecond if the event loop is busy.
+                </div>
+              </div>
+            </div>
+
+            <!-- Right Column: Code & Interactive Simulation -->
+            <div style="display:flex; flex-direction:column; gap:0.8rem;">
+              <div class="code-container">
+                <div class="code-header">
+                  <div class="code-file-badge">
+                    <span class="file-dot"></span>
+                    <span>app.js</span>
+                  </div>
+                  <button class="copy-btn">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                    <span>Copy Code</span>
+                  </button>
+                </div>
+                <pre class="code-block"><code><span class="syn-fn">console</span>.<span class="syn-fn">log</span>(<span class="syn-str">"1. Start"</span>);
+
+<span class="syn-fn">setTimeout</span>(() =&gt; {
+  <span class="syn-fn">console</span>.<span class="syn-fn">log</span>(<span class="syn-str">"2. Timer completed"</span>);
+}, <span class="syn-num">2000</span>);
+
+<span class="syn-fn">console</span>.<span class="syn-fn">log</span>(<span class="syn-str">"3. End"</span>);</code></pre>
+              </div>
+
+              <!-- Interactive Simulator -->
+              <div class="interactive-widget">
+                <div class="interactive-header">
+                  <span>Interactive Stepper Simulator</span>
+                  <button id="run-timeout-sim" class="widget-btn">Run Code ▶</button>
+                </div>
+                <div id="timeout-step-status" style="font-size:0.82rem; color:var(--text-muted);">
+                  Click "Run Code" to observe the non-blocking execution order in real time.
+                </div>
+                <div id="timeout-sim-log" class="terminal-output" style="min-height:90px; padding:0.6rem 0.9rem;">
+                  <div class="cmd">&gt; Ready...</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ===================================================================
+             SLIDE 4: setTimeout()
+             =================================================================== -->
+        <section id="slide-4" class="slide" data-slide-num="4">
+          <div class="slide-header">
+            <div class="slide-title-wrap">
+              <span class="slide-category">Section 1: Timer Functions</span>
+              <h2 class="slide-title">setTimeout()</h2>
+              <p class="slide-subtitle">Scheduling a single-execution delayed callback</p>
+            </div>
+            <span class="slide-num-pill">Slide 04 / 15</span>
+          </div>
+
+          <div class="slide-body grid-2">
+            <!-- Left Column: Explanation -->
+            <div style="display:flex; flex-direction:column; gap:0.9rem;">
+              <div class="card highlight">
+                <div class="card-title">
+                  <span class="card-icon">⏱️</span>
+                  <span>What is setTimeout?</span>
+                </div>
+                <p>
+                  <code>setTimeout()</code> schedules a function to run once after a specified delay measured in milliseconds (1 second = 1,000 ms).
+                </p>
+                <div style="font-family:var(--font-mono); font-size:0.88rem; background:#fff; padding:0.5rem 0.8rem; border-radius:6px; border:1px solid var(--border-subtle); margin-top:0.4rem;">
+                  setTimeout(callback, delay);
+                </div>
+                <ul class="feature-list" style="margin-top:0.4rem; font-size:0.86rem;">
+                  <li><span class="bullet-icon">▸</span> <strong>callback:</strong> The function to execute when the timer expires.</li>
+                  <li><span class="bullet-icon">▸</span> <strong>delay:</strong> Requested delay in milliseconds.</li>
+                </ul>
+              </div>
+
+              <div class="card">
+                <div class="card-title">
+                  <span class="card-icon">🌍</span>
+                  <span>Real-World Uses in Backend</span>
+                </div>
+                <ul class="feature-list" style="font-size:0.88rem;">
+                  <li><span class="bullet-icon">▸</span> <strong>Delayed notifications:</strong> Sending a follow-up email after a delay.</li>
+                  <li><span class="bullet-icon">▸</span> <strong>Simulating API responses:</strong> Mocking external microservice latency during development.</li>
+                  <li><span class="bullet-icon">▸</span> <strong>Scheduled actions:</strong> Auto-cancelling abandoned shopping carts after 15 minutes.</li>
+                </ul>
+              </div>
+
+              <div class="callout warning">
+                <span class="callout-icon">⚠️</span>
+                <div>
+                  <strong>Important:</strong> <code>setTimeout()</code> does <em>not</em> pause the entire application or freeze Node.js. Other HTTP requests continue serving immediately!
+                </div>
+              </div>
+            </div>
+
+            <!-- Right Column: Code & Output -->
+            <div style="display:flex; flex-direction:column; gap:0.9rem;">
+              <div class="code-container">
+                <div class="code-header">
+                  <div class="code-file-badge">
+                    <span class="file-dot"></span>
+                    <span>delayed-order.js</span>
+                  </div>
+                  <button class="copy-btn">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                    <span>Copy Code</span>
+                  </button>
+                </div>
+                <pre class="code-block"><code><span class="syn-fn">console</span>.<span class="syn-fn">log</span>(<span class="syn-str">"Order placed"</span>);
+
+<span class="syn-fn">setTimeout</span>(() =&gt; {
+  <span class="syn-fn">console</span>.<span class="syn-fn">log</span>(<span class="syn-str">"Your order is being processed"</span>);
+}, <span class="syn-num">3000</span>);
+
+<span class="syn-fn">console</span>.<span class="syn-fn">log</span>(<span class="syn-str">"Please wait..."</span>);</code></pre>
+              </div>
+
+              <div class="terminal-output">
+                <div class="terminal-header">
+                  <span class="dot"></span>
+                  <span>Execution Output</span>
+                </div>
+                <div class="terminal-body">
+<span class="cmd">$ node delayed-order.js</span>
+<span class="res">Order placed</span>
+<span class="res">Please wait...</span>
+<span class="res" style="color:#fbbf24;">Your order is being processed</span>   <span class="syn-cm"># printed after ~3 seconds</span></div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ===================================================================
+             SLIDE 5: clearTimeout()
+             =================================================================== -->
+        <section id="slide-5" class="slide" data-slide-num="5">
+          <div class="slide-header">
+            <div class="slide-title-wrap">
+              <span class="slide-category">Section 1: Timer Functions</span>
+              <h2 class="slide-title">clearTimeout()</h2>
+              <p class="slide-subtitle">Cancelling a scheduled timeout using its unique timer handle</p>
+            </div>
+            <span class="slide-num-pill">Slide 05 / 15</span>
+          </div>
+
+          <div class="slide-body grid-2">
+            <!-- Left Column: Explanation -->
+            <div style="display:flex; flex-direction:column; gap:0.9rem;">
+              <div class="card highlight">
+                <div class="card-title">
+                  <span class="card-icon">🛑</span>
+                  <span>Why Cancel a Timer?</span>
+                </div>
+                <p>
+                  Sometimes a scheduled action should be cancelled before it executes. <code>setTimeout()</code> returns a unique <strong>timer handle (ID)</strong> that you pass to <code>clearTimeout()</code> to abort the pending callback.
+                </p>
+              </div>
+
+              <div class="card">
+                <div class="card-title">
+                  <span class="card-icon">💡</span>
+                  <span>Practical Scenario</span>
+                </div>
+                <p>
+                  Imagine a user schedules a notification, auto-logout, or auto-save. If the user clicks "Cancel" or takes another action before the 3-second countdown ends:
+                </p>
+                <ul class="feature-list" style="margin-top:0.3rem;">
+                  <li><span class="bullet-icon">▸</span> We call <code>clearTimeout(timer)</code>.</li>
+                  <li><span class="bullet-icon">▸</span> Node.js discards the scheduled callback from its timer queue.</li>
+                  <li><span class="bullet-icon">▸</span> The callback function never runs!</li>
+                </ul>
+              </div>
+
+              <div class="callout tip">
+                <span class="callout-icon">🔑</span>
+                <div>
+                  <strong>Important Rule:</strong> Clearing a timer only works if the callback has <em>not already begun executing</em>. Once the timer fires, <code>clearTimeout()</code> has no effect.
+                </div>
+              </div>
+            </div>
+
+            <!-- Right Column: Code & Output -->
+            <div style="display:flex; flex-direction:column; gap:0.9rem;">
+              <div class="code-container">
+                <div class="code-header">
+                  <div class="code-file-badge">
+                    <span class="file-dot"></span>
+                    <span>cancel-timer.js</span>
+                  </div>
+                  <button class="copy-btn">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                    <span>Copy Code</span>
+                  </button>
+                </div>
+                <pre class="code-block"><code><span class="syn-cm">// Schedule a message for 3 seconds later</span>
+<span class="syn-kw">const</span> timer = <span class="syn-fn">setTimeout</span>(() =&gt; {
+  <span class="syn-fn">console</span>.<span class="syn-fn">log</span>(<span class="syn-str">"This message will not appear"</span>);
+}, <span class="syn-num">3000</span>);
+
+<span class="syn-cm">// Cancel the timer immediately</span>
+<span class="syn-fn">clearTimeout</span>(timer);
+
+<span class="syn-fn">console</span>.<span class="syn-fn">log</span>(<span class="syn-str">"Timer cancelled"</span>);</code></pre>
+              </div>
+
+              <div class="terminal-output">
+                <div class="terminal-header">
+                  <span class="dot"></span>
+                  <span>Expected Output</span>
+                </div>
+                <div class="terminal-body">
+<span class="cmd">$ node cancel-timer.js</span>
+<span class="res">Timer cancelled</span>
+<span class="syn-cm"># Note: "This message will not appear" is never printed</span></div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ===================================================================
+             SLIDE 6: setInterval()
+             =================================================================== -->
+        <section id="slide-6" class="slide" data-slide-num="6">
+          <div class="slide-header">
+            <div class="slide-title-wrap">
+              <span class="slide-category">Section 1: Timer Functions</span>
+              <h2 class="slide-title">setInterval()</h2>
+              <p class="slide-subtitle">Repeated execution at specified time intervals</p>
+            </div>
+            <span class="slide-num-pill">Slide 06 / 15</span>
+          </div>
+
+          <div class="slide-body grid-2">
+            <!-- Left Column: Explanation & Live Simulator -->
+            <div style="display:flex; flex-direction:column; gap:0.8rem;">
+              <div class="card highlight">
+                <div class="card-title">
+                  <span class="card-icon">🔁</span>
+                  <span>What is setInterval?</span>
+                </div>
+                <p>
+                  <code>setInterval()</code> schedules a callback to run repeatedly at approximately the specified interval until stopped.
+                </p>
+                <div style="font-family:var(--font-mono); font-size:0.88rem; background:#fff; padding:0.4rem 0.8rem; border-radius:6px; border:1px solid var(--border-subtle); margin-top:0.3rem;">
+                  setInterval(callback, interval);
+                </div>
+              </div>
+
+              <!-- Interactive Counter Simulator -->
+              <div class="interactive-widget">
+                <div class="interactive-header">
+                  <span>Interactive Digital Counter (1 to 5)</span>
+                  <button id="run-interval-sim" class="widget-btn">Start Counter ▶</button>
+                </div>
+                <div id="interval-step-status" style="font-size:0.82rem; color:var(--text-muted);">
+                  Click "Start Counter" to see 1-second ticks and automatic clearInterval().
+                </div>
+                <div id="interval-sim-log" class="terminal-output" style="max-height:120px; overflow-y:auto; padding:0.6rem 0.9rem;">
+                  <div class="cmd">&gt; Counter ready...</div>
+                </div>
+              </div>
+
+              <div class="callout tip">
+                <span class="callout-icon">💡</span>
+                <div>
+                  <strong>Key Rule:</strong> Always store the return value of <code>setInterval()</code> in a variable so you can stop it later with <code>clearInterval(timer)</code>!
+                </div>
+              </div>
+            </div>
+
+            <!-- Right Column: Code & Output -->
+            <div style="display:flex; flex-direction:column; gap:0.9rem;">
+              <div class="code-container">
+                <div class="code-header">
+                  <div class="code-file-badge">
+                    <span class="file-dot"></span>
+                    <span>counter.js</span>
+                  </div>
+                  <button class="copy-btn">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                    <span>Copy Code</span>
+                  </button>
+                </div>
+                <pre class="code-block"><code><span class="syn-kw">let</span> count = <span class="syn-num">1</span>;
+
+<span class="syn-kw">const</span> timer = <span class="syn-fn">setInterval</span>(() =&gt; {
+  <span class="syn-fn">console</span>.<span class="syn-fn">log</span>(<span class="syn-str">"Count:"</span>, count);
+  count++;
+
+  <span class="syn-kw">if</span> (count &gt; <span class="syn-num">5</span>) {
+    <span class="syn-fn">clearInterval</span>(timer);
+    <span class="syn-fn">console</span>.<span class="syn-fn">log</span>(<span class="syn-str">"Counter stopped"</span>);
+  }
+}, <span class="syn-num">1000</span>);</code></pre>
+              </div>
+
+              <div class="terminal-output">
+                <div class="terminal-header">
+                  <span class="dot"></span>
+                  <span>Expected Output (1 Second Apart)</span>
+                </div>
+                <div class="terminal-body">
+<span class="cmd">$ node counter.js</span>
+<span class="res">Count: 1</span>
+<span class="res">Count: 2</span>
+<span class="res">Count: 3</span>
+<span class="res">Count: 4</span>
+<span class="res">Count: 5</span>
+<span class="res" style="color:#38bdf8;">Counter stopped</span></div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ===================================================================
+             SLIDE 7: clearInterval() and Timer Comparison
+             =================================================================== -->
+        <section id="slide-7" class="slide" data-slide-num="7">
+          <div class="slide-header">
+            <div class="slide-title-wrap">
+              <span class="slide-category">Section 1: Timer Functions</span>
+              <h2 class="slide-title">clearInterval() and Timer Comparison</h2>
+              <p class="slide-subtitle">Stopping repeating timers and reviewing the four fundamental timer functions</p>
+            </div>
+            <span class="slide-num-pill">Slide 07 / 15</span>
+          </div>
+
+          <div class="slide-body grid-2">
+            <!-- Left Column: Comparison Table -->
+            <div style="display:flex; flex-direction:column; gap:0.9rem;">
+              <div class="table-wrapper">
+                <table class="presentation-table">
+                  <thead>
+                    <tr>
+                      <th>Function</th>
+                      <th>Purpose</th>
+                      <th>Repetition</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><code>setTimeout()</code></td>
+                      <td>Schedule a callback once after a delay</td>
+                      <td>Runs once</td>
+                    </tr>
+                    <tr>
+                      <td><code>clearTimeout()</code></td>
+                      <td>Cancel a pending timeout handle</td>
+                      <td>Cancels once</td>
+                    </tr>
+                    <tr>
+                      <td><code>setInterval()</code></td>
+                      <td>Schedule repeated callbacks at interval</td>
+                      <td>Repeats forever</td>
+                    </tr>
+                    <tr>
+                      <td><code>clearInterval()</code></td>
+                      <td>Stop a repeating interval handle</td>
+                      <td>Halts repeat</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <div class="card accent">
+                <div class="card-title">
+                  <span class="card-icon">🎯</span>
+                  <span>Classroom Quick Task</span>
+                </div>
+                <p>
+                  Look at the code on the right: it stops after <strong>3 seconds</strong> (<code>if (seconds === 3)</code>).
+                </p>
+                <p style="font-weight:700; color:var(--primary-dark); margin-top:0.3rem;">
+                  Task: Change the condition to stop after five seconds (<code>seconds === 5</code>).
+                </p>
+              </div>
+            </div>
+
+            <!-- Right Column: Code & Output -->
+            <div style="display:flex; flex-direction:column; gap:0.9rem;">
+              <div class="code-container">
+                <div class="code-header">
+                  <div class="code-file-badge">
+                    <span class="file-dot"></span>
+                    <span>stop-interval.js</span>
+                  </div>
+                  <button class="copy-btn">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                    <span>Copy Code</span>
+                  </button>
+                </div>
+                <pre class="code-block"><code><span class="syn-kw">let</span> seconds = <span class="syn-num">0</span>;
+
+<span class="syn-kw">const</span> timer = <span class="syn-fn">setInterval</span>(() =&gt; {
+  seconds++;
+
+  <span class="syn-fn">console</span>.<span class="syn-fn">log</span>(<span class="syn-str">`<span class="syn-var">${seconds}</span> second(s)`</span>);
+
+  <span class="syn-kw">if</span> (seconds === <span class="syn-num">3</span>) {
+    <span class="syn-fn">clearInterval</span>(timer);
+    <span class="syn-fn">console</span>.<span class="syn-fn">log</span>(<span class="syn-str">"Timer stopped"</span>);
+  }
+}, <span class="syn-num">1000</span>);</code></pre>
+              </div>
+
+              <div class="terminal-output">
+                <div class="terminal-header">
+                  <span class="dot"></span>
+                  <span>Execution Output</span>
+                </div>
+                <div class="terminal-body">
+<span class="cmd">$ node stop-interval.js</span>
+<span class="res">1 second(s)</span>
+<span class="res">2 second(s)</span>
+<span class="res">3 second(s)</span>
+<span class="res" style="color:#38bdf8;">Timer stopped</span></div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ===================================================================
+             SLIDE 8: What Is a Callback Function?
+             =================================================================== -->
+        <section id="slide-8" class="slide" data-slide-num="8">
+          <div class="slide-header">
+            <div class="slide-title-wrap">
+              <span class="slide-category">Section 2: Understanding Callbacks</span>
+              <h2 class="slide-title">What Is a Callback Function?</h2>
+              <p class="slide-subtitle">Functions as first-class citizens passed as arguments for subsequent invocation</p>
+            </div>
+            <span class="slide-num-pill">Slide 08 / 15</span>
+          </div>
+
+          <div class="slide-body grid-2">
+            <!-- Left Column: Explanation & Execution Flow -->
+            <div style="display:flex; flex-direction:column; gap:0.9rem;">
+              <div class="card highlight">
+                <div class="card-title">
+                  <span class="card-icon">📌</span>
+                  <span>Definition</span>
+                </div>
+                <p>
+                  A <strong>callback</strong> is a function passed as an argument to another function so that the receiving function can invoke ("call back") it later.
+                </p>
+                <p style="font-size:0.88rem; color:var(--text-muted); margin-top:0.3rem;">
+                  Callbacks can be used in both synchronous operations (like <code>array.map</code>) and asynchronous operations (like timers, files, or network requests).
+                </p>
+              </div>
+
+              <div class="card">
+                <div class="card-title">
+                  <span class="card-icon">🔄</span>
+                  <span>Step-by-Step Execution Flow</span>
+                </div>
+                <div class="step-breakdown">
+                  <div class="step-item">
+                    <span class="num-bullet">1</span>
+                    <span><code>showMessage</code> is passed as a function reference into <code>greetUser("Anu", showMessage)</code>.</span>
+                  </div>
+                  <div class="step-item">
+                    <span class="num-bullet">2</span>
+                    <span><code>greetUser()</code> begins executing and prints <code>"Hello, Anu"</code>.</span>
+                  </div>
+                  <div class="step-item">
+                    <span class="num-bullet">3</span>
+                    <span><code>callback()</code> is called, which invokes <code>showMessage()</code> and prints <code>"Welcome to Node.js"</code>.</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="callout warning">
+                <span class="callout-icon">⚠️</span>
+                <div>
+                  <strong>Common Student Mistake:</strong> Pass <code>showMessage</code> (the function reference), NOT <code>showMessage()</code>! Adding parentheses executes the function immediately and passes its return value (<code>undefined</code>).
+                </div>
+              </div>
+            </div>
+
+            <!-- Right Column: Code & Output -->
+            <div style="display:flex; flex-direction:column; gap:0.9rem;">
+              <div class="code-container">
+                <div class="code-header">
+                  <div class="code-file-badge">
+                    <span class="file-dot"></span>
+                    <span>callback-basic.js</span>
+                  </div>
+                  <button class="copy-btn">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                    <span>Copy Code</span>
+                  </button>
+                </div>
+                <pre class="code-block"><code><span class="syn-kw">function</span> <span class="syn-fn">greetUser</span>(name, callback) {
+  <span class="syn-fn">console</span>.<span class="syn-fn">log</span>(<span class="syn-str">`Hello, <span class="syn-var">${name}</span>`</span>);
+
+  <span class="syn-fn">callback</span>(); <span class="syn-cm">// invoke the passed callback</span>
+}
+
+<span class="syn-kw">function</span> <span class="syn-fn">showMessage</span>() {
+  <span class="syn-fn">console</span>.<span class="syn-fn">log</span>(<span class="syn-str">"Welcome to Node.js"</span>);
+}
+
+<span class="syn-cm">// Pass showMessage as a reference</span>
+<span class="syn-fn">greetUser</span>(<span class="syn-str">"Anu"</span>, showMessage);</code></pre>
+              </div>
+
+              <div class="terminal-output">
+                <div class="terminal-header">
+                  <span class="dot"></span>
+                  <span>Execution Output</span>
+                </div>
+                <div class="terminal-body">
+<span class="cmd">$ node callback-basic.js</span>
+<span class="res">Hello, Anu</span>
+<span class="res">Welcome to Node.js</span></div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ===================================================================
+             SLIDE 9: Callback with Parameters
+             =================================================================== -->
+        <section id="slide-9" class="slide" data-slide-num="9">
+          <div class="slide-header">
+            <div class="slide-title-wrap">
+              <span class="slide-category">Section 2: Understanding Callbacks</span>
+              <h2 class="slide-title">Callback with Parameters</h2>
+              <p class="slide-subtitle">Passing computed results from the host function into the callback</p>
+            </div>
+            <span class="slide-num-pill">Slide 09 / 15</span>
+          </div>
+
+          <div class="slide-body grid-2">
+            <!-- Left Column: Example 1 - Calculate Total -->
+            <div style="display:flex; flex-direction:column; gap:0.8rem;">
+              <div class="code-container">
+                <div class="code-header">
+                  <div class="code-file-badge">
+                    <span class="file-dot"></span>
+                    <span>calculate-total.js (Named Callback)</span>
+                  </div>
+                  <button class="copy-btn">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                    <span>Copy Code</span>
+                  </button>
+                </div>
+                <pre class="code-block"><code><span class="syn-kw">function</span> <span class="syn-fn">calculateTotal</span>(price, quantity, callback) {
+  <span class="syn-kw">const</span> total = price * quantity;
+
+  <span class="syn-fn">callback</span>(total); <span class="syn-cm">// passes total into callback</span>
+}
+
+<span class="syn-kw">function</span> <span class="syn-fn">displayTotal</span>(amount) {
+  <span class="syn-fn">console</span>.<span class="syn-fn">log</span>(<span class="syn-str">"Total price:"</span>, amount);
+}
+
+<span class="syn-fn">calculateTotal</span>(<span class="syn-num">500</span>, <span class="syn-num">3</span>, displayTotal);</code></pre>
+              </div>
+
+              <div class="terminal-output">
+                <div class="terminal-header">
+                  <span class="dot"></span>
+                  <span>Output 1</span>
+                </div>
+                <div class="terminal-body">
+<span class="cmd">$ node calculate-total.js</span>
+<span class="res">Total price: 1500</span></div>
+              </div>
+            </div>
+
+            <!-- Right Column: Example 2 - Anonymous Arrow Callback -->
+            <div style="display:flex; flex-direction:column; gap:0.8rem;">
+              <div class="code-container">
+                <div class="code-header">
+                  <div class="code-file-badge">
+                    <span class="file-dot"></span>
+                    <span>process-marks.js (Arrow Callback)</span>
+                  </div>
+                  <button class="copy-btn">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                    <span>Copy Code</span>
+                  </button>
+                </div>
+                <pre class="code-block"><code><span class="syn-kw">function</span> <span class="syn-fn">processMarks</span>(marks, callback) {
+  <span class="syn-kw">const</span> result = marks &gt;= <span class="syn-num">50</span> ? <span class="syn-str">"Passed"</span> : <span class="syn-str">"Failed"</span>;
+
+  <span class="syn-fn">callback</span>(result);
+}
+
+<span class="syn-cm">// Using an inline anonymous arrow callback</span>
+<span class="syn-fn">processMarks</span>(<span class="syn-num">75</span>, (result) =&gt; {
+  <span class="syn-fn">console</span>.<span class="syn-fn">log</span>(result);
+});</code></pre>
+              </div>
+
+              <div class="terminal-output">
+                <div class="terminal-header">
+                  <span class="dot"></span>
+                  <span>Output 2</span>
+                </div>
+                <div class="terminal-body">
+<span class="cmd">$ node process-marks.js</span>
+<span class="res">Passed</span></div>
+              </div>
+
+              <div class="callout tip" style="padding:0.6rem 0.9rem;">
+                <span class="callout-icon">💡</span>
+                <div style="font-size:0.84rem;">
+                  Both named functions and inline arrow functions work identically as callbacks. Anonymous arrow callbacks are very popular in modern Node.js.
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ===================================================================
+             SLIDE 10: Asynchronous Callbacks
+             =================================================================== -->
+        <section id="slide-10" class="slide" data-slide-num="10">
+          <div class="slide-header">
+            <div class="slide-title-wrap">
+              <span class="slide-category">Section 2: Understanding Callbacks</span>
+              <h2 class="slide-title">Asynchronous Callbacks</h2>
+              <p class="slide-subtitle">Combining callbacks with delayed asynchronous operations like setTimeout</p>
+            </div>
+            <span class="slide-num-pill">Slide 10 / 15</span>
+          </div>
+
+          <div class="slide-body grid-2">
+            <!-- Left Column: Explanation -->
+            <div style="display:flex; flex-direction:column; gap:0.9rem;">
+              <div class="card highlight">
+                <div class="card-title">
+                  <span class="card-icon">⚡</span>
+                  <span>Asynchronous Callback Pattern</span>
+                </div>
+                <p>
+                  In backend Node.js applications, callbacks are frequently used with asynchronous operations (timers, file systems, databases, network requests).
+                </p>
+              </div>
+
+              <div class="card">
+                <div class="card-title">
+                  <span class="card-icon">🔄</span>
+                  <span>Execution Sequence</span>
+                </div>
+                <div class="step-breakdown">
+                  <div class="step-item">
+                    <span class="num-bullet">1</span>
+                    <span><code>placeOrder()</code> is called with an arrow callback.</span>
+                  </div>
+                  <div class="step-item">
+                    <span class="num-bullet">2</span>
+                    <span>It prints <code>"Order placed"</code> immediately.</span>
+                  </div>
+                  <div class="step-item">
+                    <span class="num-bullet">3</span>
+                    <span>It schedules a 2-second timer to call the callback.</span>
+                  </div>
+                  <div class="step-item">
+                    <span class="num-bullet">4</span>
+                    <span>The main program continues without waiting and logs <code>"You can continue shopping"</code>.</span>
+                  </div>
+                  <div class="step-item">
+                    <span class="num-bullet">5</span>
+                    <span>After 2 seconds, the timer expires and logs <code>"Order completed"</code>.</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="callout note">
+                <span class="callout-icon">🌐</span>
+                <div>
+                  <strong>Real-World Connection:</strong> This exact pattern is how traditional Node.js modules read database rows, process image uploads, or query web services.
+                </div>
+              </div>
+            </div>
+
+            <!-- Right Column: Code & Output -->
+            <div style="display:flex; flex-direction:column; gap:0.9rem;">
+              <div class="code-container">
+                <div class="code-header">
+                  <div class="code-file-badge">
+                    <span class="file-dot"></span>
+                    <span>async-order.js</span>
+                  </div>
+                  <button class="copy-btn">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                    <span>Copy Code</span>
+                  </button>
+                </div>
+                <pre class="code-block"><code><span class="syn-kw">function</span> <span class="syn-fn">placeOrder</span>(callback) {
+  <span class="syn-fn">console</span>.<span class="syn-fn">log</span>(<span class="syn-str">"Order placed"</span>);
+
+  <span class="syn-fn">setTimeout</span>(() =&gt; {
+    <span class="syn-fn">callback</span>(<span class="syn-str">"Order completed"</span>);
+  }, <span class="syn-num">2000</span>);
+}
+
+<span class="syn-fn">placeOrder</span>((message) =&gt; {
+  <span class="syn-fn">console</span>.<span class="syn-fn">log</span>(message);
+});
+
+<span class="syn-fn">console</span>.<span class="syn-fn">log</span>(<span class="syn-str">"You can continue shopping"</span>);</code></pre>
+              </div>
+
+              <div class="terminal-output">
+                <div class="terminal-header">
+                  <span class="dot"></span>
+                  <span>Execution Output</span>
+                </div>
+                <div class="terminal-body">
+<span class="cmd">$ node async-order.js</span>
+<span class="res">Order placed</span>
+<span class="res">You can continue shopping</span>
+<span class="res" style="color:#fbbf24;">Order completed</span>   <span class="syn-cm"># printed after ~2 seconds</span></div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ===================================================================
+             SLIDE 11: Error-First Callbacks in Node.js
+             =================================================================== -->
+        <section id="slide-11" class="slide" data-slide-num="11">
+          <div class="slide-header">
+            <div class="slide-title-wrap">
+              <span class="slide-category">Section 2: Understanding Callbacks</span>
+              <h2 class="slide-title">Error-First Callbacks in Node.js</h2>
+              <p class="slide-subtitle">The standard Node.js convention: (error, data) with early return handling</p>
+            </div>
+            <span class="slide-num-pill">Slide 11 / 15</span>
+          </div>
+
+          <div class="slide-body grid-2">
+            <!-- Left Column: Explanation -->
+            <div style="display:flex; flex-direction:column; gap:0.9rem;">
+              <div class="card highlight">
+                <div class="card-title">
+                  <span class="card-icon">📂</span>
+                  <span>Input File (message.txt)</span>
+                </div>
+                <p style="font-family:var(--font-mono); font-size:0.9rem; background:#fff; padding:0.5rem 0.8rem; border-radius:6px; border:1px solid var(--border-subtle);">
+                  Welcome to Node.js
+                </p>
+              </div>
+
+              <div class="card">
+                <div class="card-title">
+                  <span class="card-icon">🛡️</span>
+                  <span>The Error-First Pattern</span>
+                </div>
+                <p>
+                  Most built-in Node.js callback APIs follow this strict signature:
+                </p>
+                <div style="font-family:var(--font-mono); font-size:0.88rem; background:#fff; padding:0.5rem 0.8rem; border-radius:6px; border:1px solid var(--border-subtle); margin:0.3rem 0;">
+                  callback(error, data)
+                </div>
+                <ul class="feature-list" style="font-size:0.86rem;">
+                  <li><span class="bullet-icon">▸</span> <strong>If an error occurs:</strong> <code>error</code> contains an <code>Error</code> object; <code>data</code> is undefined.</li>
+                  <li><span class="bullet-icon">▸</span> <strong>If successful:</strong> <code>error</code> is <code>null</code>; <code>data</code> contains the result.</li>
+                  <li><span class="bullet-icon">▸</span> <strong>Early Return:</strong> Always check <code>if (error)</code> and return immediately to prevent executing further code!</li>
+                </ul>
+              </div>
+            </div>
+
+            <!-- Right Column: Code & Output -->
+            <div style="display:flex; flex-direction:column; gap:0.9rem;">
+              <div class="code-container">
+                <div class="code-header">
+                  <div class="code-file-badge">
+                    <span class="file-dot"></span>
+                    <span>read-file-callback.js</span>
+                  </div>
+                  <button class="copy-btn">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                    <span>Copy Code</span>
+                  </button>
+                </div>
+                <pre class="code-block"><code><span class="syn-kw">import</span> fs <span class="syn-kw">from</span> <span class="syn-str">"node:fs"</span>;
+
+fs.<span class="syn-fn">readFile</span>(<span class="syn-str">"message.txt"</span>, <span class="syn-str">"utf8"</span>, (error, data) =&gt; {
+  <span class="syn-kw">if</span> (error) {
+    <span class="syn-fn">console</span>.<span class="syn-fn">error</span>(<span class="syn-str">"Error reading file:"</span>, error.message);
+    <span class="syn-kw">return</span>;
+  }
+
+  <span class="syn-fn">console</span>.<span class="syn-fn">log</span>(<span class="syn-str">"File content:"</span>, data);
+});</code></pre>
+              </div>
+
+              <div class="terminal-output">
+                <div class="terminal-header">
+                  <span class="dot"></span>
+                  <span>Expected Output (When file exists)</span>
+                </div>
+                <div class="terminal-body">
+<span class="cmd">$ node read-file-callback.js</span>
+<span class="res">File content: Welcome to Node.js</span></div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ===================================================================
+             SLIDE 12: What Is Callback Hell?
+             =================================================================== -->
+        <section id="slide-12" class="slide" data-slide-num="12">
+          <div class="slide-header">
+            <div class="slide-title-wrap">
+              <span class="slide-category">Section 3: Callback Hell</span>
+              <h2 class="slide-title">What Is Callback Hell?</h2>
+              <p class="slide-subtitle">The maintenance nightmare caused by deeply nested, dependent asynchronous callbacks</p>
+            </div>
+            <span class="slide-num-pill">Slide 12 / 15</span>
+          </div>
+
+          <div class="slide-body grid-2">
+            <!-- Left Column: Explanation -->
+            <div style="display:flex; flex-direction:column; gap:0.9rem;">
+              <div class="card danger">
+                <div class="card-title" style="color:#9f1239;">
+                  <span class="card-icon">🔥</span>
+                  <span>Definition of Callback Hell</span>
+                </div>
+                <p>
+                  <strong>Callback hell</strong> (also called the <em>"Pyramid of Doom"</em>) occurs when multiple asynchronous operations depend on the results of previous operations, forcing callbacks to be nested inside callbacks.
+                </p>
+              </div>
+
+              <div class="card">
+                <div class="card-title">
+                  <span class="card-icon">⚡</span>
+                  <span>Why It Becomes a Major Problem</span>
+                </div>
+                <ul class="feature-list" style="font-size:0.86rem;">
+                  <li><span class="bullet-icon">▸</span> <strong>Loss of Readability:</strong> Code grows horizontally rather than vertically.</li>
+                  <li><span class="bullet-icon">▸</span> <strong>Error Handling Nightmare:</strong> Every single nested layer requires its own error check and recovery.</li>
+                  <li><span class="bullet-icon">▸</span> <strong>Fragile Refactoring:</strong> Moving or reordering any step risks breaking the entire chain.</li>
+                </ul>
+              </div>
+            </div>
+
+            <!-- Right Column: Visual Tree Representation -->
+            <div style="display:flex; flex-direction:column; gap:0.9rem;">
+              <div class="card highlight">
+                <div class="card-title">
+                  <span class="card-icon">🌲</span>
+                  <span>Visual Representation of Dependent Tasks</span>
+                </div>
+                <div class="tree-pyramid">
+                  <div class="tree-node">
+                    <span class="node-fn">getStudent(studentId, (student) =&gt; {</span>
+                  </div>
+                  <div class="tree-node tree-indent-1">
+                    <span class="node-fn">getCourse(student.courseId, (course) =&gt; {</span>
+                  </div>
+                  <div class="tree-node tree-indent-2">
+                    <span class="node-fn">getInstructor(course.instructorId, (instructor) =&gt; {</span>
+                  </div>
+                  <div class="tree-node tree-indent-3">
+                    <span class="node-fn">displayDetails(student, course, instructor);</span>
+                  </div>
+                  <div class="tree-node tree-indent-2">
+                    <span class="node-param">});</span>
+                  </div>
+                  <div class="tree-node tree-indent-1">
+                    <span class="node-param">});</span>
+                  </div>
+                  <div class="tree-node">
+                    <span class="node-param">});</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="callout warning">
+                <span class="callout-icon">💡</span>
+                <div>
+                  <strong>Important Perspective:</strong> Callbacks themselves are <em>not</em> bad. The problem is excessive nesting, coupling, and disorganized asynchronous flow.
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ===================================================================
+             SLIDE 13: Callback Hell: Practical Example
+             =================================================================== -->
+        <section id="slide-13" class="slide" data-slide-num="13">
+          <div class="slide-header">
+            <div class="slide-title-wrap">
+              <span class="slide-category">Section 3: Callback Hell</span>
+              <h2 class="slide-title">Callback Hell: Practical Example</h2>
+              <p class="slide-subtitle">A realistic 3-step order processing pipeline with nested asynchronous callbacks</p>
+            </div>
+            <span class="slide-num-pill">Slide 13 / 15</span>
+          </div>
+
+          <div class="slide-body grid-2">
+            <!-- Left Column: Code -->
+            <div style="display:flex; flex-direction:column; gap:0.8rem;">
+              <div class="code-container" style="max-height:490px;">
+                <div class="code-header">
+                  <div class="code-file-badge">
+                    <span class="file-dot"></span>
+                    <span>nested-order.js</span>
+                  </div>
+                  <button class="copy-btn">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                    <span>Copy Code</span>
+                  </button>
+                </div>
+                <pre class="code-block" style="font-size:0.81rem; line-height:1.45;"><code><span class="syn-kw">function</span> <span class="syn-fn">getOrder</span>(callback) {
+  <span class="syn-fn">setTimeout</span>(() =&gt; {
+    <span class="syn-fn">console</span>.<span class="syn-fn">log</span>(<span class="syn-str">"Order received"</span>);
+    <span class="syn-fn">callback</span>({ orderId: <span class="syn-num">101</span> });
+  }, <span class="syn-num">500</span>);
+}
+
+<span class="syn-kw">function</span> <span class="syn-fn">getPayment</span>(order, callback) {
+  <span class="syn-fn">setTimeout</span>(() =&gt; {
+    <span class="syn-fn">console</span>.<span class="syn-fn">log</span>(<span class="syn-str">"Payment completed"</span>);
+    <span class="syn-fn">callback</span>({ ...order, paid: <span class="syn-kw">true</span> });
+  }, <span class="syn-num">500</span>);
+}
+
+<span class="syn-kw">function</span> <span class="syn-fn">shipOrder</span>(order, callback) {
+  <span class="syn-fn">setTimeout</span>(() =&gt; {
+    <span class="syn-fn">console</span>.<span class="syn-fn">log</span>(<span class="syn-str">"Order shipped"</span>);
+    <span class="syn-fn">callback</span>({ ...order, shipped: <span class="syn-kw">true</span> });
+  }, <span class="syn-num">500</span>);
+}
+
+<span class="syn-cm">// Nested Callback Invocation (Callback Hell)</span>
+<span class="syn-fn">getOrder</span>((order) =&gt; {
+  <span class="syn-fn">getPayment</span>(order, (paidOrder) =&gt; {
+    <span class="syn-fn">shipOrder</span>(paidOrder, (shippedOrder) =&gt; {
+      <span class="syn-fn">console</span>.<span class="syn-fn">log</span>(<span class="syn-str">"Final order:"</span>, shippedOrder);
+    });
+  });
+});</code></pre>
+              </div>
+            </div>
+
+            <!-- Right Column: Interactive Sim & Problem Analysis -->
+            <div style="display:flex; flex-direction:column; gap:0.8rem;">
+              <div class="interactive-widget">
+                <div class="interactive-header">
+                  <span>Interactive Pipeline Stepper</span>
+                  <button id="run-pipeline-sim" class="widget-btn">Simulate Pipeline ▶</button>
+                </div>
+                <div id="pipeline-step-status" style="font-size:0.82rem; color:var(--text-muted);">
+                  Click to trace each nested callback as it resolves after 500ms.
+                </div>
+                <div id="pipeline-sim-log" class="terminal-output" style="max-height:120px; overflow-y:auto; padding:0.6rem 0.9rem;">
+                  <div class="cmd">&gt; Pipeline ready...</div>
+                </div>
+              </div>
+
+              <div class="card">
+                <div class="card-title">
+                  <span class="card-icon">🔍</span>
+                  <span>Explain the Problem</span>
+                </div>
+                <ul class="feature-list" style="font-size:0.84rem;">
+                  <li><span class="bullet-icon">▸</span> Each operation depends directly on the result of the previous operation.</li>
+                  <li><span class="bullet-icon">▸</span> Adding error handling (e.g., checking if payment fails) triples code complexity.</li>
+                  <li><span class="bullet-icon">▸</span> Adding more steps (send email, generate invoice) pushes the code further right.</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ===================================================================
+             SLIDE 14: How Can We Avoid Callback Hell?
+             =================================================================== -->
+        <section id="slide-14" class="slide" data-slide-num="14">
+          <div class="slide-header">
+            <div class="slide-title-wrap">
+              <span class="slide-category">Section 3: Callback Hell</span>
+              <h2 class="slide-title">How Can We Avoid Callback Hell?</h2>
+              <p class="slide-subtitle">Three progressive solutions: Named Callbacks, Promises, and async/await</p>
+            </div>
+            <span class="slide-num-pill">Slide 14 / 15</span>
+          </div>
+
+          <div class="slide-body grid-3">
+            <!-- Approach 1: Named Functions -->
+            <div class="card" style="height:100%; display:flex; flex-direction:column; justify-content:space-between;">
+              <div>
+                <div class="card-title" style="font-size:0.95rem;">
+                  <span class="card-icon">1️⃣</span>
+                  <span>Named Callback Functions</span>
+                </div>
+                <p style="font-size:0.84rem; margin:0.3rem 0;">
+                  Move nested inline callbacks into standalone top-level named functions.
+                </p>
+                <div class="callout tip" style="padding:0.5rem 0.7rem; font-size:0.8rem;">
+                  <strong>Benefits:</strong> Flattens code, promotes reusability, easier to unit test.
+                </div>
+              </div>
+              <div class="callout warning" style="padding:0.5rem 0.7rem; font-size:0.8rem; margin-top:0.4rem;">
+                <strong>Limitation:</strong> Complex branching and shared state can still be difficult to coordinate.
+              </div>
+            </div>
+
+            <!-- Approach 2: Promises (Conceptual) -->
+            <div class="card highlight" style="height:100%; display:flex; flex-direction:column; justify-content:space-between;">
+              <div>
+                <div class="card-title" style="font-size:0.95rem;">
+                  <span class="card-icon">2️⃣</span>
+                  <span>Promises (Conceptual)</span>
+                </div>
+                <p style="font-size:0.84rem; margin:0.3rem 0;">
+                  Linear <code>.then()</code> chaining with centralized <code>.catch()</code> error handling:
+                </p>
+                <pre class="code-block" style="font-size:0.75rem; padding:0.6rem; border-radius:6px; background:#0b1329;"><code><span class="syn-fn">getOrder</span>()
+  .<span class="syn-fn">then</span>((order) =&gt; <span class="syn-fn">getPayment</span>(order))
+  .<span class="syn-fn">then</span>((paid) =&gt; <span class="syn-fn">shipOrder</span>(paid))
+  .<span class="syn-fn">then</span>((shipped) =&gt; {
+    <span class="syn-fn">console</span>.<span class="syn-fn">log</span>(shipped);
+  })
+  .<span class="syn-fn">catch</span>((error) =&gt; {
+    <span class="syn-fn">console</span>.<span class="syn-fn">error</span>(error);
+  });</code></pre>
+              </div>
+              <div style="font-size:0.76rem; color:var(--text-muted); font-style:italic;">
+                * Conceptual: assumes functions return Promises.
+              </div>
+            </div>
+
+            <!-- Approach 3: async/await (Conceptual) -->
+            <div class="card accent" style="height:100%; display:flex; flex-direction:column; justify-content:space-between;">
+              <div>
+                <div class="card-title" style="font-size:0.95rem;">
+                  <span class="card-icon">3️⃣</span>
+                  <span>async / await (Conceptual)</span>
+                </div>
+                <p style="font-size:0.84rem; margin:0.3rem 0;">
+                  Reads like clean synchronous code with unified <code>try/catch</code> blocks:
+                </p>
+                <pre class="code-block" style="font-size:0.75rem; padding:0.6rem; border-radius:6px; background:#0b1329;"><code><span class="syn-kw">async function</span> <span class="syn-fn">processOrder</span>() {
+  <span class="syn-kw">try</span> {
+    <span class="syn-kw">const</span> order = <span class="syn-kw">await</span> <span class="syn-fn">getOrder</span>();
+    <span class="syn-kw">const</span> paid = <span class="syn-kw">await</span> <span class="syn-fn">getPayment</span>(order);
+    <span class="syn-kw">const</span> shipped = <span class="syn-kw">await</span> <span class="syn-fn">shipOrder</span>(paid);
+
+    <span class="syn-fn">console</span>.<span class="syn-fn">log</span>(shipped);
+  } <span class="syn-kw">catch</span> (error) {
+    <span class="syn-fn">console</span>.<span class="syn-fn">error</span>(error);
+  }
+}</code></pre>
+              </div>
+              <div style="font-size:0.76rem; color:var(--text-muted); font-style:italic;">
+                * Preview for our upcoming dedicated Promises lesson!
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ===================================================================
+             SLIDE 15: Practical Exercises and Key Takeaways
+             =================================================================== -->
+        <section id="slide-15" class="slide" data-slide-num="15">
+          <div class="slide-header">
+            <div class="slide-title-wrap">
+              <span class="slide-category">Section 4: Practice &amp; Revision</span>
+              <h2 class="slide-title">Practical Exercises and Key Takeaways</h2>
+              <p class="slide-subtitle">8 hands-on student lab exercises and complete Day 2 conceptual revision</p>
+            </div>
+            <span class="slide-num-pill">Slide 15 / 15</span>
+          </div>
+
+          <div class="slide-body grid-2">
+            <!-- Left Column: 8 Practical Exercises -->
+            <div style="display:flex; flex-direction:column; gap:0.75rem;">
+              <div class="card highlight">
+                <div class="card-title">
+                  <span class="card-icon">🛠️</span>
+                  <span>8 Student Lab Exercises</span>
+                </div>
+                <div class="step-breakdown" style="font-size:0.83rem;">
+                  <div class="step-item"><span class="num-bullet">1</span><span><strong>Delayed Message:</strong> Write a script displaying <code>"Welcome"</code> after 3 seconds using <code>setTimeout()</code>.</span></div>
+                  <div class="step-item"><span class="num-bullet">2</span><span><strong>Countdown Timer:</strong> Use <code>setInterval()</code> to count down from 5 to 1, then stop with <code>clearInterval()</code>.</span></div>
+                  <div class="step-item"><span class="num-bullet">3</span><span><strong>Cancel a Timer:</strong> Create a 5-second timeout and cancel it after 2 seconds with <code>clearTimeout()</code>.</span></div>
+                  <div class="step-item"><span class="num-bullet">4</span><span><strong>Callback Greeting:</strong> Create a function accepting a name and callback; greet then invoke callback.</span></div>
+                  <div class="step-item"><span class="num-bullet">5</span><span><strong>Calculate Marks:</strong> Pass <code>"Passed"</code> (&gt;= 50) or <code>"Failed"</code> to an arrow callback.</span></div>
+                  <div class="step-item"><span class="num-bullet">6</span><span><strong>Simulate an Order:</strong> Use <code>setTimeout()</code> and callbacks to simulate order completion.</span></div>
+                  <div class="step-item"><span class="num-bullet">7</span><span><strong>Read a File:</strong> Use <code>fs.readFile()</code> with error-first callback <code>(err, data)</code>.</span></div>
+                  <div class="step-item"><span class="num-bullet">8</span><span><strong>Identify Callback Hell:</strong> Study a nested structure and identify dependent execution flow.</span></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Right Column: Final Key Takeaways -->
+            <div style="display:flex; flex-direction:column; gap:0.75rem;">
+              <div class="card success">
+                <div class="card-title" style="color:#065f46;">
+                  <span class="card-icon">🎓</span>
+                  <span>Day 2 Core Key Takeaways</span>
+                </div>
+                <ul class="feature-list" style="font-size:0.85rem;">
+                  <li><span class="bullet-icon">▸</span> <strong>Non-Blocking I/O:</strong> Synchronous code never waits for delayed timer callbacks to execute.</li>
+                  <li><span class="bullet-icon">▸</span> <strong>Timer Suite:</strong> <code>setTimeout</code>/<code>clearTimeout</code> for single delays; <code>setInterval</code>/<code>clearInterval</code> for repeating cycles.</li>
+                  <li><span class="bullet-icon">▸</span> <strong>Callbacks:</strong> Functions passed as values; invoked synchronously or asynchronously.</li>
+                  <li><span class="bullet-icon">▸</span> <strong>Error-First Standard:</strong> <code>(error, data)</code> pattern protects Node.js code from uncaught exceptions.</li>
+                  <li><span class="bullet-icon">▸</span> <strong>The Road Ahead:</strong> Callback hell is why modern MERN backends use Promises and <code>async/await</code>!</li>
+                </ul>
+              </div>
+
+              <div class="callout tip">
+                <span class="callout-icon">🚀</span>
+                <div>
+                  <strong>Congratulations MERN Students!</strong> You have conquered Node.js timers and callbacks. Next session: Mastering Promises and async/await!
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+      </div>
+    </main>
+
+    <!-- Bottom Navigation Controls -->
+    <footer class="bottom-bar">
+      <div class="bottom-left">
+        <button id="prev-btn" class="control-btn" title="Previous Slide (Left Arrow, PageUp)">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <polyline points="15 18 9 12 15 6"></polyline>
+          </svg>
+          <span>Previous</span>
+        </button>
+      </div>
+
+      <div class="bottom-center">
+        <span id="slide-counter" class="slide-counter">01 / 15</span>
+      </div>
+
+      <div class="bottom-right">
+        <button id="next-btn" class="control-btn primary" title="Next Slide (Right Arrow, Space, PageDown)">
+          <span>Next</span>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <polyline points="9 18 15 12 9 6"></polyline>
+          </svg>
+        </button>
+      </div>
+    </footer>
+
+    <!-- Table of Contents Slide Drawer -->
+    <div id="toc-overlay" class="toc-overlay">
+      <aside class="toc-drawer">
+        <div class="toc-header">
+          <div class="toc-title">Table of Contents (15 Slides)</div>
+          <button id="toc-close" class="toc-close" title="Close Drawer (Esc)">&times;</button>
+        </div>
+        <div id="toc-list" class="toc-list">
+          <!-- Populated dynamically by script.js -->
+        </div>
+      </aside>
+    </div>
+
+    <!-- Keyboard Shortcuts Help Modal -->
+    <div id="help-modal-overlay" class="help-modal-overlay">
+      <div class="help-modal">
+        <div class="help-modal-header">
+          <div class="help-modal-title">⌨️ Keyboard Shortcuts</div>
+          <button id="help-modal-close" class="toc-close">&times;</button>
+        </div>
+        <div class="help-modal-body">
+          <div class="shortcut-row">
+            <span>Next Slide</span>
+            <div><span class="kbd-badge">→</span> or <span class="kbd-badge">Space</span> or <span class="kbd-badge">PgDn</span></div>
+          </div>
+          <div class="shortcut-row">
+            <span>Previous Slide</span>
+            <div><span class="kbd-badge">←</span> or <span class="kbd-badge">PgUp</span></div>
+          </div>
+          <div class="shortcut-row">
+            <span>First Slide (Title)</span>
+            <span class="kbd-badge">Home</span>
+          </div>
+          <div class="shortcut-row">
+            <span>Last Slide (Revision)</span>
+            <span class="kbd-badge">End</span>
+          </div>
+          <div class="shortcut-row">
+            <span>Toggle Fullscreen</span>
+            <span class="kbd-badge">F</span>
+          </div>
+          <div class="shortcut-row">
+            <span>Table of Contents</span>
+            <div><span class="kbd-badge">T</span> or <span class="kbd-badge">M</span></div>
+          </div>
+          <div class="shortcut-row">
+            <span>Close Modal / Drawer</span>
+            <span class="kbd-badge">Esc</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>

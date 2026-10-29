@@ -1,0 +1,2445 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Node.js Day 2: Asynchronous Programming &amp; I/O — Interactive Presentation</title>
+  <meta name="description" content="Node.js Day 2 Presentation: Event loop, Callbacks, Promises, async/await, Promise.all, try/catch, fetch, AbortController, Exponential Backoff, fs/promises, path, and User API Report Generator.">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Presentation App Shell -->
+  <div id="presentation-app">
+
+    <!-- Top Continuous Progress Bar -->
+    <div class="progress-container">
+      <div id="progress-bar" class="progress-bar"></div>
+    </div>
+
+    <!-- Top Navigation Header -->
+    <header class="top-nav">
+      <div class="brand-badge">
+        <div class="icon-box">
+          <!-- Node.js Hexagon Icon SVG -->
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <polygon points="12 2 2 8.5 2 15.5 12 22 22 15.5 22 8.5 12 2"></polygon>
+            <line x1="12" y1="22" x2="12" y2="15.5"></line>
+            <polyline points="22 8.5 12 15.5 2 8.5"></polyline>
+          </svg>
+        </div>
+        <span>Node.js Module</span>
+        <span class="brand-tag day-pill">Day 2</span>
+      </div>
+
+      <div class="deck-section-indicator">
+        <span id="section-indicator" class="section-pill">Section 1: Understanding Asynchronous Programming</span>
+      </div>
+
+      <div class="top-actions">
+        <button id="toc-btn" class="nav-btn" title="Open Table of Contents (Press 'T' or 'M')">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="3" y1="12" x2="21" y2="12"></line>
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <line x1="3" y1="18" x2="21" y2="18"></line>
+          </svg>
+          <span>Contents</span>
+        </button>
+
+        <button id="help-btn" class="nav-btn" title="Keyboard Shortcuts (Press '?')">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"></circle>
+            <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+            <line x1="12" y1="17" x2="12.01" y2="17"></line>
+          </svg>
+          <span>Shortcuts</span>
+        </button>
+
+        <button id="fullscreen-btn" class="nav-btn" title="Toggle Fullscreen (Press 'F')">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path>
+          </svg>
+          <span>Fullscreen</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Slide Viewport -->
+    <main class="slide-viewport">
+      <div class="slide-container">
+
+        <!-- ===================================================================
+             SLIDE 1: Title Slide
+             =================================================================== -->
+        <section id="slide-1" class="slide active" data-slide-num="1">
+          <div class="title-slide-content">
+            <div class="title-badge-row">
+              <span class="pill-badge">Node.js Backend Curriculum</span>
+              <span class="pill-badge day2">Day 2 — Core Engineering</span>
+            </div>
+
+            <h1 class="hero-main-title">
+              Node.js Day 2: <br><span class="highlight">Asynchronous Programming &amp; I/O</span>
+            </h1>
+
+            <p class="hero-subtitle">
+              Working with APIs, Promises, Files, and Errors
+            </p>
+
+            <div class="logos-container">
+              <div class="logo-card">
+                <svg viewBox="0 0 256 288" width="44" height="44">
+                  <path fill="#539E43" d="M128 0L24.7 59.6v119.2L128 238.4l103.3-59.6V59.6L128 0z"/>
+                  <path fill="#FFFFFF" d="M128 32.4l75.2 43.4v86.8L128 206l-75.2-43.4V75.8L128 32.4z"/>
+                  <path fill="#333333" d="M128 47.8L68.7 82.1v68.6L128 185l59.3-34.3V82.1L128 47.8z"/>
+                  <path fill="#539E43" d="M115.8 98.4h24.4v40.3h-24.4z"/>
+                </svg>
+                <div class="logo-text">
+                  <div class="logo-text-title">Node.js Engine</div>
+                  <div class="logo-text-sub">Event Loop &amp; libuv</div>
+                </div>
+              </div>
+
+              <div class="logo-card">
+                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#0284c7" stroke-width="2">
+                  <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/>
+                </svg>
+                <div class="logo-text">
+                  <div class="logo-text-title">Non-Blocking I/O</div>
+                  <div class="logo-text-sub">Promises &amp; async/await</div>
+                </div>
+              </div>
+
+              <div class="logo-card">
+                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2">
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                  <polyline points="7 10 12 15 17 10"></polyline>
+                  <line x1="12" y1="15" x2="12" y2="3"></line>
+                </svg>
+                <div class="logo-text">
+                  <div class="logo-text-title">Production APIs</div>
+                  <div class="logo-text-sub">Fetch, Timeout &amp; Retry</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="meta-footer">
+              <div class="meta-item">
+                <span>📚 <strong>Course:</strong> Advanced Node.js Backend &amp; AI Integration</span>
+              </div>
+              <div class="meta-item">
+                <span>👨‍🏫 <strong>Instructor:</strong> Senior Node.js Specialist</span>
+              </div>
+              <div class="meta-item">
+                <span>⚡ <strong>Prerequisites:</strong> Day 1 ES Modules &amp; Fundamentals</span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ===================================================================
+             SLIDE 2: Learning Objectives
+             =================================================================== -->
+        <section id="slide-2" class="slide" data-slide-num="2">
+          <div class="slide-header">
+            <div class="slide-title-wrap">
+              <span class="slide-category">Section 1: Foundations</span>
+              <h2 class="slide-title">Learning Objectives</h2>
+              <p class="slide-subtitle">By the end of this session, students should be able to master these 10 core backend skills:</p>
+            </div>
+            <span class="slide-num-pill">Slide 02 / 25</span>
+          </div>
+
+          <div class="slide-body">
+            <div class="objectives-grid">
+              <div class="objective-item">
+                <div class="objective-num">1</div>
+                <div class="objective-text">Explain the Node.js event loop and call stack at a high level.</div>
+              </div>
+              <div class="objective-item">
+                <div class="objective-num">2</div>
+                <div class="objective-text">Understand callbacks, Promises, and the modern async/await syntax.</div>
+              </div>
+              <div class="objective-item">
+                <div class="objective-num">3</div>
+                <div class="objective-text">Execute independent asynchronous operations in parallel with Promise.all.</div>
+              </div>
+              <div class="objective-item">
+                <div class="objective-num">4</div>
+                <div class="objective-text">Handle network and runtime errors defensively using try/catch.</div>
+              </div>
+              <div class="objective-item">
+                <div class="objective-num">5</div>
+                <div class="objective-text">Fetch remote JSON data from REST APIs using Node.js's built-in fetch API.</div>
+              </div>
+              <div class="objective-item">
+                <div class="objective-num">6</div>
+                <div class="objective-text">Cancel hanging requests safely using AbortController and signals.</div>
+              </div>
+              <div class="objective-item">
+                <div class="objective-num">7</div>
+                <div class="objective-text">Implement automatic retry logic powered by exponential backoff.</div>
+              </div>
+              <div class="objective-item">
+                <div class="objective-num">8</div>
+                <div class="objective-text">Read, write, and create directories asynchronously with node:fs/promises.</div>
+              </div>
+              <div class="objective-item">
+                <div class="objective-num">9</div>
+                <div class="objective-text">Construct cross-platform file and directory paths safely using node:path.</div>
+              </div>
+              <div class="objective-item">
+                <div class="objective-num">10</div>
+                <div class="objective-text">Combine these concepts in a practical, production-ready Node.js report program.</div>
+              </div>
+            </div>
+
+            <div class="callout tip">
+              <span class="callout-icon">💡</span>
+              <div>
+                <strong>Why this matters:</strong> Every modern backend service, microservice, and AI/LLM integration (calling OpenAI, Gemini, or vector databases) depends on non-blocking I/O, timeouts, retries, and clean error handling.
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ===================================================================
+             SLIDE 3: What Is Asynchronous Programming?
+             =================================================================== -->
+        <section id="slide-3" class="slide" data-slide-num="3">
+          <div class="slide-header">
+            <div class="slide-title-wrap">
+              <span class="slide-category">Section 1: Foundations</span>
+              <h2 class="slide-title">What Is Asynchronous Programming?</h2>
+              <p class="slide-subtitle">Non-blocking execution and time-delayed operations</p>
+            </div>
+            <span class="slide-num-pill">Slide 03 / 25</span>
+          </div>
+
+          <div class="slide-body grid-2">
+            <!-- Left Column: Explanation -->
+            <div style="display:flex; flex-direction:column; gap:1rem;">
+              <div class="card highlight">
+                <div class="card-title">
+                  <span class="card-icon">⚡</span>
+                  <span>Core Definition</span>
+                </div>
+                <p>
+                  <strong>Asynchronous programming</strong> allows a program to start an operation and continue doing other work while waiting for that operation to finish.
+                </p>
+              </div>
+
+              <div class="card">
+                <div class="card-title">
+                  <span class="card-icon">🌐</span>
+                  <span>Common Asynchronous Operations in Node.js</span>
+                </div>
+                <ul class="feature-list">
+                  <li><span class="bullet-icon">▸</span> <strong>Calling an external API:</strong> Waiting for an HTTP response over the internet.</li>
+                  <li><span class="bullet-icon">▸</span> <strong>Reading a file:</strong> Waiting for disk storage to retrieve bytes.</li>
+                  <li><span class="bullet-icon">▸</span> <strong>Querying a database:</strong> Waiting for PostgreSQL or MongoDB queries.</li>
+                  <li><span class="bullet-icon">▸</span> <strong>Waiting for a network response:</strong> Connecting to microservices or AI models.</li>
+                </ul>
+              </div>
+
+              <div class="callout note">
+                <span class="callout-icon">🔑</span>
+                <div>
+                  <strong>Key Takeaway:</strong> The timer does not stop the remaining synchronous statements from running. This is the foundation for understanding asynchronous code.
+                </div>
+              </div>
+            </div>
+
+            <!-- Right Column: Code & Expected Output -->
+            <div style="display:flex; flex-direction:column; gap:0.9rem;">
+              <div class="code-container">
+                <div class="code-header">
+                  <div class="code-file-badge">
+                    <span class="file-dot"></span>
+                    <span>app.js</span>
+                  </div>
+                  <button class="copy-btn">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                    <span>Copy Code</span>
+                  </button>
+                </div>
+                <pre class="code-block"><code><span class="syn-fn">console</span>.<span class="syn-fn">log</span>(<span class="syn-str">"1. Start"</span>);
+
+<span class="syn-fn">setTimeout</span>(() =&gt; {
+  <span class="syn-fn">console</span>.<span class="syn-fn">log</span>(<span class="syn-str">"2. Timer completed"</span>);
+}, <span class="syn-num">2000</span>);
+
+<span class="syn-fn">console</span>.<span class="syn-fn">log</span>(<span class="syn-str">"3. Continue working"</span>);</code></pre>
+              </div>
+
+              <div class="terminal-output">
+                <div class="terminal-header">
+                  <span class="dot"></span>
+                  <span>Terminal Execution</span>
+                </div>
+                <div class="terminal-body">
+<span class="cmd">$ node app.js</span>
+<span class="res">1. Start</span>
+<span class="res">3. Continue working</span>
+<span class="res" style="color:#fbbf24;">2. Timer completed</span>   <span class="syn-cm"># printed after 2 seconds</span></div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ===================================================================
+             SLIDE 4: Event Loop: High-Level Overview
+             =================================================================== -->
+        <section id="slide-4" class="slide" data-slide-num="4">
+          <div class="slide-header">
+            <div class="slide-title-wrap">
+              <span class="slide-category">Section 1: Foundations</span>
+              <h2 class="slide-title">Event Loop: High-Level Overview</h2>
+              <p class="slide-subtitle">How single-threaded JavaScript coordinates non-blocking asynchronous operations</p>
+            </div>
+            <span class="slide-num-pill">Slide 04 / 25</span>
+          </div>
+
+          <div class="slide-body grid-2">
+            <!-- Left Column: Flow Diagram & Rules -->
+            <div style="display:flex; flex-direction:column; gap:0.8rem;">
+              <div class="event-loop-flow">
+                <div class="flow-step step-sync">
+                  <span class="step-badge">1. JS Thread</span>
+                  <span>JavaScript Code enters the Call Stack</span>
+                </div>
+                <div class="flow-arrow">▼</div>
+                <div class="flow-step step-async">
+                  <span class="step-badge">2. Runtime</span>
+                  <span>Start Async Operation (Delegated to Node.js / libuv)</span>
+                </div>
+                <div class="flow-arrow">▼</div>
+                <div class="flow-step step-sync">
+                  <span class="step-badge">3. Stack</span>
+                  <span>Continue Other Work (Synchronous statements finish)</span>
+                </div>
+                <div class="flow-arrow">▼</div>
+                <div class="flow-step step-async">
+                  <span class="step-badge">4. Complete</span>
+                  <span>Async Operation Completes in background</span>
+                </div>
+                <div class="flow-arrow">▼</div>
+                <div class="flow-step step-loop">
+                  <span class="step-badge">5. Queue</span>
+                  <span>Callback Becomes Eligible in Task Queue</span>
+                </div>
+                <div class="flow-arrow">▼</div>
+                <div class="flow-step step-sync">
+                  <span class="step-badge">6. Loop</span>
+                  <span>Event Loop pushes Callback to Stack when empty → Callback Executes</span>
+                </div>
+              </div>
+
+              <div class="callout warning">
+                <span class="callout-icon">⚠️</span>
+                <div>
+                  <strong>Important:</strong> Node.js is not automatically non-blocking for every task. CPU-heavy synchronous JavaScript (e.g. huge loops, heavy encryption) will block the single thread and starve the event loop!
+                </div>
+              </div>
+            </div>
+
+            <!-- Right Column: Code & Interactive Simulation -->
+            <div style="display:flex; flex-direction:column; gap:0.8rem;">
+              <div class="code-container">
+                <div class="code-header">
+                  <div class="code-file-badge">
+                    <span class="file-dot"></span>
+                    <span>event-loop-zero-timer.js</span>
+                  </div>
+                  <button class="copy-btn">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                    <span>Copy Code</span>
+                  </button>
+                </div>
+                <pre class="code-block"><code><span class="syn-fn">console</span>.<span class="syn-fn">log</span>(<span class="syn-str">"Start"</span>);
+
+<span class="syn-fn">setTimeout</span>(() =&gt; {
+  <span class="syn-fn">console</span>.<span class="syn-fn">log</span>(<span class="syn-str">"Timer callback"</span>);
+}, <span class="syn-num">0</span>);
+
+<span class="syn-fn">console</span>.<span class="syn-fn">log</span>(<span class="syn-str">"End"</span>);</code></pre>
+              </div>
+
+              <!-- Interactive Event Loop Simulator -->
+              <div class="interactive-widget">
+                <div class="interactive-header">
+                  <span>Interactive Event Loop Stepper (0ms Delay)</span>
+                  <button id="run-event-loop-sim" class="widget-btn">Simulate Execution ▶</button>
+                </div>
+                <div id="event-loop-step-status" style="font-size:0.82rem; color:var(--text-muted);">
+                  Click "Simulate Execution" to see how the call stack and event loop handle a 0ms timer.
+                </div>
+                <div id="event-loop-sim-log" class="terminal-output" style="min-height:90px; padding:0.6rem 0.9rem;">
+                  <div class="cmd">&gt; Ready for simulation...</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ===================================================================
+             SLIDE 5: Understanding Callbacks
+             =================================================================== -->
+        <section id="slide-5" class="slide" data-slide-num="5">
+          <div class="slide-header">
+            <div class="slide-title-wrap">
+              <span class="slide-category">Section 2: Asynchronous Patterns</span>
+              <h2 class="slide-title">Understanding Callbacks</h2>
+              <p class="slide-subtitle">Functions passed as arguments for delayed or event-driven invocation</p>
+            </div>
+            <span class="slide-num-pill">Slide 05 / 25</span>
+          </div>
+
+          <div class="slide-body grid-2">
+            <!-- Left Column: Explanation -->
+            <div style="display:flex; flex-direction:column; gap:1rem;">
+              <div class="card highlight">
+                <div class="card-title">
+                  <span class="card-icon">📌</span>
+                  <span>Definition of a Callback</span>
+                </div>
+                <p>
+                  A <strong>callback</strong> is a function passed to another function so that it can be called later when an event happens or a task finishes.
+                </p>
+              </div>
+
+              <div class="card">
+                <div class="card-title">
+                  <span class="card-icon">🔍</span>
+                  <span>How It Works in This Example</span>
+                </div>
+                <ul class="feature-list">
+                  <li><span class="bullet-icon">▸</span> <code>completed</code> is passed as a function reference into <code>processUser</code>.</li>
+                  <li><span class="bullet-icon">▸</span> <code>processUser</code> executes its own work, then invokes <code>callback()</code>.</li>
+                  <li><span class="bullet-icon">▸</span> Callbacks are fundamental to JavaScript's event-driven architecture.</li>
+                </ul>
+              </div>
+
+              <div class="callout warning">
+                <span class="callout-icon">⚠️</span>
+                <div>
+                  <strong>The Pitfall:</strong> When multiple asynchronous operations depend on each other, deeply nested callbacks create the infamous <em>"Callback Hell"</em> or <em>"Pyramid of Doom"</em>, making error handling and maintenance very difficult.
+                </div>
+              </div>
+            </div>
+
+            <!-- Right Column: Code & Output -->
+            <div style="display:flex; flex-direction:column; gap:0.9rem;">
+              <div class="code-container">
+                <div class="code-header">
+                  <div class="code-file-badge">
+                    <span class="file-dot"></span>
+                    <span>callback-basic.js</span>
+                  </div>
+                  <button class="copy-btn">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                    <span>Copy Code</span>
+                  </button>
+                </div>
+                <pre class="code-block"><code><span class="syn-kw">function</span> <span class="syn-fn">processUser</span>(name, callback) {
+  <span class="syn-fn">console</span>.<span class="syn-fn">log</span>(<span class="syn-str">"Processing user:"</span>, name);
+
+  <span class="syn-fn">callback</span>();
+}
+
+<span class="syn-kw">function</span> <span class="syn-fn">completed</span>() {
+  <span class="syn-fn">console</span>.<span class="syn-fn">log</span>(<span class="syn-str">"User processing completed"</span>);
+}
+
+<span class="syn-fn">processUser</span>(<span class="syn-str">"Anu"</span>, completed);</code></pre>
+              </div>
+
+              <div class="terminal-output">
+                <div class="terminal-header">
+                  <span class="dot"></span>
+                  <span>Expected Output</span>
+                </div>
+                <div class="terminal-body">
+<span class="cmd">$ node callback-basic.js</span>
+<span class="res">Processing user: Anu</span>
+<span class="res">User processing completed</span></div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ===================================================================
+             SLIDE 6: Callback-Based Asynchronous Operations
+             =================================================================== -->
+        <section id="slide-6" class="slide" data-slide-num="6">
+          <div class="slide-header">
+            <div class="slide-title-wrap">
+              <span class="slide-category">Section 2: Asynchronous Patterns</span>
+              <h2 class="slide-title">Callback-Based Asynchronous Operations</h2>
+              <p class="slide-subtitle">Reading files using node:fs and the error-first callback pattern</p>
+            </div>
+            <span class="slide-num-pill">Slide 06 / 25</span>
+          </div>
+
+          <div class="slide-body grid-2">
+            <!-- Left Column: Explanation -->
+            <div style="display:flex; flex-direction:column; gap:1rem;">
+              <div class="card highlight">
+                <div class="card-title">
+                  <span class="card-icon">📂</span>
+                  <span>Input File (message.txt)</span>
+                </div>
+                <p style="font-family:var(--font-mono); font-size:0.9rem; background:#fff; padding:0.6rem 0.8rem; border-radius:6px; border:1px solid var(--border-subtle);">
+                  Welcome to Node.js Day 2
+                </p>
+              </div>
+
+              <div class="card">
+                <div class="card-title">
+                  <span class="card-icon">🎯</span>
+                  <span>The "Error-First" Convention</span>
+                </div>
+                <p>
+                  In traditional Node.js callback APIs, the callback function always takes <code>(error, data)</code>:
+                </p>
+                <ul class="feature-list">
+                  <li><span class="bullet-icon">▸</span> If an error occurs, <code>error</code> contains the Error object, and <code>data</code> is undefined.</li>
+                  <li><span class="bullet-icon">▸</span> If successful, <code>error</code> is <code>null</code>, and <code>data</code> contains the file content.</li>
+                </ul>
+              </div>
+
+              <div class="callout note">
+                <span class="callout-icon">⏱️</span>
+                <div>
+                  <strong>Timing Insight:</strong> The synchronous log <code>"File reading started"</code> executes immediately without waiting for disk I/O. The callback only fires once the file read is complete.
+                </div>
+              </div>
+            </div>
+
+            <!-- Right Column: Code & Output -->
+            <div style="display:flex; flex-direction:column; gap:0.9rem;">
+              <div class="code-container">
+                <div class="code-header">
+                  <div class="code-file-badge">
+                    <span class="file-dot"></span>
+                    <span>app.js</span>
+                  </div>
+                  <button class="copy-btn">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                    <span>Copy Code</span>
+                  </button>
+                </div>
+                <pre class="code-block"><code><span class="syn-kw">import</span> fs <span class="syn-kw">from</span> <span class="syn-str">"node:fs"</span>;
+
+fs.<span class="syn-fn">readFile</span>(<span class="syn-str">"message.txt"</span>, <span class="syn-str">"utf8"</span>, (error, data) =&gt; {
+  <span class="syn-kw">if</span> (error) {
+    <span class="syn-fn">console</span>.<span class="syn-fn">error</span>(<span class="syn-str">"Error:"</span>, error.message);
+    <span class="syn-kw">return</span>;
+  }
+
+  <span class="syn-fn">console</span>.<span class="syn-fn">log</span>(<span class="syn-str">"File content:"</span>, data);
+});
+
+<span class="syn-fn">console</span>.<span class="syn-fn">log</span>(<span class="syn-str">"File reading started"</span>);</code></pre>
+              </div>
+
+              <div class="terminal-output">
+                <div class="terminal-header">
+                  <span class="dot"></span>
+                  <span>Execution Output Order</span>
+                </div>
+                <div class="terminal-body">
+<span class="cmd">$ node app.js</span>
+<span class="res">File reading started</span>
+<span class="res" style="color:#38bdf8;">File content: Welcome to Node.js Day 2</span></div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ===================================================================
+             SLIDE 7: Understanding Promises
+             =================================================================== -->
+        <section id="slide-7" class="slide" data-slide-num="7">
+          <div class="slide-header">
+            <div class="slide-title-wrap">
+              <span class="slide-category">Section 2: Asynchronous Patterns</span>
+              <h2 class="slide-title">Understanding Promises</h2>
+              <p class="slide-subtitle">A standardized object representing the eventual completion or failure of an async operation</p>
+            </div>
+            <span class="slide-num-pill">Slide 07 / 25</span>
+          </div>
+
+          <div class="slide-body grid-2">
+            <!-- Left Column: Explanation & 3 States -->
+            <div style="display:flex; flex-direction:column; gap:0.9rem;">
+              <div class="card highlight">
+                <div class="card-title">
+                  <span class="card-icon">🤝</span>
+                  <span>What Is a Promise?</span>
+                </div>
+                <p>
+                  A <strong>Promise</strong> is an object representing the eventual success or failure of an asynchronous operation and its resulting value.
+                </p>
+              </div>
+
+              <div class="promise-states">
+                <div class="state-card pending">
+                  <div class="state-title">⏳ Pending</div>
+                  <div class="state-desc">Initial state. Operation is currently ongoing.</div>
+                </div>
+                <div class="state-card fulfilled">
+                  <div class="state-title">✅ Fulfilled</div>
+                  <div class="state-desc">Operation succeeded. Handled via <code>.then()</code>.</div>
+                </div>
+                <div class="state-card rejected">
+                  <div class="state-title">❌ Rejected</div>
+                  <div class="state-desc">Operation failed. Handled via <code>.catch()</code>.</div>
+                </div>
+              </div>
+
+              <div class="card">
+                <div class="card-title">
+                  <span class="card-icon">⚙️</span>
+                  <span>Core Methods</span>
+                </div>
+                <ul class="feature-list">
+                  <li><span class="bullet-icon">▸</span> <code>resolve(value)</code>: Fulfills the Promise with a result value.</li>
+                  <li><span class="bullet-icon">▸</span> <code>reject(error)</code>: Rejects the Promise with an Error object.</li>
+                  <li><span class="bullet-icon">▸</span> <code>.then(cb)</code>: Runs when the promise fulfills successfully.</li>
+                  <li><span class="bullet-icon">▸</span> <code>.catch(cb)</code>: Catches any errors or rejected promises.</li>
+                </ul>
+              </div>
+            </div>
+
+            <!-- Right Column: Code & Output -->
+            <div style="display:flex; flex-direction:column; gap:0.9rem;">
+              <div class="code-container">
+                <div class="code-header">
+                  <div class="code-file-badge">
+                    <span class="file-dot"></span>
+                    <span>promise-demo.js</span>
+                  </div>
+                  <button class="copy-btn">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                    <span>Copy Code</span>
+                  </button>
+                </div>
+                <pre class="code-block"><code><span class="syn-kw">const</span> task = <span class="syn-kw">new</span> <span class="syn-fn">Promise</span>((resolve, reject) =&gt; {
+  <span class="syn-kw">const</span> success = <span class="syn-kw">true</span>;
+
+  <span class="syn-kw">if</span> (success) {
+    <span class="syn-fn">resolve</span>(<span class="syn-str">"Task completed"</span>);
+  } <span class="syn-kw">else</span> {
+    <span class="syn-fn">reject</span>(<span class="syn-kw">new</span> <span class="syn-fn">Error</span>(<span class="syn-str">"Task failed"</span>));
+  }
+});
+
+task
+  .<span class="syn-fn">then</span>((result) =&gt; {
+    <span class="syn-fn">console</span>.<span class="syn-fn">log</span>(result);
+  })
+  .<span class="syn-fn">catch</span>((error) =&gt; {
+    <span class="syn-fn">console</span>.<span class="syn-fn">error</span>(error.message);
+  });</code></pre>
+              </div>
+
+              <div class="terminal-output">
+                <div class="terminal-header">
+                  <span class="dot"></span>
+                  <span>Expected Output</span>
+                </div>
+                <div class="terminal-body">
+<span class="cmd">$ node promise-demo.js</span>
+<span class="res">Task completed</span></div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ===================================================================
+             SLIDE 8: async/await
+             =================================================================== -->
+        <section id="slide-8" class="slide" data-slide-num="8">
+          <div class="slide-header">
+            <div class="slide-title-wrap">
+              <span class="slide-category">Section 2: Asynchronous Patterns</span>
+              <h2 class="slide-title">async/await</h2>
+              <p class="slide-subtitle">Writing asynchronous code that looks and reads like clean synchronous code</p>
+            </div>
+            <span class="slide-num-pill">Slide 08 / 25</span>
+          </div>
+
+          <div class="slide-body grid-2">
+            <!-- Left Column: Explanation -->
+            <div style="display:flex; flex-direction:column; gap:1rem;">
+              <div class="card highlight">
+                <div class="card-title">
+                  <span class="card-icon">🚀</span>
+                  <span>What is async/await?</span>
+                </div>
+                <p>
+                  <code>async/await</code> is modern JavaScript syntax built on top of Promises. It eliminates promise chaining callbacks and makes asynchronous workflows easy to read and debug.
+                </p>
+              </div>
+
+              <div class="card">
+                <div class="card-title">
+                  <span class="card-icon">🔑</span>
+                  <span>How It Operates</span>
+                </div>
+                <ul class="feature-list">
+                  <li><span class="bullet-icon">▸</span> <strong><code>async</code> keyword:</strong> Marks a function as asynchronous and guarantees it returns a Promise.</li>
+                  <li><span class="bullet-icon">▸</span> <strong><code>await</code> keyword:</strong> Pauses execution <em>inside the async function</em> until the Promise settles.</li>
+                  <li><span class="bullet-icon">▸</span> <strong>Non-blocking:</strong> <code>await</code> does <em>not</em> block the entire Node.js runtime or event loop; other tasks continue to run freely.</li>
+                </ul>
+              </div>
+
+              <div class="callout tip">
+                <span class="callout-icon">💡</span>
+                <div>
+                  <strong>Sequence of Events:</strong> Displays <code>Loading user...</code> → waits 1000ms for Promise to fulfill → logs user object → displays <code>Finished</code>.
+                </div>
+              </div>
+            </div>
+
+            <!-- Right Column: Code & Output -->
+            <div style="display:flex; flex-direction:column; gap:0.9rem;">
+              <div class="code-container">
+                <div class="code-header">
+                  <div class="code-file-badge">
+                    <span class="file-dot"></span>
+                    <span>async-await.js</span>
+                  </div>
+                  <button class="copy-btn">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                    <span>Copy Code</span>
+                  </button>
+                </div>
+                <pre class="code-block"><code><span class="syn-kw">function</span> <span class="syn-fn">getUser</span>() {
+  <span class="syn-kw">return new</span> <span class="syn-fn">Promise</span>((resolve) =&gt; {
+    <span class="syn-fn">setTimeout</span>(() =&gt; {
+      <span class="syn-fn">resolve</span>({ name: <span class="syn-str">"Anu"</span>, role: <span class="syn-str">"Student"</span> });
+    }, <span class="syn-num">1000</span>);
+  });
+}
+
+<span class="syn-kw">async function</span> <span class="syn-fn">main</span>() {
+  <span class="syn-fn">console</span>.<span class="syn-fn">log</span>(<span class="syn-str">"Loading user..."</span>);
+
+  <span class="syn-kw">const</span> user = <span class="syn-kw">await</span> <span class="syn-fn">getUser</span>();
+
+  <span class="syn-fn">console</span>.<span class="syn-fn">log</span>(user);
+  <span class="syn-fn">console</span>.<span class="syn-fn">log</span>(<span class="syn-str">"Finished"</span>);
+}
+
+<span class="syn-fn">main</span>();</code></pre>
+              </div>
+
+              <div class="terminal-output">
+                <div class="terminal-header">
+                  <span class="dot"></span>
+                  <span>Execution Output</span>
+                </div>
+                <div class="terminal-body">
+<span class="cmd">$ node async-await.js</span>
+<span class="res">Loading user...</span>
+<span class="res">{ name: 'Anu', role: 'Student' }</span>
+<span class="res">Finished</span></div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ===================================================================
+             SLIDE 9: Callbacks vs Promises vs async/await
+             =================================================================== -->
+        <section id="slide-9" class="slide" data-slide-num="9">
+          <div class="slide-header">
+            <div class="slide-title-wrap">
+              <span class="slide-category">Section 2: Asynchronous Patterns</span>
+              <h2 class="slide-title">Callbacks vs Promises vs async/await</h2>
+              <p class="slide-subtitle">Evolution, trade-offs, and best practices across the three paradigms</p>
+            </div>
+            <span class="slide-num-pill">Slide 09 / 25</span>
+          </div>
+
+          <div class="slide-body">
+            <div class="table-wrapper">
+              <table class="presentation-table">
+                <thead>
+                  <tr>
+                    <th>Feature</th>
+                    <th>Callbacks</th>
+                    <th>Promises</th>
+                    <th>async / await</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><strong>Basic structure</strong></td>
+                    <td>Function passed directly to another function</td>
+                    <td>Promise object instance (with state)</td>
+                    <td>Syntactic wrapper built cleanly on Promises</td>
+                  </tr>
+                  <tr>
+                    <td><strong>Error handling</strong></td>
+                    <td>Often callback error arguments <code>(err, res)</code></td>
+                    <td>Method chaining via <code>.catch()</code></td>
+                    <td>Standard, unified <code>try/catch</code> blocks</td>
+                  </tr>
+                  <tr>
+                    <td><strong>Readability</strong></td>
+                    <td>Can become deeply nested ("Callback Hell")</td>
+                    <td>Supports linear <code>.then()</code> chaining</td>
+                    <td>Often reads directly like sequential code</td>
+                  </tr>
+                  <tr>
+                    <td><strong>Best use</strong></td>
+                    <td>Low-level event listeners &amp; legacy stream APIs</td>
+                    <td>Composing async operations &amp; concurrency helpers</td>
+                    <td>Writing clear business logic &amp; API workflows</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="grid-2" style="margin-top:0.4rem;">
+              <div class="card highlight">
+                <div class="card-title">
+                  <span class="card-icon">💡</span>
+                  <span>Core Teaching Point</span>
+                </div>
+                <p>
+                  <strong><code>async/await</code> does not replace Promises!</strong> Under the hood, an <code>async</code> function literally returns a Promise, and <code>await</code> consumes a Promise. It is cleaner syntax for working with them.
+                </p>
+              </div>
+
+              <div class="card accent">
+                <div class="card-title">
+                  <span class="card-icon">🎯</span>
+                  <span>Industry Standard for Day 2 &amp; Beyond</span>
+                </div>
+                <p>
+                  For all modern Node.js applications, microservices, and AI model orchestration, <strong><code>async/await</code> with <code>try/catch</code></strong> is the undisputed standard.
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ===================================================================
+             SLIDE 10: Promise.all for Parallel Calls
+             =================================================================== -->
+        <section id="slide-10" class="slide" data-slide-num="10">
+          <div class="slide-header">
+            <div class="slide-title-wrap">
+              <span class="slide-category">Section 3: Parallelism &amp; Errors</span>
+              <h2 class="slide-title">Promise.all for Parallel Calls</h2>
+              <p class="slide-subtitle">Running independent asynchronous operations concurrently to cut waiting time in half</p>
+            </div>
+            <span class="slide-num-pill">Slide 10 / 25</span>
+          </div>
+
+          <div class="slide-body grid-2">
+            <!-- Left Column: Explanation & Timeline Comparison -->
+            <div style="display:flex; flex-direction:column; gap:0.8rem;">
+              <div class="card highlight">
+                <div class="card-title">
+                  <span class="card-icon">⚡</span>
+                  <span>Why Run in Parallel?</span>
+                </div>
+                <p>
+                  When several independent operations are needed, starting them together dramatically reduces total waiting time compared to awaiting each one sequentially.
+                </p>
+              </div>
+
+              <div class="timeline-card">
+                <div style="font-weight:700; font-size:0.9rem; color:var(--primary-dark);">
+                  Timing Comparison: 2 Tasks (1000ms each)
+                </div>
+
+                <div class="timeline-row">
+                  <div class="timeline-label">
+                    <span>Sequential Await (await A; await B)</span>
+                    <span style="color:#e11d48;">~2000 ms</span>
+                  </div>
+                  <div class="timeline-track">
+                    <div id="seq-bar-1" class="time-bar blue" style="width:50%;">Task 1 (1s)</div>
+                    <div id="seq-bar-2" class="time-bar indigo" style="width:50%;">Task 2 (1s)</div>
+                  </div>
+                </div>
+
+                <div class="timeline-row">
+                  <div class="timeline-label">
+                    <span>Promise.all([A(), B()]) Concurrent</span>
+                    <span style="color:#059669;">~1000 ms</span>
+                  </div>
+                  <div class="timeline-track">
+                    <div id="par-bar-1" class="time-bar teal" style="width:100%;">Task 1 &amp; Task 2 running in parallel (1s)</div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Interactive Concurrency Simulator -->
+              <div class="interactive-widget">
+                <div class="interactive-header">
+                  <span>Interactive Concurrency Simulator</span>
+                  <button id="run-concurrency-sim" class="widget-btn">Simulate Timers ▶</button>
+                </div>
+                <div id="concurrency-status" style="font-size:0.82rem; color:var(--text-muted);">
+                  Click to visualize concurrent vs sequential execution speeds in real time.
+                </div>
+              </div>
+            </div>
+
+            <!-- Right Column: Code & Output -->
+            <div style="display:flex; flex-direction:column; gap:0.9rem;">
+              <div class="code-container">
+                <div class="code-header">
+                  <div class="code-file-badge">
+                    <span class="file-dot"></span>
+                    <span>parallel.js</span>
+                  </div>
+                  <button class="copy-btn">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                    <span>Copy Code</span>
+                  </button>
+                </div>
+                <pre class="code-block"><code><span class="syn-kw">function</span> <span class="syn-fn">getStudent</span>() {
+  <span class="syn-kw">return new</span> <span class="syn-fn">Promise</span>((resolve) =&gt; {
+    <span class="syn-fn">setTimeout</span>(() =&gt; <span class="syn-fn">resolve</span>(<span class="syn-str">"Student loaded"</span>), <span class="syn-num">1000</span>);
+  });
+}
+
+<span class="syn-kw">function</span> <span class="syn-fn">getCourses</span>() {
+  <span class="syn-kw">return new</span> <span class="syn-fn">Promise</span>((resolve) =&gt; {
+    <span class="syn-fn">setTimeout</span>(() =&gt; <span class="syn-fn">resolve</span>(<span class="syn-str">"Courses loaded"</span>), <span class="syn-num">1000</span>);
+  });
+}
+
+<span class="syn-kw">async function</span> <span class="syn-fn">main</span>() {
+  <span class="syn-kw">const</span> [student, courses] = <span class="syn-kw">await</span> <span class="syn-fn">Promise</span>.<span class="syn-fn">all</span>([
+    <span class="syn-fn">getStudent</span>(),
+    <span class="syn-fn">getCourses</span>(),
+  ]);
+
+  <span class="syn-fn">console</span>.<span class="syn-fn">log</span>(student);
+  <span class="syn-fn">console</span>.<span class="syn-fn">log</span>(courses);
+}
+
+<span class="syn-fn">main</span>();</code></pre>
+              </div>
+
+              <div class="terminal-output">
+                <div class="terminal-header">
+                  <span class="dot"></span>
+                  <span>Execution Output (~1 Second Total)</span>
+                </div>
+                <div class="terminal-body">
+<span class="cmd">$ node parallel.js</span>
+<span class="res">Student loaded</span>
+<span class="res">Courses loaded</span></div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ===================================================================
+             SLIDE 11: Promise.all: Important Behavior
+             =================================================================== -->
+        <section id="slide-11" class="slide" data-slide-num="11">
+          <div class="slide-header">
+            <div class="slide-title-wrap">
+              <span class="slide-category">Section 3: Parallelism &amp; Errors</span>
+              <h2 class="slide-title">Promise.all: Important Behavior</h2>
+              <p class="slide-subtitle">Understanding "All-or-Nothing" resolution, fail-fast mechanics, and best use</p>
+            </div>
+            <span class="slide-num-pill">Slide 11 / 25</span>
+          </div>
+
+          <div class="slide-body grid-2">
+            <!-- Left Column: Critical Rules -->
+            <div style="display:flex; flex-direction:column; gap:0.9rem;">
+              <div class="card">
+                <div class="card-title">
+                  <span class="card-icon">📋</span>
+                  <span>5 Essential Rules of Promise.all</span>
+                </div>
+                <ul class="feature-list">
+                  <li><span class="bullet-icon">1.</span> <strong>All Fulfill:</strong> Fulfills only when <em>every single</em> input Promise fulfills, returning an array of results in the exact same input order.</li>
+                  <li><span class="bullet-icon">2.</span> <strong>Fail-Fast Rejection:</strong> It rejects immediately as soon as <em>one single</em> input Promise rejects.</li>
+                  <li><span class="bullet-icon">3.</span> <strong>No Auto-Cancellation:</strong> Other running operations are <em>not automatically cancelled</em> when one rejects; they keep executing in the background.</li>
+                  <li><span class="bullet-icon">4.</span> <strong>When to Use:</strong> For independent operations that do not depend on each other's output.</li>
+                  <li><span class="bullet-icon">5.</span> <strong>When to Avoid:</strong> Avoid when task B requires data computed by task A (use sequential <code>await</code> instead).</li>
+                </ul>
+              </div>
+
+              <div class="callout note">
+                <span class="callout-icon">💡</span>
+                <div>
+                  <strong>ES Module Top-Level Await:</strong> In modern Node.js ES modules (files with <code>.js</code> when <code>"type": "module"</code> is set in <code>package.json</code> or <code>.mjs</code>), <code>await</code> can be used directly at the top level without wrapping in an async function.
+                </div>
+              </div>
+            </div>
+
+            <!-- Right Column: Code & Output -->
+            <div style="display:flex; flex-direction:column; gap:0.9rem;">
+              <div class="code-container">
+                <div class="code-header">
+                  <div class="code-file-badge">
+                    <span class="file-dot"></span>
+                    <span>promise-all-behavior.js</span>
+                  </div>
+                  <button class="copy-btn">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                    <span>Copy Code</span>
+                  </button>
+                </div>
+                <pre class="code-block"><code><span class="syn-cm">// Demonstrating resolved promises with Promise.all</span>
+<span class="syn-kw">const</span> first = <span class="syn-fn">Promise</span>.<span class="syn-fn">resolve</span>(<span class="syn-str">"First"</span>);
+<span class="syn-kw">const</span> second = <span class="syn-fn">Promise</span>.<span class="syn-fn">resolve</span>(<span class="syn-str">"Second"</span>);
+
+<span class="syn-cm">// Top-level await in Node.js ES Modules</span>
+<span class="syn-kw">const</span> results = <span class="syn-kw">await</span> <span class="syn-fn">Promise</span>.<span class="syn-fn">all</span>([first, second]);
+
+<span class="syn-fn">console</span>.<span class="syn-fn">log</span>(results);</code></pre>
+              </div>
+
+              <div class="terminal-output">
+                <div class="terminal-header">
+                  <span class="dot"></span>
+                  <span>Expected Output</span>
+                </div>
+                <div class="terminal-body">
+<span class="cmd">$ node promise-all-behavior.js</span>
+<span class="res">[ 'First', 'Second' ]</span></div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ===================================================================
+             SLIDE 12: Error Handling with try/catch
+             =================================================================== -->
+        <section id="slide-12" class="slide" data-slide-num="12">
+          <div class="slide-header">
+            <div class="slide-title-wrap">
+              <span class="slide-category">Section 3: Parallelism &amp; Errors</span>
+              <h2 class="slide-title">Error Handling with try/catch</h2>
+              <p class="slide-subtitle">Intercepting failures and verifying HTTP status codes defensively</p>
+            </div>
+            <span class="slide-num-pill">Slide 12 / 25</span>
+          </div>
+
+          <div class="slide-body grid-2">
+            <!-- Left Column: Explanation -->
+            <div style="display:flex; flex-direction:column; gap:0.9rem;">
+              <div class="card highlight">
+                <div class="card-title">
+                  <span class="card-icon">🛡️</span>
+                  <span>Defensive Asynchronous Programming</span>
+                </div>
+                <p>
+                  Use <code>try/catch</code> blocks around <code>await</code> expressions to gracefully intercept network timeouts, parsing issues, and thrown exceptions without crashing the Node.js process.
+                </p>
+              </div>
+
+              <div class="card">
+                <div class="card-title">
+                  <span class="card-icon">🔍</span>
+                  <span>Anatomy of try/catch</span>
+                </div>
+                <ul class="feature-list">
+                  <li><span class="bullet-icon">▸</span> <strong><code>try</code> block:</strong> Encloses risky operations (network calls, file reads, JSON parsing).</li>
+                  <li><span class="bullet-icon">▸</span> <strong><code>throw</code> statement:</strong> Generates an explicit <code>Error</code> when business conditions fail.</li>
+                  <li><span class="bullet-icon">▸</span> <strong><code>catch(error)</code>:</strong> Intercepts any thrown error and allows recovery or logging.</li>
+                </ul>
+              </div>
+
+              <div class="callout danger">
+                <span class="callout-icon">🚨</span>
+                <div>
+                  <strong>Critical Fetch Pitfall:</strong> <code>fetch()</code> does <em>not</em> reject on HTTP 404 or 500 errors! It only rejects on severe network failures. You <strong>must</strong> manually verify <code>if (!response.ok)</code> and throw an Error!
+                </div>
+              </div>
+            </div>
+
+            <!-- Right Column: Code & Output -->
+            <div style="display:flex; flex-direction:column; gap:0.9rem;">
+              <div class="code-container">
+                <div class="code-header">
+                  <div class="code-file-badge">
+                    <span class="file-dot"></span>
+                    <span>fetch-trycatch.js</span>
+                  </div>
+                  <button class="copy-btn">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                    <span>Copy Code</span>
+                  </button>
+                </div>
+                <pre class="code-block"><code><span class="syn-kw">async function</span> <span class="syn-fn">getData</span>() {
+  <span class="syn-kw">try</span> {
+    <span class="syn-kw">const</span> response = <span class="syn-kw">await</span> <span class="syn-fn">fetch</span>(
+      <span class="syn-str">"https://jsonplaceholder.typicode.com/users"</span>
+    );
+
+    <span class="syn-cm">// Must verify response.ok manually!</span>
+    <span class="syn-kw">if</span> (!response.ok) {
+      <span class="syn-kw">throw new</span> <span class="syn-fn">Error</span>(<span class="syn-str">`HTTP error: <span class="syn-var">${response.status}</span>`</span>);
+    }
+
+    <span class="syn-kw">const</span> users = <span class="syn-kw">await</span> response.<span class="syn-fn">json</span>();
+
+    <span class="syn-fn">console</span>.<span class="syn-fn">log</span>(<span class="syn-str">"Users:"</span>, users.length);
+  } <span class="syn-kw">catch</span> (error) {
+    <span class="syn-fn">console</span>.<span class="syn-fn">error</span>(<span class="syn-str">"Failed to load users:"</span>, error.message);
+  }
+}
+
+<span class="syn-fn">getData</span>();</code></pre>
+              </div>
+
+              <div class="terminal-output">
+                <div class="terminal-header">
+                  <span class="dot"></span>
+                  <span>Execution Output</span>
+                </div>
+                <div class="terminal-body">
+<span class="cmd">$ node fetch-trycatch.js</span>
+<span class="res">Users: 10</span></div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ===================================================================
+             SLIDE 13: Fetch API in Node.js
+             =================================================================== -->
+        <section id="slide-13" class="slide" data-slide-num="13">
+          <div class="slide-header">
+            <div class="slide-title-wrap">
+              <span class="slide-category">Section 4: Fetch API</span>
+              <h2 class="slide-title">Fetch API in Node.js</h2>
+              <p class="slide-subtitle">Modern HTTP requests built natively into the Node.js runtime (Node 18+)</p>
+            </div>
+            <span class="slide-num-pill">Slide 13 / 25</span>
+          </div>
+
+          <div class="slide-body grid-2">
+            <!-- Left Column: Explanation -->
+            <div style="display:flex; flex-direction:column; gap:0.9rem;">
+              <div class="card highlight">
+                <div class="card-title">
+                  <span class="card-icon">🌐</span>
+                  <span>Native Global Fetch</span>
+                </div>
+                <p>
+                  Modern Node.js includes a global <code>fetch()</code> API standard. There is <strong>no need</strong> to install <code>axios</code>, <code>node-fetch</code>, or third-party packages for standard HTTP calls.
+                </p>
+              </div>
+
+              <div class="card">
+                <div class="card-title">
+                  <span class="card-icon">🎯</span>
+                  <span>Standard 4-Step Fetch Pipeline</span>
+                </div>
+                <div class="step-breakdown">
+                  <div class="step-item">
+                    <span class="num-bullet">1</span>
+                    <span><strong>Send Request:</strong> Call <code>await fetch(url, options)</code>.</span>
+                  </div>
+                  <div class="step-item">
+                    <span class="num-bullet">2</span>
+                    <span><strong>Check Status:</strong> Check <code>if (!response.ok)</code> (200-299 range).</span>
+                  </div>
+                  <div class="step-item">
+                    <span class="num-bullet">3</span>
+                    <span><strong>Parse Body:</strong> Call <code>await response.json()</code> or <code>.text()</code>.</span>
+                  </div>
+                  <div class="step-item">
+                    <span class="num-bullet">4</span>
+                    <span><strong>Consume Data:</strong> Process records, transform arrays, or render.</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="card accent">
+                <div class="card-title">
+                  <span class="card-icon">🤖</span>
+                  <span>Preparation for AI &amp; LLMs</span>
+                </div>
+                <p>
+                  Calling Gemini, OpenAI, Claude, or local Ollama endpoints uses this identical <code>fetch()</code> interface with JSON payloads and headers.
+                </p>
+              </div>
+            </div>
+
+            <!-- Right Column: Code & Output -->
+            <div style="display:flex; flex-direction:column; gap:0.9rem;">
+              <div class="code-container">
+                <div class="code-header">
+                  <div class="code-file-badge">
+                    <span class="file-dot"></span>
+                    <span>fetch-users.js</span>
+                  </div>
+                  <button class="copy-btn">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                    <span>Copy Code</span>
+                  </button>
+                </div>
+                <pre class="code-block"><code><span class="syn-kw">async function</span> <span class="syn-fn">fetchUsers</span>() {
+  <span class="syn-kw">const</span> response = <span class="syn-kw">await</span> <span class="syn-fn">fetch</span>(
+    <span class="syn-str">"https://jsonplaceholder.typicode.com/users"</span>
+  );
+
+  <span class="syn-kw">if</span> (!response.ok) {
+    <span class="syn-kw">throw new</span> <span class="syn-fn">Error</span>(<span class="syn-str">`HTTP error: <span class="syn-var">${response.status}</span>`</span>);
+  }
+
+  <span class="syn-kw">const</span> users = <span class="syn-kw">await</span> response.<span class="syn-fn">json</span>();
+
+  <span class="syn-fn">console</span>.<span class="syn-fn">log</span>(users);
+}
+
+<span class="syn-fn">fetchUsers</span>().<span class="syn-fn">catch</span>(<span class="syn-fn">console</span>.<span class="syn-fn">error</span>);</code></pre>
+              </div>
+
+              <div class="terminal-output">
+                <div class="terminal-header">
+                  <span class="dot"></span>
+                  <span>Execution Output</span>
+                </div>
+                <div class="terminal-body">
+<span class="cmd">$ node fetch-users.js</span>
+<span class="res">[ { id: 1, name: 'Leanne Graham', email: 'Sincere@april.biz', ... }, ... 9 more items ]</span></div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ===================================================================
+             SLIDE 14: Process API Data
+             =================================================================== -->
+        <section id="slide-14" class="slide" data-slide-num="14">
+          <div class="slide-header">
+            <div class="slide-title-wrap">
+              <span class="slide-category">Section 4: Fetch API</span>
+              <h2 class="slide-title">Process API Data</h2>
+              <p class="slide-subtitle">Combining fetch responses with Day 1 functional array methods (map)</p>
+            </div>
+            <span class="slide-num-pill">Slide 14 / 25</span>
+          </div>
+
+          <div class="slide-body grid-2">
+            <!-- Left Column: Explanation -->
+            <div style="display:flex; flex-direction:column; gap:1rem;">
+              <div class="card highlight">
+                <div class="card-title">
+                  <span class="card-icon">🔄</span>
+                  <span>Bridging Day 1 and Day 2</span>
+                </div>
+                <p>
+                  In Day 1, we mastered <code>map()</code>, <code>filter()</code>, and <code>reduce()</code>. Here we immediately apply <code>map()</code> to transform raw HTTP network objects into clean domain models.
+                </p>
+              </div>
+
+              <div class="card">
+                <div class="card-title">
+                  <span class="card-icon">⚡</span>
+                  <span>Transformation Pipeline</span>
+                </div>
+                <p>
+                  <code>users</code> is an array of 10 complex objects with address, geo-coordinates, and company details.
+                </p>
+                <div style="font-family:var(--font-mono); font-size:0.86rem; background:#fff; padding:0.6rem 0.8rem; border-radius:6px; border:1px solid var(--border-subtle); margin-top:0.4rem;">
+                  const names = users.map((user) =&gt; user.name);
+                </div>
+                <p style="font-size:0.86rem; color:var(--text-muted); margin-top:0.4rem;">
+                  This extracts only the string names into a compact array.
+                </p>
+              </div>
+
+              <div class="callout tip">
+                <span class="callout-icon">💡</span>
+                <div>
+                  <strong>Clean Architecture:</strong> In professional Node.js backends, never pass raw external API shapes directly to your client or files. Always extract and sanitize the exact fields you need!
+                </div>
+              </div>
+            </div>
+
+            <!-- Right Column: Code & Output -->
+            <div style="display:flex; flex-direction:column; gap:0.9rem;">
+              <div class="code-container">
+                <div class="code-header">
+                  <div class="code-file-badge">
+                    <span class="file-dot"></span>
+                    <span>process-users.js</span>
+                  </div>
+                  <button class="copy-btn">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                    <span>Copy Code</span>
+                  </button>
+                </div>
+                <pre class="code-block"><code><span class="syn-kw">async function</span> <span class="syn-fn">showUserNames</span>() {
+  <span class="syn-kw">try</span> {
+    <span class="syn-kw">const</span> response = <span class="syn-kw">await</span> <span class="syn-fn">fetch</span>(
+      <span class="syn-str">"https://jsonplaceholder.typicode.com/users"</span>
+    );
+
+    <span class="syn-kw">if</span> (!response.ok) {
+      <span class="syn-kw">throw new</span> <span class="syn-fn">Error</span>(<span class="syn-str">`HTTP error: <span class="syn-var">${response.status}</span>`</span>);
+    }
+
+    <span class="syn-kw">const</span> users = <span class="syn-kw">await</span> response.<span class="syn-fn">json</span>();
+
+    <span class="syn-cm">// Combine Day 1 map() with Day 2 API data</span>
+    <span class="syn-kw">const</span> names = users.<span class="syn-fn">map</span>((user) =&gt; user.name);
+
+    <span class="syn-fn">console</span>.<span class="syn-fn">log</span>(<span class="syn-str">"User names:"</span>, names);
+  } <span class="syn-kw">catch</span> (error) {
+    <span class="syn-fn">console</span>.<span class="syn-fn">error</span>(<span class="syn-str">"Unable to fetch users:"</span>, error.message);
+  }
+}
+
+<span class="syn-fn">showUserNames</span>();</code></pre>
+              </div>
+
+              <div class="terminal-output">
+                <div class="terminal-header">
+                  <span class="dot"></span>
+                  <span>Execution Output</span>
+                </div>
+                <div class="terminal-body">
+<span class="cmd">$ node process-users.js</span>
+<span class="res">User names: [
+  'Leanne Graham',
+  'Ervin Howell',
+  'Clementine Bauch',
+  'Patricia Lebsack',
+  'Chelsey Dietrich',
+  'Mrs. Dennis Schulist',
+  'Kurtis Weissnat',
+  'Nicholas Runolfsdottir V',
+  'Glenna Reichert',
+  'Clementina DuBuque'
+]</span></div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ===================================================================
+             SLIDE 15: Why Do We Need Request Timeouts?
+             =================================================================== -->
+        <section id="slide-15" class="slide" data-slide-num="15">
+          <div class="slide-header">
+            <div class="slide-title-wrap">
+              <span class="slide-category">Section 5: Timeouts &amp; AbortController</span>
+              <h2 class="slide-title">Why Do We Need Request Timeouts?</h2>
+              <p class="slide-subtitle">Preventing hanging connections, deadlocks, and system resource exhaustion</p>
+            </div>
+            <span class="slide-num-pill">Slide 15 / 25</span>
+          </div>
+
+          <div class="slide-body grid-2">
+            <!-- Left Column: The Problem -->
+            <div style="display:flex; flex-direction:column; gap:0.9rem;">
+              <div class="card danger">
+                <div class="card-title" style="color:#9f1239;">
+                  <span class="card-icon">⏳</span>
+                  <span>The Hanging Request Problem</span>
+                </div>
+                <p>
+                  By default, a network request can hang for minutes if a remote server drops packets, experiences internal deadlocks, or becomes unresponsive. Your Node.js server keeps memory allocated and sockets open, leading to memory leaks and cascaded failure.
+                </p>
+              </div>
+
+              <div class="card">
+                <div class="card-title">
+                  <span class="card-icon">⚡</span>
+                  <span>What a Timeout Solution Provides</span>
+                </div>
+                <ul class="feature-list">
+                  <li><span class="bullet-icon">▸</span> <strong>Guaranteed Bound:</strong> Caps the maximum time your app is willing to wait (e.g. 3,000ms).</li>
+                  <li><span class="bullet-icon">▸</span> <strong>Request Cancellation:</strong> Informs the underlying network socket to terminate immediately.</li>
+                  <li><span class="bullet-icon">▸</span> <strong>Predictable Error Handling:</strong> Translates hanging requests into catchable timeout errors.</li>
+                </ul>
+              </div>
+            </div>
+
+            <!-- Right Column: External Services & AI Impact -->
+            <div style="display:flex; flex-direction:column; gap:0.9rem;">
+              <div class="card highlight">
+                <div class="card-title">
+                  <span class="card-icon">🤖</span>
+                  <span>Critical for Third-Party &amp; AI APIs</span>
+                </div>
+                <p>
+                  When calling external services (payment gateways, CRM webhooks, and generative AI LLMs):
+                </p>
+                <ul class="feature-list">
+                  <li><span class="bullet-icon">▸</span> Serverless cold starts or LLM generation queues can unexpectedly freeze.</li>
+                  <li><span class="bullet-icon">▸</span> Without timeouts, your downstream users see an indefinite spinning wheel.</li>
+                  <li><span class="bullet-icon">▸</span> With a timeout, you can fail fast, trigger a fallback, or alert the user cleanly.</li>
+                </ul>
+              </div>
+
+              <div class="callout warning">
+                <span class="callout-icon">💡</span>
+                <div>
+                  <strong>The Web Standard:</strong> JavaScript provides the native <code>AbortController</code> and <code>AbortSignal</code> APIs to cancel asynchronous operations cleanly across the browser and Node.js.
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ===================================================================
+             SLIDE 16: AbortController with Fetch
+             =================================================================== -->
+        <section id="slide-16" class="slide" data-slide-num="16">
+          <div class="slide-header">
+            <div class="slide-title-wrap">
+              <span class="slide-category">Section 5: Timeouts &amp; AbortController</span>
+              <h2 class="slide-title">AbortController with Fetch</h2>
+              <p class="slide-subtitle">Building a reusable timeout helper with AbortController and finally cleanup</p>
+            </div>
+            <span class="slide-num-pill">Slide 16 / 25</span>
+          </div>
+
+          <div class="slide-body grid-2">
+            <!-- Left Column: Code -->
+            <div style="display:flex; flex-direction:column; gap:0.8rem;">
+              <div class="code-container">
+                <div class="code-header">
+                  <div class="code-file-badge">
+                    <span class="file-dot"></span>
+                    <span>fetch-with-timeout.js</span>
+                  </div>
+                  <button class="copy-btn">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                    <span>Copy Code</span>
+                  </button>
+                </div>
+                <pre class="code-block"><code><span class="syn-kw">async function</span> <span class="syn-fn">fetchWithTimeout</span>(url, timeoutMs = <span class="syn-num">3000</span>) {
+  <span class="syn-kw">const</span> controller = <span class="syn-kw">new</span> <span class="syn-fn">AbortController</span>();
+
+  <span class="syn-kw">const</span> timeoutId = <span class="syn-fn">setTimeout</span>(() =&gt; {
+    controller.<span class="syn-fn">abort</span>();
+  }, timeoutMs);
+
+  <span class="syn-kw">try</span> {
+    <span class="syn-kw">const</span> response = <span class="syn-kw">await</span> <span class="syn-fn">fetch</span>(url, {
+      signal: controller.signal,
+    });
+
+    <span class="syn-kw">if</span> (!response.ok) {
+      <span class="syn-kw">throw new</span> <span class="syn-fn">Error</span>(<span class="syn-str">`HTTP error: <span class="syn-var">${response.status}</span>`</span>);
+    }
+
+    <span class="syn-kw">return await</span> response.<span class="syn-fn">json</span>();
+  } <span class="syn-kw">finally</span> {
+    <span class="syn-fn">clearTimeout</span>(timeoutId);
+  }
+}</code></pre>
+              </div>
+            </div>
+
+            <!-- Right Column: Invocation & Explanation -->
+            <div style="display:flex; flex-direction:column; gap:0.8rem;">
+              <div class="code-container" style="height:auto;">
+                <div class="code-header">
+                  <div class="code-file-badge">
+                    <span class="file-dot"></span>
+                    <span>calling-fetch-with-timeout.js</span>
+                  </div>
+                </div>
+                <pre class="code-block"><code><span class="syn-kw">try</span> {
+  <span class="syn-kw">const</span> users = <span class="syn-kw">await</span> <span class="syn-fn">fetchWithTimeout</span>(
+    <span class="syn-str">"https://jsonplaceholder.typicode.com/users"</span>,
+    <span class="syn-num">3000</span>
+  );
+  <span class="syn-fn">console</span>.<span class="syn-fn">log</span>(<span class="syn-str">"Users:"</span>, users.length);
+} <span class="syn-kw">catch</span> (error) {
+  <span class="syn-kw">if</span> (error.name === <span class="syn-str">"AbortError"</span> || error.name === <span class="syn-str">"TimeoutError"</span>) {
+    <span class="syn-fn">console</span>.<span class="syn-fn">error</span>(<span class="syn-str">"Request timed out"</span>);
+  } <span class="syn-kw">else</span> {
+    <span class="syn-fn">console</span>.<span class="syn-fn">error</span>(<span class="syn-str">"Request failed:"</span>, error.message);
+  }
+}</code></pre>
+              </div>
+
+              <div class="card">
+                <div class="card-title">
+                  <span class="card-icon">🔍</span>
+                  <span>Key Architecture Elements</span>
+                </div>
+                <ul class="feature-list" style="font-size:0.86rem;">
+                  <li><span class="bullet-icon">▸</span> <strong><code>new AbortController()</code>:</strong> Creates a controller instance with a cancellation <code>signal</code>.</li>
+                  <li><span class="bullet-icon">▸</span> <strong><code>controller.abort()</code>:</strong> Fires when the timer expires, cancelling the pending fetch.</li>
+                  <li><span class="bullet-icon">▸</span> <strong><code>finally { clearTimeout(timeoutId) }</code>:</strong> Guarantees the pending timer is cleared whether the fetch succeeds or fails!</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ===================================================================
+             SLIDE 17: Why Retry Failed Requests?
+             =================================================================== -->
+        <section id="slide-17" class="slide" data-slide-num="17">
+          <div class="slide-header">
+            <div class="slide-title-wrap">
+              <span class="slide-category">Section 6: Retry &amp; Exponential Backoff</span>
+              <h2 class="slide-title">Why Retry Failed Requests?</h2>
+              <p class="slide-subtitle">Distinguishing transient recoverable glitches from permanent failures</p>
+            </div>
+            <span class="slide-num-pill">Slide 17 / 25</span>
+          </div>
+
+          <div class="slide-body grid-2">
+            <!-- Left Column: Transient Failures -->
+            <div style="display:flex; flex-direction:column; gap:0.9rem;">
+              <div class="card success">
+                <div class="card-title" style="color:#065f46;">
+                  <span class="card-icon">✅</span>
+                  <span>When Retrying IS Appropriate</span>
+                </div>
+                <p>
+                  Distributed systems experience <strong>transient errors</strong> — temporary hiccups that resolve themselves within milliseconds:
+                </p>
+                <ul class="feature-list">
+                  <li><span class="bullet-icon">▸</span> <strong>Service temporarily unavailable:</strong> HTTP 503 during rolling server restarts.</li>
+                  <li><span class="bullet-icon">▸</span> <strong>Temporary connection drops:</strong> Brief Wi-Fi or router socket resets (ECONNRESET).</li>
+                  <li><span class="bullet-icon">▸</span> <strong>Rate limiting:</strong> HTTP 429 Too Many Requests where a short wait will reset the token bucket.</li>
+                </ul>
+              </div>
+
+              <div class="callout tip">
+                <span class="callout-icon">💡</span>
+                <div>
+                  <strong>Idempotent Operations:</strong> Safe retries are easiest on <code>GET</code> requests where reading data does not create side effects on the server.
+                </div>
+              </div>
+            </div>
+
+            <!-- Right Column: Non-Retryable Errors -->
+            <div style="display:flex; flex-direction:column; gap:0.9rem;">
+              <div class="card danger">
+                <div class="card-title" style="color:#9f1239;">
+                  <span class="card-icon">❌</span>
+                  <span>When Retrying IS DANGEROUS &amp; WRONG</span>
+                </div>
+                <p>
+                  Never retry blindly:
+                </p>
+                <ul class="feature-list">
+                  <li><span class="bullet-icon">▸</span> <strong>Permanent 4xx Client Errors:</strong> HTTP 400 Bad Request, 401 Unauthorized, or 404 Not Found will <em>never</em> succeed on retry and only waste resources.</li>
+                  <li><span class="bullet-icon">▸</span> <strong>State Mutations:</strong> Retrying non-idempotent <code>POST</code> payment or order requests blindly could charge a customer multiple times!</li>
+                </ul>
+              </div>
+
+              <div class="callout warning">
+                <span class="callout-icon">⚠️</span>
+                <div>
+                  <strong>Rule of Thumb:</strong> Immediate retries hammer an already struggling server. Always introduce an increasing delay between attempts!
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ===================================================================
+             SLIDE 18: Exponential Backoff
+             =================================================================== -->
+        <section id="slide-18" class="slide" data-slide-num="18">
+          <div class="slide-header">
+            <div class="slide-title-wrap">
+              <span class="slide-category">Section 6: Retry &amp; Exponential Backoff</span>
+              <h2 class="slide-title">Exponential Backoff</h2>
+              <p class="slide-subtitle">Increasing delays geometrically between attempts to avoid the "Thundering Herd"</p>
+            </div>
+            <span class="slide-num-pill">Slide 18 / 25</span>
+          </div>
+
+          <div class="slide-body grid-2">
+            <!-- Left Column: Delay Math & Visual Schedule -->
+            <div style="display:flex; flex-direction:column; gap:0.75rem;">
+              <div class="card highlight">
+                <div class="card-title">
+                  <span class="card-icon">📈</span>
+                  <span>Exponential Delay Progression (Base: 500ms)</span>
+                </div>
+                <div style="display:flex; flex-direction:column; gap:0.4rem; margin-top:0.3rem;">
+                  <div class="backoff-row">
+                    <span class="backoff-attempt">Initial Try</span>
+                    <div class="backoff-bar-track"><div class="backoff-bar" style="width:0%;"></div></div>
+                    <span class="backoff-val">0 ms</span>
+                  </div>
+                  <div class="backoff-row">
+                    <span class="backoff-attempt">Retry 1</span>
+                    <div class="backoff-bar-track"><div class="backoff-bar" style="width:25%;"></div></div>
+                    <span class="backoff-val">500 ms</span>
+                  </div>
+                  <div class="backoff-row">
+                    <span class="backoff-attempt">Retry 2</span>
+                    <div class="backoff-bar-track"><div class="backoff-bar" style="width:50%;"></div></div>
+                    <span class="backoff-val">1,000 ms</span>
+                  </div>
+                  <div class="backoff-row">
+                    <span class="backoff-attempt">Retry 3</span>
+                    <div class="backoff-bar-track"><div class="backoff-bar" style="width:100%;"></div></div>
+                    <span class="backoff-val">2,000 ms</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Interactive Backoff Calculator -->
+              <div class="interactive-widget">
+                <div class="interactive-header">
+                  <span>Interactive Delay Calculator</span>
+                </div>
+                <div style="display:flex; gap:0.8rem; align-items:center;">
+                  <label style="font-size:0.82rem; font-weight:600;">Attempt:</label>
+                  <select id="calc-attempt-select" style="padding:0.25rem 0.5rem; border-radius:4px; border:1px solid #cbd5e1; font-family:var(--font-mono);">
+                    <option value="1">1 (0ms initial)</option>
+                    <option value="2">2 (Retry 1)</option>
+                    <option value="3" selected>3 (Retry 2)</option>
+                    <option value="4">4 (Retry 3)</option>
+                    <option value="5">5 (Retry 4)</option>
+                  </select>
+                  <label style="font-size:0.82rem; font-weight:600;">Base (ms):</label>
+                  <input id="calc-base-input" type="number" value="500" style="width:70px; padding:0.25rem 0.4rem; border-radius:4px; border:1px solid #cbd5e1; font-family:var(--font-mono);" />
+                </div>
+                <div style="font-size:0.84rem; display:flex; justify-content:space-between; margin-top:0.2rem;">
+                  <span id="calc-formula-display" style="color:var(--text-muted); font-family:var(--font-mono);">500 * 2^(3 - 1) = 500 * 4</span>
+                  <strong id="calc-result-display" style="color:var(--primary-dark); font-family:var(--font-mono);">2,000 ms (2.0s)</strong>
+                </div>
+              </div>
+
+              <div class="callout tip" style="padding:0.6rem 0.9rem;">
+                <span class="callout-icon">🎲</span>
+                <div style="font-size:0.82rem;">
+                  <strong>Production Jitter:</strong> Adding ±10% random noise prevents thousands of clients from retrying at the exact same microsecond.
+                </div>
+              </div>
+            </div>
+
+            <!-- Right Column: Code -->
+            <div style="display:flex; flex-direction:column; gap:0.9rem;">
+              <div class="code-container">
+                <div class="code-header">
+                  <div class="code-file-badge">
+                    <span class="file-dot"></span>
+                    <span>retry-helper.js</span>
+                  </div>
+                  <button class="copy-btn">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                    <span>Copy Code</span>
+                  </button>
+                </div>
+                <pre class="code-block"><code><span class="syn-kw">function</span> <span class="syn-fn">delay</span>(ms) {
+  <span class="syn-kw">return new</span> <span class="syn-fn">Promise</span>((resolve) =&gt; <span class="syn-fn">setTimeout</span>(resolve, ms));
+}
+
+<span class="syn-kw">async function</span> <span class="syn-fn">retryOperation</span>(operation, maxAttempts = <span class="syn-num">3</span>) {
+  <span class="syn-kw">for</span> (<span class="syn-kw">let</span> attempt = <span class="syn-num">1</span>; attempt &lt;= maxAttempts; attempt++) {
+    <span class="syn-kw">try</span> {
+      <span class="syn-kw">return await</span> <span class="syn-fn">operation</span>();
+    } <span class="syn-kw">catch</span> (error) {
+      <span class="syn-kw">if</span> (attempt === maxAttempts) {
+        <span class="syn-kw">throw</span> error;
+      }
+
+      <span class="syn-kw">const</span> waitTime = <span class="syn-num">500</span> * <span class="syn-num">2</span> ** (attempt - <span class="syn-num">1</span>);
+
+      <span class="syn-fn">console</span>.<span class="syn-fn">log</span>(
+        <span class="syn-str">`Attempt <span class="syn-var">${attempt}</span> failed. Retrying in <span class="syn-var">${waitTime}</span>ms`</span>
+      );
+
+      <span class="syn-kw">await</span> <span class="syn-fn">delay</span>(waitTime);
+    }
+  }
+}</code></pre>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ===================================================================
+             SLIDE 19: Retry a Fetch Request
+             =================================================================== -->
+        <section id="slide-19" class="slide" data-slide-num="19">
+          <div class="slide-header">
+            <div class="slide-title-wrap">
+              <span class="slide-category">Section 6: Retry &amp; Exponential Backoff</span>
+              <h2 class="slide-title">Retry a Fetch Request</h2>
+              <p class="slide-subtitle">Combining the reusable retry helper with network calls and top-level error propagation</p>
+            </div>
+            <span class="slide-num-pill">Slide 19 / 25</span>
+          </div>
+
+          <div class="slide-body grid-2">
+            <!-- Left Column: Code -->
+            <div style="display:flex; flex-direction:column; gap:0.9rem;">
+              <div class="code-container">
+                <div class="code-header">
+                  <div class="code-file-badge">
+                    <span class="file-dot"></span>
+                    <span>retry-fetch.js</span>
+                  </div>
+                  <button class="copy-btn">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                    <span>Copy Code</span>
+                  </button>
+                </div>
+                <pre class="code-block"><code><span class="syn-kw">async function</span> <span class="syn-fn">fetchUsers</span>() {
+  <span class="syn-kw">const</span> response = <span class="syn-kw">await</span> <span class="syn-fn">fetch</span>(
+    <span class="syn-str">"https://jsonplaceholder.typicode.com/users"</span>
+  );
+
+  <span class="syn-kw">if</span> (!response.ok) {
+    <span class="syn-kw">throw new</span> <span class="syn-fn">Error</span>(<span class="syn-str">`HTTP error: <span class="syn-var">${response.status}</span>`</span>);
+  }
+
+  <span class="syn-kw">return</span> response.<span class="syn-fn">json</span>();
+}
+
+<span class="syn-kw">async function</span> <span class="syn-fn">main</span>() {
+  <span class="syn-kw">try</span> {
+    <span class="syn-kw">const</span> users = <span class="syn-kw">await</span> <span class="syn-fn">retryOperation</span>(fetchUsers, <span class="syn-num">3</span>);
+
+    <span class="syn-fn">console</span>.<span class="syn-fn">log</span>(<span class="syn-str">"Users loaded:"</span>, users.length);
+  } <span class="syn-kw">catch</span> (error) {
+    <span class="syn-fn">console</span>.<span class="syn-fn">error</span>(
+      <span class="syn-str">"Request failed after retries:"</span>,
+      error.message
+    );
+  }
+}
+
+<span class="syn-fn">main</span>();</code></pre>
+              </div>
+            </div>
+
+            <!-- Right Column: Step-by-Step Flow & Notes -->
+            <div style="display:flex; flex-direction:column; gap:0.9rem;">
+              <div class="card">
+                <div class="card-title">
+                  <span class="card-icon">🔄</span>
+                  <span>Execution Lifecycle</span>
+                </div>
+                <div class="step-breakdown">
+                  <div class="step-item">
+                    <span class="num-bullet">1</span>
+                    <span><strong>Attempt 1:</strong> Runs <code>fetchUsers()</code> immediately (0ms delay). If successful, returns data instantly.</span>
+                  </div>
+                  <div class="step-item">
+                    <span class="num-bullet">2</span>
+                    <span><strong>Attempt 2:</strong> If Attempt 1 throws, logs message and pauses 500ms before Attempt 2.</span>
+                  </div>
+                  <div class="step-item">
+                    <span class="num-bullet">3</span>
+                    <span><strong>Attempt 3:</strong> If Attempt 2 throws, pauses 1,000ms before the final attempt.</span>
+                  </div>
+                  <div class="step-item">
+                    <span class="num-bullet">4</span>
+                    <span><strong>Exhaustion:</strong> If Attempt 3 fails, the final error re-throws into <code>main()</code>'s <code>catch</code> block.</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="callout note">
+                <span class="callout-icon">👨‍🏫</span>
+                <div>
+                  <strong>Instructor Note:</strong> In production applications, inspect response headers: if a server sends a <code>Retry-After: 5</code> header (common on HTTP 429 rate limits), respect that duration rather than calculating an arbitrary backoff.
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ===================================================================
+             SLIDE 20: Understanding fs/promises
+             =================================================================== -->
+        <section id="slide-20" class="slide" data-slide-num="20">
+          <div class="slide-header">
+            <div class="slide-title-wrap">
+              <span class="slide-category">Section 7: Filesystem &amp; Paths</span>
+              <h2 class="slide-title">Understanding fs/promises</h2>
+              <p class="slide-subtitle">Modern Promise-based asynchronous file reading, writing, and directory creation</p>
+            </div>
+            <span class="slide-num-pill">Slide 20 / 25</span>
+          </div>
+
+          <div class="slide-body grid-2">
+            <!-- Left Column: Explanation -->
+            <div style="display:flex; flex-direction:column; gap:0.9rem;">
+              <div class="card highlight">
+                <div class="card-title">
+                  <span class="card-icon">📁</span>
+                  <span>Why node:fs/promises?</span>
+                </div>
+                <p>
+                  Node.js provides <code>node:fs/promises</code> which delivers clean, Promise-returning methods instead of legacy callback wrappers.
+                </p>
+              </div>
+
+              <div class="card">
+                <div class="card-title">
+                  <span class="card-icon">🛠️</span>
+                  <span>Common Promise Filesystem Methods</span>
+                </div>
+                <ul class="feature-list">
+                  <li><span class="bullet-icon">▸</span> <code>readFile(path, encoding)</code>: Asynchronously reads entire file contents.</li>
+                  <li><span class="bullet-icon">▸</span> <code>writeFile(path, data, encoding)</code>: Writes data; creates or overwrites the file.</li>
+                  <li><span class="bullet-icon">▸</span> <code>appendFile(path, data)</code>: Appends content to the end of a file.</li>
+                  <li><span class="bullet-icon">▸</span> <code>mkdir(path, { recursive: true })</code>: Creates directories and nested parents.</li>
+                  <li><span class="bullet-icon">▸</span> <code>readdir(path)</code>: Lists all filenames inside a directory.</li>
+                </ul>
+              </div>
+
+              <div class="callout tip">
+                <span class="callout-icon">💡</span>
+                <div>
+                  Always pass the <code>"utf8"</code> encoding argument to <code>readFile</code>; otherwise, it returns a raw binary <code>Buffer</code> object!
+                </div>
+              </div>
+            </div>
+
+            <!-- Right Column: Code & Output -->
+            <div style="display:flex; flex-direction:column; gap:0.9rem;">
+              <div class="code-container">
+                <div class="code-header">
+                  <div class="code-file-badge">
+                    <span class="file-dot"></span>
+                    <span>file-promises.js</span>
+                  </div>
+                  <button class="copy-btn">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                    <span>Copy Code</span>
+                  </button>
+                </div>
+                <pre class="code-block"><code><span class="syn-kw">import</span> { readFile, writeFile } <span class="syn-kw">from</span> <span class="syn-str">"node:fs/promises"</span>;
+
+<span class="syn-kw">async function</span> <span class="syn-fn">main</span>() {
+  <span class="syn-kw">try</span> {
+    <span class="syn-kw">const</span> content = <span class="syn-kw">await</span> <span class="syn-fn">readFile</span>(<span class="syn-str">"message.txt"</span>, <span class="syn-str">"utf8"</span>);
+
+    <span class="syn-fn">console</span>.<span class="syn-fn">log</span>(<span class="syn-str">"Original content:"</span>, content);
+
+    <span class="syn-kw">await</span> <span class="syn-fn">writeFile</span>(<span class="syn-str">"output.txt"</span>, content.<span class="syn-fn">toUpperCase</span>());
+
+    <span class="syn-fn">console</span>.<span class="syn-fn">log</span>(<span class="syn-str">"Output file created"</span>);
+  } <span class="syn-kw">catch</span> (error) {
+    <span class="syn-fn">console</span>.<span class="syn-fn">error</span>(<span class="syn-str">"File operation failed:"</span>, error.message);
+  }
+}
+
+<span class="syn-fn">main</span>();</code></pre>
+              </div>
+
+              <div class="terminal-output">
+                <div class="terminal-header">
+                  <span class="dot"></span>
+                  <span>Execution Output</span>
+                </div>
+                <div class="terminal-body">
+<span class="cmd">$ node file-promises.js</span>
+<span class="res">Original content: Welcome to Node.js Day 2</span>
+<span class="res">Output file created</span></div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ===================================================================
+             SLIDE 21: Working with File Paths
+             =================================================================== -->
+        <section id="slide-21" class="slide" data-slide-num="21">
+          <div class="slide-header">
+            <div class="slide-title-wrap">
+              <span class="slide-category">Section 7: Filesystem &amp; Paths</span>
+              <h2 class="slide-title">Working with File Paths</h2>
+              <p class="slide-subtitle">Cross-platform path resolution with node:path to eliminate OS-specific bugs</p>
+            </div>
+            <span class="slide-num-pill">Slide 21 / 25</span>
+          </div>
+
+          <div class="slide-body grid-2">
+            <!-- Left Column: Explanation -->
+            <div style="display:flex; flex-direction:column; gap:0.9rem;">
+              <div class="card warning">
+                <div class="card-title" style="color:#b45309;">
+                  <span class="card-icon">⚠️</span>
+                  <span>The Problem with Hardcoded Paths</span>
+                </div>
+                <p>
+                  Hardcoded string concatenation like <code>folder + "/" + file</code> or Windows backslashes <code>"reports\\file.txt"</code> breaks when moving code between Windows, macOS, Linux, Docker containers, and cloud hosts.
+                </p>
+              </div>
+
+              <div class="card">
+                <div class="card-title">
+                  <span class="card-icon">🧭</span>
+                  <span>Essential node:path Methods</span>
+                </div>
+                <ul class="feature-list">
+                  <li><span class="bullet-icon">▸</span> <strong><code>path.join(...segments)</code>:</strong> Joins segments using the host operating system's specific separator (<code>\</code> on Windows, <code>/</code> on Linux/Mac).</li>
+                  <li><span class="bullet-icon">▸</span> <strong><code>path.resolve(...segments)</code>:</strong> Resolves a sequence of paths into an absolute path from the current directory.</li>
+                  <li><span class="bullet-icon">▸</span> <strong><code>path.dirname(p)</code>:</strong> Extracts the directory part of a path.</li>
+                  <li><span class="bullet-icon">▸</span> <strong><code>path.basename(p)</code>:</strong> Extracts the file name and extension.</li>
+                </ul>
+              </div>
+            </div>
+
+            <!-- Right Column: Code & Output -->
+            <div style="display:flex; flex-direction:column; gap:0.9rem;">
+              <div class="code-container">
+                <div class="code-header">
+                  <div class="code-file-badge">
+                    <span class="file-dot"></span>
+                    <span>paths-demo.js</span>
+                  </div>
+                  <button class="copy-btn">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                    <span>Copy Code</span>
+                  </button>
+                </div>
+                <pre class="code-block"><code><span class="syn-kw">import</span> path <span class="syn-kw">from</span> <span class="syn-str">"node:path"</span>;
+
+<span class="syn-kw">const</span> folder = <span class="syn-str">"reports"</span>;
+<span class="syn-kw">const</span> filename = <span class="syn-str">"summary.txt"</span>;
+
+<span class="syn-cm">// Safely combines path segments for any OS</span>
+<span class="syn-kw">const</span> filePath = path.<span class="syn-fn">join</span>(folder, filename);
+
+<span class="syn-fn">console</span>.<span class="syn-fn">log</span>(filePath);</code></pre>
+              </div>
+
+              <div class="terminal-output">
+                <div class="terminal-header">
+                  <span class="dot"></span>
+                  <span>Expected Output (Platform Dependent)</span>
+                </div>
+                <div class="terminal-body">
+<span class="cmd">$ node paths-demo.js</span>
+<span class="res">reports/summary.txt</span>   <span class="syn-cm"># On Linux / macOS / POSIX</span>
+<span class="res">reports\summary.txt</span>   <span class="syn-cm"># On Windows</span></div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ===================================================================
+             SLIDE 22: Practical File Report Generator
+             =================================================================== -->
+        <section id="slide-22" class="slide" data-slide-num="22">
+          <div class="slide-header">
+            <div class="slide-title-wrap">
+              <span class="slide-category">Section 7: Filesystem &amp; Paths</span>
+              <h2 class="slide-title">Practical File Report Generator</h2>
+              <p class="slide-subtitle">Combining fetch, map, path, and fs/promises into an integrated report generator</p>
+            </div>
+            <span class="slide-num-pill">Slide 22 / 25</span>
+          </div>
+
+          <div class="slide-body grid-2">
+            <!-- Left Column: Code -->
+            <div style="display:flex; flex-direction:column; gap:0.9rem;">
+              <div class="code-container">
+                <div class="code-header">
+                  <div class="code-file-badge">
+                    <span class="file-dot"></span>
+                    <span>generate-report.js</span>
+                  </div>
+                  <button class="copy-btn">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                    <span>Copy Code</span>
+                  </button>
+                </div>
+                <pre class="code-block"><code><span class="syn-kw">import</span> { mkdir, writeFile } <span class="syn-kw">from</span> <span class="syn-str">"node:fs/promises"</span>;
+<span class="syn-kw">import</span> path <span class="syn-kw">from</span> <span class="syn-str">"node:path"</span>;
+
+<span class="syn-kw">async function</span> <span class="syn-fn">main</span>() {
+  <span class="syn-kw">const</span> response = <span class="syn-kw">await</span> <span class="syn-fn">fetch</span>(
+    <span class="syn-str">"https://jsonplaceholder.typicode.com/users"</span>
+  );
+
+  <span class="syn-kw">if</span> (!response.ok) {
+    <span class="syn-kw">throw new</span> <span class="syn-fn">Error</span>(<span class="syn-str">`HTTP error: <span class="syn-var">${response.status}</span>`</span>);
+  }
+
+  <span class="syn-kw">const</span> users = <span class="syn-kw">await</span> response.<span class="syn-fn">json</span>();
+  <span class="syn-kw">const</span> names = users.<span class="syn-fn">map</span>((user) =&gt; user.name);
+  <span class="syn-kw">const</span> report = names.<span class="syn-fn">join</span>(<span class="syn-str">"\n"</span>);
+
+  <span class="syn-kw">const</span> outputDirectory = path.<span class="syn-fn">resolve</span>(<span class="syn-str">"reports"</span>);
+  <span class="syn-kw">const</span> outputFile = path.<span class="syn-fn">join</span>(outputDirectory, <span class="syn-str">"users.txt"</span>);
+
+  <span class="syn-kw">await</span> <span class="syn-fn">mkdir</span>(outputDirectory, { recursive: <span class="syn-kw">true</span> });
+  <span class="syn-kw">await</span> <span class="syn-fn">writeFile</span>(outputFile, report, <span class="syn-str">"utf8"</span>);
+
+  <span class="syn-fn">console</span>.<span class="syn-fn">log</span>(<span class="syn-str">`Report saved to: <span class="syn-var">${outputFile}</span>`</span>);
+}
+
+<span class="syn-fn">main</span>().<span class="syn-fn">catch</span>((error) =&gt; {
+  <span class="syn-fn">console</span>.<span class="syn-fn">error</span>(<span class="syn-str">"Report generation failed:"</span>, error.message);
+});</code></pre>
+              </div>
+            </div>
+
+            <!-- Right Column: Flow Breakdown -->
+            <div style="display:flex; flex-direction:column; gap:0.9rem;">
+              <div class="card highlight">
+                <div class="card-title">
+                  <span class="card-icon">⚙️</span>
+                  <span>How the Pieces Fit Together</span>
+                </div>
+                <div class="step-breakdown">
+                  <div class="step-item">
+                    <span class="num-bullet">1</span>
+                    <span><strong>Fetch Data:</strong> <code>fetch()</code> queries JSONPlaceholder asynchronously.</span>
+                  </div>
+                  <div class="step-item">
+                    <span class="num-bullet">2</span>
+                    <span><strong>Transform:</strong> <code>map()</code> extracts user names and <code>join("\n")</code> formats text lines.</span>
+                  </div>
+                  <div class="step-item">
+                    <span class="num-bullet">3</span>
+                    <span><strong>Path Safety:</strong> <code>path.resolve()</code> and <code>path.join()</code> build reliable absolute paths.</span>
+                  </div>
+                  <div class="step-item">
+                    <span class="num-bullet">4</span>
+                    <span><strong>Recursive mkdir:</strong> <code>mkdir(..., { recursive: true })</code> creates the directory if it doesn't already exist.</span>
+                  </div>
+                  <div class="step-item">
+                    <span class="num-bullet">5</span>
+                    <span><strong>Safe Persistence:</strong> <code>writeFile()</code> writes the report cleanly to disk.</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="terminal-output">
+                <div class="terminal-header">
+                  <span class="dot"></span>
+                  <span>Execution Output</span>
+                </div>
+                <div class="terminal-body">
+<span class="cmd">$ node generate-report.js</span>
+<span class="res">Report saved to: /Users/admin/project/reports/users.txt</span></div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ===================================================================
+             SLIDE 23: Mini Project: API Report Generator
+             =================================================================== -->
+        <section id="slide-23" class="slide" data-slide-num="23">
+          <div class="slide-header">
+            <div class="slide-title-wrap">
+              <span class="slide-category">Section 8: Final Practical Project</span>
+              <h2 class="slide-title">Mini Project: API Report Generator</h2>
+              <p class="slide-subtitle">Project name: User API Report Generator — Architecture, requirements, and workflow</p>
+            </div>
+            <span class="slide-num-pill">Slide 23 / 25</span>
+          </div>
+
+          <div class="slide-body grid-2">
+            <!-- Left Column: Requirements Checklist -->
+            <div style="display:flex; flex-direction:column; gap:0.9rem;">
+              <div class="card">
+                <div class="card-title">
+                  <span class="card-icon">📋</span>
+                  <span>Project Requirements</span>
+                </div>
+                <ul class="feature-list" style="font-size:0.86rem;">
+                  <li><span class="bullet-icon">✓</span> Fetch user records from JSONPlaceholder API.</li>
+                  <li><span class="bullet-icon">✓</span> Apply request timeouts using <code>AbortController</code>.</li>
+                  <li><span class="bullet-icon">✓</span> Retry eligible failures using <strong>exponential backoff</strong>.</li>
+                  <li><span class="bullet-icon">✓</span> Extract user names and email addresses with <code>map()</code>.</li>
+                  <li><span class="bullet-icon">✓</span> Generate a clean, line-delimited text report.</li>
+                  <li><span class="bullet-icon">✓</span> Create output directory if necessary with <code>mkdir</code>.</li>
+                  <li><span class="bullet-icon">✓</span> Save report to disk using <code>fs/promises</code>.</li>
+                  <li><span class="bullet-icon">✓</span> Construct paths cross-platform with <code>node:path</code>.</li>
+                  <li><span class="bullet-icon">✓</span> Handle errors defensively using <code>try/catch</code> and exit codes.</li>
+                  <li><span class="bullet-icon">✓</span> Run seamlessly through an <code>npm start</code> script.</li>
+                </ul>
+              </div>
+
+              <div class="callout tip">
+                <span class="callout-icon">🎯</span>
+                <div>
+                  <strong>Focused Scope:</strong> Do not add Express.js, MongoDB, authentication, frontends, or external LLM API keys. Focus 100% on core asynchronous mastery!
+                </div>
+              </div>
+            </div>
+
+            <!-- Right Column: Visual Workflow Pipeline -->
+            <div style="display:flex; flex-direction:column; gap:0.6rem;">
+              <div style="font-weight:700; font-size:0.95rem; color:var(--primary-dark); margin-bottom:0.2rem;">
+                End-to-End Workflow Pipeline
+              </div>
+              <div class="pipeline-flow">
+                <div class="pipeline-step">
+                  <span class="step-idx">1</span>
+                  <div class="step-title">Environment Variables</div>
+                  <div class="step-desc">Load API_URL, TIMEOUT_MS, MAX_ATTEMPTS from .env</div>
+                </div>
+                <div class="pipeline-step">
+                  <span class="step-idx">2</span>
+                  <div class="step-title">Fetch API Data</div>
+                  <div class="step-desc">Initiate non-blocking HTTP request via global fetch</div>
+                </div>
+                <div class="pipeline-step">
+                  <span class="step-idx">3</span>
+                  <div class="step-title">Apply Timeout</div>
+                  <div class="step-desc">AbortController cancels request if &gt; TIMEOUT_MS</div>
+                </div>
+                <div class="pipeline-step">
+                  <span class="step-idx">4</span>
+                  <div class="step-title">Retry Eligible Failures</div>
+                  <div class="step-desc">Exponential backoff delays (500ms, 1000ms, ...)</div>
+                </div>
+                <div class="pipeline-step">
+                  <span class="step-idx">5</span>
+                  <div class="step-title">Transform Data</div>
+                  <div class="step-desc">map() formats "Name - Email" text lines</div>
+                </div>
+                <div class="pipeline-step">
+                  <span class="step-idx">6</span>
+                  <div class="step-title">Create Directory</div>
+                  <div class="step-desc">path.resolve() + mkdir(..., { recursive: true })</div>
+                </div>
+                <div class="pipeline-step">
+                  <span class="step-idx">7</span>
+                  <div class="step-title">Write Report</div>
+                  <div class="step-desc">writeFile() persists reports/users.txt</div>
+                </div>
+                <div class="pipeline-step">
+                  <span class="step-idx">8</span>
+                  <div class="step-title">Display Result</div>
+                  <div class="step-desc">Log confirmation or set process.exitCode = 1</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ===================================================================
+             SLIDE 24: Complete Mini Project Code
+             =================================================================== -->
+        <section id="slide-24" class="slide" data-slide-num="24">
+          <div class="slide-header">
+            <div class="slide-title-wrap">
+              <span class="slide-category">Section 8: Final Practical Project</span>
+              <h2 class="slide-title">Complete Mini Project Code</h2>
+              <p class="slide-subtitle">Full implementation of User API Report Generator (app.js, .env, and npm scripts)</p>
+            </div>
+            <span class="slide-num-pill">Slide 24 / 25</span>
+          </div>
+
+          <div class="slide-body grid-2">
+            <!-- Left Column: Full Code -->
+            <div style="display:flex; flex-direction:column; gap:0.9rem; overflow:hidden;">
+              <div class="code-container" style="max-height:510px;">
+                <div class="code-header">
+                  <div class="code-file-badge">
+                    <span class="file-dot"></span>
+                    <span>app.js</span>
+                  </div>
+                  <button class="copy-btn">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                    <span>Copy app.js</span>
+                  </button>
+                </div>
+                <pre class="code-block" style="font-size:0.8rem; line-height:1.45;"><code><span class="syn-kw">import</span> <span class="syn-str">"dotenv/config"</span>;
+<span class="syn-kw">import</span> { mkdir, writeFile } <span class="syn-kw">from</span> <span class="syn-str">"node:fs/promises"</span>;
+<span class="syn-kw">import</span> path <span class="syn-kw">from</span> <span class="syn-str">"node:path"</span>;
+
+<span class="syn-kw">const</span> API_URL =
+  process.env.API_URL ||
+  <span class="syn-str">"https://jsonplaceholder.typicode.com/users"</span>;
+
+<span class="syn-kw">const</span> TIMEOUT_MS = <span class="syn-fn">Number</span>(process.env.TIMEOUT_MS || <span class="syn-num">3000</span>);
+<span class="syn-kw">const</span> MAX_ATTEMPTS = <span class="syn-fn">Number</span>(process.env.MAX_ATTEMPTS || <span class="syn-num">3</span>);
+
+<span class="syn-kw">function</span> <span class="syn-fn">delay</span>(ms) {
+  <span class="syn-kw">return new</span> <span class="syn-fn">Promise</span>((resolve) =&gt; <span class="syn-fn">setTimeout</span>(resolve, ms));
+}
+
+<span class="syn-kw">async function</span> <span class="syn-fn">fetchWithTimeout</span>(url, timeoutMs) {
+  <span class="syn-kw">const</span> controller = <span class="syn-kw">new</span> <span class="syn-fn">AbortController</span>();
+
+  <span class="syn-kw">const</span> timeoutId = <span class="syn-fn">setTimeout</span>(() =&gt; {
+    controller.<span class="syn-fn">abort</span>();
+  }, timeoutMs);
+
+  <span class="syn-kw">try</span> {
+    <span class="syn-kw">const</span> response = <span class="syn-kw">await</span> <span class="syn-fn">fetch</span>(url, {
+      signal: controller.signal,
+    });
+
+    <span class="syn-kw">if</span> (!response.ok) {
+      <span class="syn-kw">throw new</span> <span class="syn-fn">Error</span>(<span class="syn-str">`HTTP error: <span class="syn-var">${response.status}</span>`</span>);
+    }
+
+    <span class="syn-kw">return await</span> response.<span class="syn-fn">json</span>();
+  } <span class="syn-kw">finally</span> {
+    <span class="syn-fn">clearTimeout</span>(timeoutId);
+  }
+}
+
+<span class="syn-kw">async function</span> <span class="syn-fn">retryOperation</span>(operation, maxAttempts) {
+  <span class="syn-kw">for</span> (<span class="syn-kw">let</span> attempt = <span class="syn-num">1</span>; attempt &lt;= maxAttempts; attempt++) {
+    <span class="syn-kw">try</span> {
+      <span class="syn-kw">return await</span> <span class="syn-fn">operation</span>();
+    } <span class="syn-kw">catch</span> (error) {
+      <span class="syn-kw">if</span> (attempt === maxAttempts) {
+        <span class="syn-kw">throw</span> error;
+      }
+
+      <span class="syn-kw">const</span> waitTime = <span class="syn-num">500</span> * <span class="syn-num">2</span> ** (attempt - <span class="syn-num">1</span>);
+
+      <span class="syn-fn">console</span>.<span class="syn-fn">log</span>(
+        <span class="syn-str">`Attempt <span class="syn-var">${attempt}</span> failed. Retrying in <span class="syn-var">${waitTime}</span>ms`</span>
+      );
+
+      <span class="syn-kw">await</span> <span class="syn-fn">delay</span>(waitTime);
+    }
+  }
+}
+
+<span class="syn-kw">async function</span> <span class="syn-fn">main</span>() {
+  <span class="syn-kw">try</span> {
+    <span class="syn-kw">const</span> users = <span class="syn-kw">await</span> <span class="syn-fn">retryOperation</span>(
+      () =&gt; <span class="syn-fn">fetchWithTimeout</span>(API_URL, TIMEOUT_MS),
+      MAX_ATTEMPTS
+    );
+
+    <span class="syn-kw">const</span> userDetails = users.<span class="syn-fn">map</span>((user) =&gt; ({
+      name: user.name,
+      email: user.email,
+    }));
+
+    <span class="syn-kw">const</span> report = userDetails
+      .<span class="syn-fn">map</span>((user) =&gt; <span class="syn-str">`<span class="syn-var">${user.name}</span> - <span class="syn-var">${user.email}</span>`</span>)
+      .<span class="syn-fn">join</span>(<span class="syn-str">"\n"</span>);
+
+    <span class="syn-kw">const</span> outputDirectory = path.<span class="syn-fn">resolve</span>(<span class="syn-str">"reports"</span>);
+    <span class="syn-kw">const</span> outputFile = path.<span class="syn-fn">join</span>(outputDirectory, <span class="syn-str">"users.txt"</span>);
+
+    <span class="syn-kw">await</span> <span class="syn-fn">mkdir</span>(outputDirectory, { recursive: <span class="syn-kw">true</span> });
+    <span class="syn-kw">await</span> <span class="syn-fn">writeFile</span>(outputFile, report, <span class="syn-str">"utf8"</span>);
+
+    <span class="syn-fn">console</span>.<span class="syn-fn">log</span>(<span class="syn-str">`Fetched <span class="syn-var">${userDetails.length}</span> users`</span>);
+    <span class="syn-fn">console</span>.<span class="syn-fn">log</span>(<span class="syn-str">`Report saved to: <span class="syn-var">${outputFile}</span>`</span>);
+  } <span class="syn-kw">catch</span> (error) {
+    <span class="syn-fn">console</span>.<span class="syn-fn">error</span>(<span class="syn-str">"Unable to generate report:"</span>, error.message);
+    process.exitCode = <span class="syn-num">1</span>;
+  }
+}
+
+<span class="syn-fn">main</span>();</code></pre>
+              </div>
+            </div>
+
+            <!-- Right Column: .env & npm scripts & Breakdown -->
+            <div style="display:flex; flex-direction:column; gap:0.75rem;">
+              <div class="code-container" style="height:auto;">
+                <div class="code-header">
+                  <div class="code-file-badge">
+                    <span class="file-dot"></span>
+                    <span>.env</span>
+                  </div>
+                </div>
+                <pre class="code-block" style="font-size:0.8rem; padding:0.6rem 0.9rem;"><code>API_URL=https://jsonplaceholder.typicode.com/users
+TIMEOUT_MS=3000
+MAX_ATTEMPTS=3</code></pre>
+              </div>
+
+              <div class="code-container" style="height:auto;">
+                <div class="code-header">
+                  <div class="code-file-badge">
+                    <span class="file-dot"></span>
+                    <span>package.json (scripts)</span>
+                  </div>
+                </div>
+                <pre class="code-block" style="font-size:0.8rem; padding:0.6rem 0.9rem;"><code>"scripts": {
+  "start": "node app.js",
+  "dev": "node --watch app.js"
+}</code></pre>
+              </div>
+
+              <div class="card" style="padding:0.9rem;">
+                <div class="card-title" style="font-size:0.95rem;">
+                  <span class="card-icon">🔍</span>
+                  <span>9-Stage Code Walkthrough</span>
+                </div>
+                <div class="step-breakdown" style="font-size:0.8rem;">
+                  <div class="step-item"><span class="num-bullet">1</span><span><strong>Load .env:</strong> <code>dotenv/config</code> populates process.env.</span></div>
+                  <div class="step-item"><span class="num-bullet">2</span><span><strong>delay():</strong> Promise-wrapped <code>setTimeout</code> for awaiting.</span></div>
+                  <div class="step-item"><span class="num-bullet">3</span><span><strong>fetchWithTimeout():</strong> AbortController with <code>finally</code> cleanup.</span></div>
+                  <div class="step-item"><span class="num-bullet">4</span><span><strong>retryOperation():</strong> Geometric backoff <code>500 * 2**(attempt - 1)</code>.</span></div>
+                  <div class="step-item"><span class="num-bullet">5</span><span><strong>Transform API:</strong> <code>map()</code> extracts name &amp; email.</span></div>
+                  <div class="step-item"><span class="num-bullet">6</span><span><strong>Format Report:</strong> <code>join("\n")</code> creates text file content.</span></div>
+                  <div class="step-item"><span class="num-bullet">7</span><span><strong>Safe Paths:</strong> <code>path.resolve()</code> and <code>path.join()</code>.</span></div>
+                  <div class="step-item"><span class="num-bullet">8</span><span><strong>Filesystem:</strong> <code>mkdir({ recursive: true })</code> + <code>writeFile()</code>.</span></div>
+                  <div class="step-item"><span class="num-bullet">9</span><span><strong>Defensive Error:</strong> <code>process.exitCode = 1</code> indicates non-zero exit.</span></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ===================================================================
+             SLIDE 25: Practice Tasks and Key Takeaways
+             =================================================================== -->
+        <section id="slide-25" class="slide" data-slide-num="25">
+          <div class="slide-header">
+            <div class="slide-title-wrap">
+              <span class="slide-category">Section 8: Final Practical Project</span>
+              <h2 class="slide-title">Practice Tasks and Key Takeaways</h2>
+              <p class="slide-subtitle">Hands-on student exercises and Day 2 architectural summary</p>
+            </div>
+            <span class="slide-num-pill">Slide 25 / 25</span>
+          </div>
+
+          <div class="slide-body grid-2">
+            <!-- Left Column: Student Tasks -->
+            <div style="display:flex; flex-direction:column; gap:0.8rem;">
+              <div class="card highlight">
+                <div class="card-title">
+                  <span class="card-icon">🛠️</span>
+                  <span>8 Student Practice Tasks</span>
+                </div>
+                <div class="step-breakdown" style="font-size:0.84rem;">
+                  <div class="step-item"><span class="num-bullet">1</span><span><strong>Fetch posts:</strong> Change <code>API_URL</code> to <code>https://jsonplaceholder.typicode.com/posts</code>.</span></div>
+                  <div class="step-item"><span class="num-bullet">2</span><span><strong>Save post titles:</strong> Save extracted titles to <code>reports/posts.txt</code>.</span></div>
+                  <div class="step-item"><span class="num-bullet">3</span><span><strong>Change timeout:</strong> Set <code>TIMEOUT_MS=1000</code> or <code>100</code> and observe timeout behavior.</span></div>
+                  <div class="step-item"><span class="num-bullet">4</span><span><strong>Tweak retries:</strong> Change <code>MAX_ATTEMPTS=5</code> and verify the printed logs.</span></div>
+                  <div class="step-item"><span class="num-bullet">5</span><span><strong>Add timestamp:</strong> Add a generated date header (<code>new Date().toISOString()</code>) to the report.</span></div>
+                  <div class="step-item"><span class="num-bullet">6</span><span><strong>Parallel fetching:</strong> Use <code>Promise.all()</code> to fetch users and posts concurrently.</span></div>
+                  <div class="step-item"><span class="num-bullet">7</span><span><strong>Two reports:</strong> Save two separate reports simultaneously to disk.</span></div>
+                  <div class="step-item"><span class="num-bullet">8</span><span><strong>Graceful degradation:</strong> Provide an invalid API URL and verify clean error messaging.</span></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Right Column: Key Takeaways -->
+            <div style="display:flex; flex-direction:column; gap:0.8rem;">
+              <div class="card success">
+                <div class="card-title" style="color:#065f46;">
+                  <span class="card-icon">🎓</span>
+                  <span>Day 2 Key Takeaways</span>
+                </div>
+                <ul class="feature-list" style="font-size:0.84rem;">
+                  <li><span class="bullet-icon">▸</span> <strong>Event Loop:</strong> Single-threaded JavaScript coordinates non-blocking I/O through task queues.</li>
+                  <li><span class="bullet-icon">▸</span> <strong>async/await:</strong> Syntactic sugar over Promises; pauses only inside async functions.</li>
+                  <li><span class="bullet-icon">▸</span> <strong>Promise.all:</strong> Boosts throughput for independent tasks; fails fast on single rejection.</li>
+                  <li><span class="bullet-icon">▸</span> <strong>fetch() &amp; response.ok:</strong> Global native HTTP; always verify status codes defensively.</li>
+                  <li><span class="bullet-icon">▸</span> <strong>AbortController:</strong> Standardized timeout cancellation with <code>clearTimeout</code> in <code>finally</code>.</li>
+                  <li><span class="bullet-icon">▸</span> <strong>Exponential Backoff:</strong> Progressively delays retries to protect upstream services.</li>
+                  <li><span class="bullet-icon">▸</span> <strong>fs/promises &amp; path:</strong> Asynchronous filesystem with cross-platform OS path safety.</li>
+                </ul>
+              </div>
+
+              <div class="callout tip">
+                <span class="callout-icon">🚀</span>
+                <div>
+                  <strong>Congratulations!</strong> You now possess the foundational asynchronous engineering skills required for building high-scale Node.js backends and integrating AI/LLM APIs!
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+      </div>
+    </main>
+
+    <!-- Bottom Navigation Controls -->
+    <footer class="bottom-bar">
+      <div class="bottom-left">
+        <button id="prev-btn" class="control-btn" title="Previous Slide (Left Arrow, PageUp)">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <polyline points="15 18 9 12 15 6"></polyline>
+          </svg>
+          <span>Previous</span>
+        </button>
+      </div>
+
+      <div class="bottom-center">
+        <span id="slide-counter" class="slide-counter">01 / 25</span>
+      </div>
+
+      <div class="bottom-right">
+        <button id="next-btn" class="control-btn primary" title="Next Slide (Right Arrow, Space, PageDown)">
+          <span>Next</span>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <polyline points="9 18 15 12 9 6"></polyline>
+          </svg>
+        </button>
+      </div>
+    </footer>
+
+    <!-- Table of Contents Slide Drawer -->
+    <div id="toc-overlay" class="toc-overlay">
+      <aside class="toc-drawer">
+        <div class="toc-header">
+          <div class="toc-title">Table of Contents (25 Slides)</div>
+          <button id="toc-close" class="toc-close" title="Close Drawer (Esc)">&times;</button>
+        </div>
+        <div id="toc-list" class="toc-list">
+          <!-- Populated dynamically by script.js -->
+        </div>
+      </aside>
+    </div>
+
+    <!-- Keyboard Shortcuts Help Modal -->
+    <div id="help-modal-overlay" class="help-modal-overlay">
+      <div class="help-modal">
+        <div class="help-modal-header">
+          <div class="help-modal-title">⌨️ Keyboard Shortcuts</div>
+          <button id="help-modal-close" class="toc-close">&times;</button>
+        </div>
+        <div class="help-modal-body">
+          <div class="shortcut-row">
+            <span>Next Slide</span>
+            <div><span class="kbd-badge">→</span> or <span class="kbd-badge">Space</span> or <span class="kbd-badge">PgDn</span></div>
+          </div>
+          <div class="shortcut-row">
+            <span>Previous Slide</span>
+            <div><span class="kbd-badge">←</span> or <span class="kbd-badge">PgUp</span></div>
+          </div>
+          <div class="shortcut-row">
+            <span>First Slide (Title)</span>
+            <span class="kbd-badge">Home</span>
+          </div>
+          <div class="shortcut-row">
+            <span>Last Slide (Recap)</span>
+            <span class="kbd-badge">End</span>
+          </div>
+          <div class="shortcut-row">
+            <span>Toggle Fullscreen</span>
+            <span class="kbd-badge">F</span>
+          </div>
+          <div class="shortcut-row">
+            <span>Table of Contents</span>
+            <div><span class="kbd-badge">T</span> or <span class="kbd-badge">M</span></div>
+          </div>
+          <div class="shortcut-row">
+            <span>Close Modal / Drawer</span>
+            <span class="kbd-badge">Esc</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
+
