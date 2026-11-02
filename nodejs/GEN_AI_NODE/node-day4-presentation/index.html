@@ -1,0 +1,1670 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gen-AI Node.js – Day 4: SSE Streaming, File Uploads &amp; Document Processing</title>
+  <meta name="description" content="Gen-AI Node.js Day 4 Classroom Presentation: Server-Sent Events (SSE), ReadableStream, Multer File Uploads, Node.js Buffers, PDF, DOCX &amp; CSV Document Parsing.">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Presentation App Shell -->
+  <div id="presentation-app">
+
+    <!-- Top Continuous Progress Bar -->
+    <div class="progress-container">
+      <div id="progress-bar" class="progress-bar"></div>
+    </div>
+
+    <!-- Top Navigation Header -->
+    <header class="top-nav">
+      <div class="brand-badge">
+        <div class="icon-box">
+          <!-- Sparkles / Gen-AI SVG Icon -->
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/>
+          </svg>
+        </div>
+        <span>Gen-AI Node.js</span>
+        <span class="brand-tag genai-pill">Day 4</span>
+      </div>
+
+      <div class="deck-section-indicator">
+        <span id="section-indicator" class="section-pill">Section 1: Server-Sent Events (SSE)</span>
+      </div>
+
+      <div class="top-actions">
+        <button id="toc-btn" class="nav-btn" title="Open Table of Contents (Press 'T' or 'M')">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="3" y1="12" x2="21" y2="12"></line>
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <line x1="3" y1="18" x2="21" y2="18"></line>
+          </svg>
+          <span>Contents</span>
+        </button>
+
+        <button id="help-btn" class="nav-btn" title="Keyboard Shortcuts (Press '?')">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"></circle>
+            <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+            <line x1="12" y1="17" x2="12.01" y2="17"></line>
+          </svg>
+          <span>Shortcuts</span>
+        </button>
+
+        <button id="fullscreen-btn" class="nav-btn" title="Toggle Fullscreen (Press 'F')">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path>
+          </svg>
+          <span>Fullscreen</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Slide Viewport -->
+    <main class="slide-viewport">
+      <div class="slide-container">
+
+        <!-- ===================================================================
+             SLIDE 1: Title Slide
+             =================================================================== -->
+        <section id="slide-1" class="slide active" data-slide-num="1">
+          <div class="title-slide-content">
+            <div class="title-badge-row">
+              <span class="pill-badge">Generative AI Engineering</span>
+              <span class="pill-badge genai-badge">Day 4 — Streaming &amp; Document Ingestion</span>
+            </div>
+
+            <h1 class="hero-main-title">
+              Gen-AI Node.js – Day 4: <br><span class="highlight">SSE Streaming, File Uploads &amp; Document Processing</span>
+            </h1>
+
+            <p class="hero-subtitle">
+              Streaming AI Responses, Receiving Multipart Uploads, Managing Buffers &amp; Extracting PDF, DOCX and CSV Content
+            </p>
+
+            <div class="logos-container">
+              <div class="logo-card">
+                <svg viewBox="0 0 256 288" width="44" height="44">
+                  <path fill="#539E43" d="M128 0L24.7 59.6v119.2L128 238.4l103.3-59.6V59.6L128 0z"/>
+                  <path fill="#FFFFFF" d="M128 32.4l75.2 43.4v86.8L128 206l-75.2-43.4V75.8L128 32.4z"/>
+                  <path fill="#333333" d="M128 47.8L68.7 82.1v68.6L128 185l59.3-34.3V82.1L128 47.8z"/>
+                  <path fill="#539E43" d="M115.8 98.4h24.4v40.3h-24.4z"/>
+                </svg>
+                <div class="logo-text">
+                  <div class="logo-text-title">Node.js Engine</div>
+                  <div class="logo-text-sub">Buffers &amp; Streams</div>
+                </div>
+              </div>
+
+              <div class="logo-card">
+                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#0284c7" stroke-width="2">
+                  <path d="M4 14.899A7 7 0 1 1 15.71 8h1.79a4.5 4.5 0 0 1 2.5 8.242"></path>
+                  <path d="M12 12v9"></path>
+                  <path d="m16 16-4-4-4 4"></path>
+                </svg>
+                <div class="logo-text">
+                  <div class="logo-text-title">Multer &amp; I/O</div>
+                  <div class="logo-text-sub">Multipart Ingestion</div>
+                </div>
+              </div>
+
+              <div class="logo-card">
+                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#8b5cf6" stroke-width="2">
+                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                  <polyline points="14 2 14 8 20 8"></polyline>
+                  <line x1="16" y1="13" x2="8" y2="13"></line>
+                  <line x1="16" y1="17" x2="8" y2="17"></line>
+                  <polyline points="10 9 9 9 8 9"></polyline>
+                </svg>
+                <div class="logo-text">
+                  <div class="logo-text-title">Document Parsing</div>
+                  <div class="logo-text-sub">PDF, DOCX &amp; CSV</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="meta-footer">
+              <div class="meta-item">
+                <span>📚 <strong>Track:</strong> Generative AI Backend Engineering</span>
+              </div>
+              <div class="meta-item">
+                <span>👨‍🏫 <strong>Instructor:</strong> Senior Gen-AI / Node.js Specialist</span>
+              </div>
+              <div class="meta-item">
+                <span>⚡ <strong>Prerequisites:</strong> Days 1–3 Express &amp; Async I/O</span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ===================================================================
+             SLIDE 2: Learning Objectives
+             =================================================================== -->
+        <section id="slide-2" class="slide" data-slide-num="2">
+          <div class="slide-header">
+            <div class="slide-title-wrap">
+              <span class="slide-category">Overview</span>
+              <h2 class="slide-title">Learning Objectives</h2>
+              <p class="slide-subtitle">By the end of this session, students will master these 9 core capabilities:</p>
+            </div>
+            <span class="slide-num-pill">Slide 02 / 18</span>
+          </div>
+
+          <div class="slide-body">
+            <div class="objectives-grid">
+              <div class="objective-item">
+                <div class="objective-num">1</div>
+                <div class="objective-text">Understand how Server-Sent Events (SSE) streaming works over HTTP.</div>
+              </div>
+              <div class="objective-item">
+                <div class="objective-num">2</div>
+                <div class="objective-text">Stream real-time tokens and responses from an Express backend.</div>
+              </div>
+              <div class="objective-item">
+                <div class="objective-num">3</div>
+                <div class="objective-text">Read streamed data in the browser using the <code>ReadableStream</code> API.</div>
+              </div>
+              <div class="objective-item">
+                <div class="objective-num">4</div>
+                <div class="objective-text">Upload single and multiple files using <code>multer</code> middleware.</div>
+              </div>
+              <div class="objective-item">
+                <div class="objective-num">5</div>
+                <div class="objective-text">Understand Node.js <code>Buffer</code> objects and memory vs disk storage.</div>
+              </div>
+              <div class="objective-item">
+                <div class="objective-num">6</div>
+                <div class="objective-text">Extract raw selectable text from PDF files using <code>pdf-parse</code>.</div>
+              </div>
+              <div class="objective-item">
+                <div class="objective-num">7</div>
+                <div class="objective-text">Extract clean text from Microsoft Word DOCX files using <code>mammoth</code>.</div>
+              </div>
+              <div class="objective-item">
+                <div class="objective-num">8</div>
+                <div class="objective-text">Read, parse, and convert CSV data into JavaScript objects with <code>csv-parse</code>.</div>
+              </div>
+              <div class="objective-item" style="grid-column: span 2;">
+                <div class="objective-num">9</div>
+                <div class="objective-text">Build a unified document-processing API for Retrieval-Augmented Generation (RAG).</div>
+              </div>
+            </div>
+
+            <div class="callout tip" style="margin-top:0.4rem;">
+              <span class="callout-icon">💡</span>
+              <div>
+                <strong>Why This Matters for Gen-AI:</strong> Users do not want to wait 20 seconds for a full LLM answer—they expect streaming words like ChatGPT. Furthermore, AI chatbots and RAG apps must ingest customer PDFs, Word resumes, and CSV data before an LLM can answer questions on them!
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ===================================================================
+             SLIDE 3: What Is Server-Sent Events (SSE)?
+             =================================================================== -->
+        <section id="slide-3" class="slide" data-slide-num="3">
+          <div class="slide-header">
+            <div class="slide-title-wrap">
+              <span class="slide-category">Section 1: Server-Sent Events (SSE)</span>
+              <h2 class="slide-title">What Is Server-Sent Events (SSE)?</h2>
+              <p class="slide-subtitle">Unidirectional HTTP streaming from server to client in real time</p>
+            </div>
+            <span class="slide-num-pill">Slide 03 / 18</span>
+          </div>
+
+          <div class="slide-body grid-2">
+            <!-- Left Column: Theory & Use Cases -->
+            <div style="display:flex; flex-direction:column; gap:0.9rem;">
+              <div class="card highlight">
+                <div class="card-title">
+                  <span class="card-icon">⚡</span>
+                  <span>Core Definition</span>
+                </div>
+                <p>
+                  <strong>Server-Sent Events (SSE)</strong> is a web technology that enables a server to continuously push data chunks to a client over a <strong>single, persistent HTTP connection</strong> without requiring WebSockets.
+                </p>
+              </div>
+
+              <div class="card">
+                <div class="card-title">
+                  <span class="card-icon">🤖</span>
+                  <span>Where is SSE Used in Gen-AI?</span>
+                </div>
+                <ul class="feature-list" style="font-size:0.86rem;">
+                  <li><span class="bullet-icon">▸</span> <strong>AI Chatbot Responses:</strong> ChatGPT, Gemini, and Claude stream tokens word-by-word as they are predicted.</li>
+                  <li><span class="bullet-icon">▸</span> <strong>Live Progress Updates:</strong> Tracking multi-step LLM chains and document embedding status.</li>
+                  <li><span class="bullet-icon">▸</span> <strong>Background Task Status:</strong> Real-time indexing of uploaded files.</li>
+                </ul>
+              </div>
+
+              <div class="callout note">
+                <span class="callout-icon">📌</span>
+                <div>
+                  <strong>User Experience Advantage:</strong> Instead of waiting 15 seconds for a complete answer, the user sees the first token within 300ms, making the application feel instantaneous!
+                </div>
+              </div>
+            </div>
+
+            <!-- Right Column: Visual Architecture Comparison -->
+            <div style="display:flex; flex-direction:column; gap:0.9rem;">
+              <div class="card" style="padding:1rem;">
+                <div class="card-title" style="margin-bottom:0.5rem;">
+                  <span class="card-icon">🔄</span>
+                  <span>Normal API vs Streaming API</span>
+                </div>
+
+                <div style="display:flex; flex-direction:column; gap:0.8rem;">
+                  <!-- Normal API -->
+                  <div style="background:#f8fafc; border:1px solid #cbd5e1; border-radius:8px; padding:0.7rem;">
+                    <div style="font-weight:700; font-size:0.84rem; color:#64748b; margin-bottom:0.3rem;">
+                      Normal API (Wait for Full Response)
+                    </div>
+                    <div style="font-family:var(--font-mono); font-size:0.78rem; line-height:1.45; color:#0f172a;">
+                      Browser &rarr; [HTTP Request] &rarr; Express<br>
+                      Express processes for 10 seconds...<br>
+                      Express &rarr; [Complete 100% JSON Response] &rarr; Browser
+                    </div>
+                  </div>
+
+                  <!-- Streaming API -->
+                  <div style="background:#f0f9ff; border:1px solid #bae6fd; border-radius:8px; padding:0.7rem;">
+                    <div style="font-weight:700; font-size:0.84rem; color:#0369a1; margin-bottom:0.3rem;">
+                      Streaming API via SSE (Incremental Chunks)
+                    </div>
+                    <div style="font-family:var(--font-mono); font-size:0.78rem; line-height:1.45; color:#0f172a;">
+                      Browser &rarr; [HTTP Request] &rarr; Express<br>
+                      Express &rarr; [Chunk 1: "Hello"] &rarr; Browser (0.2s)<br>
+                      Express &rarr; [Chunk 2: " I am"] &rarr; Browser (0.4s)<br>
+                      Express &rarr; [Chunk 3: " an AI"] &rarr; Browser (0.6s)<br>
+                      Express &rarr; [Chunk 4: " model."] &rarr; Browser (0.8s)
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ===================================================================
+             SLIDE 4: Creating an SSE Endpoint in Express
+             =================================================================== -->
+        <section id="slide-4" class="slide" data-slide-num="4">
+          <div class="slide-header">
+            <div class="slide-title-wrap">
+              <span class="slide-category">Section 1: Server-Sent Events (SSE)</span>
+              <h2 class="slide-title">Creating an SSE Endpoint in Express</h2>
+              <p class="slide-subtitle">Setting SSE headers, writing chunked events, and closing connections</p>
+            </div>
+            <span class="slide-num-pill">Slide 04 / 18</span>
+          </div>
+
+          <div class="slide-body grid-2">
+            <!-- Left Column: Express Server Code -->
+            <div style="display:flex; flex-direction:column; gap:0.8rem;">
+              <div class="code-container">
+                <div class="code-header">
+                  <div class="code-file-badge">
+                    <span class="file-dot"></span>
+                    <span>sse-basic.js</span>
+                  </div>
+                  <button class="copy-btn">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                    <span>Copy Code</span>
+                  </button>
+                </div>
+                <pre class="code-block" style="font-size:0.78rem; line-height:1.42;"><code><span class="syn-kw">const</span> express = <span class="syn-fn">require</span>(<span class="syn-str">"express"</span>);
+<span class="syn-kw">const</span> app = <span class="syn-fn">express</span>();
+
+app.<span class="syn-fn">get</span>(<span class="syn-str">"/stream"</span>, (req, res) =&gt; {
+    <span class="syn-cm">// 1. Set required SSE headers</span>
+    res.<span class="syn-fn">setHeader</span>(<span class="syn-str">"Content-Type"</span>, <span class="syn-str">"text/event-stream"</span>);
+    res.<span class="syn-fn">setHeader</span>(<span class="syn-str">"Cache-Control"</span>, <span class="syn-str">"no-cache"</span>);
+    res.<span class="syn-fn">setHeader</span>(<span class="syn-str">"Connection"</span>, <span class="syn-str">"keep-alive"</span>);
+
+    <span class="syn-cm">// 2. Send initial message immediately</span>
+    res.<span class="syn-fn">write</span>(<span class="syn-str">"data: Hello from Express!\n\n"</span>);
+
+    <span class="syn-cm">// 3. Send second chunk after 2s</span>
+    <span class="syn-fn">setTimeout</span>(() =&gt; {
+        res.<span class="syn-fn">write</span>(<span class="syn-str">"data: Streaming response started!\n\n"</span>);
+    }, <span class="syn-num">2000</span>);
+
+    <span class="syn-cm">// 4. Close connection after 5s</span>
+    <span class="syn-fn">setTimeout</span>(() =&gt; {
+        res.<span class="syn-fn">write</span>(<span class="syn-str">"data: Streaming completed!\n\n"</span>);
+        res.<span class="syn-fn">end</span>();
+    }, <span class="syn-num">5000</span>);
+});
+
+app.<span class="syn-fn">listen</span>(<span class="syn-num">3000</span>, () =&gt; <span class="syn-fn">console</span>.<span class="syn-fn">log</span>(<span class="syn-str">"Server on port 3000"</span>));</code></pre>
+              </div>
+            </div>
+
+            <!-- Right Column: Critical SSE Rules & Headers -->
+            <div style="display:flex; flex-direction:column; gap:0.8rem;">
+              <div class="table-wrapper">
+                <table class="presentation-table" style="font-size:0.84rem;">
+                  <thead>
+                    <tr>
+                      <th>Header</th>
+                      <th>Purpose</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><code>Content-Type</code></td>
+                      <td><code>text/event-stream</code> tells client it is an SSE stream</td>
+                    </tr>
+                    <tr>
+                      <td><code>Cache-Control</code></td>
+                      <td><code>no-cache</code> prevents proxies and browsers from buffering</td>
+                    </tr>
+                    <tr>
+                      <td><code>Connection</code></td>
+                      <td><code>keep-alive</code> keeps the TCP socket open for more chunks</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <div class="card danger">
+                <div class="card-title" style="color:#9f1239; font-size:0.95rem;">
+                  <span class="card-icon">🚨</span>
+                  <span>The Mandatory SSE Message Format</span>
+                </div>
+                <p style="font-size:0.84rem;">
+                  Every SSE message must strictly start with <code>data:</code> and terminate with <strong>two newline characters</strong>:
+                </p>
+                <div style="background:#0b1329; color:#4ade80; font-family:var(--font-mono); font-size:0.82rem; padding:0.5rem 0.8rem; border-radius:6px; margin-top:0.2rem;">
+                  data: Hello\n\n
+                </div>
+                <p style="font-size:0.8rem; color:var(--text-muted); margin-top:0.2rem;">
+                  The <code>\n\n</code> indicates to the browser parser that an individual message frame has finished.
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ===================================================================
+             SLIDE 5: Reading SSE Responses in the Browser Using ReadableStream
+             =================================================================== -->
+        <section id="slide-5" class="slide" data-slide-num="5">
+          <div class="slide-header">
+            <div class="slide-title-wrap">
+              <span class="slide-category">Section 1: Server-Sent Events (SSE)</span>
+              <h2 class="slide-title">Reading SSE in the Browser via ReadableStream</h2>
+              <p class="slide-subtitle">Using fetch(), response.body.getReader(), and TextDecoder to read incremental chunks</p>
+            </div>
+            <span class="slide-num-pill">Slide 05 / 18</span>
+          </div>
+
+          <div class="slide-body grid-2">
+            <!-- Left Column: Frontend Code -->
+            <div style="display:flex; flex-direction:column; gap:0.8rem;">
+              <div class="code-container" style="max-height:480px;">
+                <div class="code-header">
+                  <div class="code-file-badge">
+                    <span class="file-dot"></span>
+                    <span>client-stream.js</span>
+                  </div>
+                  <button class="copy-btn">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                    <span>Copy Code</span>
+                  </button>
+                </div>
+                <pre class="code-block" style="font-size:0.77rem; line-height:1.42;"><code><span class="syn-kw">const</span> startBtn = document.<span class="syn-fn">getElementById</span>(<span class="syn-str">"startBtn"</span>);
+<span class="syn-kw">const</span> output = document.<span class="syn-fn">getElementById</span>(<span class="syn-str">"output"</span>);
+
+startBtn.<span class="syn-fn">addEventListener</span>(<span class="syn-str">"click"</span>, <span class="syn-kw">async</span> () =&gt; {
+    output.innerHTML = <span class="syn-str">""</span>;
+
+    <span class="syn-cm">// 1. Fetch SSE endpoint</span>
+    <span class="syn-kw">const</span> response = <span class="syn-kw">await</span> <span class="syn-fn">fetch</span>(<span class="syn-str">"http://localhost:3000/stream"</span>);
+
+    <span class="syn-cm">// 2. Acquire stream reader</span>
+    <span class="syn-kw">const</span> reader = response.body.<span class="syn-fn">getReader</span>();
+    <span class="syn-kw">const</span> decoder = <span class="syn-kw">new</span> <span class="syn-fn">TextDecoder</span>();
+
+    <span class="syn-cm">// 3. Read chunks continuously in loop</span>
+    <span class="syn-kw">while</span> (<span class="syn-kw">true</span>) {
+        <span class="syn-kw">const</span> { done, value } = <span class="syn-kw">await</span> reader.<span class="syn-fn">read</span>();
+        <span class="syn-kw">if</span> (done) <span class="syn-kw">break</span>; <span class="syn-cm">// stream finished</span>
+
+        <span class="syn-cm">// Decode binary Uint8Array chunk to string</span>
+        <span class="syn-kw">const</span> chunk = decoder.<span class="syn-fn">decode</span>(value, { stream: <span class="syn-kw">true</span> });
+        output.innerHTML += <span class="syn-str">`&lt;p&gt;<span class="syn-var">${chunk}</span>&lt;/p&gt;`</span>;
+    }
+});</code></pre>
+              </div>
+            </div>
+
+            <!-- Right Column: Anatomy & Important Caveat -->
+            <div style="display:flex; flex-direction:column; gap:0.8rem;">
+              <div class="table-wrapper">
+                <table class="presentation-table" style="font-size:0.83rem;">
+                  <thead>
+                    <tr>
+                      <th>API Call</th>
+                      <th>Purpose</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><code>response.body</code></td>
+                      <td>Accesses the underlying byte stream</td>
+                    </tr>
+                    <tr>
+                      <td><code>getReader()</code></td>
+                      <td>Locks and acquires reader on stream</td>
+                    </tr>
+                    <tr>
+                      <td><code>reader.read()</code></td>
+                      <td>Returns <code>{ done, value }</code> for next chunk</td>
+                    </tr>
+                    <tr>
+                      <td><code>TextDecoder()</code></td>
+                      <td>Converts raw binary bytes into UTF-8 text</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <div class="callout warning">
+                <span class="callout-icon">⚠️</span>
+                <div>
+                  <strong>Crucial Network Reality:</strong> A network chunk read by <code>reader.read()</code> does <em>not</em> always match one complete SSE message. Over real networks, chunks can arrive split in half. Production frontends must buffer text and split strictly on <code>\n\n</code>.
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ===================================================================
+             SLIDE 6: Building a Better SSE Streaming Example
+             =================================================================== -->
+        <section id="slide-6" class="slide" data-slide-num="6">
+          <div class="slide-header">
+            <div class="slide-title-wrap">
+              <span class="slide-category">Section 1: Server-Sent Events (SSE)</span>
+              <h2 class="slide-title">Building a Better SSE Streaming Example</h2>
+              <p class="slide-subtitle">Simulating an AI chatbot response with JSON tokens, event buffering, and [DONE] marker</p>
+            </div>
+            <span class="slide-num-pill">Slide 06 / 18</span>
+          </div>
+
+          <div class="slide-body grid-2">
+            <!-- Left Column: Express Server Simulation Code -->
+            <div style="display:flex; flex-direction:column; gap:0.8rem;">
+              <div class="code-container" style="max-height:480px;">
+                <div class="code-header">
+                  <div class="code-file-badge">
+                    <span class="file-dot"></span>
+                    <span>ai-streaming-server.js</span>
+                  </div>
+                  <button class="copy-btn">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                    <span>Copy</span>
+                  </button>
+                </div>
+                <pre class="code-block" style="font-size:0.75rem; line-height:1.4;"><code>app.<span class="syn-fn">get</span>(<span class="syn-str">"/ai-stream"</span>, <span class="syn-kw">async</span> (req, res) =&gt; {
+    res.<span class="syn-fn">setHeader</span>(<span class="syn-str">"Content-Type"</span>, <span class="syn-str">"text/event-stream"</span>);
+    res.<span class="syn-fn">setHeader</span>(<span class="syn-str">"Cache-Control"</span>, <span class="syn-str">"no-cache"</span>);
+    res.<span class="syn-fn">setHeader</span>(<span class="syn-str">"Connection"</span>, <span class="syn-str">"keep-alive"</span>);
+
+    <span class="syn-kw">const</span> tokens = [
+        <span class="syn-str">"Hello!"</span>,
+        <span class="syn-str">" I am an AI assistant."</span>,
+        <span class="syn-str">" I can answer your questions."</span>,
+        <span class="syn-str">" This response is streamed."</span>
+    ];
+
+    <span class="syn-kw">for</span> (<span class="syn-kw">const</span> token <span class="syn-kw">of</span> tokens) {
+        res.<span class="syn-fn">write</span>(<span class="syn-str">`data: <span class="syn-var">${JSON.stringify({ text: token })}</span>\n\n`</span>);
+        <span class="syn-kw">await new</span> <span class="syn-fn">Promise</span>(r =&gt; <span class="syn-fn">setTimeout</span>(r, <span class="syn-num">800</span>));
+    }
+
+    <span class="syn-cm">// Standard OpenAI/LLM stream termination marker</span>
+    res.<span class="syn-fn">write</span>(<span class="syn-str">"data: [DONE]\n\n"</span>);
+    res.<span class="syn-fn">end</span>();
+});</code></pre>
+              </div>
+            </div>
+
+            <!-- Right Column: Interactive AI Stream Simulation -->
+            <div style="display:flex; flex-direction:column; gap:0.8rem;">
+              <div class="card" style="padding:1rem;">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.5rem;">
+                  <span style="font-weight:700; font-size:0.88rem; color:var(--primary-dark);">Live AI Stream Simulator</span>
+                  <div style="display:flex; gap:0.4rem;">
+                    <button id="run-ai-stream-btn" class="nav-btn primary">Start Stream ▶</button>
+                    <button id="reset-ai-stream-btn" class="nav-btn">Reset</button>
+                  </div>
+                </div>
+
+                <div id="ai-stream-status" style="font-size:0.75rem; font-family:var(--font-mono); color:var(--text-muted); margin-bottom:0.4rem;">
+                  Status: Idle
+                </div>
+
+                <!-- Rendered Output -->
+                <div style="font-size:0.8rem; font-weight:700; margin-bottom:0.2rem;">Rendered Token Output:</div>
+                <div id="ai-stream-output" style="background:#ffffff; border:1px solid #cbd5e1; border-radius:6px; padding:0.7rem; font-size:0.9rem; min-height:55px; color:#0f172a; margin-bottom:0.6rem;">
+                  Output will stream here...
+                </div>
+
+                <!-- Raw SSE Stream Debug Log -->
+                <div style="font-size:0.8rem; font-weight:700; margin-bottom:0.2rem;">Raw Incoming SSE Events:</div>
+                <div id="ai-stream-raw-chunks" class="terminal-output" style="height:120px; overflow-y:auto; font-size:0.75rem; padding:0.5rem 0.8rem;">
+                  <div class="cmd">&gt; Ready to stream...</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ===================================================================
+             SLIDE 7: What Is Multer?
+             =================================================================== -->
+        <section id="slide-7" class="slide" data-slide-num="7">
+          <div class="slide-header">
+            <div class="slide-title-wrap">
+              <span class="slide-category">Section 2: File Upload Using Multer</span>
+              <h2 class="slide-title">What Is Multer?</h2>
+              <p class="slide-subtitle">Handling multipart/form-data encoding for file uploads in Express</p>
+            </div>
+            <span class="slide-num-pill">Slide 07 / 18</span>
+          </div>
+
+          <div class="slide-body grid-2">
+            <!-- Left Column: Theory & Why Needed -->
+            <div style="display:flex; flex-direction:column; gap:0.9rem;">
+              <div class="card highlight">
+                <div class="card-title">
+                  <span class="card-icon">📦</span>
+                  <span>Why Do We Need Multer?</span>
+                </div>
+                <p>
+                  When a browser or client uploads binary files, it uses the encoding:
+                </p>
+                <div style="font-family:var(--font-mono); font-size:0.86rem; background:#fff; padding:0.4rem 0.7rem; border-radius:5px; border:1px solid #cbd5e1; margin:0.3rem 0;">
+                  Content-Type: multipart/form-data
+                </div>
+                <p style="font-size:0.86rem; color:var(--text-muted);">
+                  Express's standard <code>express.json()</code> and <code>express.urlencoded()</code> body parsers <strong>cannot parse multipart streams</strong>. Multer intercepts the stream and parses the incoming files and text fields.
+                </p>
+              </div>
+
+              <div class="card">
+                <div class="card-title">
+                  <span class="card-icon">⚡</span>
+                  <span>Installation</span>
+                </div>
+                <pre class="code-block" style="background:#0b1329; color:#38bdf8; padding:0.6rem 0.9rem; border-radius:6px; font-size:0.86rem;"><code>npm install multer</code></pre>
+              </div>
+            </div>
+
+            <!-- Right Column: Visual Pipeline -->
+            <div style="display:flex; flex-direction:column; gap:0.9rem;">
+              <div class="card" style="padding:1rem;">
+                <div class="card-title" style="margin-bottom:0.6rem;">
+                  <span class="card-icon">🔄</span>
+                  <span>Multipart File Upload Flow</span>
+                </div>
+
+                <div class="flow-diagram-container" style="flex-direction:column; gap:0.5rem; padding:0.8rem;">
+                  <div class="flow-node highlight-node" style="width:100%;">
+                    <span class="node-icon">👤</span>
+                    <span class="node-title">1. User Selects File</span>
+                    <span class="node-sub">Resume.pdf, Document.docx, or Data.csv</span>
+                  </div>
+
+                  <div class="flow-arrow-dual">
+                    <span>▼ FormData &rarr; multipart/form-data</span>
+                  </div>
+
+                  <div class="flow-node" style="width:100%; border-color:#38bdf8; background:#f0f9ff;">
+                    <span class="node-icon">⚙️</span>
+                    <span class="node-title">2. Express Server + Multer Middleware</span>
+                    <span class="node-sub">Reads multipart stream, extracts metadata</span>
+                  </div>
+
+                  <div class="flow-arrow-dual">
+                    <span>▼ Populates req.file or req.files</span>
+                  </div>
+
+                  <div class="flow-node" style="width:100%;">
+                    <span class="node-icon">💾</span>
+                    <span class="node-title">3. Destination Storage</span>
+                    <span class="node-sub">Written to disk (dest) or stored in RAM (memoryStorage)</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ===================================================================
+             SLIDE 8: Creating a File Upload API Using Multer
+             =================================================================== -->
+        <section id="slide-8" class="slide" data-slide-num="8">
+          <div class="slide-header">
+            <div class="slide-title-wrap">
+              <span class="slide-category">Section 2: File Upload Using Multer</span>
+              <h2 class="slide-title">Creating a File Upload API Using Multer</h2>
+              <p class="slide-subtitle">Setting up destination folders, handling single files, and verifying req.file</p>
+            </div>
+            <span class="slide-num-pill">Slide 08 / 18</span>
+          </div>
+
+          <div class="slide-body grid-2">
+            <!-- Left Column: Express Server Code -->
+            <div style="display:flex; flex-direction:column; gap:0.8rem;">
+              <div class="code-container">
+                <div class="code-header">
+                  <div class="code-file-badge">
+                    <span class="file-dot"></span>
+                    <span>multer-upload.js</span>
+                  </div>
+                  <button class="copy-btn">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                    <span>Copy Code</span>
+                  </button>
+                </div>
+                <pre class="code-block" style="font-size:0.78rem; line-height:1.42;"><code><span class="syn-kw">const</span> express = <span class="syn-fn">require</span>(<span class="syn-str">"express"</span>);
+<span class="syn-kw">const</span> multer = <span class="syn-fn">require</span>(<span class="syn-str">"multer"</span>);
+
+<span class="syn-kw">const</span> app = <span class="syn-fn">express</span>();
+
+<span class="syn-cm">// Configure destination directory on disk</span>
+<span class="syn-kw">const</span> upload = <span class="syn-fn">multer</span>({ dest: <span class="syn-str">"uploads/"</span> });
+
+<span class="syn-cm">// "file" is the exact field name sent by client</span>
+app.<span class="syn-fn">post</span>(<span class="syn-str">"/upload"</span>, upload.<span class="syn-fn">single</span>(<span class="syn-str">"file"</span>), (req, res) =&gt; {
+    <span class="syn-kw">if</span> (!req.file) {
+        <span class="syn-kw">return</span> res.<span class="syn-fn">status</span>(<span class="syn-num">400</span>).<span class="syn-fn">json</span>({
+            message: <span class="syn-str">"Please upload a file"</span>
+        });
+    }
+
+    res.<span class="syn-fn">json</span>({
+        message: <span class="syn-str">"File uploaded successfully"</span>,
+        file: req.file
+    });
+});
+
+app.<span class="syn-fn">listen</span>(<span class="syn-num">3000</span>);</code></pre>
+              </div>
+            </div>
+
+            <!-- Right Column: Methods & Field Name Rule -->
+            <div style="display:flex; flex-direction:column; gap:0.8rem;">
+              <div class="table-wrapper">
+                <table class="presentation-table" style="font-size:0.84rem;">
+                  <thead>
+                    <tr>
+                      <th>Multer Method</th>
+                      <th>Purpose</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><code>upload.single("file")</code></td>
+                      <td>Upload one file. File attached to <code>req.file</code></td>
+                    </tr>
+                    <tr>
+                      <td><code>upload.array("files", 5)</code></td>
+                      <td>Upload up to 5 files with same name to <code>req.files</code></td>
+                    </tr>
+                    <tr>
+                      <td><code>upload.fields([...])</code></td>
+                      <td>Upload multiple files using different field names</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <div class="callout warning">
+                <span class="callout-icon">⚠️</span>
+                <div>
+                  <strong>Field Name Must Match:</strong> The key name sent from the frontend or Postman (e.g. <code>formData.append("file", ...)</code>) <strong>must match exactly</strong> the string passed to <code>upload.single("file")</code>! Otherwise, <code>req.file</code> will be <code>undefined</code>.
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ===================================================================
+             SLIDE 9: Uploading Files Using Postman and HTML
+             =================================================================== -->
+        <section id="slide-9" class="slide" data-slide-num="9">
+          <div class="slide-header">
+            <div class="slide-title-wrap">
+              <span class="slide-category">Section 2: File Upload Using Multer</span>
+              <h2 class="slide-title">Uploading Files Using Postman and HTML</h2>
+              <p class="slide-subtitle">Testing with Postman form-data and uploading with HTML5 FormData</p>
+            </div>
+            <span class="slide-num-pill">Slide 09 / 18</span>
+          </div>
+
+          <div class="slide-body grid-2">
+            <!-- Left Column: Method 1 - Postman -->
+            <div style="display:flex; flex-direction:column; gap:0.8rem;">
+              <div class="card highlight">
+                <div class="card-title">
+                  <span class="card-icon">🚀</span>
+                  <span>Method 1: Postman Testing</span>
+                </div>
+                <div class="step-breakdown" style="font-size:0.84rem;">
+                  <div class="step-item"><span class="num-bullet">1</span><span>Set method to <strong>POST</strong>: <code>http://localhost:3000/upload</code></span></div>
+                  <div class="step-item"><span class="num-bullet">2</span><span>Open the <strong>Body</strong> tab &rarr; select <strong>form-data</strong>.</span></div>
+                  <div class="step-item"><span class="num-bullet">3</span><span>Hover over key &rarr; change type from <strong>Text to File</strong>.</span></div>
+                  <div class="step-item"><span class="num-bullet">4</span><span>Set key name to <code>file</code> and select your document.</span></div>
+                  <div class="step-item"><span class="num-bullet">5</span><span>Click <strong>Send</strong>.</span></div>
+                </div>
+              </div>
+
+              <div class="terminal-output">
+                <div class="terminal-header"><span class="dot"></span><span>Postman JSON Response</span></div>
+                <div class="terminal-body" style="font-size:0.8rem;">
+<span class="res">{
+    "message": "File uploaded successfully",
+    "file": {
+        "originalname": "sample.pdf",
+        "mimetype": "application/pdf",
+        "size": 15420
+    }
+}</span></div>
+              </div>
+            </div>
+
+            <!-- Right Column: Method 2 - HTML FormData -->
+            <div style="display:flex; flex-direction:column; gap:0.8rem;">
+              <div class="code-container" style="max-height:360px;">
+                <div class="code-header">
+                  <div class="code-file-badge">
+                    <span class="file-dot"></span>
+                    <span>upload.html</span>
+                  </div>
+                  <button class="copy-btn">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                    <span>Copy</span>
+                  </button>
+                </div>
+                <pre class="code-block" style="font-size:0.75rem; line-height:1.4;"><code>&lt;input type="file" id="fileInput"&gt;
+&lt;button onclick="uploadFile()"&gt;Upload&lt;/button&gt;
+
+&lt;script&gt;
+async function uploadFile() {
+    const file = document.getElementById("fileInput").files[0];
+    if (!file) return alert("Select a file");
+
+    const formData = new FormData();
+    formData.append("file", file);
+
+    const response = await fetch("http://localhost:3000/upload", {
+        method: "POST",
+        body: formData // DO NOT set Content-Type header manually!
+    });
+
+    const result = await response.json();
+    console.log(result);
+}
+&lt;/script&gt;</code></pre>
+              </div>
+
+              <div class="callout danger" style="padding:0.6rem 0.9rem;">
+                <span class="callout-icon">🚨</span>
+                <div style="font-size:0.82rem;">
+                  <strong>Never set Content-Type manually:</strong> When using <code>FormData</code> in <code>fetch()</code>, omit <code>Content-Type</code>. The browser automatically sets <code>multipart/form-data; boundary=...</code>!
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ===================================================================
+             SLIDE 10: What Is a Buffer in Node.js?
+             =================================================================== -->
+        <section id="slide-10" class="slide" data-slide-num="10">
+          <div class="slide-header">
+            <div class="slide-title-wrap">
+              <span class="slide-category">Section 3: Node.js Buffers</span>
+              <h2 class="slide-title">What Is a Buffer in Node.js?</h2>
+              <p class="slide-subtitle">Working with raw binary data, byte sequences, and hexadecimal representations</p>
+            </div>
+            <span class="slide-num-pill">Slide 10 / 18</span>
+          </div>
+
+          <div class="slide-body grid-2">
+            <!-- Left Column: Theory & Why Buffers -->
+            <div style="display:flex; flex-direction:column; gap:0.9rem;">
+              <div class="card highlight">
+                <div class="card-title">
+                  <span class="card-icon">0️⃣1️⃣</span>
+                  <span>Definition of a Buffer</span>
+                </div>
+                <p>
+                  A <strong>Buffer</strong> is a built-in Node.js global object used to store, inspect, and manipulate raw <strong>binary data</strong> (sequences of bytes outside the V8 JavaScript heap).
+                </p>
+              </div>
+
+              <div class="card">
+                <div class="card-title">
+                  <span class="card-icon">📁</span>
+                  <span>Why Gen-AI Apps Need Buffers</span>
+                </div>
+                <ul class="feature-list" style="font-size:0.86rem;">
+                  <li><span class="bullet-icon">▸</span> <strong>Files are bytes:</strong> PDFs, images, audio, and Word docs are binary byte streams.</li>
+                  <li><span class="bullet-icon">▸</span> <strong>Direct Parser Ingestion:</strong> Parsing libraries (like <code>pdf-parse</code> and <code>mammoth</code>) accept raw Buffer inputs directly.</li>
+                  <li><span class="bullet-icon">▸</span> <strong>Zero Disk I/O:</strong> Working in memory with Buffers is 10x faster than saving and reading from disk.</li>
+                </ul>
+              </div>
+            </div>
+
+            <!-- Right Column: Code & Hex Representation -->
+            <div style="display:flex; flex-direction:column; gap:0.9rem;">
+              <div class="code-container">
+                <div class="code-header">
+                  <div class="code-file-badge">
+                    <span class="file-dot"></span>
+                    <span>buffer-intro.js</span>
+                  </div>
+                  <button class="copy-btn">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                    <span>Copy</span>
+                  </button>
+                </div>
+                <pre class="code-block" style="font-size:0.82rem;"><code><span class="syn-cm">// Convert UTF-8 string to a Buffer</span>
+<span class="syn-kw">const</span> buffer = Buffer.<span class="syn-fn">from</span>(<span class="syn-str">"Hello Node.js"</span>);
+
+<span class="syn-fn">console</span>.<span class="syn-fn">log</span>(buffer);</code></pre>
+              </div>
+
+              <div class="terminal-output">
+                <div class="terminal-header"><span class="dot"></span><span>Node.js Terminal Output</span></div>
+                <div class="terminal-body">
+<span class="res">&lt;Buffer 48 65 6c 6c 6f 20 4e 6f 64 65 2e 6a 73&gt;</span></div>
+              </div>
+
+              <div class="card" style="padding:0.8rem; font-size:0.82rem;">
+                <strong>Hexadecimal Anatomy:</strong> Each 2-character hex value represents 1 byte (8 bits):<br>
+                <code>48</code> = 'H', <code>65</code> = 'e', <code>6c</code> = 'l', <code>6c</code> = 'l', <code>6f</code> = 'o'
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ===================================================================
+             SLIDE 11: Working with Buffers
+             =================================================================== -->
+        <section id="slide-11" class="slide" data-slide-num="11">
+          <div class="slide-header">
+            <div class="slide-title-wrap">
+              <span class="slide-category">Section 3: Node.js Buffers</span>
+              <h2 class="slide-title">Working with Buffers</h2>
+              <p class="slide-subtitle">Buffer methods, array conversions, and Multer memory storage</p>
+            </div>
+            <span class="slide-num-pill">Slide 11 / 18</span>
+          </div>
+
+          <div class="slide-body grid-2">
+            <!-- Left Column: Practicals 1, 2, 3 -->
+            <div style="display:flex; flex-direction:column; gap:0.8rem;">
+              <div class="code-container" style="max-height:480px;">
+                <div class="code-header">
+                  <div class="code-file-badge">
+                    <span class="file-dot"></span>
+                    <span>multer-memory-storage.js</span>
+                  </div>
+                  <button class="copy-btn">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                    <span>Copy</span>
+                  </button>
+                </div>
+                <pre class="code-block" style="font-size:0.75rem; line-height:1.4;"><code><span class="syn-cm">// 1. String &lt;-&gt; Buffer</span>
+<span class="syn-kw">const</span> b1 = Buffer.<span class="syn-fn">from</span>(<span class="syn-str">"Welcome"</span>);
+<span class="syn-fn">console</span>.<span class="syn-fn">log</span>(b1.<span class="syn-fn">toString</span>()); <span class="syn-cm">// "Welcome"</span>
+
+<span class="syn-cm">// 2. Array of ASCII Byte Values</span>
+<span class="syn-kw">const</span> b2 = Buffer.<span class="syn-fn">from</span>([<span class="syn-num">65</span>, <span class="syn-num">66</span>, <span class="syn-num">67</span>, <span class="syn-num">68</span>]);
+<span class="syn-fn">console</span>.<span class="syn-fn">log</span>(b2.<span class="syn-fn">toString</span>()); <span class="syn-cm">// "ABCD"</span>
+
+<span class="syn-cm">// 3. Ingest Upload as RAM Buffer (No Disk I/O)</span>
+<span class="syn-kw">const</span> upload = <span class="syn-fn">multer</span>({ storage: multer.<span class="syn-fn">memoryStorage</span>() });
+
+app.<span class="syn-fn">post</span>(<span class="syn-str">"/buffer-upload"</span>, upload.<span class="syn-fn">single</span>(<span class="syn-str">"file"</span>), (req, res) =&gt; {
+    <span class="syn-kw">const</span> fileBuffer = req.file.buffer;
+
+    res.<span class="syn-fn">json</span>({
+        originalName: req.file.originalname,
+        size: fileBuffer.length,
+        isBuffer: Buffer.<span class="syn-fn">isBuffer</span>(fileBuffer)
+    });
+});</code></pre>
+              </div>
+            </div>
+
+            <!-- Right Column: Interactive Live Buffer Inspector -->
+            <div style="display:flex; flex-direction:column; gap:0.8rem;">
+              <div class="card" style="padding:1rem;">
+                <div class="card-title" style="font-size:0.92rem; margin-bottom:0.4rem;">
+                  <span>Interactive Node.js Buffer Inspector</span>
+                </div>
+                <div style="display:flex; flex-direction:column; gap:0.4rem;">
+                  <label style="font-size:0.8rem; font-weight:700;">Type Text to Convert into Buffer Bytes:</label>
+                  <input type="text" id="buffer-sim-input" value="Hello Node.js" style="font-family:var(--font-mono); font-size:0.85rem; padding:0.4rem 0.6rem; border:1px solid #cbd5e1; border-radius:5px;" />
+                </div>
+
+                <div style="margin-top:0.6rem; display:flex; flex-direction:column; gap:0.3rem;">
+                  <div style="font-size:0.78rem; font-weight:700; color:var(--text-muted);">Hexadecimal Buffer:</div>
+                  <div id="buffer-sim-hex" style="font-family:var(--font-mono); font-size:0.78rem; background:#0b1329; color:#4ade80; padding:0.45rem 0.7rem; border-radius:5px; word-break:break-all;">
+                    &lt;Buffer 48 65 6c 6c 6f 20 4e 6f 64 65 2e 6a 73&gt;
+                  </div>
+
+                  <div style="font-size:0.78rem; font-weight:700; color:var(--text-muted); margin-top:0.2rem;">Decimal Byte Array:</div>
+                  <div id="buffer-sim-dec" style="font-family:var(--font-mono); font-size:0.74rem; background:#111e3d; color:#38bdf8; padding:0.45rem 0.7rem; border-radius:5px; word-break:break-all;">
+                    [ 72, 101, 108, 108, 111, 32, 78, 111, 100, 101, 46, 106, 115 ]
+                  </div>
+
+                  <div style="font-size:0.78rem; font-weight:700; color:var(--text-muted); margin-top:0.2rem;">Buffer Size:</div>
+                  <div id="buffer-sim-size" style="font-family:var(--font-mono); font-size:0.82rem; font-weight:700; color:#0284c7;">
+                    13 bytes
+                  </div>
+                </div>
+              </div>
+
+              <div class="callout tip" style="padding:0.6rem 0.9rem;">
+                <span class="callout-icon">💡</span>
+                <div style="font-size:0.82rem;">
+                  <code>multer.memoryStorage()</code> is ideal for documents parsed immediately for AI. However, for massive video files (&gt;100MB), stream to disk or cloud S3 to avoid high RAM consumption.
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ===================================================================
+             SLIDE 12: What Is Document Parsing?
+             =================================================================== -->
+        <section id="slide-12" class="slide" data-slide-num="12">
+          <div class="slide-header">
+            <div class="slide-title-wrap">
+              <span class="slide-category">Section 4: Document Parsing</span>
+              <h2 class="slide-title">What Is Document Parsing?</h2>
+              <p class="slide-subtitle">Transforming raw proprietary file bytes into clean textual representations for LLMs</p>
+            </div>
+            <span class="slide-num-pill">Slide 12 / 18</span>
+          </div>
+
+          <div class="slide-body grid-2">
+            <!-- Left Column: Theory & Libraries -->
+            <div style="display:flex; flex-direction:column; gap:0.9rem;">
+              <div class="card highlight">
+                <div class="card-title">
+                  <span class="card-icon">📄</span>
+                  <span>Definition</span>
+                </div>
+                <p>
+                  <strong>Document parsing</strong> is the process of reading an uploaded document's raw binary data and extracting structured text and metadata so that an AI / LLM model can analyze it.
+                </p>
+              </div>
+
+              <div class="table-wrapper">
+                <table class="presentation-table" style="font-size:0.84rem;">
+                  <thead>
+                    <tr>
+                      <th>Document Type</th>
+                      <th>Library</th>
+                      <th>Version / Import</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><strong>PDF</strong> (.pdf)</td>
+                      <td><code>pdf-parse</code></td>
+                      <td><code>pdf-parse@1.1.1</code> (CommonJS)</td>
+                    </tr>
+                    <tr>
+                      <td><strong>Word</strong> (.docx)</td>
+                      <td><code>mammoth</code></td>
+                      <td><code>mammoth</code></td>
+                    </tr>
+                    <tr>
+                      <td><strong>Spreadsheet</strong> (.csv)</td>
+                      <td><code>csv-parse</code></td>
+                      <td><code>csv-parse/sync</code></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <div class="card" style="padding:0.7rem 0.9rem;">
+                <div style="font-size:0.82rem; font-weight:700; color:var(--text-muted); margin-bottom:0.2rem;">Single Install Command:</div>
+                <pre class="code-block" style="background:#0b1329; color:#38bdf8; padding:0.4rem 0.7rem; border-radius:5px; font-size:0.78rem;"><code>npm install pdf-parse@1.1.1 mammoth csv-parse</code></pre>
+              </div>
+            </div>
+
+            <!-- Right Column: Document Processing Pipeline Diagram -->
+            <div style="display:flex; flex-direction:column; gap:0.9rem;">
+              <div class="card" style="padding:1rem;">
+                <div class="card-title" style="margin-bottom:0.5rem;">
+                  <span class="card-icon">🔄</span>
+                  <span>Document Ingestion to Gen-AI Pipeline</span>
+                </div>
+
+                <div class="flow-diagram-container" style="flex-direction:column; gap:0.45rem; padding:0.7rem;">
+                  <div class="flow-node highlight-node" style="width:100%;">
+                    <span class="node-icon">📂</span>
+                    <span class="node-title">1. User Uploads Document</span>
+                    <span class="node-sub">PDF, DOCX, or CSV through multipart form</span>
+                  </div>
+
+                  <div class="flow-arrow-dual"><span>▼ Multer memoryStorage</span></div>
+
+                  <div class="flow-node" style="width:100%;">
+                    <span class="node-icon">💾</span>
+                    <span class="node-title">2. Binary Buffer in RAM</span>
+                    <span class="node-sub">req.file.buffer</span>
+                  </div>
+
+                  <div class="flow-arrow-dual"><span>▼ Specialized Document Parser</span></div>
+
+                  <div class="flow-node" style="width:100%; border-color:#38bdf8; background:#f0f9ff;">
+                    <span class="node-icon">📜</span>
+                    <span class="node-title">3. Extracted Text String</span>
+                    <span class="node-sub">Clean string without corrupt formatting</span>
+                  </div>
+
+                  <div class="flow-arrow-dual"><span>▼ Sent to LLM Context / Prompt</span></div>
+
+                  <div class="flow-node" style="width:100%;">
+                    <span class="node-icon">✨</span>
+                    <span class="node-title">4. AI Response / Summary</span>
+                    <span class="node-sub">Streamed or returned to client</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ===================================================================
+             SLIDE 13: Extracting Text from PDF Using pdf-parse
+             =================================================================== -->
+        <section id="slide-13" class="slide" data-slide-num="13">
+          <div class="slide-header">
+            <div class="slide-title-wrap">
+              <span class="slide-category">Section 4: Document Parsing</span>
+              <h2 class="slide-title">Extracting Text from PDF Using pdf-parse</h2>
+              <p class="slide-subtitle">Parsing PDF buffers, reading text streams, and inspecting page counts</p>
+            </div>
+            <span class="slide-num-pill">Slide 13 / 18</span>
+          </div>
+
+          <div class="slide-body grid-2">
+            <!-- Left Column: Express PDF Upload Code -->
+            <div style="display:flex; flex-direction:column; gap:0.8rem;">
+              <div class="code-container">
+                <div class="code-header">
+                  <div class="code-file-badge">
+                    <span class="file-dot"></span>
+                    <span>parse-pdf.js</span>
+                  </div>
+                  <button class="copy-btn">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                    <span>Copy</span>
+                  </button>
+                </div>
+                <pre class="code-block" style="font-size:0.75rem; line-height:1.4;"><code><span class="syn-kw">const</span> express = <span class="syn-fn">require</span>(<span class="syn-str">"express"</span>);
+<span class="syn-kw">const</span> multer = <span class="syn-fn">require</span>(<span class="syn-str">"multer"</span>);
+<span class="syn-kw">const</span> pdfParse = <span class="syn-fn">require</span>(<span class="syn-str">"pdf-parse"</span>); <span class="syn-cm">// v1.1.1 API</span>
+
+<span class="syn-kw">const</span> app = <span class="syn-fn">express</span>();
+<span class="syn-kw">const</span> upload = <span class="syn-fn">multer</span>({ storage: multer.<span class="syn-fn">memoryStorage</span>() });
+
+app.<span class="syn-fn">post</span>(<span class="syn-str">"/upload-pdf"</span>, upload.<span class="syn-fn">single</span>(<span class="syn-str">"file"</span>), <span class="syn-kw">async</span> (req, res) =&gt; {
+    <span class="syn-kw">try</span> {
+        <span class="syn-kw">if</span> (!req.file) {
+            <span class="syn-kw">return</span> res.<span class="syn-fn">status</span>(<span class="syn-num">400</span>).<span class="syn-fn">json</span>({ message: <span class="syn-str">"PDF file required"</span> });
+        }
+
+        <span class="syn-cm">// Pass the binary buffer directly to pdfParse</span>
+        <span class="syn-kw">const</span> pdfData = <span class="syn-kw">await</span> <span class="syn-fn">pdfParse</span>(req.file.buffer);
+
+        res.<span class="syn-fn">json</span>({
+            message: <span class="syn-str">"PDF parsed successfully"</span>,
+            text: pdfData.text,
+            pages: pdfData.numpages
+        });
+    } <span class="syn-kw">catch</span> (error) {
+        res.<span class="syn-fn">status</span>(<span class="syn-num">500</span>).<span class="syn-fn">json</span>({ message: <span class="syn-str">"PDF parsing failed"</span> });
+    }
+});</code></pre>
+              </div>
+            </div>
+
+            <!-- Right Column: Testing & Limitations -->
+            <div style="display:flex; flex-direction:column; gap:0.8rem;">
+              <div class="card">
+                <div class="card-title" style="font-size:0.92rem;">
+                  <span class="card-icon">🧪</span>
+                  <span>Postman Testing Instructions</span>
+                </div>
+                <div style="font-size:0.84rem; display:flex; flex-direction:column; gap:0.3rem;">
+                  <div>Method: <span class="method-badge post">POST</span> <code>http://localhost:3000/upload-pdf</code></div>
+                  <div>Body: <strong>form-data</strong> | Key: <code>file</code> (File) | Value: <code>sample.pdf</code></div>
+                </div>
+              </div>
+
+              <div class="terminal-output">
+                <div class="terminal-header"><span class="dot"></span><span>Expected Response</span></div>
+                <div class="terminal-body" style="font-size:0.78rem;">
+<span class="res">{
+    "message": "PDF parsed successfully",
+    "text": "My name is Anu. I am a MERN Stack developer...",
+    "pages": 2
+}</span></div>
+              </div>
+
+              <div class="callout warning" style="padding:0.6rem 0.9rem;">
+                <span class="callout-icon">💡</span>
+                <div style="font-size:0.82rem;">
+                  <strong>Limitation:</strong> <code>pdf-parse</code> extracts selectable embedded text. If a PDF is a scanned flat picture from a camera, it contains no text stream and requires an OCR engine (like Tesseract).
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ===================================================================
+             SLIDE 14: Extracting Text from DOCX Using Mammoth
+             =================================================================== -->
+        <section id="slide-14" class="slide" data-slide-num="14">
+          <div class="slide-header">
+            <div class="slide-title-wrap">
+              <span class="slide-category">Section 4: Document Parsing</span>
+              <h2 class="slide-title">Extracting Text from DOCX Using Mammoth</h2>
+              <p class="slide-subtitle">Converting Microsoft Word .docx files into clean text strings for AI models</p>
+            </div>
+            <span class="slide-num-pill">Slide 14 / 18</span>
+          </div>
+
+          <div class="slide-body grid-2">
+            <!-- Left Column: Express DOCX Route Code -->
+            <div style="display:flex; flex-direction:column; gap:0.8rem;">
+              <div class="code-container">
+                <div class="code-header">
+                  <div class="code-file-badge">
+                    <span class="file-dot"></span>
+                    <span>parse-docx.js</span>
+                  </div>
+                  <button class="copy-btn">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                    <span>Copy</span>
+                  </button>
+                </div>
+                <pre class="code-block" style="font-size:0.75rem; line-height:1.4;"><code><span class="syn-kw">const</span> express = <span class="syn-fn">require</span>(<span class="syn-str">"express"</span>);
+<span class="syn-kw">const</span> multer = <span class="syn-fn">require</span>(<span class="syn-str">"multer"</span>);
+<span class="syn-kw">const</span> mammoth = <span class="syn-fn">require</span>(<span class="syn-str">"mammoth"</span>);
+
+<span class="syn-kw">const</span> app = <span class="syn-fn">express</span>();
+<span class="syn-kw">const</span> upload = <span class="syn-fn">multer</span>({ storage: multer.<span class="syn-fn">memoryStorage</span>() });
+
+app.<span class="syn-fn">post</span>(<span class="syn-str">"/upload-docx"</span>, upload.<span class="syn-fn">single</span>(<span class="syn-str">"file"</span>), <span class="syn-kw">async</span> (req, res) =&gt; {
+    <span class="syn-kw">try</span> {
+        <span class="syn-kw">if</span> (!req.file) {
+            <span class="syn-kw">return</span> res.<span class="syn-fn">status</span>(<span class="syn-num">400</span>).<span class="syn-fn">json</span>({ message: <span class="syn-str">"DOCX file required"</span> });
+        }
+
+        <span class="syn-cm">// extractRawText strips formatting and returns clean string</span>
+        <span class="syn-kw">const</span> result = <span class="syn-kw">await</span> mammoth.<span class="syn-fn">extractRawText</span>({
+            buffer: req.file.buffer
+        });
+
+        res.<span class="syn-fn">json</span>({
+            message: <span class="syn-str">"DOCX parsed successfully"</span>,
+            text: result.value
+        });
+    } <span class="syn-kw">catch</span> (error) {
+        res.<span class="syn-fn">status</span>(<span class="syn-num">500</span>).<span class="syn-fn">json</span>({ message: <span class="syn-str">"DOCX parsing failed"</span> });
+    }
+});</code></pre>
+              </div>
+            </div>
+
+            <!-- Right Column: Testing & Explanation -->
+            <div style="display:flex; flex-direction:column; gap:0.8rem;">
+              <div class="card">
+                <div class="card-title" style="font-size:0.92rem;">
+                  <span class="card-icon">📝</span>
+                  <span>Postman Testing Instructions</span>
+                </div>
+                <div style="font-size:0.84rem; display:flex; flex-direction:column; gap:0.3rem;">
+                  <div>Method: <span class="method-badge post">POST</span> <code>http://localhost:3000/upload-docx</code></div>
+                  <div>Body: <strong>form-data</strong> | Key: <code>file</code> (File) | Value: <code>resume.docx</code></div>
+                </div>
+              </div>
+
+              <div class="terminal-output">
+                <div class="terminal-header"><span class="dot"></span><span>Expected Response</span></div>
+                <div class="terminal-body" style="font-size:0.78rem;">
+<span class="res">{
+    "message": "DOCX parsed successfully",
+    "text": "Anu\nMERN Stack Developer\nSkills: React, Node.js, MongoDB"
+}</span></div>
+              </div>
+
+              <div class="callout tip" style="padding:0.6rem 0.9rem;">
+                <span class="callout-icon">💡</span>
+                <div style="font-size:0.82rem;">
+                  <code>extractRawText()</code> is preferred over converting to complex HTML because LLMs process plain text with fewer tokens and less overhead.
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ===================================================================
+             SLIDE 15: Parsing CSV Files Using csv-parse
+             =================================================================== -->
+        <section id="slide-15" class="slide" data-slide-num="15">
+          <div class="slide-header">
+            <div class="slide-title-wrap">
+              <span class="slide-category">Section 4: Document Parsing</span>
+              <h2 class="slide-title">Parsing CSV Files Using csv-parse</h2>
+              <p class="slide-subtitle">Converting Comma-Separated Values into typed JavaScript arrays and objects</p>
+            </div>
+            <span class="slide-num-pill">Slide 15 / 18</span>
+          </div>
+
+          <div class="slide-body grid-2">
+            <!-- Left Column: Express CSV Route Code -->
+            <div style="display:flex; flex-direction:column; gap:0.8rem;">
+              <div class="code-container">
+                <div class="code-header">
+                  <div class="code-file-badge">
+                    <span class="file-dot"></span>
+                    <span>parse-csv.js</span>
+                  </div>
+                  <button class="copy-btn">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                    <span>Copy</span>
+                  </button>
+                </div>
+                <pre class="code-block" style="font-size:0.75rem; line-height:1.4;"><code><span class="syn-kw">const</span> express = <span class="syn-fn">require</span>(<span class="syn-str">"express"</span>);
+<span class="syn-kw">const</span> multer = <span class="syn-fn">require</span>(<span class="syn-str">"multer"</span>);
+<span class="syn-kw">const</span> { parse } = <span class="syn-fn">require</span>(<span class="syn-str">"csv-parse/sync"</span>);
+
+<span class="syn-kw">const</span> app = <span class="syn-fn">express</span>();
+<span class="syn-kw">const</span> upload = <span class="syn-fn">multer</span>({ storage: multer.<span class="syn-fn">memoryStorage</span>() });
+
+app.<span class="syn-fn">post</span>(<span class="syn-str">"/upload-csv"</span>, upload.<span class="syn-fn">single</span>(<span class="syn-str">"file"</span>), (req, res) =&gt; {
+    <span class="syn-kw">try</span> {
+        <span class="syn-kw">if</span> (!req.file) {
+            <span class="syn-kw">return</span> res.<span class="syn-fn">status</span>(<span class="syn-num">400</span>).<span class="syn-fn">json</span>({ message: <span class="syn-str">"CSV file required"</span> });
+        }
+
+        <span class="syn-cm">// Synchronous buffer parser into object array</span>
+        <span class="syn-kw">const</span> records = <span class="syn-fn">parse</span>(req.file.buffer, {
+            columns: <span class="syn-kw">true</span>,        <span class="syn-cm">// row 1 as object keys</span>
+            skip_empty_lines: <span class="syn-kw">true</span>,
+            trim: <span class="syn-kw">true</span>
+        });
+
+        res.<span class="syn-fn">json</span>({
+            message: <span class="syn-str">"CSV parsed successfully"</span>,
+            data: records
+        });
+    } <span class="syn-kw">catch</span> (error) {
+        res.<span class="syn-fn">status</span>(<span class="syn-num">400</span>).<span class="syn-fn">json</span>({ message: <span class="syn-str">"CSV parsing failed"</span> });
+    }
+});</code></pre>
+              </div>
+            </div>
+
+            <!-- Right Column: Options & Sample Data -->
+            <div style="display:flex; flex-direction:column; gap:0.8rem;">
+              <div class="card" style="padding:0.8rem;">
+                <div style="font-weight:700; font-size:0.84rem; color:var(--primary-dark); margin-bottom:0.2rem;">Sample students.csv:</div>
+                <pre class="code-block" style="background:#0b1329; color:#cbd5e1; padding:0.4rem 0.6rem; border-radius:5px; font-size:0.75rem;"><code>name,email,course
+Anu,anu@gmail.com,MERN
+Rahul,rahul@gmail.com,Python</code></pre>
+              </div>
+
+              <div class="terminal-output">
+                <div class="terminal-header"><span class="dot"></span><span>Parsed JSON Output Array</span></div>
+                <div class="terminal-body" style="font-size:0.76rem;">
+<span class="res">[
+    { "name": "Anu", "email": "anu@gmail.com", "course": "MERN" },
+    { "name": "Rahul", "email": "rahul@gmail.com", "course": "Python" }
+]</span></div>
+              </div>
+
+              <div class="table-wrapper">
+                <table class="presentation-table" style="font-size:0.8rem;">
+                  <thead>
+                    <tr><th>Option</th><th>Effect</th></tr>
+                  </thead>
+                  <tbody>
+                    <tr><td><code>columns: true</code></td><td>First CSV row becomes property keys</td></tr>
+                    <tr><td><code>skip_empty_lines</code></td><td>Prevents creating blank records</td></tr>
+                    <tr><td><code>trim: true</code></td><td>Removes spaces around values</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ===================================================================
+             SLIDE 16: Comparing PDF, DOCX and CSV Parsing
+             =================================================================== -->
+        <section id="slide-16" class="slide" data-slide-num="16">
+          <div class="slide-header">
+            <div class="slide-title-wrap">
+              <span class="slide-category">Section 4: Document Parsing</span>
+              <h2 class="slide-title">Comparing PDF, DOCX and CSV Parsing</h2>
+              <p class="slide-subtitle">Synthesis of ingestion parsers and interactive live document extraction tester</p>
+            </div>
+            <span class="slide-num-pill">Slide 16 / 18</span>
+          </div>
+
+          <div class="slide-body grid-2">
+            <!-- Left Column: Comparison Matrix -->
+            <div style="display:flex; flex-direction:column; gap:0.8rem;">
+              <div class="table-wrapper">
+                <table class="presentation-table" style="font-size:0.84rem;">
+                  <thead>
+                    <tr>
+                      <th>Type</th>
+                      <th>Library</th>
+                      <th>Function Call</th>
+                      <th>Output Shape</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><strong>PDF</strong></td>
+                      <td><code>pdf-parse</code></td>
+                      <td><code>pdfParse(buffer)</code></td>
+                      <td><code>data.text</code> + pages</td>
+                    </tr>
+                    <tr>
+                      <td><strong>DOCX</strong></td>
+                      <td><code>mammoth</code></td>
+                      <td><code>extractRawText({buffer})</code></td>
+                      <td><code>result.value</code></td>
+                    </tr>
+                    <tr>
+                      <td><strong>CSV</strong></td>
+                      <td><code>csv-parse</code></td>
+                      <td><code>parse(buffer, options)</code></td>
+                      <td>Array of Objects</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <div class="card highlight">
+                <div class="card-title" style="font-size:0.95rem;">
+                  <span class="card-icon">🧠</span>
+                  <span>Gen-AI Context: Retrieval-Augmented Generation (RAG)</span>
+                </div>
+                <div class="step-breakdown" style="font-size:0.82rem;">
+                  <div class="step-item"><span class="num-bullet">1</span><span><strong>Ingestion:</strong> Upload document via Multer memory buffer.</span></div>
+                  <div class="step-item"><span class="num-bullet">2</span><span><strong>Parsing:</strong> Extract text strings from PDF / DOCX / CSV.</span></div>
+                  <div class="step-item"><span class="num-bullet">3</span><span><strong>Chunking &amp; Embeddings:</strong> Split text into chunks &rarr; vector database (future session).</span></div>
+                  <div class="step-item"><span class="num-bullet">4</span><span><strong>LLM Prompt:</strong> Send relevant extracted text into AI context.</span></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Right Column: Interactive Multi-Parser Playground -->
+            <div style="display:flex; flex-direction:column; gap:0.8rem;">
+              <div class="card" style="padding:1rem;">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.5rem;">
+                  <span style="font-weight:700; font-size:0.86rem; color:var(--primary-dark);">Live Parser Inspector</span>
+                  <div style="display:flex; gap:0.35rem;">
+                    <button class="nav-btn parser-select-btn active" data-type="pdf">PDF</button>
+                    <button class="nav-btn parser-select-btn" data-type="docx">DOCX</button>
+                    <button class="nav-btn parser-select-btn" data-type="csv">CSV</button>
+                  </div>
+                </div>
+
+                <div style="font-size:0.8rem; margin-bottom:0.3rem;">
+                  <strong>Active Library:</strong> <span id="parser-lib-name" style="font-family:var(--font-mono); color:#0284c7;">pdf-parse (v1.1.1)</span>
+                </div>
+
+                <div style="font-size:0.78rem; font-weight:700; color:var(--text-muted); margin-bottom:0.2rem;">Node.js Method Call:</div>
+                <pre id="parser-call-code" class="code-block" style="background:#0b1329; color:#93c5fd; padding:0.4rem 0.6rem; border-radius:5px; font-size:0.75rem; margin-bottom:0.4rem;">const pdfData = await pdfParse(req.file.buffer);</pre>
+
+                <div style="font-size:0.78rem; font-weight:700; color:var(--text-muted); margin-bottom:0.2rem;">Extracted Output Representation:</div>
+                <pre id="parser-json-output" class="code-block" style="background:#070d1d; color:#4ade80; padding:0.5rem 0.7rem; border-radius:5px; font-size:0.75rem; height:120px; overflow-y:auto;">{
+  "message": "PDF parsed successfully",
+  "pages": 2,
+  "text": "Anu - MERN Stack Developer\nEmail: anu@gmail.com\nExperience: 2 years building React & Node.js backends.\nSkills: JavaScript, Node.js, Express, MongoDB"
+}</pre>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ===================================================================
+             SLIDE 17: Mini Project – AI Document Upload API
+             =================================================================== -->
+        <section id="slide-17" class="slide" data-slide-num="17">
+          <div class="slide-header">
+            <div class="slide-title-wrap">
+              <span class="slide-category">Section 5: Final Practical &amp; Recap</span>
+              <h2 class="slide-title">Mini Project: AI Document Upload API</h2>
+              <p class="slide-subtitle">A unified REST API endpoint accepting PDF, DOCX &amp; CSV files and extracting content</p>
+            </div>
+            <span class="slide-num-pill">Slide 17 / 18</span>
+          </div>
+
+          <div class="slide-body grid-2">
+            <!-- Left Column: Architecture & Modular Structure -->
+            <div style="display:flex; flex-direction:column; gap:0.8rem;">
+              <div class="card highlight">
+                <div class="card-title" style="font-size:0.95rem;">
+                  <span class="card-icon">🎯</span>
+                  <span>Mini Project Objective</span>
+                </div>
+                <p style="font-size:0.86rem;">
+                  Build a modular Express API with endpoint <code>POST /api/documents/upload</code> that inspects the file extension, passes the buffer to the corresponding parser, and returns uniform JSON.
+                </p>
+              </div>
+
+              <div class="card" style="padding:0.8rem;">
+                <div style="font-weight:700; font-size:0.84rem; color:var(--primary-dark); margin-bottom:0.3rem;">Modular Project Structure:</div>
+                <pre class="code-block" style="background:#0b1329; color:#cbd5e1; padding:0.5rem 0.8rem; border-radius:6px; font-size:0.76rem;"><code>ai-document-api/
+├── server.js                   # Express app initialization
+├── routes/
+│   └── documentRoutes.js       # Defines POST /upload
+├── controllers/
+│   └── documentController.js   # Validates and dispatches to service
+├── services/
+│   └── documentService.js      # pdf-parse, mammoth, csv-parse logic
+├── middleware/
+│   └── uploadMiddleware.js     # multer.memoryStorage()
+└── package.json</code></pre>
+              </div>
+            </div>
+
+            <!-- Right Column: Interactive Sandbox Tester -->
+            <div style="display:flex; flex-direction:column; gap:0.8rem;">
+              <div class="card" style="padding:1rem;">
+                <div style="font-weight:700; font-size:0.88rem; color:var(--primary-dark); margin-bottom:0.4rem;">
+                  Test Endpoint: POST /api/documents/upload
+                </div>
+
+                <div style="display:flex; gap:0.5rem; align-items:center; margin-bottom:0.5rem;">
+                  <select id="mini-doc-select" style="font-family:var(--font-mono); font-size:0.84rem; padding:0.35rem 0.6rem; border-radius:5px; border:1px solid #cbd5e1;">
+                    <option value="pdf">resume.pdf (PDF Document)</option>
+                    <option value="docx">contract.docx (Word Document)</option>
+                    <option value="csv">students.csv (CSV Spreadsheet)</option>
+                  </select>
+                  <button id="mini-doc-submit" class="nav-btn primary">Upload &amp; Extract</button>
+                </div>
+
+                <div style="font-size:0.78rem; font-weight:700; color:var(--text-muted); margin-bottom:0.2rem;">Server Response:</div>
+                <pre id="mini-doc-response" class="code-block" style="background:#070d1d; color:#38bdf8; padding:0.5rem 0.7rem; border-radius:5px; font-size:0.75rem; height:180px; overflow-y:auto;">{
+  "success": true,
+  "fileName": "resume.pdf",
+  "fileType": "pdf",
+  "sizeBytes": 15340,
+  "content": "Anu\nSenior MERN &amp; AI Developer\nSpecialized in Vector DBs, Express APIs &amp; LLMs."
+}</pre>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ===================================================================
+             SLIDE 18: Practical Questions & Recap
+             =================================================================== -->
+        <section id="slide-18" class="slide" data-slide-num="18">
+          <div class="slide-header">
+            <div class="slide-title-wrap">
+              <span class="slide-category">Section 5: Final Practical &amp; Recap</span>
+              <h2 class="slide-title">Practical Questions &amp; Recap</h2>
+              <p class="slide-subtitle">Hands-on student challenge tasks and Day 4 architectural recap</p>
+            </div>
+            <span class="slide-num-pill">Slide 18 / 18</span>
+          </div>
+
+          <div class="slide-body grid-2">
+            <!-- Left Column: 6 Lab Exercises -->
+            <div style="display:flex; flex-direction:column; gap:0.8rem;">
+              <div class="card highlight">
+                <div class="card-title">
+                  <span class="card-icon">🛠️</span>
+                  <span>6 Hands-On Student Lab Tasks</span>
+                </div>
+                <div class="step-breakdown" style="font-size:0.83rem;">
+                  <div class="step-item"><span class="num-bullet">1</span><span><strong>SSE Delay Stream:</strong> Create an SSE route streaming 5 messages with 1-second delays.</span></div>
+                  <div class="step-item"><span class="num-bullet">2</span><span><strong>Browser Consumer:</strong> Consume streamed chunks using <code>ReadableStream</code> and render dynamically.</span></div>
+                  <div class="step-item"><span class="num-bullet">3</span><span><strong>Multi-File Multer:</strong> Accept multiple PDFs and return filenames, sizes, and MIME types.</span></div>
+                  <div class="step-item"><span class="num-bullet">4</span><span><strong>PDF Extractor:</strong> Read an uploaded PDF buffer and extract text with <code>pdf-parse@1.1.1</code>.</span></div>
+                  <div class="step-item"><span class="num-bullet">5</span><span><strong>DOCX Extractor:</strong> Accept a Word <code>.docx</code> file and return text via <code>mammoth.extractRawText</code>.</span></div>
+                  <div class="step-item"><span class="num-bullet">6</span><span><strong>CSV Parser:</strong> Ingest <code>.csv</code> and convert into an array of typed objects with <code>csv-parse/sync</code>.</span></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Right Column: 7 Key Takeaways -->
+            <div style="display:flex; flex-direction:column; gap:0.8rem;">
+              <div class="card success">
+                <div class="card-title" style="color:#065f46;">
+                  <span class="card-icon">🎓</span>
+                  <span>Day 4 Key Takeaways</span>
+                </div>
+                <ul class="feature-list" style="font-size:0.85rem;">
+                  <li><span class="bullet-icon">▸</span> <strong>SSE:</strong> Efficient real-time unidirectional streaming via <code>text/event-stream</code>.</li>
+                  <li><span class="bullet-icon">▸</span> <strong>ReadableStream:</strong> Consumes network chunks on the frontend as they arrive.</li>
+                  <li><span class="bullet-icon">▸</span> <strong>Multer:</strong> Handles <code>multipart/form-data</code>; memoryStorage enables zero-disk RAM parsing.</li>
+                  <li><span class="bullet-icon">▸</span> <strong>Node.js Buffers:</strong> Global objects holding binary bytes (images, PDFs, documents).</li>
+                  <li><span class="bullet-icon">▸</span> <strong>pdf-parse:</strong> Extracts text and page counts from raw PDF buffers.</li>
+                  <li><span class="bullet-icon">▸</span> <strong>Mammoth:</strong> Converts Word <code>.docx</code> buffers into clean strings.</li>
+                  <li><span class="bullet-icon">▸</span> <strong>csv-parse:</strong> Transforms CSV lines into typed JavaScript object arrays.</li>
+                </ul>
+              </div>
+
+              <div class="callout tip">
+                <span class="callout-icon">🚀</span>
+                <div>
+                  <strong>Congratulations Gen-AI Engineers!</strong> You can now stream LLM tokens to users in real time and ingest customer documents for modern RAG pipelines!
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+      </div>
+    </main>
+
+    <!-- Bottom Navigation Controls -->
+    <footer class="bottom-bar">
+      <div class="bottom-left">
+        <button id="prev-btn" class="control-btn" title="Previous Slide (Left Arrow, PageUp)">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <polyline points="15 18 9 12 15 6"></polyline>
+          </svg>
+          <span>Previous</span>
+        </button>
+      </div>
+
+      <div class="bottom-center">
+        <span id="slide-counter" class="slide-counter">01 / 18</span>
+      </div>
+
+      <div class="bottom-right">
+        <button id="next-btn" class="control-btn primary" title="Next Slide (Right Arrow, Space, PageDown)">
+          <span>Next</span>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <polyline points="9 18 15 12 9 6"></polyline>
+          </svg>
+        </button>
+      </div>
+    </footer>
+
+    <!-- Table of Contents Slide Drawer -->
+    <div id="toc-overlay" class="toc-overlay">
+      <aside class="toc-drawer">
+        <div class="toc-header">
+          <div class="toc-title">Table of Contents (18 Slides)</div>
+          <button id="toc-close" class="toc-close" title="Close Drawer (Esc)">&times;</button>
+        </div>
+        <div id="toc-list" class="toc-list">
+          <!-- Populated dynamically by script.js -->
+        </div>
+      </aside>
+    </div>
+
+    <!-- Keyboard Shortcuts Help Modal -->
+    <div id="help-modal-overlay" class="help-modal-overlay">
+      <div class="help-modal">
+        <div class="help-modal-header">
+          <div class="help-modal-title">⌨️ Keyboard Shortcuts</div>
+          <button id="help-modal-close" class="toc-close">&times;</button>
+        </div>
+        <div class="help-modal-body">
+          <div class="shortcut-row">
+            <span>Next Slide</span>
+            <div><span class="kbd-badge">&rarr;</span> or <span class="kbd-badge">Space</span> or <span class="kbd-badge">PgDn</span></div>
+          </div>
+          <div class="shortcut-row">
+            <span>Previous Slide</span>
+            <div><span class="kbd-badge">&larr;</span> or <span class="kbd-badge">PgUp</span></div>
+          </div>
+          <div class="shortcut-row">
+            <span>First Slide (Title)</span>
+            <span class="kbd-badge">Home</span>
+          </div>
+          <div class="shortcut-row">
+            <span>Last Slide (Recap)</span>
+            <span class="kbd-badge">End</span>
+          </div>
+          <div class="shortcut-row">
+            <span>Toggle Fullscreen</span>
+            <span class="kbd-badge">F</span>
+          </div>
+          <div class="shortcut-row">
+            <span>Table of Contents</span>
+            <div><span class="kbd-badge">T</span> or <span class="kbd-badge">M</span></div>
+          </div>
+          <div class="shortcut-row">
+            <span>Close Modal / Drawer</span>
+            <span class="kbd-badge">Esc</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,1547 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Node.js Day 4 — Express Setup, API Development &amp; Postman</title>
+  <meta name="description" content="Node.js Day 4 Classroom Presentation: Express Setup, Basic Routes, API vs URL, HTTP Methods, Request/Response, Postman Testing, and Data Formats.">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Presentation App Shell -->
+  <div id="presentation-app">
+
+    <!-- Top Continuous Progress Bar -->
+    <div class="progress-container">
+      <div id="progress-bar" class="progress-bar"></div>
+    </div>
+
+    <!-- Top Navigation Header -->
+    <header class="top-nav">
+      <div class="brand-badge">
+        <div class="icon-box">
+          <!-- Express / Node.js Hexagon SVG -->
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <polygon points="12 2 2 8.5 2 15.5 12 22 22 15.5 22 8.5 12 2"></polygon>
+            <line x1="12" y1="22" x2="12" y2="15.5"></line>
+            <polyline points="22 8.5 12 15.5 2 8.5"></polyline>
+          </svg>
+        </div>
+        <span>MERN Node.js</span>
+        <span class="brand-tag mern-pill">Day 4</span>
+      </div>
+
+      <div class="deck-section-indicator">
+        <span id="section-indicator" class="section-pill">Section 1: Setting Up Express &amp; First Routes</span>
+      </div>
+
+      <div class="top-actions">
+        <button id="toc-btn" class="nav-btn" title="Open Table of Contents (Press 'T' or 'M')">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="3" y1="12" x2="21" y2="12"></line>
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <line x1="3" y1="18" x2="21" y2="18"></line>
+          </svg>
+          <span>Contents</span>
+        </button>
+
+        <button id="help-btn" class="nav-btn" title="Keyboard Shortcuts (Press '?')">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"></circle>
+            <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+            <line x1="12" y1="17" x2="12.01" y2="17"></line>
+          </svg>
+          <span>Shortcuts</span>
+        </button>
+
+        <button id="fullscreen-btn" class="nav-btn" title="Toggle Fullscreen (Press 'F')">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path>
+          </svg>
+          <span>Fullscreen</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Slide Viewport -->
+    <main class="slide-viewport">
+      <div class="slide-container">
+
+        <!-- ===================================================================
+             SLIDE 1: Title Slide
+             =================================================================== -->
+        <section id="slide-1" class="slide active" data-slide-num="1">
+          <div class="title-slide-content">
+            <div class="title-badge-row">
+              <span class="pill-badge">MERN Stack Development</span>
+              <span class="pill-badge mern-badge">Day 4 — Express &amp; REST APIs</span>
+            </div>
+
+            <h1 class="hero-main-title">
+              Node.js Day 4: <br><span class="highlight">Express Setup, API Development &amp; Postman</span>
+            </h1>
+
+            <p class="hero-subtitle">
+              Building Web Servers, Designing REST Endpoints, and Testing with Postman
+            </p>
+
+            <div class="logos-container">
+              <div class="logo-card">
+                <svg viewBox="0 0 256 288" width="44" height="44">
+                  <path fill="#539E43" d="M128 0L24.7 59.6v119.2L128 238.4l103.3-59.6V59.6L128 0z"/>
+                  <path fill="#FFFFFF" d="M128 32.4l75.2 43.4v86.8L128 206l-75.2-43.4V75.8L128 32.4z"/>
+                  <path fill="#333333" d="M128 47.8L68.7 82.1v68.6L128 185l59.3-34.3V82.1L128 47.8z"/>
+                  <path fill="#539E43" d="M115.8 98.4h24.4v40.3h-24.4z"/>
+                </svg>
+                <div class="logo-text">
+                  <div class="logo-text-title">Node.js</div>
+                  <div class="logo-text-sub">JavaScript Runtime</div>
+                </div>
+              </div>
+
+              <div class="logo-card">
+                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#0284c7" stroke-width="2">
+                  <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+                  <polyline points="2 17 12 22 22 17"></polyline>
+                  <polyline points="2 12 12 17 22 12"></polyline>
+                </svg>
+                <div class="logo-text">
+                  <div class="logo-text-title">Express.js</div>
+                  <div class="logo-text-sub">Backend Web Framework</div>
+                </div>
+              </div>
+
+              <div class="logo-card">
+                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#f97316" stroke-width="2">
+                  <circle cx="12" cy="12" r="10"></circle>
+                  <polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"></polygon>
+                </svg>
+                <div class="logo-text">
+                  <div class="logo-text-title">Postman</div>
+                  <div class="logo-text-sub">API Testing Suite</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="meta-footer">
+              <div class="meta-item">
+                <span>📚 <strong>Course:</strong> Full-Stack MERN Development</span>
+              </div>
+              <div class="meta-item">
+                <span>👨‍🏫 <strong>Instructor:</strong> Senior MERN / Node.js Instructor</span>
+              </div>
+              <div class="meta-item">
+                <span>⚡ <strong>Prerequisites:</strong> Days 1–3 Asynchronous Programming</span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ===================================================================
+             SLIDE 2: Learning Objectives
+             =================================================================== -->
+        <section id="slide-2" class="slide" data-slide-num="2">
+          <div class="slide-header">
+            <div class="slide-title-wrap">
+              <span class="slide-category">Section 1: Setup &amp; Routing</span>
+              <h2 class="slide-title">Learning Objectives</h2>
+              <p class="slide-subtitle">By the end of this session, students will be able to master these core backend skills:</p>
+            </div>
+            <span class="slide-num-pill">Slide 02 / 15</span>
+          </div>
+
+          <div class="slide-body">
+            <div class="objectives-grid">
+              <div class="objective-item">
+                <div class="objective-num">1</div>
+                <div class="objective-text">Set up a Node.js project and install Express.js from npm.</div>
+              </div>
+              <div class="objective-item">
+                <div class="objective-num">2</div>
+                <div class="objective-text">Create and run an Express server using <code>app.listen()</code>.</div>
+              </div>
+              <div class="objective-item">
+                <div class="objective-num">3</div>
+                <div class="objective-text">Understand what an API is and how full-stack apps exchange data.</div>
+              </div>
+              <div class="objective-item">
+                <div class="objective-num">4</div>
+                <div class="objective-text">Clearly explain the architectural difference between an API and a URL.</div>
+              </div>
+              <div class="objective-item">
+                <div class="objective-num">5</div>
+                <div class="objective-text">Create functional GET, POST, PUT, and DELETE API endpoints.</div>
+              </div>
+              <div class="objective-item">
+                <div class="objective-num">6</div>
+                <div class="objective-text">Test API endpoints, status codes, and JSON bodies using Postman.</div>
+              </div>
+              <div class="objective-item" style="grid-column: span 2;">
+                <div class="objective-num">7</div>
+                <div class="objective-text">Understand and return different data formats (JSON, Plain Text, HTML, XML) from Express.</div>
+              </div>
+            </div>
+
+            <div class="callout tip" style="margin-top:0.4rem;">
+              <span class="callout-icon">💡</span>
+              <div>
+                <strong>Why Express is Critical:</strong> Pure Node.js requires parsing low-level streams and manual URL regexes. Express provides a fast, minimalist routing and middleware framework that powers 90%+ of production Node.js backends.
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ===================================================================
+             SLIDE 3: Setting Up an Express Project
+             =================================================================== -->
+        <section id="slide-3" class="slide" data-slide-num="3">
+          <div class="slide-header">
+            <div class="slide-title-wrap">
+              <span class="slide-category">Section 1: Setup &amp; Routing</span>
+              <h2 class="slide-title">Setting Up an Express Project</h2>
+              <p class="slide-subtitle">Step-by-step project initialization, installation, and launching your first server</p>
+            </div>
+            <span class="slide-num-pill">Slide 03 / 15</span>
+          </div>
+
+          <div class="slide-body grid-2">
+            <!-- Left Column: Steps & Explanation -->
+            <div style="display:flex; flex-direction:column; gap:0.9rem;">
+              <div class="card highlight">
+                <div class="card-title">
+                  <span class="card-icon">🚀</span>
+                  <span>What is Express.js?</span>
+                </div>
+                <p>
+                  Express.js is a fast, unopinionated, minimalist web framework for Node.js. It simplifies backend development by providing built-in routing, middleware support, and request/response abstraction.
+                </p>
+              </div>
+
+              <div class="card">
+                <div class="card-title">
+                  <span class="card-icon">🛠️</span>
+                  <span>Installation Steps</span>
+                </div>
+                <div class="step-breakdown">
+                  <div class="step-item">
+                    <span class="num-bullet">1</span>
+                    <span><strong>Create Project:</strong> <code>mkdir express-day4 &amp;&amp; cd express-day4 &amp;&amp; npm init -y</code></span>
+                  </div>
+                  <div class="step-item">
+                    <span class="num-bullet">2</span>
+                    <span><strong>Install Express:</strong> <code>npm install express</code></span>
+                  </div>
+                  <div class="step-item">
+                    <span class="num-bullet">3</span>
+                    <span><strong>Structure:</strong> <code>server.js</code>, <code>package.json</code>, and <code>node_modules/</code>.</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="callout note">
+                <span class="callout-icon">📌</span>
+                <div>
+                  <code>app.listen(PORT, callback)</code> binds and listens for connections on the specified port. Once running, your server stays active to receive HTTP traffic!
+                </div>
+              </div>
+            </div>
+
+            <!-- Right Column: Code & Terminal -->
+            <div style="display:flex; flex-direction:column; gap:0.9rem;">
+              <div class="code-container">
+                <div class="code-header">
+                  <div class="code-file-badge">
+                    <span class="file-dot"></span>
+                    <span>server.js</span>
+                  </div>
+                  <button class="copy-btn">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                    <span>Copy Code</span>
+                  </button>
+                </div>
+                <pre class="code-block"><code><span class="syn-kw">const</span> express = <span class="syn-fn">require</span>(<span class="syn-str">"express"</span>);
+
+<span class="syn-kw">const</span> app = <span class="syn-fn">express</span>();
+
+<span class="syn-kw">const</span> PORT = <span class="syn-num">3000</span>;
+
+<span class="syn-cm">// Start listening for incoming network requests</span>
+app.<span class="syn-fn">listen</span>(PORT, () =&gt; {
+    <span class="syn-fn">console</span>.<span class="syn-fn">log</span>(<span class="syn-str">`Server running on port <span class="syn-var">${PORT}</span>`</span>);
+});</code></pre>
+              </div>
+
+              <div class="terminal-output">
+                <div class="terminal-header">
+                  <span class="dot"></span>
+                  <span>Terminal Execution</span>
+                </div>
+                <div class="terminal-body">
+<span class="cmd">$ node server.js</span>
+<span class="res">Server running on port 3000</span></div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ===================================================================
+             SLIDE 4: Creating Your First API Route
+             =================================================================== -->
+        <section id="slide-4" class="slide" data-slide-num="4">
+          <div class="slide-header">
+            <div class="slide-title-wrap">
+              <span class="slide-category">Section 1: Setup &amp; Routing</span>
+              <h2 class="slide-title">Creating Your First API Route</h2>
+              <p class="slide-subtitle">Defining URL endpoints and sending HTTP responses to clients</p>
+            </div>
+            <span class="slide-num-pill">Slide 04 / 15</span>
+          </div>
+
+          <div class="slide-body grid-2">
+            <!-- Left Column: Explanation & Route Breakdown -->
+            <div style="display:flex; flex-direction:column; gap:0.8rem;">
+              <div class="card highlight">
+                <div class="card-title">
+                  <span class="card-icon">🧭</span>
+                  <span>What is a Route?</span>
+                </div>
+                <p>
+                  A <strong>route</strong> defines how the backend server responds to a client request at a specific endpoint.
+                </p>
+                <ul class="feature-list" style="margin-top:0.3rem;">
+                  <li><span class="bullet-icon">▸</span> <strong>HTTP Method:</strong> e.g., <code>GET</code>, <code>POST</code>.</li>
+                  <li><span class="bullet-icon">▸</span> <strong>URL Path:</strong> e.g., <code>/</code>, <code>/about</code>.</li>
+                  <li><span class="bullet-icon">▸</span> <strong>Handler Function:</strong> <code>(req, res) =&gt; { ... }</code></li>
+                </ul>
+              </div>
+
+              <div class="card">
+                <div class="card-title">
+                  <span class="card-icon">🔍</span>
+                  <span>Anatomy of a Handler</span>
+                </div>
+                <ul class="feature-list" style="font-size:0.86rem;">
+                  <li><span class="bullet-icon">▸</span> <code>app.get()</code>: Creates an endpoint that listens for HTTP GET requests.</li>
+                  <li><span class="bullet-icon">▸</span> <code>req</code> (Request): Holds incoming client headers, query, and params.</li>
+                  <li><span class="bullet-icon">▸</span> <code>res</code> (Response): Object used to send data back to the client.</li>
+                  <li><span class="bullet-icon">▸</span> <code>res.send()</code>: Sends an HTTP text or HTML response.</li>
+                </ul>
+              </div>
+            </div>
+
+            <!-- Right Column: Code & Browser Simulation -->
+            <div style="display:flex; flex-direction:column; gap:0.8rem;">
+              <div class="code-container">
+                <div class="code-header">
+                  <div class="code-file-badge">
+                    <span class="file-dot"></span>
+                    <span>server.js (Add Routes)</span>
+                  </div>
+                  <button class="copy-btn">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                    <span>Copy Code</span>
+                  </button>
+                </div>
+                <pre class="code-block"><code><span class="syn-cm">// Root Route</span>
+app.<span class="syn-fn">get</span>(<span class="syn-str">"/"</span>, (req, res) =&gt; {
+    res.<span class="syn-fn">send</span>(<span class="syn-str">"Welcome to My Express API"</span>);
+});
+
+<span class="syn-cm">// About Route</span>
+app.<span class="syn-fn">get</span>(<span class="syn-str">"/about"</span>, (req, res) =&gt; {
+    res.<span class="syn-fn">send</span>(<span class="syn-str">"This is my first backend application"</span>);
+});</code></pre>
+              </div>
+
+              <!-- Interactive Browser Simulation -->
+              <div class="card" style="padding:0.9rem;">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.5rem;">
+                  <span style="font-weight:700; font-size:0.84rem; color:var(--primary-dark);">Live Browser Simulator</span>
+                  <div style="display:flex; gap:0.4rem;">
+                    <button class="nav-btn route-test-btn active" data-path="/" data-response="Welcome to My Express API">Test /</button>
+                    <button class="nav-btn route-test-btn" data-path="/about" data-response="This is my first backend application">Test /about</button>
+                  </div>
+                </div>
+                <div style="background:#f1f5f9; border:1px solid #cbd5e1; border-radius:6px; padding:0.4rem 0.7rem; font-family:var(--font-mono); font-size:0.8rem; margin-bottom:0.4rem;">
+                  🌐 <span id="browser-mock-url">http://localhost:3000/</span>
+                </div>
+                <div id="browser-mock-body" style="background:#ffffff; border:1px solid #cbd5e1; border-radius:6px; padding:0.6rem 0.8rem; font-size:0.88rem; color:#0f172a; min-height:45px; display:flex; align-items:center;">
+                  Welcome to My Express API
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ===================================================================
+             SLIDE 5: What Is an API?
+             =================================================================== -->
+        <section id="slide-5" class="slide" data-slide-num="5">
+          <div class="slide-header">
+            <div class="slide-title-wrap">
+              <span class="slide-category">Section 2: API Architecture &amp; HTTP Methods</span>
+              <h2 class="slide-title">What Is an API?</h2>
+              <p class="slide-subtitle">Application Programming Interface: The communication bridge between systems</p>
+            </div>
+            <span class="slide-num-pill">Slide 05 / 15</span>
+          </div>
+
+          <div class="slide-body grid-2">
+            <!-- Left Column: Core Definition & Real-World Analogy -->
+            <div style="display:flex; flex-direction:column; gap:0.9rem;">
+              <div class="card highlight">
+                <div class="card-title">
+                  <span class="card-icon">🔌</span>
+                  <span>Definition of an API</span>
+                </div>
+                <p>
+                  <strong>API</strong> stands for <strong>Application Programming Interface</strong>. It allows two independent software programs (such as a React frontend and a Node.js backend) to securely communicate and exchange data.
+                </p>
+              </div>
+
+              <div class="card">
+                <div class="card-title">
+                  <span class="card-icon">⛅</span>
+                  <span>Real-World Example: Weather App</span>
+                </div>
+                <div class="step-breakdown" style="font-size:0.86rem;">
+                  <div class="step-item"><span class="num-bullet">1</span><span>User types <code>"Tokyo"</code> in the mobile app frontend.</span></div>
+                  <div class="step-item"><span class="num-bullet">2</span><span>App sends an HTTP GET request to the Weather API.</span></div>
+                  <div class="step-item"><span class="num-bullet">3</span><span>Weather server queries climate sensors/database.</span></div>
+                  <div class="step-item"><span class="num-bullet">4</span><span>API returns JSON: <code>{ temp: "21°C", sky: "Clear" }</code>.</span></div>
+                  <div class="step-item"><span class="num-bullet">5</span><span>Frontend displays the weather forecast to the user.</span></div>
+                </div>
+              </div>
+
+              <div class="callout note">
+                <span class="callout-icon">💡</span>
+                <div>
+                  <strong>Key Takeaway:</strong> A frontend never connects directly to a MongoDB database for security reasons. The Express API acts as the secure gatekeeper!
+                </div>
+              </div>
+            </div>
+
+            <!-- Right Column: Visual Architecture Flow -->
+            <div style="display:flex; flex-direction:column; gap:0.9rem;">
+              <div class="card" style="padding:1.1rem;">
+                <div class="card-title" style="margin-bottom:0.6rem;">
+                  <span class="card-icon">🔄</span>
+                  <span>MERN API Communication Pipeline</span>
+                </div>
+
+                <div class="flow-diagram-container" style="flex-direction:column; gap:0.6rem; padding:0.8rem;">
+                  <div class="flow-node highlight-node" style="width:100%;">
+                    <span class="node-icon">⚛️</span>
+                    <span class="node-title">React Frontend</span>
+                    <span class="node-sub">Runs in client browser (User Interface)</span>
+                  </div>
+
+                  <div class="flow-arrow-dual">
+                    <span>▼ HTTP Request (GET / POST)</span>
+                    <span class="arrow-label">JSON Payload</span>
+                  </div>
+
+                  <div class="flow-node" style="width:100%; border-color:#38bdf8; background:#f0f9ff;">
+                    <span class="node-icon">⚡</span>
+                    <span class="node-title">Express API Server (Node.js)</span>
+                    <span class="node-sub">Validates requests, runs business logic</span>
+                  </div>
+
+                  <div class="flow-arrow-dual">
+                    <span>▼ Query Database / Services</span>
+                    <span class="arrow-label">BSON / Driver</span>
+                  </div>
+
+                  <div class="flow-node" style="width:100%;">
+                    <span class="node-icon">🍃</span>
+                    <span class="node-title">MongoDB Database</span>
+                    <span class="node-sub">Stores persistent collections and records</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ===================================================================
+             SLIDE 6: API vs URL
+             =================================================================== -->
+        <section id="slide-6" class="slide" data-slide-num="6">
+          <div class="slide-header">
+            <div class="slide-title-wrap">
+              <span class="slide-category">Section 2: API Architecture &amp; HTTP Methods</span>
+              <h2 class="slide-title">API vs URL</h2>
+              <p class="slide-subtitle">Understanding the critical distinction between resource addresses and communication interfaces</p>
+            </div>
+            <span class="slide-num-pill">Slide 06 / 15</span>
+          </div>
+
+          <div class="slide-body grid-2">
+            <!-- Left Column: Core Definitions -->
+            <div style="display:flex; flex-direction:column; gap:0.9rem;">
+              <div class="card">
+                <div class="card-title">
+                  <span class="card-icon">📍</span>
+                  <span>What is a URL?</span>
+                </div>
+                <p>
+                  <strong>Uniform Resource Locator:</strong> The unique address used to locate a specific resource (webpage, image, file, or endpoint) on a network or server.
+                </p>
+                <div style="font-family:var(--font-mono); font-size:0.84rem; background:#fff; padding:0.4rem 0.7rem; border-radius:5px; border:1px solid #cbd5e1; margin-top:0.2rem;">
+                  https://example.com/products
+                </div>
+              </div>
+
+              <div class="card">
+                <div class="card-title">
+                  <span class="card-icon">⚙️</span>
+                  <span>What is an API?</span>
+                </div>
+                <p>
+                  <strong>Application Programming Interface:</strong> Defines the complete set of rules, HTTP verbs, and data contracts that software applications use to interact with resources.
+                </p>
+                <div style="font-family:var(--font-mono); font-size:0.84rem; background:#fff; padding:0.4rem 0.7rem; border-radius:5px; border:1px solid #cbd5e1; margin-top:0.2rem; display:flex; flex-direction:column; gap:0.2rem;">
+                  <div><span class="method-badge get">GET</span> /api/products</div>
+                  <div><span class="method-badge post">POST</span> /api/products</div>
+                  <div><span class="method-badge delete">DELETE</span> /api/products/101</div>
+                </div>
+              </div>
+
+              <div class="callout warning">
+                <span class="callout-icon">💡</span>
+                <div>
+                  <strong>Golden Rule:</strong> An API endpoint always has a URL, but <strong>not every URL is an API</strong>! A URL can simply point to an HTML page, PDF, or image file.
+                </div>
+              </div>
+            </div>
+
+            <!-- Right Column: Comparison Table -->
+            <div style="display:flex; flex-direction:column; gap:0.9rem;">
+              <div class="table-wrapper">
+                <table class="presentation-table">
+                  <thead>
+                    <tr>
+                      <th>Feature</th>
+                      <th>URL</th>
+                      <th>API</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><strong>Primary Role</strong></td>
+                      <td>Identifies the location of a resource</td>
+                      <td>Defines how software communicates</td>
+                    </tr>
+                    <tr>
+                      <td><strong>Who Uses It?</strong></td>
+                      <td>Web browsers, human users, applications</td>
+                      <td>Software applications &amp; frontend clients</td>
+                    </tr>
+                    <tr>
+                      <td><strong>What It Returns</strong></td>
+                      <td>HTML webpage, static image, or endpoint</td>
+                      <td>Structured data (JSON), status codes, actions</td>
+                    </tr>
+                    <tr>
+                      <td><strong>Endpoints</strong></td>
+                      <td>Single specific path</td>
+                      <td>Can expose multiple verbs on same path</td>
+                    </tr>
+                    <tr>
+                      <td><strong>Example</strong></td>
+                      <td><code>https://site.com/about</code></td>
+                      <td><code>GET /api/users</code></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <div class="card accent">
+                <div class="card-title" style="font-size:0.95rem;">
+                  <span class="card-icon">🎯</span>
+                  <span>Compare in Action</span>
+                </div>
+                <div style="font-size:0.86rem; display:flex; flex-direction:column; gap:0.4rem;">
+                  <div><code>https://example.com/about</code> &rarr; Returns visual <strong>HTML Webpage</strong> for humans.</div>
+                  <div><code>https://example.com/api/users</code> &rarr; Returns raw <strong>JSON Data</strong> for apps.</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ===================================================================
+             SLIDE 7: Understanding HTTP Methods
+             =================================================================== -->
+        <section id="slide-7" class="slide" data-slide-num="7">
+          <div class="slide-header">
+            <div class="slide-title-wrap">
+              <span class="slide-category">Section 2: API Architecture &amp; HTTP Methods</span>
+              <h2 class="slide-title">Understanding HTTP Methods</h2>
+              <p class="slide-subtitle">Informing the backend which CRUD operation the client intends to perform</p>
+            </div>
+            <span class="slide-num-pill">Slide 07 / 15</span>
+          </div>
+
+          <div class="slide-body grid-2">
+            <!-- Left Column: Methods Table -->
+            <div style="display:flex; flex-direction:column; gap:0.8rem;">
+              <div class="table-wrapper">
+                <table class="presentation-table">
+                  <thead>
+                    <tr>
+                      <th>Method</th>
+                      <th>CRUD Action</th>
+                      <th>Backend Purpose</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><span class="method-badge get">GET</span></td>
+                      <td><strong>Read</strong></td>
+                      <td>Retrieve existing data from server</td>
+                    </tr>
+                    <tr>
+                      <td><span class="method-badge post">POST</span></td>
+                      <td><strong>Create</strong></td>
+                      <td>Submit new data to create a resource</td>
+                    </tr>
+                    <tr>
+                      <td><span class="method-badge put">PUT</span></td>
+                      <td><strong>Update</strong></td>
+                      <td>Completely update/replace a resource</td>
+                    </tr>
+                    <tr>
+                      <td><span class="method-badge patch">PATCH</span></td>
+                      <td><strong>Partial</strong></td>
+                      <td>Partially update specific fields</td>
+                    </tr>
+                    <tr>
+                      <td><span class="method-badge delete">DELETE</span></td>
+                      <td><strong>Delete</strong></td>
+                      <td>Remove a resource permanently</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <div class="callout note">
+                <span class="callout-icon">🔑</span>
+                <div>
+                  <strong>Key Insight:</strong> The exact same URL path (<code>/students</code>) executes completely different backend logic based on the incoming <strong>HTTP method</strong>!
+                </div>
+              </div>
+            </div>
+
+            <!-- Right Column: Code & Interactive Explorer -->
+            <div style="display:flex; flex-direction:column; gap:0.8rem;">
+              <div class="code-container" style="max-height:280px;">
+                <div class="code-header">
+                  <div class="code-file-badge">
+                    <span class="file-dot"></span>
+                    <span>routes-by-method.js</span>
+                  </div>
+                  <button class="copy-btn">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                    <span>Copy Code</span>
+                  </button>
+                </div>
+                <pre class="code-block" style="font-size:0.8rem; line-height:1.45;"><code>app.<span class="syn-fn">get</span>(<span class="syn-str">"/students"</span>, (req, res) =&gt; {
+    res.<span class="syn-fn">send</span>(<span class="syn-str">"Get all students"</span>);
+});
+
+app.<span class="syn-fn">post</span>(<span class="syn-str">"/students"</span>, (req, res) =&gt; {
+    res.<span class="syn-fn">send</span>(<span class="syn-str">"Create a new student"</span>);
+});
+
+app.<span class="syn-fn">put</span>(<span class="syn-str">"/students/:id"</span>, (req, res) =&gt; {
+    res.<span class="syn-fn">send</span>(<span class="syn-str">`Update student <span class="syn-var">${req.params.id}</span>`</span>);
+});
+
+app.<span class="syn-fn">patch</span>(<span class="syn-str">"/students/:id"</span>, (req, res) =&gt; {
+    res.<span class="syn-fn">send</span>(<span class="syn-str">`Partially update student <span class="syn-var">${req.params.id}</span>`</span>);
+});
+
+app.<span class="syn-fn">delete</span>(<span class="syn-str">"/students/:id"</span>, (req, res) =&gt; {
+    res.<span class="syn-fn">send</span>(<span class="syn-str">`Delete student <span class="syn-var">${req.params.id}</span>`</span>);
+});</code></pre>
+              </div>
+
+              <!-- Interactive HTTP Explorer -->
+              <div class="card" style="padding:0.8rem;">
+                <div style="font-weight:700; font-size:0.82rem; color:var(--primary-dark); margin-bottom:0.4rem;">
+                  Interactive Method Matcher (Click to inspect)
+                </div>
+                <div style="display:flex; gap:0.4rem; flex-wrap:wrap; margin-bottom:0.5rem;">
+                  <button class="nav-btn method-explore-btn active" data-method="GET">GET</button>
+                  <button class="nav-btn method-explore-btn" data-method="POST">POST</button>
+                  <button class="nav-btn method-explore-btn" data-method="PUT">PUT</button>
+                  <button class="nav-btn method-explore-btn" data-method="PATCH">PATCH</button>
+                  <button class="nav-btn method-explore-btn" data-method="DELETE">DELETE</button>
+                </div>
+                <div style="font-size:0.8rem; background:#f8fafc; border:1px solid #cbd5e1; border-radius:6px; padding:0.5rem 0.7rem; display:flex; flex-direction:column; gap:0.2rem;">
+                  <div><strong>Endpoint:</strong> <span id="method-explorer-endpoint" style="font-family:var(--font-mono); color:var(--primary);">GET /students</span></div>
+                  <div><strong>Operation:</strong> <span id="method-explorer-action" style="color:var(--text-muted);">Fetch and retrieve all student records from database.</span></div>
+                  <div><strong>Return:</strong> <code id="method-explorer-response" style="color:#059669;">res.send("Get all students");</code></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ===================================================================
+             SLIDE 8: Understanding Request and Response
+             =================================================================== -->
+        <section id="slide-8" class="slide" data-slide-num="8">
+          <div class="slide-header">
+            <div class="slide-title-wrap">
+              <span class="slide-category">Section 2: API Architecture &amp; HTTP Methods</span>
+              <h2 class="slide-title">Understanding Request and Response</h2>
+              <p class="slide-subtitle">The fundamental message cycle between client (req) and server (res)</p>
+            </div>
+            <span class="slide-num-pill">Slide 08 / 15</span>
+          </div>
+
+          <div class="slide-body grid-2">
+            <!-- Left Column: Anatomy Breakdown -->
+            <div style="display:flex; flex-direction:column; gap:0.9rem;">
+              <div class="card highlight">
+                <div class="card-title">
+                  <span class="card-icon">📥</span>
+                  <span>What is a Request (req)?</span>
+                </div>
+                <p>
+                  A message sent from client to server containing:
+                </p>
+                <ul class="feature-list" style="font-size:0.86rem;">
+                  <li><span class="bullet-icon">▸</span> <strong>HTTP Method:</strong> (GET, POST, etc.)</li>
+                  <li><span class="bullet-icon">▸</span> <strong>URL &amp; Query Params:</strong> <code>/users?page=1</code></li>
+                  <li><span class="bullet-icon">▸</span> <strong>Headers:</strong> Authorization, Content-Type</li>
+                  <li><span class="bullet-icon">▸</span> <strong>Request Body:</strong> JSON data sent via POST/PUT</li>
+                </ul>
+              </div>
+
+              <div class="card success">
+                <div class="card-title" style="color:#065f46;">
+                  <span class="card-icon">📤</span>
+                  <span>What is a Response (res)?</span>
+                </div>
+                <p>
+                  A message returned from server to client containing:
+                </p>
+                <ul class="feature-list" style="font-size:0.86rem;">
+                  <li><span class="bullet-icon">▸</span> <strong>HTTP Status Code:</strong> (200 OK, 201 Created, 404 Not Found)</li>
+                  <li><span class="bullet-icon">▸</span> <strong>Response Headers:</strong> Content-Type: application/json</li>
+                  <li><span class="bullet-icon">▸</span> <strong>Response Body:</strong> The returned data or error message</li>
+                </ul>
+              </div>
+            </div>
+
+            <!-- Right Column: Code & Response Methods -->
+            <div style="display:flex; flex-direction:column; gap:0.9rem;">
+              <div class="code-container">
+                <div class="code-header">
+                  <div class="code-file-badge">
+                    <span class="file-dot"></span>
+                    <span>res-json-demo.js</span>
+                  </div>
+                  <button class="copy-btn">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                    <span>Copy Code</span>
+                  </button>
+                </div>
+                <pre class="code-block"><code>app.<span class="syn-fn">get</span>(<span class="syn-str">"/profile"</span>, (req, res) =&gt; {
+    <span class="syn-cm">// Chain status code with JSON data payload</span>
+    res.<span class="syn-fn">status</span>(<span class="syn-num">200</span>).<span class="syn-fn">json</span>({
+        success: <span class="syn-kw">true</span>,
+        message: <span class="syn-str">"Profile fetched successfully"</span>,
+        user: {
+            id: <span class="syn-num">101</span>,
+            name: <span class="syn-str">"Anu"</span>
+        }
+    });
+});</code></pre>
+              </div>
+
+              <div class="terminal-output">
+                <div class="terminal-header">
+                  <span class="dot"></span>
+                  <span>Client Received JSON Payload (Status: 200 OK)</span>
+                </div>
+                <div class="terminal-body">
+<span class="res">{
+    "success": true,
+    "message": "Profile fetched successfully",
+    "user": {
+        "id": 101,
+        "name": "Anu"
+    }
+}</span></div>
+              </div>
+
+              <div class="card" style="padding:0.8rem; font-size:0.84rem;">
+                <strong>Three Crucial Express Methods:</strong>
+                <ul class="feature-list" style="margin-top:0.3rem;">
+                  <li><code>res.send()</code> &rarr; Sends general text/HTML.</li>
+                  <li><code>res.json()</code> &rarr; Sets Content-Type to JSON and formats objects automatically.</li>
+                  <li><code>res.status(code)</code> &rarr; Sets explicit HTTP status code before sending response.</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ===================================================================
+             SLIDE 9: Introduction to Postman
+             =================================================================== -->
+        <section id="slide-9" class="slide" data-slide-num="9">
+          <div class="slide-header">
+            <div class="slide-title-wrap">
+              <span class="slide-category">Section 3: Testing with Postman</span>
+              <h2 class="slide-title">Introduction to Postman</h2>
+              <p class="slide-subtitle">The industry-standard development tool for building, testing, and debugging APIs</p>
+            </div>
+            <span class="slide-num-pill">Slide 09 / 15</span>
+          </div>
+
+          <div class="slide-body grid-2">
+            <!-- Left Column: What & Why -->
+            <div style="display:flex; flex-direction:column; gap:0.9rem;">
+              <div class="card highlight">
+                <div class="card-title">
+                  <span class="card-icon">🚀</span>
+                  <span>What is Postman?</span>
+                </div>
+                <p>
+                  <strong>Postman</strong> is an API client tool that allows backend engineers to construct, send, and inspect HTTP requests (GET, POST, PUT, DELETE) without writing any frontend React or HTML code!
+                </p>
+              </div>
+
+              <div class="card">
+                <div class="card-title">
+                  <span class="card-icon">🎯</span>
+                  <span>Why Postman is Essential</span>
+                </div>
+                <ul class="feature-list" style="font-size:0.86rem;">
+                  <li><span class="bullet-icon">▸</span> <strong>Browser limitation:</strong> Web browser address bars can only trigger <code>GET</code> requests.</li>
+                  <li><span class="bullet-icon">▸</span> <strong>Send JSON Bodies:</strong> Easily test <code>POST</code> and <code>PUT</code> with complex JSON payloads.</li>
+                  <li><span class="bullet-icon">▸</span> <strong>Status Code Inspection:</strong> Verify 200, 201, 404, or 500 error responses immediately.</li>
+                  <li><span class="bullet-icon">▸</span> <strong>Response Time &amp; Size:</strong> Monitor latency in milliseconds.</li>
+                </ul>
+              </div>
+
+              <div class="callout tip">
+                <span class="callout-icon">💡</span>
+                <div>
+                  Always thoroughly test all backend endpoints in Postman <em>first</em> before connecting your React or frontend application!
+                </div>
+              </div>
+            </div>
+
+            <!-- Right Column: Visual Anatomy of Postman UI -->
+            <div style="display:flex; flex-direction:column; gap:0.9rem;">
+              <div class="card" style="padding:1rem;">
+                <div class="card-title" style="margin-bottom:0.6rem;">
+                  <span class="card-icon">🖥️</span>
+                  <span>7 Core Postman UI Elements</span>
+                </div>
+                <div class="step-breakdown" style="font-size:0.86rem;">
+                  <div class="step-item"><span class="num-bullet">1</span><span><strong>Method Selector:</strong> Dropdown to choose GET, POST, PUT, DELETE, etc.</span></div>
+                  <div class="step-item"><span class="num-bullet">2</span><span><strong>Request URL Bar:</strong> Enter endpoint (e.g. <code>http://localhost:3000/api/students</code>).</span></div>
+                  <div class="step-item"><span class="num-bullet">3</span><span><strong>Params Tab:</strong> Query strings added automatically to the URL.</span></div>
+                  <div class="step-item"><span class="num-bullet">4</span><span><strong>Headers Tab:</strong> Set headers like <code>Content-Type: application/json</code>.</span></div>
+                  <div class="step-item"><span class="num-bullet">5</span><span><strong>Body Tab:</strong> Select <strong>raw &rarr; JSON</strong> to send data with POST/PUT.</span></div>
+                  <div class="step-item"><span class="num-bullet">6</span><span><strong>Send Button:</strong> Dispatches the HTTP request to your running server.</span></div>
+                  <div class="step-item"><span class="num-bullet">7</span><span><strong>Response Section:</strong> Displays returned status code, response time, and payload.</span></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ===================================================================
+             SLIDE 10: Testing GET API in Postman
+             =================================================================== -->
+        <section id="slide-10" class="slide" data-slide-num="10">
+          <div class="slide-header">
+            <div class="slide-title-wrap">
+              <span class="slide-category">Section 3: Testing with Postman</span>
+              <h2 class="slide-title">Testing GET API in Postman</h2>
+              <p class="slide-subtitle">Retrieving an array of students and inspecting the JSON response</p>
+            </div>
+            <span class="slide-num-pill">Slide 10 / 15</span>
+          </div>
+
+          <div class="slide-body grid-2">
+            <!-- Left Column: Express Route Code -->
+            <div style="display:flex; flex-direction:column; gap:0.9rem;">
+              <div class="code-container">
+                <div class="code-header">
+                  <div class="code-file-badge">
+                    <span class="file-dot"></span>
+                    <span>get-students.js</span>
+                  </div>
+                  <button class="copy-btn">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                    <span>Copy Code</span>
+                  </button>
+                </div>
+                <pre class="code-block"><code>app.<span class="syn-fn">get</span>(<span class="syn-str">"/api/students"</span>, (req, res) =&gt; {
+    <span class="syn-kw">const</span> students = [
+        { id: <span class="syn-num">1</span>, name: <span class="syn-str">"Anu"</span>, course: <span class="syn-str">"MERN"</span> },
+        { id: <span class="syn-num">2</span>, name: <span class="syn-str">"Rahul"</span>, course: <span class="syn-str">"Python"</span> },
+        { id: <span class="syn-num">3</span>, name: <span class="syn-str">"Neha"</span>, course: <span class="syn-str">"MERN"</span> }
+    ];
+
+    res.<span class="syn-fn">status</span>(<span class="syn-num">200</span>).<span class="syn-fn">json</span>({
+        success: <span class="syn-kw">true</span>,
+        data: students
+    });
+});</code></pre>
+              </div>
+
+              <div class="card">
+                <div class="card-title">
+                  <span class="card-icon">📝</span>
+                  <span>Step-by-Step Instructions</span>
+                </div>
+                <div class="step-breakdown" style="font-size:0.86rem;">
+                  <div class="step-item"><span class="num-bullet">1</span><span>Open Postman and click <strong>+ (New Request)</strong>.</span></div>
+                  <div class="step-item"><span class="num-bullet">2</span><span>Select <strong>GET</strong> from the method dropdown.</span></div>
+                  <div class="step-item"><span class="num-bullet">3</span><span>Enter: <code>http://localhost:3000/api/students</code></span></div>
+                  <div class="step-item"><span class="num-bullet">4</span><span>Click the orange <strong>Send</strong> button.</span></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Right Column: Expected Postman Response Simulation -->
+            <div style="display:flex; flex-direction:column; gap:0.9rem;">
+              <div class="postman-window">
+                <div class="postman-topbar">
+                  <span style="font-size:0.8rem; font-weight:700; color:#475569;">Postman &bull; Student Query</span>
+                </div>
+                <div class="postman-urlbar">
+                  <span class="method-badge get">GET</span>
+                  <input type="text" class="postman-url-input" value="http://localhost:3000/api/students" readonly />
+                  <button class="postman-send-btn" disabled>Sent</button>
+                </div>
+                <div class="postman-status-bar">
+                  <div>Status: <span class="status-badge status-200">200 OK</span></div>
+                  <div>Time: 18 ms</div>
+                  <div>Size: 342 B</div>
+                </div>
+                <div class="postman-response-pane">
+<pre style="margin:0; font-family:var(--font-mono); color:#cbd5e1;"><code>{
+  <span style="color:#38bdf8;">"success"</span>: <span style="color:#c084fc;">true</span>,
+  <span style="color:#38bdf8;">"data"</span>: [
+    {
+      <span style="color:#38bdf8;">"id"</span>: <span style="color:#fbbf24;">1</span>,
+      <span style="color:#38bdf8;">"name"</span>: <span style="color:#4ade80;">"Anu"</span>,
+      <span style="color:#38bdf8;">"course"</span>: <span style="color:#4ade80;">"MERN"</span>
+    },
+    {
+      <span style="color:#38bdf8;">"id"</span>: <span style="color:#fbbf24;">2</span>,
+      <span style="color:#38bdf8;">"name"</span>: <span style="color:#4ade80;">"Rahul"</span>,
+      <span style="color:#38bdf8;">"course"</span>: <span style="color:#4ade80;">"Python"</span>
+    },
+    {
+      <span style="color:#38bdf8;">"id"</span>: <span style="color:#fbbf24;">3</span>,
+      <span style="color:#38bdf8;">"name"</span>: <span style="color:#4ade80;">"Neha"</span>,
+      <span style="color:#38bdf8;">"course"</span>: <span style="color:#4ade80;">"MERN"</span>
+    }
+  ]
+}</code></pre>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ===================================================================
+             SLIDE 11: Testing POST API in Postman
+             =================================================================== -->
+        <section id="slide-11" class="slide" data-slide-num="11">
+          <div class="slide-header">
+            <div class="slide-title-wrap">
+              <span class="slide-category">Section 3: Testing with Postman</span>
+              <h2 class="slide-title">Testing POST API in Postman</h2>
+              <p class="slide-subtitle">Parsing JSON request bodies with express.json() and creating resources</p>
+            </div>
+            <span class="slide-num-pill">Slide 11 / 15</span>
+          </div>
+
+          <div class="slide-body grid-2">
+            <!-- Left Column: Express Route Code -->
+            <div style="display:flex; flex-direction:column; gap:0.8rem;">
+              <div class="code-container">
+                <div class="code-header">
+                  <div class="code-file-badge">
+                    <span class="file-dot"></span>
+                    <span>post-student.js</span>
+                  </div>
+                  <button class="copy-btn">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                    <span>Copy Code</span>
+                  </button>
+                </div>
+                <pre class="code-block" style="font-size:0.81rem; line-height:1.45;"><code><span class="syn-cm">// MUST enable JSON body parser middleware!</span>
+app.<span class="syn-fn">use</span>(express.<span class="syn-fn">json</span>());
+
+<span class="syn-kw">let</span> students = [];
+
+app.<span class="syn-fn">post</span>(<span class="syn-str">"/api/students"</span>, (req, res) =&gt; {
+    <span class="syn-kw">const</span> { name, course } = req.body;
+
+    <span class="syn-kw">const</span> newStudent = {
+        id: students.length + <span class="syn-num">1</span>,
+        name,
+        course
+    };
+
+    students.<span class="syn-fn">push</span>(newStudent);
+
+    <span class="syn-cm">// 201 Created indicates successful creation</span>
+    res.<span class="syn-fn">status</span>(<span class="syn-num">201</span>).<span class="syn-fn">json</span>({
+        message: <span class="syn-str">"Student created successfully"</span>,
+        data: newStudent
+    });
+});</code></pre>
+              </div>
+
+              <div class="callout danger" style="padding:0.7rem 1rem;">
+                <span class="callout-icon">🚨</span>
+                <div style="font-size:0.84rem;">
+                  <strong>Critical Requirement:</strong> Without <code>app.use(express.json())</code>, <code>req.body</code> will be <code>undefined</code> and crash your server!
+                </div>
+              </div>
+            </div>
+
+            <!-- Right Column: Postman Request and Response -->
+            <div style="display:flex; flex-direction:column; gap:0.8rem;">
+              <div class="card" style="padding:0.8rem;">
+                <div class="card-title" style="font-size:0.92rem; margin-bottom:0.3rem;">
+                  <span>Postman Request Settings</span>
+                </div>
+                <div style="font-size:0.82rem; display:flex; flex-direction:column; gap:0.25rem;">
+                  <div>1. Set Method: <span class="method-badge post">POST</span></div>
+                  <div>2. Enter URL: <code>http://localhost:3000/api/students</code></div>
+                  <div>3. Click <strong>Body &rarr; raw &rarr; select JSON</strong></div>
+                  <div>4. Enter Payload:</div>
+                </div>
+                <pre class="code-block" style="background:#0b1329; color:#cbd5e1; padding:0.5rem 0.8rem; border-radius:6px; font-size:0.8rem; margin-top:0.3rem;"><code>{
+  "name": "Mubashir",
+  "course": "MERN Stack"
+}</code></pre>
+              </div>
+
+              <div class="terminal-output" style="padding:0.6rem 0.9rem;">
+                <div class="terminal-header">
+                  <span class="dot"></span>
+                  <span>Postman Response (Status: 201 Created)</span>
+                </div>
+                <div class="terminal-body" style="font-size:0.8rem;">
+<span class="res">{
+    "message": "Student created successfully",
+    "data": {
+        "id": 1,
+        "name": "Mubashir",
+        "course": "MERN Stack"
+    }
+}</span></div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ===================================================================
+             SLIDE 12: Testing PUT and DELETE APIs
+             =================================================================== -->
+        <section id="slide-12" class="slide" data-slide-num="12">
+          <div class="slide-header">
+            <div class="slide-title-wrap">
+              <span class="slide-category">Section 3: Testing with Postman</span>
+              <h2 class="slide-title">Testing PUT and DELETE APIs</h2>
+              <p class="slide-subtitle">Updating existing records and removing items by dynamic route parameters (:id)</p>
+            </div>
+            <span class="slide-num-pill">Slide 12 / 15</span>
+          </div>
+
+          <div class="slide-body grid-2">
+            <!-- Left Column: PUT Update Route -->
+            <div style="display:flex; flex-direction:column; gap:0.8rem;">
+              <div class="code-container">
+                <div class="code-header">
+                  <div class="code-file-badge">
+                    <span class="file-dot" style="background:var(--http-put);"></span>
+                    <span>PUT /api/students/:id</span>
+                  </div>
+                  <button class="copy-btn">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                    <span>Copy</span>
+                  </button>
+                </div>
+                <pre class="code-block" style="font-size:0.77rem; line-height:1.4;"><code>app.<span class="syn-fn">put</span>(<span class="syn-str">"/api/students/:id"</span>, (req, res) =&gt; {
+    <span class="syn-kw">const</span> id = <span class="syn-fn">Number</span>(req.params.id);
+    <span class="syn-kw">const</span> student = students.<span class="syn-fn">find</span>((item) =&gt; item.id === id);
+
+    <span class="syn-kw">if</span> (!student) {
+        <span class="syn-kw">return</span> res.<span class="syn-fn">status</span>(<span class="syn-num">404</span>).<span class="syn-fn">json</span>({
+            message: <span class="syn-str">"Student not found"</span>
+        });
+    }
+
+    student.name = req.body.name;
+    student.course = req.body.course;
+
+    res.<span class="syn-fn">json</span>({
+        message: <span class="syn-str">"Student updated successfully"</span>,
+        data: student
+    });
+});</code></pre>
+              </div>
+
+              <div class="card" style="padding:0.7rem; font-size:0.8rem;">
+                <strong>Postman PUT Test:</strong><br>
+                <code>PUT http://localhost:3000/api/students/1</code><br>
+                Body: <code>{ "name": "Mubashir Updated", "course": "Node.js" }</code>
+              </div>
+            </div>
+
+            <!-- Right Column: DELETE Route -->
+            <div style="display:flex; flex-direction:column; gap:0.8rem;">
+              <div class="code-container">
+                <div class="code-header">
+                  <div class="code-file-badge">
+                    <span class="file-dot" style="background:var(--http-delete);"></span>
+                    <span>DELETE /api/students/:id</span>
+                  </div>
+                  <button class="copy-btn">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                    <span>Copy</span>
+                  </button>
+                </div>
+                <pre class="code-block" style="font-size:0.77rem; line-height:1.4;"><code>app.<span class="syn-fn">delete</span>(<span class="syn-str">"/api/students/:id"</span>, (req, res) =&gt; {
+    <span class="syn-kw">const</span> id = <span class="syn-fn">Number</span>(req.params.id);
+    <span class="syn-kw">const</span> studentIndex = students.<span class="syn-fn">findIndex</span>(
+        (item) =&gt; item.id === id
+    );
+
+    <span class="syn-kw">if</span> (studentIndex === -<span class="syn-num">1</span>) {
+        <span class="syn-kw">return</span> res.<span class="syn-fn">status</span>(<span class="syn-num">404</span>).<span class="syn-fn">json</span>({
+            message: <span class="syn-str">"Student not found"</span>
+        });
+    }
+
+    <span class="syn-kw">const</span> deletedStudent = students.<span class="syn-fn">splice</span>(studentIndex, <span class="syn-num">1</span>);
+
+    res.<span class="syn-fn">json</span>({
+        message: <span class="syn-str">"Student deleted successfully"</span>,
+        data: deletedStudent[<span class="syn-num">0</span>]
+    });
+});</code></pre>
+              </div>
+
+              <div class="card" style="padding:0.7rem; font-size:0.8rem;">
+                <strong>Postman DELETE Test:</strong><br>
+                <code>DELETE http://localhost:3000/api/students/1</code><br>
+                Response: <code>{ "message": "Student deleted successfully", "data": { ... } }</code>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ===================================================================
+             SLIDE 13: Understanding Data Formats
+             =================================================================== -->
+        <section id="slide-13" class="slide" data-slide-num="13">
+          <div class="slide-header">
+            <div class="slide-title-wrap">
+              <span class="slide-category">Section 4: Formats &amp; Final Project</span>
+              <h2 class="slide-title">Understanding Data Formats</h2>
+              <p class="slide-subtitle">How information is structured, serialized, and transmitted across network boundaries</p>
+            </div>
+            <span class="slide-num-pill">Slide 13 / 15</span>
+          </div>
+
+          <div class="slide-body grid-4">
+            <!-- Format 1: JSON -->
+            <div class="format-card">
+              <div class="format-card-header">
+                <strong>1. JSON</strong>
+                <span class="format-badge">MERN Standard</span>
+              </div>
+              <p style="font-size:0.82rem; color:var(--text-muted);">
+                JavaScript Object Notation: Lightweight, easy for machines and humans to read.
+              </p>
+              <pre class="code-block" style="font-size:0.78rem; padding:0.6rem; border-radius:6px; background:#0b1329;"><code>{
+  "name": "Anu",
+  "age": 22,
+  "course": "MERN"
+}</code></pre>
+            </div>
+
+            <!-- Format 2: XML -->
+            <div class="format-card">
+              <div class="format-card-header">
+                <strong>2. XML</strong>
+                <span class="format-badge" style="background:#fef3c7; color:#92400e;">Legacy / SOAP</span>
+              </div>
+              <p style="font-size:0.82rem; color:var(--text-muted);">
+                Extensible Markup Language: Uses nested tags to define custom data properties.
+              </p>
+              <pre class="code-block" style="font-size:0.78rem; padding:0.6rem; border-radius:6px; background:#0b1329;"><code>&lt;student&gt;
+  &lt;name&gt;Anu&lt;/name&gt;
+  &lt;age&gt;22&lt;/age&gt;
+  &lt;course&gt;MERN&lt;/course&gt;
+&lt;/student&gt;</code></pre>
+            </div>
+
+            <!-- Format 3: Plain Text -->
+            <div class="format-card">
+              <div class="format-card-header">
+                <strong>3. Plain Text</strong>
+                <span class="format-badge" style="background:#f1f5f9; color:#475569;">Simple</span>
+              </div>
+              <p style="font-size:0.82rem; color:var(--text-muted);">
+                Raw text without tags, keys, or metadata structure. Used for logs or simple pings.
+              </p>
+              <pre class="code-block" style="font-size:0.78rem; padding:0.6rem; border-radius:6px; background:#0b1329; color:#38bdf8;"><code>Welcome to Node.js</code></pre>
+            </div>
+
+            <!-- Format 4: HTML -->
+            <div class="format-card">
+              <div class="format-card-header">
+                <strong>4. HTML</strong>
+                <span class="format-badge" style="background:#ecfdf5; color:#065f46;">Web View</span>
+              </div>
+              <p style="font-size:0.82rem; color:var(--text-muted);">
+                HyperText Markup Language: Structures visual documents rendered by web browsers.
+              </p>
+              <pre class="code-block" style="font-size:0.78rem; padding:0.6rem; border-radius:6px; background:#0b1329;"><code>&lt;h1&gt;Welcome&lt;/h1&gt;
+&lt;p&gt;Learning Express.js&lt;/p&gt;</code></pre>
+            </div>
+          </div>
+        </section>
+
+        <!-- ===================================================================
+             SLIDE 14: Sending Different Data Formats from Express
+             =================================================================== -->
+        <section id="slide-14" class="slide" data-slide-num="14">
+          <div class="slide-header">
+            <div class="slide-title-wrap">
+              <span class="slide-category">Section 4: Formats &amp; Final Project</span>
+              <h2 class="slide-title">Sending Different Data Formats from Express</h2>
+              <p class="slide-subtitle">Setting headers and delivering JSON, Text, HTML, and XML using res.type()</p>
+            </div>
+            <span class="slide-num-pill">Slide 14 / 15</span>
+          </div>
+
+          <div class="slide-body grid-2">
+            <!-- Left Column: Express Endpoints Code -->
+            <div style="display:flex; flex-direction:column; gap:0.8rem;">
+              <div class="code-container" style="max-height:480px;">
+                <div class="code-header">
+                  <div class="code-file-badge">
+                    <span class="file-dot"></span>
+                    <span>formats-server.js</span>
+                  </div>
+                  <button class="copy-btn">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                    <span>Copy Code</span>
+                  </button>
+                </div>
+                <pre class="code-block" style="font-size:0.78rem; line-height:1.42;"><code><span class="syn-cm">// 1. JSON Response (res.json)</span>
+app.<span class="syn-fn">get</span>(<span class="syn-str">"/json"</span>, (req, res) =&gt; {
+    res.<span class="syn-fn">json</span>({
+        name: <span class="syn-str">"Anu"</span>,
+        course: <span class="syn-str">"MERN"</span>
+    });
+});
+
+<span class="syn-cm">// 2. Plain Text Response</span>
+app.<span class="syn-fn">get</span>(<span class="syn-str">"/text"</span>, (req, res) =&gt; {
+    res.<span class="syn-fn">type</span>(<span class="syn-str">"text/plain"</span>).<span class="syn-fn">send</span>(<span class="syn-str">"Welcome to Express"</span>);
+});
+
+<span class="syn-cm">// 3. HTML Response</span>
+app.<span class="syn-fn">get</span>(<span class="syn-str">"/html"</span>, (req, res) =&gt; {
+    res.<span class="syn-fn">type</span>(<span class="syn-str">"html"</span>).<span class="syn-fn">send</span>(<span class="syn-str">`
+        &lt;h1&gt;Welcome to Express&lt;/h1&gt;
+        &lt;p&gt;This is an HTML response&lt;/p&gt;
+    `</span>);
+});
+
+<span class="syn-cm">// 4. XML Response</span>
+app.<span class="syn-fn">get</span>(<span class="syn-str">"/xml"</span>, (req, res) =&gt; {
+    res.<span class="syn-fn">type</span>(<span class="syn-str">"application/xml"</span>).<span class="syn-fn">send</span>(<span class="syn-str">`
+        &lt;student&gt;
+            &lt;name&gt;Anu&lt;/name&gt;
+            &lt;course&gt;MERN&lt;/course&gt;
+        &lt;/student&gt;
+    `</span>);
+});</code></pre>
+              </div>
+            </div>
+
+            <!-- Right Column: Interactive Format Inspector -->
+            <div style="display:flex; flex-direction:column; gap:0.8rem;">
+              <div class="card" style="padding:1rem;">
+                <div style="font-weight:700; font-size:0.85rem; color:var(--primary-dark); margin-bottom:0.4rem;">
+                  Interactive Format Inspector (Click to test endpoint)
+                </div>
+                <div style="display:flex; gap:0.4rem; margin-bottom:0.6rem;">
+                  <button class="nav-btn format-switch-btn active" data-fmt="json">/json</button>
+                  <button class="nav-btn format-switch-btn" data-fmt="text">/text</button>
+                  <button class="nav-btn format-switch-btn" data-fmt="html">/html</button>
+                  <button class="nav-btn format-switch-btn" data-fmt="xml">/xml</button>
+                </div>
+                <div style="font-size:0.78rem; font-family:var(--font-mono); background:#e0f2fe; color:#0369a1; padding:0.35rem 0.6rem; border-radius:4px; margin-bottom:0.5rem;" id="format-header-display">
+                  Content-Type: application/json; charset=utf-8
+                </div>
+                <div style="font-size:0.82rem; font-weight:700; margin-bottom:0.2rem;">Server Code:</div>
+                <pre id="format-code-display" class="code-block" style="background:#0b1329; color:#93c5fd; padding:0.5rem 0.7rem; border-radius:5px; font-size:0.75rem; margin-bottom:0.5rem;">app.get("/json", (req, res) => {
+  res.json({
+    name: "Anu",
+    course: "MERN"
+  });
+});</pre>
+                <div style="font-size:0.82rem; font-weight:700; margin-bottom:0.2rem;">Received Client Output:</div>
+                <pre id="format-preview-display" class="code-block" style="background:#070d1d; color:#4ade80; padding:0.5rem 0.7rem; border-radius:5px; font-size:0.78rem;">{
+  "name": "Anu",
+  "course": "MERN"
+}</pre>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ===================================================================
+             SLIDE 15: Final Practical – Student Management API
+             =================================================================== -->
+        <section id="slide-15" class="slide" data-slide-num="15">
+          <div class="slide-header">
+            <div class="slide-title-wrap">
+              <span class="slide-category">Section 4: Formats &amp; Final Project</span>
+              <h2 class="slide-title">Final Practical: Student Management API</h2>
+              <p class="slide-subtitle">Building and testing a complete 5-endpoint REST API using Express and Postman</p>
+            </div>
+            <span class="slide-num-pill">Slide 15 / 15</span>
+          </div>
+
+          <div class="slide-body grid-2">
+            <!-- Left Column: Requirements & Endpoints Table -->
+            <div style="display:flex; flex-direction:column; gap:0.8rem;">
+              <div class="card highlight">
+                <div class="card-title">
+                  <span class="card-icon">🎯</span>
+                  <span>Practical Objective</span>
+                </div>
+                <p style="font-size:0.88rem;">
+                  Build a complete Student Management REST API in <code>server.js</code> with in-memory array storage and test every route in Postman.
+                </p>
+              </div>
+
+              <div class="table-wrapper">
+                <table class="presentation-table" style="font-size:0.84rem;">
+                  <thead>
+                    <tr>
+                      <th>Method</th>
+                      <th>Endpoint</th>
+                      <th>Functionality</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><span class="method-badge get">GET</span></td>
+                      <td><code>/api/students</code></td>
+                      <td>Get all students (200 OK)</td>
+                    </tr>
+                    <tr>
+                      <td><span class="method-badge get">GET</span></td>
+                      <td><code>/api/students/:id</code></td>
+                      <td>Get one student by ID (200 or 404)</td>
+                    </tr>
+                    <tr>
+                      <td><span class="method-badge post">POST</span></td>
+                      <td><code>/api/students</code></td>
+                      <td>Create new student (201 Created)</td>
+                    </tr>
+                    <tr>
+                      <td><span class="method-badge put">PUT</span></td>
+                      <td><code>/api/students/:id</code></td>
+                      <td>Update student details (200 or 404)</td>
+                    </tr>
+                    <tr>
+                      <td><span class="method-badge delete">DELETE</span></td>
+                      <td><code>/api/students/:id</code></td>
+                      <td>Delete student by ID (200 or 404)</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <div class="card" style="padding:0.75rem; font-size:0.82rem;">
+                <strong>Student Record Data Model:</strong>
+                <pre class="code-block" style="background:#0b1329; color:#cbd5e1; padding:0.4rem 0.6rem; border-radius:5px; font-size:0.78rem; margin-top:0.2rem;"><code>{
+  "id": 1,
+  "name": "Anu",
+  "email": "anu@gmail.com",
+  "course": "MERN Stack"
+}</code></pre>
+              </div>
+            </div>
+
+            <!-- Right Column: Full server.js Implementation Preview -->
+            <div style="display:flex; flex-direction:column; gap:0.8rem;">
+              <div class="code-container" style="max-height:480px;">
+                <div class="code-header">
+                  <div class="code-file-badge">
+                    <span class="file-dot"></span>
+                    <span>student-management-api/server.js</span>
+                  </div>
+                  <button class="copy-btn">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                    <span>Copy Full Code</span>
+                  </button>
+                </div>
+                <pre class="code-block" style="font-size:0.74rem; line-height:1.4;"><code><span class="syn-kw">const</span> express = <span class="syn-fn">require</span>(<span class="syn-str">"express"</span>);
+<span class="syn-kw">const</span> app = <span class="syn-fn">express</span>();
+<span class="syn-kw">const</span> PORT = <span class="syn-num">3000</span>;
+
+app.<span class="syn-fn">use</span>(express.<span class="syn-fn">json</span>());
+
+<span class="syn-kw">let</span> students = [
+  { id: <span class="syn-num">1</span>, name: <span class="syn-str">"Anu"</span>, email: <span class="syn-str">"anu@gmail.com"</span>, course: <span class="syn-str">"MERN Stack"</span> }
+];
+
+<span class="syn-cm">// 1. GET ALL</span>
+app.<span class="syn-fn">get</span>(<span class="syn-str">"/api/students"</span>, (req, res) =&gt; {
+  res.<span class="syn-fn">status</span>(<span class="syn-num">200</span>).<span class="syn-fn">json</span>(students);
+});
+
+<span class="syn-cm">// 2. GET ONE BY ID</span>
+app.<span class="syn-fn">get</span>(<span class="syn-str">"/api/students/:id"</span>, (req, res) =&gt; {
+  <span class="syn-kw">const</span> student = students.<span class="syn-fn">find</span>(s =&gt; s.id === <span class="syn-fn">Number</span>(req.params.id));
+  <span class="syn-kw">if</span> (!student) <span class="syn-kw">return</span> res.<span class="syn-fn">status</span>(<span class="syn-num">404</span>).<span class="syn-fn">json</span>({ message: <span class="syn-str">"Student not found"</span> });
+  res.<span class="syn-fn">status</span>(<span class="syn-num">200</span>).<span class="syn-fn">json</span>(student);
+});
+
+<span class="syn-cm">// 3. POST CREATE</span>
+app.<span class="syn-fn">post</span>(<span class="syn-str">"/api/students"</span>, (req, res) =&gt; {
+  <span class="syn-kw">const</span> { name, email, course } = req.body;
+  <span class="syn-kw">const</span> newStudent = { id: students.length + <span class="syn-num">1</span>, name, email, course };
+  students.<span class="syn-fn">push</span>(newStudent);
+  res.<span class="syn-fn">status</span>(<span class="syn-num">201</span>).<span class="syn-fn">json</span>(newStudent);
+});
+
+<span class="syn-cm">// 4. PUT UPDATE</span>
+app.<span class="syn-fn">put</span>(<span class="syn-str">"/api/students/:id"</span>, (req, res) =&gt; {
+  <span class="syn-kw">const</span> student = students.<span class="syn-fn">find</span>(s =&gt; s.id === <span class="syn-fn">Number</span>(req.params.id));
+  <span class="syn-kw">if</span> (!student) <span class="syn-kw">return</span> res.<span class="syn-fn">status</span>(<span class="syn-num">404</span>).<span class="syn-fn">json</span>({ message: <span class="syn-str">"Student not found"</span> });
+  student.name = req.body.name || student.name;
+  student.email = req.body.email || student.email;
+  student.course = req.body.course || student.course;
+  res.<span class="syn-fn">status</span>(<span class="syn-num">200</span>).<span class="syn-fn">json</span>(student);
+});
+
+<span class="syn-cm">// 5. DELETE REMOVE</span>
+app.<span class="syn-fn">delete</span>(<span class="syn-str">"/api/students/:id"</span>, (req, res) =&gt; {
+  <span class="syn-kw">const</span> index = students.<span class="syn-fn">findIndex</span>(s =&gt; s.id === <span class="syn-fn">Number</span>(req.params.id));
+  <span class="syn-kw">if</span> (index === -<span class="syn-num">1</span>) <span class="syn-kw">return</span> res.<span class="syn-fn">status</span>(<span class="syn-num">404</span>).<span class="syn-fn">json</span>({ message: <span class="syn-str">"Student not found"</span> });
+  <span class="syn-kw">const</span> deleted = students.<span class="syn-fn">splice</span>(index, <span class="syn-num">1</span>);
+  res.<span class="syn-fn">status</span>(<span class="syn-num">200</span>).<span class="syn-fn">json</span>(deleted[<span class="syn-num">0</span>]);
+});
+
+app.<span class="syn-fn">listen</span>(PORT, () =&gt; <span class="syn-fn">console</span>.<span class="syn-fn">log</span>(<span class="syn-str">`API running on port <span class="syn-var">${PORT}</span>`</span>));</code></pre>
+              </div>
+            </div>
+          </div>
+        </section>
+
+      </div>
+    </main>
+
+    <!-- Bottom Navigation Controls -->
+    <footer class="bottom-bar">
+      <div class="bottom-left">
+        <button id="prev-btn" class="control-btn" title="Previous Slide (Left Arrow, PageUp)">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <polyline points="15 18 9 12 15 6"></polyline>
+          </svg>
+          <span>Previous</span>
+        </button>
+      </div>
+
+      <div class="bottom-center">
+        <span id="slide-counter" class="slide-counter">01 / 15</span>
+      </div>
+
+      <div class="bottom-right">
+        <button id="next-btn" class="control-btn primary" title="Next Slide (Right Arrow, Space, PageDown)">
+          <span>Next</span>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <polyline points="9 18 15 12 9 6"></polyline>
+          </svg>
+        </button>
+      </div>
+    </footer>
+
+    <!-- Table of Contents Slide Drawer -->
+    <div id="toc-overlay" class="toc-overlay">
+      <aside class="toc-drawer">
+        <div class="toc-header">
+          <div class="toc-title">Table of Contents (15 Slides)</div>
+          <button id="toc-close" class="toc-close" title="Close Drawer (Esc)">&times;</button>
+        </div>
+        <div id="toc-list" class="toc-list">
+          <!-- Populated dynamically by script.js -->
+        </div>
+      </aside>
+    </div>
+
+    <!-- Keyboard Shortcuts Help Modal -->
+    <div id="help-modal-overlay" class="help-modal-overlay">
+      <div class="help-modal">
+        <div class="help-modal-header">
+          <div class="help-modal-title">⌨️ Keyboard Shortcuts</div>
+          <button id="help-modal-close" class="toc-close">&times;</button>
+        </div>
+        <div class="help-modal-body">
+          <div class="shortcut-row">
+            <span>Next Slide</span>
+            <div><span class="kbd-badge">&rarr;</span> or <span class="kbd-badge">Space</span> or <span class="kbd-badge">PgDn</span></div>
+          </div>
+          <div class="shortcut-row">
+            <span>Previous Slide</span>
+            <div><span class="kbd-badge">&larr;</span> or <span class="kbd-badge">PgUp</span></div>
+          </div>
+          <div class="shortcut-row">
+            <span>First Slide (Title)</span>
+            <span class="kbd-badge">Home</span>
+          </div>
+          <div class="shortcut-row">
+            <span>Last Slide (Practical)</span>
+            <span class="kbd-badge">End</span>
+          </div>
+          <div class="shortcut-row">
+            <span>Toggle Fullscreen</span>
+            <span class="kbd-badge">F</span>
+          </div>
+          <div class="shortcut-row">
+            <span>Table of Contents</span>
+            <div><span class="kbd-badge">T</span> or <span class="kbd-badge">M</span></div>
+          </div>
+          <div class="shortcut-row">
+            <span>Close Modal / Drawer</span>
+            <span class="kbd-badge">Esc</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
