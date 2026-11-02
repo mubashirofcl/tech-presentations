@@ -1,22 +1,20 @@
 /**
- * Node.js Day 2: Asynchronous Programming & I/O
- * Interactive Presentation Engine
- * Pure Vanilla JavaScript: Navigation, Keyboard, Fullscreen, Copy-Code, TOC & Interactive Widgets
+ * Node.js Day 3 — Promises & Async/Await
+ * Day 3 — MERN Stack Development
+ * Interactive Presentation Engine (Vanilla JavaScript)
  */
 
 (function () {
   'use strict';
 
-  // Section Mapping for all 25 slides
+  // Section Mapping for all 20 slides
   const SLIDE_SECTIONS = [
-    { start: 1, end: 4, name: 'Section 1: Understanding Asynchronous Programming' },
-    { start: 5, end: 9, name: 'Section 2: Callbacks, Promises, and async/await' },
-    { start: 10, end: 12, name: 'Section 3: Parallel Operations and Error Handling' },
-    { start: 13, end: 14, name: 'Section 4: Fetch API in Node.js' },
-    { start: 15, end: 16, name: 'Section 5: Timeouts and AbortController' },
-    { start: 17, end: 19, name: 'Section 6: Retry with Exponential Backoff' },
-    { start: 20, end: 22, name: 'Section 7: File Operations with fs/promises and path' },
-    { start: 23, end: 25, name: 'Section 8: Final Practical Project & Next Steps' },
+    { start: 1, end: 3, name: 'Section 1: Introduction to Promises' },
+    { start: 4, end: 7, name: 'Section 2: Understanding Promises' },
+    { start: 8, end: 11, name: 'Section 3: Handling Promises' },
+    { start: 12, end: 15, name: 'Section 4: Understanding async/await' },
+    { start: 16, end: 17, name: 'Section 5: Error Handling with async/await' },
+    { start: 18, end: 20, name: 'Section 6: Final Practical Implementation' },
   ];
 
   // DOM Elements
@@ -47,7 +45,7 @@
         return sec.name;
       }
     }
-    return 'Node.js Day 2';
+    return 'Node.js Day 3 (MERN)';
   }
 
   /**
@@ -68,10 +66,10 @@
     // Activate new slide
     if (slides[currentIndex]) {
       slides[currentIndex].classList.add('active');
-      slides[currentIndex].scrollTop = 0; // scroll to top if needed
+      slides[currentIndex].scrollTop = 0;
     }
 
-    // Update Slide Counter
+    // Update Slide Counter (e.g. 01 / 20)
     const pad = (n) => (n < 10 ? '0' + n : n);
     if (slideCounter) {
       slideCounter.textContent = `${pad(slideNumber)} / ${pad(totalSlides)}`;
@@ -94,7 +92,11 @@
 
     // Update URL hash
     if (updateHash) {
-      history.replaceState(null, '', `#slide-${slideNumber}`);
+      try {
+        history.replaceState(null, '', `#slide-${slideNumber}`);
+      } catch (err) {
+        // Some browsers restrict history updates on file:// URLs; navigation still works.
+      }
     }
 
     // Update active state in Table of Contents
@@ -128,8 +130,6 @@
     if (!tocList) return;
     tocList.innerHTML = '';
 
-    let currentSecIndex = -1;
-
     slides.forEach((slide, idx) => {
       const slideNum = idx + 1;
 
@@ -148,16 +148,20 @@
       if (titleElem) {
         titleText = titleElem.textContent.trim().replace(/\s+/g, ' ');
       } else if (slide.querySelector('.hero-main-title')) {
-        titleText = 'Title: Node.js Day 2 Asynchronous Programming & I/O';
+        titleText = 'Title: Node.js Day 3 — Promises & Async/Await';
       }
 
       const item = document.createElement('div');
       item.className = 'toc-item' + (idx === currentIndex ? ' active' : '');
       item.setAttribute('data-index', idx);
-      item.innerHTML = `
-        <span class="item-num">${slideNum < 10 ? '0' + slideNum : slideNum}</span>
-        <span class="item-text">${titleText}</span>
-      `;
+      const numSpan = document.createElement('span');
+      numSpan.className = 'item-num';
+      numSpan.textContent = slideNum < 10 ? '0' + slideNum : String(slideNum);
+      const textSpan = document.createElement('span');
+      textSpan.className = 'item-text';
+      textSpan.textContent = titleText;
+      item.appendChild(numSpan);
+      item.appendChild(textSpan);
 
       item.addEventListener('click', () => {
         goToSlide(idx);
@@ -200,6 +204,30 @@
   }
 
   /**
+   * Clipboard helper with a fallback for browsers/contexts without the async API
+   */
+  async function writeToClipboard(text) {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      try {
+        await navigator.clipboard.writeText(text);
+        return;
+      } catch (err) {
+        // fall through to legacy copy
+      }
+    }
+    const ta = document.createElement('textarea');
+    ta.value = text;
+    ta.setAttribute('readonly', '');
+    ta.style.position = 'fixed';
+    ta.style.top = '-1000px';
+    document.body.appendChild(ta);
+    ta.select();
+    const ok = document.execCommand('copy');
+    document.body.removeChild(ta);
+    if (!ok) throw new Error('Copy command failed');
+  }
+
+  /**
    * Copy-to-Clipboard for code blocks
    */
   function initCopyButtons() {
@@ -216,7 +244,7 @@
         const textToCopy = codeEl.innerText;
 
         try {
-          await navigator.clipboard.writeText(textToCopy);
+          await writeToClipboard(textToCopy);
           const originalHTML = btn.innerHTML;
           btn.classList.add('copied');
           btn.innerHTML = `
@@ -242,6 +270,9 @@
    */
   function initKeyboardNavigation() {
     window.addEventListener('keydown', (e) => {
+      // Leave browser shortcuts (Ctrl/Cmd/Alt combos) alone
+      if (e.ctrlKey || e.metaKey || e.altKey) return;
+
       // Do not intercept if user is typing in form inputs or editable elements
       const activeTag = document.activeElement ? document.activeElement.tagName : '';
       if (['INPUT', 'TEXTAREA', 'SELECT'].includes(activeTag) || (document.activeElement && document.activeElement.isContentEditable)) {
@@ -308,7 +339,7 @@
   }
 
   /**
-   * Hash change sync (#slide-1 to #slide-25)
+   * Hash change sync (#slide-1 to #slide-20)
    */
   function initHashNavigation() {
     function handleHash() {
@@ -326,115 +357,6 @@
 
     window.addEventListener('hashchange', handleHash);
     handleHash();
-  }
-
-  /**
-   * Interactive Simulator: Slide 4 Event Loop
-   */
-  function initEventLoopSimulator() {
-    const btn = document.getElementById('run-event-loop-sim');
-    const logOutput = document.getElementById('event-loop-sim-log');
-    const statusText = document.getElementById('event-loop-step-status');
-    if (!btn || !logOutput) return;
-
-    btn.addEventListener('click', () => {
-      btn.disabled = true;
-      logOutput.innerHTML = '';
-      if (statusText) statusText.textContent = '1. Executing synchronous code: console.log("Start")';
-
-      logOutput.innerHTML += '<div class="cmd">&gt; node app.js</div>';
-      logOutput.innerHTML += '<div class="res">Start</div>';
-
-      setTimeout(() => {
-        if (statusText) statusText.textContent = '2. setTimeout(..., 0) registered with Node.js timer queue. Synchronous code continues...';
-        logOutput.innerHTML += '<div class="cmd" style="color:#94a3b8;">[Timer callback scheduled in Timer Phase]</div>';
-
-        setTimeout(() => {
-          if (statusText) statusText.textContent = '3. Executing synchronous code: console.log("End")';
-          logOutput.innerHTML += '<div class="res">End</div>';
-
-          setTimeout(() => {
-            if (statusText) statusText.textContent = '4. Call Stack empty! Event loop picks timer callback and executes it:';
-            logOutput.innerHTML += '<div class="res" style="color:#38bdf8; font-weight:700;">Timer callback</div>';
-            if (statusText) statusText.textContent = '✓ Execution complete. Notice Timer callback printed last!';
-            btn.disabled = false;
-          }, 900);
-        }, 900);
-      }, 900);
-    });
-  }
-
-  /**
-   * Interactive Simulator: Slide 10 Concurrency Comparator
-   */
-  function initConcurrencySimulator() {
-    const btn = document.getElementById('run-concurrency-sim');
-    const seqBar1 = document.getElementById('seq-bar-1');
-    const seqBar2 = document.getElementById('seq-bar-2');
-    const parBar1 = document.getElementById('par-bar-1');
-    const parBar2 = document.getElementById('par-bar-2');
-    const statusEl = document.getElementById('concurrency-status');
-
-    if (!btn || !seqBar1 || !parBar1) return;
-
-    btn.addEventListener('click', () => {
-      btn.disabled = true;
-      if (statusEl) statusEl.textContent = 'Starting comparison: Sequential vs Promise.all concurrently...';
-
-      // Reset bars
-      seqBar1.style.width = '0%';
-      seqBar2.style.width = '0%';
-      parBar1.style.width = '0%';
-      parBar2.style.width = '0%';
-
-      // Parallel execution (runs both at once over 1s)
-      parBar1.style.transition = 'width 1s linear';
-      parBar2.style.transition = 'width 1s linear';
-      parBar1.style.width = '100%';
-      parBar2.style.width = '100%';
-
-      // Sequential execution: first 1s for task 1, then next 1s for task 2
-      seqBar1.style.transition = 'width 1s linear';
-      seqBar1.style.width = '100%';
-
-      setTimeout(() => {
-        if (statusEl) statusEl.textContent = 'Promise.all finished in ~1s! Sequential task 1 complete, now starting task 2...';
-        seqBar2.style.transition = 'width 1s linear';
-        seqBar2.style.width = '100%';
-
-        setTimeout(() => {
-          if (statusEl) statusEl.textContent = '✓ Done: Promise.all took ~1s total. Sequential took ~2s total!';
-          btn.disabled = false;
-        }, 1000);
-      }, 1000);
-    });
-  }
-
-  /**
-   * Interactive Simulator: Slide 18 Backoff Calculator
-   */
-  function initBackoffCalculator() {
-    const attemptSelect = document.getElementById('calc-attempt-select');
-    const baseInput = document.getElementById('calc-base-input');
-    const formulaDisplay = document.getElementById('calc-formula-display');
-    const resultDisplay = document.getElementById('calc-result-display');
-
-    if (!attemptSelect || !baseInput || !resultDisplay) return;
-
-    function recalculate() {
-      const attempt = parseInt(attemptSelect.value, 10) || 1;
-      const base = parseInt(baseInput.value, 10) || 500;
-      const delayMs = base * Math.pow(2, attempt - 1);
-
-      if (formulaDisplay) {
-        formulaDisplay.textContent = `${base} * 2^(${attempt} - 1) = ${base} * ${Math.pow(2, attempt - 1)}`;
-      }
-      resultDisplay.textContent = `${delayMs.toLocaleString()} ms (${(delayMs / 1000).toFixed(1)}s)`;
-    }
-
-    attemptSelect.addEventListener('change', recalculate);
-    baseInput.addEventListener('input', recalculate);
-    recalculate();
   }
 
   /**
@@ -464,11 +386,6 @@
         if (e.target === helpModalOverlay) closeHelp();
       });
     }
-
-    // Attach interactive widgets
-    initEventLoopSimulator();
-    initConcurrencySimulator();
-    initBackoffCalculator();
   }
 
   // Run when DOM is ready
@@ -478,3 +395,4 @@
     init();
   }
 })();
+

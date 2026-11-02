@@ -1,6 +1,6 @@
 /* ==========================================================================
-   Node.js Asynchronous Programming — Timers, Callbacks & Callback Hell
-   Day 2 — MERN Stack Development
+   Node.js Day 3 — Promises & Async/Await
+   Day 3 — MERN Stack Development
    Theme: Professional Light Blue & White Classroom Presentation
    ========================================================================== */
 
@@ -120,7 +120,7 @@ html, body {
 
 .progress-bar {
   height: 100%;
-  width: 6.66%;
+  width: 5%;
   background: linear-gradient(90deg, var(--primary) 0%, var(--accent-cyan) 100%);
   transition: width 0.3s ease;
 }
@@ -1351,4 +1351,159 @@ pre.code-block {
   .deck-section-indicator {
     display: none;
   }
+}
+
+
+/* ==========================================================================
+   Day 3 Additions — Promises & Async/Await
+   (Projector-friendly sizes, layout helpers, state diagram, workflow)
+   ========================================================================== */
+
+.slide-body { font-size: 1.02rem; }
+
+.col {
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+  min-width: 0;
+}
+
+.col .code-container { height: auto; }
+
+.span-all { grid-column: 1 / -1; }
+
+/* Inline code (outside code panels and tables) */
+.slide code {
+  font-family: var(--font-mono);
+  font-size: 0.9em;
+  background: #eef2f7;
+  color: var(--primary-dark);
+  padding: 0.1rem 0.38rem;
+  border-radius: 4px;
+}
+
+.slide pre code,
+.terminal-output code {
+  background: none;
+  color: inherit;
+  padding: 0;
+  font-size: inherit;
+}
+
+.card p { line-height: 1.5; }
+
+/* Larger, projector-friendly code and output */
+pre.code-block {
+  font-size: 0.95rem;
+  line-height: 1.55;
+}
+
+.terminal-output { font-size: 0.92rem; }
+
+.feature-list li { font-size: 1rem; }
+.step-item { font-size: 0.97rem; }
+.callout { font-size: 0.97rem; }
+
+.inline-syntax {
+  font-family: var(--font-mono);
+  font-size: 0.9rem;
+  background: #ffffff;
+  padding: 0.55rem 0.85rem;
+  border-radius: 6px;
+  border: 1px solid var(--border-subtle);
+  white-space: pre;
+  overflow-x: auto;
+}
+
+.pane-label {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--primary-dark);
+}
+
+/* Title slide: topic chips */
+.topics-block { display: flex; flex-direction: column; align-items: center; gap: 0.6rem; margin: 0.4rem 0; }
+.topics-label { font-size: 0.9rem; font-weight: 700; color: var(--text-muted); }
+.topics-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.6rem;
+  max-width: 960px;
+}
+.topic-chip {
+  background: var(--bg-card-blue);
+  border: 1px solid var(--primary-border);
+  color: var(--primary-dark);
+  font-weight: 600;
+  font-size: 0.95rem;
+  padding: 0.4rem 0.95rem;
+  border-radius: 20px;
+}
+
+/* Promise state diagram (Slide 5) */
+.state-diagram {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.6rem;
+  background: #ffffff;
+  border: 1px solid var(--border-subtle);
+  border-radius: 10px;
+  padding: 1.1rem;
+  box-shadow: var(--shadow-sm);
+}
+.state-box {
+  padding: 0.6rem 1.6rem;
+  border-radius: 8px;
+  font-weight: 800;
+  font-size: 1.05rem;
+  border: 2px solid transparent;
+}
+.state-pending   { background: var(--accent-amber-bg); border-color: var(--accent-amber); color: #92400e; }
+.state-fulfilled { background: var(--accent-green-bg); border-color: var(--accent-green); color: #047857; }
+.state-rejected  { background: var(--accent-rose-bg);  border-color: var(--accent-rose);  color: #be123c; }
+.state-branches {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.2rem;
+  width: 100%;
+}
+.state-branch { display: flex; flex-direction: column; align-items: center; gap: 0.45rem; }
+.state-arrow { font-size: 0.95rem; color: var(--text-muted); font-weight: 600; }
+.state-note { font-size: 0.9rem; color: var(--text-muted); text-align: center; }
+
+/* Workflow diagram (Slide 18) */
+.workflow {
+  display: flex;
+  align-items: stretch;
+  justify-content: space-between;
+  gap: 0.35rem;
+}
+.wf-step {
+  flex: 1;
+  min-width: 0;
+  background: #ffffff;
+  border: 1px solid var(--primary-border);
+  border-radius: 8px;
+  padding: 0.7rem 0.5rem;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  justify-content: center;
+}
+.wf-name { font-weight: 800; font-size: 0.98rem; color: var(--text-main); }
+.wf-fn { font-family: var(--font-mono); font-size: 0.74rem; color: var(--primary-dark); }
+.wf-arrow { align-self: center; color: var(--primary); font-weight: 800; font-size: 1.1rem; }
+
+.exercise-list { gap: 0.55rem; }
+
+@media (max-width: 1024px) {
+  .workflow { flex-direction: column; }
+  .wf-arrow { transform: rotate(90deg); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .slide, .progress-bar, .toc-drawer, .toc-overlay, .help-modal-overlay { transition: none; }
 }

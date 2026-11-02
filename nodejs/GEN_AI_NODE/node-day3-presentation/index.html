@@ -1,0 +1,1302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Node.js Day 3 — Express Routing, Middleware &amp; Zod Validation</title>
+  <meta name="description" content="Day 3 MERN Stack Development: Express routing, middleware, JSON body parsing, error handling, CORS, routes-controllers-services and Zod validation.">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Presentation App Shell -->
+  <div id="presentation-app">
+
+    <!-- Top Continuous Progress Bar -->
+    <div class="progress-container">
+      <div id="progress-bar" class="progress-bar" style="width:5%"></div>
+    </div>
+
+    <!-- Top Navigation Header -->
+    <header class="top-nav">
+      <div class="brand-badge">
+        <div class="icon-box">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <polygon points="12 2 2 8.5 2 15.5 12 22 22 15.5 22 8.5 12 2"></polygon>
+            <line x1="12" y1="22" x2="12" y2="15.5"></line>
+            <polyline points="22 8.5 12 15.5 2 8.5"></polyline>
+          </svg>
+        </div>
+        <span>MERN Node.js</span>
+        <span class="brand-tag mern-pill">Day 3</span>
+      </div>
+
+      <div class="deck-section-indicator">
+        <span id="section-indicator" class="section-pill">Section 1: Welcome</span>
+      </div>
+
+      <div class="top-actions">
+        <button id="toc-btn" class="nav-btn" type="button" title="Open Table of Contents (Press 'T' or 'M')">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+          <span>Contents</span>
+        </button>
+        <button id="help-btn" class="nav-btn" type="button" title="Keyboard Shortcuts (Press '?')">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+          <span>Shortcuts</span>
+        </button>
+        <button id="fullscreen-btn" class="nav-btn" type="button" title="Toggle Fullscreen (Press 'F')">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path></svg>
+          <span>Fullscreen</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Slide Viewport -->
+    <main class="slide-viewport">
+      <div class="slide-container">
+
+        <!-- ===================================================================
+             SLIDE 1: Title
+             =================================================================== -->
+        <section id="slide-1" class="slide active" data-slide-num="1">
+          <div class="title-slide-content">
+            <div class="title-badge-row">
+              <span class="pill-badge">MERN Stack Curriculum</span>
+              <span class="pill-badge mern-badge">Day 3 — Building APIs with Express</span>
+            </div>
+            <h1 class="hero-main-title">Node.js Day 3: <br><span class="highlight">Express Routing, Middleware &amp; Zod Validation</span></h1>
+            <p class="hero-subtitle">Build a clean, validated REST API step by step</p>
+            <div class="topics-block">
+              <div class="topics-label">Today's topics</div>
+              <div class="topics-grid"><span class="topic-chip">Express Routing</span><span class="topic-chip">Middleware</span><span class="topic-chip">JSON Body Parsing</span><span class="topic-chip">Error Handling</span><span class="topic-chip">CORS</span><span class="topic-chip">Routes → Controllers → Services</span><span class="topic-chip">Zod Validation</span></div>
+            </div>
+            <div class="meta-footer">
+              <div class="meta-item"><span>📚 <strong>Course:</strong> Full-Stack MERN Development</span></div>
+              <div class="meta-item"><span>🔗 <strong>Builds on:</strong> Node.js, npm and async programming</span></div>
+              <div class="meta-item"><span>🧰 <strong>Tools:</strong> Node.js, npm, Postman (or curl)</span></div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ===================================================================
+             SLIDE 2: Learning Objectives
+             =================================================================== -->
+        <section id="slide-2" class="slide" data-slide-num="2">
+          <div class="slide-header">
+            <div class="slide-title-wrap">
+              <span class="slide-category">Section 1: Welcome</span>
+              <h2 class="slide-title">Learning Objectives</h2>
+              <p class="slide-subtitle">By the end of this session, students should be able to:</p>
+            </div>
+            <span class="slide-num-pill">Slide 02 / 20</span>
+          </div>
+          <div class="slide-body ">
+            <div class="objectives-grid"><div class="objective-item"><div class="objective-num">1</div><div class="objective-text">Create routes using Express.</div></div><div class="objective-item"><div class="objective-num">2</div><div class="objective-text">Understand and implement middleware.</div></div><div class="objective-item"><div class="objective-num">3</div><div class="objective-text">Receive JSON data from client requests.</div></div><div class="objective-item"><div class="objective-num">4</div><div class="objective-text">Handle errors using error-handling middleware.</div></div><div class="objective-item"><div class="objective-num">5</div><div class="objective-text">Configure CORS.</div></div><div class="objective-item"><div class="objective-num">6</div><div class="objective-text">Organize code using routes, controllers and services.</div></div><div class="objective-item"><div class="objective-num">7</div><div class="objective-text">Validate request data using Zod.</div></div></div>
+            <div class="callout tip"><span class="callout-icon">💡</span><div><strong>Classroom Plan:</strong> First we learn routing and middleware. Then we build a proper project structure. Finally we add Zod validation and build a Student Registration API.</div></div>
+          </div>
+        </section>
+
+        <!-- ===================================================================
+             SLIDE 3: Express Routing
+             =================================================================== -->
+        <section id="slide-3" class="slide" data-slide-num="3">
+          <div class="slide-header">
+            <div class="slide-title-wrap">
+              <span class="slide-category">Section 2: Express Routing</span>
+              <h2 class="slide-title">Express Routing</h2>
+              <p class="slide-subtitle">Introduction and your first Express routes</p>
+            </div>
+            <span class="slide-num-pill">Slide 03 / 20</span>
+          </div>
+          <div class="slide-body grid-2">
+            <div class="col"><div class="card highlight">
+                <div class="card-title"><span class="card-icon">🧭</span><span>What Is Routing?</span></div>
+                <p><strong>Routing</strong> means deciding how the server responds when a client sends a request to a particular URL and HTTP method.</p><p><strong>Why we need it:</strong> one server must handle many different requests, such as reading, creating, updating and deleting users.</p>
+              </div>
+<div class="table-wrapper"><table class="presentation-table"><thead><tr><th>HTTP Method</th><th>Endpoint</th><th>Purpose</th></tr></thead><tbody><tr><td><code>GET</code></td><td><code>/users</code></td><td>Get all users</td></tr><tr><td><code>GET</code></td><td><code>/users/:id</code></td><td>Get one user</td></tr><tr><td><code>POST</code></td><td><code>/users</code></td><td>Create a user</td></tr><tr><td><code>PUT</code></td><td><code>/users/:id</code></td><td>Update a user</td></tr><tr><td><code>DELETE</code></td><td><code>/users/:id</code></td><td>Delete a user</td></tr></tbody></table></div>
+<div class="callout note"><span class="callout-icon">📌</span><div><code>app.get()</code> creates a <strong>GET route</strong>. Its callback receives the request (<code>req</code>) and sends a response (<code>res</code>).</div></div></div>
+            <div class="col"><div class="code-container compact">
+                <div class="code-header">
+                  <div class="code-file-badge"><span class="file-dot"></span><span>terminal — install Express</span></div>
+                  <button class="copy-btn" type="button"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg><span>Copy Code</span></button>
+                </div>
+                <pre class="code-block"><code>npm init -y
+npm install express</code></pre>
+              </div>
+<div class="code-container compact">
+                <div class="code-header">
+                  <div class="code-file-badge"><span class="file-dot"></span><span>server.js</span></div>
+                  <button class="copy-btn" type="button"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg><span>Copy Code</span></button>
+                </div>
+                <pre class="code-block"><code><span class="syn-kw">const</span> express = <span class="syn-fn">require</span>(<span class="syn-str">"express"</span>);
+
+<span class="syn-kw">const</span> app = <span class="syn-fn">express</span>();
+
+app.<span class="syn-fn">get</span>(<span class="syn-str">"/"</span>, (req, res) =&gt; {
+  res.<span class="syn-fn">send</span>(<span class="syn-str">"Welcome to Express Server"</span>);
+});
+
+app.<span class="syn-fn">get</span>(<span class="syn-str">"/users"</span>, (req, res) =&gt; {
+  res.<span class="syn-fn">json</span>([
+    { id: <span class="syn-num">1</span>, name: <span class="syn-str">"Anu"</span> },
+    { id: <span class="syn-num">2</span>, name: <span class="syn-str">"Rahul"</span> },
+  ]);
+});
+
+app.<span class="syn-fn">listen</span>(<span class="syn-num">3000</span>, () =&gt; {
+  <span class="syn-fn">console</span>.<span class="syn-fn">log</span>(<span class="syn-str">"Server running on port 3000"</span>);
+});</code></pre>
+              </div>
+<div class="terminal-output">
+                <div class="terminal-header"><span class="dot"></span><span>Test and Expected Response</span></div>
+                <div class="terminal-body"><span class="cmd">GET http://localhost:3000/</span>
+<span class="res">Welcome to Express Server</span>
+<span class="cmd">GET http://localhost:3000/users</span>
+<span class="res">[</span>
+<span class="res">  {</span>
+<span class="res">    "id": 1,</span>
+<span class="res">    "name": "Anu"</span>
+<span class="res">  },</span>
+<span class="res">  {</span>
+<span class="res">    "id": 2,</span>
+<span class="res">    "name": "Rahul"</span>
+<span class="res">  }</span>
+<span class="res">]</span></div>
+              </div></div>
+          </div>
+        </section>
+
+        <!-- ===================================================================
+             SLIDE 4: Route Parameters and Query Parameters
+             =================================================================== -->
+        <section id="slide-4" class="slide" data-slide-num="4">
+          <div class="slide-header">
+            <div class="slide-title-wrap">
+              <span class="slide-category">Section 2: Express Routing</span>
+              <h2 class="slide-title">Route Parameters and Query Parameters</h2>
+              <p class="slide-subtitle">Two ways to receive information through a URL</p>
+            </div>
+            <span class="slide-num-pill">Slide 04 / 20</span>
+          </div>
+          <div class="slide-body grid-2">
+            <div class="col"><div class="card highlight">
+                <div class="card-title"><span class="card-icon">🔑</span><span>1. Route Parameters</span></div>
+                <p>Identify a <strong>specific resource</strong>.</p><div class="inline-syntax">/users/101</div><p>Read the value with <code>req.params.id</code>.</p>
+              </div>
+<div class="card highlight">
+                <div class="card-title"><span class="card-icon">🔎</span><span>2. Query Parameters</span></div>
+                <p>Send <strong>optional</strong> information such as search terms and filters.</p><div class="inline-syntax">/users?name=Anu&amp;age=22</div><p>Read the values with <code>req.query</code>.</p>
+              </div>
+<div class="table-wrapper"><table class="presentation-table"><thead><tr><th>Property</th><th>Where the value comes from</th></tr></thead><tbody><tr><td><code>req.params</code></td><td>Values included in the route path</td></tr><tr><td><code>req.query</code></td><td>Values after <code>?</code> in the URL</td></tr></tbody></table></div>
+<div class="callout warning"><span class="callout-icon">⚠️</span><div>Values from the URL are always <strong>strings</strong>. Notice <code>"101"</code> and <code>"22"</code> in the output.</div></div></div>
+            <div class="col"><div class="code-container compact">
+                <div class="code-header">
+                  <div class="code-file-badge"><span class="file-dot"></span><span>server.js</span></div>
+                  <button class="copy-btn" type="button"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg><span>Copy Code</span></button>
+                </div>
+                <pre class="code-block"><code><span class="syn-kw">const</span> express = <span class="syn-fn">require</span>(<span class="syn-str">"express"</span>);
+
+<span class="syn-kw">const</span> app = <span class="syn-fn">express</span>();
+
+<span class="syn-cm">// Route parameter: /users/101</span>
+app.<span class="syn-fn">get</span>(<span class="syn-str">"/users/:id"</span>, (req, res) =&gt; {
+  <span class="syn-kw">const</span> userId = req.params.id;
+
+  res.<span class="syn-fn">json</span>({
+    message: <span class="syn-str">"User details"</span>,
+    id: userId,
+  });
+});
+
+<span class="syn-cm">// Query parameters: /search?name=Anu&amp;age=22</span>
+app.<span class="syn-fn">get</span>(<span class="syn-str">"/search"</span>, (req, res) =&gt; {
+  <span class="syn-kw">const</span> name = req.query.name;
+  <span class="syn-kw">const</span> age = req.query.age;
+
+  res.<span class="syn-fn">json</span>({
+    name,
+    age,
+  });
+});
+
+app.<span class="syn-fn">listen</span>(<span class="syn-num">3000</span>);</code></pre>
+              </div>
+<div class="terminal-output">
+                <div class="terminal-header"><span class="dot"></span><span>Test and Expected Response</span></div>
+                <div class="terminal-body"><span class="cmd">GET http://localhost:3000/users/101</span>
+<span class="res">{</span>
+<span class="res">  "message": "User details",</span>
+<span class="res">  "id": "101"</span>
+<span class="res">}</span>
+<span class="cmd">GET http://localhost:3000/search?name=Anu&amp;age=22</span>
+<span class="res">{</span>
+<span class="res">  "name": "Anu",</span>
+<span class="res">  "age": "22"</span>
+<span class="res">}</span></div>
+              </div></div>
+          </div>
+        </section>
+
+        <!-- ===================================================================
+             SLIDE 5: Express Router
+             =================================================================== -->
+        <section id="slide-5" class="slide" data-slide-num="5">
+          <div class="slide-header">
+            <div class="slide-title-wrap">
+              <span class="slide-category">Section 2: Express Routing</span>
+              <h2 class="slide-title">Express Router</h2>
+              <p class="slide-subtitle">Separating routes into files</p>
+            </div>
+            <span class="slide-num-pill">Slide 05 / 20</span>
+          </div>
+          <div class="slide-body grid-2">
+            <div class="col"><div class="card highlight">
+                <div class="card-title"><span class="card-icon">🗂️</span><span>Why Use a Router?</span></div>
+                <p>As an application grows, writing every route inside <code>server.js</code> becomes hard to manage. <strong>Express Router</strong> lets us keep routes in separate files.</p>
+              </div>
+<div class="diagram"><div class="diagram-title">Express Router Flow</div><div class="flow-row "><div class="flow-node">Request URL<span class="flow-sub">/users/101</span></div><span class="flow-arrow">→</span><div class="flow-node">Main Server<span class="flow-sub">server.js</span></div><span class="flow-arrow">→</span><div class="flow-node">Express Router<span class="flow-sub">userRoutes.js</span></div><span class="flow-arrow">→</span><div class="flow-node">Matching Route<span class="flow-sub">/:id</span></div></div></div>
+<div class="code-container compact">
+                <div class="code-header">
+                  <div class="code-file-badge"><span class="file-dot"></span><span>Project structure</span></div>
+                  <button class="copy-btn" type="button"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg><span>Copy Code</span></button>
+                </div>
+                <pre class="code-block"><code>project/
+├── routes/
+│   └── userRoutes.js
+└── server.js</code></pre>
+              </div>
+<div class="callout note"><span class="callout-icon">📌</span><div><code>app.use("/users", userRoutes)</code> adds the <code>/users</code> prefix. Inside the router, <code>"/"</code> means <code>/users</code> and <code>"/:id"</code> means <code>/users/:id</code>.</div></div></div>
+            <div class="col"><div class="code-container compact">
+                <div class="code-header">
+                  <div class="code-file-badge"><span class="file-dot"></span><span>routes/userRoutes.js</span></div>
+                  <button class="copy-btn" type="button"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg><span>Copy Code</span></button>
+                </div>
+                <pre class="code-block"><code><span class="syn-kw">const</span> express = <span class="syn-fn">require</span>(<span class="syn-str">"express"</span>);
+
+<span class="syn-kw">const</span> router = express.<span class="syn-fn">Router</span>();
+
+router.<span class="syn-fn">get</span>(<span class="syn-str">"/"</span>, (req, res) =&gt; {
+  res.<span class="syn-fn">send</span>(<span class="syn-str">"All users"</span>);
+});
+
+router.<span class="syn-fn">get</span>(<span class="syn-str">"/:id"</span>, (req, res) =&gt; {
+  res.<span class="syn-fn">send</span>(<span class="syn-str">`User ID: ${req.params.id}`</span>);
+});
+
+module.exports = router;</code></pre>
+              </div>
+<div class="code-container compact">
+                <div class="code-header">
+                  <div class="code-file-badge"><span class="file-dot"></span><span>server.js</span></div>
+                  <button class="copy-btn" type="button"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg><span>Copy Code</span></button>
+                </div>
+                <pre class="code-block"><code><span class="syn-kw">const</span> express = <span class="syn-fn">require</span>(<span class="syn-str">"express"</span>);
+<span class="syn-kw">const</span> userRoutes = <span class="syn-fn">require</span>(<span class="syn-str">"./routes/userRoutes"</span>);
+
+<span class="syn-kw">const</span> app = <span class="syn-fn">express</span>();
+
+app.<span class="syn-fn">use</span>(<span class="syn-str">"/users"</span>, userRoutes);
+
+app.<span class="syn-fn">listen</span>(<span class="syn-num">3000</span>, () =&gt; {
+  <span class="syn-fn">console</span>.<span class="syn-fn">log</span>(<span class="syn-str">"Server running"</span>);
+});</code></pre>
+              </div>
+<div class="terminal-output">
+                <div class="terminal-header"><span class="dot"></span><span>Test and Expected Response</span></div>
+                <div class="terminal-body"><span class="cmd">GET http://localhost:3000/users</span>
+<span class="res">All users</span>
+<span class="cmd">GET http://localhost:3000/users/101</span>
+<span class="res">User ID: 101</span></div>
+              </div></div>
+          </div>
+        </section>
+
+        <!-- ===================================================================
+             SLIDE 6: Middleware
+             =================================================================== -->
+        <section id="slide-6" class="slide" data-slide-num="6">
+          <div class="slide-header">
+            <div class="slide-title-wrap">
+              <span class="slide-category">Section 3: Middleware</span>
+              <h2 class="slide-title">Middleware</h2>
+              <p class="slide-subtitle">Definition, request flow and a practical example</p>
+            </div>
+            <span class="slide-num-pill">Slide 06 / 20</span>
+          </div>
+          <div class="slide-body grid-2">
+            <div class="col"><div class="card highlight">
+                <div class="card-title"><span class="card-icon">🧩</span><span>What Is Middleware?</span></div>
+                <p><strong>Middleware</strong> is a function that runs between receiving a request and sending a response. It can:</p><ul class="feature-list"><li><span class="bullet-icon">▸</span><span>Execute code.</span></li><li><span class="bullet-icon">▸</span><span>Access the request and response objects.</span></li><li><span class="bullet-icon">▸</span><span>Modify request data.</span></li><li><span class="bullet-icon">▸</span><span>Stop the request and send a response.</span></li><li><span class="bullet-icon">▸</span><span>Pass control on using <code>next()</code>.</span></li></ul>
+              </div>
+<div class="diagram"><div class="diagram-title">Middleware Flow</div><div class="flow-row "><div class="flow-node">Client Request</div><span class="flow-arrow">→</span><div class="flow-node">Middleware<span class="flow-sub">logger</span></div><span class="flow-arrow">→</span><div class="flow-node">Route<span class="flow-sub">app.get</span></div><span class="flow-arrow">→</span><div class="flow-node">Controller</div><span class="flow-arrow">→</span><div class="flow-node">Response</div></div><div class="diagram-note">Why we need it: shared work like logging happens once, not inside every route.</div></div></div>
+            <div class="col"><div class="code-container compact">
+                <div class="code-header">
+                  <div class="code-file-badge"><span class="file-dot"></span><span>server.js</span></div>
+                  <button class="copy-btn" type="button"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg><span>Copy Code</span></button>
+                </div>
+                <pre class="code-block"><code><span class="syn-kw">const</span> express = <span class="syn-fn">require</span>(<span class="syn-str">"express"</span>);
+
+<span class="syn-kw">const</span> app = <span class="syn-fn">express</span>();
+
+<span class="syn-kw">const</span> logger = (req, res, next) =&gt; {
+  <span class="syn-fn">console</span>.<span class="syn-fn">log</span>(<span class="syn-str">`${req.method} ${req.url}`</span>);
+
+  <span class="syn-fn">next</span>();
+};
+
+app.<span class="syn-fn">use</span>(logger);
+
+app.<span class="syn-fn">get</span>(<span class="syn-str">"/"</span>, (req, res) =&gt; {
+  res.<span class="syn-fn">send</span>(<span class="syn-str">"Home Page"</span>);
+});
+
+app.<span class="syn-fn">listen</span>(<span class="syn-num">3000</span>);</code></pre>
+              </div>
+<div class="terminal-output">
+                <div class="terminal-header"><span class="dot"></span><span>Terminal Output</span></div>
+                <div class="terminal-body"><span class="cmd">GET http://localhost:3000/  →  terminal output</span>
+<span class="res">GET /</span></div>
+              </div>
+<div class="card ">
+                <div class="card-title"><span class="card-icon">🔍</span><span>Important Lines</span></div>
+                <ul class="feature-list"><li><span class="bullet-icon">▸</span><span><code>req</code> contains request information.</span></li><li><span class="bullet-icon">▸</span><span><code>res</code> is used to send a response.</span></li><li><span class="bullet-icon">▸</span><span><code>next()</code> passes control to the next middleware or route handler.</span></li></ul>
+              </div><div class="callout warning"><span class="callout-icon">⚠️</span><div>Without <code>next()</code> or a response, the request stays pending.</div></div></div>
+          </div>
+        </section>
+
+        <!-- ===================================================================
+             SLIDE 7: Types of Middleware
+             =================================================================== -->
+        <section id="slide-7" class="slide" data-slide-num="7">
+          <div class="slide-header">
+            <div class="slide-title-wrap">
+              <span class="slide-category">Section 3: Middleware</span>
+              <h2 class="slide-title">Types of Middleware</h2>
+              <p class="slide-subtitle">Application-level, router-level, built-in, third-party and error-handling</p>
+            </div>
+            <span class="slide-num-pill">Slide 07 / 20</span>
+          </div>
+          <div class="slide-body grid-2">
+            <div class="col"><div class="table-wrapper"><table class="presentation-table"><thead><tr><th>Type</th><th>Purpose</th><th>Example</th></tr></thead><tbody><tr><td>Application-level</td><td>Runs across the application</td><td><code>app.use(logger)</code></td></tr><tr><td>Router-level</td><td>Runs for a particular router</td><td><code>router.use(...)</code></td></tr><tr><td>Built-in</td><td>Provided by Express</td><td><code>express.json()</code></td></tr><tr><td>Third-party</td><td>Installed using npm</td><td><code>cors()</code></td></tr><tr><td>Error-handling</td><td>Handles application errors</td><td><code>(err, req, res, next)</code></td></tr></tbody></table></div>
+<div class="callout note"><span class="callout-icon">📌</span><div><strong>Explain:</strong> application-level middleware can run for requests across the application. Router-level middleware is limited to one router.</div></div>
+<div class="callout tip"><span class="callout-icon">💡</span><div>Why it matters: use application-level for work every request needs, and router-level for work only some routes need.</div></div></div>
+            <div class="col"><div class="code-container compact">
+                <div class="code-header">
+                  <div class="code-file-badge"><span class="file-dot"></span><span>server.js</span></div>
+                  <button class="copy-btn" type="button"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg><span>Copy Code</span></button>
+                </div>
+                <pre class="code-block"><code><span class="syn-kw">const</span> express = <span class="syn-fn">require</span>(<span class="syn-str">"express"</span>);
+
+<span class="syn-kw">const</span> app = <span class="syn-fn">express</span>();
+<span class="syn-kw">const</span> router = express.<span class="syn-fn">Router</span>();
+
+<span class="syn-cm">// Application-level: runs for every request</span>
+app.<span class="syn-fn">use</span>((req, res, next) =&gt; {
+  <span class="syn-fn">console</span>.<span class="syn-fn">log</span>(<span class="syn-str">"Application middleware"</span>);
+  <span class="syn-fn">next</span>();
+});
+
+<span class="syn-cm">// Router-level: runs only for requests to this router</span>
+router.<span class="syn-fn">use</span>((req, res, next) =&gt; {
+  <span class="syn-fn">console</span>.<span class="syn-fn">log</span>(<span class="syn-str">"User router middleware"</span>);
+  <span class="syn-fn">next</span>();
+});
+
+router.<span class="syn-fn">get</span>(<span class="syn-str">"/"</span>, (req, res) =&gt; {
+  res.<span class="syn-fn">send</span>(<span class="syn-str">"Users"</span>);
+});
+
+app.<span class="syn-fn">use</span>(<span class="syn-str">"/users"</span>, router);
+
+app.<span class="syn-fn">get</span>(<span class="syn-str">"/"</span>, (req, res) =&gt; {
+  res.<span class="syn-fn">send</span>(<span class="syn-str">"Home"</span>);
+});
+
+app.<span class="syn-fn">listen</span>(<span class="syn-num">3000</span>);</code></pre>
+              </div>
+<div class="terminal-output">
+                <div class="terminal-header"><span class="dot"></span><span>Terminal Output</span></div>
+                <div class="terminal-body"><span class="cmd">GET http://localhost:3000/users  →  terminal output</span>
+<span class="res">Application middleware</span>
+<span class="res">User router middleware</span>
+<span class="cmd">GET http://localhost:3000/  →  terminal output</span>
+<span class="res">Application middleware</span></div>
+              </div></div>
+          </div>
+        </section>
+
+        <!-- ===================================================================
+             SLIDE 8: JSON Body Parsing
+             =================================================================== -->
+        <section id="slide-8" class="slide" data-slide-num="8">
+          <div class="slide-header">
+            <div class="slide-title-wrap">
+              <span class="slide-category">Section 3: Middleware</span>
+              <h2 class="slide-title">JSON Body Parsing</h2>
+              <p class="slide-subtitle">Using express.json() and testing POST requests</p>
+            </div>
+            <span class="slide-num-pill">Slide 08 / 20</span>
+          </div>
+          <div class="slide-body grid-2">
+            <div class="col"><div class="card highlight">
+                <div class="card-title"><span class="card-icon">📥</span><span>Why Do We Need It?</span></div>
+                <p>When a frontend sends JSON to the backend, Express must <strong>parse</strong> it before we can read it from <code>req.body</code>.</p><div class="inline-syntax">app.use(express.json());</div>
+              </div>
+<div class="card ">
+                <div class="card-title"><span class="card-icon">🧪</span><span>Test with Postman</span></div>
+                <div class="step-breakdown"><div class="step-item"><span class="num-bullet">1</span><span>Method: <code>POST</code></span></div><div class="step-item"><span class="num-bullet">2</span><span>URL: <code>http://localhost:3000/users</code></span></div><div class="step-item"><span class="num-bullet">3</span><span>Body → raw → <strong>JSON</strong>, then paste the JSON shown on the right.</span></div><div class="step-item"><span class="num-bullet">4</span><span>Click Send. Status should be <code>201</code>.</span></div></div>
+              </div>
+<div class="callout warning"><span class="callout-icon">⚠️</span><div>Without <code>express.json()</code>, JSON data is <strong>not</strong> available in <code>req.body</code>. Register it <strong>before</strong> the routes that use <code>req.body</code>.</div></div></div>
+            <div class="col"><div class="code-container compact">
+                <div class="code-header">
+                  <div class="code-file-badge"><span class="file-dot"></span><span>server.js</span></div>
+                  <button class="copy-btn" type="button"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg><span>Copy Code</span></button>
+                </div>
+                <pre class="code-block"><code><span class="syn-kw">const</span> express = <span class="syn-fn">require</span>(<span class="syn-str">"express"</span>);
+
+<span class="syn-kw">const</span> app = <span class="syn-fn">express</span>();
+
+app.<span class="syn-fn">use</span>(express.<span class="syn-fn">json</span>());
+
+app.<span class="syn-fn">post</span>(<span class="syn-str">"/users"</span>, (req, res) =&gt; {
+  <span class="syn-kw">const</span> { name, email } = req.body;
+
+  res.<span class="syn-fn">status</span>(<span class="syn-num">201</span>).<span class="syn-fn">json</span>({
+    message: <span class="syn-str">"User created"</span>,
+    name,
+    email,
+  });
+});
+
+app.<span class="syn-fn">listen</span>(<span class="syn-num">3000</span>);</code></pre>
+              </div>
+<div class="terminal-output">
+                <div class="terminal-header"><span class="dot"></span><span>Request Body and Expected Response</span></div>
+                <div class="terminal-body"><span class="cmd">POST http://localhost:3000/users   (Body → raw → JSON)</span>
+<span class="res">{</span>
+<span class="res">  "name": "Anu",</span>
+<span class="res">  "email": "anu@gmail.com"</span>
+<span class="res">}</span>
+<span class="res"></span>
+<span class="res">Response — 201 Created</span>
+<span class="res">{</span>
+<span class="res">  "message": "User created",</span>
+<span class="res">  "name": "Anu",</span>
+<span class="res">  "email": "anu@gmail.com"</span>
+<span class="res">}</span></div>
+              </div></div>
+          </div>
+        </section>
+
+        <!-- ===================================================================
+             SLIDE 9: Error Handling
+             =================================================================== -->
+        <section id="slide-9" class="slide" data-slide-num="9">
+          <div class="slide-header">
+            <div class="slide-title-wrap">
+              <span class="slide-category">Section 3: Middleware</span>
+              <h2 class="slide-title">Error Handling</h2>
+              <p class="slide-subtitle">Centralized error-handling middleware</p>
+            </div>
+            <span class="slide-num-pill">Slide 09 / 20</span>
+          </div>
+          <div class="slide-body grid-2">
+            <div class="col"><div class="card danger">
+                <div class="card-title"><span class="card-icon">🚨</span><span>Why Centralize Errors?</span></div>
+                <p>Errors can happen anywhere:</p><ul class="feature-list"><li><span class="bullet-icon">▸</span><span>Invalid user input.</span></li><li><span class="bullet-icon">▸</span><span>Database connection failures.</span></li><li><span class="bullet-icon">▸</span><span>Missing resources.</span></li><li><span class="bullet-icon">▸</span><span>Unexpected server errors.</span></li></ul><p>Instead of repeating error responses in every route, one error-handling middleware handles them all.</p>
+              </div>
+<div class="callout warning"><span class="callout-icon">⚠️</span><div><strong>Important:</strong> error-handling middleware has <strong>four parameters</strong>: <code>(err, req, res, next)</code>. Express recognizes it by these four. Register it <strong>after</strong> the routes.</div></div>
+<div class="card ">
+                <div class="card-title"><span class="card-icon">🔍</span><span>How It Flows</span></div>
+                <div class="step-breakdown"><div class="step-item"><span class="num-bullet">1</span><span>The route catches an error.</span></div><div class="step-item"><span class="num-bullet">2</span><span><code>next(error)</code> passes it to Express.</span></div><div class="step-item"><span class="num-bullet">3</span><span>Express skips normal handlers and runs the error handler.</span></div><div class="step-item"><span class="num-bullet">4</span><span>The handler logs the error and sends a <code>500</code> response.</span></div></div>
+              </div></div>
+            <div class="col"><div class="code-container compact">
+                <div class="code-header">
+                  <div class="code-file-badge"><span class="file-dot"></span><span>server.js</span></div>
+                  <button class="copy-btn" type="button"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg><span>Copy Code</span></button>
+                </div>
+                <pre class="code-block"><code><span class="syn-kw">const</span> express = <span class="syn-fn">require</span>(<span class="syn-str">"express"</span>);
+
+<span class="syn-kw">const</span> app = <span class="syn-fn">express</span>();
+
+app.<span class="syn-fn">get</span>(<span class="syn-str">"/users"</span>, (req, res, next) =&gt; {
+  <span class="syn-kw">try</span> {
+    <span class="syn-kw">throw</span> <span class="syn-kw">new</span> <span class="syn-fn">Error</span>(<span class="syn-str">"Something went wrong"</span>);
+  } <span class="syn-kw">catch</span> (error) {
+    <span class="syn-fn">next</span>(error);
+  }
+});
+
+app.<span class="syn-fn">use</span>((err, req, res, next) =&gt; {
+  <span class="syn-fn">console</span>.<span class="syn-fn">error</span>(err.message);
+
+  res.<span class="syn-fn">status</span>(<span class="syn-num">500</span>).<span class="syn-fn">json</span>({
+    success: <span class="syn-kw">false</span>,
+    message: err.message,
+  });
+});
+
+app.<span class="syn-fn">listen</span>(<span class="syn-num">3000</span>);</code></pre>
+              </div>
+<div class="terminal-output">
+                <div class="terminal-header"><span class="dot"></span><span>Test and Expected Response</span></div>
+                <div class="terminal-body"><span class="cmd">GET http://localhost:3000/users   →  Status 500</span>
+<span class="res">{</span>
+<span class="res">  "success": false,</span>
+<span class="res">  "message": "Something went wrong"</span>
+<span class="res">}</span>
+<span class="cmd">Terminal output</span>
+<span class="res">Something went wrong</span></div>
+              </div></div>
+          </div>
+        </section>
+
+        <!-- ===================================================================
+             SLIDE 10: CORS
+             =================================================================== -->
+        <section id="slide-10" class="slide" data-slide-num="10">
+          <div class="slide-header">
+            <div class="slide-title-wrap">
+              <span class="slide-category">Section 3: Middleware</span>
+              <h2 class="slide-title">CORS</h2>
+              <p class="slide-subtitle">Understanding origins and configuring CORS</p>
+            </div>
+            <span class="slide-num-pill">Slide 10 / 20</span>
+          </div>
+          <div class="slide-body grid-2">
+            <div class="col"><div class="card highlight">
+                <div class="card-title"><span class="card-icon">🌐</span><span>What Is CORS?</span></div>
+                <p><strong>CORS</strong> (Cross-Origin Resource Sharing) is a browser security rule. It controls whether a frontend from one origin can use a backend from another origin.</p>
+              </div>
+<div class="diagram"><div class="diagram-title">Two different origins</div><div class="origin-row"><div class="flow-node">Frontend<span class="flow-sub">http://localhost:5173</span></div><span class="flow-arrow">→</span><div class="flow-node">Backend<span class="flow-sub">http://localhost:3000</span></div></div><div class="diagram-note">The ports are different, so these are different origins. The browser may block the request unless the backend allows the frontend origin.</div></div>
+<div class="callout danger"><span class="callout-icon">🚫</span><div>CORS is enforced by <strong>browsers</strong>. It is <strong>not</strong> an authentication or authorization system.</div></div></div>
+            <div class="col"><div class="code-container compact">
+                <div class="code-header">
+                  <div class="code-file-badge"><span class="file-dot"></span><span>terminal — install cors</span></div>
+                  <button class="copy-btn" type="button"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg><span>Copy Code</span></button>
+                </div>
+                <pre class="code-block"><code>npm install cors</code></pre>
+              </div>
+<div class="code-container compact">
+                <div class="code-header">
+                  <div class="code-file-badge"><span class="file-dot"></span><span>server.js</span></div>
+                  <button class="copy-btn" type="button"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg><span>Copy Code</span></button>
+                </div>
+                <pre class="code-block"><code><span class="syn-kw">const</span> express = <span class="syn-fn">require</span>(<span class="syn-str">"express"</span>);
+<span class="syn-kw">const</span> cors = <span class="syn-fn">require</span>(<span class="syn-str">"cors"</span>);
+
+<span class="syn-kw">const</span> app = <span class="syn-fn">express</span>();
+
+app.<span class="syn-fn">use</span>(<span class="syn-fn">cors</span>());
+
+app.<span class="syn-fn">get</span>(<span class="syn-str">"/users"</span>, (req, res) =&gt; {
+  res.<span class="syn-fn">json</span>([{ name: <span class="syn-str">"Anu"</span> }, { name: <span class="syn-str">"Rahul"</span> }]);
+});
+
+app.<span class="syn-fn">listen</span>(<span class="syn-num">3000</span>);</code></pre>
+              </div>
+<div class="code-container compact">
+                <div class="code-header">
+                  <div class="code-file-badge"><span class="file-dot"></span><span>Allow only one frontend origin</span></div>
+                  <button class="copy-btn" type="button"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg><span>Copy Code</span></button>
+                </div>
+                <pre class="code-block"><code><span class="syn-cm">// Allow only a specific frontend origin</span>
+app.<span class="syn-fn">use</span>(<span class="syn-fn">cors</span>({
+  origin: <span class="syn-str">"http://localhost:5173"</span>,
+}));</code></pre>
+              </div>
+<div class="card ">
+                <div class="card-title"><span class="card-icon">🔍</span><span>Explain</span></div>
+                <ul class="feature-list"><li><span class="bullet-icon">▸</span><span><code>cors()</code> allows cross-origin requests according to its settings.</span></li><li><span class="bullet-icon">▸</span><span><code>origin</code> says which frontend origin is allowed.</span></li><li><span class="bullet-icon">▸</span><span>Check the <code>Access-Control-Allow-Origin</code> header in the browser Network tab.</span></li></ul>
+              </div></div>
+          </div>
+        </section>
+
+        <!-- ===================================================================
+             SLIDE 11: Project Structure
+             =================================================================== -->
+        <section id="slide-11" class="slide" data-slide-num="11">
+          <div class="slide-header">
+            <div class="slide-title-wrap">
+              <span class="slide-category">Section 4: Project Structure</span>
+              <h2 class="slide-title">Project Structure</h2>
+              <p class="slide-subtitle">Why routes, controllers and services are needed</p>
+            </div>
+            <span class="slide-num-pill">Slide 11 / 20</span>
+          </div>
+          <div class="slide-body grid-2">
+            <div class="col"><div class="card highlight">
+                <div class="card-title"><span class="card-icon">🏗️</span><span>Why Separate the Code?</span></div>
+                <p>In a small app, all code in <code>server.js</code> may work. In a real app, each part needs one clear job.</p><ul class="feature-list"><li><span class="bullet-icon">▸</span><span>Easier to read and find code.</span></li><li><span class="bullet-icon">▸</span><span>Easier to change one part without breaking others.</span></li><li><span class="bullet-icon">▸</span><span>Easier to test and for teams to share work.</span></li></ul>
+              </div>
+<div class="diagram"><div class="diagram-title">Project Architecture</div><div class="flow-row "><div class="flow-node">Frontend</div><span class="flow-arrow">→</span><div class="flow-node">Routes</div><span class="flow-arrow">→</span><div class="flow-node">Controllers</div><span class="flow-arrow">→</span><div class="flow-node">Services</div><span class="flow-arrow">→</span><div class="flow-node">Database<span class="flow-sub">later</span></div></div><div class="diagram-note">Example: a user registration request travels through each layer.</div></div></div>
+            <div class="col"><div class="table-wrapper"><table class="presentation-table"><thead><tr><th>Layer</th><th>Responsibility</th></tr></thead><tbody><tr><td>Routes</td><td>Define API endpoints</td></tr><tr><td>Controllers</td><td>Handle request and response</td></tr><tr><td>Services</td><td>Contain business logic</td></tr><tr><td>Models</td><td>Handle database structure and operations</td></tr></tbody></table></div>
+<div class="code-container compact">
+                <div class="code-header">
+                  <div class="code-file-badge"><span class="file-dot"></span><span>Folder layout for today</span></div>
+                  <button class="copy-btn" type="button"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg><span>Copy Code</span></button>
+                </div>
+                <pre class="code-block"><code>user-api/
+├── routes/        # which URL calls which function
+├── controllers/   # read request, send response
+├── services/      # business logic
+└── server.js</code></pre>
+              </div>
+<div class="callout note"><span class="callout-icon">📌</span><div>Today we focus on <strong>Routes → Controllers → Services</strong>. Models and the database come later.</div></div></div>
+          </div>
+        </section>
+
+        <!-- ===================================================================
+             SLIDE 12: Routes
+             =================================================================== -->
+        <section id="slide-12" class="slide" data-slide-num="12">
+          <div class="slide-header">
+            <div class="slide-title-wrap">
+              <span class="slide-category">Section 4: Project Structure</span>
+              <h2 class="slide-title">Routes</h2>
+              <p class="slide-subtitle">Defining API endpoints</p>
+            </div>
+            <span class="slide-num-pill">Slide 12 / 20</span>
+          </div>
+          <div class="slide-body grid-2">
+            <div class="col"><div class="card highlight">
+                <div class="card-title"><span class="card-icon">🛣️</span><span>What Routes Do</span></div>
+                <p>Routes define <strong>which endpoint</strong> handles a particular HTTP request. They connect incoming requests to controller functions.</p><p><strong>Why we need them:</strong> one file shows every endpoint of the API at a glance.</p>
+              </div>
+<div class="card ">
+                <div class="card-title"><span class="card-icon">🔍</span><span>Important Line</span></div>
+                <div class="inline-syntax">router.post("/", userController.createUser);</div><p>When a <code>POST</code> request reaches <code>/users</code>, Express calls <code>createUser</code> from the controller.</p>
+              </div>
+<div class="callout warning"><span class="callout-icon">⚠️</span><div>Routes should <strong>not</strong> contain complex business logic. They only point to controller functions.</div></div></div>
+            <div class="col"><div class="code-container compact">
+                <div class="code-header">
+                  <div class="code-file-badge"><span class="file-dot"></span><span>routes/userRoutes.js</span></div>
+                  <button class="copy-btn" type="button"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg><span>Copy Code</span></button>
+                </div>
+                <pre class="code-block"><code><span class="syn-kw">const</span> express = <span class="syn-fn">require</span>(<span class="syn-str">"express"</span>);
+<span class="syn-kw">const</span> router = express.<span class="syn-fn">Router</span>();
+
+<span class="syn-kw">const</span> userController = <span class="syn-fn">require</span>(<span class="syn-str">"../controllers/userController"</span>);
+
+router.<span class="syn-fn">post</span>(<span class="syn-str">"/"</span>, userController.createUser);
+
+router.<span class="syn-fn">get</span>(<span class="syn-str">"/"</span>, userController.getUsers);
+
+module.exports = router;</code></pre>
+              </div>
+<div class="callout note"><span class="callout-icon">📌</span><div>The router is mounted at <code>/users</code> in <code>server.js</code>, so <code>"/"</code> here means <code>/users</code>.</div></div></div>
+          </div>
+        </section>
+
+        <!-- ===================================================================
+             SLIDE 13: Controllers
+             =================================================================== -->
+        <section id="slide-13" class="slide" data-slide-num="13">
+          <div class="slide-header">
+            <div class="slide-title-wrap">
+              <span class="slide-category">Section 4: Project Structure</span>
+              <h2 class="slide-title">Controllers</h2>
+              <p class="slide-subtitle">Handling requests and responses</p>
+            </div>
+            <span class="slide-num-pill">Slide 13 / 20</span>
+          </div>
+          <div class="slide-body grid-2">
+            <div class="col"><div class="card highlight">
+                <div class="card-title"><span class="card-icon">🎛️</span><span>What Controllers Do</span></div>
+                <p>A controller receives the request, reads the data it needs, calls the service, and sends the response.</p><p><strong>Why we need them:</strong> all request and response code stays in one place, away from business rules.</p>
+              </div>
+<div class="card ">
+                <div class="card-title"><span class="card-icon">🔍</span><span>How It Works</span></div>
+                <div class="step-breakdown"><div class="step-item"><span class="num-bullet">1</span><span>Reads request data (<code>req.body</code>).</span></div><div class="step-item"><span class="num-bullet">2</span><span>Calls the service.</span></div><div class="step-item"><span class="num-bullet">3</span><span>Sends an HTTP response (<code>201</code> or <code>200</code>).</span></div><div class="step-item"><span class="num-bullet">4</span><span>Passes errors to the error-handling middleware with <code>next(error)</code>.</span></div></div>
+              </div></div>
+            <div class="col"><div class="code-container compact">
+                <div class="code-header">
+                  <div class="code-file-badge"><span class="file-dot"></span><span>controllers/userController.js</span></div>
+                  <button class="copy-btn" type="button"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg><span>Copy Code</span></button>
+                </div>
+                <pre class="code-block"><code><span class="syn-kw">const</span> userService = <span class="syn-fn">require</span>(<span class="syn-str">"../services/userService"</span>);
+
+<span class="syn-kw">const</span> createUser = (req, res, next) =&gt; {
+  <span class="syn-kw">try</span> {
+    <span class="syn-kw">const</span> user = userService.<span class="syn-fn">createUser</span>(req.body);
+
+    res.<span class="syn-fn">status</span>(<span class="syn-num">201</span>).<span class="syn-fn">json</span>({
+      message: <span class="syn-str">"User created successfully"</span>,
+      data: user,
+    });
+  } <span class="syn-kw">catch</span> (error) {
+    <span class="syn-fn">next</span>(error);
+  }
+};
+
+<span class="syn-kw">const</span> getUsers = (req, res, next) =&gt; {
+  <span class="syn-kw">try</span> {
+    <span class="syn-kw">const</span> users = userService.<span class="syn-fn">getUsers</span>();
+
+    res.<span class="syn-fn">json</span>({
+      data: users,
+    });
+  } <span class="syn-kw">catch</span> (error) {
+    <span class="syn-fn">next</span>(error);
+  }
+};
+
+module.exports = {
+  createUser,
+  getUsers,
+};</code></pre>
+              </div></div>
+          </div>
+        </section>
+
+        <!-- ===================================================================
+             SLIDE 14: Services
+             =================================================================== -->
+        <section id="slide-14" class="slide" data-slide-num="14">
+          <div class="slide-header">
+            <div class="slide-title-wrap">
+              <span class="slide-category">Section 4: Project Structure</span>
+              <h2 class="slide-title">Services</h2>
+              <p class="slide-subtitle">Separating business logic</p>
+            </div>
+            <span class="slide-num-pill">Slide 14 / 20</span>
+          </div>
+          <div class="slide-body grid-2">
+            <div class="col"><div class="card highlight">
+                <div class="card-title"><span class="card-icon">⚙️</span><span>What Services Do</span></div>
+                <p>Services contain the actual <strong>business logic</strong>. They perform operations and apply business rules.</p><p><strong>Why we need them:</strong> the same logic can be reused and tested without any HTTP code.</p>
+              </div>
+<div class="card ">
+                <div class="card-title"><span class="card-icon">🔍</span><span>How It Works</span></div>
+                <p>The service creates users and stores them in a temporary array. In a real application, this layer could talk to MongoDB through Mongoose.</p>
+              </div>
+<div class="callout warning"><span class="callout-icon">⚠️</span><div>This example uses <strong>in-memory storage</strong> only. Data disappears when the server restarts.</div></div></div>
+            <div class="col"><div class="code-container compact">
+                <div class="code-header">
+                  <div class="code-file-badge"><span class="file-dot"></span><span>services/userService.js</span></div>
+                  <button class="copy-btn" type="button"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg><span>Copy Code</span></button>
+                </div>
+                <pre class="code-block"><code><span class="syn-kw">let</span> users = [];
+
+<span class="syn-kw">const</span> createUser = (userData) =&gt; {
+  <span class="syn-kw">const</span> newUser = {
+    id: users.length + <span class="syn-num">1</span>,
+    name: userData.name,
+    email: userData.email,
+  };
+
+  users.<span class="syn-fn">push</span>(newUser);
+
+  <span class="syn-kw">return</span> newUser;
+};
+
+<span class="syn-kw">const</span> getUsers = () =&gt; {
+  <span class="syn-kw">return</span> users;
+};
+
+module.exports = {
+  createUser,
+  getUsers,
+};</code></pre>
+              </div></div>
+          </div>
+        </section>
+
+        <!-- ===================================================================
+             SLIDE 15: Connecting Routes, Controllers and Services
+             =================================================================== -->
+        <section id="slide-15" class="slide" data-slide-num="15">
+          <div class="slide-header">
+            <div class="slide-title-wrap">
+              <span class="slide-category">Section 4: Project Structure</span>
+              <h2 class="slide-title">Connecting Routes, Controllers and Services</h2>
+              <p class="slide-subtitle">The complete request flow</p>
+            </div>
+            <span class="slide-num-pill">Slide 15 / 20</span>
+          </div>
+          <div class="slide-body grid-2">
+            <div class="col"><div class="code-container compact">
+                <div class="code-header">
+                  <div class="code-file-badge"><span class="file-dot"></span><span>Project structure</span></div>
+                  <button class="copy-btn" type="button"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg><span>Copy Code</span></button>
+                </div>
+                <pre class="code-block"><code>user-api/
+├── controllers/
+│   └── userController.js
+├── services/
+│   └── userService.js
+├── routes/
+│   └── userRoutes.js
+├── server.js
+└── package.json</code></pre>
+              </div>
+<div class="diagram"><div class="diagram-title">Complete Request Flow</div><div class="flow-row "><div class="flow-node">POST /users</div><span class="flow-arrow">→</span><div class="flow-node">userRoutes.js</div><span class="flow-arrow">→</span><div class="flow-node">userController.js</div><span class="flow-arrow">→</span><div class="flow-node">userService.js</div><span class="flow-arrow">→</span><div class="flow-node">Controller sends response</div></div><div class="diagram-note">The service returns the user data. The controller sends the response.</div></div>
+<div class="callout note"><span class="callout-icon">📌</span><div><code>express.json()</code> is registered <strong>before</strong> the routes, so <code>req.body</code> is ready when the controller reads it.</div></div></div>
+            <div class="col"><div class="code-container compact">
+                <div class="code-header">
+                  <div class="code-file-badge"><span class="file-dot"></span><span>server.js</span></div>
+                  <button class="copy-btn" type="button"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg><span>Copy Code</span></button>
+                </div>
+                <pre class="code-block"><code><span class="syn-kw">const</span> express = <span class="syn-fn">require</span>(<span class="syn-str">"express"</span>);
+
+<span class="syn-kw">const</span> userRoutes = <span class="syn-fn">require</span>(<span class="syn-str">"./routes/userRoutes"</span>);
+
+<span class="syn-kw">const</span> app = <span class="syn-fn">express</span>();
+
+app.<span class="syn-fn">use</span>(express.<span class="syn-fn">json</span>());
+
+app.<span class="syn-fn">use</span>(<span class="syn-str">"/users"</span>, userRoutes);
+
+app.<span class="syn-fn">listen</span>(<span class="syn-num">3000</span>, () =&gt; {
+  <span class="syn-fn">console</span>.<span class="syn-fn">log</span>(<span class="syn-str">"Server running on port 3000"</span>);
+});</code></pre>
+              </div>
+<div class="terminal-output">
+                <div class="terminal-header"><span class="dot"></span><span>Test and Expected Response</span></div>
+                <div class="terminal-body"><span class="cmd">POST http://localhost:3000/users</span>
+<span class="res">{</span>
+<span class="res">  "name": "Anu",</span>
+<span class="res">  "email": "anu@gmail.com"</span>
+<span class="res">}</span>
+<span class="res"></span>
+<span class="res">Response — 201 Created</span>
+<span class="res">{</span>
+<span class="res">  "message": "User created successfully",</span>
+<span class="res">  "data": {</span>
+<span class="res">    "id": 1,</span>
+<span class="res">    "name": "Anu",</span>
+<span class="res">    "email": "anu@gmail.com"</span>
+<span class="res">  }</span>
+<span class="res">}</span>
+<span class="cmd">GET http://localhost:3000/users</span>
+<span class="res">{</span>
+<span class="res">  "data": [</span>
+<span class="res">    {</span>
+<span class="res">      "id": 1,</span>
+<span class="res">      "name": "Anu",</span>
+<span class="res">      "email": "anu@gmail.com"</span>
+<span class="res">    }</span>
+<span class="res">  ]</span>
+<span class="res">}</span></div>
+              </div></div>
+          </div>
+        </section>
+
+        <!-- ===================================================================
+             SLIDE 16: Introduction to Zod
+             =================================================================== -->
+        <section id="slide-16" class="slide" data-slide-num="16">
+          <div class="slide-header">
+            <div class="slide-title-wrap">
+              <span class="slide-category">Section 5: Zod Validation</span>
+              <h2 class="slide-title">Introduction to Zod</h2>
+              <p class="slide-subtitle">Why we need validation</p>
+            </div>
+            <span class="slide-num-pill">Slide 16 / 20</span>
+          </div>
+          <div class="slide-body grid-2">
+            <div class="col"><div class="card highlight">
+                <div class="card-title"><span class="card-icon">🛡️</span><span>What Is Zod?</span></div>
+                <p><strong>Zod</strong> is a JavaScript and TypeScript validation library. It checks whether incoming data follows the rules we define.</p><p>When a user registers, we may require:</p><ul class="feature-list"><li><span class="bullet-icon">▸</span><span>Name must not be empty.</span></li><li><span class="bullet-icon">▸</span><span>Email must be valid.</span></li><li><span class="bullet-icon">▸</span><span>Password must have at least 8 characters.</span></li></ul>
+              </div>
+<div class="callout danger"><span class="callout-icon">🚫</span><div><strong>Why validate?</strong> Without validation, invalid data can enter our application.</div></div></div>
+            <div class="col"><div class="card ">
+                <div class="card-title"><span class="card-icon">✅</span><span>What Zod Gives Us</span></div>
+                <ul class="feature-list"><li><span class="bullet-icon">▸</span><span>Validates incoming data.</span></li><li><span class="bullet-icon">▸</span><span>Checks data types.</span></li><li><span class="bullet-icon">▸</span><span>Supports required fields.</span></li><li><span class="bullet-icon">▸</span><span>Supports custom validation rules.</span></li><li><span class="bullet-icon">▸</span><span>Gives useful error messages.</span></li><li><span class="bullet-icon">▸</span><span>Can parse and return validated data.</span></li></ul>
+              </div>
+<div class="code-container compact">
+                <div class="code-header">
+                  <div class="code-file-badge"><span class="file-dot"></span><span>terminal — install Zod</span></div>
+                  <button class="copy-btn" type="button"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg><span>Copy Code</span></button>
+                </div>
+                <pre class="code-block"><code>npm install zod</code></pre>
+              </div>
+<div class="code-container compact">
+                <div class="code-header">
+                  <div class="code-file-badge"><span class="file-dot"></span><span>check-name.js</span></div>
+                  <button class="copy-btn" type="button"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg><span>Copy Code</span></button>
+                </div>
+                <pre class="code-block"><code><span class="syn-kw">const</span> { z } = <span class="syn-fn">require</span>(<span class="syn-str">"zod"</span>);
+
+<span class="syn-kw">const</span> nameSchema = z.<span class="syn-fn">string</span>().<span class="syn-fn">min</span>(<span class="syn-num">3</span>);
+
+<span class="syn-fn">console</span>.<span class="syn-fn">log</span>(nameSchema.<span class="syn-fn">safeParse</span>(<span class="syn-str">"Anu"</span>).success);
+<span class="syn-fn">console</span>.<span class="syn-fn">log</span>(nameSchema.<span class="syn-fn">safeParse</span>(<span class="syn-str">"An"</span>).success);</code></pre>
+              </div>
+<div class="terminal-output">
+                <div class="terminal-header"><span class="dot"></span><span>Expected Output</span></div>
+                <div class="terminal-body"><span class="cmd">$ node check-name.js</span>
+<span class="res">true</span>
+<span class="res">false</span></div>
+              </div></div>
+          </div>
+        </section>
+
+        <!-- ===================================================================
+             SLIDE 17: Creating Zod Schemas
+             =================================================================== -->
+        <section id="slide-17" class="slide" data-slide-num="17">
+          <div class="slide-header">
+            <div class="slide-title-wrap">
+              <span class="slide-category">Section 5: Zod Validation</span>
+              <h2 class="slide-title">Creating Zod Schemas</h2>
+              <p class="slide-subtitle">Types and validation rules</p>
+            </div>
+            <span class="slide-num-pill">Slide 17 / 20</span>
+          </div>
+          <div class="slide-body grid-2">
+            <div class="col"><div class="card highlight">
+                <div class="card-title"><span class="card-icon">📐</span><span>What Is a Schema?</span></div>
+                <p>A <strong>schema</strong> is a set of rules that describes what valid data should look like. Zod checks data against it.</p>
+              </div>
+<div class="table-wrapper"><table class="presentation-table"><thead><tr><th>Validation</th><th>Meaning</th></tr></thead><tbody><tr><td><code>z.string()</code></td><td>Must be a string</td></tr><tr><td><code>z.number()</code></td><td>Must be a number</td></tr><tr><td><code>.min(3)</code></td><td>Minimum length or value is 3</td></tr><tr><td><code>.email()</code></td><td>Must be a valid email</td></tr><tr><td><code>.min(18)</code></td><td>Number must be at least 18</td></tr><tr><td><code>.optional()</code></td><td>Field is optional</td></tr></tbody></table></div></div>
+            <div class="col"><div class="code-container compact">
+                <div class="code-header">
+                  <div class="code-file-badge"><span class="file-dot"></span><span>user-schema.js</span></div>
+                  <button class="copy-btn" type="button"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg><span>Copy Code</span></button>
+                </div>
+                <pre class="code-block"><code><span class="syn-kw">const</span> { z } = <span class="syn-fn">require</span>(<span class="syn-str">"zod"</span>);
+
+<span class="syn-kw">const</span> userSchema = z.<span class="syn-fn">object</span>({
+  name: z.<span class="syn-fn">string</span>().<span class="syn-fn">min</span>(<span class="syn-num">3</span>),
+
+  email: z.<span class="syn-fn">string</span>().<span class="syn-fn">email</span>(),
+
+  age: z.<span class="syn-fn">number</span>().<span class="syn-fn">min</span>(<span class="syn-num">18</span>),
+});
+
+<span class="syn-cm">// Valid data</span>
+<span class="syn-kw">const</span> validUser = {
+  name: <span class="syn-str">"Anu"</span>,
+  email: <span class="syn-str">"anu@gmail.com"</span>,
+  age: <span class="syn-num">22</span>,
+};
+
+<span class="syn-cm">// Invalid data</span>
+<span class="syn-kw">const</span> invalidUser = {
+  name: <span class="syn-str">"An"</span>,
+  email: <span class="syn-str">"invalid-email"</span>,
+  age: <span class="syn-num">15</span>,
+};
+
+<span class="syn-fn">console</span>.<span class="syn-fn">log</span>(userSchema.<span class="syn-fn">safeParse</span>(validUser).success);
+<span class="syn-fn">console</span>.<span class="syn-fn">log</span>(userSchema.<span class="syn-fn">safeParse</span>(invalidUser).success);</code></pre>
+              </div>
+<div class="terminal-output">
+                <div class="terminal-header"><span class="dot"></span><span>Expected Output</span></div>
+                <div class="terminal-body"><span class="cmd">$ node user-schema.js</span>
+<span class="res">true</span>
+<span class="res">false</span></div>
+              </div>
+<div class="callout note"><span class="callout-icon">📌</span><div>The valid user passes every rule. The invalid user breaks all three: the name is too short, the email is wrong and the age is under 18.</div></div></div>
+          </div>
+        </section>
+
+        <!-- ===================================================================
+             SLIDE 18: Zod Parsing
+             =================================================================== -->
+        <section id="slide-18" class="slide" data-slide-num="18">
+          <div class="slide-header">
+            <div class="slide-title-wrap">
+              <span class="slide-category">Section 5: Zod Validation</span>
+              <h2 class="slide-title">Zod Parsing</h2>
+              <p class="slide-subtitle">parse() vs safeParse()</p>
+            </div>
+            <span class="slide-num-pill">Slide 18 / 20</span>
+          </div>
+          <div class="slide-body grid-2">
+            <div class="col"><div class="card highlight">
+                <div class="card-title"><span class="card-icon">1️⃣</span><span>parse()</span></div>
+                <p>Validates the data. If validation fails, it <strong>throws an error</strong>, so use <code>try/catch</code>.</p>
+              </div>
+<div class="card highlight">
+                <div class="card-title"><span class="card-icon">2️⃣</span><span>safeParse()</span></div>
+                <p>Validates the data <strong>without throwing</strong> for validation failures. It returns a result with <code>success</code>.</p><p>On failure, <code>result.error.issues</code> is a list of problems. Each has a <code>path</code> and a <code>message</code>.</p>
+              </div>
+<div class="table-wrapper"><table class="presentation-table"><thead><tr><th>parse()</th><th>safeParse()</th></tr></thead><tbody><tr><td>Throws error when invalid</td><td>Returns validation result</td></tr><tr><td>Use <code>try/catch</code></td><td>Check <code>success</code></td></tr><tr><td>Returns parsed data</td><td>Returns parsed data when valid</td></tr></tbody></table></div>
+<div class="callout tip"><span class="callout-icon">💡</span><div>For Express request validation, <code>safeParse()</code> is often convenient.</div></div></div>
+            <div class="col"><div class="code-container compact">
+                <div class="code-header">
+                  <div class="code-file-badge"><span class="file-dot"></span><span>parse-demo.js</span></div>
+                  <button class="copy-btn" type="button"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg><span>Copy Code</span></button>
+                </div>
+                <pre class="code-block"><code><span class="syn-kw">const</span> { z } = <span class="syn-fn">require</span>(<span class="syn-str">"zod"</span>);
+
+<span class="syn-kw">const</span> userSchema = z.<span class="syn-fn">object</span>({
+  name: z.<span class="syn-fn">string</span>().<span class="syn-fn">min</span>(<span class="syn-num">3</span>),
+  email: z.<span class="syn-fn">string</span>().<span class="syn-fn">email</span>(),
+  age: z.<span class="syn-fn">number</span>().<span class="syn-fn">min</span>(<span class="syn-num">18</span>),
+});
+
+<span class="syn-cm">// 1. parse() throws an error when the data is invalid</span>
+<span class="syn-kw">const</span> result = userSchema.<span class="syn-fn">parse</span>({
+  name: <span class="syn-str">"Anu"</span>,
+  email: <span class="syn-str">"anu@gmail.com"</span>,
+  age: <span class="syn-num">22</span>,
+});
+
+<span class="syn-fn">console</span>.<span class="syn-fn">log</span>(result);
+
+<span class="syn-kw">try</span> {
+  userSchema.<span class="syn-fn">parse</span>({ name: <span class="syn-str">"An"</span>, email: <span class="syn-str">"wrong-email"</span>, age: <span class="syn-num">15</span> });
+} <span class="syn-kw">catch</span> (error) {
+  <span class="syn-fn">console</span>.<span class="syn-fn">log</span>(<span class="syn-str">"parse() threw:"</span>, error.name);
+}
+
+<span class="syn-cm">// 2. safeParse() returns a result instead of throwing</span>
+<span class="syn-kw">const</span> safeResult = userSchema.<span class="syn-fn">safeParse</span>({
+  name: <span class="syn-str">"An"</span>,
+  email: <span class="syn-str">"wrong-email"</span>,
+  age: <span class="syn-num">15</span>,
+});
+
+<span class="syn-kw">if</span> (!safeResult.success) {
+  safeResult.error.issues.<span class="syn-fn">forEach</span>((issue) =&gt; {
+    <span class="syn-fn">console</span>.<span class="syn-fn">log</span>(issue.path[<span class="syn-num">0</span>] + <span class="syn-str">": "</span> + issue.message);
+  });
+} <span class="syn-kw">else</span> {
+  <span class="syn-fn">console</span>.<span class="syn-fn">log</span>(safeResult.data);
+}</code></pre>
+              </div>
+<div class="terminal-output">
+                <div class="terminal-header"><span class="dot"></span><span>Expected Output</span></div>
+                <div class="terminal-body"><span class="cmd">$ node parse-demo.js</span>
+<span class="res">{ name: 'Anu', email: 'anu@gmail.com', age: 22 }</span>
+<span class="res">parse() threw: ZodError</span>
+<span class="res">name: Too small: expected string to have &gt;=3 characters</span>
+<span class="res">email: Invalid email address</span>
+<span class="res">age: Too small: expected number to be &gt;=18</span></div>
+              </div>
+<div class="callout note"><span class="callout-icon">📌</span><div>Message wording can differ slightly between Zod versions. The <code>path</code> and <code>message</code> fields are always there.</div></div></div>
+          </div>
+        </section>
+
+        <!-- ===================================================================
+             SLIDE 19: Zod Validation in Express
+             =================================================================== -->
+        <section id="slide-19" class="slide" data-slide-num="19">
+          <div class="slide-header">
+            <div class="slide-title-wrap">
+              <span class="slide-category">Section 5: Zod Validation</span>
+              <h2 class="slide-title">Zod Validation in Express</h2>
+              <p class="slide-subtitle">Creating validation middleware</p>
+            </div>
+            <span class="slide-num-pill">Slide 19 / 20</span>
+          </div>
+          <div class="slide-body grid-2">
+            <div class="col"><div class="code-container compact">
+                <div class="code-header">
+                  <div class="code-file-badge"><span class="file-dot"></span><span>Step 1 — validators/userValidator.js</span></div>
+                  <button class="copy-btn" type="button"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg><span>Copy Code</span></button>
+                </div>
+                <pre class="code-block"><code><span class="syn-kw">const</span> { z } = <span class="syn-fn">require</span>(<span class="syn-str">"zod"</span>);
+
+<span class="syn-kw">const</span> userSchema = z.<span class="syn-fn">object</span>({
+  name: z.<span class="syn-fn">string</span>().<span class="syn-fn">min</span>(<span class="syn-num">3</span>, <span class="syn-str">"Name must have at least 3 characters"</span>),
+
+  email: z.<span class="syn-fn">string</span>().<span class="syn-fn">email</span>(<span class="syn-str">"Invalid email address"</span>),
+
+  age: z.<span class="syn-fn">number</span>().<span class="syn-fn">min</span>(<span class="syn-num">18</span>, <span class="syn-str">"Age must be at least 18"</span>),
+});
+
+<span class="syn-kw">const</span> validateUser = (req, res, next) =&gt; {
+  <span class="syn-kw">const</span> result = userSchema.<span class="syn-fn">safeParse</span>(req.body);
+
+  <span class="syn-kw">if</span> (!result.success) {
+    <span class="syn-kw">return</span> res.<span class="syn-fn">status</span>(<span class="syn-num">400</span>).<span class="syn-fn">json</span>({
+      success: <span class="syn-kw">false</span>,
+      errors: result.error.issues,
+    });
+  }
+
+  req.body = result.data;
+
+  <span class="syn-fn">next</span>();
+};
+
+module.exports = validateUser;</code></pre>
+              </div>
+<div class="diagram"><div class="diagram-title">Zod Validation Flow</div><div class="flow-row"><div class="flow-node">Incoming Request</div><span class="flow-arrow">→</span><div class="flow-node">Validation Middleware</div><span class="flow-arrow">→</span><div class="flow-node ok">Valid Data</div><span class="flow-arrow">→</span><div class="flow-node">Controller</div></div><div class="flow-branch"><span class="flow-arrow down">↓</span><div class="flow-node bad">Invalid Data → HTTP 400 Response</div></div></div></div>
+            <div class="col"><div class="code-container compact">
+                <div class="code-header">
+                  <div class="code-file-badge"><span class="file-dot"></span><span>Step 2 — routes/userRoutes.js</span></div>
+                  <button class="copy-btn" type="button"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg><span>Copy Code</span></button>
+                </div>
+                <pre class="code-block"><code><span class="syn-kw">const</span> express = <span class="syn-fn">require</span>(<span class="syn-str">"express"</span>);
+
+<span class="syn-kw">const</span> router = express.<span class="syn-fn">Router</span>();
+
+<span class="syn-kw">const</span> validateUser = <span class="syn-fn">require</span>(<span class="syn-str">"../validators/userValidator"</span>);
+
+<span class="syn-kw">const</span> userController = <span class="syn-fn">require</span>(<span class="syn-str">"../controllers/userController"</span>);
+
+router.<span class="syn-fn">post</span>(<span class="syn-str">"/"</span>, validateUser, userController.createUser);
+
+router.<span class="syn-fn">get</span>(<span class="syn-str">"/"</span>, userController.getUsers);
+
+module.exports = router;</code></pre>
+              </div>
+<div class="terminal-output">
+                <div class="terminal-header"><span class="dot"></span><span>Test Requests and Expected Results</span></div>
+                <div class="terminal-body"><span class="cmd">POST /users   valid data</span>
+<span class="res">{</span>
+<span class="res">  "name": "Anu",</span>
+<span class="res">  "email": "anu@gmail.com",</span>
+<span class="res">  "age": 22</span>
+<span class="res">}</span>
+<span class="res">Response — 201 Created</span>
+<span class="cmd">POST /users   invalid data</span>
+<span class="res">{</span>
+<span class="res">  "name": "An",</span>
+<span class="res">  "email": "wrong",</span>
+<span class="res">  "age": 15</span>
+<span class="res">}</span>
+<span class="res">Response — 400 Bad Request</span>
+<span class="res">{</span>
+<span class="res">  "success": false,</span>
+<span class="res">  "errors": [</span>
+<span class="res">    {</span>
+<span class="res">      "path": [</span>
+<span class="res">        "name"</span>
+<span class="res">      ],</span>
+<span class="res">      "message": "Name must have at least 3 characters"</span>
+<span class="res">    },</span>
+<span class="res">    {</span>
+<span class="res">      "path": [</span>
+<span class="res">        "email"</span>
+<span class="res">      ],</span>
+<span class="res">      "message": "Invalid email address"</span>
+<span class="res">    },</span>
+<span class="res">    {</span>
+<span class="res">      "path": [</span>
+<span class="res">        "age"</span>
+<span class="res">      ],</span>
+<span class="res">      "message": "Age must be at least 18"</span>
+<span class="res">    }</span>
+<span class="res">  ]</span>
+<span class="res">}</span></div>
+              </div>
+<div class="callout note"><span class="callout-icon">📌</span><div>The validator runs <strong>before</strong> the controller. <code>req.body = result.data</code> replaces the body with the parsed data. Each real issue also has extra fields; <code>path</code> and <code>message</code> are shown here. Our service saves only <code>name</code> and <code>email</code>.</div></div></div>
+          </div>
+        </section>
+
+        <!-- ===================================================================
+             SLIDE 20: Final Practical: Student Registration API
+             =================================================================== -->
+        <section id="slide-20" class="slide" data-slide-num="20">
+          <div class="slide-header">
+            <div class="slide-title-wrap">
+              <span class="slide-category">Section 6: Final Practical</span>
+              <h2 class="slide-title">Final Practical: Student Registration API</h2>
+              <p class="slide-subtitle">Build it using everything from today</p>
+            </div>
+            <span class="slide-num-pill">Slide 20 / 20</span>
+          </div>
+          <div class="slide-body grid-2">
+            <div class="col"><div class="card highlight">
+                <div class="card-title"><span class="card-icon">🎯</span><span>Objective</span></div>
+                <p>Create a simple Student Registration API using Express routing, JSON body parsing, middleware, routes / controllers / services, Zod validation and error handling.</p>
+              </div>
+<div class="table-wrapper"><table class="presentation-table"><thead><tr><th>Method</th><th>Endpoint</th><th>Purpose</th></tr></thead><tbody><tr><td><code>POST</code></td><td><code>/students</code></td><td>Register student</td></tr><tr><td><code>GET</code></td><td><code>/students</code></td><td>Get all students</td></tr><tr><td><code>GET</code></td><td><code>/students/:id</code></td><td>Get student by ID</td></tr></tbody></table></div>
+<div class="card ">
+                <div class="card-title"><span class="card-icon">✅</span><span>Required Validation</span></div>
+                <ul class="feature-list"><li><span class="bullet-icon">▸</span><span><strong>Name:</strong> minimum 3 characters.</span></li><li><span class="bullet-icon">▸</span><span><strong>Email:</strong> valid email format.</span></li><li><span class="bullet-icon">▸</span><span><strong>Age:</strong> minimum 18.</span></li><li><span class="bullet-icon">▸</span><span><strong>Course:</strong> required string.</span></li></ul>
+              </div>
+<div class="callout tip"><span class="callout-icon">🏁</span><div><strong>Challenge:</strong> implement the complete API. Use an in-memory array for storage. MongoDB is not required.</div></div></div>
+            <div class="col"><div class="code-container compact">
+                <div class="code-header">
+                  <div class="code-file-badge"><span class="file-dot"></span><span>Expected project structure</span></div>
+                  <button class="copy-btn" type="button"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg><span>Copy Code</span></button>
+                </div>
+                <pre class="code-block"><code>student-api/
+├── routes/
+│   └── studentRoutes.js
+├── controllers/
+│   └── studentController.js
+├── services/
+│   └── studentService.js
+├── validators/
+│   └── studentValidator.js
+├── middleware/
+│   └── errorHandler.js
+├── server.js
+└── package.json</code></pre>
+              </div>
+<div class="code-container compact">
+                <div class="code-header">
+                  <div class="code-file-badge"><span class="file-dot"></span><span>middleware/errorHandler.js  (starter)</span></div>
+                  <button class="copy-btn" type="button"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg><span>Copy Code</span></button>
+                </div>
+                <pre class="code-block"><code><span class="syn-kw">const</span> errorHandler = (err, req, res, next) =&gt; {
+  <span class="syn-fn">console</span>.<span class="syn-fn">error</span>(err.message);
+
+  res.<span class="syn-fn">status</span>(err.statusCode || <span class="syn-num">500</span>).<span class="syn-fn">json</span>({
+    success: <span class="syn-kw">false</span>,
+    message: err.message,
+  });
+};
+
+module.exports = errorHandler;</code></pre>
+              </div>
+<div class="callout note"><span class="callout-icon">📌</span><div><strong>Hints:</strong> register <code>express.json()</code> first, then the routes, then <code>errorHandler</code> last. For an unknown ID, create an <code>Error</code>, set <code>error.statusCode = 404</code>, and pass it to <code>next(error)</code>.</div></div></div>
+          </div>
+        </section>
+      </div>
+    </main>
+
+    <!-- Bottom Navigation Controls -->
+    <footer class="bottom-bar">
+      <div class="bottom-left">
+        <button id="prev-btn" class="control-btn" type="button" title="Previous Slide (Left Arrow, PageUp)">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"></polyline></svg>
+          <span>Previous</span>
+        </button>
+      </div>
+      <div class="bottom-center">
+        <span id="slide-counter" class="slide-counter">01 / 20</span>
+      </div>
+      <div class="bottom-right">
+        <button id="next-btn" class="control-btn primary" type="button" title="Next Slide (Right Arrow, Space, PageDown)">
+          <span>Next</span>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
+        </button>
+      </div>
+    </footer>
+
+    <!-- Table of Contents Slide Drawer -->
+    <div id="toc-overlay" class="toc-overlay">
+      <aside class="toc-drawer">
+        <div class="toc-header">
+          <div class="toc-title">Table of Contents (20 Slides)</div>
+          <button id="toc-close" class="toc-close" type="button" title="Close Drawer (Esc)">&times;</button>
+        </div>
+        <div id="toc-list" class="toc-list">
+          <!-- Populated dynamically by script.js -->
+        </div>
+      </aside>
+    </div>
+
+    <!-- Keyboard Shortcuts Help Modal -->
+    <div id="help-modal-overlay" class="help-modal-overlay">
+      <div class="help-modal">
+        <div class="help-modal-header">
+          <div class="help-modal-title">⌨️ Keyboard Shortcuts</div>
+          <button id="help-modal-close" class="toc-close" type="button">&times;</button>
+        </div>
+        <div class="help-modal-body">
+          <div class="shortcut-row"><span>Next Slide</span><div><span class="kbd-badge">→</span> or <span class="kbd-badge">Space</span> or <span class="kbd-badge">PgDn</span></div></div>
+          <div class="shortcut-row"><span>Previous Slide</span><div><span class="kbd-badge">←</span> or <span class="kbd-badge">PgUp</span></div></div>
+          <div class="shortcut-row"><span>First Slide (Title)</span><span class="kbd-badge">Home</span></div>
+          <div class="shortcut-row"><span>Last Slide (Practice &amp; Takeaways)</span><span class="kbd-badge">End</span></div>
+          <div class="shortcut-row"><span>Toggle Fullscreen</span><span class="kbd-badge">F</span></div>
+          <div class="shortcut-row"><span>Table of Contents</span><div><span class="kbd-badge">T</span> or <span class="kbd-badge">M</span></div></div>
+          <div class="shortcut-row"><span>Close Modal / Drawer</span><span class="kbd-badge">Esc</span></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>

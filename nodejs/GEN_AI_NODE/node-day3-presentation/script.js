@@ -1,18 +1,20 @@
 /**
- * Node.js Asynchronous Programming — Timers, Callbacks & Callback Hell
- * Day 2 — MERN Stack Development
+ * Node.js Day 3 — Express Routing, Middleware & Zod Validation
+ * Day 3 — MERN Stack Development
  * Interactive Presentation Engine (Vanilla JavaScript)
  */
 
 (function () {
   'use strict';
 
-  // Section Mapping for all 15 slides
+  // Section Mapping for all 20 slides
   const SLIDE_SECTIONS = [
-    { start: 1, end: 7, name: 'Section 1: Timer Functions in Node.js' },
-    { start: 8, end: 11, name: 'Section 2: Understanding Callbacks' },
-    { start: 12, end: 14, name: 'Section 3: Callback Hell & Solutions' },
-    { start: 15, end: 15, name: 'Section 4: Practical Exercises & Takeaways' },
+    { start: 1, end: 2, name: 'Section 1: Welcome' },
+    { start: 3, end: 5, name: 'Section 2: Express Routing' },
+    { start: 6, end: 10, name: 'Section 3: Middleware' },
+    { start: 11, end: 15, name: 'Section 4: Project Structure' },
+    { start: 16, end: 19, name: 'Section 5: Zod Validation' },
+    { start: 20, end: 20, name: 'Section 6: Final Practical' },
   ];
 
   // DOM Elements
@@ -43,7 +45,7 @@
         return sec.name;
       }
     }
-    return 'Node.js Day 2 (MERN)';
+    return 'Node.js Day 3 (Express)';
   }
 
   /**
@@ -67,7 +69,7 @@
       slides[currentIndex].scrollTop = 0;
     }
 
-    // Update Slide Counter (e.g. 01 / 15)
+    // Update Slide Counter (e.g. 01 / 20)
     const pad = (n) => (n < 10 ? '0' + n : n);
     if (slideCounter) {
       slideCounter.textContent = `${pad(slideNumber)} / ${pad(totalSlides)}`;
@@ -90,7 +92,11 @@
 
     // Update URL hash
     if (updateHash) {
-      history.replaceState(null, '', `#slide-${slideNumber}`);
+      try {
+        history.replaceState(null, '', `#slide-${slideNumber}`);
+      } catch (err) {
+        // Some browsers restrict history updates on file:// URLs; navigation still works.
+      }
     }
 
     // Update active state in Table of Contents
@@ -142,16 +148,20 @@
       if (titleElem) {
         titleText = titleElem.textContent.trim().replace(/\s+/g, ' ');
       } else if (slide.querySelector('.hero-main-title')) {
-        titleText = 'Title: Node.js Timers, Callbacks & Callback Hell';
+        titleText = 'Title: Node.js Day 3 — Express Routing, Middleware & Zod';
       }
 
       const item = document.createElement('div');
       item.className = 'toc-item' + (idx === currentIndex ? ' active' : '');
       item.setAttribute('data-index', idx);
-      item.innerHTML = `
-        <span class="item-num">${slideNum < 10 ? '0' + slideNum : slideNum}</span>
-        <span class="item-text">${titleText}</span>
-      `;
+      const numSpan = document.createElement('span');
+      numSpan.className = 'item-num';
+      numSpan.textContent = slideNum < 10 ? '0' + slideNum : String(slideNum);
+      const textSpan = document.createElement('span');
+      textSpan.className = 'item-text';
+      textSpan.textContent = titleText;
+      item.appendChild(numSpan);
+      item.appendChild(textSpan);
 
       item.addEventListener('click', () => {
         goToSlide(idx);
@@ -194,6 +204,30 @@
   }
 
   /**
+   * Clipboard helper with a fallback for browsers/contexts without the async API
+   */
+  async function writeToClipboard(text) {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      try {
+        await navigator.clipboard.writeText(text);
+        return;
+      } catch (err) {
+        // fall through to legacy copy
+      }
+    }
+    const ta = document.createElement('textarea');
+    ta.value = text;
+    ta.setAttribute('readonly', '');
+    ta.style.position = 'fixed';
+    ta.style.top = '-1000px';
+    document.body.appendChild(ta);
+    ta.select();
+    const ok = document.execCommand('copy');
+    document.body.removeChild(ta);
+    if (!ok) throw new Error('Copy command failed');
+  }
+
+  /**
    * Copy-to-Clipboard for code blocks
    */
   function initCopyButtons() {
@@ -210,7 +244,7 @@
         const textToCopy = codeEl.innerText;
 
         try {
-          await navigator.clipboard.writeText(textToCopy);
+          await writeToClipboard(textToCopy);
           const originalHTML = btn.innerHTML;
           btn.classList.add('copied');
           btn.innerHTML = `
@@ -236,6 +270,9 @@
    */
   function initKeyboardNavigation() {
     window.addEventListener('keydown', (e) => {
+      // Leave browser shortcuts (Ctrl/Cmd/Alt combos) alone
+      if (e.ctrlKey || e.metaKey || e.altKey) return;
+
       // Do not intercept if user is typing in form inputs or editable elements
       const activeTag = document.activeElement ? document.activeElement.tagName : '';
       if (['INPUT', 'TEXTAREA', 'SELECT'].includes(activeTag) || (document.activeElement && document.activeElement.isContentEditable)) {
@@ -302,7 +339,7 @@
   }
 
   /**
-   * Hash change sync (#slide-1 to #slide-15)
+   * Hash change sync (#slide-1 to #slide-20)
    */
   function initHashNavigation() {
     function handleHash() {
@@ -320,105 +357,6 @@
 
     window.addEventListener('hashchange', handleHash);
     handleHash();
-  }
-
-  /**
-   * Interactive Simulator: Slide 3/4 setTimeout Non-Blocking Stepper
-   */
-  function initTimeoutSimulator() {
-    const btn = document.getElementById('run-timeout-sim');
-    const logOutput = document.getElementById('timeout-sim-log');
-    const statusText = document.getElementById('timeout-step-status');
-    if (!btn || !logOutput) return;
-
-    btn.addEventListener('click', () => {
-      btn.disabled = true;
-      logOutput.innerHTML = '';
-      if (statusText) statusText.textContent = '1. Executing synchronous code: console.log("1. Start")';
-
-      logOutput.innerHTML += '<div class="cmd">&gt; node app.js</div>';
-      logOutput.innerHTML += '<div class="res">1. Start</div>';
-
-      setTimeout(() => {
-        if (statusText) statusText.textContent = '2. setTimeout scheduled for 2000ms. Synchronous code continues immediately...';
-        logOutput.innerHTML += '<div class="cmd" style="color:#94a3b8;">[Timer callback scheduled in background (2000ms)]</div>';
-        logOutput.innerHTML += '<div class="res">3. End</div>';
-
-        if (statusText) statusText.textContent = '3. Synchronous statements finished. Waiting for 2000ms timer...';
-
-        setTimeout(() => {
-          if (statusText) statusText.textContent = '4. 2000ms timer completed! Callback invoked:';
-          logOutput.innerHTML += '<div class="res" style="color:#fbbf24; font-weight:700;">2. Timer completed</div>';
-          if (statusText) statusText.textContent = '✓ Execution complete. Notice "3. End" printed before the timer!';
-          btn.disabled = false;
-        }, 1500);
-      }, 500);
-    });
-  }
-
-  /**
-   * Interactive Simulator: Slide 6 setInterval Digital Counter
-   */
-  function initIntervalSimulator() {
-    const btn = document.getElementById('run-interval-sim');
-    const logOutput = document.getElementById('interval-sim-log');
-    const statusText = document.getElementById('interval-step-status');
-    if (!btn || !logOutput) return;
-
-    let activeInterval = null;
-
-    btn.addEventListener('click', () => {
-      btn.disabled = true;
-      logOutput.innerHTML = '<div class="cmd">&gt; node counter.js</div>';
-      let count = 1;
-      if (statusText) statusText.textContent = `Interval ticking every 1000ms...`;
-
-      activeInterval = setInterval(() => {
-        logOutput.innerHTML += `<div class="res">Count: ${count}</div>`;
-        logOutput.scrollTop = logOutput.scrollHeight;
-        count++;
-
-        if (count > 5) {
-          clearInterval(activeInterval);
-          logOutput.innerHTML += `<div class="res" style="color:#38bdf8; font-weight:700;">Counter stopped</div>`;
-          if (statusText) statusText.textContent = '✓ clearInterval() called after count reached 5.';
-          btn.disabled = false;
-        }
-      }, 800);
-    });
-  }
-
-  /**
-   * Interactive Simulator: Slide 13 Callback Hell Order Pipeline
-   */
-  function initPipelineSimulator() {
-    const btn = document.getElementById('run-pipeline-sim');
-    const logOutput = document.getElementById('pipeline-sim-log');
-    const statusText = document.getElementById('pipeline-step-status');
-    if (!btn || !logOutput) return;
-
-    btn.addEventListener('click', () => {
-      btn.disabled = true;
-      logOutput.innerHTML = '<div class="cmd">&gt; node order-flow.js</div>';
-      if (statusText) statusText.textContent = '1. Step 1: getOrder() executing (500ms)...';
-
-      setTimeout(() => {
-        logOutput.innerHTML += '<div class="res">Order received</div>';
-        if (statusText) statusText.textContent = '2. Step 2: getPayment() executing (nested callback, 500ms)...';
-
-        setTimeout(() => {
-          logOutput.innerHTML += '<div class="res">Payment completed</div>';
-          if (statusText) statusText.textContent = '3. Step 3: shipOrder() executing (deeply nested callback, 500ms)...';
-
-          setTimeout(() => {
-            logOutput.innerHTML += '<div class="res">Order shipped</div>';
-            logOutput.innerHTML += '<div class="res" style="color:#38bdf8; font-weight:700;">Final order: { orderId: 101, paid: true, shipped: true }</div>';
-            if (statusText) statusText.textContent = '✓ Pipeline complete: Notice the 3-level indentation in the source code!';
-            btn.disabled = false;
-          }, 500);
-        }, 500);
-      }, 500);
-    });
   }
 
   /**
@@ -448,11 +386,6 @@
         if (e.target === helpModalOverlay) closeHelp();
       });
     }
-
-    // Attach interactive simulators
-    initTimeoutSimulator();
-    initIntervalSimulator();
-    initPipelineSimulator();
   }
 
   // Run when DOM is ready
@@ -462,3 +395,4 @@
     init();
   }
 })();
+

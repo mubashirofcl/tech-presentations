@@ -1,0 +1,1138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Node.js Day 3 — Promises &amp; Async/Await</title>
+  <meta name="description" content="Day 3 MERN Stack Development: Promises, Promise states, resolve/reject, then/catch/finally, chaining, async/await, try/catch, and a Student Enrollment System.">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Presentation App Shell -->
+  <div id="presentation-app">
+
+    <!-- Top Continuous Progress Bar -->
+    <div class="progress-container">
+      <div id="progress-bar" class="progress-bar" style="width:5%"></div>
+    </div>
+
+    <!-- Top Navigation Header -->
+    <header class="top-nav">
+      <div class="brand-badge">
+        <div class="icon-box">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <polygon points="12 2 2 8.5 2 15.5 12 22 22 15.5 22 8.5 12 2"></polygon>
+            <line x1="12" y1="22" x2="12" y2="15.5"></line>
+            <polyline points="22 8.5 12 15.5 2 8.5"></polyline>
+          </svg>
+        </div>
+        <span>MERN Node.js</span>
+        <span class="brand-tag mern-pill">Day 3</span>
+      </div>
+
+      <div class="deck-section-indicator">
+        <span id="section-indicator" class="section-pill">Section 1: Introduction to Promises</span>
+      </div>
+
+      <div class="top-actions">
+        <button id="toc-btn" class="nav-btn" type="button" title="Open Table of Contents (Press 'T' or 'M')">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+          <span>Contents</span>
+        </button>
+        <button id="help-btn" class="nav-btn" type="button" title="Keyboard Shortcuts (Press '?')">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+          <span>Shortcuts</span>
+        </button>
+        <button id="fullscreen-btn" class="nav-btn" type="button" title="Toggle Fullscreen (Press 'F')">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path></svg>
+          <span>Fullscreen</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Slide Viewport -->
+    <main class="slide-viewport">
+      <div class="slide-container">
+
+        <!-- ===================================================================
+             SLIDE 1: Title Slide
+             =================================================================== -->
+        <section id="slide-1" class="slide active" data-slide-num="1">
+          <div class="title-slide-content">
+            <div class="title-badge-row">
+              <span class="pill-badge">MERN Stack Curriculum</span>
+              <span class="pill-badge mern-badge">Day 3 — Node.js Asynchronous Programming</span>
+            </div>
+            <h1 class="hero-main-title">Node.js Day 3: <br><span class="highlight">Promises &amp; Async/Await</span></h1>
+            <p class="hero-subtitle">Managing Asynchronous Operations in Node.js</p>
+            <div class="topics-block">
+              <div class="topics-label">Today's topics</div>
+              <div class="topics-grid"><span class="topic-chip">Understanding Promises</span><span class="topic-chip">Promise states</span><span class="topic-chip">Creating Promises</span><span class="topic-chip">resolve() and reject()</span><span class="topic-chip">then(), catch(), finally()</span><span class="topic-chip">Promise chaining</span><span class="topic-chip">async and await</span><span class="topic-chip">Error handling with try/catch</span><span class="topic-chip">Practical implementation</span></div>
+            </div>
+            <div class="meta-footer">
+              <div class="meta-item"><span>📚 <strong>Course:</strong> Full-Stack MERN Development</span></div>
+              <div class="meta-item"><span>🔗 <strong>Builds on:</strong> Day 2 Callbacks &amp; Callback Hell</span></div>
+              <div class="meta-item"><span>🎯 <strong>Level:</strong> Beginner to Intermediate</span></div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ===================================================================
+             SLIDE 2: Learning Objectives
+             =================================================================== -->
+        <section id="slide-2" class="slide" data-slide-num="2">
+          <div class="slide-header">
+            <div class="slide-title-wrap">
+              <span class="slide-category">Section 1: Introduction to Promises</span>
+              <h2 class="slide-title">Learning Objectives</h2>
+              <p class="slide-subtitle">By the end of this session, students should be able to:</p>
+            </div>
+            <span class="slide-num-pill">Slide 02 / 20</span>
+          </div>
+          <div class="slide-body ">
+            <div class="objectives-grid"><div class="objective-item"><div class="objective-num">1</div><div class="objective-text">Understand what a Promise is.</div></div><div class="objective-item"><div class="objective-num">2</div><div class="objective-text">Explain the three Promise states.</div></div><div class="objective-item"><div class="objective-num">3</div><div class="objective-text">Create Promises using <code>new Promise()</code>.</div></div><div class="objective-item"><div class="objective-num">4</div><div class="objective-text">Use <code>resolve()</code> and <code>reject()</code>.</div></div><div class="objective-item"><div class="objective-num">5</div><div class="objective-text">Handle results using <code>.then()</code> and <code>.catch()</code>.</div></div><div class="objective-item"><div class="objective-num">6</div><div class="objective-text">Understand <code>.finally()</code>.</div></div><div class="objective-item"><div class="objective-num">7</div><div class="objective-text">Perform Promise chaining.</div></div><div class="objective-item"><div class="objective-num">8</div><div class="objective-text">Convert callback-based code into Promises.</div></div><div class="objective-item"><div class="objective-num">9</div><div class="objective-text">Use <code>async</code> and <code>await</code>.</div></div><div class="objective-item"><div class="objective-num">10</div><div class="objective-text">Handle asynchronous errors using <code>try/catch</code>.</div></div><div class="objective-item"><div class="objective-num">11</div><div class="objective-text">Implement a real-world asynchronous workflow.</div></div></div>
+            <div class="callout tip"><span class="callout-icon">💡</span><div><strong>Classroom Focus:</strong> We start from the callback problems of Day 2, learn Promises step by step, then finish by building a complete asynchronous workflow.</div></div>
+          </div>
+        </section>
+
+        <!-- ===================================================================
+             SLIDE 3: Why Do We Need Promises?
+             =================================================================== -->
+        <section id="slide-3" class="slide" data-slide-num="3">
+          <div class="slide-header">
+            <div class="slide-title-wrap">
+              <span class="slide-category">Section 1: Introduction to Promises</span>
+              <h2 class="slide-title">Why Do We Need Promises?</h2>
+              <p class="slide-subtitle">Connecting Day 2 callback hell to a better solution</p>
+            </div>
+            <span class="slide-num-pill">Slide 03 / 20</span>
+          </div>
+          <div class="slide-body grid-2">
+            <div class="col"><div class="card highlight">
+                <div class="card-title"><span class="card-icon">🔗</span><span>Recap: The Problem with Callbacks</span></div>
+                <p>When several asynchronous operations depend on each other, callbacks become deeply nested.</p><ul class="feature-list"><li><span class="bullet-icon">▸</span><span><strong>Nested callbacks</strong> grow into a pyramid.</span></li><li><span class="bullet-icon">▸</span><span><strong>Difficult error handling</strong> — every level needs its own check.</span></li><li><span class="bullet-icon">▸</span><span><strong>Difficult maintenance</strong> — hard to read, hard to change.</span></li><li><span class="bullet-icon">▸</span><span><strong>Complex workflows</strong> — more steps means more nesting.</span></li></ul>
+              </div>
+<div class="card ">
+                <div class="card-title"><span class="card-icon">🔍</span><span>How This Example Runs</span></div>
+                <div class="step-breakdown"><div class="step-item"><span class="num-bullet">1</span><span><code>getUser()</code> waits 1 second, then calls its callback with the user.</span></div><div class="step-item"><span class="num-bullet">2</span><span>Inside it, <code>getOrders()</code> waits another second and calls <em>its</em> callback.</span></div><div class="step-item"><span class="num-bullet">3</span><span>Only the innermost function can use both <code>user</code> and <code>orders</code>.</span></div></div>
+              </div>
+<div class="callout tip"><span class="callout-icon">✅</span><div><strong>Solution:</strong> Promises provide a structured way to handle asynchronous operations.</div></div></div>
+            <div class="col"><div class="code-container">
+                <div class="code-header">
+                  <div class="code-file-badge"><span class="file-dot"></span><span>callbacks-problem.js</span></div>
+                  <button class="copy-btn" type="button"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg><span>Copy Code</span></button>
+                </div>
+                <pre class="code-block"><code><span class="syn-kw">function</span> <span class="syn-fn">getUser</span>(callback) {
+  <span class="syn-fn">setTimeout</span>(() =&gt; {
+    <span class="syn-fn">callback</span>({ id: <span class="syn-num">1</span>, name: <span class="syn-str">"Anu"</span> });
+  }, <span class="syn-num">1000</span>);
+}
+
+<span class="syn-kw">function</span> <span class="syn-fn">getOrders</span>(userId, callback) {
+  <span class="syn-fn">setTimeout</span>(() =&gt; {
+    <span class="syn-fn">callback</span>([<span class="syn-str">"Order 101"</span>, <span class="syn-str">"Order 102"</span>]);
+  }, <span class="syn-num">1000</span>);
+}
+
+<span class="syn-fn">getUser</span>((user) =&gt; {
+  <span class="syn-fn">getOrders</span>(user.id, (orders) =&gt; {
+    <span class="syn-fn">console</span>.<span class="syn-fn">log</span>(user);
+    <span class="syn-fn">console</span>.<span class="syn-fn">log</span>(orders);
+  });
+});</code></pre>
+              </div>
+              <div class="terminal-output">
+                <div class="terminal-header"><span class="dot"></span><span>Expected Output (after ~2 seconds)</span></div>
+                <div class="terminal-body"><span class="cmd">$ node callbacks-problem.js</span>
+<span class="res">{ id: 1, name: 'Anu' }</span>
+<span class="res">[ 'Order 101', 'Order 102' ]</span></div>
+              </div></div>
+          </div>
+        </section>
+
+        <!-- ===================================================================
+             SLIDE 4: What Is a Promise?
+             =================================================================== -->
+        <section id="slide-4" class="slide" data-slide-num="4">
+          <div class="slide-header">
+            <div class="slide-title-wrap">
+              <span class="slide-category">Section 2: Understanding Promises</span>
+              <h2 class="slide-title">What Is a Promise?</h2>
+              <p class="slide-subtitle">An object that represents the eventual result of an asynchronous operation</p>
+            </div>
+            <span class="slide-num-pill">Slide 04 / 20</span>
+          </div>
+          <div class="slide-body grid-2">
+            <div class="col"><div class="card highlight">
+                <div class="card-title"><span class="card-icon">📖</span><span>Definition</span></div>
+                <p>A <strong>Promise</strong> is a JavaScript object that represents the eventual completion or failure of an asynchronous operation.</p><ul class="feature-list"><li><span class="bullet-icon">▸</span><span>A successful result, or</span></li><li><span class="bullet-icon">▸</span><span>An error (a rejection).</span></li></ul><p><strong>Why it is useful:</strong> one object carries the result, so the code stays flat and errors have one place to go.</p>
+              </div>
+<div class="card ">
+                <div class="card-title"><span class="card-icon">🍔</span><span>Real-World Example: Ordering Food</span></div>
+                <div class="step-breakdown"><div class="step-item"><span class="num-bullet">1</span><span>You place an order.</span></div><div class="step-item"><span class="num-bullet">2</span><span>The restaurant accepts the order.</span></div><div class="step-item"><span class="num-bullet">3</span><span>The restaurant prepares the food.</span></div><div class="step-item"><span class="num-bullet">4</span><span>The order is completed or cancelled.</span></div></div><p>A Promise represents the pending result of that operation.</p>
+              </div></div>
+            <div class="col"><div class="code-container">
+                <div class="code-header">
+                  <div class="code-file-badge"><span class="file-dot"></span><span>order.js</span></div>
+                  <button class="copy-btn" type="button"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg><span>Copy Code</span></button>
+                </div>
+                <pre class="code-block"><code><span class="syn-kw">const</span> order = <span class="syn-kw">new</span> <span class="syn-fn">Promise</span>((resolve, reject) =&gt; {
+  <span class="syn-kw">const</span> success = <span class="syn-kw">true</span>;
+
+  <span class="syn-kw">if</span> (success) {
+    <span class="syn-fn">resolve</span>(<span class="syn-str">"Order completed"</span>);
+  } <span class="syn-kw">else</span> {
+    <span class="syn-fn">reject</span>(<span class="syn-kw">new</span> <span class="syn-fn">Error</span>(<span class="syn-str">"Order failed"</span>));
+  }
+});
+
+<span class="syn-fn">console</span>.<span class="syn-fn">log</span>(order);</code></pre>
+              </div>
+              <div class="terminal-output">
+                <div class="terminal-header"><span class="dot"></span><span>Expected Output</span></div>
+                <div class="terminal-body"><span class="cmd">$ node order.js</span>
+<span class="res">Promise { 'Order completed' }</span></div>
+              </div>
+<div class="callout note"><span class="callout-icon">📌</span><div><strong>Execution flow:</strong> the executor function runs immediately. Calling <code>resolve()</code> or <code>reject()</code> decides whether the Promise is pending, fulfilled, or rejected.</div></div></div>
+          </div>
+        </section>
+
+        <!-- ===================================================================
+             SLIDE 5: Three States of a Promise
+             =================================================================== -->
+        <section id="slide-5" class="slide" data-slide-num="5">
+          <div class="slide-header">
+            <div class="slide-title-wrap">
+              <span class="slide-category">Section 2: Understanding Promises</span>
+              <h2 class="slide-title">Three States of a Promise</h2>
+              <p class="slide-subtitle">Pending, fulfilled, and rejected</p>
+            </div>
+            <span class="slide-num-pill">Slide 05 / 20</span>
+          </div>
+          <div class="slide-body grid-2">
+            <div class="col"><div class="table-wrapper"><table class="presentation-table">
+                <thead><tr><th>State</th><th>Meaning</th></tr></thead>
+                <tbody>
+                  <tr><td><strong>Pending</strong></td><td>Operation is still in progress</td></tr>
+                  <tr><td><strong>Fulfilled</strong></td><td>Operation completed successfully</td></tr>
+                  <tr><td><strong>Rejected</strong></td><td>Operation failed</td></tr>
+                </tbody></table></div>
+<div class="card warning">
+                <div class="card-title"><span class="card-icon">⚠️</span><span>Important Points</span></div>
+                <ul class="feature-list"><li><span class="bullet-icon">▸</span><span>A Promise starts in the <strong>pending</strong> state.</span></li><li><span class="bullet-icon">▸</span><span><code>resolve()</code> fulfills it.</span></li><li><span class="bullet-icon">▸</span><span><code>reject()</code> rejects it.</span></li><li><span class="bullet-icon">▸</span><span>Once fulfilled or rejected, its state cannot change again.</span></li></ul>
+              </div></div>
+            <div class="col"><div class="state-diagram">
+                <div class="state-box state-pending">Pending</div>
+                <div class="state-branches">
+                  <div class="state-branch">
+                    <div class="state-arrow">↙ <code>resolve()</code></div>
+                    <div class="state-box state-fulfilled">Fulfilled</div>
+                  </div>
+                  <div class="state-branch">
+                    <div class="state-arrow"><code>reject()</code> ↘</div>
+                    <div class="state-box state-rejected">Rejected</div>
+                  </div>
+                </div>
+                <div class="state-note">Fulfilled and rejected are both <strong>settled</strong>. A settled Promise never changes again.</div>
+              </div>
+<div class="code-container">
+                <div class="code-header">
+                  <div class="code-file-badge"><span class="file-dot"></span><span>promise-states.js</span></div>
+                  <button class="copy-btn" type="button"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg><span>Copy Code</span></button>
+                </div>
+                <pre class="code-block"><code><span class="syn-kw">const</span> pending = <span class="syn-kw">new</span> <span class="syn-fn">Promise</span>(() =&gt; {});
+
+<span class="syn-fn">console</span>.<span class="syn-fn">log</span>(pending);</code></pre>
+              </div>
+              <div class="terminal-output">
+                <div class="terminal-header"><span class="dot"></span><span>Expected Output</span></div>
+                <div class="terminal-body"><span class="cmd">$ node promise-states.js</span>
+<span class="res">Promise { &lt;pending&gt; }</span></div>
+              </div></div>
+          </div>
+        </section>
+
+        <!-- ===================================================================
+             SLIDE 6: Creating a Promise Using resolve()
+             =================================================================== -->
+        <section id="slide-6" class="slide" data-slide-num="6">
+          <div class="slide-header">
+            <div class="slide-title-wrap">
+              <span class="slide-category">Section 2: Understanding Promises</span>
+              <h2 class="slide-title">Creating a Promise Using resolve()</h2>
+              <p class="slide-subtitle">Simulating a user that loads after two seconds</p>
+            </div>
+            <span class="slide-num-pill">Slide 06 / 20</span>
+          </div>
+          <div class="slide-body grid-2">
+            <div class="col"><div class="card highlight">
+                <div class="card-title"><span class="card-icon">✅</span><span>What resolve() Does</span></div>
+                <p><code>resolve(value)</code> marks the Promise as <strong>fulfilled</strong> and passes <code>value</code> to <code>.then()</code>.</p><div class="inline-syntax">const promise = new Promise((resolve, reject) =&gt; {
+  resolve("Success");
+});</div><p><strong>Why it is useful:</strong> a function can hand back a result that is not ready yet.</p>
+              </div>
+<div class="card ">
+                <div class="card-title"><span class="card-icon">🔍</span><span>Execution Flow</span></div>
+                <div class="step-breakdown"><div class="step-item"><span class="num-bullet">1</span><span><code>getUser()</code> returns a Promise.</span></div><div class="step-item"><span class="num-bullet">2</span><span><code>setTimeout()</code> simulates an asynchronous operation.</span></div><div class="step-item"><span class="num-bullet">3</span><span><code>resolve()</code> returns the successful result.</span></div><div class="step-item"><span class="num-bullet">4</span><span><code>.then()</code> receives the result.</span></div></div>
+              </div></div>
+            <div class="col"><div class="code-container">
+                <div class="code-header">
+                  <div class="code-file-badge"><span class="file-dot"></span><span>user-loading.js</span></div>
+                  <button class="copy-btn" type="button"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg><span>Copy Code</span></button>
+                </div>
+                <pre class="code-block"><code><span class="syn-kw">function</span> <span class="syn-fn">getUser</span>() {
+  <span class="syn-kw">return</span> <span class="syn-kw">new</span> <span class="syn-fn">Promise</span>((resolve) =&gt; {
+    <span class="syn-fn">setTimeout</span>(() =&gt; {
+      <span class="syn-fn">resolve</span>({
+        id: <span class="syn-num">1</span>,
+        name: <span class="syn-str">"Anu"</span>,
+        role: <span class="syn-str">"Student"</span>,
+      });
+    }, <span class="syn-num">2000</span>);
+  });
+}
+
+<span class="syn-fn">getUser</span>().<span class="syn-fn">then</span>((user) =&gt; {
+  <span class="syn-fn">console</span>.<span class="syn-fn">log</span>(<span class="syn-str">"User loaded:"</span>, user);
+});</code></pre>
+              </div>
+              <div class="terminal-output">
+                <div class="terminal-header"><span class="dot"></span><span>Expected Output</span></div>
+                <div class="terminal-body"><span class="cmd">$ node user-loading.js</span>
+<span class="res">User loaded: { id: 1, name: 'Anu', role: 'Student' }</span>   <span class="syn-cm"># printed after ~2 seconds</span></div>
+              </div></div>
+          </div>
+        </section>
+
+        <!-- ===================================================================
+             SLIDE 7: Creating a Promise Using reject()
+             =================================================================== -->
+        <section id="slide-7" class="slide" data-slide-num="7">
+          <div class="slide-header">
+            <div class="slide-title-wrap">
+              <span class="slide-category">Section 2: Understanding Promises</span>
+              <h2 class="slide-title">Creating a Promise Using reject()</h2>
+              <p class="slide-subtitle">A Promise can represent failure as well as success</p>
+            </div>
+            <span class="slide-num-pill">Slide 07 / 20</span>
+          </div>
+          <div class="slide-body grid-2">
+            <div class="col"><div class="card danger">
+                <div class="card-title"><span class="card-icon">❌</span><span>What reject() Does</span></div>
+                <p><code>reject(error)</code> marks the Promise as <strong>rejected</strong>. The error goes to <code>.catch()</code>.</p><p><strong>Why it is useful:</strong> failures travel through the same object as successes, so they can be handled in one place.</p>
+              </div>
+<div class="card ">
+                <div class="card-title"><span class="card-icon">🔍</span><span>Execution Flow</span></div>
+                <ul class="feature-list"><li><span class="bullet-icon">▸</span><span>Valid amount → <code>resolve()</code>.</span></li><li><span class="bullet-icon">▸</span><span>Invalid amount → <code>reject()</code>.</span></li><li><span class="bullet-icon">▸</span><span><code>.catch()</code> handles the rejection.</span></li><li><span class="bullet-icon">▸</span><span>Here the amount is <code>-500</code>, so the Promise rejects.</span></li></ul>
+              </div>
+<div class="callout tip"><span class="callout-icon">💡</span><div>Reject with <code>new Error(...)</code>, not a plain string. An <code>Error</code> carries a <code>message</code>.</div></div></div>
+            <div class="col"><div class="code-container">
+                <div class="code-header">
+                  <div class="code-file-badge"><span class="file-dot"></span><span>payment.js</span></div>
+                  <button class="copy-btn" type="button"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg><span>Copy Code</span></button>
+                </div>
+                <pre class="code-block"><code><span class="syn-kw">function</span> <span class="syn-fn">processPayment</span>(amount) {
+  <span class="syn-kw">return</span> <span class="syn-kw">new</span> <span class="syn-fn">Promise</span>((resolve, reject) =&gt; {
+    <span class="syn-fn">setTimeout</span>(() =&gt; {
+      <span class="syn-kw">if</span> (amount &gt; <span class="syn-num">0</span>) {
+        <span class="syn-fn">resolve</span>(<span class="syn-str">"Payment successful"</span>);
+      } <span class="syn-kw">else</span> {
+        <span class="syn-fn">reject</span>(<span class="syn-kw">new</span> <span class="syn-fn">Error</span>(<span class="syn-str">"Invalid payment amount"</span>));
+      }
+    }, <span class="syn-num">1000</span>);
+  });
+}
+
+<span class="syn-fn">processPayment</span>(-<span class="syn-num">500</span>)
+  .<span class="syn-fn">then</span>((result) =&gt; {
+    <span class="syn-fn">console</span>.<span class="syn-fn">log</span>(result);
+  })
+  .<span class="syn-kw">catch</span>((error) =&gt; {
+    <span class="syn-fn">console</span>.<span class="syn-fn">log</span>(error.message);
+  });</code></pre>
+              </div>
+              <div class="terminal-output">
+                <div class="terminal-header"><span class="dot"></span><span>Expected Output</span></div>
+                <div class="terminal-body"><span class="cmd">$ node payment.js</span>
+<span class="res">Invalid payment amount</span>   <span class="syn-cm"># printed after ~1 second</span></div>
+              </div></div>
+          </div>
+        </section>
+
+        <!-- ===================================================================
+             SLIDE 8: Understanding then()
+             =================================================================== -->
+        <section id="slide-8" class="slide" data-slide-num="8">
+          <div class="slide-header">
+            <div class="slide-title-wrap">
+              <span class="slide-category">Section 3: Handling Promises</span>
+              <h2 class="slide-title">Understanding then()</h2>
+              <p class="slide-subtitle">Handling the successful result of a Promise</p>
+            </div>
+            <span class="slide-num-pill">Slide 08 / 20</span>
+          </div>
+          <div class="slide-body grid-2">
+            <div class="col"><div class="card highlight">
+                <div class="card-title"><span class="card-icon">✅</span><span>What then() Does</span></div>
+                <p><code>.then()</code> runs a function when the Promise is <strong>fulfilled</strong>. The function receives the resolved value.</p><div class="inline-syntax">promise.then((result) =&gt; {
+  console.log(result);
+});</div><p><strong>Why it is useful:</strong> your code runs exactly when the data is ready, with no polling.</p>
+              </div>
+<div class="card ">
+                <div class="card-title"><span class="card-icon">🔍</span><span>Execution Flow</span></div>
+                <div class="step-breakdown"><div class="step-item"><span class="num-bullet">1</span><span><code>getProduct()</code> returns a pending Promise.</span></div><div class="step-item"><span class="num-bullet">2</span><span>After 1 second, <code>resolve()</code> fulfills it with the product object.</span></div><div class="step-item"><span class="num-bullet">3</span><span><code>.then()</code> receives that object as <code>product</code>.</span></div></div>
+              </div></div>
+            <div class="col"><div class="code-container">
+                <div class="code-header">
+                  <div class="code-file-badge"><span class="file-dot"></span><span>product.js</span></div>
+                  <button class="copy-btn" type="button"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg><span>Copy Code</span></button>
+                </div>
+                <pre class="code-block"><code><span class="syn-kw">function</span> <span class="syn-fn">getProduct</span>() {
+  <span class="syn-kw">return</span> <span class="syn-kw">new</span> <span class="syn-fn">Promise</span>((resolve) =&gt; {
+    <span class="syn-fn">setTimeout</span>(() =&gt; {
+      <span class="syn-fn">resolve</span>({
+        name: <span class="syn-str">"Laptop"</span>,
+        price: <span class="syn-num">50000</span>,
+      });
+    }, <span class="syn-num">1000</span>);
+  });
+}
+
+<span class="syn-fn">getProduct</span>().<span class="syn-fn">then</span>((product) =&gt; {
+  <span class="syn-fn">console</span>.<span class="syn-fn">log</span>(<span class="syn-str">"Product:"</span>, product.name);
+  <span class="syn-fn">console</span>.<span class="syn-fn">log</span>(<span class="syn-str">"Price:"</span>, product.price);
+});</code></pre>
+              </div>
+              <div class="terminal-output">
+                <div class="terminal-header"><span class="dot"></span><span>Expected Output</span></div>
+                <div class="terminal-body"><span class="cmd">$ node product.js</span>
+<span class="res">Product: Laptop</span>
+<span class="res">Price: 50000</span></div>
+              </div></div>
+          </div>
+        </section>
+
+        <!-- ===================================================================
+             SLIDE 9: Understanding catch()
+             =================================================================== -->
+        <section id="slide-9" class="slide" data-slide-num="9">
+          <div class="slide-header">
+            <div class="slide-title-wrap">
+              <span class="slide-category">Section 3: Handling Promises</span>
+              <h2 class="slide-title">Understanding catch()</h2>
+              <p class="slide-subtitle">Handling Promise rejections</p>
+            </div>
+            <span class="slide-num-pill">Slide 09 / 20</span>
+          </div>
+          <div class="slide-body grid-2">
+            <div class="col"><div class="card danger">
+                <div class="card-title"><span class="card-icon">🛡️</span><span>What catch() Does</span></div>
+                <p><code>.catch()</code> runs when the Promise is <strong>rejected</strong>, or when an earlier handler in the chain throws an error.</p><p><strong>Why it is useful:</strong> one <code>.catch()</code> at the end can protect a whole chain.</p>
+              </div>
+<div class="card ">
+                <div class="card-title"><span class="card-icon">🔍</span><span>Execution Flow</span></div>
+                <div class="step-breakdown"><div class="step-item"><span class="num-bullet">1</span><span><code>checkAge(16)</code> runs. 16 is less than 18.</span></div><div class="step-item"><span class="num-bullet">2</span><span>The Promise is rejected with an <code>Error</code>.</span></div><div class="step-item"><span class="num-bullet">3</span><span><code>.then()</code> is skipped.</span></div><div class="step-item"><span class="num-bullet">4</span><span><code>.catch()</code> prints the error message.</span></div></div>
+              </div></div>
+            <div class="col"><div class="code-container">
+                <div class="code-header">
+                  <div class="code-file-badge"><span class="file-dot"></span><span>check-age.js</span></div>
+                  <button class="copy-btn" type="button"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg><span>Copy Code</span></button>
+                </div>
+                <pre class="code-block"><code><span class="syn-kw">function</span> <span class="syn-fn">checkAge</span>(age) {
+  <span class="syn-kw">return</span> <span class="syn-kw">new</span> <span class="syn-fn">Promise</span>((resolve, reject) =&gt; {
+    <span class="syn-kw">if</span> (age &gt;= <span class="syn-num">18</span>) {
+      <span class="syn-fn">resolve</span>(<span class="syn-str">"Access granted"</span>);
+    } <span class="syn-kw">else</span> {
+      <span class="syn-fn">reject</span>(<span class="syn-kw">new</span> <span class="syn-fn">Error</span>(<span class="syn-str">"Access denied"</span>));
+    }
+  });
+}
+
+<span class="syn-fn">checkAge</span>(<span class="syn-num">16</span>)
+  .<span class="syn-fn">then</span>((message) =&gt; {
+    <span class="syn-fn">console</span>.<span class="syn-fn">log</span>(message);
+  })
+  .<span class="syn-kw">catch</span>((error) =&gt; {
+    <span class="syn-fn">console</span>.<span class="syn-fn">log</span>(<span class="syn-str">"Error:"</span>, error.message);
+  });</code></pre>
+              </div>
+              <div class="terminal-output">
+                <div class="terminal-header"><span class="dot"></span><span>Expected Output</span></div>
+                <div class="terminal-body"><span class="cmd">$ node check-age.js</span>
+<span class="res">Error: Access denied</span></div>
+              </div></div>
+          </div>
+        </section>
+
+        <!-- ===================================================================
+             SLIDE 10: Understanding finally()
+             =================================================================== -->
+        <section id="slide-10" class="slide" data-slide-num="10">
+          <div class="slide-header">
+            <div class="slide-title-wrap">
+              <span class="slide-category">Section 3: Handling Promises</span>
+              <h2 class="slide-title">Understanding finally()</h2>
+              <p class="slide-subtitle">Running cleanup code after a Promise settles</p>
+            </div>
+            <span class="slide-num-pill">Slide 10 / 20</span>
+          </div>
+          <div class="slide-body grid-2">
+            <div class="col"><div class="card highlight">
+                <div class="card-title"><span class="card-icon">🏁</span><span>What finally() Does</span></div>
+                <p><code>.finally()</code> runs after the Promise settles, whether it was fulfilled or rejected.</p><ul class="feature-list"><li><span class="bullet-icon">▸</span><span><code>.then()</code> handles success.</span></li><li><span class="bullet-icon">▸</span><span><code>.catch()</code> handles failure.</span></li><li><span class="bullet-icon">▸</span><span><code>.finally()</code> handles cleanup or completion tasks.</span></li></ul>
+              </div>
+<div class="card ">
+                <div class="card-title"><span class="card-icon">🌍</span><span>Why It Is Useful</span></div>
+                <p>Hiding a loading indicator after an API request finishes, whether the request worked or not.</p>
+              </div>
+<div class="callout note"><span class="callout-icon">📌</span><div><strong>Flow:</strong> the Promise fulfills after 2 seconds → <code>.then()</code> prints the data → <code>.catch()</code> is skipped → <code>.finally()</code> always runs last.</div></div></div>
+            <div class="col"><div class="code-container">
+                <div class="code-header">
+                  <div class="code-file-badge"><span class="file-dot"></span><span>loading-status.js</span></div>
+                  <button class="copy-btn" type="button"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg><span>Copy Code</span></button>
+                </div>
+                <pre class="code-block"><code><span class="syn-kw">function</span> <span class="syn-fn">fetchData</span>() {
+  <span class="syn-kw">return</span> <span class="syn-kw">new</span> <span class="syn-fn">Promise</span>((resolve) =&gt; {
+    <span class="syn-fn">setTimeout</span>(() =&gt; {
+      <span class="syn-fn">resolve</span>(<span class="syn-str">"Data loaded successfully"</span>);
+    }, <span class="syn-num">2000</span>);
+  });
+}
+
+<span class="syn-fn">fetchData</span>()
+  .<span class="syn-fn">then</span>((result) =&gt; {
+    <span class="syn-fn">console</span>.<span class="syn-fn">log</span>(result);
+  })
+  .<span class="syn-kw">catch</span>((error) =&gt; {
+    <span class="syn-fn">console</span>.<span class="syn-fn">log</span>(error.message);
+  })
+  .<span class="syn-kw">finally</span>(() =&gt; {
+    <span class="syn-fn">console</span>.<span class="syn-fn">log</span>(<span class="syn-str">"Operation completed"</span>);
+  });</code></pre>
+              </div>
+              <div class="terminal-output">
+                <div class="terminal-header"><span class="dot"></span><span>Expected Output</span></div>
+                <div class="terminal-body"><span class="cmd">$ node loading-status.js</span>
+<span class="res">Data loaded successfully</span>   <span class="syn-cm"># after ~2 seconds</span>
+<span class="res">Operation completed</span></div>
+              </div></div>
+          </div>
+        </section>
+
+        <!-- ===================================================================
+             SLIDE 11: Promise Chaining
+             =================================================================== -->
+        <section id="slide-11" class="slide" data-slide-num="11">
+          <div class="slide-header">
+            <div class="slide-title-wrap">
+              <span class="slide-category">Section 3: Handling Promises</span>
+              <h2 class="slide-title">Promise Chaining</h2>
+              <p class="slide-subtitle">Running asynchronous steps in sequence without nesting</p>
+            </div>
+            <span class="slide-num-pill">Slide 11 / 20</span>
+          </div>
+          <div class="slide-body grid-2">
+            <div class="col"><div class="card highlight">
+                <div class="card-title"><span class="card-icon">🔗</span><span>What Chaining Does</span></div>
+                <p>Promise chaining runs several asynchronous operations one after another, in a flat list instead of a nested pyramid.</p>
+              </div>
+<div class="card ">
+                <div class="card-title"><span class="card-icon">🔍</span><span>Execution Flow</span></div>
+                <div class="step-breakdown"><div class="step-item"><span class="num-bullet">1</span><span><code>getUser()</code> returns a Promise.</span></div><div class="step-item"><span class="num-bullet">2</span><span>The first <code>.then()</code> receives the user.</span></div><div class="step-item"><span class="num-bullet">3</span><span>It <strong>returns</strong> another Promise from <code>getCourses()</code>.</span></div><div class="step-item"><span class="num-bullet">4</span><span>The next <code>.then()</code> receives the courses.</span></div><div class="step-item"><span class="num-bullet">5</span><span><code>.catch()</code> handles errors from anywhere in the chain.</span></div></div>
+              </div>
+<div class="callout warning"><span class="callout-icon">⚠️</span><div><strong>Always return the next Promise.</strong> Each <code>.then()</code> must <code>return</code> the next asynchronous operation. Without <code>return</code>, the next step does not wait for it.</div></div></div>
+            <div class="col"><div class="code-container">
+                <div class="code-header">
+                  <div class="code-file-badge"><span class="file-dot"></span><span>student-info.js</span></div>
+                  <button class="copy-btn" type="button"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg><span>Copy Code</span></button>
+                </div>
+                <pre class="code-block"><code><span class="syn-kw">function</span> <span class="syn-fn">getUser</span>() {
+  <span class="syn-kw">return</span> <span class="syn-kw">new</span> <span class="syn-fn">Promise</span>((resolve) =&gt; {
+    <span class="syn-fn">setTimeout</span>(() =&gt; {
+      <span class="syn-fn">resolve</span>({ id: <span class="syn-num">1</span>, name: <span class="syn-str">"Anu"</span> });
+    }, <span class="syn-num">1000</span>);
+  });
+}
+
+<span class="syn-kw">function</span> <span class="syn-fn">getCourses</span>(userId) {
+  <span class="syn-kw">return</span> <span class="syn-kw">new</span> <span class="syn-fn">Promise</span>((resolve) =&gt; {
+    <span class="syn-fn">setTimeout</span>(() =&gt; {
+      <span class="syn-fn">resolve</span>([<span class="syn-str">"React"</span>, <span class="syn-str">"Node.js"</span>, <span class="syn-str">"MongoDB"</span>]);
+    }, <span class="syn-num">1000</span>);
+  });
+}
+
+<span class="syn-fn">getUser</span>()
+  .<span class="syn-fn">then</span>((user) =&gt; {
+    <span class="syn-fn">console</span>.<span class="syn-fn">log</span>(<span class="syn-str">"User:"</span>, user.name);
+
+    <span class="syn-kw">return</span> <span class="syn-fn">getCourses</span>(user.id);
+  })
+  .<span class="syn-fn">then</span>((courses) =&gt; {
+    <span class="syn-fn">console</span>.<span class="syn-fn">log</span>(<span class="syn-str">"Courses:"</span>, courses);
+  })
+  .<span class="syn-kw">catch</span>((error) =&gt; {
+    <span class="syn-fn">console</span>.<span class="syn-fn">log</span>(<span class="syn-str">"Error:"</span>, error.message);
+  });</code></pre>
+              </div>
+              <div class="terminal-output">
+                <div class="terminal-header"><span class="dot"></span><span>Expected Output (1 second between lines)</span></div>
+                <div class="terminal-body"><span class="cmd">$ node student-info.js</span>
+<span class="res">User: Anu</span>
+<span class="res">Courses: [ 'React', 'Node.js', 'MongoDB' ]</span></div>
+              </div></div>
+          </div>
+        </section>
+
+        <!-- ===================================================================
+             SLIDE 12: What Is async/await?
+             =================================================================== -->
+        <section id="slide-12" class="slide" data-slide-num="12">
+          <div class="slide-header">
+            <div class="slide-title-wrap">
+              <span class="slide-category">Section 4: Understanding async/await</span>
+              <h2 class="slide-title">What Is async/await?</h2>
+              <p class="slide-subtitle">Modern syntax that makes Promise-based code easier to read</p>
+            </div>
+            <span class="slide-num-pill">Slide 12 / 20</span>
+          </div>
+          <div class="slide-body grid-2">
+            <div class="col"><div class="card highlight">
+                <div class="card-title"><span class="card-icon">✨</span><span>The Two Keywords</span></div>
+                <ul class="feature-list"><li><span class="bullet-icon">▸</span><span><code>async</code> declares an asynchronous function.</span></li><li><span class="bullet-icon">▸</span><span>An <code>async</code> function always returns a Promise.</span></li><li><span class="bullet-icon">▸</span><span><code>await</code> waits for a Promise to settle before continuing <em>inside that async function</em>.</span></li></ul>
+              </div>
+<div class="callout tip"><span class="callout-icon">⚡</span><div><strong>Non-blocking:</strong> <code>await</code> does not block the entire Node.js runtime. Other work keeps running while the function waits.</div></div>
+<div class="card ">
+                <div class="card-title"><span class="card-icon">🌍</span><span>Why It Is Useful</span></div>
+                <p>Asynchronous code reads from top to bottom like normal, step-by-step code.</p>
+              </div></div>
+            <div class="col"><div class="code-container">
+                <div class="code-header">
+                  <div class="code-file-badge"><span class="file-dot"></span><span>syntax.js  (pattern only)</span></div>
+                  <button class="copy-btn" type="button"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg><span>Copy Code</span></button>
+                </div>
+                <pre class="code-block"><code><span class="syn-kw">async</span> <span class="syn-kw">function</span> <span class="syn-fn">getData</span>() {
+  <span class="syn-kw">const</span> result = <span class="syn-kw">await</span> <span class="syn-fn">somePromise</span>();
+
+  <span class="syn-fn">console</span>.<span class="syn-fn">log</span>(result);
+}</code></pre>
+              </div>
+<div class="callout note"><span class="callout-icon">📌</span><div><code>somePromise()</code> stands for any function that returns a Promise. This slide shows the <strong>pattern</strong>; the next slides run real code.</div></div></div>
+          </div>
+        </section>
+
+        <!-- ===================================================================
+             SLIDE 13: Understanding async
+             =================================================================== -->
+        <section id="slide-13" class="slide" data-slide-num="13">
+          <div class="slide-header">
+            <div class="slide-title-wrap">
+              <span class="slide-category">Section 4: Understanding async/await</span>
+              <h2 class="slide-title">Understanding async</h2>
+              <p class="slide-subtitle">An async function always returns a Promise</p>
+            </div>
+            <span class="slide-num-pill">Slide 13 / 20</span>
+          </div>
+          <div class="slide-body grid-2">
+            <div class="col"><div class="card highlight">
+                <div class="card-title"><span class="card-icon">📦</span><span>What async Does</span></div>
+                <p>Adding <code>async</code> in front of a function makes it return a Promise automatically.</p><p>Even though <code>greet()</code> returns a normal string, JavaScript wraps it in a <strong>fulfilled Promise</strong>.</p>
+              </div>
+<div class="card ">
+                <div class="card-title"><span class="card-icon">🔍</span><span>Execution Flow</span></div>
+                <div class="step-breakdown"><div class="step-item"><span class="num-bullet">1</span><span><code>greet()</code> is called and returns a Promise, not a string.</span></div><div class="step-item"><span class="num-bullet">2</span><span><code>console.log(greet())</code> prints that Promise.</span></div><div class="step-item"><span class="num-bullet">3</span><span><code>.then()</code> receives the string inside it.</span></div></div>
+              </div></div>
+            <div class="col"><div class="code-container">
+                <div class="code-header">
+                  <div class="code-file-badge"><span class="file-dot"></span><span>async-basics.js</span></div>
+                  <button class="copy-btn" type="button"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg><span>Copy Code</span></button>
+                </div>
+                <pre class="code-block"><code><span class="syn-kw">async</span> <span class="syn-kw">function</span> <span class="syn-fn">greet</span>() {
+  <span class="syn-kw">return</span> <span class="syn-str">"Hello from Node.js"</span>;
+}
+
+<span class="syn-fn">console</span>.<span class="syn-fn">log</span>(<span class="syn-fn">greet</span>());
+
+<span class="syn-fn">greet</span>().<span class="syn-fn">then</span>((message) =&gt; {
+  <span class="syn-fn">console</span>.<span class="syn-fn">log</span>(message);
+});</code></pre>
+              </div>
+              <div class="terminal-output">
+                <div class="terminal-header"><span class="dot"></span><span>Expected Output</span></div>
+                <div class="terminal-body"><span class="cmd">$ node async-basics.js</span>
+<span class="res">Promise { 'Hello from Node.js' }</span>
+<span class="res">Hello from Node.js</span></div>
+              </div></div>
+          </div>
+        </section>
+
+        <!-- ===================================================================
+             SLIDE 14: Understanding await
+             =================================================================== -->
+        <section id="slide-14" class="slide" data-slide-num="14">
+          <div class="slide-header">
+            <div class="slide-title-wrap">
+              <span class="slide-category">Section 4: Understanding async/await</span>
+              <h2 class="slide-title">Understanding await</h2>
+              <p class="slide-subtitle">Waiting for a Promise and using its value</p>
+            </div>
+            <span class="slide-num-pill">Slide 14 / 20</span>
+          </div>
+          <div class="slide-body grid-2">
+            <div class="col"><div class="card highlight">
+                <div class="card-title"><span class="card-icon">⏳</span><span>What await Does</span></div>
+                <p><code>await</code> waits for a Promise to settle. It gives back the fulfilled value, or throws the rejection reason.</p><p><strong>Why it is useful:</strong> no <code>.then()</code> needed. The result goes straight into a variable.</p>
+              </div>
+<div class="card ">
+                <div class="card-title"><span class="card-icon">🔍</span><span>Execution Flow</span></div>
+                <div class="step-breakdown"><div class="step-item"><span class="num-bullet">1</span><span><code>main()</code> starts and prints <code>Loading user...</code>.</span></div><div class="step-item"><span class="num-bullet">2</span><span><code>await</code> waits for <code>getUser()</code> to fulfill (2 seconds).</span></div><div class="step-item"><span class="num-bullet">3</span><span>The user object is assigned to <code>user</code>.</span></div><div class="step-item"><span class="num-bullet">4</span><span>Execution continues with the next statement.</span></div></div>
+              </div></div>
+            <div class="col"><div class="code-container">
+                <div class="code-header">
+                  <div class="code-file-badge"><span class="file-dot"></span><span>await-user.js</span></div>
+                  <button class="copy-btn" type="button"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg><span>Copy Code</span></button>
+                </div>
+                <pre class="code-block"><code><span class="syn-kw">function</span> <span class="syn-fn">getUser</span>() {
+  <span class="syn-kw">return</span> <span class="syn-kw">new</span> <span class="syn-fn">Promise</span>((resolve) =&gt; {
+    <span class="syn-fn">setTimeout</span>(() =&gt; {
+      <span class="syn-fn">resolve</span>({
+        name: <span class="syn-str">"Anu"</span>,
+        role: <span class="syn-str">"Student"</span>,
+      });
+    }, <span class="syn-num">2000</span>);
+  });
+}
+
+<span class="syn-kw">async</span> <span class="syn-kw">function</span> <span class="syn-fn">main</span>() {
+  <span class="syn-fn">console</span>.<span class="syn-fn">log</span>(<span class="syn-str">"Loading user..."</span>);
+
+  <span class="syn-kw">const</span> user = <span class="syn-kw">await</span> <span class="syn-fn">getUser</span>();
+
+  <span class="syn-fn">console</span>.<span class="syn-fn">log</span>(<span class="syn-str">"User:"</span>, user);
+  <span class="syn-fn">console</span>.<span class="syn-fn">log</span>(<span class="syn-str">"Completed"</span>);
+}
+
+<span class="syn-fn">main</span>();</code></pre>
+              </div>
+              <div class="terminal-output">
+                <div class="terminal-header"><span class="dot"></span><span>Expected Output</span></div>
+                <div class="terminal-body"><span class="cmd">$ node await-user.js</span>
+<span class="res">Loading user...</span>
+<span class="res">User: { name: 'Anu', role: 'Student' }</span>   <span class="syn-cm"># after ~2 seconds</span>
+<span class="res">Completed</span></div>
+              </div></div>
+          </div>
+        </section>
+
+        <!-- ===================================================================
+             SLIDE 15: Promise vs async/await
+             =================================================================== -->
+        <section id="slide-15" class="slide" data-slide-num="15">
+          <div class="slide-header">
+            <div class="slide-title-wrap">
+              <span class="slide-category">Section 4: Understanding async/await</span>
+              <h2 class="slide-title">Promise vs async/await</h2>
+              <p class="slide-subtitle">The same asynchronous operation written two ways</p>
+            </div>
+            <span class="slide-num-pill">Slide 15 / 20</span>
+          </div>
+          <div class="slide-body grid-2">
+            <div class="col">
+              <div class="pane-label">Promise approach</div>
+              <div class="code-container">
+                <div class="code-header">
+                  <div class="code-file-badge"><span class="file-dot"></span><span>promise-version.js</span></div>
+                  <button class="copy-btn" type="button"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg><span>Copy Code</span></button>
+                </div>
+                <pre class="code-block"><code><span class="syn-kw">function</span> <span class="syn-fn">getUser</span>() {
+  <span class="syn-kw">return</span> <span class="syn-kw">new</span> <span class="syn-fn">Promise</span>((resolve) =&gt; {
+    <span class="syn-fn">setTimeout</span>(() =&gt; {
+      <span class="syn-fn">resolve</span>({ name: <span class="syn-str">"Anu"</span>, role: <span class="syn-str">"Student"</span> });
+    }, <span class="syn-num">1000</span>);
+  });
+}
+
+<span class="syn-fn">getUser</span>()
+  .<span class="syn-fn">then</span>((user) =&gt; {
+    <span class="syn-fn">console</span>.<span class="syn-fn">log</span>(user);
+  })
+  .<span class="syn-kw">catch</span>((error) =&gt; {
+    <span class="syn-fn">console</span>.<span class="syn-fn">log</span>(error.message);
+  });</code></pre>
+              </div>
+            </div>
+            <div class="col">
+              <div class="pane-label">async/await approach</div>
+              <div class="code-container">
+                <div class="code-header">
+                  <div class="code-file-badge"><span class="file-dot"></span><span>async-version.js</span></div>
+                  <button class="copy-btn" type="button"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg><span>Copy Code</span></button>
+                </div>
+                <pre class="code-block"><code><span class="syn-cm">// Uses the same getUser() function</span>
+<span class="syn-kw">async</span> <span class="syn-kw">function</span> <span class="syn-fn">main</span>() {
+  <span class="syn-kw">try</span> {
+    <span class="syn-kw">const</span> user = <span class="syn-kw">await</span> <span class="syn-fn">getUser</span>();
+
+    <span class="syn-fn">console</span>.<span class="syn-fn">log</span>(user);
+  } <span class="syn-kw">catch</span> (error) {
+    <span class="syn-fn">console</span>.<span class="syn-fn">log</span>(error.message);
+  }
+}
+
+<span class="syn-fn">main</span>();</code></pre>
+              </div>
+              <div class="terminal-output">
+                <div class="terminal-header"><span class="dot"></span><span>Both versions print the same output</span></div>
+                <div class="terminal-body"><span class="cmd">$ node async-version.js</span>
+<span class="res">{ name: 'Anu', role: 'Student' }</span></div>
+              </div>
+            </div>
+            <div class="span-all">
+              <div class="table-wrapper"><table class="presentation-table">
+              <thead><tr><th>Promises</th><th>async/await</th></tr></thead>
+              <tbody>
+                <tr><td>Uses <code>.then()</code></td><td>Uses <code>await</code></td></tr>
+                <tr><td>Uses <code>.catch()</code></td><td>Commonly uses <code>try/catch</code></td></tr>
+                <tr><td>Uses chaining</td><td>Reads like sequential code</td></tr>
+                <tr><td>Useful for Promise composition</td><td>Useful for readable asynchronous workflows</td></tr>
+              </tbody></table></div>
+              <div style="margin-top:0.9rem;"><div class="callout warning"><span class="callout-icon">⚠️</span><div><strong>Important:</strong> async/await is built on Promises. It does not replace them.</div></div></div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ===================================================================
+             SLIDE 16: try/catch with async/await
+             =================================================================== -->
+        <section id="slide-16" class="slide" data-slide-num="16">
+          <div class="slide-header">
+            <div class="slide-title-wrap">
+              <span class="slide-category">Section 5: Error Handling with async/await</span>
+              <h2 class="slide-title">try/catch with async/await</h2>
+              <p class="slide-subtitle">Catching rejected Promises with familiar syntax</p>
+            </div>
+            <span class="slide-num-pill">Slide 16 / 20</span>
+          </div>
+          <div class="slide-body grid-2">
+            <div class="col"><div class="card danger">
+                <div class="card-title"><span class="card-icon">🛡️</span><span>How It Works</span></div>
+                <p>When an awaited Promise rejects, the rejection is <strong>thrown as an error</strong>. A <code>try/catch</code> block can catch it.</p><p><strong>Why it is useful:</strong> the same <code>try/catch</code> you already know handles asynchronous errors.</p>
+              </div>
+<div class="card ">
+                <div class="card-title"><span class="card-icon">🔍</span><span>Execution Flow</span></div>
+                <div class="step-breakdown"><div class="step-item"><span class="num-bullet">1</span><span><code>try</code> contains the asynchronous operation.</span></div><div class="step-item"><span class="num-bullet">2</span><span><code>await</code> receives the Promise result.</span></div><div class="step-item"><span class="num-bullet">3</span><span>If the Promise rejects, execution moves to <code>catch</code>.</span></div><div class="step-item"><span class="num-bullet">4</span><span>The error is handled without crashing the workflow.</span></div></div>
+              </div></div>
+            <div class="col"><div class="code-container">
+                <div class="code-header">
+                  <div class="code-file-badge"><span class="file-dot"></span><span>try-catch.js</span></div>
+                  <button class="copy-btn" type="button"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg><span>Copy Code</span></button>
+                </div>
+                <pre class="code-block"><code><span class="syn-kw">function</span> <span class="syn-fn">getUser</span>() {
+  <span class="syn-kw">return</span> <span class="syn-kw">new</span> <span class="syn-fn">Promise</span>((resolve, reject) =&gt; {
+    <span class="syn-fn">setTimeout</span>(() =&gt; {
+      <span class="syn-fn">reject</span>(<span class="syn-kw">new</span> <span class="syn-fn">Error</span>(<span class="syn-str">"Unable to load user"</span>));
+    }, <span class="syn-num">1000</span>);
+  });
+}
+
+<span class="syn-kw">async</span> <span class="syn-kw">function</span> <span class="syn-fn">main</span>() {
+  <span class="syn-kw">try</span> {
+    <span class="syn-kw">const</span> user = <span class="syn-kw">await</span> <span class="syn-fn">getUser</span>();
+
+    <span class="syn-fn">console</span>.<span class="syn-fn">log</span>(user);
+  } <span class="syn-kw">catch</span> (error) {
+    <span class="syn-fn">console</span>.<span class="syn-fn">log</span>(<span class="syn-str">"Error:"</span>, error.message);
+  }
+}
+
+<span class="syn-fn">main</span>();</code></pre>
+              </div>
+              <div class="terminal-output">
+                <div class="terminal-header"><span class="dot"></span><span>Expected Output</span></div>
+                <div class="terminal-body"><span class="cmd">$ node try-catch.js</span>
+<span class="res">Error: Unable to load user</span>   <span class="syn-cm"># after ~1 second</span></div>
+              </div></div>
+          </div>
+        </section>
+
+        <!-- ===================================================================
+             SLIDE 17: Practical Login Workflow
+             =================================================================== -->
+        <section id="slide-17" class="slide" data-slide-num="17">
+          <div class="slide-header">
+            <div class="slide-title-wrap">
+              <span class="slide-category">Section 5: Error Handling with async/await</span>
+              <h2 class="slide-title">Practical Login Workflow</h2>
+              <p class="slide-subtitle">A simulated login using Promises, async/await, and try/catch</p>
+            </div>
+            <span class="slide-num-pill">Slide 17 / 20</span>
+          </div>
+          <div class="slide-body grid-2">
+            <div class="col"><div class="callout danger"><span class="callout-icon">🚫</span><div><strong>Demonstration only.</strong> This is a simulated login workflow. It is <em>not</em> real authentication and must never be used to store or verify real passwords.</div></div>
+<div class="card ">
+                <div class="card-title"><span class="card-icon">🔍</span><span>Execution Flow</span></div>
+                <div class="step-breakdown"><div class="step-item"><span class="num-bullet">1</span><span><code>login()</code> prints <code>Checking credentials...</code>.</span></div><div class="step-item"><span class="num-bullet">2</span><span><code>await loginUser(...)</code> waits 1.5 seconds.</span></div><div class="step-item"><span class="num-bullet">3</span><span>Correct credentials → the Promise resolves and the welcome lines print.</span></div><div class="step-item"><span class="num-bullet">4</span><span>Wrong credentials → the Promise rejects and <code>catch</code> prints the failure.</span></div></div>
+              </div>
+<div class="card ">
+                <div class="card-title"><span class="card-icon">🧪</span><span>Try It: Wrong Password</span></div>
+                <p>Change <code>"12345"</code> in the <code>loginUser(...)</code> call to <code>"wrong"</code> and run it again:</p><div class="terminal-output">
+                <div class="terminal-header"><span class="dot"></span><span>Output with a wrong password</span></div>
+                <div class="terminal-body"><span class="cmd">$ node login.js</span>
+<span class="res">Checking credentials...</span>
+<span class="res">Login failed: Invalid username or password</span></div>
+              </div>
+              </div></div>
+            <div class="col"><div class="code-container">
+                <div class="code-header">
+                  <div class="code-file-badge"><span class="file-dot"></span><span>login.js</span></div>
+                  <button class="copy-btn" type="button"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg><span>Copy Code</span></button>
+                </div>
+                <pre class="code-block"><code><span class="syn-kw">function</span> <span class="syn-fn">loginUser</span>(username, password) {
+  <span class="syn-kw">return</span> <span class="syn-kw">new</span> <span class="syn-fn">Promise</span>((resolve, reject) =&gt; {
+    <span class="syn-fn">setTimeout</span>(() =&gt; {
+      <span class="syn-kw">if</span> (username === <span class="syn-str">"admin"</span> &amp;&amp; password === <span class="syn-str">"12345"</span>) {
+        <span class="syn-fn">resolve</span>({
+          id: <span class="syn-num">1</span>,
+          username: <span class="syn-str">"admin"</span>,
+          message: <span class="syn-str">"Login successful"</span>,
+        });
+      } <span class="syn-kw">else</span> {
+        <span class="syn-fn">reject</span>(<span class="syn-kw">new</span> <span class="syn-fn">Error</span>(<span class="syn-str">"Invalid username or password"</span>));
+      }
+    }, <span class="syn-num">1500</span>);
+  });
+}
+
+<span class="syn-kw">async</span> <span class="syn-kw">function</span> <span class="syn-fn">login</span>() {
+  <span class="syn-kw">try</span> {
+    <span class="syn-fn">console</span>.<span class="syn-fn">log</span>(<span class="syn-str">"Checking credentials..."</span>);
+
+    <span class="syn-kw">const</span> user = <span class="syn-kw">await</span> <span class="syn-fn">loginUser</span>(<span class="syn-str">"admin"</span>, <span class="syn-str">"12345"</span>);
+
+    <span class="syn-fn">console</span>.<span class="syn-fn">log</span>(user.message);
+    <span class="syn-fn">console</span>.<span class="syn-fn">log</span>(<span class="syn-str">"Welcome:"</span>, user.username);
+  } <span class="syn-kw">catch</span> (error) {
+    <span class="syn-fn">console</span>.<span class="syn-fn">log</span>(<span class="syn-str">"Login failed:"</span>, error.message);
+  }
+}
+
+<span class="syn-fn">login</span>();</code></pre>
+              </div>
+              <div class="terminal-output">
+                <div class="terminal-header"><span class="dot"></span><span>Expected Output (after ~1.5 seconds)</span></div>
+                <div class="terminal-body"><span class="cmd">$ node login.js</span>
+<span class="res">Checking credentials...</span>
+<span class="res">Login successful</span>
+<span class="res">Welcome: admin</span></div>
+              </div></div>
+          </div>
+        </section>
+
+        <!-- ===================================================================
+             SLIDE 18: Mini Project: Student Enrollment System
+             =================================================================== -->
+        <section id="slide-18" class="slide" data-slide-num="18">
+          <div class="slide-header">
+            <div class="slide-title-wrap">
+              <span class="slide-category">Section 6: Final Practical Implementation</span>
+              <h2 class="slide-title">Mini Project: Student Enrollment System</h2>
+              <p class="slide-subtitle">Combining Promises and async/await in one small workflow</p>
+            </div>
+            <span class="slide-num-pill">Slide 18 / 20</span>
+          </div>
+          <div class="slide-body grid-2">
+            <div class="col">
+              <div class="card highlight">
+                <div class="card-title"><span class="card-icon">📋</span><span>Requirements</span></div>
+                <p>The application should:</p><ul class="feature-list"><li><span class="bullet-icon">▸</span><span>Register a student.</span></li><li><span class="bullet-icon">▸</span><span>Validate student information.</span></li><li><span class="bullet-icon">▸</span><span>Save student information using a simulated asynchronous operation.</span></li><li><span class="bullet-icon">▸</span><span>Enroll the student in a course.</span></li><li><span class="bullet-icon">▸</span><span>Display the enrollment confirmation.</span></li><li><span class="bullet-icon">▸</span><span>Handle errors using <code>try/catch</code>.</span></li></ul>
+              </div>
+            </div>
+            <div class="col">
+              <div class="card ">
+                <div class="card-title"><span class="card-icon">🗺️</span><span>Workflow</span></div>
+                <div class="workflow"><div class="wf-step"><div class="wf-name">Register Student</div><div class="wf-fn">registerStudent()</div></div><span class="wf-arrow">→</span><div class="wf-step"><div class="wf-name">Validate</div><div class="wf-fn">inside registerStudent()</div></div><span class="wf-arrow">→</span><div class="wf-step"><div class="wf-name">Save Student</div><div class="wf-fn">inside registerStudent()</div></div><span class="wf-arrow">→</span><div class="wf-step"><div class="wf-name">Enroll in Course</div><div class="wf-fn">enrollCourse()</div></div><span class="wf-arrow">→</span><div class="wf-step"><div class="wf-name">Confirmation</div><div class="wf-fn">main() logs the result</div></div></div>
+              </div>
+              <div class="callout note"><span class="callout-icon">📌</span><div><strong>Plan for next slide:</strong> <code>registerStudent()</code> validates the input and simulates saving the student. <code>enrollCourse()</code> enrolls the student. <code>async main()</code> connects them with <code>await</code>.</div></div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ===================================================================
+             SLIDE 19: Complete Practical Project
+             =================================================================== -->
+        <section id="slide-19" class="slide" data-slide-num="19">
+          <div class="slide-header">
+            <div class="slide-title-wrap">
+              <span class="slide-category">Section 6: Final Practical Implementation</span>
+              <h2 class="slide-title">Complete Practical Project</h2>
+              <p class="slide-subtitle">Student Enrollment System — explained section by section</p>
+            </div>
+            <span class="slide-num-pill">Slide 19 / 20</span>
+          </div>
+          <div class="slide-body grid-2-1">
+            <div class="col">
+              <div class="code-container">
+                <div class="code-header">
+                  <div class="code-file-badge"><span class="file-dot"></span><span>app.js</span></div>
+                  <button class="copy-btn" type="button"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg><span>Copy Code</span></button>
+                </div>
+                <pre class="code-block"><code><span class="syn-kw">function</span> <span class="syn-fn">registerStudent</span>(name, email) {
+  <span class="syn-kw">return</span> <span class="syn-kw">new</span> <span class="syn-fn">Promise</span>((resolve, reject) =&gt; {
+    <span class="syn-fn">setTimeout</span>(() =&gt; {
+      <span class="syn-kw">if</span> (!name || !email) {
+        <span class="syn-fn">reject</span>(<span class="syn-kw">new</span> <span class="syn-fn">Error</span>(<span class="syn-str">"Name and email are required"</span>));
+        <span class="syn-kw">return</span>;
+      }
+
+      <span class="syn-fn">resolve</span>({
+        id: <span class="syn-num">101</span>,
+        name,
+        email,
+      });
+    }, <span class="syn-num">1000</span>);
+  });
+}
+
+<span class="syn-kw">function</span> <span class="syn-fn">enrollCourse</span>(studentId, course) {
+  <span class="syn-kw">return</span> <span class="syn-kw">new</span> <span class="syn-fn">Promise</span>((resolve, reject) =&gt; {
+    <span class="syn-fn">setTimeout</span>(() =&gt; {
+      <span class="syn-kw">if</span> (!course) {
+        <span class="syn-fn">reject</span>(<span class="syn-kw">new</span> <span class="syn-fn">Error</span>(<span class="syn-str">"Course is required"</span>));
+        <span class="syn-kw">return</span>;
+      }
+
+      <span class="syn-fn">resolve</span>({
+        studentId,
+        course,
+        status: <span class="syn-str">"Enrolled"</span>,
+      });
+    }, <span class="syn-num">1000</span>);
+  });
+}
+
+<span class="syn-kw">async</span> <span class="syn-kw">function</span> <span class="syn-fn">main</span>() {
+  <span class="syn-kw">try</span> {
+    <span class="syn-fn">console</span>.<span class="syn-fn">log</span>(<span class="syn-str">"Student registration started..."</span>);
+
+    <span class="syn-kw">const</span> student = <span class="syn-kw">await</span> <span class="syn-fn">registerStudent</span>(<span class="syn-str">"Anu"</span>, <span class="syn-str">"anu@example.com"</span>);
+
+    <span class="syn-fn">console</span>.<span class="syn-fn">log</span>(<span class="syn-str">"Student registered:"</span>, student.name);
+
+    <span class="syn-kw">const</span> enrollment = <span class="syn-kw">await</span> <span class="syn-fn">enrollCourse</span>(student.id, <span class="syn-str">"MERN Stack"</span>);
+
+    <span class="syn-fn">console</span>.<span class="syn-fn">log</span>(<span class="syn-str">"Enrollment completed:"</span>, enrollment);
+  } <span class="syn-kw">catch</span> (error) {
+    <span class="syn-fn">console</span>.<span class="syn-fn">error</span>(<span class="syn-str">"Process failed:"</span>, error.message);
+  } <span class="syn-kw">finally</span> {
+    <span class="syn-fn">console</span>.<span class="syn-fn">log</span>(<span class="syn-str">"Enrollment process finished"</span>);
+  }
+}
+
+<span class="syn-fn">main</span>();</code></pre>
+              </div>
+            </div>
+            <div class="col">
+              <div class="card highlight">
+                <div class="card-title"><span class="card-icon">🧩</span><span>Code Walkthrough</span></div>
+                <div class="step-breakdown"><div class="step-item"><span class="num-bullet">1</span><span><strong><code>registerStudent()</code></strong> returns a Promise. It rejects if the name or email is missing; otherwise it resolves with the student after 1 second.</span></div><div class="step-item"><span class="num-bullet">2</span><span><strong><code>enrollCourse()</code></strong> returns a Promise. It rejects if the course is missing; otherwise it resolves with the enrollment record.</span></div><div class="step-item"><span class="num-bullet">3</span><span><strong><code>async main()</code></strong> connects both functions. Each <code>await</code> pauses <code>main()</code> until its Promise settles.</span></div><div class="step-item"><span class="num-bullet">4</span><span><strong><code>try/catch</code></strong> catches a rejection from either Promise.</span></div><div class="step-item"><span class="num-bullet">5</span><span><strong><code>finally</code></strong> always runs last, on success or failure.</span></div></div>
+              </div>
+              <div class="terminal-output">
+                <div class="terminal-header"><span class="dot"></span><span>Expected Output (about 2 seconds total)</span></div>
+                <div class="terminal-body"><span class="cmd">$ node app.js</span>
+<span class="res">Student registration started...</span>
+<span class="res">Student registered: Anu</span>
+<span class="res">Enrollment completed: { studentId: 101, course: 'MERN Stack', status: 'Enrolled' }</span>
+<span class="res">Enrollment process finished</span></div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ===================================================================
+             SLIDE 20: Practice Tasks and Key Takeaways
+             =================================================================== -->
+        <section id="slide-20" class="slide" data-slide-num="20">
+          <div class="slide-header">
+            <div class="slide-title-wrap">
+              <span class="slide-category">Section 6: Final Practical Implementation</span>
+              <h2 class="slide-title">Practice Tasks and Key Takeaways</h2>
+              <p class="slide-subtitle">Student lab exercises and a recap of Day 3</p>
+            </div>
+            <span class="slide-num-pill">Slide 20 / 20</span>
+          </div>
+          <div class="slide-body grid-2">
+            <div class="col">
+              <div class="card highlight">
+                <div class="card-title"><span class="card-icon">🧪</span><span>Student Practice Questions</span></div>
+                <div class="step-breakdown exercise-list"><div class="step-item"><span class="num-bullet">1</span><span>Create a Promise that resolves with <code>"Task Completed"</code> after two seconds.</span></div><div class="step-item"><span class="num-bullet">2</span><span>Create a Promise that rejects when a user enters an invalid age.</span></div><div class="step-item"><span class="num-bullet">3</span><span>Create a product function that returns product details using a Promise.</span></div><div class="step-item"><span class="num-bullet">4</span><span>Use <code>.then()</code> to display a product name and price.</span></div><div class="step-item"><span class="num-bullet">5</span><span>Use <code>.catch()</code> to handle an invalid product ID.</span></div><div class="step-item"><span class="num-bullet">6</span><span>Use <code>.finally()</code> to display <code>"Operation Finished"</code>.</span></div><div class="step-item"><span class="num-bullet">7</span><span>Convert a callback-based function into a Promise-based function.</span></div><div class="step-item"><span class="num-bullet">8</span><span>Create an async function that fetches student information using a simulated Promise.</span></div><div class="step-item"><span class="num-bullet">9</span><span>Implement a login function using async/await and try/catch.</span></div><div class="step-item"><span class="num-bullet">10</span><span>Extend the Student Enrollment System to validate the student's email.</span></div></div>
+              </div>
+            </div>
+            <div class="col">
+              <div class="card success">
+                <div class="card-title"><span class="card-icon">🎯</span><span>Key Takeaways</span></div>
+                <ul class="feature-list"><li><span class="bullet-icon">▸</span><span>Promises represent future asynchronous results.</span></li><li><span class="bullet-icon">▸</span><span><code>resolve()</code> fulfills a Promise.</span></li><li><span class="bullet-icon">▸</span><span><code>reject()</code> rejects a Promise.</span></li><li><span class="bullet-icon">▸</span><span><code>.then()</code> handles successful results.</span></li><li><span class="bullet-icon">▸</span><span><code>.catch()</code> handles failures.</span></li><li><span class="bullet-icon">▸</span><span><code>.finally()</code> runs after settlement.</span></li><li><span class="bullet-icon">▸</span><span>Promise chaining connects asynchronous operations.</span></li><li><span class="bullet-icon">▸</span><span><code>async</code> functions return Promises.</span></li><li><span class="bullet-icon">▸</span><span><code>await</code> makes Promise-based code easier to read.</span></li><li><span class="bullet-icon">▸</span><span><code>try/catch</code> handles asynchronous errors.</span></li></ul>
+              </div>
+            </div>
+          </div>
+        </section>
+
+      </div>
+    </main>
+
+    <!-- Bottom Navigation Controls -->
+    <footer class="bottom-bar">
+      <div class="bottom-left">
+        <button id="prev-btn" class="control-btn" type="button" title="Previous Slide (Left Arrow, PageUp)">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"></polyline></svg>
+          <span>Previous</span>
+        </button>
+      </div>
+      <div class="bottom-center">
+        <span id="slide-counter" class="slide-counter">01 / 20</span>
+      </div>
+      <div class="bottom-right">
+        <button id="next-btn" class="control-btn primary" type="button" title="Next Slide (Right Arrow, Space, PageDown)">
+          <span>Next</span>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
+        </button>
+      </div>
+    </footer>
+
+    <!-- Table of Contents Slide Drawer -->
+    <div id="toc-overlay" class="toc-overlay">
+      <aside class="toc-drawer">
+        <div class="toc-header">
+          <div class="toc-title">Table of Contents (20 Slides)</div>
+          <button id="toc-close" class="toc-close" type="button" title="Close Drawer (Esc)">&times;</button>
+        </div>
+        <div id="toc-list" class="toc-list">
+          <!-- Populated dynamically by script.js -->
+        </div>
+      </aside>
+    </div>
+
+    <!-- Keyboard Shortcuts Help Modal -->
+    <div id="help-modal-overlay" class="help-modal-overlay">
+      <div class="help-modal">
+        <div class="help-modal-header">
+          <div class="help-modal-title">⌨️ Keyboard Shortcuts</div>
+          <button id="help-modal-close" class="toc-close" type="button">&times;</button>
+        </div>
+        <div class="help-modal-body">
+          <div class="shortcut-row"><span>Next Slide</span><div><span class="kbd-badge">→</span> or <span class="kbd-badge">Space</span> or <span class="kbd-badge">PgDn</span></div></div>
+          <div class="shortcut-row"><span>Previous Slide</span><div><span class="kbd-badge">←</span> or <span class="kbd-badge">PgUp</span></div></div>
+          <div class="shortcut-row"><span>First Slide (Title)</span><span class="kbd-badge">Home</span></div>
+          <div class="shortcut-row"><span>Last Slide (Practice &amp; Takeaways)</span><span class="kbd-badge">End</span></div>
+          <div class="shortcut-row"><span>Toggle Fullscreen</span><span class="kbd-badge">F</span></div>
+          <div class="shortcut-row"><span>Table of Contents</span><div><span class="kbd-badge">T</span> or <span class="kbd-badge">M</span></div></div>
+          <div class="shortcut-row"><span>Close Modal / Drawer</span><span class="kbd-badge">Esc</span></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
