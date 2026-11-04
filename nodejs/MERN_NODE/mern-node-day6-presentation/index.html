@@ -1,0 +1,1666 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Node.js Day 6 — CRUD API, Middleware &amp; MVC Architecture</title>
+  <meta name="description" content="Node.js Day 6 Classroom Presentation: Implementing CRUD APIs, Express Middleware, Error Handling, and MVC Architecture using a Student Management API.">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="presentation-container">
+    
+    <!-- ===================================================================
+         TOP BAR (Header, Navigation & Progress)
+         =================================================================== -->
+    <header class="top-bar">
+      <div class="progress-track">
+        <div id="progress-bar" class="progress-fill"></div>
+      </div>
+
+      <div class="top-left">
+        <div class="brand-badge">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+          <span>Node.js Day 6</span>
+        </div>
+        <div class="deck-title">
+          <span>Backend Architecture</span>
+          <span class="deck-divider">/</span>
+          <span id="section-indicator" class="section-indicator">Overview &amp; What is CRUD?</span>
+        </div>
+      </div>
+
+      <div class="top-right">
+        <span id="slide-counter" class="slide-counter">01 / 18</span>
+        <button id="toc-btn" class="top-btn" title="Open Table of Contents (Press 'T' or 'M')">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+        </button>
+        <button id="help-btn" class="top-btn" title="Keyboard Shortcuts (Press '?')">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+        </button>
+        <button id="fullscreen-btn" class="top-btn" title="Toggle Fullscreen (Press 'F')">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path></svg>
+        </button>
+      </div>
+    </header>
+
+    <!-- ===================================================================
+         SLIDE VIEWPORT (18 Slides)
+         =================================================================== -->
+    <main class="slide-viewport">
+
+      <!-- ===============================================================
+           SLIDE 1: Title Slide
+           =============================================================== -->
+      <section id="slide-1" class="slide active" data-slide-num="1">
+        <div class="hero-container">
+          <div class="hero-badge-wrap">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg>
+            <span>Node.js &amp; Express.js — Day 6</span>
+          </div>
+
+          <h1 class="hero-title">
+            CRUD API, Middleware &amp; <span class="highlight-text">MVC Architecture</span>
+          </h1>
+
+          <p class="hero-subtitle">
+            Learn how to build complete RESTful data operations, intercept requests with reusable checkpoints (Middleware), and organize professional backend code using the Model-View-Controller pattern.
+          </p>
+
+          <div class="hero-topics-grid">
+            <div class="hero-topic-card">
+              <span style="font-size:1.4rem;">⚡</span>
+              <span><strong>CRUD API</strong><br><small style="color:var(--text-subtle);">Create, Read, Update, Delete</small></span>
+            </div>
+            <div class="hero-topic-card">
+              <span style="font-size:1.4rem;">🛡️</span>
+              <span><strong>Express Middleware</strong><br><small style="color:var(--text-subtle);">Request checkpoints &amp; next()</small></span>
+            </div>
+            <div class="hero-topic-card">
+              <span style="font-size:1.4rem;">🏗️</span>
+              <span><strong>MVC Architecture</strong><br><small style="color:var(--text-subtle);">Models, Routes, Controllers</small></span>
+            </div>
+          </div>
+
+          <div class="hero-footer-meta">
+            <span><strong>Target:</strong> Beginner MERN Stack Students</span>
+            <span>•</span>
+            <span><strong>Core Project:</strong> Student Management API</span>
+            <span>•</span>
+            <span><strong>Focus:</strong> From Simple Server to Clean Architecture</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===============================================================
+           SLIDE 2: What Are We Building Today?
+           =============================================================== -->
+      <section id="slide-2" class="slide" data-slide-num="2">
+        <div class="slide-header">
+          <div class="slide-title-wrap">
+            <span class="slide-category">Project Overview</span>
+            <h2 class="slide-title">What Are We Building Today?</h2>
+            <p class="slide-subtitle">Building and structuring a production-ready Student Management API</p>
+          </div>
+          <span class="slide-num-pill">Slide 02 / 18</span>
+        </div>
+
+        <div class="slide-body grid-2">
+          <!-- Left Column: The Practical Application Requirements -->
+          <div style="display:flex; flex-direction:column; gap:0.95rem;">
+            <div class="card highlight">
+              <div class="card-title">
+                <span>🎓</span>
+                <span>The Student Management Scenario</span>
+              </div>
+              <p>
+                Imagine an educational institution where an administrator needs an API to:
+              </p>
+              <ul class="feature-list" style="margin-top:0.3rem;">
+                <li><span class="bullet-icon">➕</span> <strong>Register a new student:</strong> Save name, email, and enrolled course.</li>
+                <li><span class="bullet-icon">📋</span> <strong>View all students:</strong> Return the complete student roster.</li>
+                <li><span class="bullet-icon">🔍</span> <strong>View one student's profile:</strong> Lookup student details by ID.</li>
+                <li><span class="bullet-icon">✏️</span> <strong>Update student information:</strong> Modify contact or course details.</li>
+                <li><span class="bullet-icon">❌</span> <strong>Delete a student:</strong> Remove a student upon withdrawal.</li>
+              </ul>
+            </div>
+
+            <div class="callout callout-info">
+              <span>💡</span>
+              <div>
+                <strong>The Architectural Challenge:</strong> Putting all these routes, validations, and data arrays inside one big <code>server.js</code> file becomes unreadable. Today we learn how to cleanly split this into <strong>Middleware and MVC</strong>!
+              </div>
+            </div>
+          </div>
+
+          <!-- Right Column: Visual Architecture Flow -->
+          <div style="display:flex; flex-direction:column; gap:0.95rem;">
+            <div class="card">
+              <div class="card-title">
+                <span>🔄</span>
+                <span>The End-to-End Request Pipeline</span>
+              </div>
+              <div style="background:#0b1329; border-radius:8px; padding:1.1rem; color:#e2e8f0; font-family:var(--font-mono); font-size:0.83rem; line-height:1.7;">
+                Client / Postman Request<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&darr;<br>
+                <span style="color:#f472b6;">Express Server</span> (server.js)<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&darr;<br>
+                <span style="color:#fbbf24;">Middleware</span> (Logging &amp; Validation checkpoints)<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&darr;<br>
+                <span style="color:#38bdf8;">Routes</span> (URL matching: /students)<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&darr;<br>
+                <span style="color:#4ade80;">Controller</span> (Request / Response logic)<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&darr;<br>
+                <span style="color:#c084fc;">Model</span> (Student data array operations)<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&darr;<br>
+                <strong>JSON Response returned to client!</strong>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===============================================================
+           SLIDE 3: What Is CRUD?
+           =============================================================== -->
+      <section id="slide-3" class="slide" data-slide-num="3">
+        <div class="slide-header">
+          <div class="slide-title-wrap">
+            <span class="slide-category">Core Fundamentals</span>
+            <h2 class="slide-title">What Is CRUD?</h2>
+            <p class="slide-subtitle">The four basic data management operations and their standard HTTP method mappings</p>
+          </div>
+          <span class="slide-num-pill">Slide 03 / 18</span>
+        </div>
+
+        <div class="slide-body grid-2">
+          <!-- Left Column: Meaning & HTTP Mapping Table -->
+          <div style="display:flex; flex-direction:column; gap:0.95rem;">
+            <div class="table-responsive">
+              <table class="custom-table" style="font-size:0.86rem;">
+                <thead>
+                  <tr>
+                    <th>CRUD Operation</th>
+                    <th>Meaning</th>
+                    <th>HTTP Method</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><strong>Create</strong></td>
+                    <td>Add new record</td>
+                    <td><span class="badge-method badge-post">POST</span></td>
+                  </tr>
+                  <tr>
+                    <td><strong>Read</strong></td>
+                    <td>Retrieve existing data</td>
+                    <td><span class="badge-method badge-get">GET</span></td>
+                  </tr>
+                  <tr>
+                    <td><strong>Update</strong></td>
+                    <td>Modify existing record</td>
+                    <td><span class="badge-method badge-put">PUT / PATCH</span></td>
+                  </tr>
+                  <tr>
+                    <td><strong>Delete</strong></td>
+                    <td>Remove existing record</td>
+                    <td><span class="badge-method badge-delete">DELETE</span></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="callout callout-tip">
+              <span>📌</span>
+              <div>
+                <strong>Important Principle:</strong> CRUD describes <em>what we want to do</em> with our data. HTTP methods (POST, GET, PUT, PATCH, DELETE) are the standard communication protocols used to execute them across the internet.
+              </div>
+            </div>
+          </div>
+
+          <!-- Right Column: Student Management Mapping -->
+          <div style="display:flex; flex-direction:column; gap:0.95rem;">
+            <div class="card highlight">
+              <div class="card-title">
+                <span>🎓</span>
+                <span>Student Management Mapping</span>
+              </div>
+              <div class="table-responsive">
+                <table class="custom-table" style="font-size:0.84rem;">
+                  <thead>
+                    <tr>
+                      <th>Action</th>
+                      <th>API Endpoint</th>
+                      <th>Method</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>Register new student</td>
+                      <td><code>/students</code></td>
+                      <td><span class="badge-method badge-post">POST</span></td>
+                    </tr>
+                    <tr>
+                      <td>View all students</td>
+                      <td><code>/students</code></td>
+                      <td><span class="badge-method badge-get">GET</span></td>
+                    </tr>
+                    <tr>
+                      <td>View student by ID</td>
+                      <td><code>/students/:id</code></td>
+                      <td><span class="badge-method badge-get">GET</span></td>
+                    </tr>
+                    <tr>
+                      <td>Change email / course</td>
+                      <td><code>/students/:id</code></td>
+                      <td><span class="badge-method badge-put">PUT</span></td>
+                    </tr>
+                    <tr>
+                      <td>Withdraw student</td>
+                      <td><code>/students/:id</code></td>
+                      <td><span class="badge-method badge-delete">DELETE</span></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===============================================================
+           SLIDE 4: Setting Up the Express Project
+           =============================================================== -->
+      <section id="slide-4" class="slide" data-slide-num="4">
+        <div class="slide-header">
+          <div class="slide-title-wrap">
+            <span class="slide-category">Section 1: Implementing CRUD API</span>
+            <h2 class="slide-title">Setting Up the Express Project</h2>
+            <p class="slide-subtitle">Initializing our project and creating a simple starter server with in-memory state</p>
+          </div>
+          <span class="slide-num-pill">Slide 04 / 18</span>
+        </div>
+
+        <div class="slide-body grid-2">
+          <!-- Left Column: Terminal Setup & Starter Code -->
+          <div style="display:flex; flex-direction:column; gap:0.9rem;">
+            <div class="card highlight" style="padding:0.9rem 1.1rem;">
+              <div class="card-title">
+                <span>💻</span>
+                <span>Step 1: Terminal Setup</span>
+              </div>
+              <pre class="code-block" style="font-size:0.8rem; background:#0b1329; padding:0.6rem; border-radius:6px;"><code>mkdir student-management-api
+cd student-management-api
+npm init -y
+npm install express</code></pre>
+            </div>
+
+            <div class="code-container">
+              <div class="code-header">
+                <div class="code-file-badge"><span class="file-dot"></span><span>server.js — Initial Setup</span></div>
+                <button class="copy-btn"><span>Copy Code</span></button>
+              </div>
+              <pre class="code-block" style="font-size:0.79rem;"><code><span class="syn-kw">const</span> express = <span class="syn-fn">require</span>(<span class="syn-str">"express"</span>);
+<span class="syn-kw">const</span> app = <span class="syn-fn">express</span>();
+<span class="syn-kw">const</span> PORT = <span class="syn-num">3000</span>;
+
+<span class="syn-cm">// CRITICAL: Middleware to parse incoming JSON bodies</span>
+app.<span class="syn-fn">use</span>(express.<span class="syn-fn">json</span>());
+
+<span class="syn-cm">// In-memory student array (temporary storage)</span>
+<span class="syn-kw">let</span> students = [
+    { id: <span class="syn-num">1</span>, name: <span class="syn-str">"Anu"</span>, email: <span class="syn-str">"anu@gmail.com"</span>, course: <span class="syn-str">"MERN"</span> },
+    { id: <span class="syn-num">2</span>, name: <span class="syn-str">"Rahul"</span>, email: <span class="syn-str">"rahul@gmail.com"</span>, course: <span class="syn-str">"Python"</span> }
+];
+
+app.<span class="syn-fn">listen</span>(PORT, () =&gt; {
+    <span class="syn-fn">console</span>.<span class="syn-fn">log</span>(<span class="syn-str">`Server running on port ${PORT}`</span>);
+});</code></pre>
+            </div>
+          </div>
+
+          <!-- Right Column: Explanations -->
+          <div style="display:flex; flex-direction:column; gap:0.9rem;">
+            <div class="card">
+              <div class="card-title">
+                <span>🔍</span>
+                <span>Code Breakdown</span>
+              </div>
+              <ul class="feature-list" style="font-size:0.86rem;">
+                <li><code>express()</code> &rarr; Initializes the Express application instance.</li>
+                <li><code>app.use(express.json())</code> &rarr; Reads incoming JSON request bodies and attaches them to <code>req.body</code>.</li>
+                <li><code>app.listen()</code> &rarr; Starts our server listening on port 3000.</li>
+              </ul>
+            </div>
+
+            <div class="terminal-output">
+              <div class="terminal-header"><span class="dot"></span><span>Node Terminal</span></div>
+              <div class="terminal-body"><span class="cmd">node server.js</span>
+<span class="suc">Server running on port 3000</span></div>
+            </div>
+
+            <div class="callout callout-warning">
+              <span>⚠️</span>
+              <div>
+                <strong>In-Memory Notice:</strong> Because our data is stored in a JavaScript array (<code>let students</code>), it lives in RAM. When you restart the server, the data resets to its initial two students.
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===============================================================
+           SLIDE 5: CREATE: Adding a New Student
+           =============================================================== -->
+      <section id="slide-5" class="slide" data-slide-num="5">
+        <div class="slide-header">
+          <div class="slide-title-wrap">
+            <span class="slide-category">Section 1: Implementing CRUD API</span>
+            <h2 class="slide-title">CREATE — Adding a New Student</h2>
+            <p class="slide-subtitle">Implementing <code>POST /students</code> with body validation and HTTP 201 Created</p>
+          </div>
+          <span class="slide-num-pill">Slide 05 / 18</span>
+        </div>
+
+        <div class="slide-body grid-2">
+          <!-- Left Column: Code -->
+          <div style="display:flex; flex-direction:column; gap:0.9rem;">
+            <div class="code-container">
+              <div class="code-header">
+                <div class="code-file-badge"><span class="file-dot"></span><span>server.js (POST /students)</span></div>
+                <button class="copy-btn"><span>Copy Code</span></button>
+              </div>
+              <pre class="code-block" style="font-size:0.79rem;"><code>app.<span class="syn-fn">post</span>(<span class="syn-str">"/students"</span>, (req, res) =&gt; {
+    <span class="syn-kw">const</span> { name, email, course } = req.body;
+
+    <span class="syn-cm">// 1. Validate required fields</span>
+    <span class="syn-kw">if</span> (!name || !email || !course) {
+        <span class="syn-kw">return</span> res.<span class="syn-fn">status</span>(<span class="syn-num">400</span>).<span class="syn-fn">json</span>({
+            message: <span class="syn-str">"All fields are required"</span>
+        });
+    }
+
+    <span class="syn-cm">// 2. Auto-increment dynamic ID</span>
+    <span class="syn-kw">const</span> newStudent = {
+        id: students.length
+            ? Math.<span class="syn-fn">max</span>(...students.<span class="syn-fn">map</span>(s =&gt; s.id)) + <span class="syn-num">1</span>
+            : <span class="syn-num">1</span>,
+        name,
+        email,
+        course
+    };
+
+    <span class="syn-cm">// 3. Save to array and respond with 201 Created</span>
+    students.<span class="syn-fn">push</span>(newStudent);
+
+    res.<span class="syn-fn">status</span>(<span class="syn-num">201</span>).<span class="syn-fn">json</span>({
+        message: <span class="syn-str">"Student created successfully"</span>,
+        data: newStudent
+    });
+});</code></pre>
+            </div>
+          </div>
+
+          <!-- Right Column: Postman Testing -->
+          <div style="display:flex; flex-direction:column; gap:0.9rem;">
+            <div class="card highlight">
+              <div class="card-title">
+                <span class="badge-method badge-post">POST</span>
+                <span>Testing CREATE in Postman</span>
+              </div>
+              <ul class="feature-list" style="font-size:0.86rem;">
+                <li><strong>Method:</strong> <code>POST</code> &nbsp;|&nbsp; <strong>URL:</strong> <code>http://localhost:3000/students</code></li>
+                <li><strong>Body Tab:</strong> Select <strong>raw</strong> &rarr; <strong>JSON</strong></li>
+              </ul>
+            </div>
+
+            <div class="terminal-output">
+              <div class="terminal-header"><span class="dot"></span><span>Postman Request Body &amp; 201 Response</span></div>
+              <div class="terminal-body"><span class="cmd">// JSON REQUEST BODY:</span>
+{
+    "name": "Mubashir",
+    "email": "mubashir@gmail.com",
+    "course": "MERN Stack"
+}
+
+<span class="suc">// STATUS: 201 Created</span>
+<span class="res">{
+    "message": "Student created successfully",
+    "data": {
+        "id": 3,
+        "name": "Mubashir",
+        "email": "mubashir@gmail.com",
+        "course": "MERN Stack"
+    }
+}</span></div>
+            </div>
+
+            <div class="card" style="font-size:0.83rem; padding:0.75rem 1rem;">
+              <strong>Key Point:</strong> <code>201 Created</code> explicitly signals that a new resource was successfully added to our data collection.
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===============================================================
+           SLIDE 6: READ: Getting Student Details
+           =============================================================== -->
+      <section id="slide-6" class="slide" data-slide-num="6">
+        <div class="slide-header">
+          <div class="slide-title-wrap">
+            <span class="slide-category">Section 1: Implementing CRUD API</span>
+            <h2 class="slide-title">READ — Getting Student Details</h2>
+            <p class="slide-subtitle">Retrieving the full roster with <code>GET /students</code> and a single profile with <code>GET /students/:id</code></p>
+          </div>
+          <span class="slide-num-pill">Slide 06 / 18</span>
+        </div>
+
+        <div class="slide-body grid-2">
+          <!-- Left Column: Code -->
+          <div style="display:flex; flex-direction:column; gap:0.9rem;">
+            <div class="code-container">
+              <div class="code-header">
+                <div class="code-file-badge"><span class="file-dot"></span><span>server.js (READ Endpoints)</span></div>
+                <button class="copy-btn"><span>Copy Code</span></button>
+              </div>
+              <pre class="code-block" style="font-size:0.8rem;"><code><span class="syn-cm">// 1. GET ALL STUDENTS</span>
+app.<span class="syn-fn">get</span>(<span class="syn-str">"/students"</span>, (req, res) =&gt; {
+    res.<span class="syn-fn">status</span>(<span class="syn-num">200</span>).<span class="syn-fn">json</span>({
+        count: students.length,
+        data: students
+    });
+});
+
+<span class="syn-cm">// 2. GET ONE STUDENT BY ID</span>
+app.<span class="syn-fn">get</span>(<span class="syn-str">"/students/:id"</span>, (req, res) =&gt; {
+    <span class="syn-kw">const</span> id = <span class="syn-fn">Number</span>(req.params.id);
+
+    <span class="syn-kw">const</span> student = students.<span class="syn-fn">find</span>(
+        (s) =&gt; s.id === id
+    );
+
+    <span class="syn-kw">if</span> (!student) {
+        <span class="syn-kw">return</span> res.<span class="syn-fn">status</span>(<span class="syn-num">404</span>).<span class="syn-fn">json</span>({
+            message: <span class="syn-str">"Student not found"</span>
+        });
+    }
+
+    res.<span class="syn-fn">status</span>(<span class="syn-num">200</span>).<span class="syn-fn">json</span>({
+        data: student
+    });
+});</code></pre>
+            </div>
+          </div>
+
+          <!-- Right Column: Explanations & Postman -->
+          <div style="display:flex; flex-direction:column; gap:0.9rem;">
+            <div class="card highlight">
+              <div class="card-title">
+                <span class="badge-method badge-get">GET</span>
+                <span>Testing READ in Postman</span>
+              </div>
+              <ul class="feature-list" style="font-size:0.86rem;">
+                <li><code>GET /students</code> &rarr; Returns all students with array count.</li>
+                <li><code>GET /students/1</code> &rarr; Returns Anu's object with <code>200 OK</code>.</li>
+                <li><code>GET /students/99</code> &rarr; Returns <code>404 Not Found</code>.</li>
+              </ul>
+            </div>
+
+            <div class="terminal-output">
+              <div class="terminal-header"><span class="dot"></span><span>Response: GET /students/1</span></div>
+              <div class="terminal-body"><span class="suc">// STATUS: 200 OK</span>
+<span class="res">{
+    "data": {
+        "id": 1,
+        "name": "Anu",
+        "email": "anu@gmail.com",
+        "course": "MERN"
+    }
+}</span></div>
+            </div>
+
+            <div class="card" style="font-size:0.83rem; padding:0.75rem 1rem;">
+              <strong>Key Functions:</strong> <code>find()</code> searches for the matching ID, and <code>Number()</code> ensures string URL parameters (<code>"1"</code>) match numeric IDs (<code>1</code>).
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===============================================================
+           SLIDE 7: UPDATE: Updating Student Information
+           =============================================================== -->
+      <section id="slide-7" class="slide" data-slide-num="7">
+        <div class="slide-header">
+          <div class="slide-title-wrap">
+            <span class="slide-category">Section 1: Implementing CRUD API</span>
+            <h2 class="slide-title">UPDATE — Updating Student Information</h2>
+            <p class="slide-subtitle">Replacing a complete student record using the <code>PUT /students/:id</code> method</p>
+          </div>
+          <span class="slide-num-pill">Slide 07 / 18</span>
+        </div>
+
+        <div class="slide-body grid-2">
+          <!-- Left Column: PUT Code -->
+          <div style="display:flex; flex-direction:column; gap:0.9rem;">
+            <div class="code-container">
+              <div class="code-header">
+                <div class="code-file-badge"><span class="file-dot"></span><span>server.js (PUT /students/:id)</span></div>
+                <button class="copy-btn"><span>Copy Code</span></button>
+              </div>
+              <pre class="code-block" style="font-size:0.79rem;"><code>app.<span class="syn-fn">put</span>(<span class="syn-str">"/students/:id"</span>, (req, res) =&gt; {
+    <span class="syn-kw">const</span> id = <span class="syn-fn">Number</span>(req.params.id);
+
+    <span class="syn-cm">// 1. Locate existing student</span>
+    <span class="syn-kw">const</span> student = students.<span class="syn-fn">find</span>(s =&gt; s.id === id);
+    <span class="syn-kw">if</span> (!student) {
+        <span class="syn-kw">return</span> res.<span class="syn-fn">status</span>(<span class="syn-num">404</span>).<span class="syn-fn">json</span>({
+            message: <span class="syn-str">"Student not found"</span>
+        });
+    }
+
+    <span class="syn-kw">const</span> { name, email, course } = req.body;
+
+    <span class="syn-cm">// 2. PUT requires all representation fields</span>
+    <span class="syn-kw">if</span> (!name || !email || !course) {
+        <span class="syn-kw">return</span> res.<span class="syn-fn">status</span>(<span class="syn-num">400</span>).<span class="syn-fn">json</span>({
+            message: <span class="syn-str">"All fields are required"</span>
+        });
+    }
+
+    <span class="syn-cm">// 3. Update the fields</span>
+    student.name = name;
+    student.email = email;
+    student.course = course;
+
+    res.<span class="syn-fn">status</span>(<span class="syn-num">200</span>).<span class="syn-fn">json</span>({
+        message: <span class="syn-str">"Student updated successfully"</span>,
+        data: student
+    });
+});</code></pre>
+            </div>
+          </div>
+
+          <!-- Right Column: Explanations -->
+          <div style="display:flex; flex-direction:column; gap:0.9rem;">
+            <div class="card highlight">
+              <div class="card-title">
+                <span class="badge-method badge-put">PUT</span>
+                <span>The Nature of HTTP PUT</span>
+              </div>
+              <p style="font-size:0.86rem;">
+                <strong>PUT</strong> replaces the <em>complete representation</em> of a resource. The client must submit all required fields (<code>name</code>, <code>email</code>, and <code>course</code>).
+              </p>
+            </div>
+
+            <div class="terminal-output">
+              <div class="terminal-header"><span class="dot"></span><span>Postman: PUT /students/1</span></div>
+              <div class="terminal-body"><span class="cmd">// REQUEST BODY:</span>
+{
+    "name": "Anu Updated",
+    "email": "anuupdated@gmail.com",
+    "course": "Node.js"
+}
+
+<span class="suc">// STATUS: 200 OK</span>
+<span class="res">{
+    "message": "Student updated successfully",
+    "data": {
+        "id": 1,
+        "name": "Anu Updated",
+        "email": "anuupdated@gmail.com",
+        "course": "Node.js"
+    }
+}</span></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===============================================================
+           SLIDE 8: PATCH: Updating Selected Fields
+           =============================================================== -->
+      <section id="slide-8" class="slide" data-slide-num="8">
+        <div class="slide-header">
+          <div class="slide-title-wrap">
+            <span class="slide-category">Section 1: Implementing CRUD API</span>
+            <h2 class="slide-title">PATCH — Updating Selected Fields</h2>
+            <p class="slide-subtitle">Modifying only specified fields with <code>PATCH /students/:id</code> and Object.assign()</p>
+          </div>
+          <span class="slide-num-pill">Slide 08 / 18</span>
+        </div>
+
+        <div class="slide-body grid-2">
+          <!-- Left Column: PATCH Code -->
+          <div style="display:flex; flex-direction:column; gap:0.9rem;">
+            <div class="code-container">
+              <div class="code-header">
+                <div class="code-file-badge"><span class="file-dot"></span><span>server.js (PATCH /students/:id)</span></div>
+                <button class="copy-btn"><span>Copy Code</span></button>
+              </div>
+              <pre class="code-block" style="font-size:0.79rem;"><code>app.<span class="syn-fn">patch</span>(<span class="syn-str">"/students/:id"</span>, (req, res) =&gt; {
+    <span class="syn-kw">const</span> id = <span class="syn-fn">Number</span>(req.params.id);
+
+    <span class="syn-kw">const</span> student = students.<span class="syn-fn">find</span>(s =&gt; s.id === id);
+    <span class="syn-kw">if</span> (!student) {
+        <span class="syn-kw">return</span> res.<span class="syn-fn">status</span>(<span class="syn-num">404</span>).<span class="syn-fn">json</span>({ message: <span class="syn-str">"Student not found"</span> });
+    }
+
+    <span class="syn-cm">// 1. Allowed fields whitelist</span>
+    <span class="syn-kw">const</span> allowedFields = [<span class="syn-str">"name"</span>, <span class="syn-str">"email"</span>, <span class="syn-str">"course"</span>];
+    <span class="syn-kw">const</span> updates = Object.<span class="syn-fn">keys</span>(req.body);
+
+    <span class="syn-cm">// 2. Check for empty or invalid fields</span>
+    <span class="syn-kw">if</span> (updates.length === <span class="syn-num">0</span> || updates.<span class="syn-fn">some</span>(f =&gt; !allowedFields.<span class="syn-fn">includes</span>(f))) {
+        <span class="syn-kw">return</span> res.<span class="syn-fn">status</span>(<span class="syn-num">400</span>).<span class="syn-fn">json</span>({
+            message: <span class="syn-str">"Provide valid fields to update"</span>
+        });
+    }
+
+    <span class="syn-cm">// 3. Merge only provided fields into student</span>
+    Object.<span class="syn-fn">assign</span>(student, req.body);
+
+    res.<span class="syn-fn">status</span>(<span class="syn-num">200</span>).<span class="syn-fn">json</span>({
+        message: <span class="syn-str">"Student partially updated",
+        data: student
+    });
+});</code></pre>
+            </div>
+          </div>
+
+          <!-- Right Column: Explanations & Postman -->
+          <div style="display:flex; flex-direction:column; gap:0.9rem;">
+            <div class="card highlight">
+              <div class="card-title">
+                <span class="badge-method badge-patch">PATCH</span>
+                <span>PUT vs PATCH Summary</span>
+              </div>
+              <ul class="feature-list" style="font-size:0.86rem;">
+                <li><strong>PUT:</strong> Replaces the entire resource. All fields are mandatory.</li>
+                <li><strong>PATCH:</strong> Updates only specific fields. Unmentioned properties remain unchanged!</li>
+              </ul>
+            </div>
+
+            <div class="terminal-output">
+              <div class="terminal-header"><span class="dot"></span><span>Postman: PATCH /students/1</span></div>
+              <div class="terminal-body"><span class="cmd">// REQUEST BODY (Only course is sent):</span>
+{
+    "course": "Advanced MERN"
+}
+
+<span class="suc">// STATUS: 200 OK</span>
+<span class="res">{
+    "message": "Student partially updated",
+    "data": {
+        "id": 1,
+        "name": "Anu",
+        "email": "anu@gmail.com",
+        "course": "Advanced MERN"
+    }
+}</span></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===============================================================
+           SLIDE 9: DELETE: Removing a Student
+           =============================================================== -->
+      <section id="slide-9" class="slide" data-slide-num="9">
+        <div class="slide-header">
+          <div class="slide-title-wrap">
+            <span class="slide-category">Section 1: Implementing CRUD API</span>
+            <h2 class="slide-title">DELETE — Removing a Student</h2>
+            <p class="slide-subtitle">Finding record index, splicing from array, and confirming deletion</p>
+          </div>
+          <span class="slide-num-pill">Slide 09 / 18</span>
+        </div>
+
+        <div class="slide-body grid-2">
+          <!-- Left Column: Code -->
+          <div style="display:flex; flex-direction:column; gap:0.9rem;">
+            <div class="code-container">
+              <div class="code-header">
+                <div class="code-file-badge"><span class="file-dot"></span><span>server.js (DELETE /students/:id)</span></div>
+                <button class="copy-btn"><span>Copy Code</span></button>
+              </div>
+              <pre class="code-block" style="font-size:0.8rem;"><code>app.<span class="syn-fn">delete</span>(<span class="syn-str">"/students/:id"</span>, (req, res) =&gt; {
+    <span class="syn-kw">const</span> id = <span class="syn-fn">Number</span>(req.params.id);
+
+    <span class="syn-cm">// 1. Locate array index</span>
+    <span class="syn-kw">const</span> studentIndex = students.<span class="syn-fn">findIndex</span>(
+        s =&gt; s.id === id
+    );
+
+    <span class="syn-cm">// 2. If student does not exist, return 404</span>
+    <span class="syn-kw">if</span> (studentIndex === -<span class="syn-num">1</span>) {
+        <span class="syn-kw">return</span> res.<span class="syn-fn">status</span>(<span class="syn-num">404</span>).<span class="syn-fn">json</span>({
+            message: <span class="syn-str">"Student not found"</span>
+        });
+    }
+
+    <span class="syn-cm">// 3. Remove 1 item from array at index</span>
+    <span class="syn-kw">const</span> deletedStudent = students.<span class="syn-fn">splice</span>(studentIndex, <span class="syn-num">1</span>)[<span class="syn-num">0</span>];
+
+    res.<span class="syn-fn">status</span>(<span class="syn-num">200</span>).<span class="syn-fn">json</span>({
+        message: <span class="syn-str">"Student deleted successfully"</span>,
+        data: deletedStudent
+    });
+});</code></pre>
+            </div>
+          </div>
+
+          <!-- Right Column: Explanations -->
+          <div style="display:flex; flex-direction:column; gap:0.9rem;">
+            <div class="card highlight">
+              <div class="card-title">
+                <span class="badge-method badge-delete">DELETE</span>
+                <span>Understanding Array Methods</span>
+              </div>
+              <ul class="feature-list" style="font-size:0.86rem;">
+                <li><code>findIndex()</code> &rarr; Returns the array position (0, 1...) or <code>-1</code> if not found.</li>
+                <li><code>splice(index, 1)</code> &rarr; Mutates the array to remove the item and returns the removed record.</li>
+              </ul>
+            </div>
+
+            <div class="terminal-output">
+              <div class="terminal-header"><span class="dot"></span><span>Postman: DELETE /students/2</span></div>
+              <div class="terminal-body"><span class="suc">// STATUS: 200 OK</span>
+<span class="res">{
+    "message": "Student deleted successfully",
+    "data": {
+        "id": 2,
+        "name": "Rahul",
+        "email": "rahul@gmail.com",
+        "course": "Python"
+    }
+}</span></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===============================================================
+           SLIDE 10: Testing the Complete CRUD API
+           =============================================================== -->
+      <section id="slide-10" class="slide" data-slide-num="10">
+        <div class="slide-header">
+          <div class="slide-title-wrap">
+            <span class="slide-category">Section 1: Implementing CRUD API</span>
+            <h2 class="slide-title">Testing the Complete CRUD API</h2>
+            <p class="slide-subtitle">The systematic 7-step Postman verification sequence and live interactive tester</p>
+          </div>
+          <span class="slide-num-pill">Slide 10 / 18</span>
+        </div>
+
+        <div class="slide-body grid-2">
+          <!-- Left Column: Steps & Status Codes -->
+          <div style="display:flex; flex-direction:column; gap:0.85rem;">
+            <div class="table-responsive">
+              <table class="custom-table" style="font-size:0.82rem;">
+                <thead>
+                  <tr>
+                    <th>Step</th>
+                    <th>Method</th>
+                    <th>Endpoint</th>
+                    <th>Purpose</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><strong>1</strong></td>
+                    <td><span class="badge-method badge-get">GET</span></td>
+                    <td><code>/students</code></td>
+                    <td>Get all students (initially 2 records)</td>
+                  </tr>
+                  <tr>
+                    <td><strong>2</strong></td>
+                    <td><span class="badge-method badge-get">GET</span></td>
+                    <td><code>/students/1</code></td>
+                    <td>Get single student profile (200 OK)</td>
+                  </tr>
+                  <tr>
+                    <td><strong>3</strong></td>
+                    <td><span class="badge-method badge-post">POST</span></td>
+                    <td><code>/students</code></td>
+                    <td>Create a new student (201 Created)</td>
+                  </tr>
+                  <tr>
+                    <td><strong>4</strong></td>
+                    <td><span class="badge-method badge-put">PUT</span></td>
+                    <td><code>/students/1</code></td>
+                    <td>Update all fields (200 OK)</td>
+                  </tr>
+                  <tr>
+                    <td><strong>5</strong></td>
+                    <td><span class="badge-method badge-patch">PATCH</span></td>
+                    <td><code>/students/1</code></td>
+                    <td>Update only course field (200 OK)</td>
+                  </tr>
+                  <tr>
+                    <td><strong>6</strong></td>
+                    <td><span class="badge-method badge-delete">DELETE</span></td>
+                    <td><code>/students/1</code></td>
+                    <td>Delete student #1 (200 OK)</td>
+                  </tr>
+                  <tr>
+                    <td><strong>7</strong></td>
+                    <td><span class="badge-method badge-get">GET</span></td>
+                    <td><code>/students/1</code></td>
+                    <td>Confirm deletion &rarr; returns <strong>404 Not Found</strong></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="card" style="padding:0.65rem 0.9rem; font-size:0.82rem;">
+              <strong>Verification Practice:</strong> Always follow mutations (POST, PUT, DELETE) with a GET request to verify the actual array state.
+            </div>
+          </div>
+
+          <!-- Right Column: Interactive Console Sandbox -->
+          <div style="display:flex; flex-direction:column; gap:0.85rem;">
+            <div class="sandbox-card">
+              <div class="sandbox-header">
+                <span class="sandbox-title">⚡ Interactive CRUD Tester</span>
+                <span id="crud-sim-status" class="badge-status status-200">200 OK</span>
+              </div>
+
+              <!-- Quick Presets -->
+              <div style="display:flex; gap:0.35rem; flex-wrap:wrap;">
+                <button class="sandbox-btn sandbox-btn-secondary crud-preset-btn" data-method="GET" data-url="/students" data-body="">GET All</button>
+                <button class="sandbox-btn sandbox-btn-secondary crud-preset-btn" data-method="GET" data-url="/students/1" data-body="">GET #1</button>
+                <button class="sandbox-btn sandbox-btn-secondary crud-preset-btn" data-method="POST" data-url="/students" data-body='{"name":"Mubashir","email":"mubashir@gmail.com","course":"MERN"}'>POST New</button>
+                <button class="sandbox-btn sandbox-btn-secondary crud-preset-btn" data-method="PATCH" data-url="/students/1" data-body='{"course":"Advanced MERN"}'>PATCH #1</button>
+                <button class="sandbox-btn sandbox-btn-secondary crud-preset-btn" data-method="DELETE" data-url="/students/1" data-body="">DELETE #1</button>
+              </div>
+
+              <!-- Controls -->
+              <div class="sandbox-controls">
+                <select id="crud-sim-method" class="sandbox-input" style="font-weight:700; width:110px;">
+                  <option value="GET">GET</option>
+                  <option value="POST">POST</option>
+                  <option value="PUT">PUT</option>
+                  <option value="PATCH">PATCH</option>
+                  <option value="DELETE">DELETE</option>
+                </select>
+                <input id="crud-sim-url" class="sandbox-input" style="flex:1;" value="/students">
+                <button id="crud-sim-send" class="sandbox-btn">Send</button>
+              </div>
+
+              <!-- Body Input -->
+              <textarea id="crud-sim-body" class="sandbox-input" style="font-family:var(--font-mono); font-size:0.75rem; height:50px; resize:none;" placeholder='{ "name": "...", "email": "...", "course": "..." }'></textarea>
+
+              <!-- Response Box -->
+              <pre id="crud-sim-response" style="font-family:var(--font-mono); font-size:0.76rem; background:#0b1329; color:#4ade80; padding:0.5rem; border-radius:6px; height:90px; overflow-y:auto; margin:0;"></pre>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===============================================================
+           SLIDE 11: What Is Middleware?
+           =============================================================== -->
+      <section id="slide-11" class="slide" data-slide-num="11">
+        <div class="slide-header">
+          <div class="slide-title-wrap">
+            <span class="slide-category">Section 2: Express Middleware</span>
+            <h2 class="slide-title">What Is Express Middleware?</h2>
+            <p class="slide-subtitle">Functions that execute in the middle between receiving a request and sending a response</p>
+          </div>
+          <span class="slide-num-pill">Slide 11 / 18</span>
+        </div>
+
+        <div class="slide-body grid-2">
+          <!-- Left Column: Simple Definition & Analogy -->
+          <div style="display:flex; flex-direction:column; gap:0.95rem;">
+            <div class="card highlight">
+              <div class="card-title">
+                <span>🛡️</span>
+                <span>Simple Definition</span>
+              </div>
+              <p>
+                <strong>Middleware</strong> is a JavaScript function that executes between receiving an HTTP request and sending an HTTP response.
+              </p>
+              <p>
+                Think of middleware as a <strong>checkpoint or security guard</strong>. Before a request reaches your controller, middleware can inspect, validate, or modify it.
+              </p>
+            </div>
+
+            <div class="card">
+              <div class="card-title">
+                <span>🏢</span>
+                <span>Real-World Office Analogy</span>
+              </div>
+              <p style="font-size:0.88rem;">Imagine visiting an office building:</p>
+              <ul class="feature-list" style="font-size:0.86rem;">
+                <li><strong>1. Security Gate:</strong> Security guards check your ID (Authentication).</li>
+                <li><strong>2. Reception Desk:</strong> Your visitor details are logged (Logging).</li>
+                <li><strong>3. Access Granted:</strong> You are allowed into the office room (Controller)!</li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- Right Column: Flowchart & Capabilities -->
+          <div style="display:flex; flex-direction:column; gap:0.95rem;">
+            <div class="card">
+              <div class="card-title">
+                <span>🔄</span>
+                <span>The Middleware Pipeline</span>
+              </div>
+              <div style="background:#0b1329; border-radius:8px; padding:1.1rem; color:#e2e8f0; font-family:var(--font-mono); font-size:0.84rem; line-height:1.7;">
+                Client Request<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&darr;<br>
+                <span style="color:#fbbf24; font-weight:bold;">Middleware Checkpoint</span> (req, res, next)<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&darr;<br>
+                <span style="color:#38bdf8;">Route Handler</span> (/students)<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&darr;<br>
+                <span style="color:#4ade80;">Controller Function</span><br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&darr;<br>
+                <strong>Response sent back to client</strong>
+              </div>
+            </div>
+
+            <div class="card" style="font-size:0.85rem;">
+              <strong>What Can Middleware Do?</strong>
+              <div style="display:grid; grid-template-columns:1fr 1fr; gap:0.4rem; margin-top:0.3rem;">
+                <div>• Log incoming requests</div>
+                <div>• Parse request bodies</div>
+                <div>• Validate form data</div>
+                <div>• Verify login tokens</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===============================================================
+           SLIDE 12: Creating Custom Middleware
+           =============================================================== -->
+      <section id="slide-12" class="slide" data-slide-num="12">
+        <div class="slide-header">
+          <div class="slide-title-wrap">
+            <span class="slide-category">Section 2: Express Middleware</span>
+            <h2 class="slide-title">Creating Custom Middleware</h2>
+            <p class="slide-subtitle">Writing a request logger, registering with <code>app.use()</code>, and understanding <code>next()</code></p>
+          </div>
+          <span class="slide-num-pill">Slide 12 / 18</span>
+        </div>
+
+        <div class="slide-body grid-2">
+          <!-- Left Column: Code -->
+          <div style="display:flex; flex-direction:column; gap:0.9rem;">
+            <div class="code-container">
+              <div class="code-header">
+                <div class="code-file-badge"><span class="file-dot"></span><span>logger-demo.js</span></div>
+                <button class="copy-btn"><span>Copy Code</span></button>
+              </div>
+              <pre class="code-block" style="font-size:0.8rem;"><code><span class="syn-kw">const</span> express = <span class="syn-fn">require</span>(<span class="syn-str">"express"</span>);
+<span class="syn-kw">const</span> app = <span class="syn-fn">express</span>();
+
+<span class="syn-cm">// 1. Custom Logger Middleware Function</span>
+<span class="syn-kw">const</span> logger = (req, res, next) =&gt; {
+    <span class="syn-fn">console</span>.<span class="syn-fn">log</span>(<span class="syn-str">`${req.method} ${req.url}`</span>);
+    
+    <span class="syn-cm">// CRITICAL: Hand over control to the next function</span>
+    <span class="syn-fn">next</span>();
+};
+
+<span class="syn-cm">// 2. Register middleware globally across all routes</span>
+app.<span class="syn-fn">use</span>(logger);
+
+app.<span class="syn-fn">get</span>(<span class="syn-str">"/"</span>, (req, res) =&gt; res.<span class="syn-fn">send</span>(<span class="syn-str">"Home Page"</span>));
+app.<span class="syn-fn">get</span>(<span class="syn-str">"/students"</span>, (req, res) =&gt; res.<span class="syn-fn">send</span>(<span class="syn-str">"Student List"</span>));
+
+app.<span class="syn-fn">listen</span>(<span class="syn-num">3000</span>);</code></pre>
+            </div>
+          </div>
+
+          <!-- Right Column: next() and Output -->
+          <div style="display:flex; flex-direction:column; gap:0.9rem;">
+            <div class="card highlight">
+              <div class="card-title">
+                <span>🔄</span>
+                <span>The Crucial Role of next()</span>
+              </div>
+              <p style="font-size:0.88rem;">
+                <code>next()</code> is a callback provided by Express. It tells Express: <em>"This checkpoint is finished, pass control to the next middleware or route handler!"</em>
+              </p>
+            </div>
+
+            <div class="terminal-output">
+              <div class="terminal-header"><span class="dot"></span><span>Console Output as Requests Arrive</span></div>
+              <div class="terminal-body"><span class="suc">GET /</span>
+<span class="suc">GET /students</span>
+<span class="suc">POST /students</span></div>
+            </div>
+
+            <div class="callout callout-warning">
+              <span>⚠️</span>
+              <div>
+                <strong>The Hanging Request Trap:</strong> If your middleware does not send a response (<code>res.send</code>) and forgets to call <code>next()</code>, the browser will spin endlessly waiting for a response!
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===============================================================
+           SLIDE 13: Types of Middleware
+           =============================================================== -->
+      <section id="slide-13" class="slide" data-slide-num="13">
+        <div class="slide-header">
+          <div class="slide-title-wrap">
+            <span class="slide-category">Section 2: Express Middleware</span>
+            <h2 class="slide-title">Types of Express Middleware</h2>
+            <p class="slide-subtitle">Categorizing middleware by scope, origin, and responsibility</p>
+          </div>
+          <span class="slide-num-pill">Slide 13 / 18</span>
+        </div>
+
+        <div class="slide-body grid-2">
+          <!-- Left Column: Table of Types -->
+          <div style="display:flex; flex-direction:column; gap:0.95rem;">
+            <div class="table-responsive">
+              <table class="custom-table" style="font-size:0.84rem;">
+                <thead>
+                  <tr>
+                    <th>Middleware Type</th>
+                    <th>Purpose &amp; Scope</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><strong>Application-level</strong></td>
+                    <td>Runs globally across every route via <code>app.use()</code></td>
+                  </tr>
+                  <tr>
+                    <td><strong>Router-level</strong></td>
+                    <td>Binds to a specific mini-app instance via <code>router.use()</code></td>
+                  </tr>
+                  <tr>
+                    <td><strong>Built-in</strong></td>
+                    <td>Shipped natively with Express (e.g. <code>express.json()</code>)</td>
+                  </tr>
+                  <tr>
+                    <td><strong>Third-party</strong></td>
+                    <td>Installed from npm (e.g. <code>cors</code>, <code>multer</code>, <code>morgan</code>)</td>
+                  </tr>
+                  <tr>
+                    <td><strong>Error-handling</strong></td>
+                    <td>Catches errors using 4 parameters: <code>(err, req, res, next)</code></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="callout callout-info" style="font-size:0.84rem;">
+              <span>💡</span>
+              <div>
+                <strong>Why Categorize?</strong> Different middleware solve different problems. Using them appropriately prevents repeating identical validation or logging across dozens of routes.
+              </div>
+            </div>
+          </div>
+
+          <!-- Right Column: Code Examples -->
+          <div style="display:flex; flex-direction:column; gap:0.9rem;">
+            <div class="code-container">
+              <div class="code-header">
+                <div class="code-file-badge"><span class="file-dot"></span><span>middleware-types.js</span></div>
+                <button class="copy-btn"><span>Copy Code</span></button>
+              </div>
+              <pre class="code-block" style="font-size:0.77rem;"><code><span class="syn-cm">// 1. Application-level</span>
+app.<span class="syn-fn">use</span>((req, res, next) =&gt; { <span class="syn-fn">console</span>.<span class="syn-fn">log</span>(<span class="syn-str">"Global app middleware"</span>); <span class="syn-fn">next</span>(); });
+
+<span class="syn-cm">// 2. Router-level</span>
+<span class="syn-kw">const</span> router = express.<span class="syn-fn">Router</span>();
+router.<span class="syn-fn">use</span>((req, res, next) =&gt; { <span class="syn-fn">console</span>.<span class="syn-fn">log</span>(<span class="syn-str">"Student router only"</span>); <span class="syn-fn">next</span>(); });
+
+<span class="syn-cm">// 3. Built-in</span>
+app.<span class="syn-fn">use</span>(express.<span class="syn-fn">json</span>());
+
+<span class="syn-cm">// 4. Third-party</span>
+<span class="syn-kw">const</span> cors = <span class="syn-fn">require</span>(<span class="syn-str">"cors"</span>);
+app.<span class="syn-fn">use</span>(<span class="syn-fn">cors</span>());
+
+<span class="syn-cm">// 5. Error-handling (4 parameters)</span>
+app.<span class="syn-fn">use</span>((err, req, res, next) =&gt; {
+    res.<span class="syn-fn">status</span>(<span class="syn-num">500</span>).<span class="syn-fn">json</span>({ message: err.message });
+});</code></pre>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===============================================================
+           SLIDE 14: Implementing Validation Middleware
+           =============================================================== -->
+      <section id="slide-14" class="slide" data-slide-num="14">
+        <div class="slide-header">
+          <div class="slide-title-wrap">
+            <span class="slide-category">Section 2: Express Middleware</span>
+            <h2 class="slide-title">Implementing Validation Middleware</h2>
+            <p class="slide-subtitle">Creating reusable route validation to keep controllers clean and focused</p>
+          </div>
+          <span class="slide-num-pill">Slide 14 / 18</span>
+        </div>
+
+        <div class="slide-body grid-2">
+          <!-- Left Column: Code -->
+          <div style="display:flex; flex-direction:column; gap:0.9rem;">
+            <div class="code-container">
+              <div class="code-header">
+                <div class="code-file-badge"><span class="file-dot"></span><span>validateStudent.js</span></div>
+                <button class="copy-btn"><span>Copy Code</span></button>
+              </div>
+              <pre class="code-block" style="font-size:0.79rem;"><code><span class="syn-cm">// 1. Reusable Validation Checkpoint</span>
+<span class="syn-kw">const</span> validateStudent = (req, res, next) =&gt; {
+    <span class="syn-kw">const</span> { name, email, course } = req.body;
+
+    <span class="syn-kw">if</span> (!name || !email || !course) {
+        <span class="syn-kw">return</span> res.<span class="syn-fn">status</span>(<span class="syn-num">400</span>).<span class="syn-fn">json</span>({
+            message: <span class="syn-str">"All fields are required"</span>
+        });
+    }
+
+    <span class="syn-cm">// If valid, proceed to route handler</span>
+    <span class="syn-fn">next</span>();
+};
+
+<span class="syn-cm">// 2. Attach validateStudent between route path &amp; handler</span>
+app.<span class="syn-fn">post</span>(<span class="syn-str">"/students"</span>, validateStudent, (req, res) =&gt; {
+    <span class="syn-cm">// Guaranteed clean data reaches here!</span>
+    <span class="syn-kw">const</span> newStudent = { id: students.length + <span class="syn-num">1</span>, ...req.body };
+    students.<span class="syn-fn">push</span>(newStudent);
+    res.<span class="syn-fn">status</span>(<span class="syn-num">201</span>).<span class="syn-fn">json</span>({ message: <span class="syn-str">"Student created"</span>, data: newStudent });
+});</code></pre>
+            </div>
+          </div>
+
+          <!-- Right Column: Interactive Checkpoint Simulator -->
+          <div style="display:flex; flex-direction:column; gap:0.9rem;">
+            <div class="sandbox-card">
+              <div class="sandbox-header">
+                <span class="sandbox-title">⚡ Middleware Checkpoint Simulator</span>
+                <span class="sandbox-badge">Live</span>
+              </div>
+
+              <p style="font-size:0.84rem; color:var(--text-muted);">
+                Test what happens when the client sends valid vs invalid data:
+              </p>
+
+              <div class="sandbox-controls">
+                <button id="demo-val-valid" class="sandbox-btn" style="background:#10b981;">Send Valid Data</button>
+                <button id="demo-val-invalid" class="sandbox-btn" style="background:#ef4444;">Send Incomplete Data</button>
+              </div>
+
+              <div style="display:flex; flex-direction:column; gap:0.35rem; margin-top:0.3rem;">
+                <div id="demo-val-checkpoint" style="padding:0.6rem; border-radius:6px; background:#f1f5f9; font-size:0.83rem;">
+                  <strong>Checkpoint Status:</strong> Waiting for test click...
+                </div>
+                <div style="display:flex; justify-content:space-between; align-items:center;">
+                  <span style="font-size:0.8rem; font-weight:700;">Resulting Action:</span>
+                  <span id="demo-val-result" class="badge-status status-200">Idle</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="card" style="font-size:0.84rem;">
+              <strong>The Architecture Benefit:</strong> By validating in middleware, your controller doesn't need 15 lines of <code>if (!field)</code> statements. It only handles business logic!
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===============================================================
+           SLIDE 15: Error-Handling Middleware
+           =============================================================== -->
+      <section id="slide-15" class="slide" data-slide-num="15">
+        <div class="slide-header">
+          <div class="slide-title-wrap">
+            <span class="slide-category">Section 2: Express Middleware</span>
+            <h2 class="slide-title">Error-Handling Middleware</h2>
+            <p class="slide-subtitle">Catching and centralizing application errors with the 4-parameter error handler</p>
+          </div>
+          <span class="slide-num-pill">Slide 15 / 18</span>
+        </div>
+
+        <div class="slide-body grid-2">
+          <!-- Left Column: Code -->
+          <div style="display:flex; flex-direction:column; gap:0.9rem;">
+            <div class="code-container">
+              <div class="code-header">
+                <div class="code-file-badge"><span class="file-dot"></span><span>error-handler-demo.js</span></div>
+                <button class="copy-btn"><span>Copy Code</span></button>
+              </div>
+              <pre class="code-block" style="font-size:0.79rem;"><code><span class="syn-cm">// Route that throws or forwards an error</span>
+app.<span class="syn-fn">get</span>(<span class="syn-str">"/error-test"</span>, (req, res, next) =&gt; {
+    <span class="syn-kw">const</span> error = <span class="syn-kw">new</span> <span class="syn-fn">Error</span>(<span class="syn-str">"Database connection failed"</span>);
+    
+    <span class="syn-cm">// Pass error to Express error pipeline</span>
+    <span class="syn-fn">next</span>(error);
+});
+
+<span class="syn-cm">// Centralized Error-Handling Middleware (4 parameters!)</span>
+app.<span class="syn-fn">use</span>((err, req, res, next) =&gt; {
+    <span class="syn-fn">console</span>.<span class="syn-fn">error</span>(<span class="syn-str">"Error caught centrally:"</span>, err.message);
+
+    res.<span class="syn-fn">status</span>(<span class="syn-num">500</span>).<span class="syn-fn">json</span>({
+        success: <span class="syn-kw">false</span>,
+        message: err.message
+    });
+});</code></pre>
+            </div>
+          </div>
+
+          <!-- Right Column: Explanations -->
+          <div style="display:flex; flex-direction:column; gap:0.9rem;">
+            <div class="card highlight">
+              <div class="card-title">
+                <span>⚠️</span>
+                <span>The 4-Parameter Signature</span>
+              </div>
+              <p style="font-size:0.88rem;">
+                Express identifies error handlers strictly by checking their parameter count:
+              </p>
+              <div style="font-family:var(--font-mono); font-size:0.86rem; background:#ffffff; border:1px solid var(--primary-border); padding:0.6rem; border-radius:6px; color:#0c4a6e; font-weight:700;">
+                (err, req, res, next)
+              </div>
+              <p style="font-size:0.85rem; color:var(--text-muted); margin-top:0.3rem;">
+                You <em>must</em> write all four parameters, even if you don't use <code>next</code> inside the body.
+              </p>
+            </div>
+
+            <div class="terminal-output">
+              <div class="terminal-header"><span class="dot"></span><span>Client JSON Response</span></div>
+              <div class="terminal-body"><span class="err">// STATUS: 500 Internal Server Error</span>
+<span class="res">{
+    "success": false,
+    "message": "Database connection failed"
+}</span></div>
+            </div>
+
+            <div class="callout callout-warning" style="font-size:0.82rem;">
+              <span>📌</span>
+              <div>
+                <strong>Registration Order:</strong> Always register your error-handling middleware at the very bottom of <code>server.js</code>, <em>after</em> all other routes!
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===============================================================
+           SLIDE 16: What Is MVC Architecture?
+           =============================================================== -->
+      <section id="slide-16" class="slide" data-slide-num="16">
+        <div class="slide-header">
+          <div class="slide-title-wrap">
+            <span class="slide-category">Section 3: MVC Architecture</span>
+            <h2 class="slide-title">What Is MVC Architecture?</h2>
+            <p class="slide-subtitle">Dividing backend applications into Models, Views, and Controllers</p>
+          </div>
+          <span class="slide-num-pill">Slide 16 / 18</span>
+        </div>
+
+        <div class="slide-body grid-2">
+          <!-- Left Column: The 3 Roles -->
+          <div style="display:flex; flex-direction:column; gap:0.95rem;">
+            <div class="card highlight">
+              <div class="card-title">
+                <span>🏛️</span>
+                <span>The Three Responsibilities</span>
+              </div>
+              <ul class="feature-list" style="font-size:0.86rem;">
+                <li>
+                  <strong>1. Model (Data):</strong> Manages data structures, array operations, validations, and database queries.
+                </li>
+                <li>
+                  <strong>2. View (Presentation):</strong> Renders visual user interfaces or HTML pages (React, templates).
+                </li>
+                <li>
+                  <strong>3. Controller (Logic):</strong> Receives requests, calls the Model for data, and returns responses.
+                </li>
+              </ul>
+            </div>
+
+            <div class="callout callout-info">
+              <span>💡</span>
+              <div>
+                <strong>Why Express REST APIs don't need a View folder:</strong> Modern Express backends send raw JSON directly from Controllers to clients (like React or Mobile apps). The frontend renders the view!
+              </div>
+            </div>
+          </div>
+
+          <!-- Right Column: Flow Diagram -->
+          <div style="display:flex; flex-direction:column; gap:0.95rem;">
+            <div class="card">
+              <div class="card-title">
+                <span>🔄</span>
+                <span>REST API MVC Flow</span>
+              </div>
+              <div style="background:#0b1329; border-radius:8px; padding:1.1rem; color:#e2e8f0; font-family:var(--font-mono); font-size:0.84rem; line-height:1.7;">
+                Client Request (Postman / React)<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&darr;<br>
+                <span style="color:#38bdf8; font-weight:bold;">Controller</span> (Receives req &amp; prepares res)<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&darr;<br>
+                <span style="color:#c084fc; font-weight:bold;">Model</span> (Performs find, create, delete)<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&darr;<br>
+                <span style="color:#4ade80;">Student Data Store</span> (Array / DB)<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&darr;<br>
+                <strong>Controller returns JSON back to Client!</strong>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===============================================================
+           SLIDE 17: Implementing MVC Folder Structure
+           =============================================================== -->
+      <section id="slide-17" class="slide" data-slide-num="17">
+        <div class="slide-header">
+          <div class="slide-title-wrap">
+            <span class="slide-category">Section 3: MVC Architecture</span>
+            <h2 class="slide-title">Implementing MVC Folder Structure</h2>
+            <p class="slide-subtitle">Organizing an Express project into clean, single-responsibility folders</p>
+          </div>
+          <span class="slide-num-pill">Slide 17 / 18</span>
+        </div>
+
+        <div class="slide-body grid-2">
+          <!-- Left Column: Folder Tree -->
+          <div style="display:flex; flex-direction:column; gap:0.9rem;">
+            <div class="card">
+              <div class="card-title">
+                <span>📁</span>
+                <span>Standard Express MVC Project Tree</span>
+              </div>
+              <pre class="code-block" style="font-size:0.82rem; background:#0b1329; color:#93c5fd; padding:0.85rem; border-radius:6px;"><code>student-management-api/
+│
+├── controllers/
+│   └── studentController.js   # Request / Response logic
+│
+├── models/
+│   └── studentModel.js        # Data &amp; array operations
+│
+├── routes/
+│   └── studentRoutes.js       # Maps URLs to controllers
+│
+├── middleware/
+│   ├── logger.js              # Request logging
+│   └── validateStudent.js     # Body validation
+│
+├── server.js                  # Main server entry &amp; config
+└── package.json</code></pre>
+            </div>
+          </div>
+
+          <!-- Right Column: Responsibilities Table -->
+          <div style="display:flex; flex-direction:column; gap:0.9rem;">
+            <div class="table-responsive">
+              <table class="custom-table" style="font-size:0.83rem;">
+                <thead>
+                  <tr>
+                    <th>Folder / File</th>
+                    <th>Exact Responsibility</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><code>models/</code></td>
+                    <td>Owns data and data mutation functions</td>
+                  </tr>
+                  <tr>
+                    <td><code>controllers/</code></td>
+                    <td>Reads <code>req</code>, invokes models, sends <code>res</code></td>
+                  </tr>
+                  <tr>
+                    <td><code>routes/</code></td>
+                    <td>Defines URL paths and hooks middleware</td>
+                  </tr>
+                  <tr>
+                    <td><code>middleware/</code></td>
+                    <td>Reusable checkpoints (logging, auth, validation)</td>
+                  </tr>
+                  <tr>
+                    <td><code>server.js</code></td>
+                    <td>Configures Express and starts the listener</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="callout callout-tip" style="font-size:0.84rem;">
+              <span>🎯</span>
+              <div>
+                <strong>No More Monolithic Files:</strong> When you need to edit student data logic, you open <code>studentModel.js</code>. When you add a new endpoint, you open <code>studentRoutes.js</code>. Everything is clean and modular!
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===============================================================
+           SLIDE 18: Connecting Model, Controller and Routes
+           =============================================================== -->
+      <section id="slide-18" class="slide" data-slide-num="18">
+        <div class="slide-header">
+          <div class="slide-title-wrap">
+            <span class="slide-category">Section 3: MVC Architecture</span>
+            <h2 class="slide-title">Connecting Model, Controller &amp; Routes</h2>
+            <p class="slide-subtitle">Inspect the complete working implementation across all separate files</p>
+          </div>
+          <span class="slide-num-pill">Slide 18 / 18</span>
+        </div>
+
+        <div class="slide-body grid-2">
+          <!-- Left Column: Tabbed Code Explorer -->
+          <div style="display:flex; flex-direction:column; gap:0.6rem;">
+            <div class="mvc-tab-container">
+              <div class="mvc-tabs-bar">
+                <button class="mvc-tab-btn active" data-target="tab-model">studentModel.js</button>
+                <button class="mvc-tab-btn" data-target="tab-controller">studentController.js</button>
+                <button class="mvc-tab-btn" data-target="tab-routes">studentRoutes.js</button>
+                <button class="mvc-tab-btn" data-target="tab-server">server.js</button>
+              </div>
+
+              <!-- Tab 1: Model -->
+              <div id="tab-model" class="mvc-tab-content active">
+                <pre class="code-block" style="font-size:0.75rem; max-height:300px;"><code><span class="syn-cm">// models/studentModel.js</span>
+<span class="syn-kw">let</span> students = [
+    { id: <span class="syn-num">1</span>, name: <span class="syn-str">"Anu"</span>, email: <span class="syn-str">"anu@gmail.com"</span>, course: <span class="syn-str">"MERN"</span> },
+    { id: <span class="syn-num">2</span>, name: <span class="syn-str">"Rahul"</span>, email: <span class="syn-str">"rahul@gmail.com"</span>, course: <span class="syn-str">"Python"</span> }
+];
+
+<span class="syn-kw">const</span> getAllStudents = () =&gt; students;
+
+<span class="syn-kw">const</span> getStudentById = (id) =&gt; students.<span class="syn-fn">find</span>(s =&gt; s.id === id);
+
+<span class="syn-kw">const</span> createStudent = (data) =&gt; {
+    <span class="syn-kw">const</span> newStudent = {
+        id: students.length ? Math.<span class="syn-fn">max</span>(...students.<span class="syn-fn">map</span>(s =&gt; s.id)) + <span class="syn-num">1</span> : <span class="syn-num">1</span>,
+        ...data
+    };
+    students.<span class="syn-fn">push</span>(newStudent);
+    <span class="syn-kw">return</span> newStudent;
+};
+
+<span class="syn-kw">const</span> deleteStudent = (id) =&gt; {
+    <span class="syn-kw">const</span> index = students.<span class="syn-fn">findIndex</span>(s =&gt; s.id === id);
+    <span class="syn-kw">if</span> (index === -<span class="syn-num">1</span>) <span class="syn-kw">return</span> <span class="syn-kw">null</span>;
+    <span class="syn-kw">return</span> students.<span class="syn-fn">splice</span>(index, <span class="syn-num">1</span>)[<span class="syn-num">0</span>];
+};
+
+module.exports = { getAllStudents, getStudentById, createStudent, deleteStudent };</code></pre>
+              </div>
+
+              <!-- Tab 2: Controller -->
+              <div id="tab-controller" class="mvc-tab-content">
+                <pre class="code-block" style="font-size:0.75rem; max-height:300px;"><code><span class="syn-cm">// controllers/studentController.js</span>
+<span class="syn-kw">const</span> Student = <span class="syn-fn">require</span>(<span class="syn-str">"../models/studentModel"</span>);
+
+<span class="syn-kw">const</span> getStudents = (req, res) =&gt; {
+    res.<span class="syn-fn">status</span>(<span class="syn-num">200</span>).<span class="syn-fn">json</span>({ data: Student.<span class="syn-fn">getAllStudents</span>() });
+};
+
+<span class="syn-kw">const</span> getStudent = (req, res) =&gt; {
+    <span class="syn-kw">const</span> student = Student.<span class="syn-fn">getStudentById</span>(<span class="syn-fn">Number</span>(req.params.id));
+    <span class="syn-kw">if</span> (!student) <span class="syn-kw">return</span> res.<span class="syn-fn">status</span>(<span class="syn-num">404</span>).<span class="syn-fn">json</span>({ message: <span class="syn-str">"Student not found"</span> });
+    res.<span class="syn-fn">status</span>(<span class="syn-num">200</span>).<span class="syn-fn">json</span>({ data: student });
+};
+
+<span class="syn-kw">const</span> createStudent = (req, res) =&gt; {
+    <span class="syn-kw">const</span> student = Student.<span class="syn-fn">createStudent</span>(req.body);
+    res.<span class="syn-fn">status</span>(<span class="syn-num">201</span>).<span class="syn-fn">json</span>({ message: <span class="syn-str">"Student created"</span>, data: student });
+};
+
+module.exports = { getStudents, getStudent, createStudent };</code></pre>
+              </div>
+
+              <!-- Tab 3: Routes -->
+              <div id="tab-routes" class="mvc-tab-content">
+                <pre class="code-block" style="font-size:0.75rem; max-height:300px;"><code><span class="syn-cm">// routes/studentRoutes.js</span>
+<span class="syn-kw">const</span> express = <span class="syn-fn">require</span>(<span class="syn-str">"express"</span>);
+<span class="syn-kw">const</span> router = express.<span class="syn-fn">Router</span>();
+<span class="syn-kw">const</span> studentController = <span class="syn-fn">require</span>(<span class="syn-str">"../controllers/studentController"</span>);
+<span class="syn-kw">const</span> validateStudent = <span class="syn-fn">require</span>(<span class="syn-str">"../middleware/validateStudent"</span>);
+
+router.<span class="syn-fn">get</span>(<span class="syn-str">"/"</span>, studentController.getStudents);
+router.<span class="syn-fn">get</span>(<span class="syn-str">"/:id"</span>, studentController.getStudent);
+router.<span class="syn-fn">post</span>(<span class="syn-str">"/"</span>, validateStudent, studentController.createStudent);
+
+module.exports = router;</code></pre>
+              </div>
+
+              <!-- Tab 4: Server -->
+              <div id="tab-server" class="mvc-tab-content">
+                <pre class="code-block" style="font-size:0.75rem; max-height:300px;"><code><span class="syn-cm">// server.js</span>
+<span class="syn-kw">const</span> express = <span class="syn-fn">require</span>(<span class="syn-str">"express"</span>);
+<span class="syn-kw">const</span> studentRoutes = <span class="syn-fn">require</span>(<span class="syn-str">"./routes/studentRoutes"</span>);
+<span class="syn-kw">const</span> logger = <span class="syn-fn">require</span>(<span class="syn-str">"./middleware/logger"</span>);
+
+<span class="syn-kw">const</span> app = <span class="syn-fn">express</span>();
+app.<span class="syn-fn">use</span>(express.<span class="syn-fn">json</span>());
+app.<span class="syn-fn">use</span>(logger);
+
+<span class="syn-cm">// Mount router at /students</span>
+app.<span class="syn-fn">use</span>(<span class="syn-str">"/students"</span>, studentRoutes);
+
+app.<span class="syn-fn">listen</span>(<span class="syn-num">3000</span>, () =&gt; <span class="syn-fn">console</span>.<span class="syn-fn">log</span>(<span class="syn-str">"Server running on port 3000"</span>));</code></pre>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right Column: Final Key Takeaways -->
+          <div style="display:flex; flex-direction:column; gap:0.9rem;">
+            <div class="card highlight">
+              <div class="card-title">
+                <span>🏆</span>
+                <span>The 4 Big Teaching Takeaways</span>
+              </div>
+              <ul class="feature-list" style="font-size:0.86rem;">
+                <li><strong>Routes</strong> decide which controller function to execute.</li>
+                <li><strong>Middleware</strong> validates, checks, or logs before controllers run.</li>
+                <li><strong>Controllers</strong> read HTTP requests and send back HTTP responses.</li>
+                <li><strong>Models</strong> manage data records and business operations.</li>
+              </ul>
+            </div>
+
+            <div class="callout callout-tip" style="font-size:0.86rem;">
+              <span>🎉</span>
+              <div>
+                <strong>Congratulations!</strong> You now understand how modern Express.js backends are built and structured like real production software!
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- ===================================================================
+         BOTTOM BAR (Navigation, Controls & Shortcuts Pill)
+         =================================================================== -->
+    <footer class="bottom-bar">
+      <div class="bottom-left">
+        <span>Use <kbd>&larr;</kbd> <kbd>&rarr;</kbd> or <kbd>Space</kbd> to Navigate</span>
+        <span>•</span>
+        <span>Press <kbd>T</kbd> for Contents</span>
+        <span>•</span>
+        <span>Press <kbd>F</kbd> for Fullscreen</span>
+      </div>
+
+      <div class="bottom-right">
+        <button id="prev-btn" class="nav-btn" disabled>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"></polyline></svg>
+          <span>Previous</span>
+        </button>
+        <button id="next-btn" class="nav-btn nav-btn-primary">
+          <span>Next Slide</span>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
+        </button>
+      </div>
+    </footer>
+
+    <!-- ===================================================================
+         TABLE OF CONTENTS DRAWER & OVERLAY
+         =================================================================== -->
+    <div id="toc-overlay" class="toc-overlay">
+      <aside class="toc-drawer">
+        <div class="toc-header">
+          <div class="toc-title">Table of Contents (18 Slides)</div>
+          <button id="toc-close" class="toc-close" title="Close Drawer (Esc)">&times;</button>
+        </div>
+        <ul id="toc-list" class="toc-list">
+          <!-- Dynamically generated by script.js -->
+        </ul>
+      </aside>
+    </div>
+
+    <!-- ===================================================================
+         KEYBOARD SHORTCUTS HELP MODAL
+         =================================================================== -->
+    <div id="help-modal-overlay" class="help-modal-overlay">
+      <div class="help-modal">
+        <div class="help-header">
+          <div class="help-title">Keyboard Navigation &amp; Shortcuts</div>
+          <button id="help-modal-close" class="toc-close">&times;</button>
+        </div>
+        <div class="help-body">
+          <div class="shortcut-row">
+            <span>Next Slide</span>
+            <div><span class="shortcut-key">&rarr;</span> <span class="shortcut-key">Space</span> <span class="shortcut-key">PgDn</span></div>
+          </div>
+          <div class="shortcut-row">
+            <span>Previous Slide</span>
+            <div><span class="shortcut-key">&larr;</span> <span class="shortcut-key">PgUp</span></div>
+          </div>
+          <div class="shortcut-row">
+            <span>First / Title Slide</span>
+            <span class="shortcut-key">Home</span>
+          </div>
+          <div class="shortcut-row">
+            <span>Final MVC Slide</span>
+            <span class="shortcut-key">End</span>
+          </div>
+          <div class="shortcut-row">
+            <span>Toggle Fullscreen</span>
+            <span class="shortcut-key">F</span>
+          </div>
+          <div class="shortcut-row">
+            <span>Open / Close Table of Contents</span>
+            <div><span class="shortcut-key">T</span> <span class="shortcut-key">M</span></div>
+          </div>
+          <div class="shortcut-row">
+            <span>Close Modal / Drawer</span>
+            <span class="shortcut-key">Esc</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>

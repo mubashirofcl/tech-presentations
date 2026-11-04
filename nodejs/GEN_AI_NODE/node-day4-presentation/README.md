@@ -1,33 +1,48 @@
-# Gen-AI Node.js – Day 4 Presentation: SSE Streaming, File Uploads & Document Processing
+# Gen-AI Node.js — Day 4 Presentation: Streaming, File Upload & Document Processing
 
-An interactive, production-grade classroom presentation and lab environment built for MERN stack students and instructors. This slide deck covers the foundational backend patterns required for generative AI architectures: real-time token/text streaming via Server-Sent Events (SSE), binary file uploads using Multer in-memory storage, raw binary buffer inspection, multi-format document extraction (PDF, DOCX, CSV), and robust defensive validation.
+A beginner-friendly, trainer-focused interactive classroom presentation designed for beginner MERN Stack students. This deck avoids heavy theoretical jargon and teaches complex backend concepts through one unified, real-world narrative: **"Building an AI Document Assistant."**
+
+Students learn how an Express backend receives uploaded documents (PDF, Word, CSV), manages raw binary data in memory using Node.js Buffers, extracts clean text using specialized parsing libraries, and streams real-time AI responses to the browser word by word.
 
 ---
 
 ## 📋 Course Overview & Metadata
 
 - **Course:** MERN Stack & Generative AI Development
-- **Module:** Gen-AI Node.js Engineering
-- **Session:** Day 4 — SSE Streaming, File Uploads, Buffers & Document Parsing
+- **Module:** Gen-AI Node.js Architecture
+- **Session:** Day 4 — Streaming (SSE), File Uploads (Multer), Buffers & Document Parsing
 - **Format:** Single Page Application (Pure HTML5, CSS3, Vanilla JavaScript ES6+)
-- **No External UI Dependencies:** Zero Tailwind, Bootstrap, React, or heavy slide framework dependencies. Runs immediately in any modern browser.
+- **Zero Framework Overhead:** No React, Bootstrap, or Tailwind dependencies. Runs directly in any web browser.
+- **Teaching Style:** Step-by-step trainer presentation with practical code snippets, visual data flow diagrams, Postman testing guides, and embedded live simulators.
 
 ---
 
-## 🎯 Learning Objectives
+## 🎯 The Central Story: "Building an AI Document Assistant"
 
-By the end of this session, students will be able to:
-1. **Explain and Implement SSE:** Configure Express HTTP response headers (`text/event-stream`, `Cache-Control: no-cache`, `Connection: keep-alive`) to push tokens and status updates incrementally.
-2. **Stream in the Browser:** Ingest live chunks using the native `ReadableStream` (`fetch()`) and `TextDecoder` APIs with proper split-chunk line buffering.
-3. **Handle Disconnections:** Bind to `req.on("close")` and clear active timers or abort generative LLM requests to avoid memory leaks.
-4. **Buffer In-Memory Uploads:** Configure Multer with `multer.memoryStorage()` to keep incoming files in RAM (`req.file.buffer`) for zero-disk latency in cloud or serverless environments.
-5. **Inspect & Manipulate Buffers:** Understand `Buffer.from()`, `buf.toString("utf-8")`, byte sizing (`byteLength`), and Base64 conversion for vision model payloads.
-6. **Parse Heterogeneous Documents:**
-   - **PDF:** Extract raw page text using CommonJS-compatible `pdf-parse@1.1.1`.
-   - **DOCX:** Extract raw prose and text content using `mammoth.extractRawText()`.
-   - **CSV:** Parse tabular structured records into JSON objects using `csv-parse/sync`.
-7. **Defend File Endpoints:** Enforce strict MIME-type allowlists, size limits (`limits: { fileSize: 10 * 1024 * 1024 }`), and clean Express error handling.
-8. **Assemble a Unified Document Ingestion API:** Build an end-to-end `POST /api/documents/upload` endpoint ready for downstream LLM chunking, vector embedding, and RAG pipelines.
+```
+User Uploads PDF / DOCX / CSV
+              |
+              v
+        Express Server
+              |
+              v
+        Multer Receives File (Multipart/Form-Data)
+              |
+              v
+        Hold File in Memory as a Buffer
+              |
+              v
+        Document Parser (pdf-parse / Mammoth / csv-parse)
+              |
+              v
+        Send Extracted Text to AI
+              |
+              v
+        AI Generates Answer
+              |
+              v
+        Stream Answer Word by Word to Browser (SSE)
+```
 
 ---
 
@@ -35,41 +50,40 @@ By the end of this session, students will be able to:
 
 | Slide # | Slide Title | Core Concept / Focus |
 |:-------:|:------------|:---------------------|
-| **01** | Title Slide | Gen-AI Node.js Day 4: SSE Streaming, File Uploads & Document Processing |
-| **02** | Learning Objectives | Complete breakdown of competencies: SSE, Streams, Multer, Buffers, PDF, DOCX, CSV |
-| **03** | What Is Server-Sent Events (SSE)? | SSE vs Polling vs WebSockets; ASCII flow diagrams of traditional vs streaming LLM responses |
-| **04** | Creating an SSE Endpoint in Express | HTTP response headers, formatting `data: ...\n\n`, flush intervals, and `res.write()` |
-| **05** | Consuming SSE in the Browser | `fetch()` with `ReadableStreamDefaultReader`, `TextDecoder`, and handling partial chunk splits |
-| **06** | Stream Disconnection & Cleanup | Client abort handling via `req.on("close")`, clearing intervals, and preventing resource leaks |
-| **07** | Why File Uploads Matter in Gen-AI | Document Q&A, RAG ingestion pipelines, and multi-modal file intake patterns |
-| **08** | Setting Up Multer for Memory Storage | `multer.memoryStorage()` vs disk storage, security advantages, and `req.file.buffer` |
-| **09** | Handling Single and Multiple File Uploads | `upload.single("document")` vs `upload.array("documents", 5)` vs `upload.fields()` |
-| **10** | What Is a Node.js Buffer? | Raw binary memory outside V8 heap, byte arrays, hex inspection, and encoding formats |
-| **11** | Converting Buffers to Strings and Encodings | `buf.toString("utf-8")`, Base64 encoding for vision models (`data:image/png;base64,...`) |
-| **12** | Extracting Text from PDF Documents | Setting up and utilizing `pdf-parse@1.1.1`, extracting metadata, page counts, and raw text |
-| **13** | Extracting Text from DOCX Documents | Extracting Word document contents using `mammoth.extractRawText({ buffer })` |
-| **14** | Parsing CSV Files for Tabular AI Ingestion | Converting tabular CSV streams/buffers into structured JSON using `csv-parse/sync` |
-| **15** | Error Handling & File Validation | Enforcing MIME validation, file extension cross-checks, Multer file size limits, and 400 responses |
-| **16** | Mini-Project Architecture | Flowchart and design of the Unified Document Ingestion Pipeline for RAG applications |
-| **17** | Complete Express Server Implementation | Production-ready Express script combining Multer, PDF, DOCX, CSV parsers, and JSON response |
-| **18** | Summary, Best Practices & Hands-On Exercises | Quick recap, production dos & don'ts, and 6 progressive student practice challenges |
+| **01** | **Title Slide** | Gen-AI Node.js – Day 4: Streaming, File Upload & Document Processing |
+| **02** | **What Are We Building Today?** | The central story: Building an AI Document Assistant and backend flow |
+| **03** | **What Is Streaming?** | Normal API response (wait for full answer) vs Streaming response (word-by-word like ChatGPT) |
+| **04** | **What Is SSE?** | Server-Sent Events simple definition, one-way server-to-browser pipe, and use cases |
+| **05** | **Creating Our First SSE Server** | Express endpoint (`/stream`), `text/event-stream`, `no-cache`, `res.write()`, and `res.end()` |
+| **06** | **How Does the Browser Read Streaming Data?** | `ReadableStream` simplified: `fetch()`, `response.body`, `getReader()`, `reader.read()`, and `TextDecoder()` |
+| **07** | **Practical: Display Streaming Data in Browser** | Simple HTML & JS working demo with `while(true)` chunk reading and live simulator |
+| **08** | **What Happens When We Upload a File?** | JSON (`application/json`) vs File uploads (`multipart/form-data`); Why `express.json()` is not enough |
+| **09** | **What Is Multer?** | Installing Multer, `upload.single("file")`, and inspecting `req.file` (`originalname`, `mimetype`, `size`) |
+| **10** | **Practical: Upload a File Using Postman** | 9-step Postman testing procedure (POST, form-data, file key, selecting files, and verifying 200 OK) |
+| **11** | **What Is a Buffer?** | Simple explanation: Computer bytes, `Buffer.from("Hello")`, `buffer.toString()`, and interactive byte explorer |
+| **12** | **Getting a Buffer from an Uploaded File** | `multer.memoryStorage()`, accessing `req.file.buffer`, `Buffer.isBuffer()`, and `buffer.length` |
+| **13** | **What Is Document Parsing?** | Why raw PDF bytes look like gibberish; The 3 dedicated libraries (`pdf-parse`, `mammoth`, `csv-parse`) |
+| **14** | **Reading PDF Files Using pdf-parse** | Installing `pdf-parse@1.1.1`, calling `await pdfParse(req.file.buffer)`, and inspecting `result.text` |
+| **15** | **Reading DOCX Files Using Mammoth** | Calling `mammoth.extractRawText({ buffer: req.file.buffer })`, and reading `result.value` |
+| **16** | **Reading CSV Files Using csv-parse** | Calling `parse(req.file.buffer, { columns: true })` and converting rows into JavaScript objects |
+| **17** | **Final Practical: AI Document Reader** | Connecting the full pipeline: `POST /documents/upload`, clean architecture, and interactive runner |
+| **18** | **Practical Questions & Recap** | 6 hands-on student lab challenges and quick reference summary table |
 
 ---
 
 ## 🚀 How to Open and Run the Presentation
 
-### Option 1: Direct File Launch (No Server Needed)
-Simply double-click `index.html` or open it with your browser:
+### Option 1: Direct File Launch (No Server Required)
+Simply double-click `index.html` or run:
 ```bash
 # Windows PowerShell
 Start-Process "index.html"
 
-# Or open directly in Chrome / Edge / Firefox
+# Google Chrome / Microsoft Edge
 chrome index.html
 ```
 
 ### Option 2: Run with a Local Static Server
-If you prefer running via HTTP (e.g. for testing live fetch calls or sharing across your local network):
 ```bash
 # Using npx serve (recommended)
 npx serve .
@@ -77,92 +91,120 @@ npx serve .
 # Or using Python 3
 python -m http.server 3000
 ```
-Then navigate to `http://localhost:3000/`.
+Then navigate to `http://localhost:3000` in your browser.
 
 ---
 
 ## ⌨️ Keyboard Shortcuts & Interactive Controls
 
-| Shortcut / Button | Action |
-|:------------------|:-------|
+| Shortcut / Control | Action |
+|:-------------------|:-------|
 | `→` or `Space` or `Page Down` | Advance to the **Next Slide** |
 | `←` or `Page Up` | Return to the **Previous Slide** |
-| `Home` | Jump directly to **Slide 1 (Title)** |
-| `End` | Jump directly to **Slide 18 (Summary & Lab)** |
-| `F` or `F11` | Toggle **Fullscreen Presentation Mode** |
-| `T` or `M` | Open/Close the **Table of Contents Drawer** |
-| `Esc` | Close Table of Contents Drawer |
-| `Copy Code` Button | Copies syntax-highlighted code blocks with visual feedback |
-| Navigation Header | Shows current section pill, slide number, and live progress bar |
+| `Home` | Jump directly to **Slide 1 (Title Slide)** |
+| `End` | Jump directly to **Slide 18 (Final Practical Lab)** |
+| `F` | Toggle **Fullscreen Presentation Mode** |
+| `T` or `M` | Open / Close the **Table of Contents Drawer** |
+| `?` or `H` | Open / Close the **Keyboard Shortcuts Help Modal** |
+| `Esc` | Close any open drawer or modal |
+| **Copy Code Button** | Copies code snippet to clipboard with instant checkmark feedback |
 
 ---
 
-## 🧪 Built-In Interactive Live Simulators
+## 🧪 Built-In Interactive Simulators
 
-The presentation includes 4 embedded interactive sandboxes directly within the slides:
-1. **Slide 5: Live SSE Chatbot Simulator**
-   - Click "Start SSE Stream" to watch simulated streaming tokens appear in real time with auto-scrolling terminal logs, demonstrating `ReadableStream` chunk assembly.
-2. **Slide 10: Buffer & Hex Explorer**
-   - Type any text string to inspect the exact byte length, hexadecimal representation, binary array, and UTF-8 round-trip string.
-3. **Slide 14: Tabular CSV Parser Sandbox**
-   - Edit sample CSV records directly and run the live in-browser parser to preview generated structured JSON records and row count metrics.
-4. **Slide 17: Document Ingestion API Sandbox**
-   - Simulate uploading PDF, DOCX, or CSV files to the `/api/documents/upload` endpoint and inspect the resulting metadata, word count, character count, and structured text payload.
+1. **Slide 7 — Live Browser Streaming Simulator:**
+   - Click "Start Streaming" to simulate incoming SSE chunks arriving with 1-second delays and rendering in real time.
+2. **Slide 11 — Interactive Buffer & Byte Explorer:**
+   - Type any text string to inspect the exact Node.js hexadecimal Buffer representation, byte size, and UTF-8 decoded text.
+3. **Slide 17 — Full Document Pipeline Simulator:**
+   - Select PDF, Word, or CSV formats and watch the file traverse the 3-step backend pipeline (Multer Memory &rarr; RAM Buffer &rarr; Parser) to produce extracted JSON.
 
 ---
 
-## 🛠️ Complete Mini-Project Setup Guide
+## 🛠️ Complete Student Server Implementation (`server.js`)
 
-Students can run the complete Day 4 server locally to test uploads and streaming:
+Students can test document parsing and streaming locally using this single-file Express `server.js`:
 
-### Step 1: Initialize Project and Install Dependencies
-```bash
-mkdir gen-ai-node-day4
-cd gen-ai-node-day4
-npm init -y
+```javascript
+const express = require("express");
+const multer = require("multer");
+const pdfParse = require("pdf-parse");
+const mammoth = require("mammoth");
+const { parse } = require("csv-parse/sync");
 
-# Install core Express, Multer, and document parsing libraries
-npm install express multer pdf-parse mammoth csv-parse
-```
+const app = express();
+const PORT = 3000;
 
-### Step 2: Create `server.js`
-Copy the code provided on **Slide 17** into `server.js`.
+// Configure Multer with in-memory storage (req.file.buffer)
+const upload = multer({
+    storage: multer.memoryStorage(),
+    limits: { fileSize: 10 * 1024 * 1024 } // 10MB limit
+});
 
-### Step 3: Run the Server
-```bash
-node server.js
-```
-The server will start on `http://localhost:3000`.
+// 1. SSE Streaming Endpoint
+app.get("/stream", async (req, res) => {
+    res.setHeader("Content-Type", "text/event-stream");
+    res.setHeader("Cache-Control", "no-cache");
 
-### Step 4: Test with cURL or Postman
-```bash
-# Test Document Upload Endpoint (PDF, DOCX, or CSV)
-curl -X POST http://localhost:3000/api/documents/upload \
-  -F "document=@sample.pdf"
+    res.write("data: Hello Students!\n\n");
+    await new Promise(r => setTimeout(r, 1000));
 
-# Test SSE Streaming Endpoint
-curl -N http://localhost:3000/api/stream
+    res.write("data: Welcome to Node.js!\n\n");
+    await new Promise(r => setTimeout(r, 1000));
+
+    res.write("data: Streaming completed!\n\n");
+    res.end();
+});
+
+// 2. Read PDF Endpoint
+app.post("/read-pdf", upload.single("file"), async (req, res) => {
+    try {
+        if (!req.file) return res.status(400).json({ message: "Please upload a PDF file" });
+        const result = await pdfParse(req.file.buffer);
+        res.json({ message: "PDF read successfully", text: result.text });
+    } catch (err) {
+        res.status(500).json({ message: "Unable to read PDF" });
+    }
+});
+
+// 3. Read DOCX Endpoint
+app.post("/read-docx", upload.single("file"), async (req, res) => {
+    try {
+        if (!req.file) return res.status(400).json({ message: "Please upload a DOCX file" });
+        const result = await mammoth.extractRawText({ buffer: req.file.buffer });
+        res.json({ message: "DOCX read successfully", text: result.value });
+    } catch (err) {
+        res.status(500).json({ message: "Unable to read DOCX" });
+    }
+});
+
+// 4. Read CSV Endpoint
+app.post("/read-csv", upload.single("file"), (req, res) => {
+    try {
+        if (!req.file) return res.status(400).json({ message: "Please upload a CSV file" });
+        const records = parse(req.file.buffer, {
+            columns: true,
+            skip_empty_lines: true,
+            trim: true
+        });
+        res.json({ message: "CSV read successfully", data: records });
+    } catch (err) {
+        res.status(400).json({ message: "Unable to read CSV" });
+    }
+});
+
+app.listen(PORT, () => {
+    console.log(`Server running at http://localhost:${PORT}`);
+});
 ```
 
 ---
 
-## 🧑‍💻 Student Practice Exercises & Challenges
+## 🧑‍💻 Student Practice Challenges
 
-1. **Exercise 1 (SSE Heartbeat):** Modify the SSE endpoint in `server.js` to send a `: ping\n\n` comment event every 15 seconds to prevent NAT gateway timeouts.
-2. **Exercise 2 (Multi-File Ingestion):** Upgrade the upload endpoint from `upload.single("document")` to `upload.array("documents", 5)` so users can upload up to 5 documents at once.
-3. **Exercise 3 (Document Chunker):** Write a utility function that splits the parsed text into sliding window chunks of 500 characters with a 50-character overlap for RAG embeddings.
-4. **Exercise 4 (Image Vision Payloads):** Add image upload validation (`image/png`, `image/jpeg`) and convert the image buffer to a base64 Data URI formatted for OpenAI or Gemini multimodal APIs.
-5. **Exercise 5 (AbortController Integration):** Wire the SSE client's disconnect event (`req.on("close")`) to an `AbortController.signal` passed into an LLM call.
-6. **Exercise 6 (Token Counter):** Add a rough token estimator function (`Math.ceil(text.length / 4)`) to the upload response JSON so frontend developers know prompt budget usage.
-
----
-
-## 📂 Project Directory Structure
-
-```
-gen-ai-node-day4-presentation/
-├── index.html          # Semantic HTML5 deck (all 18 slides with code, theory & diagrams)
-├── style.css           # Modern developer presentation theme (light-blue & dark code styling)
-├── script.js           # Navigation engine, keyboard shortcuts, TOC & interactive simulators
-└── README.md           # Syllabus breakdown, setup manual, and hands-on exercises
-```
+1. **Challenge 1 (SSE Heartbeat):** Modify the `/stream` endpoint to send 5 progressive messages with a 1-second delay between each.
+2. **Challenge 2 (Word Counter):** In `/read-pdf`, calculate and return the total number of words in `result.text` (`text.split(/\s+/).length`).
+3. **Challenge 3 (File Type Validation):** Check `req.file.mimetype` before parsing and reject unexpected file formats with a clear `400 Bad Request`.
+4. **Challenge 4 (Tabular Filter):** In `/read-csv`, filter the parsed records array to only return students who belong to a specific course passed via query parameters (`?course=MERN`).
+5. **Challenge 5 (Unified Ingestion Route):** Combine `/read-pdf`, `/read-docx`, and `/read-csv` into a single endpoint (`POST /documents/upload`) that checks the file extension and calls the appropriate parser dynamically.
