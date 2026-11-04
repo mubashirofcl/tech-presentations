@@ -1,0 +1,1858 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Node.js Day 5 — Query Parameters, Route Parameters &amp; CRUD API</title>
+  <meta name="description" content="Node.js Day 5 Classroom Presentation: URL Structure, Query Parameters (req.query), Route Parameters (req.params), and In-Memory Express CRUD API.">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="presentation-container">
+    
+    <!-- ===================================================================
+         TOP BAR (Header, Navigation & Progress)
+         =================================================================== -->
+    <header class="top-bar">
+      <div class="progress-track">
+        <div id="progress-bar" class="progress-fill"></div>
+      </div>
+
+      <div class="top-left">
+        <div class="brand-badge">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+          <span>Node.js Day 5</span>
+        </div>
+        <div class="deck-title">
+          <span>Express.js Backend Development</span>
+          <span class="deck-divider">/</span>
+          <span id="section-indicator" class="section-indicator">Overview &amp; Objectives</span>
+        </div>
+      </div>
+
+      <div class="top-right">
+        <span id="slide-counter" class="slide-counter">01 / 18</span>
+        <button id="toc-btn" class="top-btn" title="Open Table of Contents (Press 'T' or 'M')">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+        </button>
+        <button id="help-btn" class="top-btn" title="Keyboard Shortcuts (Press '?')">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+        </button>
+        <button id="fullscreen-btn" class="top-btn" title="Toggle Fullscreen (Press 'F')">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path></svg>
+        </button>
+      </div>
+    </header>
+
+    <!-- ===================================================================
+         SLIDE VIEWPORT (18 Slides)
+         =================================================================== -->
+    <main class="slide-viewport">
+
+      <!-- ===============================================================
+           SLIDE 1: Title Slide
+           =============================================================== -->
+      <section id="slide-1" class="slide active" data-slide-num="1">
+        <div class="hero-container">
+          <div class="hero-badge-wrap">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg>
+            <span>Node.js &amp; Express.js — Day 5</span>
+          </div>
+
+          <h1 class="hero-title">
+            Query Parameters, Route Parameters &amp; <span class="highlight-text">CRUD API</span>
+          </h1>
+
+          <p class="hero-subtitle">
+            Master receiving dynamic data through URLs using <code>req.query</code> and <code>req.params</code>, then build a complete RESTful Student Management API with in-memory persistence.
+          </p>
+
+          <div class="hero-topics-grid">
+            <div class="hero-topic-card">
+              <span>🌐</span> <span>URL Structure</span>
+            </div>
+            <div class="hero-topic-card">
+              <span>🔍</span> <span>Query Parameters (<code>req.query</code>)</span>
+            </div>
+            <div class="hero-topic-card">
+              <span>🎯</span> <span>Route Parameters (<code>req.params</code>)</span>
+            </div>
+            <div class="hero-topic-card">
+              <span>⚖️</span> <span>Query vs Route Params</span>
+            </div>
+            <div class="hero-topic-card">
+              <span>⚡</span> <span>CRUD Architecture</span>
+            </div>
+            <div class="hero-topic-card">
+              <span>🛠️</span> <span>Express Implementation</span>
+            </div>
+            <div class="hero-topic-card">
+              <span>📮</span> <span>Postman API Testing</span>
+            </div>
+            <div class="hero-topic-card">
+              <span>🚀</span> <span>In-Memory Student API</span>
+            </div>
+          </div>
+
+          <div class="hero-footer-meta">
+            <span><strong>Target:</strong> Beginner MERN Stack Students</span>
+            <span>•</span>
+            <span><strong>Focus:</strong> Hands-On REST API Development</span>
+            <span>•</span>
+            <span><strong>Prerequisite:</strong> Express Setup (Day 4)</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===============================================================
+           SLIDE 2: Learning Objectives
+           =============================================================== -->
+      <section id="slide-2" class="slide" data-slide-num="2">
+        <div class="slide-header">
+          <div class="slide-title-wrap">
+            <span class="slide-category">Orientation</span>
+            <h2 class="slide-title">Learning Objectives</h2>
+            <p class="slide-subtitle">Competencies and practical backend skills you will acquire in this session</p>
+          </div>
+          <span class="slide-num-pill">Slide 02 / 18</span>
+        </div>
+
+        <div class="slide-body grid-2">
+          <!-- Left Column: Core URL Objectives -->
+          <div style="display:flex; flex-direction:column; gap:0.95rem;">
+            <div class="card highlight">
+              <div class="card-title">
+                <span>🌐</span>
+                <span>Part 1: Receiving Data from URLs</span>
+              </div>
+              <ul class="feature-list">
+                <li><span class="bullet-icon">▸</span> <strong>Understand URL Structure:</strong> Dissect protocols, domains, path segments, and query strings.</li>
+                <li><span class="bullet-icon">▸</span> <strong>Master Query Parameters:</strong> Extract optional filtering, searching, and pagination inputs with <code>req.query</code>.</li>
+                <li><span class="bullet-icon">▸</span> <strong>Master Route Parameters:</strong> Extract dynamic resource identifiers with <code>req.params</code>.</li>
+                <li><span class="bullet-icon">▸</span> <strong>Query vs Route Parameters:</strong> Know precisely when to use <code>?key=value</code> vs <code>/:id</code>.</li>
+              </ul>
+            </div>
+
+            <div class="callout callout-info">
+              <span>💡</span>
+              <div>
+                <strong>Key Takeaway:</strong> Backend APIs must be able to identify <em>specific records</em> (route params) and <em>filter/paginate lists</em> (query params) without altering backend route registrations.
+              </div>
+            </div>
+          </div>
+
+          <!-- Right Column: CRUD & Testing Objectives -->
+          <div style="display:flex; flex-direction:column; gap:0.95rem;">
+            <div class="card highlight">
+              <div class="card-title">
+                <span>⚡</span>
+                <span>Part 2: RESTful CRUD API Development</span>
+              </div>
+              <ul class="feature-list">
+                <li><span class="bullet-icon">▸</span> <strong>Implement CRUD Operations:</strong> Build CREATE, READ, UPDATE, and DELETE endpoints with Express.js.</li>
+                <li><span class="bullet-icon">▸</span> <strong>Handle Request Bodies:</strong> Parse incoming JSON payloads with <code>express.json()</code> and <code>req.body</code>.</li>
+                <li><span class="bullet-icon">▸</span> <strong>Return Appropriate HTTP Status Codes:</strong> Respond with 200 OK, 201 Created, 400 Bad Request, and 404 Not Found.</li>
+                <li><span class="bullet-icon">▸</span> <strong>Professional Postman Testing:</strong> Test all endpoints sequentially and verify request bodies, headers, and status codes.</li>
+              </ul>
+            </div>
+
+            <div class="callout callout-tip">
+              <span>🚀</span>
+              <div>
+                <strong>Hands-On Approach:</strong> We will implement a complete <strong>Student Management API</strong> with an in-memory array to master backend logic before introducing databases.
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===============================================================
+           SLIDE 3: Understanding URL Structure
+           =============================================================== -->
+      <section id="slide-3" class="slide" data-slide-num="3">
+        <div class="slide-header">
+          <div class="slide-title-wrap">
+            <span class="slide-category">Section 1: Query Parameters</span>
+            <h2 class="slide-title">Understanding URL Structure</h2>
+            <p class="slide-subtitle">Before reading parameters, understand how URLs are organized and parsed</p>
+          </div>
+          <span class="slide-num-pill">Slide 03 / 18</span>
+        </div>
+
+        <div class="slide-body" style="gap:1.15rem;">
+          <!-- Visual URL Anatomy Box -->
+          <div class="url-anatomy-box">
+            <div style="font-size:0.86rem; font-weight:700; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.04em;">
+              URL Breakdown Anatomy
+            </div>
+            <div class="url-full-display">
+              <span class="url-segment seg-proto">https://</span>
+              <span class="url-segment seg-domain">example.com</span>
+              <span class="url-segment seg-path">/api/students/</span>
+              <span class="url-segment seg-route-param">101</span>
+              <span class="url-segment seg-query-sep">?</span>
+              <span class="url-segment seg-query-param">course=MERN</span>
+            </div>
+
+            <div class="url-breakdown-grid">
+              <div class="url-breakdown-card">
+                <span class="label">Protocol</span>
+                <span class="val seg-proto">https</span>
+              </div>
+              <div class="url-breakdown-card">
+                <span class="label">Domain / Host</span>
+                <span class="val seg-domain">example.com</span>
+              </div>
+              <div class="url-breakdown-card">
+                <span class="label">Base Path</span>
+                <span class="val seg-path">/api/students</span>
+              </div>
+              <div class="url-breakdown-card">
+                <span class="label">Route Parameter</span>
+                <span class="val seg-route-param">101</span>
+              </div>
+              <div class="url-breakdown-card">
+                <span class="label">Query Parameter</span>
+                <span class="val seg-query-param">course=MERN</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Key Rules Grid -->
+          <div class="grid-2">
+            <div class="card">
+              <div class="card-title">
+                <span>📌</span>
+                <span>The Two Key URL Separators</span>
+              </div>
+              <ul class="feature-list">
+                <li><span class="bullet-icon">▸</span> <strong>The Question Mark (<code>?</code>):</strong> Marks the boundary between the URL path and the query string. Everything after <code>?</code> is query data.</li>
+                <li><span class="bullet-icon">▸</span> <strong>The Ampersand (<code>&amp;</code>):</strong> Delimits multiple key-value pairs in a single query string.</li>
+              </ul>
+            </div>
+
+            <div class="card">
+              <div class="card-title">
+                <span>🔗</span>
+                <span>Multiple Query Parameters Example</span>
+              </div>
+              <div style="font-family:var(--font-mono); font-size:0.86rem; background:#0b1329; color:#e2e8f0; padding:0.8rem; border-radius:6px; line-height:1.6;">
+                /api/students<span style="color:#f43f5e; font-weight:bold;">?</span><span style="color:#4ade80;">course=MERN</span><span style="color:#facc15; font-weight:bold;">&amp;</span><span style="color:#38bdf8;">age=22</span><span style="color:#facc15; font-weight:bold;">&amp;</span><span style="color:#c084fc;">status=active</span>
+              </div>
+              <p style="font-size:0.84rem; color:var(--text-muted); margin-top:0.4rem;">
+                Here, 3 query parameters (<code>course</code>, <code>age</code>, and <code>status</code>) are sent together.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===============================================================
+           SLIDE 4: What Are Query Parameters?
+           =============================================================== -->
+      <section id="slide-4" class="slide" data-slide-num="4">
+        <div class="slide-header">
+          <div class="slide-title-wrap">
+            <span class="slide-category">Section 1: Query Parameters</span>
+            <h2 class="slide-title">What Are Query Parameters?</h2>
+            <p class="slide-subtitle">Passing optional key-value pairs to Express routes using <code>req.query</code></p>
+          </div>
+          <span class="slide-num-pill">Slide 04 / 18</span>
+        </div>
+
+        <div class="slide-body grid-2">
+          <!-- Left Column: Theory & Common Uses -->
+          <div style="display:flex; flex-direction:column; gap:0.95rem;">
+            <div class="card highlight">
+              <div class="card-title">
+                <span>📖</span>
+                <span>Theory &amp; Purpose</span>
+              </div>
+              <p>
+                <strong>Query parameters</strong> are key-value pairs appended to the end of a URL after the <code>?</code> symbol. They are used to send optional instructions to the server without changing the route endpoint.
+              </p>
+              <ul class="feature-list" style="margin-top:0.3rem;">
+                <li><span class="bullet-icon">🔍</span> <strong>Searching:</strong> <code>/students?search=anu</code></li>
+                <li><span class="bullet-icon">🎯</span> <strong>Filtering:</strong> <code>/students?course=MERN</code></li>
+                <li><span class="bullet-icon">📊</span> <strong>Sorting:</strong> <code>/products?category=electronics&amp;sort=price</code></li>
+                <li><span class="bullet-icon">📄</span> <strong>Pagination:</strong> <code>/students?page=2&amp;limit=10</code></li>
+              </ul>
+            </div>
+
+            <div class="callout callout-warning">
+              <span>⚠️</span>
+              <div>
+                <strong>Important Behavior:</strong> Query parameter values are <em>always received as strings</em> (e.g., <code>"22"</code> instead of <code>22</code>). Always convert them using <code>Number()</code> when performing numeric comparisons!
+              </div>
+            </div>
+          </div>
+
+          <!-- Right Column: Code & Execution -->
+          <div style="display:flex; flex-direction:column; gap:0.9rem;">
+            <div class="code-container">
+              <div class="code-header">
+                <div class="code-file-badge">
+                  <span class="file-dot"></span>
+                  <span>server.js — Accessing req.query</span>
+                </div>
+                <button class="copy-btn">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                  <span>Copy Code</span>
+                </button>
+              </div>
+              <pre class="code-block"><code><span class="syn-kw">const</span> express = <span class="syn-fn">require</span>(<span class="syn-str">"express"</span>);
+<span class="syn-kw">const</span> app = <span class="syn-fn">express</span>();
+
+<span class="syn-cm">// GET /students?course=MERN&amp;age=22</span>
+app.<span class="syn-fn">get</span>(<span class="syn-str">"/students"</span>, (req, res) =&gt; {
+    <span class="syn-kw">const</span> course = req.query.course;
+    <span class="syn-kw">const</span> age = req.query.age;
+
+    res.<span class="syn-fn">json</span>({
+        message: <span class="syn-str">"Query parameters received"</span>,
+        course,
+        age
+    });
+});
+
+app.<span class="syn-fn">listen</span>(<span class="syn-num">3000</span>);</code></pre>
+            </div>
+
+            <div class="terminal-output">
+              <div class="terminal-header">
+                <span class="dot"></span>
+                <span>Postman / Browser Request &amp; Response</span>
+              </div>
+              <div class="terminal-body">
+<span class="cmd">GET http://localhost:3000/students?course=MERN&amp;age=22</span>
+
+<span class="res">{
+    "message": "Query parameters received",
+    "course": "MERN",
+    "age": "22"
+}</span></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===============================================================
+           SLIDE 5: Practical: Filtering Students Using Query Parameters
+           =============================================================== -->
+      <section id="slide-5" class="slide" data-slide-num="5">
+        <div class="slide-header">
+          <div class="slide-title-wrap">
+            <span class="slide-category">Section 1: Query Parameters</span>
+            <h2 class="slide-title">Practical: Filtering Students Using Query Parameters</h2>
+            <p class="slide-subtitle">Dynamically filtering an in-memory array based on user-provided course values</p>
+          </div>
+          <span class="slide-num-pill">Slide 05 / 18</span>
+        </div>
+
+        <div class="slide-body grid-2">
+          <!-- Left Column: Code Implementation -->
+          <div style="display:flex; flex-direction:column; gap:0.9rem;">
+            <div class="code-container">
+              <div class="code-header">
+                <div class="code-file-badge">
+                  <span class="file-dot"></span>
+                  <span>filter-students.js</span>
+                </div>
+                <button class="copy-btn">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                  <span>Copy Code</span>
+                </button>
+              </div>
+              <pre class="code-block" style="font-size:0.82rem;"><code><span class="syn-kw">const</span> students = [
+    { id: <span class="syn-num">1</span>, name: <span class="syn-str">"Anu"</span>, course: <span class="syn-str">"MERN"</span> },
+    { id: <span class="syn-num">2</span>, name: <span class="syn-str">"Rahul"</span>, course: <span class="syn-str">"Python"</span> },
+    { id: <span class="syn-num">3</span>, name: <span class="syn-str">"Neha"</span>, course: <span class="syn-str">"MERN"</span> },
+    { id: <span class="syn-num">4</span>, name: <span class="syn-str">"Arun"</span>, course: <span class="syn-str">"React"</span> }
+];
+
+app.<span class="syn-fn">get</span>(<span class="syn-str">"/students"</span>, (req, res) =&gt; {
+    <span class="syn-kw">const</span> course = req.query.course;
+    <span class="syn-kw">let</span> filteredStudents = students;
+
+    <span class="syn-cm">// Only filter if a course query was provided</span>
+    <span class="syn-kw">if</span> (course) {
+        filteredStudents = students.<span class="syn-fn">filter</span>(
+            (student) =&gt; student.course.<span class="syn-fn">toLowerCase</span>() === course.<span class="syn-fn">toLowerCase</span>()
+        );
+    }
+
+    res.<span class="syn-fn">json</span>({
+        count: filteredStudents.length,
+        data: filteredStudents
+    });
+});</code></pre>
+            </div>
+          </div>
+
+          <!-- Right Column: Testing & Explanations -->
+          <div style="display:flex; flex-direction:column; gap:0.9rem;">
+            <div class="card">
+              <div class="card-title">
+                <span>🧪</span>
+                <span>Testing Scenarios</span>
+              </div>
+              <div style="display:flex; flex-direction:column; gap:0.5rem; font-size:0.88rem;">
+                <div><strong>Test 1: Get All Students (No Query)</strong></div>
+                <code>GET /students</code> &rarr; Returns all 4 students (count: 4).
+                
+                <div style="margin-top:0.4rem;"><strong>Test 2: Filter by Course</strong></div>
+                <code>GET /students?course=MERN</code> &rarr; Returns 2 students: Anu &amp; Neha.
+              </div>
+            </div>
+
+            <div class="terminal-output">
+              <div class="terminal-header">
+                <span class="dot"></span>
+                <span>Expected Response for /students?course=MERN</span>
+              </div>
+              <div class="terminal-body">
+<span class="res">{
+    "count": 2,
+    "data": [
+        { "id": 1, "name": "Anu", "course": "MERN" },
+        { "id": 3, "name": "Neha", "course": "MERN" }
+    ]
+}</span></div>
+            </div>
+
+            <div class="callout callout-tip">
+              <span>💡</span>
+              <div>
+                <strong>Defensive Comparison:</strong> Using <code>.toLowerCase()</code> on both sides ensures <code>?course=mern</code>, <code>?course=MERN</code>, and <code>?course=Mern</code> all match accurately!
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===============================================================
+           SLIDE 6: Multiple Query Parameters: Search, Filter & Pagination
+           =============================================================== -->
+      <section id="slide-6" class="slide" data-slide-num="6">
+        <div class="slide-header">
+          <div class="slide-title-wrap">
+            <span class="slide-category">Section 1: Query Parameters</span>
+            <h2 class="slide-title">Multiple Query Parameters: Search, Filter &amp; Pagination</h2>
+            <p class="slide-subtitle">Combining queries to build professional, production-ready search and pagination features</p>
+          </div>
+          <span class="slide-num-pill">Slide 06 / 18</span>
+        </div>
+
+        <div class="slide-body grid-2">
+          <!-- Left Column: Code -->
+          <div style="display:flex; flex-direction:column; gap:0.9rem;">
+            <div class="code-container">
+              <div class="code-header">
+                <div class="code-file-badge">
+                  <span class="file-dot"></span>
+                  <span>search-paginate.js</span>
+                </div>
+                <button class="copy-btn">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                  <span>Copy Code</span>
+                </button>
+              </div>
+              <pre class="code-block" style="font-size:0.8rem;"><code>app.<span class="syn-fn">get</span>(<span class="syn-str">"/students"</span>, (req, res) =&gt; {
+    <span class="syn-kw">const</span> { course, search, page = <span class="syn-str">"1"</span>, limit = <span class="syn-str">"5"</span> } = req.query;
+
+    <span class="syn-kw">let</span> result = [...students];
+
+    <span class="syn-cm">// 1. Filter by course</span>
+    <span class="syn-kw">if</span> (course) {
+        result = result.<span class="syn-fn">filter</span>(
+            s =&gt; s.course.<span class="syn-fn">toLowerCase</span>() === course.<span class="syn-fn">toLowerCase</span>()
+        );
+    }
+
+    <span class="syn-cm">// 2. Search by student name</span>
+    <span class="syn-kw">if</span> (search) {
+        result = result.<span class="syn-fn">filter</span>(
+            s =&gt; s.name.<span class="syn-fn">toLowerCase</span>().<span class="syn-fn">includes</span>(search.<span class="syn-fn">toLowerCase</span>())
+        );
+    }
+
+    <span class="syn-cm">// 3. Calculate Pagination indices</span>
+    <span class="syn-kw">const</span> pageNumber = Math.<span class="syn-fn">max</span>(<span class="syn-num">1</span>, <span class="syn-fn">Number</span>(page) || <span class="syn-num">1</span>);
+    <span class="syn-kw">const</span> pageSize = Math.<span class="syn-fn">max</span>(<span class="syn-num">1</span>, <span class="syn-fn">Number</span>(limit) || <span class="syn-num">5</span>);
+    <span class="syn-kw">const</span> startIndex = (pageNumber - <span class="syn-num">1</span>) * pageSize;
+
+    <span class="syn-kw">const</span> paginatedData = result.<span class="syn-fn">slice</span>(
+        startIndex,
+        startIndex + pageSize
+    );
+
+    res.<span class="syn-fn">json</span>({
+        total: result.length,
+        page: pageNumber,
+        limit: pageSize,
+        data: paginatedData
+    });
+});</code></pre>
+            </div>
+          </div>
+
+          <!-- Right Column: Interactive Sandbox & Mathematics -->
+          <div style="display:flex; flex-direction:column; gap:0.9rem;">
+            <!-- Mathematics Box -->
+            <div class="card" style="padding:0.9rem 1.1rem;">
+              <div class="card-title">
+                <span>📐</span>
+                <span>The Pagination Formula</span>
+              </div>
+              <div style="font-family:var(--font-mono); font-size:0.86rem; background:#f0f9ff; border:1px solid #bae6fd; padding:0.5rem 0.8rem; border-radius:6px; color:#0369a1; font-weight:700;">
+                const startIndex = (page - 1) * limit;
+              </div>
+              <div style="display:grid; grid-template-columns:1fr 1fr; gap:0.5rem; font-size:0.82rem; margin-top:0.4rem;">
+                <div>Page 1 (limit 5) &rarr; Items 0 to 4</div>
+                <div>Page 2 (limit 5) &rarr; Items 5 to 9</div>
+              </div>
+            </div>
+
+            <!-- Live Simulator -->
+            <div class="sandbox-card">
+              <div class="sandbox-header">
+                <span class="sandbox-title">⚡ Live Query Parameter Simulator</span>
+                <span class="sandbox-badge">Interactive</span>
+              </div>
+              
+              <div class="sandbox-controls">
+                <input id="query-sim-url" class="sandbox-input" style="flex:1;" value="/students?course=MERN&amp;search=anu&amp;page=1&amp;limit=5" placeholder="Enter query URL...">
+                <button id="query-sim-run" class="sandbox-btn">Run Query</button>
+              </div>
+
+              <div style="display:flex; gap:0.4rem; flex-wrap:wrap;">
+                <button class="sandbox-btn sandbox-btn-secondary query-preset-btn" data-url="/students?course=MERN">Preset: MERN</button>
+                <button class="sandbox-btn sandbox-btn-secondary query-preset-btn" data-url="/students?search=rahul">Preset: Search 'rahul'</button>
+                <button class="sandbox-btn sandbox-btn-secondary query-preset-btn" data-url="/students?page=2&amp;limit=2">Preset: Page 2 (limit 2)</button>
+              </div>
+
+              <div style="display:grid; grid-template-columns:1fr 1.5fr; gap:0.6rem;">
+                <div style="display:flex; flex-direction:column; gap:0.2rem;">
+                  <span style="font-size:0.75rem; font-weight:700; color:var(--text-subtle);">Parsed req.query:</span>
+                  <pre id="query-sim-parsed" style="font-family:var(--font-mono); font-size:0.75rem; background:#0b1329; color:#4ade80; padding:0.5rem; border-radius:4px; height:100px; overflow-y:auto; margin:0;"></pre>
+                </div>
+                <div style="display:flex; flex-direction:column; gap:0.2rem;">
+                  <span style="font-size:0.75rem; font-weight:700; color:var(--text-subtle);">Simulated Response:</span>
+                  <pre id="query-sim-output" style="font-family:var(--font-mono); font-size:0.75rem; background:#0b1329; color:#38bdf8; padding:0.5rem; border-radius:4px; height:100px; overflow-y:auto; margin:0;"></pre>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===============================================================
+           SLIDE 7: What Are Route Parameters?
+           =============================================================== -->
+      <section id="slide-7" class="slide" data-slide-num="7">
+        <div class="slide-header">
+          <div class="slide-title-wrap">
+            <span class="slide-category">Section 2: Route Parameters</span>
+            <h2 class="slide-title">What Are Route Parameters?</h2>
+            <p class="slide-subtitle">Capturing dynamic path values inside the Express route using <code>req.params</code></p>
+          </div>
+          <span class="slide-num-pill">Slide 07 / 18</span>
+        </div>
+
+        <div class="slide-body grid-2">
+          <!-- Left Column: Theory & Syntax -->
+          <div style="display:flex; flex-direction:column; gap:0.95rem;">
+            <div class="card highlight">
+              <div class="card-title">
+                <span>🎯</span>
+                <span>Theory &amp; Definition</span>
+              </div>
+              <p>
+                <strong>Route parameters</strong> are named URL segments used to capture dynamic values at specific positions in the URL path.
+              </p>
+              <p>
+                In Express, a route parameter is defined by prefixing a path segment with a <strong>colon (<code>:</code>)</strong>.
+              </p>
+              <div style="background:#ffffff; border:1px solid var(--primary-border); padding:0.7rem; border-radius:6px; font-family:var(--font-mono); font-size:0.86rem; color:#0369a1; margin-top:0.3rem;">
+                app.get("/students/<span style="color:#d97706; font-weight:bold;">:id</span>", (req, res) =&gt; { ... });
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-title">
+                <span>📌</span>
+                <span>Resource Identification Examples</span>
+              </div>
+              <ul class="feature-list" style="font-size:0.88rem;">
+                <li><code>/api/students/101</code> &rarr; Parameter <code>id</code> is <code>"101"</code></li>
+                <li><code>/api/students/102</code> &rarr; Parameter <code>id</code> is <code>"102"</code></li>
+                <li><code>/api/products/501</code> &rarr; Parameter <code>id</code> is <code>"501"</code></li>
+              </ul>
+              <p style="font-size:0.84rem; color:var(--text-muted); margin-top:0.3rem;">
+                Unlike query parameters which filter a collection, route parameters target a <strong>distinct individual resource</strong>.
+              </p>
+            </div>
+          </div>
+
+          <!-- Right Column: Code & Execution -->
+          <div style="display:flex; flex-direction:column; gap:0.9rem;">
+            <div class="code-container">
+              <div class="code-header">
+                <div class="code-file-badge">
+                  <span class="file-dot"></span>
+                  <span>route-param-intro.js</span>
+                </div>
+                <button class="copy-btn">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                  <span>Copy Code</span>
+                </button>
+              </div>
+              <pre class="code-block"><code><span class="syn-cm">// Defining a dynamic route parameter with :id</span>
+app.<span class="syn-fn">get</span>(<span class="syn-str">"/students/:id"</span>, (req, res) =&gt; {
+
+    <span class="syn-cm">// req.params contains all defined route parameters</span>
+    <span class="syn-kw">const</span> studentId = req.params.id;
+
+    res.<span class="syn-fn">json</span>({
+        message: <span class="syn-str">"Student details"</span>,
+        id: studentId
+    });
+
+});</code></pre>
+            </div>
+
+            <div class="terminal-output">
+              <div class="terminal-header">
+                <span class="dot"></span>
+                <span>Postman Test: GET /students/101</span>
+              </div>
+              <div class="terminal-body">
+<span class="cmd">GET http://localhost:3000/students/101</span>
+
+<span class="res">{
+    "message": "Student details",
+    "id": "101"
+}</span></div>
+            </div>
+
+            <div class="callout callout-warning">
+              <span>⚠️</span>
+              <div>
+                <strong>String Type Warning:</strong> Notice that <code>id</code> is returned as a string: <code>"101"</code>! To compare it against numeric array IDs, we must cast it with <code>Number(req.params.id)</code>.
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===============================================================
+           SLIDE 8: Practical: Get a Student Using Route Parameters
+           =============================================================== -->
+      <section id="slide-8" class="slide" data-slide-num="8">
+        <div class="slide-header">
+          <div class="slide-title-wrap">
+            <span class="slide-category">Section 2: Route Parameters</span>
+            <h2 class="slide-title">Practical: Get a Student Using Route Parameters</h2>
+            <p class="slide-subtitle">Finding a specific student by ID, handling type conversion, and returning 404</p>
+          </div>
+          <span class="slide-num-pill">Slide 08 / 18</span>
+        </div>
+
+        <div class="slide-body grid-2">
+          <!-- Left Column: Code -->
+          <div style="display:flex; flex-direction:column; gap:0.9rem;">
+            <div class="code-container">
+              <div class="code-header">
+                <div class="code-file-badge">
+                  <span class="file-dot"></span>
+                  <span>get-student-by-id.js</span>
+                </div>
+                <button class="copy-btn">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                  <span>Copy Code</span>
+                </button>
+              </div>
+              <pre class="code-block" style="font-size:0.82rem;"><code><span class="syn-kw">const</span> students = [
+    { id: <span class="syn-num">1</span>, name: <span class="syn-str">"Anu"</span>, course: <span class="syn-str">"MERN"</span> },
+    { id: <span class="syn-num">2</span>, name: <span class="syn-str">"Rahul"</span>, course: <span class="syn-str">"Python"</span> },
+    { id: <span class="syn-num">3</span>, name: <span class="syn-str">"Neha"</span>, course: <span class="syn-str">"React"</span> }
+];
+
+app.<span class="syn-fn">get</span>(<span class="syn-str">"/students/:id"</span>, (req, res) =&gt; {
+    <span class="syn-cm">// 1. Convert string parameter to a Number</span>
+    <span class="syn-kw">const</span> id = <span class="syn-fn">Number</span>(req.params.id);
+
+    <span class="syn-cm">// 2. Search student in array</span>
+    <span class="syn-kw">const</span> student = students.<span class="syn-fn">find</span>(
+        (student) =&gt; student.id === id
+    );
+
+    <span class="syn-cm">// 3. Handle non-existent student (404)</span>
+    <span class="syn-kw">if</span> (!student) {
+        <span class="syn-kw">return</span> res.<span class="syn-fn">status</span>(<span class="syn-num">404</span>).<span class="syn-fn">json</span>({
+            message: <span class="syn-str">"Student not found"</span>
+        });
+    }
+
+    <span class="syn-cm">// 4. Return matching student (200)</span>
+    res.<span class="syn-fn">status</span>(<span class="syn-num">200</span>).<span class="syn-fn">json</span>({
+        data: student
+    });
+});</code></pre>
+            </div>
+          </div>
+
+          <!-- Right Column: Interactive Tester & Logic Explanation -->
+          <div style="display:flex; flex-direction:column; gap:0.9rem;">
+            <div class="sandbox-card">
+              <div class="sandbox-header">
+                <span class="sandbox-title">⚡ Route Parameter Tester</span>
+                <span id="param-sim-status" class="badge-status status-200">200 OK</span>
+              </div>
+              
+              <div class="sandbox-controls">
+                <span style="font-family:var(--font-mono); font-size:0.86rem; color:var(--text-muted);">GET /students/</span>
+                <input id="param-sim-id" class="sandbox-input" style="width:90px;" value="1" placeholder="ID...">
+                <button id="param-sim-run" class="sandbox-btn">Fetch Student</button>
+              </div>
+
+              <div style="display:flex; gap:0.4rem; flex-wrap:wrap;">
+                <button class="sandbox-btn sandbox-btn-secondary param-preset-btn" data-id="1">Test ID: 1 (Anu)</button>
+                <button class="sandbox-btn sandbox-btn-secondary param-preset-btn" data-id="2">Test ID: 2 (Rahul)</button>
+                <button class="sandbox-btn sandbox-btn-secondary param-preset-btn" data-id="100">Test ID: 100 (404 Not Found)</button>
+              </div>
+
+              <div style="display:flex; flex-direction:column; gap:0.2rem;">
+                <span style="font-size:0.75rem; font-weight:700; color:var(--text-subtle);">Response JSON:</span>
+                <pre id="param-sim-output" style="font-family:var(--font-mono); font-size:0.8rem; background:#0b1329; color:#38bdf8; padding:0.7rem; border-radius:6px; margin:0; height:120px; overflow-y:auto;"></pre>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-title">
+                <span>🔍</span>
+                <span>Code Mechanics</span>
+              </div>
+              <ul class="feature-list" style="font-size:0.85rem;">
+                <li><span class="bullet-icon">1</span> <code>Number(req.params.id)</code> avoids the common bug <code>"1" === 1</code> returning false.</li>
+                <li><span class="bullet-icon">2</span> <code>find()</code> returns the first matching object or <code>undefined</code>.</li>
+                <li><span class="bullet-icon">3</span> <code>return res.status(404)...</code> halts execution so headers aren't sent twice.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===============================================================
+           SLIDE 9: Query Parameters vs Route Parameters
+           =============================================================== -->
+      <section id="slide-9" class="slide" data-slide-num="9">
+        <div class="slide-header">
+          <div class="slide-title-wrap">
+            <span class="slide-category">Section 2: Route Parameters</span>
+            <h2 class="slide-title">Query Parameters vs Route Parameters</h2>
+            <p class="slide-subtitle">Clear architectural distinction and how to seamlessly combine both in a single endpoint</p>
+          </div>
+          <span class="slide-num-pill">Slide 09 / 18</span>
+        </div>
+
+        <div class="slide-body" style="gap:1.15rem;">
+          <!-- Comprehensive Comparison Table -->
+          <div class="table-responsive">
+            <table class="custom-table">
+              <thead>
+                <tr>
+                  <th style="width:24%;">Feature</th>
+                  <th style="width:38%;">Query Parameters (<code>req.query</code>)</th>
+                  <th style="width:38%;">Route Parameters (<code>req.params</code>)</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Position in URL</strong></td>
+                  <td>Appended at the end after the <code>?</code> mark</td>
+                  <td>Embedded directly within the URL path segments</td>
+                </tr>
+                <tr>
+                  <td><strong>Express Access</strong></td>
+                  <td><code>req.query.paramName</code></td>
+                  <td><code>req.params.paramName</code></td>
+                </tr>
+                <tr>
+                  <td><strong>Primary Purpose</strong></td>
+                  <td>Filtering, searching, sorting, and pagination</td>
+                  <td>Identifying a specific, distinct resource</td>
+                </tr>
+                <tr>
+                  <td><strong>Necessity</strong></td>
+                  <td>Almost always <strong>optional</strong></td>
+                  <td>Usually <strong>required</strong> by the route pattern</td>
+                </tr>
+                <tr>
+                  <td><strong>Multiple Values</strong></td>
+                  <td>Separated by ampersands: <code>?course=MERN&amp;page=1</code></td>
+                  <td>Separated by path slashes: <code>/students/:id/grades/:sem</code></td>
+                </tr>
+                <tr>
+                  <td><strong>Example URL</strong></td>
+                  <td><code>GET /students?course=MERN</code></td>
+                  <td><code>GET /students/101</code></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Combining Both Example -->
+          <div class="grid-2">
+            <div class="card highlight">
+              <div class="card-title">
+                <span>🤝</span>
+                <span>Can We Use Both Together? Yes!</span>
+              </div>
+              <p style="font-size:0.88rem;">
+                A real-world API often targets a specific entity via route params while requesting optional related fields via query params:
+              </p>
+              <div style="font-family:var(--font-mono); font-size:0.86rem; background:#ffffff; border:1px solid var(--primary-border); padding:0.6rem; border-radius:6px; color:#0c4a6e;">
+                GET /students/<span style="color:#d97706; font-weight:bold;">101</span><span style="color:#f43f5e; font-weight:bold;">?</span><span style="color:#047857; font-weight:bold;">include=course</span>
+              </div>
+              <div style="display:flex; justify-content:space-between; font-size:0.82rem; margin-top:0.3rem;">
+                <span>Route param &rarr; <code>req.params.id</code> = <code>"101"</code></span>
+                <span>Query param &rarr; <code>req.query.include</code> = <code>"course"</code></span>
+              </div>
+            </div>
+
+            <div class="code-container">
+              <div class="code-header">
+                <div class="code-file-badge">
+                  <span class="file-dot"></span>
+                  <span>combined-params.js</span>
+                </div>
+                <button class="copy-btn">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                  <span>Copy Code</span>
+                </button>
+              </div>
+              <pre class="code-block" style="font-size:0.82rem;"><code>app.<span class="syn-fn">get</span>(<span class="syn-str">"/students/:id"</span>, (req, res) =&gt; {
+    <span class="syn-kw">const</span> id = <span class="syn-fn">Number</span>(req.params.id);
+    <span class="syn-kw">const</span> include = req.query.include;
+
+    res.<span class="syn-fn">json</span>({
+        studentId: id,
+        include
+    });
+});</code></pre>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===============================================================
+           SLIDE 10: What Is CRUD?
+           =============================================================== -->
+      <section id="slide-10" class="slide" data-slide-num="10">
+        <div class="slide-header">
+          <div class="slide-title-wrap">
+            <span class="slide-category">Section 3: CRUD API Implementation</span>
+            <h2 class="slide-title">What Is CRUD?</h2>
+            <p class="slide-subtitle">The four foundational operations of data management and their REST HTTP method mappings</p>
+          </div>
+          <span class="slide-num-pill">Slide 10 / 18</span>
+        </div>
+
+        <div class="slide-body" style="gap:1.2rem;">
+          <!-- 4 CRUD Cards Grid -->
+          <div class="crud-grid-cards">
+            <div class="crud-box crud-box-create">
+              <span class="badge-method badge-post">POST</span>
+              <span class="crud-box-title">CREATE</span>
+              <p class="crud-box-desc">Add a new record to the data store. Receives data from the client request body.</p>
+              <div style="font-family:var(--font-mono); font-size:0.75rem; color:#b45309; font-weight:700;">Status: 201 Created</div>
+            </div>
+
+            <div class="crud-box crud-box-read">
+              <span class="badge-method badge-get">GET</span>
+              <span class="crud-box-title">READ</span>
+              <p class="crud-box-desc">Retrieve existing records. Fetch all items or a single item by its ID parameter.</p>
+              <div style="font-family:var(--font-mono); font-size:0.75rem; color:#047857; font-weight:700;">Status: 200 OK</div>
+            </div>
+
+            <div class="crud-box crud-box-update">
+              <span class="badge-method badge-put">PUT / PATCH</span>
+              <span class="crud-box-title">UPDATE</span>
+              <p class="crud-box-desc">Modify existing records. PUT replaces the full entity; PATCH updates specific fields.</p>
+              <div style="font-family:var(--font-mono); font-size:0.75rem; color:#0369a1; font-weight:700;">Status: 200 OK</div>
+            </div>
+
+            <div class="crud-box crud-box-delete">
+              <span class="badge-method badge-delete">DELETE</span>
+              <span class="crud-box-title">DELETE</span>
+              <p class="crud-box-desc">Remove an existing record by its ID. Spliced from the array or deleted from DB.</p>
+              <div style="font-family:var(--font-mono); font-size:0.75rem; color:#b91c1c; font-weight:700;">Status: 200 OK</div>
+            </div>
+          </div>
+
+          <!-- Real World Student Example & Workflow Chain -->
+          <div class="grid-2">
+            <div class="card">
+              <div class="card-title">
+                <span>🎓</span>
+                <span>Real-World Student Management Example</span>
+              </div>
+              <ul class="feature-list" style="font-size:0.86rem;">
+                <li><strong>Create:</strong> Register a new student enrollment (<code>POST /students</code>).</li>
+                <li><strong>Read:</strong> View the student roster or view a single profile (<code>GET /students</code> or <code>GET /students/:id</code>).</li>
+                <li><strong>Update:</strong> Edit phone, email, or change selected course (<code>PUT</code> or <code>PATCH /students/:id</code>).</li>
+                <li><strong>Delete:</strong> Withdraw or graduate a student (<code>DELETE /students/:id</code>).</li>
+              </ul>
+            </div>
+
+            <div class="card highlight">
+              <div class="card-title">
+                <span>🔄</span>
+                <span>REST Architecture Insight</span>
+              </div>
+              <p style="font-size:0.88rem;">
+                <strong>CRUD is a general conceptual model</strong> used in all database and software engineering.
+              </p>
+              <p style="font-size:0.88rem;">
+                In web applications, <strong>HTTP Methods</strong> (POST, GET, PUT, PATCH, DELETE) provide the standard communication protocol to execute CRUD operations across the network.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===============================================================
+           SLIDE 11: Setting Up the CRUD API Project
+           =============================================================== -->
+      <section id="slide-11" class="slide" data-slide-num="11">
+        <div class="slide-header">
+          <div class="slide-title-wrap">
+            <span class="slide-category">Section 3: CRUD API Implementation</span>
+            <h2 class="slide-title">Setting Up the CRUD API Project</h2>
+            <p class="slide-subtitle">Initializing the Express project, configuring JSON middleware, and preparing in-memory state</p>
+          </div>
+          <span class="slide-num-pill">Slide 11 / 18</span>
+        </div>
+
+        <div class="slide-body grid-2">
+          <!-- Left Column: Terminal & Directory -->
+          <div style="display:flex; flex-direction:column; gap:0.95rem;">
+            <div class="card highlight">
+              <div class="card-title">
+                <span>💻</span>
+                <span>Step 1: Terminal Setup</span>
+              </div>
+              <pre class="code-block" style="font-size:0.84rem; padding:0.75rem 0.9rem; border-radius:6px; background:#0b1329;"><code><span class="syn-cm"># Create and enter project folder</span>
+mkdir student-crud-api
+cd student-crud-api
+
+<span class="syn-cm"># Initialize npm package</span>
+npm init -y
+
+<span class="syn-cm"># Install Express framework</span>
+npm install express</code></pre>
+            </div>
+
+            <div class="card">
+              <div class="card-title">
+                <span>📁</span>
+                <span>Project Directory Structure</span>
+              </div>
+              <pre class="code-block" style="font-size:0.82rem; padding:0.75rem 0.9rem; border-radius:6px; background:#0b1329; color:#93c5fd;"><code>student-crud-api/
+│
+├── node_modules/
+├── package.json
+├── package-lock.json
+└── server.js</code></pre>
+            </div>
+
+            <div class="callout callout-info">
+              <span>ℹ️</span>
+              <div>
+                <strong>In-Memory Notice:</strong> We are using a JavaScript array (<code>let students = [...]</code>). Data lives in RAM and resets when the Node process restarts.
+              </div>
+            </div>
+          </div>
+
+          <!-- Right Column: Base server.js Code -->
+          <div style="display:flex; flex-direction:column; gap:0.9rem;">
+            <div class="code-container">
+              <div class="code-header">
+                <div class="code-file-badge">
+                  <span class="file-dot"></span>
+                  <span>server.js — Boilerplate &amp; State</span>
+                </div>
+                <button class="copy-btn">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                  <span>Copy Code</span>
+                </button>
+              </div>
+              <pre class="code-block" style="font-size:0.82rem;"><code><span class="syn-kw">const</span> express = <span class="syn-fn">require</span>(<span class="syn-str">"express"</span>);
+<span class="syn-kw">const</span> app = <span class="syn-fn">express</span>();
+<span class="syn-kw">const</span> PORT = <span class="syn-num">3000</span>;
+
+<span class="syn-cm">// CRITICAL: Middleware to parse incoming JSON bodies</span>
+app.<span class="syn-fn">use</span>(express.<span class="syn-fn">json</span>());
+
+<span class="syn-cm">// In-memory student records</span>
+<span class="syn-kw">let</span> students = [
+    { id: <span class="syn-num">1</span>, name: <span class="syn-str">"Anu"</span>, email: <span class="syn-str">"anu@gmail.com"</span>, course: <span class="syn-str">"MERN"</span> },
+    { id: <span class="syn-num">2</span>, name: <span class="syn-str">"Rahul"</span>, email: <span class="syn-str">"rahul@gmail.com"</span>, course: <span class="syn-str">"Python"</span> },
+    { id: <span class="syn-num">3</span>, name: <span class="syn-str">"Neha"</span>, email: <span class="syn-str">"neha@gmail.com"</span>, course: <span class="syn-str">"React"</span> }
+];
+
+<span class="syn-cm">// CRUD routes will be added here</span>
+
+app.<span class="syn-fn">listen</span>(PORT, () =&gt; {
+    <span class="syn-fn">console</span>.<span class="syn-fn">log</span>(<span class="syn-str">`Server running on port ${PORT}`</span>);
+});</code></pre>
+            </div>
+
+            <div class="card" style="padding:0.75rem 1rem; font-size:0.83rem;">
+              <strong>Why <code>app.use(express.json())</code> is Essential:</strong> By default, Node.js streams request bodies as raw chunks. <code>express.json()</code> intercepts the stream, parses the raw JSON, and attaches it cleanly to <code>req.body</code>.
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===============================================================
+           SLIDE 12: CREATE: Adding a New Student
+           =============================================================== -->
+      <section id="slide-12" class="slide" data-slide-num="12">
+        <div class="slide-header">
+          <div class="slide-title-wrap">
+            <span class="slide-category">Section 3: CRUD API Implementation</span>
+            <h2 class="slide-title">CREATE — Adding a New Student</h2>
+            <p class="slide-subtitle">Implementing <code>POST /students</code> with body validation, ID generation, and 201 Created</p>
+          </div>
+          <span class="slide-num-pill">Slide 12 / 18</span>
+        </div>
+
+        <div class="slide-body grid-2">
+          <!-- Left Column: Express Route Implementation -->
+          <div style="display:flex; flex-direction:column; gap:0.9rem;">
+            <div class="code-container">
+              <div class="code-header">
+                <div class="code-file-badge">
+                  <span class="file-dot"></span>
+                  <span>create-student.js (POST /students)</span>
+                </div>
+                <button class="copy-btn">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                  <span>Copy Code</span>
+                </button>
+              </div>
+              <pre class="code-block" style="font-size:0.82rem;"><code>app.<span class="syn-fn">post</span>(<span class="syn-str">"/students"</span>, (req, res) =&gt; {
+    <span class="syn-kw">const</span> { name, email, course } = req.body;
+
+    <span class="syn-cm">// 1. Validate required fields (400 Bad Request)</span>
+    <span class="syn-kw">if</span> (!name || !email || !course) {
+        <span class="syn-kw">return</span> res.<span class="syn-fn">status</span>(<span class="syn-num">400</span>).<span class="syn-fn">json</span>({
+            message: <span class="syn-str">"All fields are required"</span>
+        });
+    }
+
+    <span class="syn-cm">// 2. Auto-increment dynamic ID</span>
+    <span class="syn-kw">const</span> newStudent = {
+        id: students.length
+            ? Math.<span class="syn-fn">max</span>(...students.<span class="syn-fn">map</span>(s =&gt; s.id)) + <span class="syn-num">1</span>
+            : <span class="syn-num">1</span>,
+        name,
+        email,
+        course
+    };
+
+    <span class="syn-cm">// 3. Append to state</span>
+    students.<span class="syn-fn">push</span>(newStudent);
+
+    <span class="syn-cm">// 4. Respond with HTTP 201 Created</span>
+    res.<span class="syn-fn">status</span>(<span class="syn-num">201</span>).<span class="syn-fn">json</span>({
+        message: <span class="syn-str">"Student created successfully"</span>,
+        data: newStudent
+    });
+});</code></pre>
+            </div>
+          </div>
+
+          <!-- Right Column: Postman Testing & Steps -->
+          <div style="display:flex; flex-direction:column; gap:0.9rem;">
+            <div class="card highlight">
+              <div class="card-title">
+                <span class="badge-method badge-post">POST</span>
+                <span>Postman Testing Configuration</span>
+              </div>
+              <ul class="feature-list" style="font-size:0.86rem;">
+                <li><strong>Method:</strong> Select <code>POST</code></li>
+                <li><strong>URL:</strong> <code>http://localhost:3000/students</code></li>
+                <li><strong>Tab:</strong> Click <strong>Body</strong> &rarr; select <strong>raw</strong> &rarr; choose <strong>JSON</strong></li>
+              </ul>
+            </div>
+
+            <div class="terminal-output">
+              <div class="terminal-header">
+                <span class="dot"></span>
+                <span>Postman Request Body &amp; 201 Response</span>
+              </div>
+              <div class="terminal-body">
+<span class="cmd">// REQUEST BODY (JSON):</span>
+{
+    "name": "Mubashir",
+    "email": "mubashir@gmail.com",
+    "course": "MERN Stack"
+}
+
+<span class="suc">// STATUS: 201 Created</span>
+<span class="res">{
+    "message": "Student created successfully",
+    "data": {
+        "id": 4,
+        "name": "Mubashir",
+        "email": "mubashir@gmail.com",
+        "course": "MERN Stack"
+    }
+}</span></div>
+            </div>
+
+            <div class="callout callout-tip">
+              <span>💡</span>
+              <div>
+                <strong>Why Status 201?</strong> While <code>200 OK</code> means general success, <code>201 Created</code> specifically signals that a new resource has been permanently generated on the server.
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===============================================================
+           SLIDE 13: READ: Getting All Students and One Student
+           =============================================================== -->
+      <section id="slide-13" class="slide" data-slide-num="13">
+        <div class="slide-header">
+          <div class="slide-title-wrap">
+            <span class="slide-category">Section 3: CRUD API Implementation</span>
+            <h2 class="slide-title">READ — Getting All Students &amp; One Student</h2>
+            <p class="slide-subtitle">Implementing <code>GET /students</code> for list retrieval and <code>GET /students/:id</code> for single record lookup</p>
+          </div>
+          <span class="slide-num-pill">Slide 13 / 18</span>
+        </div>
+
+        <div class="slide-body grid-2">
+          <!-- Left Column: Both Endpoints -->
+          <div style="display:flex; flex-direction:column; gap:0.9rem;">
+            <div class="code-container">
+              <div class="code-header">
+                <div class="code-file-badge">
+                  <span class="file-dot"></span>
+                  <span>read-students.js (GET Endpoints)</span>
+                </div>
+                <button class="copy-btn">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                  <span>Copy Code</span>
+                </button>
+              </div>
+              <pre class="code-block" style="font-size:0.81rem;"><code><span class="syn-cm">// 1. GET ALL STUDENTS</span>
+app.<span class="syn-fn">get</span>(<span class="syn-str">"/students"</span>, (req, res) =&gt; {
+    res.<span class="syn-fn">status</span>(<span class="syn-num">200</span>).<span class="syn-fn">json</span>({
+        count: students.length,
+        data: students
+    });
+});
+
+<span class="syn-cm">// 2. GET SINGLE STUDENT BY ID</span>
+app.<span class="syn-fn">get</span>(<span class="syn-str">"/students/:id"</span>, (req, res) =&gt; {
+    <span class="syn-kw">const</span> id = <span class="syn-fn">Number</span>(req.params.id);
+
+    <span class="syn-kw">const</span> student = students.<span class="syn-fn">find</span>(
+        (student) =&gt; student.id === id
+    );
+
+    <span class="syn-kw">if</span> (!student) {
+        <span class="syn-kw">return</span> res.<span class="syn-fn">status</span>(<span class="syn-num">404</span>).<span class="syn-fn">json</span>({
+            message: <span class="syn-str">"Student not found"</span>
+        });
+    }
+
+    res.<span class="syn-fn">status</span>(<span class="syn-num">200</span>).<span class="syn-fn">json</span>({
+        data: student
+    });
+});</code></pre>
+            </div>
+          </div>
+
+          <!-- Right Column: Postman Testing -->
+          <div style="display:flex; flex-direction:column; gap:0.9rem;">
+            <div class="card highlight">
+              <div class="card-title">
+                <span class="badge-method badge-get">GET</span>
+                <span>Testing READ Endpoints in Postman</span>
+              </div>
+              <div style="display:flex; flex-direction:column; gap:0.55rem; font-size:0.86rem;">
+                <div>
+                  <strong>Endpoint 1: Get Complete Roster</strong><br>
+                  <code>GET http://localhost:3000/students</code><br>
+                  <span style="color:var(--text-subtle);">Returns status <code>200 OK</code>, count of items, and complete array.</span>
+                </div>
+                <div style="border-top:1px solid var(--border-subtle); padding-top:0.45rem;">
+                  <strong>Endpoint 2: Get Student By ID</strong><br>
+                  <code>GET http://localhost:3000/students/2</code><br>
+                  <span style="color:var(--text-subtle);">Returns status <code>200 OK</code> and Rahul's object.</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="terminal-output">
+              <div class="terminal-header">
+                <span class="dot"></span>
+                <span>Response for GET /students/2</span>
+              </div>
+              <div class="terminal-body">
+<span class="suc">// STATUS: 200 OK</span>
+<span class="res">{
+    "data": {
+        "id": 2,
+        "name": "Rahul",
+        "email": "rahul@gmail.com",
+        "course": "Python"
+    }
+}</span></div>
+            </div>
+
+            <div class="callout callout-info">
+              <span>🎯</span>
+              <div>
+                <strong>Why Two Separate Endpoints?</strong> Frontend apps need list endpoints for table displays and detail endpoints for profile or editing pages.
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===============================================================
+           SLIDE 14: UPDATE: Updating Student Details Using PUT
+           =============================================================== -->
+      <section id="slide-14" class="slide" data-slide-num="14">
+        <div class="slide-header">
+          <div class="slide-title-wrap">
+            <span class="slide-category">Section 3: CRUD API Implementation</span>
+            <h2 class="slide-title">UPDATE — Updating Student Details Using PUT</h2>
+            <p class="slide-subtitle">Replacing complete resource representations with <code>PUT /students/:id</code></p>
+          </div>
+          <span class="slide-num-pill">Slide 14 / 18</span>
+        </div>
+
+        <div class="slide-body grid-2">
+          <!-- Left Column: PUT Code -->
+          <div style="display:flex; flex-direction:column; gap:0.9rem;">
+            <div class="code-container">
+              <div class="code-header">
+                <div class="code-file-badge">
+                  <span class="file-dot"></span>
+                  <span>update-put.js (PUT /students/:id)</span>
+                </div>
+                <button class="copy-btn">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                  <span>Copy Code</span>
+                </button>
+              </div>
+              <pre class="code-block" style="font-size:0.81rem;"><code>app.<span class="syn-fn">put</span>(<span class="syn-str">"/students/:id"</span>, (req, res) =&gt; {
+    <span class="syn-kw">const</span> id = <span class="syn-fn">Number</span>(req.params.id);
+
+    <span class="syn-cm">// 1. Locate student by ID</span>
+    <span class="syn-kw">const</span> student = students.<span class="syn-fn">find</span>(
+        (student) =&gt; student.id === id
+    );
+
+    <span class="syn-kw">if</span> (!student) {
+        <span class="syn-kw">return</span> res.<span class="syn-fn">status</span>(<span class="syn-num">404</span>).<span class="syn-fn">json</span>({
+            message: <span class="syn-str">"Student not found"</span>
+        });
+    }
+
+    <span class="syn-kw">const</span> { name, email, course } = req.body;
+
+    <span class="syn-cm">// 2. PUT requires complete representation</span>
+    <span class="syn-kw">if</span> (!name || !email || !course) {
+        <span class="syn-kw">return</span> res.<span class="syn-fn">status</span>(<span class="syn-num">400</span>).<span class="syn-fn">json</span>({
+            message: <span class="syn-str">"All fields are required"</span>
+        });
+    }
+
+    <span class="syn-cm">// 3. Replace fields</span>
+    student.name = name;
+    student.email = email;
+    student.course = course;
+
+    res.<span class="syn-fn">status</span>(<span class="syn-num">200</span>).<span class="syn-fn">json</span>({
+        message: <span class="syn-str">"Student updated successfully"</span>,
+        data: student
+    });
+});</code></pre>
+            </div>
+          </div>
+
+          <!-- Right Column: Explanation & Postman -->
+          <div style="display:flex; flex-direction:column; gap:0.9rem;">
+            <div class="card highlight">
+              <div class="card-title">
+                <span class="badge-method badge-put">PUT</span>
+                <span>The Nature of HTTP PUT</span>
+              </div>
+              <p style="font-size:0.88rem;">
+                In REST conventions, <strong>PUT</strong> implies <em>replacing the complete record</em>. The client must supply all required fields (<code>name</code>, <code>email</code>, and <code>course</code>).
+              </p>
+            </div>
+
+            <div class="terminal-output">
+              <div class="terminal-header">
+                <span class="dot"></span>
+                <span>Postman: PUT /students/1</span>
+              </div>
+              <div class="terminal-body">
+<span class="cmd">// REQUEST BODY:</span>
+{
+    "name": "Anu Updated",
+    "email": "anuupdated@gmail.com",
+    "course": "Node.js"
+}
+
+<span class="suc">// STATUS: 200 OK</span>
+<span class="res">{
+    "message": "Student updated successfully",
+    "data": {
+        "id": 1,
+        "name": "Anu Updated",
+        "email": "anuupdated@gmail.com",
+        "course": "Node.js"
+    }
+}</span></div>
+            </div>
+
+            <div class="callout callout-warning">
+              <span>⚠️</span>
+              <div>
+                <strong>Missing Field Caveat:</strong> If a client sends only <code>{ "course": "Node.js" }</code> to a PUT endpoint, our validation rightly returns <code>400 Bad Request</code> because PUT expects the full object.
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===============================================================
+           SLIDE 15: PATCH: Updating Specific Fields
+           =============================================================== -->
+      <section id="slide-15" class="slide" data-slide-num="15">
+        <div class="slide-header">
+          <div class="slide-title-wrap">
+            <span class="slide-category">Section 3: CRUD API Implementation</span>
+            <h2 class="slide-title">PATCH — Updating Specific Fields</h2>
+            <p class="slide-subtitle">Performing partial updates with <code>PATCH /students/:id</code>, field whitelisting &amp; Object.assign</p>
+          </div>
+          <span class="slide-num-pill">Slide 15 / 18</span>
+        </div>
+
+        <div class="slide-body grid-2">
+          <!-- Left Column: PATCH Code -->
+          <div style="display:flex; flex-direction:column; gap:0.9rem;">
+            <div class="code-container">
+              <div class="code-header">
+                <div class="code-file-badge">
+                  <span class="file-dot"></span>
+                  <span>update-patch.js (PATCH /students/:id)</span>
+                </div>
+                <button class="copy-btn">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                  <span>Copy Code</span>
+                </button>
+              </div>
+              <pre class="code-block" style="font-size:0.81rem;"><code>app.<span class="syn-fn">patch</span>(<span class="syn-str">"/students/:id"</span>, (req, res) =&gt; {
+    <span class="syn-kw">const</span> id = <span class="syn-fn">Number</span>(req.params.id);
+
+    <span class="syn-kw">const</span> student = students.<span class="syn-fn">find</span>(s =&gt; s.id === id);
+    <span class="syn-kw">if</span> (!student) {
+        <span class="syn-kw">return</span> res.<span class="syn-fn">status</span>(<span class="syn-num">404</span>).<span class="syn-fn">json</span>({ message: <span class="syn-str">"Student not found"</span> });
+    }
+
+    <span class="syn-cm">// 1. Whitelist allowed fields for security</span>
+    <span class="syn-kw">const</span> allowedFields = [<span class="syn-str">"name"</span>, <span class="syn-str">"email"</span>, <span class="syn-str">"course"</span>];
+    <span class="syn-kw">const</span> updates = Object.<span class="syn-fn">keys</span>(req.body);
+
+    <span class="syn-cm">// 2. Reject empty updates or illegal keys</span>
+    <span class="syn-kw">if</span> (updates.length === <span class="syn-num">0</span> || updates.<span class="syn-fn">some</span>(f =&gt; !allowedFields.<span class="syn-fn">includes</span>(f))) {
+        <span class="syn-kw">return</span> res.<span class="syn-fn">status</span>(<span class="syn-num">400</span>).<span class="syn-fn">json</span>({
+            message: <span class="syn-str">"Provide valid fields to update"</span>
+        });
+    }
+
+    <span class="syn-cm">// 3. Merge only provided fields</span>
+    Object.<span class="syn-fn">assign</span>(student, req.body);
+
+    res.<span class="syn-fn">status</span>(<span class="syn-num">200</span>).<span class="syn-fn">json</span>({
+        message: <span class="syn-str">"Student partially updated"</span>,
+        data: student
+    });
+});</code></pre>
+            </div>
+          </div>
+
+          <!-- Right Column: Postman & PUT vs PATCH Matrix -->
+          <div style="display:flex; flex-direction:column; gap:0.9rem;">
+            <div class="card highlight">
+              <div class="card-title">
+                <span class="badge-method badge-patch">PATCH</span>
+                <span>Testing Partial Updates in Postman</span>
+              </div>
+              <p style="font-size:0.86rem;">
+                Send <em>only the single field</em> you wish to alter:
+              </p>
+            </div>
+
+            <div class="terminal-output">
+              <div class="terminal-header">
+                <span class="dot"></span>
+                <span>Postman: PATCH /students/1</span>
+              </div>
+              <div class="terminal-body">
+<span class="cmd">// REQUEST BODY (Only course sent):</span>
+{
+    "course": "Advanced MERN"
+}
+
+<span class="suc">// STATUS: 200 OK</span>
+<span class="res">{
+    "message": "Student partially updated",
+    "data": {
+        "id": 1,
+        "name": "Anu",
+        "email": "anu@gmail.com",
+        "course": "Advanced MERN"
+    }
+}</span></div>
+            </div>
+
+            <div class="card" style="font-size:0.85rem; padding:0.85rem 1rem;">
+              <strong>Summary: PUT vs PATCH</strong>
+              <div style="display:flex; justify-content:space-between; margin-top:0.3rem;">
+                <span><strong>PUT:</strong> Full Replacement (All fields required)</span>
+                <span><strong>PATCH:</strong> Delta Update (Only changes sent)</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===============================================================
+           SLIDE 16: DELETE: Removing a Student
+           =============================================================== -->
+      <section id="slide-16" class="slide" data-slide-num="16">
+        <div class="slide-header">
+          <div class="slide-title-wrap">
+            <span class="slide-category">Section 3: CRUD API Implementation</span>
+            <h2 class="slide-title">DELETE — Removing a Student</h2>
+            <p class="slide-subtitle">Finding record index, splicing from array, and confirming deletion</p>
+          </div>
+          <span class="slide-num-pill">Slide 16 / 18</span>
+        </div>
+
+        <div class="slide-body grid-2">
+          <!-- Left Column: DELETE Code -->
+          <div style="display:flex; flex-direction:column; gap:0.9rem;">
+            <div class="code-container">
+              <div class="code-header">
+                <div class="code-file-badge">
+                  <span class="file-dot"></span>
+                  <span>delete-student.js (DELETE /students/:id)</span>
+                </div>
+                <button class="copy-btn">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                  <span>Copy Code</span>
+                </button>
+              </div>
+              <pre class="code-block" style="font-size:0.82rem;"><code>app.<span class="syn-fn">delete</span>(<span class="syn-str">"/students/:id"</span>, (req, res) =&gt; {
+    <span class="syn-kw">const</span> id = <span class="syn-fn">Number</span>(req.params.id);
+
+    <span class="syn-cm">// 1. Locate index of target student</span>
+    <span class="syn-kw">const</span> studentIndex = students.<span class="syn-fn">findIndex</span>(
+        (student) =&gt; student.id === id
+    );
+
+    <span class="syn-cm">// 2. If findIndex returns -1, student does not exist</span>
+    <span class="syn-kw">if</span> (studentIndex === -<span class="syn-num">1</span>) {
+        <span class="syn-kw">return</span> res.<span class="syn-fn">status</span>(<span class="syn-num">404</span>).<span class="syn-fn">json</span>({
+            message: <span class="syn-str">"Student not found"</span>
+        });
+    }
+
+    <span class="syn-cm">// 3. Remove 1 item at studentIndex</span>
+    <span class="syn-kw">const</span> deletedStudent = students.<span class="syn-fn">splice</span>(studentIndex, <span class="syn-num">1</span>)[<span class="syn-num">0</span>];
+
+    <span class="syn-cm">// 4. Return confirmed deleted payload</span>
+    res.<span class="syn-fn">status</span>(<span class="syn-num">200</span>).<span class="syn-fn">json</span>({
+        message: <span class="syn-str">"Student deleted successfully"</span>,
+        data: deletedStudent
+    });
+});</code></pre>
+            </div>
+          </div>
+
+          <!-- Right Column: Testing & Splice Mechanics -->
+          <div style="display:flex; flex-direction:column; gap:0.9rem;">
+            <div class="card highlight">
+              <div class="card-title">
+                <span class="badge-method badge-delete">DELETE</span>
+                <span>Testing DELETE in Postman</span>
+              </div>
+              <p style="font-size:0.86rem;">
+                Select method <code>DELETE</code>, target <code>http://localhost:3000/students/2</code>, and press <strong>Send</strong>.
+              </p>
+            </div>
+
+            <div class="terminal-output">
+              <div class="terminal-header">
+                <span class="dot"></span>
+                <span>Postman Response: DELETE /students/2</span>
+              </div>
+              <div class="terminal-body">
+<span class="suc">// STATUS: 200 OK</span>
+<span class="res">{
+    "message": "Student deleted successfully",
+    "data": {
+        "id": 2,
+        "name": "Rahul",
+        "email": "rahul@gmail.com",
+        "course": "Python"
+    }
+}</span></div>
+            </div>
+
+            <div class="card">
+              <div class="card-title">
+                <span>🔍</span>
+                <span>Key JavaScript Mechanics</span>
+              </div>
+              <ul class="feature-list" style="font-size:0.85rem;">
+                <li><span class="bullet-icon">▸</span> <code>findIndex()</code> returns the index number (0, 1, 2...) or <code>-1</code> if not found.</li>
+                <li><span class="bullet-icon">▸</span> <code>splice(index, 1)</code> mutates the original array and returns an array of removed items.</li>
+                <li><span class="bullet-icon">▸</span> Subsequent requests to <code>GET /students/2</code> will now immediately return <code>404 Not Found</code>!</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===============================================================
+           SLIDE 17: Complete CRUD API Testing in Postman
+           =============================================================== -->
+      <section id="slide-17" class="slide" data-slide-num="17">
+        <div class="slide-header">
+          <div class="slide-title-wrap">
+            <span class="slide-category">Section 4: Testing &amp; Practical Lab</span>
+            <h2 class="slide-title">Complete CRUD API Testing in Postman</h2>
+            <p class="slide-subtitle">The systematic 7-step test sequence, HTTP status codes, and verification checklist</p>
+          </div>
+          <span class="slide-num-pill">Slide 17 / 18</span>
+        </div>
+
+        <div class="slide-body grid-2">
+          <!-- Left Column: Sequential Testing Steps -->
+          <div style="display:flex; flex-direction:column; gap:0.85rem;">
+            <div class="table-responsive">
+              <table class="custom-table" style="font-size:0.84rem;">
+                <thead>
+                  <tr>
+                    <th>Step</th>
+                    <th>Method</th>
+                    <th>Endpoint</th>
+                    <th>Expected Purpose</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><strong>1</strong></td>
+                    <td><span class="badge-method badge-get">GET</span></td>
+                    <td><code>/students</code></td>
+                    <td>Get all students (initially 3 records)</td>
+                  </tr>
+                  <tr>
+                    <td><strong>2</strong></td>
+                    <td><span class="badge-method badge-get">GET</span></td>
+                    <td><code>/students/1</code></td>
+                    <td>Get single student (Anu, 200 OK)</td>
+                  </tr>
+                  <tr>
+                    <td><strong>3</strong></td>
+                    <td><span class="badge-method badge-post">POST</span></td>
+                    <td><code>/students</code></td>
+                    <td>Create new student (201 Created)</td>
+                  </tr>
+                  <tr>
+                    <td><strong>4</strong></td>
+                    <td><span class="badge-method badge-put">PUT</span></td>
+                    <td><code>/students/1</code></td>
+                    <td>Update all fields of student 1 (200 OK)</td>
+                  </tr>
+                  <tr>
+                    <td><strong>5</strong></td>
+                    <td><span class="badge-method badge-patch">PATCH</span></td>
+                    <td><code>/students/1</code></td>
+                    <td>Update only course of student 1 (200 OK)</td>
+                  </tr>
+                  <tr>
+                    <td><strong>6</strong></td>
+                    <td><span class="badge-method badge-delete">DELETE</span></td>
+                    <td><code>/students/1</code></td>
+                    <td>Delete student 1 from array (200 OK)</td>
+                  </tr>
+                  <tr>
+                    <td><strong>7</strong></td>
+                    <td><span class="badge-method badge-get">GET</span></td>
+                    <td><code>/students/1</code></td>
+                    <td>Confirm deletion &rarr; returns <strong>404 Not Found</strong></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Right Column: Status Codes & Checklist -->
+          <div style="display:flex; flex-direction:column; gap:0.85rem;">
+            <div class="card highlight">
+              <div class="card-title">
+                <span>🚦</span>
+                <span>Important HTTP Status Codes Cheat Sheet</span>
+              </div>
+              <div style="display:grid; grid-template-columns:1fr 1fr; gap:0.5rem; font-size:0.84rem;">
+                <div><span class="badge-status status-200">200 OK</span> General success</div>
+                <div><span class="badge-status status-201">201 Created</span> Resource generated</div>
+                <div><span class="badge-status status-400">400 Bad Request</span> Missing/invalid body</div>
+                <div><span class="badge-status status-404">404 Not Found</span> Record does not exist</div>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-title">
+                <span>📋</span>
+                <span>Postman Verification Checklist</span>
+              </div>
+              <ul class="feature-list" style="font-size:0.84rem;">
+                <li><span class="bullet-icon">☑</span> <strong>HTTP Method:</strong> Did you select the correct verb (GET, POST, PUT...)?</li>
+                <li><span class="bullet-icon">☑</span> <strong>Header / Body:</strong> For POST/PUT/PATCH, is <strong>raw &rarr; JSON</strong> selected?</li>
+                <li><span class="bullet-icon">☑</span> <strong>Status Code:</strong> Does POST return 201? Does non-existent ID return 404?</li>
+                <li><span class="bullet-icon">☑</span> <strong>Data Integrity:</strong> Did PATCH alter only the intended property?</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===============================================================
+           SLIDE 18: Final Practical: Student Management CRUD API
+           =============================================================== -->
+      <section id="slide-18" class="slide" data-slide-num="18">
+        <div class="slide-header">
+          <div class="slide-title-wrap">
+            <span class="slide-category">Section 4: Testing &amp; Practical Lab</span>
+            <h2 class="slide-title">Final Practical — Student Management CRUD API</h2>
+            <p class="slide-subtitle">Assemble all concepts into a unified API and test live directly in this interactive console</p>
+          </div>
+          <span class="slide-num-pill">Slide 18 / 18</span>
+        </div>
+
+        <div class="slide-body grid-2">
+          <!-- Left Column: Specification & Rules -->
+          <div style="display:flex; flex-direction:column; gap:0.85rem;">
+            <div class="card highlight">
+              <div class="card-title">
+                <span>🎯</span>
+                <span>Project Requirements &amp; Endpoints</span>
+              </div>
+              <div class="table-responsive">
+                <table class="custom-table" style="font-size:0.78rem;">
+                  <thead>
+                    <tr>
+                      <th>Method</th>
+                      <th>Endpoint</th>
+                      <th>Purpose</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><span class="badge-method badge-get">GET</span></td>
+                      <td><code>/students</code></td>
+                      <td>Get all (with course filter, search &amp; pagination)</td>
+                    </tr>
+                    <tr>
+                      <td><span class="badge-method badge-get">GET</span></td>
+                      <td><code>/students/:id</code></td>
+                      <td>Get single student by ID (or 404)</td>
+                    </tr>
+                    <tr>
+                      <td><span class="badge-method badge-post">POST</span></td>
+                      <td><code>/students</code></td>
+                      <td>Create new student (201 Created)</td>
+                    </tr>
+                    <tr>
+                      <td><span class="badge-method badge-put">PUT</span></td>
+                      <td><code>/students/:id</code></td>
+                      <td>Full update of student representation</td>
+                    </tr>
+                    <tr>
+                      <td><span class="badge-method badge-patch">PATCH</span></td>
+                      <td><code>/students/:id</code></td>
+                      <td>Partial update of selected fields</td>
+                    </tr>
+                    <tr>
+                      <td><span class="badge-method badge-delete">DELETE</span></td>
+                      <td><code>/students/:id</code></td>
+                      <td>Delete student by ID</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <!-- In-Memory Array Live Viewer -->
+            <div class="card" style="padding:0.75rem 0.95rem;">
+              <div style="display:flex; justify-content:space-between; align-items:center;">
+                <span style="font-size:0.84rem; font-weight:700; color:var(--primary-deep);">Current In-Memory Array State:</span>
+                <button id="crud-sim-reset" class="copy-btn" style="background:#f1f5f9; color:#0f172a; border-color:#cbd5e1;">Reset State</button>
+              </div>
+              <pre id="crud-sim-array-view" style="font-family:var(--font-mono); font-size:0.74rem; background:#0b1329; color:#38bdf8; padding:0.5rem; border-radius:4px; max-height:105px; overflow-y:auto; margin-top:0.35rem;"></pre>
+            </div>
+          </div>
+
+          <!-- Right Column: Interactive Live CRUD Console -->
+          <div style="display:flex; flex-direction:column; gap:0.85rem;">
+            <div class="sandbox-card">
+              <div class="sandbox-header">
+                <span class="sandbox-title">⚡ Interactive Student Management Console</span>
+                <span id="crud-sim-status" class="badge-status status-200">200 OK</span>
+              </div>
+
+              <!-- Quick Presets -->
+              <div style="display:flex; gap:0.35rem; flex-wrap:wrap;">
+                <button class="sandbox-btn sandbox-btn-secondary crud-preset-btn" data-method="GET" data-url="/students" data-body="">GET All</button>
+                <button class="sandbox-btn sandbox-btn-secondary crud-preset-btn" data-method="GET" data-url="/students/1" data-body="">GET #1</button>
+                <button class="sandbox-btn sandbox-btn-secondary crud-preset-btn" data-method="GET" data-url="/students?course=MERN" data-body="">Filter MERN</button>
+                <button class="sandbox-btn sandbox-btn-secondary crud-preset-btn" data-method="POST" data-url="/students" data-body='{"name":"Mubashir","email":"mubashir@gmail.com","course":"MERN"}'>POST New</button>
+                <button class="sandbox-btn sandbox-btn-secondary crud-preset-btn" data-method="PATCH" data-url="/students/1" data-body='{"course":"Advanced MERN"}'>PATCH #1</button>
+                <button class="sandbox-btn sandbox-btn-secondary crud-preset-btn" data-method="DELETE" data-url="/students/1" data-body="">DELETE #1</button>
+              </div>
+
+              <!-- Method + URL Input -->
+              <div class="sandbox-controls">
+                <select id="crud-sim-method" class="sandbox-input" style="font-weight:700; width:110px;">
+                  <option value="GET">GET</option>
+                  <option value="POST">POST</option>
+                  <option value="PUT">PUT</option>
+                  <option value="PATCH">PATCH</option>
+                  <option value="DELETE">DELETE</option>
+                </select>
+                <input id="crud-sim-url" class="sandbox-input" style="flex:1;" value="/students">
+                <button id="crud-sim-send" class="sandbox-btn">Send</button>
+              </div>
+
+              <!-- Request Body (for POST/PUT/PATCH) -->
+              <div style="display:flex; flex-direction:column; gap:0.2rem;">
+                <span style="font-size:0.75rem; font-weight:700; color:var(--text-subtle);">Request Body (JSON for POST / PUT / PATCH):</span>
+                <textarea id="crud-sim-body" class="sandbox-input" style="font-family:var(--font-mono); font-size:0.76rem; height:60px; resize:none;" placeholder='{ "name": "...", "email": "...", "course": "..." }'></textarea>
+              </div>
+
+              <!-- Response Box -->
+              <div style="display:flex; flex-direction:column; gap:0.2rem;">
+                <span style="font-size:0.75rem; font-weight:700; color:var(--text-subtle);">JSON Response:</span>
+                <pre id="crud-sim-response" style="font-family:var(--font-mono); font-size:0.76rem; background:#0b1329; color:#4ade80; padding:0.6rem; border-radius:6px; height:120px; overflow-y:auto; margin:0;"></pre>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- ===================================================================
+         BOTTOM BAR (Navigation, Controls & Shortcuts Pill)
+         =================================================================== -->
+    <footer class="bottom-bar">
+      <div class="bottom-left">
+        <span>Use <kbd>&larr;</kbd> <kbd>&rarr;</kbd> or <kbd>Space</kbd> to Navigate</span>
+        <span>•</span>
+        <span>Press <kbd>T</kbd> for Contents</span>
+        <span>•</span>
+        <span>Press <kbd>F</kbd> for Fullscreen</span>
+      </div>
+
+      <div class="bottom-right">
+        <button id="prev-btn" class="nav-btn" disabled>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"></polyline></svg>
+          <span>Previous</span>
+        </button>
+        <button id="next-btn" class="nav-btn nav-btn-primary">
+          <span>Next Slide</span>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
+        </button>
+      </div>
+    </footer>
+
+    <!-- ===================================================================
+         TABLE OF CONTENTS DRAWER & OVERLAY
+         =================================================================== -->
+    <div id="toc-overlay" class="toc-overlay">
+      <aside class="toc-drawer">
+        <div class="toc-header">
+          <div class="toc-title">Table of Contents (18 Slides)</div>
+          <button id="toc-close" class="toc-close" title="Close Drawer (Esc)">&times;</button>
+        </div>
+        <ul id="toc-list" class="toc-list">
+          <!-- Dynamically generated by script.js -->
+        </ul>
+      </aside>
+    </div>
+
+    <!-- ===================================================================
+         KEYBOARD SHORTCUTS HELP MODAL
+         =================================================================== -->
+    <div id="help-modal-overlay" class="help-modal-overlay">
+      <div class="help-modal">
+        <div class="help-header">
+          <div class="help-title">Keyboard Navigation &amp; Shortcuts</div>
+          <button id="help-modal-close" class="toc-close">&times;</button>
+        </div>
+        <div class="help-body">
+          <div class="shortcut-row">
+            <span>Next Slide</span>
+            <div><span class="shortcut-key">&rarr;</span> <span class="shortcut-key">Space</span> <span class="shortcut-key">PgDn</span></div>
+          </div>
+          <div class="shortcut-row">
+            <span>Previous Slide</span>
+            <div><span class="shortcut-key">&larr;</span> <span class="shortcut-key">PgUp</span></div>
+          </div>
+          <div class="shortcut-row">
+            <span>First / Title Slide</span>
+            <span class="shortcut-key">Home</span>
+          </div>
+          <div class="shortcut-row">
+            <span>Final Practical Slide</span>
+            <span class="shortcut-key">End</span>
+          </div>
+          <div class="shortcut-row">
+            <span>Toggle Fullscreen</span>
+            <span class="shortcut-key">F</span>
+          </div>
+          <div class="shortcut-row">
+            <span>Open / Close Table of Contents</span>
+            <div><span class="shortcut-key">T</span> <span class="shortcut-key">M</span></div>
+          </div>
+          <div class="shortcut-row">
+            <span>Close Modal / Drawer</span>
+            <span class="shortcut-key">Esc</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
