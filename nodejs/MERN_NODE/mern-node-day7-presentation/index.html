@@ -1,0 +1,1519 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Node.js Day 7 — User Authentication Using JSON Web Tokens (JWT)</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <div class="presentation-container">
+
+    <!-- =====================================================================
+         TOP NAVIGATION BAR
+         ===================================================================== -->
+    <header class="top-bar">
+      <!-- Progress Bar Track -->
+      <div class="progress-track">
+        <div class="progress-fill" id="progressFill"></div>
+      </div>
+
+      <div class="top-left">
+        <div class="brand-badge">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+            <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+          </svg>
+          <span>MERN · Node.js Day 7</span>
+        </div>
+        <div class="deck-title">
+          <span>User Authentication (JWT)</span>
+          <span class="deck-divider">/</span>
+          <span class="section-indicator" id="sectionIndicator">Welcome & Overview</span>
+        </div>
+      </div>
+
+      <div class="top-right">
+        <div class="slide-counter" id="slideCounter">01 / 18</div>
+        <button class="top-btn" id="tocBtn" title="Table of Contents (T)">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="3" y1="12" x2="21" y2="12"></line>
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <line x1="3" y1="18" x2="21" y2="18"></line>
+          </svg>
+        </button>
+        <button class="top-btn" id="helpBtn" title="Keyboard Shortcuts (?)">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"></circle>
+            <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+            <line x1="12" y1="17" x2="12.01" y2="17"></line>
+          </svg>
+        </button>
+        <button class="top-btn" id="fullscreenBtn" title="Toggle Fullscreen (F)">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="15 3 21 3 21 9"></polyline>
+            <polyline points="9 21 3 21 3 15"></polyline>
+            <line x1="21" y1="3" x2="14" y2="10"></line>
+            <line x1="3" y1="21" x2="10" y2="14"></line>
+          </svg>
+        </button>
+      </div>
+    </header>
+
+    <!-- =====================================================================
+         MAIN SLIDES VIEWPORT (18 SLIDES)
+         ===================================================================== -->
+    <main class="slide-viewport">
+
+      <!-- -------------------------------------------------------------------
+           SLIDE 1: TITLE SLIDE
+           ------------------------------------------------------------------- -->
+      <section class="slide active" id="slide-1">
+        <div class="hero-container">
+          <div class="hero-badge-wrap">
+            <span class="badge-dot" style="background:#0284c7;"></span>
+            <span>MERN Stack Development · Backend Security Track</span>
+          </div>
+          
+          <h1 class="hero-title">
+            User Authentication Using <br>
+            <span class="highlight-text">JSON Web Tokens (JWT)</span>
+          </h1>
+
+          <p class="hero-subtitle">
+            A comprehensive, practical guide to securing Node.js &amp; Express APIs with password hashing (bcryptjs), cryptographic tokens (JWT), and authorization middleware.
+          </p>
+
+          <div class="hero-topics-grid">
+            <div class="hero-topic-item">
+              <span class="bullet-icon">&#x2714;</span>
+              <span>Authentication Fundamentals</span>
+            </div>
+            <div class="hero-topic-item">
+              <span class="bullet-icon">&#x2714;</span>
+              <span>Password Hashing with bcryptjs</span>
+            </div>
+            <div class="hero-topic-item">
+              <span class="bullet-icon">&#x2714;</span>
+              <span>JWT Generation &amp; Verification</span>
+            </div>
+            <div class="hero-topic-item">
+              <span class="bullet-icon">&#x2714;</span>
+              <span>Protected API Routes &amp; Middleware</span>
+            </div>
+            <div class="hero-topic-item">
+              <span class="bullet-icon">&#x2714;</span>
+              <span>Live Postman Testing Workflow</span>
+            </div>
+          </div>
+
+          <div class="hero-footer-meta">
+            <span><strong>Target Audience:</strong> Beginner to Intermediate Node.js Developers</span>
+            <span>&bull;</span>
+            <span><strong>Stack:</strong> Express.js &bull; bcryptjs &bull; jsonwebtoken &bull; dotenv</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- -------------------------------------------------------------------
+           SLIDE 2: WHAT ARE WE BUILDING?
+           ------------------------------------------------------------------- -->
+      <section class="slide" id="slide-2">
+        <header class="slide-header">
+          <div class="slide-title-wrap">
+            <span class="slide-category">Course Roadmap &amp; Project Overview</span>
+            <h2 class="slide-title">What Are We Building Today?</h2>
+            <p class="slide-subtitle">A production-ready Student Authentication API (<code>jwt-auth-api</code>) using Express and in-memory storage.</p>
+          </div>
+          <span class="slide-num-pill">Slide 02</span>
+        </header>
+
+        <div class="slide-body">
+          <div class="grid-2">
+            <!-- Left: Objectives -->
+            <div class="card highlight border-accent">
+              <h3 class="card-title">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+                Core Deliverables
+              </h3>
+              <ul class="feature-list">
+                <li><span class="bullet-icon">&bull;</span> <strong>User Registration:</strong> Accept name, email, password, validate inputs, hash passwords with salt, and save in-memory.</li>
+                <li><span class="bullet-icon">&bull;</span> <strong>Secure Login:</strong> Compare entered password against the stored bcrypt hash and issue a signed JWT.</li>
+                <li><span class="bullet-icon">&bull;</span> <strong>Protected Routes:</strong> Create a <code>/profile</code> route inaccessible without a valid Bearer token.</li>
+                <li><span class="bullet-icon">&bull;</span> <strong>Authentication Middleware:</strong> Extract token from headers, verify signature, and attach user context to <code>req.user</code>.</li>
+              </ul>
+            </div>
+
+            <!-- Right: Flow Visual -->
+            <div class="card">
+              <h3 class="card-title">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                The Authentication Lifecycle
+              </h3>
+              
+              <div class="flow-horizontal">
+                <div class="flow-box">
+                  <span class="flow-step-num">Step 1</span>
+                  <div class="flow-step-text"><strong>Register</strong><br><small>Hash Password</small></div>
+                </div>
+                <div class="flow-arrow">&rarr;</div>
+                <div class="flow-box">
+                  <span class="flow-step-num">Step 2</span>
+                  <div class="flow-step-text"><strong>Login</strong><br><small>Verify Hash</small></div>
+                </div>
+                <div class="flow-arrow">&rarr;</div>
+                <div class="flow-box">
+                  <span class="flow-step-num">Step 3</span>
+                  <div class="flow-step-text"><strong>JWT Issued</strong><br><small>Client Stores</small></div>
+                </div>
+                <div class="flow-arrow">&rarr;</div>
+                <div class="flow-box">
+                  <span class="flow-step-num">Step 4</span>
+                  <div class="flow-step-text"><strong>Protected</strong><br><small>Bearer Auth</small></div>
+                </div>
+              </div>
+
+              <div class="callout callout-info" style="margin-top:0.75rem;">
+                <strong>Key Focus:</strong> To keep this session 100% focused on authentication concepts, we will use an in-memory array for storage. MongoDB and database modeling will follow in Day 8!
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- -------------------------------------------------------------------
+           SLIDE 3: WHAT IS AUTHENTICATION?
+           ------------------------------------------------------------------- -->
+      <section class="slide" id="slide-3">
+        <header class="slide-header">
+          <div class="slide-title-wrap">
+            <span class="slide-category">Core Concepts</span>
+            <h2 class="slide-title">What Is Authentication?</h2>
+            <p class="slide-subtitle">Understanding identity verification vs. access permission in modern web applications.</p>
+          </div>
+          <span class="slide-num-pill">Slide 03</span>
+        </header>
+
+        <div class="slide-body">
+          <div class="grid-2">
+            <!-- Authentication Card -->
+            <div class="card highlight">
+              <h3 class="card-title" style="color:var(--primary-deep);">
+                <span class="status-badge badge-post">1. Authentication (AuthN)</span>
+              </h3>
+              <p><strong>The Core Question: "Who are you?"</strong></p>
+              <p>The process of verifying that an entity (user or service) is genuinely who they claim to be by validating supplied credentials.</p>
+              <div class="callout callout-tip">
+                <strong>Real-World Analogy:</strong> Showing your official Student Identity Card or Passport at the campus security gate to prove your identity.
+              </div>
+              <ul class="feature-list" style="margin-top:0.5rem;">
+                <li><span class="bullet-icon">&check;</span> Email &amp; Password verification</li>
+                <li><span class="bullet-icon">&check;</span> Multi-Factor Authentication (OTP, SMS)</li>
+                <li><span class="bullet-icon">&check;</span> Biometric login (FaceID, Fingerprint)</li>
+              </ul>
+            </div>
+
+            <!-- Authorization Card -->
+            <div class="card">
+              <h3 class="card-title" style="color:#6d28d9;">
+                <span class="status-badge" style="background:#f5f3ff; color:#6d28d9; border:1px solid #ddd6fe;">2. Authorization (AuthZ)</span>
+              </h3>
+              <p><strong>The Core Question: "What are you allowed to do?"</strong></p>
+              <p>The process of determining whether an authenticated user has the necessary permissions to access a specific resource or perform an action.</p>
+              <div class="callout callout-warning">
+                <strong>Real-World Analogy:</strong> Your Student ID proves who you are (AuthN), but it doesn't give you access to the Professor's Faculty Lounge (AuthZ)!
+              </div>
+              <ul class="feature-list" style="margin-top:0.5rem;">
+                <li><span class="bullet-icon">&check;</span> Role-Based Access Control (Admin vs. Student)</li>
+                <li><span class="bullet-icon">&check;</span> Can user edit this grade? Can user delete this post?</li>
+                <li><span class="bullet-icon">&check;</span> Executed <em>after</em> authentication succeeds.</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="table-responsive">
+            <table class="custom-table">
+              <thead>
+                <tr>
+                  <th>Dimension</th>
+                  <th>Authentication (AuthN)</th>
+                  <th>Authorization (AuthZ)</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Purpose</strong></td>
+                  <td>Validates user identity</td>
+                  <td>Validates permissions &amp; privileges</td>
+                </tr>
+                <tr>
+                  <td><strong>Mechanisms</strong></td>
+                  <td>Passwords, OTPs, Biometrics, SSO</td>
+                  <td>Roles (Admin, User), Scopes, Permissions</td>
+                </tr>
+                <tr>
+                  <td><strong>HTTP Status on Failure</strong></td>
+                  <td><code>401 Unauthorized</code> (Not logged in)</td>
+                  <td><code>403 Forbidden</code> (Logged in, but denied)</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- -------------------------------------------------------------------
+           SLIDE 4: HOW AUTHENTICATION WORKS
+           ------------------------------------------------------------------- -->
+      <section class="slide" id="slide-4">
+        <header class="slide-header">
+          <div class="slide-title-wrap">
+            <span class="slide-category">System Architecture</span>
+            <h2 class="slide-title">How Modern Authentication Works</h2>
+            <p class="slide-subtitle">Step-by-step communication lifecycle between Frontend Client and Express Backend Server.</p>
+          </div>
+          <span class="slide-num-pill">Slide 04</span>
+        </header>
+
+        <div class="slide-body">
+          <div class="flow-horizontal" style="gap:0.75rem;">
+            <div class="flow-box">
+              <span class="flow-step-num">Step 1</span>
+              <div class="flow-step-text"><strong>User Credentials</strong><br><small>Client submits email &amp; plain password via HTTPS POST</small></div>
+            </div>
+            <div class="flow-arrow">&rarr;</div>
+            <div class="flow-box">
+              <span class="flow-step-num">Step 2</span>
+              <div class="flow-step-text"><strong>Server Verifies</strong><br><small>Server queries DB &amp; verifies hash with bcrypt</small></div>
+            </div>
+            <div class="flow-arrow">&rarr;</div>
+            <div class="flow-box">
+              <span class="flow-step-num">Step 3</span>
+              <div class="flow-step-text"><strong>Token Issued</strong><br><small>Server signs JWT with secret key and returns JSON</small></div>
+            </div>
+            <div class="flow-arrow">&rarr;</div>
+            <div class="flow-box">
+              <span class="flow-step-num">Step 4</span>
+              <div class="flow-step-text"><strong>Token Stored</strong><br><small>Client stores token in memory, localStorage, or cookie</small></div>
+            </div>
+            <div class="flow-arrow">&rarr;</div>
+            <div class="flow-box">
+              <span class="flow-step-num">Step 5</span>
+              <div class="flow-step-text"><strong>Protected Calls</strong><br><small>Sent via <code>Authorization: Bearer &lt;token&gt;</code> header</small></div>
+            </div>
+          </div>
+
+          <div class="grid-2" style="margin-top:0.5rem;">
+            <div class="card">
+              <h3 class="card-title">Traditional Session vs. Modern JWT</h3>
+              <ul class="feature-list">
+                <li><span class="bullet-icon">&bull;</span> <strong>Session-Based (Stateful):</strong> The server stores session data in RAM or Redis. For millions of users, servers require massive memory synchronization across clusters.</li>
+                <li><span class="bullet-icon">&bull;</span> <strong>JWT-Based (Stateless):</strong> The server does NOT store sessions in memory. The token itself contains all necessary claims. Any backend server with the secret key can verify it instantly!</li>
+              </ul>
+            </div>
+
+            <div class="card highlight">
+              <h3 class="card-title">Why Stateless Tokens Win for MERN &amp; Microservices</h3>
+              <p>Stateless tokens allow seamless horizontal scaling. Whether your request hits Server A, Server B, or Server C behind a load balancer, each server can verify the cryptographic signature independently without shared database lookups.</p>
+              <div class="callout callout-tip" style="margin-top:0.4rem;">
+                <strong>Stateless Rule:</strong> "The server doesn't remember who you are. The client presents a cryptographic passport on every request."
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- -------------------------------------------------------------------
+           SLIDE 5: WHY SHOULD WE HASH PASSWORDS?
+           ------------------------------------------------------------------- -->
+      <section class="slide" id="slide-5">
+        <header class="slide-header">
+          <div class="slide-title-wrap">
+            <span class="slide-category">Security Fundamentals</span>
+            <h2 class="slide-title">Why Should We Hash Passwords?</h2>
+            <p class="slide-subtitle">Never store plain text passwords. Learn the mathematics of one-way cryptographic hashing.</p>
+          </div>
+          <span class="slide-num-pill">Slide 05</span>
+        </header>
+
+        <div class="slide-body">
+          <div class="grid-2">
+            <!-- Plain Text Danger -->
+            <div class="card" style="border-left:4px solid #ef4444;">
+              <h3 class="card-title" style="color:#b91c1c;">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+                The Danger of Plain Text Passwords
+              </h3>
+              <p>If an attacker accesses your database through SQL/NoSQL injection, backup leaks, or compromised developer credentials, all user passwords are compromised immediately.</p>
+              <div class="callout callout-danger">
+                <strong>Catastrophic Impact:</strong> Because 65%+ of users reuse passwords across multiple sites, a leak on your student portal compromises their personal email, banking, and social accounts!
+              </div>
+            </div>
+
+            <!-- What is Hashing -->
+            <div class="card highlight">
+              <h3 class="card-title" style="color:var(--primary-deep);">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+                What Is Cryptographic Hashing?
+              </h3>
+              <p>Hashing is a <strong>one-way mathematical function</strong> that transforms input text of any length into a unique, fixed-length string.</p>
+              <ul class="feature-list">
+                <li><span class="bullet-icon">&check;</span> <strong>Irreversible:</strong> It is computationally impossible to reverse the hash back into the plain text password.</li>
+                <li><span class="bullet-icon">&check;</span> <strong>Deterministic:</strong> The exact same input always generates the exact same hash output.</li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- Salt and bcrypt explanation -->
+          <div class="card" style="margin-top:0.25rem;">
+            <div class="grid-2">
+              <div>
+                <h4 style="font-size:0.95rem; font-weight:700; color:var(--primary-dark); margin-bottom:0.4rem;">What Is a Cryptographic "Salt"?</h4>
+                <p style="font-size:0.88rem; line-height:1.5;">A salt is a <strong>unique, random string of bytes</strong> generated and appended to the password before hashing. Even if two students choose the exact same password (<code>password123</code>), their generated hashes will be completely different! This completely neutralizes pre-computed Rainbow Table attacks.</p>
+              </div>
+              <div>
+                <h4 style="font-size:0.95rem; font-weight:700; color:var(--primary-dark); margin-bottom:0.4rem;">Why bcrypt over MD5 or SHA-256?</h4>
+                <p style="font-size:0.88rem; line-height:1.5;">MD5 and SHA-256 were designed for speed; a modern GPU can compute billions of SHA-256 hashes per second. <strong>bcrypt is deliberately slow</strong> and includes an adjustable <em>cost factor</em> (work factor), making brute-force attacks infeasible.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- -------------------------------------------------------------------
+           SLIDE 6: PRACTICAL — HASHING PASSWORDS USING BCRYPTJS
+           ------------------------------------------------------------------- -->
+      <section class="slide" id="slide-6">
+        <header class="slide-header">
+          <div class="slide-title-wrap">
+            <span class="slide-category">Hands-on Implementation</span>
+            <h2 class="slide-title">Practical: Hashing Passwords with bcryptjs</h2>
+            <p class="slide-subtitle">Install bcryptjs, hash passwords with salt rounds, and safely compare during authentication.</p>
+          </div>
+          <span class="slide-num-pill">Slide 06</span>
+        </header>
+
+        <div class="slide-body">
+          <div class="grid-2">
+            <!-- Code Block -->
+            <div class="code-container">
+              <div class="code-header">
+                <div class="code-file-badge">
+                  <span class="file-dot"></span>
+                  <span>bcrypt-demo.js</span>
+                </div>
+                <button class="copy-btn">Copy</button>
+              </div>
+              <pre><code><span class="syn-comment">// 1. Import bcryptjs</span>
+<span class="syn-kw">const</span> bcrypt = <span class="syn-fn">require</span>(<span class="syn-str">'bcryptjs'</span>);
+
+<span class="syn-kw">async function</span> <span class="syn-fn">demonstrateBcrypt</span>() {
+  <span class="syn-kw">const</span> plainPassword = <span class="syn-str">'student123'</span>;
+  <span class="syn-kw">const</span> saltRounds = <span class="syn-num">10</span>; <span class="syn-comment">// 2^10 iterations</span>
+
+  <span class="syn-comment">// 2. Hash the password</span>
+  <span class="syn-kw">const</span> hashedPassword = <span class="syn-kw">await</span> bcrypt.<span class="syn-fn">hash</span>(plainPassword, saltRounds);
+  console.<span class="syn-fn">log</span>(<span class="syn-str">'Hashed Password:'</span>, hashedPassword);
+
+  <span class="syn-comment">// 3. Verify on Login</span>
+  <span class="syn-kw">const</span> isMatch = <span class="syn-kw">await</span> bcrypt.<span class="syn-fn">compare</span>(plainPassword, hashedPassword);
+  console.<span class="syn-fn">log</span>(<span class="syn-str">'Password Match:'</span>, isMatch); <span class="syn-comment">// true</span>
+
+  <span class="syn-comment">// 4. Test with wrong password</span>
+  <span class="syn-kw">const</span> isWrong = <span class="syn-kw">await</span> bcrypt.<span class="syn-fn">compare</span>(<span class="syn-str">'wrongPass'</span>, hashedPassword);
+  console.<span class="syn-fn">log</span>(<span class="syn-str">'Wrong Match:'</span>, isWrong); <span class="syn-comment">// false</span>
+}
+
+<span class="syn-fn">demonstrateBcrypt</span>();</code></pre>
+            </div>
+
+            <!-- Interactive bcrypt Sandbox -->
+            <div class="sandbox-card">
+              <div class="sandbox-header">
+                <div class="sandbox-title">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                  <span>Interactive bcrypt Simulator</span>
+                </div>
+                <span class="sandbox-badge">Live Lab</span>
+              </div>
+
+              <div class="sandbox-controls">
+                <input type="text" id="bcryptInputPass" class="sandbox-input" value="student123" placeholder="Enter password" style="flex:1;">
+                <label style="font-size:0.78rem; font-weight:600; color:var(--text-muted); display:flex; align-items:center; gap:0.3rem;">
+                  Cost: <span id="bcryptCostVal" style="font-family:var(--font-mono); color:var(--primary); font-weight:700;">10</span>
+                  <input type="range" id="bcryptCostSlider" min="4" max="12" value="10" style="width:70px;">
+                </label>
+                <button id="bcryptHashBtn" class="sandbox-btn">Hash with bcrypt</button>
+              </div>
+
+              <div>
+                <label style="font-size:0.75rem; text-transform:uppercase; font-weight:700; color:var(--text-muted);">Generated bcrypt Hash String</label>
+                <input type="text" id="bcryptHashOutput" class="sandbox-input" readonly value="$2b$10$EixZaYVK1fsbw1ZfbX3OXePaWxn96p36WQoeG6Lruj3vjPGga31lW" style="width:100%; margin-top:0.25rem; background:#f8fafc; font-size:0.8rem;">
+                <div id="bcryptHashAnatomy">
+                  <!-- Auto populated by JS -->
+                </div>
+              </div>
+
+              <div style="border-top:1px solid var(--border-subtle); padding-top:0.65rem;">
+                <label style="font-size:0.75rem; text-transform:uppercase; font-weight:700; color:var(--text-muted);">Test bcrypt.compare(enteredPassword, storedHash)</label>
+                <div class="sandbox-controls" style="margin-top:0.35rem;">
+                  <input type="text" id="bcryptVerifyPass" class="sandbox-input" value="student123" placeholder="Enter test password" style="flex:1;">
+                  <button id="bcryptVerifyBtn" class="sandbox-btn sandbox-btn-secondary">Verify Match</button>
+                </div>
+                <div id="bcryptVerifyResult" style="margin-top:0.5rem;">
+                  <span style="font-size:0.8rem; color:var(--text-muted);">Click "Verify Match" to test comparison logic.</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- -------------------------------------------------------------------
+           SLIDE 7: WHAT IS JSON WEB TOKEN?
+           ------------------------------------------------------------------- -->
+      <section class="slide" id="slide-7">
+        <header class="slide-header">
+          <div class="slide-title-wrap">
+            <span class="slide-category">Token Deep-Dive</span>
+            <h2 class="slide-title">What Is JSON Web Token (JWT)?</h2>
+            <p class="slide-subtitle">RFC 7519 open standard: A compact, URL-safe, self-contained method for securely transmitting claims.</p>
+          </div>
+          <span class="slide-num-pill">Slide 07</span>
+        </header>
+
+        <div class="slide-body">
+          <!-- Token Anatomy Visual Card -->
+          <div class="jwt-anatomy-card">
+            <div>
+              <span style="font-size:0.78rem; text-transform:uppercase; letter-spacing:0.05em; font-weight:700; color:var(--text-muted);">A Real Encoded JWT Token (Separated by dots)</span>
+              <div class="jwt-token-display">
+                <span class="jwt-part-header" id="jwtHeaderPart">eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9</span><span class="jwt-part-dot">.</span><span class="jwt-part-payload" id="jwtPayloadPart">eyJ1c2VySWQiOiJzdGRfMTAxIiwicm9sZSI6InN0dWRlbnQiLCJlbWFpbCI6ImFsZXhAY29sbGVnZS5lZHUifQ</span><span class="jwt-part-dot">.</span><span class="jwt-part-sig" id="jwtSigPart">SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c</span>
+              </div>
+            </div>
+
+            <!-- Breakdown Grid -->
+            <div class="jwt-breakdown-grid">
+              <div class="jwt-section-card jwt-section-header">
+                <span class="jwt-section-title">1. Header (Red)</span>
+                <span class="jwt-section-desc">Specifies token type and signing algorithm (e.g. HS256).</span>
+                <pre style="margin:0; background:#ffffff; padding:0.4rem; border-radius:4px; font-size:0.75rem; color:#b91c1c;"><code id="jwtDecodedHeader">{
+  "alg": "HS256",
+  "typ": "JWT"
+}</code></pre>
+              </div>
+
+              <div class="jwt-section-card jwt-section-payload">
+                <span class="jwt-section-title">2. Payload (Purple)</span>
+                <span class="jwt-section-desc">Contains the claims: user ID, role, expiration timestamp.</span>
+                <pre style="margin:0; background:#ffffff; padding:0.4rem; border-radius:4px; font-size:0.75rem; color:#6d28d9;"><code id="jwtDecodedPayload">{
+  "userId": "std_101",
+  "role": "student"
+}</code></pre>
+              </div>
+
+              <div class="jwt-section-card jwt-section-sig">
+                <span class="jwt-section-title">3. Signature (Cyan)</span>
+                <span class="jwt-section-desc">HMAC SHA-256 hash using the header, payload &amp; server secret.</span>
+                <pre style="margin:0; background:#ffffff; padding:0.4rem; border-radius:4px; font-size:0.75rem; color:#0e7490;"><code id="jwtDecodedSig">HMACSHA256(
+  base64Url(header) + "." +
+  base64Url(payload),
+  secretKey
+)</code></pre>
+              </div>
+            </div>
+          </div>
+
+          <div class="grid-2" style="margin-top:0.25rem;">
+            <div class="callout callout-warning">
+              <strong>CRITICAL SECURITY NOTE:</strong> Base64Url is <strong>ENCODED, NOT ENCRYPTED!</strong> Anyone with the token can decode and read the payload. <em>NEVER store passwords, API keys, or credit card details inside a JWT payload!</em>
+            </div>
+            <div class="callout callout-tip">
+              <strong>What Prevents Tampering?</strong> The Signature! If an attacker changes <code>"role": "student"</code> to <code>"admin"</code>, the cryptographic signature won't match, and the server rejects it with <code>401 Unauthorized</code>.
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- -------------------------------------------------------------------
+           SLIDE 8: HOW JWT AUTHENTICATION WORKS
+           ------------------------------------------------------------------- -->
+      <section class="slide" id="slide-8">
+        <header class="slide-header">
+          <div class="slide-title-wrap">
+            <span class="slide-category">Protocol Flow</span>
+            <h2 class="slide-title">How JWT Authentication Works (Step-by-Step)</h2>
+            <p class="slide-subtitle">The complete HTTP conversation between client browser and Express server.</p>
+          </div>
+          <span class="slide-num-pill">Slide 08</span>
+        </header>
+
+        <div class="slide-body">
+          <div class="grid-2">
+            <!-- Left Flow -->
+            <div class="card highlight">
+              <h3 class="card-title">Phase A: Login &amp; Token Issuance</h3>
+              <ol class="feature-list" style="margin-top:0.35rem;">
+                <li><span class="bullet-icon">1.</span> <strong>Client POST:</strong> Browser sends <code>POST /api/login</code> with <code>{ email, password }</code>.</li>
+                <li><span class="bullet-icon">2.</span> <strong>Backend Verification:</strong> Server looks up user and verifies password hash using <code>bcrypt.compare()</code>.</li>
+                <li><span class="bullet-icon">3.</span> <strong>Sign Token:</strong> Server creates a JWT containing <code>{ userId, role }</code> signed with <code>process.env.JWT_SECRET</code>.</li>
+                <li><span class="bullet-icon">4.</span> <strong>Client Response:</strong> Server sends back HTTP 200 with <code>{ token: "eyJhbGciOi..." }</code>.</li>
+                <li><span class="bullet-icon">5.</span> <strong>Storage:</strong> Client application stores token in memory or local storage.</li>
+              </ol>
+            </div>
+
+            <!-- Right Flow -->
+            <div class="card">
+              <h3 class="card-title">Phase B: Accessing Protected Endpoints</h3>
+              <ol class="feature-list" style="margin-top:0.35rem;">
+                <li><span class="bullet-icon">6.</span> <strong>Client GET:</strong> Browser sends request to <code>GET /api/profile</code> with header:
+                  <div style="font-family:var(--font-mono); font-size:0.8rem; background:#0b1329; color:#38bdf8; padding:0.4rem 0.6rem; border-radius:4px; margin-top:0.3rem;">
+                    Authorization: Bearer eyJhbGciOi...
+                  </div>
+                </li>
+                <li><span class="bullet-icon">7.</span> <strong>Middleware Intercept:</strong> <code>authMiddleware</code> parses the header and extracts the token.</li>
+                <li><span class="bullet-icon">8.</span> <strong>Cryptographic Check:</strong> Server runs <code>jwt.verify(token, secret)</code>. If valid, attaches payload to <code>req.user</code> and calls <code>next()</code>.</li>
+                <li><span class="bullet-icon">9.</span> <strong>Response:</strong> Controller executes and returns student profile data!</li>
+              </ol>
+            </div>
+          </div>
+
+          <div class="callout callout-info">
+            <strong>Standard Convention:</strong> The <code>Authorization</code> header uses the standard format <code>Bearer &lt;token&gt;</code>. "Bearer" signifies that whoever bears this token is granted access.
+          </div>
+        </div>
+      </section>
+
+      <!-- -------------------------------------------------------------------
+           SLIDE 9: PRACTICAL — GENERATE A JWT TOKEN USING JWT.SIGN()
+           ------------------------------------------------------------------- -->
+      <section class="slide" id="slide-9">
+        <header class="slide-header">
+          <div class="slide-title-wrap">
+            <span class="slide-category">Hands-on Implementation</span>
+            <h2 class="slide-title">Practical: Generate a JWT with jwt.sign()</h2>
+            <p class="slide-subtitle">Install <code>jsonwebtoken</code> and construct signed cryptographic tokens with expiration.</p>
+          </div>
+          <span class="slide-num-pill">Slide 09</span>
+        </header>
+
+        <div class="slide-body">
+          <div class="grid-2">
+            <!-- Code Block -->
+            <div class="code-container">
+              <div class="code-header">
+                <div class="code-file-badge">
+                  <span class="file-dot"></span>
+                  <span>generate-token.js</span>
+                </div>
+                <button class="copy-btn">Copy</button>
+              </div>
+              <pre><code><span class="syn-comment">// 1. Import jsonwebtoken library</span>
+<span class="syn-kw">const</span> jwt = <span class="syn-fn">require</span>(<span class="syn-str">'jsonwebtoken'</span>);
+<span class="syn-fn">require</span>(<span class="syn-str">'dotenv'</span>).<span class="syn-fn">config</span>();
+
+<span class="syn-comment">// 2. Define user payload (public claims)</span>
+<span class="syn-kw">const</span> payload = {
+  userId: <span class="syn-str">'std_101'</span>,
+  email: <span class="syn-str">'alex@college.edu'</span>,
+  role: <span class="syn-str">'student'</span>
+};
+
+<span class="syn-comment">// 3. Secret key loaded from .env</span>
+<span class="syn-kw">const</span> secretKey = process.env.<span class="syn-prop">JWT_SECRET</span> || <span class="syn-str">'mySuperSecretKey_2026'</span>;
+
+<span class="syn-comment">// 4. Sign token with expiration (1 hour)</span>
+<span class="syn-kw">const</span> token = jwt.<span class="syn-fn">sign</span>(payload, secretKey, {
+  expiresIn: <span class="syn-str">'1h'</span> <span class="syn-comment">// '15m', '2h', '7d'</span>
+});
+
+console.<span class="syn-fn">log</span>(<span class="syn-str">'Generated JWT Token:\n'</span>, token);</code></pre>
+            </div>
+
+            <!-- Parameters Table & Explanation -->
+            <div class="card">
+              <h3 class="card-title">Anatomy of jwt.sign(payload, secret, options)</h3>
+              <div class="table-responsive">
+                <table class="custom-table">
+                  <thead>
+                    <tr>
+                      <th>Argument</th>
+                      <th>Type</th>
+                      <th>Description</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><code>payload</code></td>
+                      <td>Object</td>
+                      <td>Data claims stored in token (e.g. <code>userId</code>, <code>role</code>).</td>
+                    </tr>
+                    <tr>
+                      <td><code>secretKey</code></td>
+                      <td>String</td>
+                      <td>Private key stored in <code>.env</code> used to sign and verify.</td>
+                    </tr>
+                    <tr>
+                      <td><code>options</code></td>
+                      <td>Object</td>
+                      <td>Options like <code>{ expiresIn: '1h' }</code> to auto-expire tokens.</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <!-- Mini Sandbox Control -->
+              <div class="sandbox-card" style="margin-top:0.6rem; padding:0.85rem;">
+                <div class="sandbox-title" style="font-size:0.85rem;">
+                  <span>Live Token Generator Sandbox</span>
+                </div>
+                <div class="sandbox-controls" style="margin-top:0.4rem;">
+                  <input type="text" id="jwtUserId" class="sandbox-input" value="std_101" placeholder="User ID" style="width:90px;">
+                  <input type="text" id="jwtUserRole" class="sandbox-input" value="student" placeholder="Role" style="width:90px;">
+                  <input type="text" id="jwtUserEmail" class="sandbox-input" value="alex@college.edu" placeholder="Email" style="flex:1;">
+                  <input type="hidden" id="jwtSecretInput" value="supersecretkey123">
+                  <button id="jwtGenBtn" class="sandbox-btn" style="padding:0.35rem 0.75rem;">Generate</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- -------------------------------------------------------------------
+           SLIDE 10: UNDERSTANDING JWT VERIFICATION
+           ------------------------------------------------------------------- -->
+      <section class="slide" id="slide-10">
+        <header class="slide-header">
+          <div class="slide-title-wrap">
+            <span class="slide-category">Token Deep-Dive</span>
+            <h2 class="slide-title">Understanding JWT Verification</h2>
+            <p class="slide-subtitle">How <code>jwt.verify()</code> detects tampering, validates expiration, and extracts claims.</p>
+          </div>
+          <span class="slide-num-pill">Slide 10</span>
+        </header>
+
+        <div class="slide-body">
+          <div class="grid-2">
+            <!-- Code Block -->
+            <div class="code-container">
+              <div class="code-header">
+                <div class="code-file-badge">
+                  <span class="file-dot"></span>
+                  <span>verify-token.js</span>
+                </div>
+                <button class="copy-btn">Copy</button>
+              </div>
+              <pre><code><span class="syn-kw">const</span> jwt = <span class="syn-fn">require</span>(<span class="syn-str">'jsonwebtoken'</span>);
+<span class="syn-kw">const</span> secretKey = <span class="syn-str">'mySuperSecretKey_2026'</span>;
+
+<span class="syn-comment">// Validating an incoming token</span>
+<span class="syn-kw">function</span> <span class="syn-fn">validateToken</span>(token) {
+  <span class="syn-kw">try</span> {
+    <span class="syn-comment">// Verifies signature and expiration</span>
+    <span class="syn-kw">const</span> decoded = jwt.<span class="syn-fn">verify</span>(token, secretKey);
+    console.<span class="syn-fn">log</span>(<span class="syn-str">'Token Valid! Decoded payload:'</span>, decoded);
+    <span class="syn-kw">return</span> { valid: <span class="syn-num">true</span>, decoded };
+  } <span class="syn-kw">catch</span> (error) {
+    <span class="syn-comment">// jwt.verify throws error if invalid or expired</span>
+    <span class="syn-kw">if</span> (error.name === <span class="syn-str">'TokenExpiredError'</span>) {
+      console.<span class="syn-fn">error</span>(<span class="syn-str">'Token has expired!'</span>);
+    } <span class="syn-kw">else</span> {
+      console.<span class="syn-fn">error</span>(<span class="syn-str">'Invalid token signature!'</span>, error.message);
+    }
+    <span class="syn-kw">return</span> { valid: <span class="syn-num">false</span>, error: error.message };
+  }
+}</code></pre>
+            </div>
+
+            <!-- Verification checks & Errors -->
+            <div class="card">
+              <h3 class="card-title">What Happens During jwt.verify()?</h3>
+              <ol class="feature-list">
+                <li><span class="bullet-icon">1.</span> <strong>Signature Re-computation:</strong> Takes Header and Payload from the token and recalculates HMAC SHA-256 with the server's secret.</li>
+                <li><span class="bullet-icon">2.</span> <strong>Cryptographic Match:</strong> Compares computed signature with the token's signature. If even 1 bit was altered, verification fails immediately!</li>
+                <li><span class="bullet-icon">3.</span> <strong>Timestamp Check:</strong> Checks current Unix timestamp against <code>exp</code> (expiration) and <code>iat</code> (issued at). If expired, throws <code>TokenExpiredError</code>.</li>
+              </ol>
+
+              <div class="callout callout-danger" style="margin-top:0.75rem;">
+                <strong>Common Error Types:</strong>
+                <ul style="margin:0.25rem 0 0 1rem; font-size:0.84rem;">
+                  <li><code>JsonWebTokenError: invalid signature</code> &rarr; Secret didn't match or token tampered.</li>
+                  <li><code>TokenExpiredError: jwt expired</code> &rarr; Token lifetime exceeded.</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- -------------------------------------------------------------------
+           SLIDE 11: PROJECT SETUP & CONFIGURATION
+           ------------------------------------------------------------------- -->
+      <section class="slide" id="slide-11">
+        <header class="slide-header">
+          <div class="slide-title-wrap">
+            <span class="slide-category">Project Architecture</span>
+            <h2 class="slide-title">Project Setup: The Student Auth API</h2>
+            <p class="slide-subtitle">Initialize project, install dependencies, configure environment variables, and organize modular folders.</p>
+          </div>
+          <span class="slide-num-pill">Slide 11</span>
+        </header>
+
+        <div class="slide-body">
+          <div class="grid-2">
+            <!-- Terminal & Directory -->
+            <div>
+              <div class="code-container">
+                <div class="code-header">
+                  <div class="code-file-badge">
+                    <span class="file-dot"></span>
+                    <span>Terminal Commands</span>
+                  </div>
+                  <button class="copy-btn">Copy</button>
+                </div>
+                <pre><code><span class="syn-comment"># 1. Initialize project directory</span>
+mkdir jwt-auth-api &amp;&amp; cd jwt-auth-api
+npm init -y
+
+<span class="syn-comment"># 2. Install production dependencies</span>
+npm install express jsonwebtoken bcryptjs dotenv
+
+<span class="syn-comment"># 3. Install nodemon for live development</span>
+npm install -D nodemon</code></pre>
+              </div>
+
+              <div class="card" style="margin-top:0.85rem;">
+                <h4 style="font-size:0.9rem; font-weight:700; color:var(--primary-dark);">Package Responsibilities:</h4>
+                <ul class="feature-list" style="margin-top:0.35rem; font-size:0.85rem;">
+                  <li><code>express</code>: HTTP routing, JSON parser &amp; middleware</li>
+                  <li><code>jsonwebtoken</code>: Signs and verifies JWT tokens</li>
+                  <li><code>bcryptjs</code>: Hashes passwords with salt algorithms</li>
+                  <li><code>dotenv</code>: Loads <code>JWT_SECRET</code> securely from <code>.env</code></li>
+                </ul>
+              </div>
+            </div>
+
+            <!-- Folder Structure & .env -->
+            <div>
+              <div class="code-container">
+                <div class="code-header">
+                  <div class="code-file-badge">
+                    <span class="file-dot"></span>
+                    <span>Folder Structure</span>
+                  </div>
+                </div>
+                <pre><code>jwt-auth-api/
+├── middleware/
+│   └── authMiddleware.js   <span class="syn-comment"># JWT verification gatekeeper</span>
+├── routes/
+│   └── authRoutes.js       <span class="syn-comment"># /register, /login, /profile</span>
+├── .env                    <span class="syn-comment"># Secrets &amp; Port</span>
+├── .gitignore              <span class="syn-comment"># Ignores node_modules &amp; .env</span>
+├── package.json
+└── server.js               <span class="syn-comment"># Express entry point</span></code></pre>
+              </div>
+
+              <div class="code-container" style="margin-top:0.85rem;">
+                <div class="code-header">
+                  <div class="code-file-badge">
+                    <span class="file-dot"></span>
+                    <span>.env (Environment Variables)</span>
+                  </div>
+                  <button class="copy-btn">Copy</button>
+                </div>
+                <pre><code>PORT=5000
+JWT_SECRET=superSecretKey_NodeDay7_JWT_2026!
+JWT_EXPIRES_IN=1h</code></pre>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- -------------------------------------------------------------------
+           SLIDE 12: PRACTICAL — USER REGISTRATION API
+           ------------------------------------------------------------------- -->
+      <section class="slide" id="slide-12">
+        <header class="slide-header">
+          <div class="slide-title-wrap">
+            <span class="slide-category">Hands-on Implementation</span>
+            <h2 class="slide-title">Practical: User Registration API</h2>
+            <p class="slide-subtitle">Implement <code>POST /api/register</code> with duplicate checks, password hashing, and clean HTTP 201 responses.</p>
+          </div>
+          <span class="slide-num-pill">Slide 12</span>
+        </header>
+
+        <div class="slide-body">
+          <div class="grid-2">
+            <!-- Code Block -->
+            <div class="code-container">
+              <div class="code-header">
+                <div class="code-file-badge">
+                  <span class="file-dot"></span>
+                  <span>routes/authRoutes.js (Register)</span>
+                </div>
+                <button class="copy-btn">Copy</button>
+              </div>
+              <pre><code><span class="syn-kw">const</span> express = <span class="syn-fn">require</span>(<span class="syn-str">'express'</span>);
+<span class="syn-kw">const</span> bcrypt = <span class="syn-fn">require</span>(<span class="syn-str">'bcryptjs'</span>);
+<span class="syn-kw">const</span> router = express.<span class="syn-fn">Router</span>();
+
+<span class="syn-comment">// In-memory student database array</span>
+<span class="syn-kw">const</span> students = [];
+
+<span class="syn-comment">// POST /api/register</span>
+router.<span class="syn-fn">post</span>(<span class="syn-str">'/register'</span>, <span class="syn-kw">async</span> (req, res) => {
+  <span class="syn-kw">try</span> {
+    <span class="syn-kw">const</span> { name, email, password } = req.body;
+
+    <span class="syn-comment">// 1. Validation</span>
+    <span class="syn-kw">if</span> (!name || !email || !password) {
+      <span class="syn-kw">return</span> res.<span class="syn-fn">status</span>(<span class="syn-num">400</span>).<span class="syn-fn">json</span>({ error: <span class="syn-str">'All fields are required'</span> });
+    }
+
+    <span class="syn-comment">// 2. Check if student already exists</span>
+    <span class="syn-kw">const</span> existingStudent = students.<span class="syn-fn">find</span>(s => s.email === email);
+    <span class="syn-kw">if</span> (existingStudent) {
+      <span class="syn-kw">return</span> res.<span class="syn-fn">status</span>(<span class="syn-num">409</span>).<span class="syn-fn">json</span>({ error: <span class="syn-str">'Email already registered'</span> });
+    }
+
+    <span class="syn-comment">// 3. Hash the plain password with salt</span>
+    <span class="syn-kw">const</span> hashedPassword = <span class="syn-kw">await</span> bcrypt.<span class="syn-fn">hash</span>(password, <span class="syn-num">10</span>);
+
+    <span class="syn-comment">// 4. Save new student</span>
+    <span class="syn-kw">const</span> newStudent = {
+      id: String(students.length + <span class="syn-num">101</span>),
+      name,
+      email,
+      password: hashedPassword
+    };
+    students.<span class="syn-fn">push</span>(newStudent);
+
+    <span class="syn-comment">// 5. Return 201 Created (NEVER return password!)</span>
+    res.<span class="syn-fn">status</span>(<span class="syn-num">201</span>).<span class="syn-fn">json</span>({
+      message: <span class="syn-str">'Student registered successfully'</span>,
+      student: { id: newStudent.id, name, email }
+    });
+  } <span class="syn-kw">catch</span> (err) {
+    res.<span class="syn-fn">status</span>(<span class="syn-num">500</span>).<span class="syn-fn">json</span>({ error: <span class="syn-str">'Server registration error'</span> });
+  }
+});</code></pre>
+            </div>
+
+            <!-- Workflow Highlights -->
+            <div class="card">
+              <h3 class="card-title">Registration Logic Breakdown</h3>
+              <ul class="feature-list">
+                <li><span class="bullet-icon">&check;</span> <strong>Input Validation (400):</strong> Verify <code>name</code>, <code>email</code>, and <code>password</code> are present.</li>
+                <li><span class="bullet-icon">&check;</span> <strong>Duplicate Prevention (409):</strong> Use <code>students.find()</code> to check if the email already exists in the system. <code>409 Conflict</code> is the correct REST status.</li>
+                <li><span class="bullet-icon">&check;</span> <strong>One-Way Hashing:</strong> <code>bcrypt.hash(password, 10)</code> ensures plain text never enters storage.</li>
+                <li><span class="bullet-icon">&check;</span> <strong>Data Sanitization:</strong> The JSON response returns the student's ID, name, and email—<strong>never</strong> the hashed password!</li>
+              </ul>
+
+              <div class="callout callout-tip" style="margin-top:0.75rem;">
+                <strong>Expected Output (201 Created):</strong>
+                <pre style="margin-top:0.3rem; font-size:0.78rem; background:#0b1329; color:#a5f3fc; padding:0.5rem; border-radius:4px;"><code>{
+  "message": "Student registered successfully",
+  "student": {
+    "id": "101",
+    "name": "Sarah Connor",
+    "email": "sarah@college.edu"
+  }
+}</code></pre>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- -------------------------------------------------------------------
+           SLIDE 13: PRACTICAL — USER LOGIN API
+           ------------------------------------------------------------------- -->
+      <section class="slide" id="slide-13">
+        <header class="slide-header">
+          <div class="slide-title-wrap">
+            <span class="slide-category">Hands-on Implementation</span>
+            <h2 class="slide-title">Practical: User Login API</h2>
+            <p class="slide-subtitle">Implement <code>POST /api/login</code> with bcrypt comparison, token signing, and security best practices.</p>
+          </div>
+          <span class="slide-num-pill">Slide 13</span>
+        </header>
+
+        <div class="slide-body">
+          <div class="grid-2">
+            <!-- Code Block -->
+            <div class="code-container">
+              <div class="code-header">
+                <div class="code-file-badge">
+                  <span class="file-dot"></span>
+                  <span>routes/authRoutes.js (Login)</span>
+                </div>
+                <button class="copy-btn">Copy</button>
+              </div>
+              <pre><code><span class="syn-kw">const</span> jwt = <span class="syn-fn">require</span>(<span class="syn-str">'jsonwebtoken'</span>);
+
+<span class="syn-comment">// POST /api/login</span>
+router.<span class="syn-fn">post</span>(<span class="syn-str">'/login'</span>, <span class="syn-kw">async</span> (req, res) => {
+  <span class="syn-kw">try</span> {
+    <span class="syn-kw">const</span> { email, password } = req.body;
+
+    <span class="syn-comment">// 1. Find student by email</span>
+    <span class="syn-kw">const</span> student = students.<span class="syn-fn">find</span>(s => s.email === email);
+    <span class="syn-kw">if</span> (!student) {
+      <span class="syn-kw">return</span> res.<span class="syn-fn">status</span>(<span class="syn-num">401</span>).<span class="syn-fn">json</span>({ error: <span class="syn-str">'Invalid email or password'</span> });
+    }
+
+    <span class="syn-comment">// 2. Compare entered password with stored hash</span>
+    <span class="syn-kw">const</span> isMatch = <span class="syn-kw">await</span> bcrypt.<span class="syn-fn">compare</span>(password, student.password);
+    <span class="syn-kw">if</span> (!isMatch) {
+      <span class="syn-kw">return</span> res.<span class="syn-fn">status</span>(<span class="syn-num">401</span>).<span class="syn-fn">json</span>({ error: <span class="syn-str">'Invalid email or password'</span> });
+    }
+
+    <span class="syn-comment">// 3. Generate signed JWT token</span>
+    <span class="syn-kw">const</span> token = jwt.<span class="syn-fn">sign</span>(
+      { userId: student.id, email: student.email, role: <span class="syn-str">'student'</span> },
+      process.env.<span class="syn-prop">JWT_SECRET</span>,
+      { expiresIn: <span class="syn-str">'1h'</span> }
+    );
+
+    <span class="syn-comment">// 4. Send token back to client (200 OK)</span>
+    res.<span class="syn-fn">status</span>(<span class="syn-num">200</span>).<span class="syn-fn">json</span>({
+      message: <span class="syn-str">'Login successful'</span>,
+      token
+    });
+  } <span class="syn-kw">catch</span> (err) {
+    res.<span class="syn-fn">status</span>(<span class="syn-num">500</span>).<span class="syn-fn">json</span>({ error: <span class="syn-str">'Server login error'</span> });
+  }
+});</code></pre>
+            </div>
+
+            <!-- Best practices -->
+            <div class="card">
+              <h3 class="card-title">Security Best Practices for Login</h3>
+              <div class="callout callout-warning">
+                <strong>Prevent User Enumeration Attacks:</strong> Notice that whether the email doesn't exist OR the password is wrong, we return the <strong>exact same message</strong>: <code>"Invalid email or password"</code>. Never tell attackers "Email not found"!
+              </div>
+
+              <div class="callout callout-tip" style="margin-top:0.75rem;">
+                <strong>Expected Output (200 OK):</strong>
+                <pre style="margin-top:0.3rem; font-size:0.78rem; background:#0b1329; color:#a5f3fc; padding:0.5rem; border-radius:4px;"><code>{
+  "message": "Login successful",
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOi..."
+}</code></pre>
+              </div>
+
+              <div class="card highlight" style="margin-top:0.75rem;">
+                <h4 style="font-size:0.88rem; font-weight:700; color:var(--primary-dark);">Client Next Steps:</h4>
+                <p style="font-size:0.83rem;">The client stores this token. For all subsequent requests to protected endpoints, the client attaches this token in the HTTP <code>Authorization</code> header.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- -------------------------------------------------------------------
+           SLIDE 14: WHAT IS AUTHENTICATION MIDDLEWARE?
+           ------------------------------------------------------------------- -->
+      <section class="slide" id="slide-14">
+        <header class="slide-header">
+          <div class="slide-title-wrap">
+            <span class="slide-category">Middleware Pattern</span>
+            <h2 class="slide-title">What Is Authentication Middleware?</h2>
+            <p class="slide-subtitle">The gatekeeper pattern: Protecting Express routes before they reach your controller logic.</p>
+          </div>
+          <span class="slide-num-pill">Slide 14</span>
+        </header>
+
+        <div class="slide-body">
+          <div class="flow-horizontal" style="gap:1rem;">
+            <div class="flow-box">
+              <span class="flow-step-num">Step 1</span>
+              <div class="flow-step-text"><strong>HTTP Request</strong><br><small>Incoming GET /profile with Bearer Token</small></div>
+            </div>
+            <div class="flow-arrow">&rarr;</div>
+            <div class="flow-box" style="border:2px solid var(--primary); background:var(--bg-card-blue);">
+              <span class="flow-step-num">Step 2: Gatekeeper</span>
+              <div class="flow-step-text"><strong>authMiddleware</strong><br><small>Extracts header, runs jwt.verify(), sets req.user</small></div>
+            </div>
+            <div class="flow-arrow">&rarr;</div>
+            <div class="flow-box">
+              <span class="flow-step-num">Step 3</span>
+              <div class="flow-step-text"><strong>Route Controller</strong><br><small>Runs business logic safely with req.user data</small></div>
+            </div>
+            <div class="flow-arrow">&rarr;</div>
+            <div class="flow-box">
+              <span class="flow-step-num">Step 4</span>
+              <div class="flow-step-text"><strong>JSON Response</strong><br><small>200 OK + Student Profile Payload</small></div>
+            </div>
+          </div>
+
+          <div class="grid-2" style="margin-top:0.5rem;">
+            <div class="card">
+              <h3 class="card-title">Responsibilities of authMiddleware</h3>
+              <ul class="feature-list">
+                <li><span class="bullet-icon">&bull;</span> Inspect incoming <code>req.headers.authorization</code> header.</li>
+                <li><span class="bullet-icon">&bull;</span> Check if header exists and starts with <code>"Bearer "</code>.</li>
+                <li><span class="bullet-icon">&bull;</span> Split string to isolate the raw JWT token.</li>
+                <li><span class="bullet-icon">&bull;</span> Verify cryptographic signature against <code>process.env.JWT_SECRET</code>.</li>
+                <li><span class="bullet-icon">&bull;</span> If valid: Attach payload to <code>req.user</code> and call <code>next()</code>.</li>
+                <li><span class="bullet-icon">&bull;</span> If invalid or missing: Immediately abort with <code>401 Unauthorized</code>!</li>
+              </ul>
+            </div>
+
+            <div class="card highlight">
+              <h3 class="card-title">Why Use Middleware Instead of Repeating Code?</h3>
+              <p>In a large application with 50+ protected routes (e.g. <code>/profile</code>, <code>/grades</code>, <code>/submit-assignment</code>, <code>/enroll</code>), copying and pasting token verification into every controller would create maintenance nightmares.</p>
+              <div class="callout callout-tip" style="margin-top:0.5rem;">
+                <strong>DRY (Don't Repeat Yourself):</strong> By writing <code>authMiddleware</code> once, you can protect any Express route simply by inserting it into the route definition:
+                <div style="font-family:var(--font-mono); font-size:0.8rem; margin-top:0.35rem; color:#0369a1;">
+                  router.get('/profile', <strong>authMiddleware</strong>, profileController);
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- -------------------------------------------------------------------
+           SLIDE 15: PRACTICAL — CREATE JWT AUTHENTICATION MIDDLEWARE
+           ------------------------------------------------------------------- -->
+      <section class="slide" id="slide-15">
+        <header class="slide-header">
+          <div class="slide-title-wrap">
+            <span class="slide-category">Hands-on Implementation</span>
+            <h2 class="slide-title">Practical: Creating authMiddleware.js</h2>
+            <p class="slide-subtitle">Build the complete, production-grade token extraction and verification middleware.</p>
+          </div>
+          <span class="slide-num-pill">Slide 15</span>
+        </header>
+
+        <div class="slide-body">
+          <div class="grid-2">
+            <!-- Code Block -->
+            <div class="code-container">
+              <div class="code-header">
+                <div class="code-file-badge">
+                  <span class="file-dot"></span>
+                  <span>middleware/authMiddleware.js</span>
+                </div>
+                <button class="copy-btn">Copy</button>
+              </div>
+              <pre><code><span class="syn-kw">const</span> jwt = <span class="syn-fn">require</span>(<span class="syn-str">'jsonwebtoken'</span>);
+
+<span class="syn-kw">const</span> authMiddleware = (req, res, next) => {
+  <span class="syn-comment">// 1. Read the Authorization header</span>
+  <span class="syn-kw">const</span> authHeader = req.headers.<span class="syn-prop">authorization</span>;
+
+  <span class="syn-comment">// 2. Verify header existence and format</span>
+  <span class="syn-kw">if</span> (!authHeader || !authHeader.<span class="syn-fn">startsWith</span>(<span class="syn-str">'Bearer '</span>)) {
+    <span class="syn-kw">return</span> res.<span class="syn-fn">status</span>(<span class="syn-num">401</span>).<span class="syn-fn">json</span>({
+      error: <span class="syn-str">'Access denied. No token provided.'</span>
+    });
+  }
+
+  <span class="syn-comment">// 3. Extract the token (split by space)</span>
+  <span class="syn-kw">const</span> token = authHeader.<span class="syn-fn">split</span>(<span class="syn-str">' '</span>)[<span class="syn-num">1</span>];
+
+  <span class="syn-kw">try</span> {
+    <span class="syn-comment">// 4. Verify signature using secret key</span>
+    <span class="syn-kw">const</span> decoded = jwt.<span class="syn-fn">verify</span>(token, process.env.<span class="syn-prop">JWT_SECRET</span>);
+
+    <span class="syn-comment">// 5. Attach decoded payload to request</span>
+    req.user = decoded;
+
+    <span class="syn-comment">// 6. Pass control to the next handler</span>
+    <span class="syn-fn">next</span>();
+  } <span class="syn-kw">catch</span> (err) {
+    <span class="syn-kw">return</span> res.<span class="syn-fn">status</span>(<span class="syn-num">401</span>).<span class="syn-fn">json</span>({
+      error: <span class="syn-str">'Invalid or expired token.'</span>
+    });
+  }
+};
+
+module.exports = authMiddleware;</code></pre>
+            </div>
+
+            <!-- Visual Checklist -->
+            <div class="card">
+              <h3 class="card-title">Code Walkthrough &amp; Error Paths</h3>
+              <div class="table-responsive">
+                <table class="custom-table">
+                  <thead>
+                    <tr>
+                      <th>Scenario</th>
+                      <th>Condition Checked</th>
+                      <th>Action</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><strong>No Header</strong></td>
+                      <td><code>!authHeader</code></td>
+                      <td>Returns <code>401</code> immediately.</td>
+                    </tr>
+                    <tr>
+                      <td><strong>Bad Prefix</strong></td>
+                      <td><code>!startsWith('Bearer ')</code></td>
+                      <td>Returns <code>401</code> immediately.</td>
+                    </tr>
+                    <tr>
+                      <td><strong>Tampered Token</strong></td>
+                      <td><code>jwt.verify()</code> throws</td>
+                      <td>Caught in <code>catch</code>; returns <code>401</code>.</td>
+                    </tr>
+                    <tr>
+                      <td><strong>Valid Token</strong></td>
+                      <td><code>jwt.verify()</code> succeeds</td>
+                      <td>Sets <code>req.user</code> &amp; calls <code>next()</code>.</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <div class="callout callout-tip" style="margin-top:0.75rem;">
+                <strong>Why <code>req.user = decoded</code>?</strong> By attaching the decoded payload to the Express <code>req</code> object, downstream controllers can read the user's ID (e.g. <code>req.user.userId</code>) without having to re-decode or re-verify the token!
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- -------------------------------------------------------------------
+           SLIDE 16: PRACTICAL — CREATE A PROTECTED ROUTE
+           ------------------------------------------------------------------- -->
+      <section class="slide" id="slide-16">
+        <header class="slide-header">
+          <div class="slide-title-wrap">
+            <span class="slide-category">Hands-on Implementation</span>
+            <h2 class="slide-title">Practical: Creating Protected Routes</h2>
+            <p class="slide-subtitle">Attach <code>authMiddleware</code> to <code>GET /api/profile</code> and access verified user context from <code>req.user</code>.</p>
+          </div>
+          <span class="slide-num-pill">Slide 16</span>
+        </header>
+
+        <div class="slide-body">
+          <div class="grid-2">
+            <!-- Code Block -->
+            <div class="code-container">
+              <div class="code-header">
+                <div class="code-file-badge">
+                  <span class="file-dot"></span>
+                  <span>routes/authRoutes.js (Protected Route)</span>
+                </div>
+                <button class="copy-btn">Copy</button>
+              </div>
+              <pre><code><span class="syn-kw">const</span> express = <span class="syn-fn">require</span>(<span class="syn-str">'express'</span>);
+<span class="syn-kw">const</span> router = express.<span class="syn-fn">Router</span>();
+<span class="syn-kw">const</span> authMiddleware = <span class="syn-fn">require</span>(<span class="syn-str">'../middleware/authMiddleware'</span>);
+
+<span class="syn-comment">// GET /api/profile — PROTECTED ROUTE</span>
+router.<span class="syn-fn">get</span>(<span class="syn-str">'/profile'</span>, authMiddleware, (req, res) => {
+  <span class="syn-comment">// req.user was populated by authMiddleware!</span>
+  <span class="syn-kw">const</span> authenticatedUserId = req.user.<span class="syn-prop">userId</span>;
+
+  <span class="syn-comment">// Find student in database</span>
+  <span class="syn-kw">const</span> student = students.<span class="syn-fn">find</span>(s => s.id === authenticatedUserId);
+
+  <span class="syn-kw">if</span> (!student) {
+    <span class="syn-kw">return</span> res.<span class="syn-fn">status</span>(<span class="syn-num">404</span>).<span class="syn-fn">json</span>({ error: <span class="syn-str">'Student profile not found'</span> });
+  }
+
+  <span class="syn-comment">// Return profile data safely</span>
+  res.<span class="syn-fn">status</span>(<span class="syn-num">200</span>).<span class="syn-fn">json</span>({
+    success: <span class="syn-num">true</span>,
+    student: {
+      id: student.id,
+      name: student.name,
+      email: student.email,
+      role: req.user.role
+    }
+  });
+});
+
+module.exports = router;</code></pre>
+            </div>
+
+            <!-- Server Integration & Explanation -->
+            <div class="card">
+              <h3 class="card-title">Full Express Server Integration</h3>
+              <div class="code-container">
+                <div class="code-header">
+                  <div class="code-file-badge">
+                    <span class="file-dot"></span>
+                    <span>server.js</span>
+                  </div>
+                  <button class="copy-btn">Copy</button>
+                </div>
+                <pre><code><span class="syn-kw">const</span> express = <span class="syn-fn">require</span>(<span class="syn-str">'express'</span>);
+<span class="syn-fn">require</span>(<span class="syn-str">'dotenv'</span>).<span class="syn-fn">config</span>();
+
+<span class="syn-kw">const</span> app = <span class="syn-fn">express</span>();
+app.<span class="syn-fn">use</span>(express.<span class="syn-fn">json</span>());
+
+<span class="syn-comment">// Mount authentication routes</span>
+<span class="syn-kw">const</span> authRoutes = <span class="syn-fn">require</span>(<span class="syn-str">'./routes/authRoutes'</span>);
+app.<span class="syn-fn">use</span>(<span class="syn-str">'/api'</span>, authRoutes);
+
+<span class="syn-kw">const</span> PORT = process.env.PORT || <span class="syn-num">5000</span>;
+app.<span class="syn-fn">listen</span>(PORT, () => {
+  console.<span class="syn-fn">log</span>(<span class="syn-str">`Auth server running on port ${PORT}`</span>);
+});</code></pre>
+              </div>
+
+              <div class="callout callout-tip" style="margin-top:0.6rem;">
+                <strong>Notice:</strong> The controller doesn't need to know how the token was decoded or validated. It simply trusts <code>req.user</code> because <code>authMiddleware</code> already rejected fraudulent requests!
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- -------------------------------------------------------------------
+           SLIDE 17: TESTING JWT AUTHENTICATION USING POSTMAN
+           ------------------------------------------------------------------- -->
+      <section class="slide" id="slide-17">
+        <header class="slide-header">
+          <div class="slide-title-wrap">
+            <span class="slide-category">Testing &amp; Verification</span>
+            <h2 class="slide-title">Testing JWT Authentication Using Postman</h2>
+            <p class="slide-subtitle">Step-by-step sequential testing guide: Register, Login, Protected Profile with &amp; without token.</p>
+          </div>
+          <span class="slide-num-pill">Slide 17</span>
+        </header>
+
+        <div class="slide-body">
+          <!-- Interactive Postman Lab Sandbox -->
+          <div class="sandbox-card" style="padding:1.1rem 1.35rem;">
+            <div class="sandbox-header" style="margin-bottom:0.6rem;">
+              <div class="sandbox-title">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>
+                <span>Interactive API Testing Console (Built-in Postman)</span>
+              </div>
+              <div style="display:flex; gap:0.5rem; align-items:center;">
+                <button id="pmCopyTokenBtn" class="sandbox-btn sandbox-btn-secondary" style="font-size:0.75rem; padding:0.25rem 0.6rem;">Copy Active Token</button>
+                <span class="sandbox-badge">Interactive Simulator</span>
+              </div>
+            </div>
+
+            <!-- Tab Navigation for Test Scenarios -->
+            <div style="display:flex; flex-wrap:wrap; gap:0.5rem; margin-bottom:0.75rem; border-bottom:1px solid var(--border-subtle); padding-bottom:0.6rem;">
+              <button class="postman-tab active" data-action="register">1. POST /api/register</button>
+              <button class="postman-tab" data-action="login">2. POST /api/login</button>
+              <button class="postman-tab" data-action="profileWithToken">3. GET /api/profile (With Bearer Token)</button>
+              <button class="postman-tab" data-action="profileNoToken">4. GET /api/profile (No Token &rarr; 401)</button>
+            </div>
+
+            <!-- Request Bar -->
+            <div style="display:flex; gap:0.6rem; align-items:center; margin-bottom:0.75rem;">
+              <span id="pmMethodBadge" class="status-badge badge-post" style="height:38px; display:inline-flex; align-items:center;">POST</span>
+              <input type="text" id="pmUrlInput" class="sandbox-input" value="http://localhost:5000/api/register" readonly style="flex:1; background:#f8fafc;">
+              <button id="pmSendBtn" class="sandbox-btn">
+                <span>Send Request</span>
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+              </button>
+            </div>
+
+            <div class="grid-2">
+              <!-- Request Details -->
+              <div>
+                <label style="font-size:0.75rem; text-transform:uppercase; font-weight:700; color:var(--text-muted); display:flex; justify-content:space-between;">
+                  <span>Request Headers &amp; JSON Body</span>
+                  <span id="pmHeaderDisplay" style="font-family:var(--font-mono); font-size:0.72rem; color:var(--primary);">Content-Type: application/json</span>
+                </label>
+                <textarea id="pmReqBody" class="sandbox-input" style="width:100%; height:130px; margin-top:0.3rem; resize:none; font-size:0.8rem;">{
+  "name": "Sarah Connor",
+  "email": "sarah@college.edu",
+  "password": "mypassword123"
+}</textarea>
+              </div>
+
+              <!-- Response Details -->
+              <div>
+                <div style="display:flex; justify-content:space-between; align-items:center;">
+                  <label style="font-size:0.75rem; text-transform:uppercase; font-weight:700; color:var(--text-muted);">Response Output</label>
+                  <div style="display:flex; gap:0.4rem; align-items:center;">
+                    <span id="pmTimeBadge" style="font-family:var(--font-mono); font-size:0.72rem; color:var(--text-muted);">0 ms</span>
+                    <span id="pmStatusBadge" class="status-pill" style="font-size:0.75rem;">Status: Waiting</span>
+                  </div>
+                </div>
+                <pre style="margin-top:0.3rem; background:#0b1329; border:1px solid #1e293b; border-radius:6px; padding:0.75rem; height:130px; overflow-y:auto; font-family:var(--font-mono); font-size:0.78rem; color:#38bdf8;"><code id="pmResBody">// Click "Send Request" to test simulated Express endpoint</code></pre>
+              </div>
+            </div>
+          </div>
+
+          <div class="callout callout-info" style="margin-top:0.4rem;">
+            <strong>Postman Setup in Real Life:</strong> In Postman, select the <strong>Authorization</strong> tab &rarr; Type: <strong>Bearer Token</strong> &rarr; Paste your JWT token into the Token field. Postman automatically sets the header <code>Authorization: Bearer &lt;token&gt;</code>!
+          </div>
+        </div>
+      </section>
+
+      <!-- -------------------------------------------------------------------
+           SLIDE 18: RECAP AND PRACTICAL CHALLENGE
+           ------------------------------------------------------------------- -->
+      <section class="slide" id="slide-18">
+        <header class="slide-header">
+          <div class="slide-title-wrap">
+            <span class="slide-category">Summary &amp; Homework Lab</span>
+            <h2 class="slide-title">Recap &amp; Practical Student Challenges</h2>
+            <p class="slide-subtitle">Mastery summary table and 5 progressive challenges to solidify your backend authentication skills.</p>
+          </div>
+          <span class="slide-num-pill">Slide 18</span>
+        </header>
+
+        <div class="slide-body">
+          <div class="grid-2">
+            <!-- Left: Recap Table -->
+            <div class="card highlight">
+              <h3 class="card-title">Day 7 Core Concept Checklist</h3>
+              <div class="table-responsive">
+                <table class="custom-table" style="font-size:0.83rem;">
+                  <thead>
+                    <tr>
+                      <th>Module / Concept</th>
+                      <th>Primary Function / Role</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><code>bcrypt.hash(pass, 10)</code></td>
+                      <td>One-way salt &amp; password hashing before DB storage</td>
+                    </tr>
+                    <tr>
+                      <td><code>bcrypt.compare(pass, hash)</code></td>
+                      <td>Securely matches plain password against stored hash</td>
+                    </tr>
+                    <tr>
+                      <td><code>jwt.sign(payload, secret, opts)</code></td>
+                      <td>Issues signed, time-limited cryptographic token</td>
+                    </tr>
+                    <tr>
+                      <td><code>jwt.verify(token, secret)</code></td>
+                      <td>Validates signature &amp; extracts claims from token</td>
+                    </tr>
+                    <tr>
+                      <td><code>authMiddleware</code></td>
+                      <td>Gatekeeper verifying Bearer token on protected routes</td>
+                    </tr>
+                    <tr>
+                      <td><code>HTTP Status Codes</code></td>
+                      <td><code>200 OK</code>, <code>201 Created</code>, <code>401 Unauthorized</code>, <code>409 Conflict</code></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <!-- Right: 5 Challenges -->
+            <div class="card">
+              <h3 class="card-title">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                5 Practical Student Challenges
+              </h3>
+              <ol class="feature-list" style="font-size:0.86rem; gap:0.45rem;">
+                <li><span class="bullet-icon">1.</span> <strong>Role-Based Access Control (RBAC):</strong> Create an <code>adminOnly</code> middleware that checks <code>if (req.user.role !== 'admin') return res.status(403).json(...)</code>.</li>
+                <li><span class="bullet-icon">2.</span> <strong>Password Complexity Validator:</strong> Add regex checks to reject passwords with fewer than 8 characters or missing numbers.</li>
+                <li><span class="bullet-icon">3.</span> <strong>Update Password Endpoint:</strong> Build <code>PUT /api/update-password</code> protected with <code>authMiddleware</code> that requires entering the old password and verifying it with <code>bcrypt.compare</code>.</li>
+                <li><span class="bullet-icon">4.</span> <strong>Specific Token Errors:</strong> Distinguish between expired tokens (return <code>"Token expired, please login again"</code>) and tampered tokens in <code>authMiddleware</code>.</li>
+                <li><span class="bullet-icon">5.</span> <strong>MongoDB Migration Preview:</strong> Swap the in-memory <code>students</code> array for a Mongoose Student Model with <code>unique: true</code> on email!</li>
+              </ol>
+
+              <div class="callout callout-tip" style="margin-top:0.6rem;">
+                <strong>Next Session (Day 8):</strong> MongoDB &amp; Mongoose Database Modeling, Schemas, Validation, and Persistent CRUD Authentication!
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- =====================================================================
+         BOTTOM NAVIGATION BAR
+         ===================================================================== -->
+    <footer class="bottom-bar">
+      <div class="bottom-left">
+        <span>Use <kbd>&larr;</kbd> <kbd>&rarr;</kbd> or <kbd>Space</kbd> to navigate</span>
+        <span>&bull;</span>
+        <span>Press <kbd>T</kbd> for Contents</span>
+        <span>&bull;</span>
+        <span>Press <kbd>?</kbd> for Help</span>
+      </div>
+
+      <div class="bottom-right">
+        <button class="nav-btn" id="prevBtn" disabled>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+          <span>Previous</span>
+        </button>
+        <button class="nav-btn nav-btn-primary" id="nextBtn">
+          <span>Next</span>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        </button>
+      </div>
+    </footer>
+
+    <!-- =====================================================================
+         TABLE OF CONTENTS DRAWER
+         ===================================================================== -->
+    <div class="toc-overlay" id="tocOverlay">
+      <div class="toc-drawer">
+        <div class="toc-header">
+          <div class="toc-title">Table of Contents</div>
+          <button class="toc-close" id="tocClose" title="Close (Esc)">&times;</button>
+        </div>
+        <div class="toc-list" id="tocList">
+          <!-- Dynamically populated by script.js -->
+        </div>
+      </div>
+    </div>
+
+    <!-- =====================================================================
+         HELP SHORTCUTS MODAL
+         ===================================================================== -->
+    <div class="help-modal-overlay" id="helpModal">
+      <div class="help-modal">
+        <div class="help-header">
+          <div class="help-title">Keyboard Navigation &amp; Shortcuts</div>
+          <button class="toc-close" id="helpClose" title="Close (Esc)">&times;</button>
+        </div>
+        <div class="help-body">
+          <div class="shortcut-row">
+            <span>Next Slide</span>
+            <div><span class="shortcut-key">&rarr;</span> <span class="shortcut-key">Down</span> <span class="shortcut-key">Space</span> <span class="shortcut-key">PgDn</span></div>
+          </div>
+          <div class="shortcut-row">
+            <span>Previous Slide</span>
+            <div><span class="shortcut-key">&larr;</span> <span class="shortcut-key">Up</span> <span class="shortcut-key">PgUp</span></div>
+          </div>
+          <div class="shortcut-row">
+            <span>First / Last Slide</span>
+            <div><span class="shortcut-key">Home</span> / <span class="shortcut-key">End</span></div>
+          </div>
+          <div class="shortcut-row">
+            <span>Table of Contents Drawer</span>
+            <span class="shortcut-key">T</span>
+          </div>
+          <div class="shortcut-row">
+            <span>Toggle Fullscreen</span>
+            <span class="shortcut-key">F</span>
+          </div>
+          <div class="shortcut-row">
+            <span>Keyboard Shortcuts Help</span>
+            <span class="shortcut-key">?</span> or <span class="shortcut-key">H</span>
+          </div>
+          <div class="shortcut-row">
+            <span>Close Modal / Drawer</span>
+            <span class="shortcut-key">Esc</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>

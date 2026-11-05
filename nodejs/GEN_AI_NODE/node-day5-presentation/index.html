@@ -1,0 +1,1541 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gen-AI Node.js — Day 5: MySQL CRUD, Reusable Database Functions &amp; NPM SDK Integration</title>
+  <meta name="description" content="Beginner-friendly classroom presentation: Connect Node.js to MySQL, build reusable database functions, validate with Zod, integrate AI SDKs, and build a GenAI Starter API.">
+  <link rel="stylesheet" href="style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <div class="presentation-container">
+
+    <!-- =====================================================================
+         TOP NAVIGATION BAR
+         ===================================================================== -->
+    <header class="top-bar">
+      <!-- Animated Progress Bar -->
+      <div class="progress-track">
+        <div class="progress-fill" id="progressFill"></div>
+      </div>
+
+      <div class="top-left">
+        <div class="brand-badge">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+            <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+          </svg>
+          <span>Gen-AI Node.js Day 5</span>
+        </div>
+        <div class="deck-title">
+          <span>GenAI Backend Architecture</span>
+          <span class="deck-divider">/</span>
+          <span class="section-indicator" id="sectionIndicator">Introduction &amp; Agenda</span>
+        </div>
+      </div>
+
+      <div class="top-right">
+        <div class="slide-counter" id="slideCounter">01 / 20</div>
+        <button class="top-btn" id="tocBtn" title="Table of Contents (T)">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="3" y1="12" x2="21" y2="12"></line>
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <line x1="3" y1="18" x2="21" y2="18"></line>
+          </svg>
+        </button>
+        <button class="top-btn" id="helpBtn" title="Keyboard Shortcuts (?)">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"></circle>
+            <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+            <line x1="12" y1="17" x2="12.01" y2="17"></line>
+          </svg>
+        </button>
+        <button class="top-btn" id="fullscreenBtn" title="Toggle Fullscreen (F)">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="15 3 21 3 21 9"></polyline>
+            <polyline points="9 21 3 21 3 15"></polyline>
+            <line x1="21" y1="3" x2="14" y2="10"></line>
+            <line x1="3" y1="21" x2="10" y2="14"></line>
+          </svg>
+        </button>
+      </div>
+    </header>
+
+    <!-- =====================================================================
+         MAIN SLIDES VIEWPORT (EXACTLY 20 SLIDES)
+         ===================================================================== -->
+    <main class="slide-viewport">
+
+      <!-- -------------------------------------------------------------------
+           SLIDE 1: INTRODUCTION
+           ------------------------------------------------------------------- -->
+      <section class="slide active" id="slide-1">
+        <div class="hero-container">
+          <div class="hero-badge-wrap">
+            <span class="badge-dot" style="background:#0284c7; width:8px; height:8px; border-radius:50%; display:inline-block;"></span>
+            <span>Gen-AI Node.js Track · Day 5</span>
+          </div>
+
+          <h1 class="hero-title">
+            MySQL CRUD, Reusable Database Functions &amp; <br>
+            <span class="highlight-text">NPM SDK Integration</span>
+          </h1>
+
+          <p class="hero-subtitle">
+            A practical guide to connecting Node.js with MySQL, creating modular database layers, integrating AI SDKs (OpenAI, Anthropic, Ollama, ChromaDB), and building an Express + Zod starter template.
+          </p>
+
+          <div class="hero-topics-grid">
+            <div class="hero-topic-item">
+              <span class="bullet-icon">&#x2714;</span>
+              <span>MySQL2 Connection &amp; Pools</span>
+            </div>
+            <div class="hero-topic-item">
+              <span class="bullet-icon">&#x2714;</span>
+              <span>Async Parameterized CRUD</span>
+            </div>
+            <div class="hero-topic-item">
+              <span class="bullet-icon">&#x2714;</span>
+              <span>Reusable Database Functions</span>
+            </div>
+            <div class="hero-topic-item">
+              <span class="bullet-icon">&#x2714;</span>
+              <span>NPM AI SDKs &amp; Documentation</span>
+            </div>
+            <div class="hero-topic-item">
+              <span class="bullet-icon">&#x2714;</span>
+              <span>Secure API Keys &amp; .env</span>
+            </div>
+            <div class="hero-topic-item">
+              <span class="bullet-icon">&#x2714;</span>
+              <span>Zod Validation &amp; SSE Streaming</span>
+            </div>
+          </div>
+
+          <div class="hero-footer-meta">
+            <span><strong>Audience:</strong> Beginner to Intermediate Node.js Developers</span>
+            <span>&bull;</span>
+            <span><strong>Stack:</strong> Express &bull; MySQL2 &bull; Zod &bull; dotenv &bull; OpenAI SDK</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- -------------------------------------------------------------------
+           SLIDE 2: WHAT ARE WE BUILDING?
+           ------------------------------------------------------------------- -->
+      <section class="slide" id="slide-2">
+        <header class="slide-header">
+          <div class="slide-title-wrap">
+            <span class="slide-category">Project Roadmap &amp; Architecture</span>
+            <h2 class="slide-title">What Are We Building Today?</h2>
+            <p class="slide-subtitle">The GenAI Node.js Starter API: A robust, scalable foundation for database-driven AI backends.</p>
+          </div>
+          <span class="slide-num-pill">Slide 02</span>
+        </header>
+
+        <div class="slide-body">
+          <div class="grid-2">
+            <!-- Left: Deliverables -->
+            <div class="card highlight border-accent">
+              <h3 class="card-title">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+                Core Capabilities of Our Starter API
+              </h3>
+              <ul class="feature-list">
+                <li><span class="bullet-icon">&check;</span> <strong>MySQL Connection:</strong> Connect Node.js to a MySQL server via a high-performance connection pool.</li>
+                <li><span class="bullet-icon">&check;</span> <strong>CRUD Operations:</strong> Create, Read, Update, and Delete records safely using async queries.</li>
+                <li><span class="bullet-icon">&check;</span> <strong>Zod Request Validation:</strong> Guard endpoints against invalid types, empty strings, and bad emails.</li>
+                <li><span class="bullet-icon">&check;</span> <strong>Reusable Database Functions:</strong> Clean MVC separation between HTTP controllers and SQL queries.</li>
+                <li><span class="bullet-icon">&check;</span> <strong>AI SDK Integration:</strong> Initialize external SDKs once and reuse them across requests.</li>
+                <li><span class="bullet-icon">&check;</span> <strong>Environment Security:</strong> Keep all credentials and secrets safe in <code>.env</code>.</li>
+                <li><span class="bullet-icon">&check;</span> <strong>Fetch &amp; Streaming:</strong> Consume third-party APIs and stream AI answers back to clients.</li>
+              </ul>
+            </div>
+
+            <!-- Right: Architecture Diagram -->
+            <div class="card">
+              <h3 class="card-title">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                Starter API Request Flow
+              </h3>
+              <div class="diagram-container">
+                <div class="arch-tree">
+                  <div class="arch-node client-node">CLIENT (Browser / Postman / Mobile)</div>
+                  <div class="arch-arrow-down">&darr;</div>
+                  <div class="arch-node server-node">EXPRESS SERVER (Routing &amp; Middleware)</div>
+                  <div class="arch-arrow-down">&darr;</div>
+                  <div class="arch-node zod-node">ZOD SCHEMA VALIDATION</div>
+                  <div class="arch-arrow-down">&darr;</div>
+                  <div class="arch-node" style="background:#f1f5f9;">CONTROLLER / REUSABLE SERVICE</div>
+                  <div class="arch-arrow-down">&darr;</div>
+                  <div class="arch-split-row">
+                    <div class="arch-node db-node" style="flex:1;">
+                      <strong>MYSQL DATABASE</strong><br>
+                      <small>Persistent Storage (mysql2)</small>
+                    </div>
+                    <div class="arch-node ai-node" style="flex:1;">
+                      <strong>AI SDK CLIENT</strong><br>
+                      <small>OpenAI / Claude / Ollama</small>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- -------------------------------------------------------------------
+           SLIDE 3: WHAT IS MYSQL2?
+           ------------------------------------------------------------------- -->
+      <section class="slide" id="slide-3">
+        <header class="slide-header">
+          <div class="slide-title-wrap">
+            <span class="slide-category">Database Fundamentals</span>
+            <h2 class="slide-title">What Is MySQL2?</h2>
+            <p class="slide-subtitle">The modern, promise-based MySQL driver for Node.js applications.</p>
+          </div>
+          <span class="slide-num-pill">Slide 03</span>
+        </header>
+
+        <div class="slide-body">
+          <div class="grid-2">
+            <!-- Left: Concepts -->
+            <div class="card highlight">
+              <h3 class="card-title">Why Node.js Needs MySQL2</h3>
+              <p>Node.js does not have built-in support for communicating with relational databases. <strong>MySQL2</strong> is an open-source npm library that establishes TCP socket connections to MySQL servers, sends SQL commands, and parses binary results into JavaScript objects.</p>
+              
+              <div class="code-container" style="margin-top:0.75rem;">
+                <div class="code-header">
+                  <div class="code-file-badge"><span class="file-dot"></span><span>Installation</span></div>
+                  <button class="copy-btn">Copy</button>
+                </div>
+                <pre><code><span class="syn-comment"># Install MySQL2 package</span>
+npm install mysql2</code></pre>
+              </div>
+
+              <div class="code-container" style="margin-top:0.75rem;">
+                <div class="code-header">
+                  <div class="code-file-badge"><span class="file-dot"></span><span>Promise-Based Import</span></div>
+                  <button class="copy-btn">Copy</button>
+                </div>
+                <pre><code><span class="syn-comment">// Always import the promise-based wrapper!</span>
+<span class="syn-kw">const</span> mysql = <span class="syn-fn">require</span>(<span class="syn-str">"mysql2/promise"</span>);</code></pre>
+              </div>
+            </div>
+
+            <!-- Right: Why Promise Version? -->
+            <div class="card">
+              <h3 class="card-title">Why Use the Promise Version (`mysql2/promise`)?</h3>
+              <ul class="feature-list">
+                <li><span class="bullet-icon">&check;</span> <strong>Native async/await:</strong> Eliminates callback hell and deeply nested functions when chaining queries.</li>
+                <li><span class="bullet-icon">&check;</span> <strong>Clean Error Handling:</strong> Allows standard <code>try / catch</code> blocks instead of error-first callback arguments.</li>
+                <li><span class="bullet-icon">&check;</span> <strong>Connection Pooling:</strong> Seamlessly manages multiple concurrent connections for high-traffic Express APIs.</li>
+                <li><span class="bullet-icon">&check;</span> <strong>Prepared Statements:</strong> Prevents SQL injection through parameterized <code>execute()</code> calls.</li>
+              </ul>
+
+              <div class="callout callout-info" style="margin-top:0.75rem;">
+                <strong>Important:</strong> <code>mysql2/promise</code> is built right into the <code>mysql2</code> package. You do not need to install an extra package!
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- -------------------------------------------------------------------
+           SLIDE 4: CONNECTING NODE.JS WITH MYSQL
+           ------------------------------------------------------------------- -->
+      <section class="slide" id="slide-4">
+        <header class="slide-header">
+          <div class="slide-title-wrap">
+            <span class="slide-category">Database Setup</span>
+            <h2 class="slide-title">Connecting Node.js with MySQL</h2>
+            <p class="slide-subtitle">Create the database, configure tables, and initialize a reusable connection pool.</p>
+          </div>
+          <span class="slide-num-pill">Slide 04</span>
+        </header>
+
+        <div class="slide-body">
+          <div class="grid-2">
+            <!-- Left: SQL Schema -->
+            <div>
+              <div class="code-container">
+                <div class="code-header">
+                  <div class="code-file-badge"><span class="file-dot"></span><span>schema.sql</span></div>
+                  <button class="copy-btn">Copy</button>
+                </div>
+                <pre><code><span class="syn-comment">-- 1. Create the database</span>
+<span class="syn-sql">CREATE DATABASE</span> genai_node;
+
+<span class="syn-comment">-- 2. Select database</span>
+<span class="syn-sql">USE</span> genai_node;
+
+<span class="syn-comment">-- 3. Create students table</span>
+<span class="syn-sql">CREATE TABLE</span> students (
+  id <span class="syn-sql">INT AUTO_INCREMENT PRIMARY KEY</span>,
+  name <span class="syn-sql">VARCHAR</span>(<span class="syn-num">100</span>) <span class="syn-sql">NOT NULL</span>,
+  email <span class="syn-sql">VARCHAR</span>(<span class="syn-num">150</span>) <span class="syn-sql">NOT NULL UNIQUE</span>,
+  course <span class="syn-sql">VARCHAR</span>(<span class="syn-num">100</span>) <span class="syn-sql">NOT NULL</span>
+);</code></pre>
+              </div>
+
+              <div class="callout callout-tip" style="margin-top:0.75rem;">
+                <strong>Why Connection Pools?</strong> A connection pool maintains an active pool of database connections. Instead of opening and closing a new TCP socket for every HTTP request, Express reuses existing connections.
+              </div>
+            </div>
+
+            <!-- Right: Node.js Connection Pool Code -->
+            <div>
+              <div class="code-container">
+                <div class="code-header">
+                  <div class="code-file-badge"><span class="file-dot"></span><span>db.js</span></div>
+                  <button class="copy-btn">Copy</button>
+                </div>
+                <pre><code><span class="syn-kw">const</span> mysql = <span class="syn-fn">require</span>(<span class="syn-str">"mysql2/promise"</span>);
+
+<span class="syn-comment">// Create reusable connection pool</span>
+<span class="syn-kw">const</span> pool = mysql.<span class="syn-fn">createPool</span>({
+  host: <span class="syn-str">"localhost"</span>,
+  user: <span class="syn-str">"root"</span>,
+  password: <span class="syn-str">"your_password"</span>,
+  database: <span class="syn-str">"genai_node"</span>,
+  waitForConnections: <span class="syn-num">true</span>,
+  connectionLimit: <span class="syn-num">10</span>
+});
+
+module.exports = pool;</code></pre>
+              </div>
+
+              <div class="card" style="margin-top:0.75rem;">
+                <h4 style="font-size:0.9rem; font-weight:700; color:var(--primary-dark);">Configuration Parameters:</h4>
+                <ul class="feature-list" style="margin-top:0.35rem; font-size:0.84rem;">
+                  <li><code>host</code>: MySQL server host address (e.g. <code>localhost</code>).</li>
+                  <li><code>user</code> &amp; <code>password</code>: Credentials for database access.</li>
+                  <li><code>database</code>: The target schema (<code>genai_node</code>).</li>
+                  <li><code>connectionLimit</code>: Max number of simultaneous open connections.</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- -------------------------------------------------------------------
+           SLIDE 5: WHAT IS CRUD?
+           ------------------------------------------------------------------- -->
+      <section class="slide" id="slide-5">
+        <header class="slide-header">
+          <div class="slide-title-wrap">
+            <span class="slide-category">Core Concepts</span>
+            <h2 class="slide-title">What Is CRUD?</h2>
+            <p class="slide-subtitle">The four foundational operations of all data-driven web and AI applications.</p>
+          </div>
+          <span class="slide-num-pill">Slide 05</span>
+        </header>
+
+        <div class="slide-body">
+          <div class="table-responsive">
+            <table class="custom-table">
+              <thead>
+                <tr>
+                  <th>CRUD Operation</th>
+                  <th>SQL Command</th>
+                  <th>HTTP Method</th>
+                  <th>Purpose</th>
+                  <th>Student System Example</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong style="color:#166534;">CREATE</strong></td>
+                  <td><span class="status-badge badge-post">INSERT</span></td>
+                  <td><code>POST</code></td>
+                  <td>Add new data records</td>
+                  <td>Register a new student</td>
+                </tr>
+                <tr>
+                  <td><strong style="color:#1e40af;">READ</strong></td>
+                  <td><span class="status-badge badge-get">SELECT</span></td>
+                  <td><code>GET</code></td>
+                  <td>Retrieve existing records</td>
+                  <td>View student profiles or grades</td>
+                </tr>
+                <tr>
+                  <td><strong style="color:#92400e;">UPDATE</strong></td>
+                  <td><span class="status-badge badge-put">UPDATE</span></td>
+                  <td><code>PUT / PATCH</code></td>
+                  <td>Modify existing records</td>
+                  <td>Change student's enrolled course</td>
+                </tr>
+                <tr>
+                  <td><strong style="color:#991b1b;">DELETE</strong></td>
+                  <td><span class="status-badge badge-delete">DELETE</span></td>
+                  <td><code>DELETE</code></td>
+                  <td>Remove records permanently</td>
+                  <td>Withdraw or remove a student</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="diagram-container" style="margin-top:0.5rem;">
+            <div class="flow-horizontal">
+              <div class="flow-box">
+                <span class="flow-step-num">C</span>
+                <div class="flow-step-text"><strong>CREATE</strong><br><small>INSERT INTO students ...</small></div>
+              </div>
+              <div class="flow-arrow">&harr;</div>
+              <div class="flow-box">
+                <span class="flow-step-num">R</span>
+                <div class="flow-step-text"><strong>READ</strong><br><small>SELECT * FROM students</small></div>
+              </div>
+              <div class="flow-arrow">&harr;</div>
+              <div class="flow-box">
+                <span class="flow-step-num">U</span>
+                <div class="flow-step-text"><strong>UPDATE</strong><br><small>UPDATE students SET ...</small></div>
+              </div>
+              <div class="flow-arrow">&harr;</div>
+              <div class="flow-box">
+                <span class="flow-step-num">D</span>
+                <div class="flow-step-text"><strong>DELETE</strong><br><small>DELETE FROM students ...</small></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- -------------------------------------------------------------------
+           SLIDE 6: PRACTICAL — CREATE AND READ USING ASYNC QUERIES
+           ------------------------------------------------------------------- -->
+      <section class="slide" id="slide-6">
+        <header class="slide-header">
+          <div class="slide-title-wrap">
+            <span class="slide-category">Hands-on Implementation</span>
+            <h2 class="slide-title">Practical: CREATE &amp; READ with Async Queries</h2>
+            <p class="slide-subtitle">Execute parameterized INSERT and SELECT queries using async/await and array destructuring.</p>
+          </div>
+          <span class="slide-num-pill">Slide 06</span>
+        </header>
+
+        <div class="slide-body">
+          <div class="grid-2">
+            <!-- Code Block -->
+            <div class="code-container">
+              <div class="code-header">
+                <div class="code-file-badge"><span class="file-dot"></span><span>create-read-demo.js</span></div>
+                <button class="copy-btn">Copy</button>
+              </div>
+              <pre><code><span class="syn-kw">const</span> mysql = <span class="syn-fn">require</span>(<span class="syn-str">"mysql2/promise"</span>);
+
+<span class="syn-kw">async function</span> <span class="syn-fn">runCreateAndRead</span>() {
+  <span class="syn-comment">// 1. Establish database connection</span>
+  <span class="syn-kw">const</span> connection = <span class="syn-kw">await</span> mysql.<span class="syn-fn">createConnection</span>({
+    host: <span class="syn-str">"localhost"</span>,
+    user: <span class="syn-str">"root"</span>,
+    password: <span class="syn-str">"your_password"</span>,
+    database: <span class="syn-str">"genai_node"</span>
+  });
+
+  <span class="syn-comment">// 2. CREATE: Parameterized INSERT</span>
+  <span class="syn-kw">const</span> [insertResult] = <span class="syn-kw">await</span> connection.<span class="syn-fn">execute</span>(
+    <span class="syn-str">"INSERT INTO students (name, email, course) VALUES (?, ?, ?)"</span>,
+    [<span class="syn-str">"John"</span>, <span class="syn-str">"john@gmail.com"</span>, <span class="syn-str">"MERN Stack"</span>]
+  );
+  console.<span class="syn-fn">log</span>(<span class="syn-str">"Inserted ID:"</span>, insertResult.<span class="syn-prop">insertId</span>);
+
+  <span class="syn-comment">// 3. READ: SELECT all students</span>
+  <span class="syn-kw">const</span> [rows] = <span class="syn-kw">await</span> connection.<span class="syn-fn">execute</span>(
+    <span class="syn-str">"SELECT * FROM students"</span>
+  );
+  console.<span class="syn-fn">log</span>(<span class="syn-str">"Students in DB:"</span>, rows);
+
+  <span class="syn-kw">await</span> connection.<span class="syn-fn">end</span>();
+}
+
+<span class="syn-fn">runCreateAndRead</span>();</code></pre>
+            </div>
+
+            <!-- Interactive Query Runner Sandbox -->
+            <div class="sandbox-card">
+              <div class="sandbox-header">
+                <div class="sandbox-title">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><ellipse cx="12" cy="5" rx="9" ry="3"></ellipse><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"></path><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"></path></svg>
+                  <span>Interactive SQL Query Runner</span>
+                </div>
+                <span class="sandbox-badge">Live Lab</span>
+              </div>
+
+              <div class="sandbox-controls">
+                <select id="sqlOpSelect" class="sandbox-input">
+                  <option value="SELECT">SELECT * FROM students</option>
+                  <option value="INSERT">INSERT INTO students (name, email, course)</option>
+                  <option value="UPDATE">UPDATE students SET course = ? WHERE id = ?</option>
+                  <option value="DELETE">DELETE FROM students WHERE id = ?</option>
+                </select>
+                <button id="sqlExecuteBtn" class="sandbox-btn">Execute Query</button>
+              </div>
+
+              <div>
+                <input type="text" id="sqlParamInput" class="sandbox-input" placeholder="Parameters (if needed)" style="width:100%; margin-top:0.25rem;">
+                <div style="font-family:var(--font-mono); font-size:0.75rem; color:var(--text-muted); margin-top:0.35rem;" id="sqlQueryDisplay">
+                  SELECT * FROM students;
+                </div>
+              </div>
+
+              <div class="table-responsive" style="max-height:120px; overflow-y:auto; margin-top:0.4rem;">
+                <table class="custom-table" style="font-size:0.78rem;">
+                  <thead>
+                    <tr><th>ID</th><th>Name</th><th>Email</th><th>Course</th></tr>
+                  </thead>
+                  <tbody id="sqlTableBody">
+                    <!-- Populated by JS -->
+                  </tbody>
+                </table>
+              </div>
+
+              <div>
+                <label style="font-size:0.72rem; text-transform:uppercase; font-weight:700; color:var(--text-muted);">Query Output (Result / Rows)</label>
+                <pre style="background:#0b1329; color:#38bdf8; padding:0.45rem; border-radius:4px; font-family:var(--font-mono); font-size:0.75rem; max-height:85px; overflow-y:auto; margin-top:0.2rem;"><code id="sqlResultOutput">// Run a query above to see output</code></pre>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- -------------------------------------------------------------------
+           SLIDE 7: PRACTICAL — UPDATE AND DELETE
+           ------------------------------------------------------------------- -->
+      <section class="slide" id="slide-7">
+        <header class="slide-header">
+          <div class="slide-title-wrap">
+            <span class="slide-category">Hands-on Implementation</span>
+            <h2 class="slide-title">Practical: UPDATE &amp; DELETE with Async Queries</h2>
+            <p class="slide-subtitle">Modify and remove records using <code>affectedRows</code> inspection and SQL placeholders.</p>
+          </div>
+          <span class="slide-num-pill">Slide 07</span>
+        </header>
+
+        <div class="slide-body">
+          <div class="grid-2">
+            <!-- Code Block -->
+            <div class="code-container">
+              <div class="code-header">
+                <div class="code-file-badge"><span class="file-dot"></span><span>update-delete-demo.js</span></div>
+                <button class="copy-btn">Copy</button>
+              </div>
+              <pre><code><span class="syn-comment">// 1. UPDATE: Modify student's course</span>
+<span class="syn-kw">const</span> [updateResult] = <span class="syn-kw">await</span> connection.<span class="syn-fn">execute</span>(
+  <span class="syn-str">"UPDATE students SET course = ? WHERE id = ?"</span>,
+  [<span class="syn-str">"GenAI Development"</span>, <span class="syn-num">1</span>]
+);
+
+console.<span class="syn-fn">log</span>(<span class="syn-str">"Updated rows:"</span>, updateResult.<span class="syn-prop">affectedRows</span>);
+
+<span class="syn-comment">// 2. DELETE: Remove student by id</span>
+<span class="syn-kw">const</span> [deleteResult] = <span class="syn-kw">await</span> connection.<span class="syn-fn">execute</span>(
+  <span class="syn-str">"DELETE FROM students WHERE id = ?"</span>,
+  [<span class="syn-num">1</span>]
+);
+
+console.<span class="syn-fn">log</span>(<span class="syn-str">"Deleted rows:"</span>, deleteResult.<span class="syn-prop">affectedRows</span>);</code></pre>
+            </div>
+
+            <!-- Deep Dive Explanation -->
+            <div class="card">
+              <h3 class="card-title">Key Rules for UPDATE &amp; DELETE</h3>
+              <ul class="feature-list">
+                <li><span class="bullet-icon">&bull;</span> <strong>Understanding affectedRows:</strong> <code>affectedRows</code> informs you how many rows matched your <code>WHERE</code> condition and were modified/deleted. If <code>affectedRows === 0</code>, the record didn't exist!</li>
+                <li><span class="bullet-icon">&bull;</span> <strong>Always Use WHERE:</strong> Running <code>DELETE FROM students</code> without a <code>WHERE</code> clause will wipe out the entire table!</li>
+                <li><span class="bullet-icon">&bull;</span> <strong>SQL Injection Defense:</strong> Never concatenate user input directly into SQL strings (e.g. <code>`WHERE id = ${req.body.id}`</code>). Always pass parameters via the <code>?</code> placeholder array!</li>
+              </ul>
+
+              <div class="callout callout-warning" style="margin-top:0.75rem;">
+                <strong>Hands-on Challenge:</strong> Try inserting two students, printing the table, updating the course of the first student, and deleting the second student in the simulator on Slide 6!
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- -------------------------------------------------------------------
+           SLIDE 8: WHY DO WE NEED REUSABLE DATABASE FUNCTIONS?
+           ------------------------------------------------------------------- -->
+      <section class="slide" id="slide-8">
+        <header class="slide-header">
+          <div class="slide-title-wrap">
+            <span class="slide-category">Architectural Design</span>
+            <h2 class="slide-title">Why Reusable Database Functions?</h2>
+            <p class="slide-subtitle">Never write raw SQL queries directly inside Express route handlers.</p>
+          </div>
+          <span class="slide-num-pill">Slide 08</span>
+        </header>
+
+        <div class="slide-body">
+          <div class="grid-2">
+            <!-- Bad Practice -->
+            <div class="card" style="border-left:4px solid #ef4444;">
+              <h3 class="card-title" style="color:#b91c1c;">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg>
+                The Anti-Pattern: SQL Inside Routes
+              </h3>
+              <p>Writing raw database connections and SQL strings inside route handlers leads to serious architectural defects:</p>
+              <ul class="feature-list" style="margin-top:0.4rem;">
+                <li><span class="bullet-icon">&times;</span> <strong>Duplicated Code:</strong> The same pool connection and query logic copied across dozens of endpoints.</li>
+                <li><span class="bullet-icon">&times;</span> <strong>Maintenance Nightmare:</strong> If a table column changes, you must edit 15 different route files.</li>
+                <li><span class="bullet-icon">&times;</span> <strong>Impossible to Test:</strong> Cannot write unit tests for database logic without mocking entire HTTP requests.</li>
+              </ul>
+            </div>
+
+            <!-- Good Practice -->
+            <div class="card highlight border-accent">
+              <h3 class="card-title">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                The Clean Solution: Model Layer
+              </h3>
+              <p>Extract database operations into separate, reusable functions inside a model layer (e.g. <code>models/studentModel.js</code>).</p>
+              <div class="diagram-container" style="margin-top:0.6rem;">
+                <div class="flow-horizontal">
+                  <div class="flow-box">
+                    <span class="flow-step-num">Step 1</span>
+                    <div class="flow-step-text"><strong>API Route</strong><br><small>Handles HTTP req/res</small></div>
+                  </div>
+                  <div class="flow-arrow">&rarr;</div>
+                  <div class="flow-box active-box">
+                    <span class="flow-step-num">Step 2</span>
+                    <div class="flow-step-text"><strong>Model Function</strong><br><small>getAllStudents()</small></div>
+                  </div>
+                  <div class="flow-arrow">&rarr;</div>
+                  <div class="flow-box">
+                    <span class="flow-step-num">Step 3</span>
+                    <div class="flow-step-text"><strong>MySQL Pool</strong><br><small>Executes SQL Query</small></div>
+                  </div>
+                </div>
+              </div>
+              <p style="font-size:0.86rem; margin-top:0.6rem;">Now, your route handlers only call simple functions: <code>const students = await getAllStudents();</code></p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- -------------------------------------------------------------------
+           SLIDE 9: PRACTICAL — CREATE REUSABLE DATABASE FUNCTIONS
+           ------------------------------------------------------------------- -->
+      <section class="slide" id="slide-9">
+        <header class="slide-header">
+          <div class="slide-title-wrap">
+            <span class="slide-category">Hands-on Implementation</span>
+            <h2 class="slide-title">Practical: Create Reusable Database Functions</h2>
+            <p class="slide-subtitle">Build <code>config/db.js</code> and modular CRUD functions in <code>models/studentModel.js</code>.</p>
+          </div>
+          <span class="slide-num-pill">Slide 09</span>
+        </header>
+
+        <div class="slide-body">
+          <div class="grid-2">
+            <!-- Left: Model Code -->
+            <div class="code-container">
+              <div class="code-header">
+                <div class="code-file-badge"><span class="file-dot"></span><span>models/studentModel.js</span></div>
+                <button class="copy-btn">Copy</button>
+              </div>
+              <pre><code><span class="syn-kw">const</span> pool = <span class="syn-fn">require</span>(<span class="syn-str">"../config/db"</span>);
+
+<span class="syn-comment">// 1. Get all students</span>
+<span class="syn-kw">async function</span> <span class="syn-fn">getAllStudents</span>() {
+  <span class="syn-kw">const</span> [rows] = <span class="syn-kw">await</span> pool.<span class="syn-fn">execute</span>(<span class="syn-str">"SELECT * FROM students"</span>);
+  <span class="syn-kw">return</span> rows;
+}
+
+<span class="syn-comment">// 2. Get student by ID</span>
+<span class="syn-kw">async function</span> <span class="syn-fn">getStudentById</span>(id) {
+  <span class="syn-kw">const</span> [rows] = <span class="syn-kw">await</span> pool.<span class="syn-fn">execute</span>(
+    <span class="syn-str">"SELECT * FROM students WHERE id = ?"</span>, [id]
+  );
+  <span class="syn-kw">return</span> rows[<span class="syn-num">0</span>];
+}
+
+<span class="syn-comment">// 3. Create a new student</span>
+<span class="syn-kw">async function</span> <span class="syn-fn">createStudent</span>(data) {
+  <span class="syn-kw">const</span> [result] = <span class="syn-kw">await</span> pool.<span class="syn-fn">execute</span>(
+    <span class="syn-str">"INSERT INTO students (name, email, course) VALUES (?, ?, ?)"</span>,
+    [data.name, data.email, data.course]
+  );
+  <span class="syn-kw">return</span> result.<span class="syn-prop">insertId</span>;
+}
+
+module.exports = { getAllStudents, getStudentById, createStudent };</code></pre>
+            </div>
+
+            <!-- Right: Architectural Notes -->
+            <div class="card">
+              <h3 class="card-title">Model Design Principles</h3>
+              <ul class="feature-list">
+                <li><span class="bullet-icon">&check;</span> <strong>Single Responsibility:</strong> Each function performs exactly one database operation and returns raw data or IDs.</li>
+                <li><span class="bullet-icon">&check;</span> <strong>No Express Dependencies:</strong> Notice that <code>studentModel.js</code> does <strong>NOT</strong> import Express and does <strong>NOT</strong> touch <code>req</code> or <code>res</code>!</li>
+                <li><span class="bullet-icon">&check;</span> <strong>Clean CommonJS Exports:</strong> Functions are bundled and exported via <code>module.exports = { ... }</code> for easy importing.</li>
+              </ul>
+
+              <div class="callout callout-tip" style="margin-top:0.75rem;">
+                <strong>Golden Rule:</strong> "Database functions return data or throw errors. Route controllers decide what HTTP response to send."
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- -------------------------------------------------------------------
+           SLIDE 10: USING REUSABLE FUNCTIONS IN EXPRESS ROUTES
+           ------------------------------------------------------------------- -->
+      <section class="slide" id="slide-10">
+        <header class="slide-header">
+          <div class="slide-title-wrap">
+            <span class="slide-category">Express Integration</span>
+            <h2 class="slide-title">Using Reusable Functions in Express Routes</h2>
+            <p class="slide-subtitle">Import your database model into Express route handlers for clean, decoupled code.</p>
+          </div>
+          <span class="slide-num-pill">Slide 10</span>
+        </header>
+
+        <div class="slide-body">
+          <div class="grid-2">
+            <!-- Code Block -->
+            <div class="code-container">
+              <div class="code-header">
+                <div class="code-file-badge"><span class="file-dot"></span><span>routes/studentRoutes.js</span></div>
+                <button class="copy-btn">Copy</button>
+              </div>
+              <pre><code><span class="syn-kw">const</span> express = <span class="syn-fn">require</span>(<span class="syn-str">"express"</span>);
+<span class="syn-kw">const</span> { getAllStudents, createStudent } = <span class="syn-fn">require</span>(<span class="syn-str">"../models/studentModel"</span>);
+
+<span class="syn-kw">const</span> router = express.<span class="syn-fn">Router</span>();
+
+<span class="syn-comment">// GET /students — Fetch all students</span>
+router.<span class="syn-fn">get</span>(<span class="syn-str">"/"</span>, <span class="syn-kw">async</span> (req, res, next) => {
+  <span class="syn-kw">try</span> {
+    <span class="syn-kw">const</span> students = <span class="syn-kw">await</span> <span class="syn-fn">getAllStudents</span>();
+    res.<span class="syn-fn">json</span>(students);
+  } <span class="syn-kw">catch</span> (error) {
+    res.<span class="syn-fn">status</span>(<span class="syn-num">500</span>).<span class="syn-fn">json</span>({ message: <span class="syn-str">"Database error"</span> });
+  }
+});
+
+<span class="syn-comment">// POST /students — Create new student</span>
+router.<span class="syn-fn">post</span>(<span class="syn-str">"/"</span>, <span class="syn-kw">async</span> (req, res, next) => {
+  <span class="syn-kw">try</span> {
+    <span class="syn-kw">const</span> id = <span class="syn-kw">await</span> <span class="syn-fn">createStudent</span>(req.body);
+    res.<span class="syn-fn">status</span>(<span class="syn-num">201</span>).<span class="syn-fn">json</span>({ message: <span class="syn-str">"Student created"</span>, id });
+  } <span class="syn-kw">catch</span> (error) {
+    res.<span class="syn-fn">status</span>(<span class="syn-num">500</span>).<span class="syn-fn">json</span>({ message: <span class="syn-str">"Database error"</span> });
+  }
+});
+
+module.exports = router;</code></pre>
+            </div>
+
+            <!-- Key Takeaways -->
+            <div class="card">
+              <h3 class="card-title">Why This Pattern Is Professional</h3>
+              <ul class="feature-list">
+                <li><span class="bullet-icon">&check;</span> <strong>Zero SQL in Routes:</strong> The Express route handler has no idea whether students are saved in MySQL, PostgreSQL, or SQLite. It only calls <code>createStudent()</code>.</li>
+                <li><span class="bullet-icon">&check;</span> <strong>Readable Endpoints:</strong> Any new developer can open the route and instantly understand the HTTP workflow without decoding complex SQL joins.</li>
+                <li><span class="bullet-icon">&check;</span> <strong>Proper Status Codes:</strong> Returns <code>200 OK</code> for reads, <code>201 Created</code> for inserts, and <code>500</code> for database failures.</li>
+              </ul>
+
+              <div class="callout callout-info" style="margin-top:0.75rem;">
+                <strong>Next Step:</strong> What if a client sends invalid JSON, an empty name, or a broken email? We will add <strong>Zod Validation</strong> in Slide 16!
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- -------------------------------------------------------------------
+           SLIDE 11: WHAT IS AN NPM SDK?
+           ------------------------------------------------------------------- -->
+      <section class="slide" id="slide-11">
+        <header class="slide-header">
+          <div class="slide-title-wrap">
+            <span class="slide-category">SDK Foundations</span>
+            <h2 class="slide-title">What Is an NPM SDK?</h2>
+            <p class="slide-subtitle">Software Development Kits: The bridge between your Node.js server and external AI providers.</p>
+          </div>
+          <span class="slide-num-pill">Slide 11</span>
+        </header>
+
+        <div class="slide-body">
+          <div class="grid-2">
+            <!-- Concept -->
+            <div class="card highlight">
+              <h3 class="card-title">Definition &amp; Purpose</h3>
+              <p>An <strong>SDK (Software Development Kit)</strong> is a pre-packaged npm library provided by a third-party service (like OpenAI or Anthropic) that contains ready-to-use methods for interacting with their APIs.</p>
+
+              <div class="diagram-container" style="margin-top:0.75rem;">
+                <div class="flow-horizontal">
+                  <div class="flow-box">
+                    <span class="flow-step-num">Your App</span>
+                    <div class="flow-step-text"><strong>Node.js Server</strong><br><small>Express backend</small></div>
+                  </div>
+                  <div class="flow-arrow">&rarr;</div>
+                  <div class="flow-box active-box">
+                    <span class="flow-step-num">Ready Methods</span>
+                    <div class="flow-step-text"><strong>AI SDK</strong><br><small>client.responses.create()</small></div>
+                  </div>
+                  <div class="flow-arrow">&rarr;</div>
+                  <div class="flow-box">
+                    <span class="flow-step-num">Provider</span>
+                    <div class="flow-step-text"><strong>AI Cloud / Engine</strong><br><small>LLM inference</small></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Comparison Table -->
+            <div class="card">
+              <h3 class="card-title">Manual Fetch vs. Official SDK</h3>
+              <div class="table-responsive">
+                <table class="custom-table" style="font-size:0.84rem;">
+                  <thead>
+                    <tr>
+                      <th>Aspect</th>
+                      <th>Manual HTTP / Fetch</th>
+                      <th>Official SDK</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><strong>Auth Headers</strong></td>
+                      <td>Must construct Bearer headers manually</td>
+                      <td>Automated via <code>apiKey</code> config</td>
+                    </tr>
+                    <tr>
+                      <td><strong>Streaming</strong></td>
+                      <td>Manual byte parsing of SSE streams</td>
+                      <td>Built-in async iterable iterators</td>
+                    </tr>
+                    <tr>
+                      <td><strong>Retries &amp; Backoff</strong></td>
+                      <td>Must implement custom retry loops</td>
+                      <td>Built-in exponential backoff</td>
+                    </tr>
+                    <tr>
+                      <td><strong>Type Safety</strong></td>
+                      <td>Plain un-typed JSON</td>
+                      <td>Full autocomplete &amp; TypeScript types</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- -------------------------------------------------------------------
+           SLIDE 12: INSTALLING AI SDKS
+           ------------------------------------------------------------------- -->
+      <section class="slide" id="slide-12">
+        <header class="slide-header">
+          <div class="slide-title-wrap">
+            <span class="slide-category">SDK Ecosystem</span>
+            <h2 class="slide-title">Installing AI SDKs (OpenAI, Anthropic, Ollama, ChromaDB)</h2>
+            <p class="slide-subtitle">Install and review the primary SDKs powering modern GenAI applications.</p>
+          </div>
+          <span class="slide-num-pill">Slide 12</span>
+        </header>
+
+        <div class="slide-body">
+          <div class="grid-2">
+            <!-- Terminal Commands -->
+            <div class="code-container">
+              <div class="code-header">
+                <div class="code-file-badge"><span class="file-dot"></span><span>Terminal Installation</span></div>
+                <button class="copy-btn">Copy</button>
+              </div>
+              <pre><code><span class="syn-comment"># 1. Official OpenAI SDK (GPT-4o, GPT-4.1)</span>
+npm install openai
+
+<span class="syn-comment"># 2. Official Anthropic SDK (Claude 3.5 Sonnet)</span>
+npm install @anthropic-ai/sdk
+
+<span class="syn-comment"># 3. Official Ollama SDK (Local models like Llama 3)</span>
+npm install ollama
+
+<span class="syn-comment"># 4. ChromaDB Vector Database Client</span>
+npm install chromadb</code></pre>
+            </div>
+
+            <!-- Ecosystem Table -->
+            <div class="table-responsive">
+              <table class="custom-table">
+                <thead>
+                  <tr>
+                    <th>Package</th>
+                    <th>Provider</th>
+                    <th>Primary Purpose</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><code>openai</code></td>
+                    <td>OpenAI</td>
+                    <td>Connects to GPT-4o, Embeddings, DALL-E, &amp; Whisper APIs.</td>
+                  </tr>
+                  <tr>
+                    <td><code>@anthropic-ai/sdk</code></td>
+                    <td>Anthropic</td>
+                    <td>Connects to Claude 3.5 Sonnet &amp; Haiku APIs.</td>
+                  </tr>
+                  <tr>
+                    <td><code>ollama</code></td>
+                    <td>Local / Self-hosted</td>
+                    <td>Communicates with locally running open-weight models (Llama 3, Mistral).</td>
+                  </tr>
+                  <tr>
+                    <td><code>chromadb</code></td>
+                    <td>Chroma</td>
+                    <td>Stores and searches vector embeddings for RAG applications.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="callout callout-tip">
+            <strong>Documentation Mastery:</strong> Before writing code with any new SDK, always check its official documentation for: 1) Client initialization; 2) Required parameters; 3) Error handling conventions; and 4) Response object structures.
+          </div>
+        </div>
+      </section>
+
+      <!-- -------------------------------------------------------------------
+           SLIDE 13: READING SDK DOCUMENTATION AND INITIALIZING OPENAI
+           ------------------------------------------------------------------- -->
+      <section class="slide" id="slide-13">
+        <header class="slide-header">
+          <div class="slide-title-wrap">
+            <span class="slide-category">SDK Implementation</span>
+            <h2 class="slide-title">Reading SDK Documentation &amp; Initializing OpenAI</h2>
+            <p class="slide-subtitle">Official docs links and initializing the client using CommonJS and environment variables.</p>
+          </div>
+          <span class="slide-num-pill">Slide 13</span>
+        </header>
+
+        <div class="slide-body">
+          <div class="grid-2">
+            <!-- Code Block -->
+            <div class="code-container">
+              <div class="code-header">
+                <div class="code-file-badge"><span class="file-dot"></span><span>openai-demo.js</span></div>
+                <button class="copy-btn">Copy</button>
+              </div>
+              <pre><code><span class="syn-comment">// 1. Import OpenAI class</span>
+<span class="syn-kw">const</span> OpenAI = <span class="syn-fn">require</span>(<span class="syn-str">"openai"</span>);
+
+<span class="syn-comment">// 2. Initialize client with secret API key from .env</span>
+<span class="syn-kw">const</span> client = <span class="syn-kw">new</span> <span class="syn-fn">OpenAI</span>({
+  apiKey: process.env.<span class="syn-prop">OPENAI_API_KEY</span>
+});
+
+<span class="syn-comment">// 3. Send request to the Responses API</span>
+<span class="syn-kw">async function</span> <span class="syn-fn">askAi</span>() {
+  <span class="syn-kw">const</span> response = <span class="syn-kw">await</span> client.responses.<span class="syn-fn">create</span>({
+    model: <span class="syn-str">"gpt-4.1-mini"</span>,
+    input: <span class="syn-str">"Explain Node.js in simple words."</span>
+  });
+
+  <span class="syn-comment">// 4. Access output text directly</span>
+  console.<span class="syn-fn">log</span>(response.<span class="syn-prop">output_text</span>);
+}
+
+<span class="syn-fn">askAi</span>();</code></pre>
+            </div>
+
+            <!-- Official Docs & Breakdown -->
+            <div class="card">
+              <h3 class="card-title">Official Documentation Quick Reference</h3>
+              <ul class="feature-list" style="margin-bottom:0.75rem;">
+                <li><span class="bullet-icon">&bull;</span> <strong>OpenAI Docs:</strong> <a href="https://developers.openai.com/api/docs" target="_blank" style="color:var(--primary); font-weight:700;">developers.openai.com/api/docs</a></li>
+                <li><span class="bullet-icon">&bull;</span> <strong>Anthropic Docs:</strong> <a href="https://platform.claude.com/docs/en/home" target="_blank" style="color:var(--primary); font-weight:700;">platform.claude.com/docs/en/home</a></li>
+                <li><span class="bullet-icon">&bull;</span> <strong>Ollama Docs:</strong> <a href="https://github.com/ollama/ollama-js" target="_blank" style="color:var(--primary); font-weight:700;">github.com/ollama/ollama-js</a></li>
+                <li><span class="bullet-icon">&bull;</span> <strong>ChromaDB Docs:</strong> <a href="https://docs.trychroma.com/" target="_blank" style="color:var(--primary); font-weight:700;">docs.trychroma.com</a></li>
+              </ul>
+
+              <div class="callout callout-info">
+                <strong>Anatomy of OpenAI Client:</strong>
+                <ul style="margin:0.25rem 0 0 1rem; font-size:0.83rem;">
+                  <li><code>new OpenAI()</code>: Instantiates the HTTP client.</li>
+                  <li><code>apiKey</code>: Passes the bearer authentication credential.</li>
+                  <li><code>model</code>: Specifies model capability &amp; pricing tier.</li>
+                  <li><code>output_text</code>: Accesses the generated AI answer.</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- -------------------------------------------------------------------
+           SLIDE 14: UNDERSTANDING OTHER SDKS
+           ------------------------------------------------------------------- -->
+      <section class="slide" id="slide-14">
+        <header class="slide-header">
+          <div class="slide-title-wrap">
+            <span class="slide-category">SDK Comparison</span>
+            <h2 class="slide-title">Understanding Other SDKs (Anthropic, Ollama, ChromaDB)</h2>
+            <p class="slide-subtitle">Client initialization syntax for cloud AI, local LLM servers, and vector databases.</p>
+          </div>
+          <span class="slide-num-pill">Slide 14</span>
+        </header>
+
+        <div class="slide-body">
+          <div class="grid-3">
+            <!-- Anthropic -->
+            <div class="card">
+              <h3 class="card-title" style="color:#6d28d9;">1. Anthropic SDK</h3>
+              <p style="font-size:0.83rem;">Cloud API for Claude 3.5 models.</p>
+              <div class="code-container" style="margin-top:0.35rem;">
+                <pre><code><span class="syn-kw">const</span> Anthropic = <span class="syn-fn">require</span>(<span class="syn-str">"@anthropic-ai/sdk"</span>);
+
+<span class="syn-kw">const</span> anthropic = <span class="syn-kw">new</span> <span class="syn-fn">Anthropic</span>({
+  apiKey: process.env.<span class="syn-prop">ANTHROPIC_API_KEY</span>
+});</code></pre>
+              </div>
+            </div>
+
+            <!-- Ollama -->
+            <div class="card">
+              <h3 class="card-title" style="color:#0284c7;">2. Ollama SDK</h3>
+              <p style="font-size:0.83rem;">Local LLM daemon running on port 11434.</p>
+              <div class="code-container" style="margin-top:0.35rem;">
+                <pre><code><span class="syn-kw">const</span> { Ollama } = <span class="syn-fn">require</span>(<span class="syn-str">"ollama"</span>);
+
+<span class="syn-kw">const</span> ollama = <span class="syn-kw">new</span> <span class="syn-fn">Ollama</span>({
+  host: <span class="syn-str">"http://127.0.0.1:11434"</span>
+});</code></pre>
+              </div>
+            </div>
+
+            <!-- ChromaDB -->
+            <div class="card">
+              <h3 class="card-title" style="color:#0e7490;">3. ChromaDB Client</h3>
+              <p style="font-size:0.83rem;">Vector DB server running on port 8000.</p>
+              <div class="code-container" style="margin-top:0.35rem;">
+                <pre><code><span class="syn-kw">const</span> { ChromaClient } = <span class="syn-fn">require</span>(<span class="syn-str">"chromadb"</span>);
+
+<span class="syn-kw">const</span> chroma = <span class="syn-kw">new</span> <span class="syn-fn">ChromaClient</span>({
+  path: <span class="syn-str">"http://localhost:8000"</span>
+});</code></pre>
+              </div>
+            </div>
+          </div>
+
+          <div class="callout callout-warning">
+            <strong>Crucial Teaching Point:</strong> Installing an npm package like <code>ollama</code> or <code>chromadb</code> does <strong>NOT</strong> run the underlying AI server! Ollama requires the Ollama desktop engine running, and ChromaDB requires the Chroma server running.
+          </div>
+        </div>
+      </section>
+
+      <!-- -------------------------------------------------------------------
+           SLIDE 15: WHY SHOULD API KEYS BE STORED IN .ENV?
+           ------------------------------------------------------------------- -->
+      <section class="slide" id="slide-15">
+        <header class="slide-header">
+          <div class="slide-title-wrap">
+            <span class="slide-category">Security Best Practices</span>
+            <h2 class="slide-title">Why Should API Keys Be Stored in .env?</h2>
+            <p class="slide-subtitle">Never hardcode secret keys. Protect credentials using <code>dotenv</code> and <code>.gitignore</code>.</p>
+          </div>
+          <span class="slide-num-pill">Slide 15</span>
+        </header>
+
+        <div class="slide-body">
+          <div class="grid-2">
+            <!-- Wrong vs Right -->
+            <div>
+              <div class="card" style="border-left:4px solid #ef4444;">
+                <h4 style="color:#b91c1c; font-size:0.92rem; font-weight:700;">Wrong: Hardcoded API Keys</h4>
+                <div class="code-container" style="margin-top:0.35rem;">
+                  <pre><code><span class="syn-comment">// DANGEROUS: Leaks immediately when pushed to GitHub!</span>
+<span class="syn-kw">const</span> apiKey = <span class="syn-str">"sk-proj-99xSecretKey123"</span>;</code></pre>
+                </div>
+                <p style="font-size:0.84rem; margin-top:0.4rem;">Automated bots scrape public repositories within seconds of committing, resulting in huge unexpected credit card charges!</p>
+              </div>
+
+              <div class="card highlight" style="margin-top:0.75rem;">
+                <h4 style="color:var(--primary-dark); font-size:0.92rem; font-weight:700;">Correct: .env + dotenv</h4>
+                <div class="code-container" style="margin-top:0.35rem;">
+                  <pre><code><span class="syn-comment">// .env file</span>
+PORT=3000
+DB_HOST=localhost
+OPENAI_API_KEY=sk-proj-yourActualKeyHere</code></pre>
+                </div>
+              </div>
+            </div>
+
+            <!-- Loading & .gitignore -->
+            <div>
+              <div class="code-container">
+                <div class="code-header">
+                  <div class="code-file-badge"><span class="file-dot"></span><span>server.js (Top of Entry Point)</span></div>
+                  <button class="copy-btn">Copy</button>
+                </div>
+                <pre><code><span class="syn-comment">// 1. MUST BE LINE 1 before any other modules</span>
+<span class="syn-fn">require</span>(<span class="syn-str">"dotenv"</span>).<span class="syn-fn">config</span>();
+
+<span class="syn-comment">// 2. Node.js can now read values from process.env</span>
+console.<span class="syn-fn">log</span>(process.env.<span class="syn-prop">OPENAI_API_KEY</span>);</code></pre>
+              </div>
+
+              <div class="code-container" style="margin-top:0.75rem;">
+                <div class="code-header">
+                  <div class="code-file-badge"><span class="file-dot"></span><span>.gitignore</span></div>
+                  <button class="copy-btn">Copy</button>
+                </div>
+                <pre><code>node_modules/
+.env</code></pre>
+              </div>
+
+              <div class="callout callout-danger" style="margin-top:0.6rem;">
+                <strong>Golden Security Rule:</strong> Always add <code>.env</code> to <code>.gitignore</code> before executing your very first <code>git commit</code>!
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- -------------------------------------------------------------------
+           SLIDE 16: WHAT IS ZOD AND WHY DO WE NEED IT?
+           ------------------------------------------------------------------- -->
+      <section class="slide" id="slide-16">
+        <header class="slide-header">
+          <div class="slide-title-wrap">
+            <span class="slide-category">Input Validation</span>
+            <h2 class="slide-title">What Is Zod &amp; Why Do We Need It?</h2>
+            <p class="slide-subtitle">Validate request bodies before executing database queries or invoking expensive AI models.</p>
+          </div>
+          <span class="slide-num-pill">Slide 16</span>
+        </header>
+
+        <div class="slide-body">
+          <div class="grid-2">
+            <!-- Code Block -->
+            <div class="code-container">
+              <div class="code-header">
+                <div class="code-file-badge"><span class="file-dot"></span><span>zod-demo.js</span></div>
+                <button class="copy-btn">Copy</button>
+              </div>
+              <pre><code><span class="syn-kw">const</span> { z } = <span class="syn-fn">require</span>(<span class="syn-str">"zod"</span>);
+
+<span class="syn-comment">// 1. Define strict schema rules</span>
+<span class="syn-kw">const</span> studentSchema = z.<span class="syn-fn">object</span>({
+  name: z.<span class="syn-fn">string</span>().<span class="syn-fn">min</span>(<span class="syn-num">2</span>),
+  email: z.<span class="syn-fn">string</span>().<span class="syn-fn">email</span>(),
+  course: z.<span class="syn-fn">string</span>().<span class="syn-fn">min</span>(<span class="syn-num">2</span>)
+});
+
+<span class="syn-comment">// 2. Validate incoming payload without throwing</span>
+<span class="syn-kw">const</span> result = studentSchema.<span class="syn-fn">safeParse</span>({
+  name: <span class="syn-str">"John"</span>,
+  email: <span class="syn-str">"john@gmail.com"</span>,
+  course: <span class="syn-str">"MERN Stack"</span>
+});
+
+<span class="syn-kw">if</span> (!result.<span class="syn-prop">success</span>) {
+  console.<span class="syn-fn">log</span>(<span class="syn-str">"Validation errors:"</span>, result.<span class="syn-prop">error</span>.issues);
+} <span class="syn-kw">else</span> {
+  console.<span class="syn-fn">log</span>(<span class="syn-str">"Sanitized data:"</span>, result.<span class="syn-prop">data</span>);
+}</code></pre>
+            </div>
+
+            <!-- Live Zod Sandbox -->
+            <div class="sandbox-card">
+              <div class="sandbox-header">
+                <div class="sandbox-title">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+                  <span>Interactive Zod Validator</span>
+                </div>
+                <span id="zodStatusBadge" class="status-pill">Ready to Validate</span>
+              </div>
+
+              <div>
+                <label style="font-size:0.74rem; text-transform:uppercase; font-weight:700; color:var(--text-muted);">Incoming JSON Request Body</label>
+                <textarea id="zodInputPayload" class="sandbox-input" style="width:100%; height:85px; margin-top:0.25rem; font-size:0.8rem; font-family:var(--font-mono); resize:none;">{
+  "name": "John",
+  "email": "john@gmail.com",
+  "course": "MERN Stack"
+}</textarea>
+              </div>
+
+              <div class="sandbox-controls">
+                <button id="zodLoadValidBtn" class="sandbox-btn sandbox-btn-secondary" style="font-size:0.75rem; padding:0.3rem 0.6rem;">Load Valid Data</button>
+                <button id="zodLoadInvalidBtn" class="sandbox-btn sandbox-btn-secondary" style="font-size:0.75rem; padding:0.3rem 0.6rem;">Load Invalid Data</button>
+                <button id="zodValidateBtn" class="sandbox-btn" style="font-size:0.78rem; padding:0.35rem 0.8rem;">Run safeParse()</button>
+              </div>
+
+              <div>
+                <label style="font-size:0.72rem; text-transform:uppercase; font-weight:700; color:var(--text-muted);">safeParse() Output</label>
+                <pre style="background:#0b1329; color:#38bdf8; padding:0.45rem; border-radius:4px; font-family:var(--font-mono); font-size:0.75rem; max-height:85px; overflow-y:auto; margin-top:0.2rem;"><code id="zodOutputResult">// Click "Run safeParse()" to test validation</code></pre>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- -------------------------------------------------------------------
+           SLIDE 17: WHAT IS FETCH IN NODE.JS?
+           ------------------------------------------------------------------- -->
+      <section class="slide" id="slide-17">
+        <header class="slide-header">
+          <div class="slide-title-wrap">
+            <span class="slide-category">HTTP &amp; External APIs</span>
+            <h2 class="slide-title">What Is Fetch in Node.js?</h2>
+            <p class="slide-subtitle">Modern Node.js (18+) includes native, built-in Fetch. No extra npm packages required.</p>
+          </div>
+          <span class="slide-num-pill">Slide 17</span>
+        </header>
+
+        <div class="slide-body">
+          <div class="grid-2">
+            <!-- Code Block -->
+            <div class="code-container">
+              <div class="code-header">
+                <div class="code-file-badge"><span class="file-dot"></span><span>fetch-demo.js</span></div>
+                <button class="copy-btn">Copy</button>
+              </div>
+              <pre><code><span class="syn-comment">// Built-in fetch available globally in Node 18+</span>
+<span class="syn-kw">async function</span> <span class="syn-fn">getPosts</span>() {
+  <span class="syn-kw">try</span> {
+    <span class="syn-kw">const</span> response = <span class="syn-kw">await</span> <span class="syn-fn">fetch</span>(
+      <span class="syn-str">"https://jsonplaceholder.typicode.com/posts"</span>
+    );
+
+    <span class="syn-comment">// CRITICAL: Check response.ok</span>
+    <span class="syn-kw">if</span> (!response.<span class="syn-prop">ok</span>) {
+      <span class="syn-kw">throw new</span> <span class="syn-fn">Error</span>(<span class="syn-str">`HTTP error! status: ${response.status}`</span>);
+    }
+
+    <span class="syn-kw">const</span> data = <span class="syn-kw">await</span> response.<span class="syn-fn">json</span>();
+    console.<span class="syn-fn">log</span>(<span class="syn-str">"Fetched posts count:"</span>, data.<span class="syn-prop">length</span>);
+  } <span class="syn-kw">catch</span> (error) {
+    console.<span class="syn-fn">error</span>(<span class="syn-str">"Fetch failed:"</span>, error.<span class="syn-prop">message</span>);
+  }
+}
+
+<span class="syn-fn">getPosts</span>();</code></pre>
+            </div>
+
+            <!-- Deep Dive Explanation -->
+            <div class="card">
+              <h3 class="card-title">Essential Rules for Fetch in Node.js</h3>
+              <ul class="feature-list">
+                <li><span class="bullet-icon">&bull;</span> <strong>No `node-fetch` Required:</strong> You do not need to install <code>node-fetch</code> or <code>axios</code> for standard HTTP calls in modern Node.js.</li>
+                <li><span class="bullet-icon">&bull;</span> <strong>The response.ok Trap:</strong> <code>fetch()</code> does <strong>NOT</strong> reject on HTTP 404 or 500 error responses! It only rejects on network failures. You <em>must</em> inspect <code>response.ok</code> before calling <code>response.json()</code>.</li>
+                <li><span class="bullet-icon">&bull;</span> <strong>Calling External AI Endpoints:</strong> If you ever need to connect to an AI model where no official SDK exists, native <code>fetch()</code> handles standard REST payloads effortlessly.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- -------------------------------------------------------------------
+           SLIDE 18: WHAT IS STREAMING?
+           ------------------------------------------------------------------- -->
+      <section class="slide" id="slide-18">
+        <header class="slide-header">
+          <div class="slide-title-wrap">
+            <span class="slide-category">GenAI Core Concepts</span>
+            <h2 class="slide-title">What Is Streaming &amp; Why Does GenAI Need It?</h2>
+            <p class="slide-subtitle">Compare traditional request-response latency with continuous chunked event streams.</p>
+          </div>
+          <span class="slide-num-pill">Slide 18</span>
+        </header>
+
+        <div class="slide-body">
+          <div class="grid-2">
+            <!-- Normal Response -->
+            <div class="card">
+              <h3 class="card-title" style="color:#b91c1c;">1. Traditional (Normal) Response</h3>
+              <p style="font-size:0.86rem;">The server generates the entire answer in memory, waits for completion, and transmits one large payload.</p>
+              
+              <div class="diagram-container" style="margin-top:0.5rem;">
+                <div class="flow-horizontal" style="flex-direction:column; gap:0.4rem;">
+                  <div class="flow-box" style="width:100%;"><span class="flow-step-num">Step 1</span> Client sends HTTP Request</div>
+                  <div class="flow-arrow">&darr;</div>
+                  <div class="flow-box" style="width:100%; background:#fff1f2; border-color:#fecdd3;">
+                    <span class="flow-step-num" style="color:#b91c1c;">Wait 8-15 Seconds</span><br>
+                    <small>User sees blank screen / spinner</small>
+                  </div>
+                  <div class="flow-arrow">&darr;</div>
+                  <div class="flow-box" style="width:100%;"><span class="flow-step-num">Step 2</span> Send 100% of answer at once</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Streaming Response -->
+            <div class="card highlight border-accent">
+              <h3 class="card-title" style="color:#0369a1;">2. Streaming Response (Chunked)</h3>
+              <p style="font-size:0.86rem;">The server establishes a continuous stream and emits partial tokens as they are generated by the model.</p>
+
+              <div class="diagram-container" style="margin-top:0.5rem;">
+                <div class="flow-horizontal" style="flex-direction:column; gap:0.4rem;">
+                  <div class="flow-box" style="width:100%;"><span class="flow-step-num">Step 1</span> Client sends Request</div>
+                  <div class="flow-arrow">&darr;</div>
+                  <div class="flow-box" style="width:100%; background:#ecfeff; border-color:#a5f3fc;">
+                    <span class="flow-step-num" style="color:#0e7490;">Immediate Feedback (200ms)</span><br>
+                    <small>Chunk 1 &rarr; Chunk 2 &rarr; Chunk 3 ...</small>
+                  </div>
+                  <div class="flow-arrow">&darr;</div>
+                  <div class="flow-box" style="width:100%;"><span class="flow-step-num">Step 2</span> Server closes stream ([DONE])</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="callout callout-tip">
+            <strong>Why Streaming Matters for GenAI:</strong> Large Language Models generate text one token at a time. Streaming transforms a frustrating 15-second delay into an interactive, real-time typing experience.
+          </div>
+        </div>
+      </section>
+
+      <!-- -------------------------------------------------------------------
+           SLIDE 19: PRACTICAL — CREATE AN EXPRESS STREAMING API USING SSE
+           ------------------------------------------------------------------- -->
+      <section class="slide" id="slide-19">
+        <header class="slide-header">
+          <div class="slide-title-wrap">
+            <span class="slide-category">Hands-on Implementation</span>
+            <h2 class="slide-title">Practical: Express Streaming API using SSE</h2>
+            <p class="slide-subtitle">Set up Server-Sent Events with <code>res.write()</code> and simulated asynchronous delay.</p>
+          </div>
+          <span class="slide-num-pill">Slide 19</span>
+        </header>
+
+        <div class="slide-body">
+          <div class="grid-2">
+            <!-- Code Block -->
+            <div class="code-container">
+              <div class="code-header">
+                <div class="code-file-badge"><span class="file-dot"></span><span>streamRoutes.js</span></div>
+                <button class="copy-btn">Copy</button>
+              </div>
+              <pre><code><span class="syn-comment">// GET /stream — Server-Sent Events (SSE)</span>
+app.<span class="syn-fn">get</span>(<span class="syn-str">"/stream"</span>, <span class="syn-kw">async</span> (req, res) => {
+  <span class="syn-comment">// 1. Set SSE Headers</span>
+  res.<span class="syn-fn">setHeader</span>(<span class="syn-str">"Content-Type"</span>, <span class="syn-str">"text/event-stream"</span>);
+  res.<span class="syn-fn">setHeader</span>(<span class="syn-str">"Cache-Control"</span>, <span class="syn-str">"no-cache"</span>);
+  res.<span class="syn-fn">setHeader</span>(<span class="syn-str">"Connection"</span>, <span class="syn-str">"keep-alive"</span>);
+
+  <span class="syn-kw">const</span> messages = [<span class="syn-str">"Hello"</span>, <span class="syn-str">"Welcome"</span>, <span class="syn-str">"To GenAI Node.js"</span>];
+
+  <span class="syn-comment">// 2. Stream tokens chunk by chunk</span>
+  <span class="syn-kw">for</span> (<span class="syn-kw">const</span> msg <span class="syn-kw">of</span> messages) {
+    res.<span class="syn-fn">write</span>(<span class="syn-str">`data: ${msg}\n\n`</span>);
+    <span class="syn-kw">await new</span> <span class="syn-fn">Promise</span>(r => <span class="syn-fn">setTimeout</span>(r, <span class="syn-num">1000</span>));
+  }
+
+  <span class="syn-comment">// 3. End stream</span>
+  res.<span class="syn-fn">write</span>(<span class="syn-str">"data: [DONE]\n\n"</span>);
+  res.<span class="syn-fn">end</span>();
+});</code></pre>
+            </div>
+
+            <!-- Live SSE Stream Sandbox -->
+            <div class="sandbox-card">
+              <div class="sandbox-header">
+                <div class="sandbox-title">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
+                  <span>Live SSE Stream Console</span>
+                </div>
+                <span id="sseChunkBadge" class="status-pill">Idle</span>
+              </div>
+
+              <div class="sandbox-controls">
+                <button id="sseStreamBtn" class="sandbox-btn">Start SSE Stream</button>
+                <button id="sseClearBtn" class="sandbox-btn sandbox-btn-secondary">Clear Terminal</button>
+              </div>
+
+              <div>
+                <label style="font-size:0.72rem; text-transform:uppercase; font-weight:700; color:var(--text-muted);">Incoming Event Stream (text/event-stream)</label>
+                <pre id="sseTerminalOutput" style="background:#0b1329; color:#38bdf8; padding:0.65rem; border-radius:6px; font-family:var(--font-mono); font-size:0.8rem; height:130px; overflow-y:auto; margin-top:0.25rem;"><span style="color:#64748b;">// Click "Start SSE Stream" to test simulated res.write() events</span></pre>
+              </div>
+
+              <div class="callout callout-info" style="padding:0.4rem 0.75rem; font-size:0.78rem;">
+                <strong>Notice the `data: ...\n\n` protocol:</strong> The browser SSE parser requires two newline characters (<code>\n\n</code>) to distinguish individual event chunks!
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- -------------------------------------------------------------------
+           SLIDE 20: MINI PROJECT — GENAI NODE.JS STARTER TEMPLATE
+           ------------------------------------------------------------------- -->
+      <section class="slide" id="slide-20">
+        <header class="slide-header">
+          <div class="slide-title-wrap">
+            <span class="slide-category">Mini Project &amp; Capstone</span>
+            <h2 class="slide-title">Mini Project: GenAI Node.js Starter Template</h2>
+            <p class="slide-subtitle">Combine Express, Zod, MySQL Connection Pools, and the OpenAI SDK into one production-ready template.</p>
+          </div>
+          <span class="slide-num-pill">Slide 20</span>
+        </header>
+
+        <div class="slide-body">
+          <!-- Interactive Starter API Console -->
+          <div class="sandbox-card" style="padding:1rem 1.25rem;">
+            <div class="sandbox-header" style="padding-bottom:0.4rem; margin-bottom:0.5rem;">
+              <div class="sandbox-title">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>
+                <span>Interactive Starter API Console</span>
+              </div>
+              <div style="display:flex; gap:0.4rem; align-items:center;">
+                <span id="stTimeBadge" style="font-family:var(--font-mono); font-size:0.75rem; color:var(--text-muted);">0 ms</span>
+                <span id="stStatusBadge" class="status-pill">Status: Ready</span>
+              </div>
+            </div>
+
+            <div style="display:flex; flex-wrap:wrap; gap:0.4rem; margin-bottom:0.6rem; border-bottom:1px solid var(--border-subtle); padding-bottom:0.5rem;">
+              <button class="starter-tab active" data-action="getStudents">1. GET /students</button>
+              <button class="starter-tab" data-action="postStudent">2. POST /students (Zod)</button>
+              <button class="starter-tab" data-action="aiPrompt">3. GET /ai?prompt=...</button>
+            </div>
+
+            <div style="display:flex; gap:0.5rem; align-items:center; margin-bottom:0.6rem;">
+              <span id="stMethodBadge" class="status-badge badge-get" style="height:38px; display:inline-flex; align-items:center;">GET</span>
+              <input type="text" id="stUrlInput" class="sandbox-input" value="http://localhost:3000/students" readonly style="flex:1; background:#f8fafc;">
+              <button id="stSendBtn" class="sandbox-btn">Send Request</button>
+            </div>
+
+            <div class="grid-2">
+              <div>
+                <label style="font-size:0.72rem; text-transform:uppercase; font-weight:700; color:var(--text-muted); display:flex; justify-content:space-between;">
+                  <span>Request Payload / Query</span>
+                  <span id="stHeaderDisplay" style="color:var(--primary); font-family:var(--font-mono);">Accept: application/json</span>
+                </label>
+                <textarea id="stReqBody" class="sandbox-input" style="width:100%; height:95px; margin-top:0.2rem; font-size:0.78rem; font-family:var(--font-mono); resize:none;">// GET request: no payload sent</textarea>
+              </div>
+
+              <div>
+                <label style="font-size:0.72rem; text-transform:uppercase; font-weight:700; color:var(--text-muted);">JSON Response Output</label>
+                <pre style="background:#0b1329; color:#38bdf8; padding:0.5rem; border-radius:6px; height:95px; overflow-y:auto; font-family:var(--font-mono); font-size:0.78rem; margin-top:0.2rem;"><code id="stResBody">// Click "Send Request" to test simulated endpoint</code></pre>
+              </div>
+            </div>
+          </div>
+
+          <!-- Project Structure & 5 Student Challenges -->
+          <div class="grid-2" style="margin-top:0.35rem;">
+            <div class="card" style="padding:0.85rem 1rem;">
+              <h4 style="font-size:0.88rem; font-weight:700; color:var(--primary-dark);">Project File Layout</h4>
+              <pre style="font-family:var(--font-mono); font-size:0.74rem; background:#0b1329; color:#93c5fd; padding:0.5rem; border-radius:6px; margin-top:0.3rem;"><code>genai-node-starter/
+├── config/db.js           <span class="syn-comment"># Connection pool</span>
+├── models/studentModel.js <span class="syn-comment"># Reusable CRUD</span>
+├── routes/studentRoutes.js<span class="syn-comment"># Express + Zod</span>
+├── services/aiService.js  <span class="syn-comment"># OpenAI SDK reuse</span>
+├── server.js              <span class="syn-comment"># Express entry point</span>
+├── .env &amp; .gitignore</code></pre>
+            </div>
+
+            <div class="card highlight" style="padding:0.85rem 1rem;">
+              <h4 style="font-size:0.88rem; font-weight:700; color:var(--primary-dark);">5 Final Practical Challenges</h4>
+              <ol class="feature-list" style="font-size:0.8rem; gap:0.25rem; margin-top:0.25rem;">
+                <li><span class="bullet-icon">1.</span> Add <code>updateStudent(id, data)</code> &amp; <code>deleteStudent(id)</code> to model.</li>
+                <li><span class="bullet-icon">2.</span> Expose <code>PUT /students/:id</code> &amp; <code>DELETE /students/:id</code> with Zod.</li>
+                <li><span class="bullet-icon">3.</span> Convert <code>/ai</code> to stream tokens directly using the SSE pattern!</li>
+                <li><span class="bullet-icon">4.</span> Add a custom 404 handler and global error middleware.</li>
+                <li><span class="bullet-icon">5.</span> Test all endpoints systematically using Postman.</li>
+              </ol>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- =====================================================================
+         BOTTOM NAVIGATION BAR
+         ===================================================================== -->
+    <footer class="bottom-bar">
+      <div class="bottom-left">
+        <span>Use <kbd>&larr;</kbd> <kbd>&rarr;</kbd> or <kbd>Space</kbd> to navigate</span>
+        <span>&bull;</span>
+        <span>Press <kbd>T</kbd> for Contents</span>
+        <span>&bull;</span>
+        <span>Press <kbd>?</kbd> for Help</span>
+      </div>
+
+      <div class="bottom-right">
+        <button class="nav-btn" id="prevBtn" disabled>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+          <span>Previous</span>
+        </button>
+        <button class="nav-btn nav-btn-primary" id="nextBtn">
+          <span>Next</span>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        </button>
+      </div>
+    </footer>
+
+    <!-- =====================================================================
+         TABLE OF CONTENTS DRAWER
+         ===================================================================== -->
+    <div class="toc-overlay" id="tocOverlay">
+      <div class="toc-drawer">
+        <div class="toc-header">
+          <div class="toc-title">Table of Contents</div>
+          <button class="toc-close" id="tocClose" title="Close (Esc)">&times;</button>
+        </div>
+        <div class="toc-list" id="tocList">
+          <!-- Dynamically populated by script.js -->
+        </div>
+      </div>
+    </div>
+
+    <!-- =====================================================================
+         HELP SHORTCUTS MODAL
+         ===================================================================== -->
+    <div class="help-modal-overlay" id="helpModal">
+      <div class="help-modal">
+        <div class="help-header">
+          <div class="help-title">Keyboard Navigation &amp; Shortcuts</div>
+          <button class="toc-close" id="helpClose" title="Close (Esc)">&times;</button>
+        </div>
+        <div class="help-body">
+          <div class="shortcut-row">
+            <span>Next Slide</span>
+            <div><span class="shortcut-key">&rarr;</span> <span class="shortcut-key">Down</span> <span class="shortcut-key">Space</span> <span class="shortcut-key">PgDn</span></div>
+          </div>
+          <div class="shortcut-row">
+            <span>Previous Slide</span>
+            <div><span class="shortcut-key">&larr;</span> <span class="shortcut-key">Up</span> <span class="shortcut-key">PgUp</span></div>
+          </div>
+          <div class="shortcut-row">
+            <span>First / Last Slide</span>
+            <div><span class="shortcut-key">Home</span> / <span class="shortcut-key">End</span></div>
+          </div>
+          <div class="shortcut-row">
+            <span>Table of Contents Drawer</span>
+            <span class="shortcut-key">T</span>
+          </div>
+          <div class="shortcut-row">
+            <span>Toggle Fullscreen</span>
+            <span class="shortcut-key">F</span>
+          </div>
+          <div class="shortcut-row">
+            <span>Keyboard Shortcuts Help</span>
+            <span class="shortcut-key">?</span> or <span class="shortcut-key">H</span>
+          </div>
+          <div class="shortcut-row">
+            <span>Close Modal / Drawer</span>
+            <span class="shortcut-key">Esc</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
