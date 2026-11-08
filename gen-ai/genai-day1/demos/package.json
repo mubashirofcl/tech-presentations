@@ -1,0 +1,23 @@
+{
+  "name": "genai-day1",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Node.js + Generative AI Day 1 Demos",
+  "main": "ai.js",
+  "scripts": {
+    "first-prompt": "node 01-first-prompt.js",
+    "traditional-vs-genai": "node 02-traditional-vs-genai.js",
+    "types": "node 03-types.js",
+    "chatbot": "node 04-chatbot.js",
+    "llm-api": "node 05-llm-api.js",
+    "rag": "node 06-rag.js",
+    "agent": "node 07-agent.js",
+    "multimodal": "node 08-multimodal.js"
+  },
+  "dependencies": {
+    "@google/genai": "^0.1.2",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2"
+  }
+}
+

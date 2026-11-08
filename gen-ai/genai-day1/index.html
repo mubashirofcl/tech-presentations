@@ -1,0 +1,1160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Node.js + Generative AI | Day 1: Foundations of GenAI</title>
+  
+  <!-- Inter & JetBrains Mono Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Prism.js Syntax Highlighting (Tomorrow Night theme) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css">
+  
+  <link rel="stylesheet" href="style.css">
+  <script src="script.js" defer></script>
+</head>
+<body>
+  <div id="presentation-app">
+    
+    <!-- Top Progress Bar -->
+    <div class="progress-container">
+      <div class="progress-bar" id="progressBar"></div>
+    </div>
+
+    <!-- Top Navigation Bar -->
+    <header class="top-bar">
+      <div class="brand-section">
+        <span class="brand-badge">Node.js + GenAI</span>
+        <span class="brand-title">Day 1: Foundations of GenAI</span>
+      </div>
+      <div class="top-controls">
+        <div class="slide-counter" id="slideCounter">01 / 12</div>
+        <button class="icon-btn" id="tocBtn" title="Table of Contents (T)">
+          <span>☰</span> <span>Topics</span>
+        </button>
+        <button class="icon-btn" id="helpBtn" title="Keyboard Shortcuts (?)">
+          <span>?</span> <span>Help</span>
+        </button>
+        <button class="icon-btn" id="fullscreenBtn" title="Toggle Fullscreen (F)">
+          <span>⛶</span> <span>Fullscreen</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Main Slides Viewport -->
+    <main class="slides-viewport">
+
+      <!-- ===================================================================
+           SLIDE 1: Title Slide
+           =================================================================== -->
+      <section class="slide active" id="slide-1">
+        <div class="title-slide-content">
+          <div class="title-badge">
+            <span>⚡ Google GenAI SDK · Node.js Backend Track</span>
+          </div>
+          <h1 class="title-main">
+            Node.js + Generative AI<br>
+            <span class="highlight">Day 1: Foundations of GenAI</span>
+          </h1>
+          <p class="title-subtitle">
+            Understand how Generative AI works, master core architectures (LLM Apps, RAG Pipelines, AI Agents, Multimodal AI), and run practical Node.js code with the Gemini API.
+          </p>
+          <div class="title-features-pills">
+            <div class="feature-pill"><span class="pill-dot"></span> 12 Structured Slides</div>
+            <div class="feature-pill"><span class="pill-dot"></span> gemini-2.5-flash</div>
+            <div class="feature-pill"><span class="pill-dot"></span> 8 Runnable Node.js Demos</div>
+            <div class="feature-pill"><span class="pill-dot"></span> Architectural Diagrams</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===================================================================
+           SLIDE 2: Agenda + Setup
+           =================================================================== -->
+      <section class="slide" id="slide-2">
+        <div class="slide-header">
+          <div class="slide-category">Roadmap &amp; Environment Setup</div>
+          <h2 class="slide-title">Agenda &amp; <span class="highlight">Project Setup</span></h2>
+        </div>
+        <div class="split-layout">
+          <div class="concept-col">
+            <div class="concept-card accent-border">
+              <h3 class="concept-title">📋 Today's 7 Core Topics</h3>
+              <div class="key-term-list">
+                <div class="key-term-item"><strong>1. What is Generative AI?</strong> — Definitions, tokens, models, and LLMs.</div>
+                <div class="key-term-item"><strong>2. AI vs ML vs DL vs GenAI</strong> — Hierarchy, definitions, and concentric diagram.</div>
+                <div class="key-term-item"><strong>3. Traditional AI vs GenAI</strong> — Classification vs Creation &amp; context awareness.</div>
+                <div class="key-term-item"><strong>4. Types of GenAI</strong> — Text, Image, Audio, Video, and Code generation.</div>
+                <div class="key-term-item"><strong>5. Real-World Applications</strong> — Chatbots, copilots, search, and industry workflows.</div>
+                <div class="key-term-item"><strong>6. 3 Core Architectures</strong> — LLM App, RAG Pipeline, and Autonomous Agent Loop.</div>
+                <div class="key-term-item"><strong>7. Multimodal AI</strong> — Processing multiple inputs (text, images, audio, video) together.</div>
+              </div>
+            </div>
+
+            <div class="concept-card violet-border">
+              <h3 class="concept-title">💻 Terminal Setup Commands</h3>
+              <div class="code-container" style="height: auto; margin-top: 0.5rem;">
+                <div class="code-header">
+                  <span class="code-file-badge"><span class="file-icon">⚡</span> bash</span>
+                  <button class="copy-btn">Copy</button>
+                </div>
+                <div class="code-scroll-area">
+                  <pre><code class="language-bash">mkdir genai-day1 && cd genai-day1
+npm init -y && npm pkg set type=module
+npm i @google/genai dotenv express
+echo "GEMINI_API_KEY=your_key_here" > .env</code></pre>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="code-col">
+            <div class="code-container">
+              <div class="code-header">
+                <span class="code-file-badge"><span class="file-icon">📄</span> demos/ai.js</span>
+                <div class="code-actions">
+                  <span style="color:var(--text-muted); font-size:0.75rem;">ES Module</span>
+                  <button class="copy-btn">Copy</button>
+                </div>
+              </div>
+              <div class="code-scroll-area">
+                <pre class="line-numbers"><code class="language-javascript">// ai.js
+import 'dotenv/config';
+import { GoogleGenAI } from '@google/genai';
+
+export const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
+export const MODEL = 'gemini-2.5-flash';</code></pre>
+              </div>
+              <div class="code-run-hint">
+                <span>💡 <strong>Shared Client:</strong> Imported by all subsequent demo scripts.</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===================================================================
+           SLIDE 3: What is Generative AI?
+           =================================================================== -->
+      <section class="slide" id="slide-3">
+        <div class="slide-header">
+          <div class="slide-category">Fundamental Concepts</div>
+          <h2 class="slide-title">What is <span class="highlight">Generative AI?</span></h2>
+        </div>
+        <div class="split-layout">
+          <div class="concept-col">
+            <div class="concept-card accent-border">
+              <h3 class="concept-title">📖 Definition</h3>
+              <p class="concept-text">
+                <strong>Generative AI</strong> is a type of AI that creates <em>new, original content</em> (text, images, audio, video, code) by learning patterns from large amounts of existing data.
+              </p>
+            </div>
+
+            <div class="concept-card">
+              <h3 class="concept-title">🔑 Key Terms</h3>
+              <div class="key-term-list">
+                <div class="key-term-item">
+                  <span class="key-term-name">Model</span>: The trained “brain” that generates output (e.g., Gemini, GPT).
+                </div>
+                <div class="key-term-item">
+                  <span class="key-term-name">Prompt</span>: The instruction or question you provide to the model.
+                </div>
+                <div class="key-term-item">
+                  <span class="key-term-name">Token</span>: A small piece of text (a word or partial word) that the model reads and writes.
+                </div>
+                <div class="key-term-item">
+                  <span class="key-term-name">LLM (Large Language Model)</span>: A GenAI model trained on vast text data to understand and generate human language.
+                </div>
+              </div>
+            </div>
+
+            <div class="concept-card emerald-border">
+              <h3 class="concept-title">⚙️ How It Works</h3>
+              <p class="concept-text">
+                <strong>Prompt → Model predicts the next token, repeatedly → Output</strong><br>
+                The model reads your prompt and calculates probabilities to predict the most likely next token, step by step, until the answer is complete.
+              </p>
+              <div class="example-box" style="margin-top:0.75rem;">
+                <strong>💡 Real Example:</strong> You prompt: <em>“Write a leave letter for fever”</em> → The model generates a unique, tailored letter. It does <strong>not</strong> look up or copy one from a database.
+              </div>
+            </div>
+          </div>
+
+          <div class="code-col">
+            <div class="code-container">
+              <div class="code-header">
+                <span class="code-file-badge"><span class="file-icon">📄</span> demos/01-first-prompt.js</span>
+                <div class="code-actions">
+                  <button class="copy-btn">Copy</button>
+                </div>
+              </div>
+              <div class="code-scroll-area">
+                <pre class="line-numbers"><code class="language-javascript">// 01-first-prompt.js
+import { ai, MODEL } from './ai.js';
+
+const res = await ai.models.generateContent({
+  model: MODEL,
+  contents: 'Explain Generative AI in 2 lines for a beginner.',
+});
+console.log(res.text);</code></pre>
+              </div>
+              <div class="code-run-hint">
+                <span>▶ Run: <code>node demos/01-first-prompt.js</code></span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===================================================================
+           SLIDE 4: AI vs ML vs DL vs GenAI
+           =================================================================== -->
+      <section class="slide" id="slide-4">
+        <div class="slide-header">
+          <div class="slide-category">Conceptual Hierarchy</div>
+          <h2 class="slide-title">AI vs ML vs DL vs <span class="highlight">GenAI</span></h2>
+        </div>
+        <div class="split-layout">
+          <div class="concept-col">
+            <div class="concept-card accent-border">
+              <h3 class="concept-title">🧠 Definitions &amp; Scope</h3>
+              <div class="key-term-list">
+                <div class="key-term-item">
+                  <strong style="color:var(--accent-cyan);">AI (Artificial Intelligence):</strong> Any technique that enables machines to perform tasks requiring human-like intelligence.<br>
+                  <em style="color:var(--text-muted);">Example:</em> Chess bot, Google Maps finding the fastest route.
+                </div>
+                <div class="key-term-item">
+                  <strong style="color:var(--accent-indigo);">ML (Machine Learning):</strong> A subset of AI where machines learn patterns from data instead of being explicitly programmed.<br>
+                  <em style="color:var(--text-muted);">Example:</em> Gmail spam filter learning from marked spam.
+                </div>
+                <div class="key-term-item">
+                  <strong style="color:var(--accent-amber);">DL (Deep Learning):</strong> A subset of ML that uses multi-layer neural networks to learn complex representations from massive data.<br>
+                  <em style="color:var(--text-muted);">Example:</em> Face unlock on phones, YouTube voice-to-caption.
+                </div>
+                <div class="key-term-item">
+                  <strong style="color:var(--accent-emerald);">GenAI (Generative AI):</strong> A subset of DL that generates new, original content instead of merely classifying or predicting.<br>
+                  <em style="color:var(--text-muted);">Example:</em> ChatGPT writing an essay, Gemini generating images.
+                </div>
+              </div>
+            </div>
+
+            <div class="example-box">
+              <strong>💡 One-Line Memory Trick:</strong><br>
+              <code>AI = thinks</code> · <code>ML = learns</code> · <code>DL = learns deeply</code> · <code>GenAI = creates</code>
+            </div>
+
+            <div class="table-wrapper">
+              <table class="styled-table">
+                <thead>
+                  <tr>
+                    <th>Term</th>
+                    <th>Meaning</th>
+                    <th>Real-World Example</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="tag-col" style="color:var(--accent-cyan);">AI</td>
+                    <td>Machines doing “smart” tasks</td>
+                    <td>Chess bot, route planning</td>
+                  </tr>
+                  <tr>
+                    <td class="tag-col" style="color:var(--accent-indigo);">ML</td>
+                    <td>Learns patterns from data</td>
+                    <td>Spam filter, movie recommendations</td>
+                  </tr>
+                  <tr>
+                    <td class="tag-col" style="color:var(--accent-amber);">DL</td>
+                    <td>ML using deep neural networks</td>
+                    <td>Face unlock, autonomous driving vision</td>
+                  </tr>
+                  <tr>
+                    <td class="tag-col" style="color:var(--accent-emerald);">GenAI</td>
+                    <td>DL that generates new content</td>
+                    <td>ChatGPT, Gemini, Midjourney</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="code-col" style="justify-content: center; align-items: center;">
+            <div class="concept-card" style="width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+              <h4 style="color:var(--text-secondary); margin-bottom: 1rem; font-weight: 700;">
+                Nested Hierarchy Diagram: AI ⊃ ML ⊃ DL ⊃ GenAI
+              </h4>
+              
+              <div class="diagram-concentric-container">
+                <div class="circle-ai">
+                  <span class="circle-label-ai">Artificial Intelligence (AI)</span>
+                  
+                  <div class="circle-ml">
+                    <span class="circle-label-ml">Machine Learning (ML)</span>
+                    
+                    <div class="circle-dl">
+                      <span class="circle-label-dl">Deep Learning (DL)</span>
+                      
+                      <div class="circle-genai">
+                        <span class="circle-label-genai">GenAI</span>
+                        <span class="circle-sublabel-genai">Creates Content</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===================================================================
+           SLIDE 5: Traditional AI vs GenAI
+           =================================================================== -->
+      <section class="slide" id="slide-5">
+        <div class="slide-header">
+          <div class="slide-category">Comparative Analysis</div>
+          <h2 class="slide-title">Traditional AI vs <span class="highlight">Generative AI</span></h2>
+        </div>
+        <div class="split-layout">
+          <div class="concept-col">
+            <div class="concept-card accent-border">
+              <h3 class="concept-title">⚖️ Key Differences</h3>
+              <p class="concept-text">
+                <strong>Traditional AI:</strong> Systems built for one specific task that analyze data and produce a fixed output (a label, numerical score, or classification).<br>
+                <em style="color:var(--text-muted);">Example:</em> A bank fraud detector says “Fraud / Not Fraud”. It cannot draft an explanation email.
+              </p>
+              <p class="concept-text" style="margin-top:0.6rem;">
+                <strong>Generative AI:</strong> General-purpose foundation models that create original content and solve diverse tasks across domains using natural language prompts.<br>
+                <em style="color:var(--text-muted);">Example:</em> The same Gemini model can summarize a PDF, write Node.js code, and translate text.
+              </p>
+              <div class="example-box" style="margin-top:0.75rem;">
+                <strong>💡 Core Distinction:</strong> Traditional AI answers <em>“Which one?”</em> whereas GenAI answers <em>“Make one.”</em>
+              </div>
+            </div>
+
+            <div class="table-wrapper">
+              <table class="styled-table">
+                <thead>
+                  <tr>
+                    <th>Feature</th>
+                    <th>Traditional AI</th>
+                    <th>Generative AI</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><strong>Goal</strong></td>
+                    <td>Classify / predict</td>
+                    <td style="color:var(--accent-cyan); font-weight:700;">Create new content</td>
+                  </tr>
+                  <tr>
+                    <td><strong>Output</strong></td>
+                    <td>Label or number</td>
+                    <td style="color:var(--accent-emerald);">Text, image, code, audio…</td>
+                  </tr>
+                  <tr>
+                    <td><strong>Built With</strong></td>
+                    <td>Rules or task-specific models</td>
+                    <td>Large pretrained models + prompts</td>
+                  </tr>
+                  <tr>
+                    <td><strong>Flexibility</strong></td>
+                    <td>One narrow task</td>
+                    <td style="color:var(--accent-indigo);">Many diverse tasks</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="concept-card violet-border">
+              <h4 style="font-size:1rem; color:var(--text-main); margin-bottom:0.4rem;">💡 Code Demo Insight</h4>
+              <p class="concept-text" style="font-size:0.95rem;">
+                Rule-based code looks for the substring <code>'bad'</code> and incorrectly classifies <em>"The food was not bad at all!"</em> as <strong>Negative</strong>. GenAI understands nuanced semantics and correctly detects <strong>Positive</strong> sentiment!
+              </p>
+            </div>
+          </div>
+
+          <div class="code-col">
+            <div class="code-container">
+              <div class="code-header">
+                <span class="code-file-badge"><span class="file-icon">📄</span> demos/02-traditional-vs-genai.js</span>
+                <div class="code-actions">
+                  <button class="copy-btn">Copy</button>
+                </div>
+              </div>
+              <div class="code-scroll-area">
+                <pre class="line-numbers"><code class="language-javascript">// 02-traditional-vs-genai.js
+import { ai, MODEL } from './ai.js';
+
+const review = "The food was not bad at all, I'd definitely come back!";
+
+// Traditional: fixed rule
+const rule = review.includes('bad') ? 'Negative' : 'Positive';
+console.log('Rule-based:', rule); // Wrong → Negative
+
+// GenAI: understands context
+const res = await ai.models.generateContent({
+  model: MODEL,
+  contents: `Reply only Positive or Negative. Sentiment of: "${review}"`,
+});
+console.log('GenAI:', res.text); // Positive</code></pre>
+              </div>
+              <div class="code-run-hint">
+                <span>▶ Run: <code>node demos/02-traditional-vs-genai.js</code></span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===================================================================
+           SLIDE 6: Types of GenAI
+           =================================================================== -->
+      <section class="slide" id="slide-6">
+        <div class="slide-header">
+          <div class="slide-category">Content Modalities</div>
+          <h2 class="slide-title">Types of <span class="highlight">Generative AI</span></h2>
+        </div>
+        <div class="split-layout">
+          <div class="concept-col">
+            <div class="table-wrapper">
+              <table class="styled-table">
+                <thead>
+                  <tr>
+                    <th>Type</th>
+                    <th>Definition</th>
+                    <th>Example Tools</th>
+                    <th>Real Use</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="tag-col">📝 Text</td>
+                    <td>Generates or transforms written language</td>
+                    <td>Gemini, ChatGPT, Claude</td>
+                    <td>Writing emails, summaries, reports</td>
+                  </tr>
+                  <tr>
+                    <td class="tag-col" style="color:var(--accent-indigo);">🎨 Image</td>
+                    <td>Creates images from text descriptions</td>
+                    <td>Imagen, DALL·E, Midjourney</td>
+                    <td>Marketing posters, product mockups</td>
+                  </tr>
+                  <tr>
+                    <td class="tag-col" style="color:var(--accent-amber);">🎙️ Audio</td>
+                    <td>Generates speech, voice or music</td>
+                    <td>ElevenLabs, Suno, Google TTS</td>
+                    <td>Voiceovers, podcasts, audiobooks</td>
+                  </tr>
+                  <tr>
+                    <td class="tag-col" style="color:var(--accent-rose);">🎬 Video</td>
+                    <td>Creates or edits video from prompts</td>
+                    <td>Veo, Sora, Runway</td>
+                    <td>Video ads, instructional clips, reels</td>
+                  </tr>
+                  <tr>
+                    <td class="tag-col" style="color:var(--accent-emerald);">💻 Code</td>
+                    <td>Writes, explains or fixes code</td>
+                    <td>Copilot, Claude Code, Cursor</td>
+                    <td>Auto-complete, bug fixing, test writing</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="cards-grid-5" style="margin-top: 0.5rem;">
+              <div class="feature-card">
+                <div class="card-top">
+                  <span class="card-heading" style="font-size:1.05rem;">📝 Text &amp; Code</span>
+                  <span class="card-type-tag">Core LLM</span>
+                </div>
+                <p class="card-meta-line">Core capability of <code>gemini-2.5-flash</code> for rapid reasoning and generation.</p>
+              </div>
+              <div class="feature-card">
+                <div class="card-top">
+                  <span class="card-heading" style="font-size:1.05rem;">🖼️ Image Output</span>
+                  <span class="card-type-tag">Vision Gen</span>
+                </div>
+                <p class="card-meta-line">Using models like <code>gemini-2.5-flash-image</code> to generate binary image buffers.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="code-col">
+            <div class="code-container">
+              <div class="code-header">
+                <span class="code-file-badge"><span class="file-icon">📄</span> demos/03-types.js</span>
+                <div class="code-actions">
+                  <button class="copy-btn">Copy</button>
+                </div>
+              </div>
+              <div class="code-scroll-area">
+                <pre class="line-numbers"><code class="language-javascript">// 03-types.js
+import fs from 'node:fs';
+import { ai, MODEL } from './ai.js';
+
+// Text
+const text = await ai.models.generateContent({ model: MODEL, contents: 'Write a 1-line tagline for a coffee shop.' });
+console.log('TEXT:', text.text);
+
+// Code
+const code = await ai.models.generateContent({ model: MODEL, contents: 'Write a JS function isPalindrome(str). Code only.' });
+console.log('CODE:\n', code.text);
+
+// Image (may need a paid-tier key)
+const img = await ai.models.generateContent({ model: 'gemini-2.5-flash-image', contents: 'Cartoon robot teaching in a classroom' });
+const part = img.candidates[0].content.parts.find(p => p.inlineData);
+fs.writeFileSync('robot.png', Buffer.from(part.inlineData.data, 'base64'));
+console.log('IMAGE: saved robot.png');</code></pre>
+              </div>
+              <div class="code-run-hint">
+                <span>▶ Run: <code>node demos/03-types.js</code></span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===================================================================
+           SLIDE 7: Real-World Applications
+           =================================================================== -->
+      <section class="slide" id="slide-7">
+        <div class="slide-header">
+          <div class="slide-category">Industry Use Cases</div>
+          <h2 class="slide-title">Real-World <span class="highlight">Applications</span></h2>
+        </div>
+        <div class="split-layout">
+          <div class="concept-col">
+            <div class="cards-grid-7">
+              <div class="feature-card">
+                <div class="card-top">
+                  <span class="card-icon-badge">💬</span>
+                  <span class="card-type-tag">Customer Support</span>
+                </div>
+                <div class="card-heading">Conversational Support</div>
+                <div class="card-meta-line">Answers user queries 24/7 with context memory.</div>
+                <div class="card-example-badge">👉 Swiggy / Zomato order support chatbots</div>
+              </div>
+
+              <div class="feature-card">
+                <div class="card-top">
+                  <span class="card-icon-badge">✍️</span>
+                  <span class="card-type-tag">Marketing</span>
+                </div>
+                <div class="card-heading">Content Creation</div>
+                <div class="card-meta-line">Writes blogs, ads, social posts, and product copies.</div>
+                <div class="card-example-badge">👉 Marketing teams drafting campaign captions</div>
+              </div>
+
+              <div class="feature-card">
+                <div class="card-top">
+                  <span class="card-icon-badge">👨‍💻</span>
+                  <span class="card-type-tag">Developer Tools</span>
+                </div>
+                <div class="card-heading">Coding Assistants</div>
+                <div class="card-meta-line">Suggests syntax, explains errors, and generates tests.</div>
+                <div class="card-example-badge">👉 GitHub Copilot &amp; Cursor in VS Code</div>
+              </div>
+
+              <div class="feature-card">
+                <div class="card-top">
+                  <span class="card-icon-badge">📑</span>
+                  <span class="card-type-tag">Document AI</span>
+                </div>
+                <div class="card-heading">Document Summarization</div>
+                <div class="card-meta-line">Extracts key points and risks from long legal documents.</div>
+                <div class="card-example-badge">👉 Summarizing 50-page legal contracts</div>
+              </div>
+
+              <div class="feature-card">
+                <div class="card-top">
+                  <span class="card-icon-badge">🎓</span>
+                  <span class="card-type-tag">EdTech</span>
+                </div>
+                <div class="card-heading">Personalized Education</div>
+                <div class="card-meta-line">Step-by-step tutoring tailored to student pace.</div>
+                <div class="card-example-badge">👉 Khanmigo explaining math problems</div>
+              </div>
+
+              <div class="feature-card">
+                <div class="card-top">
+                  <span class="card-icon-badge">🏥</span>
+                  <span class="card-type-tag">Healthcare</span>
+                </div>
+                <div class="card-heading">Clinical Note Generation</div>
+                <div class="card-meta-line">Drafts medical notes and explains lab reports.</div>
+                <div class="card-example-badge">👉 Doctors auto-generating patient visit summaries</div>
+              </div>
+
+              <div class="feature-card" style="grid-column: 1 / -1;">
+                <div class="card-top">
+                  <span class="card-icon-badge">🔍</span>
+                  <span class="card-type-tag">Enterprise Search</span>
+                </div>
+                <div class="card-heading">Enterprise Search &amp; Q&amp;A</div>
+                <div class="card-meta-line">Secure search over company documents, handbooks, and intranets.</div>
+                <div class="card-example-badge">👉 Internal HR bot answering: “How many paid leaves do I have left?”</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="code-col">
+            <div class="code-container">
+              <div class="code-header">
+                <span class="code-file-badge"><span class="file-icon">📄</span> demos/04-chatbot.js</span>
+                <div class="code-actions">
+                  <span style="font-size:0.75rem; color:var(--text-muted);">Chat with Memory</span>
+                  <button class="copy-btn">Copy</button>
+                </div>
+              </div>
+              <div class="code-scroll-area">
+                <pre class="line-numbers"><code class="language-javascript">// 04-chatbot.js: support chatbot with memory
+import readline from 'node:readline/promises';
+import { ai, MODEL } from './ai.js';
+
+const chat = ai.chats.create({
+  model: MODEL,
+  config: { systemInstruction: 'You are a friendly support bot for a coding institute.' },
+});
+const rl = readline.createInterface({ input: process.stdin, output: process.stdout });
+
+while (true) {
+  const msg = await rl.question('You: ');
+  if (msg === 'exit') break;
+  const res = await chat.sendMessage({ message: msg });
+  console.log('Bot:', res.text);
+}
+rl.close();</code></pre>
+              </div>
+              <div class="code-run-hint">
+                <span>▶ Run: <code>node demos/04-chatbot.js</code> (Type 'exit' to quit)</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===================================================================
+           SLIDE 8: Architecture 1, LLM App
+           =================================================================== -->
+      <section class="slide" id="slide-8">
+        <div class="slide-header">
+          <div class="slide-category">System Architecture 1 of 3</div>
+          <h2 class="slide-title">Architecture 1: <span class="highlight">Direct LLM App</span></h2>
+        </div>
+        <div class="split-layout">
+          <div class="concept-col">
+            <div class="concept-card accent-border">
+              <h3 class="concept-title">🏛️ Architecture Definition</h3>
+              <p class="concept-text">
+                The simplest GenAI pattern where your backend receives a user’s prompt, forwards it directly to an LLM API, and returns the generated response to the frontend client.
+              </p>
+            </div>
+
+            <!-- Architecture Flow Diagram -->
+            <div class="diagram-flow-box">
+              <h4 style="font-size:0.95rem; color:var(--text-secondary); font-weight:700;">Data Flow Pipeline</h4>
+              <div class="flow-step-row">
+                <div class="flow-node active-node">📱 Client (Browser/App)</div>
+                <span class="flow-arrow-icon">→</span>
+                <div class="flow-node indigo-node">🚀 Node/Express API (/ask)</div>
+                <span class="flow-arrow-icon">→</span>
+                <div class="flow-node emerald-node">🧠 Gemini LLM</div>
+                <span class="flow-arrow-icon">→</span>
+                <div class="flow-node">📥 JSON Response</div>
+              </div>
+            </div>
+
+            <div class="concept-card">
+              <h3 class="concept-title">🔒 Why Do We Need a Backend?</h3>
+              <p class="concept-text">
+                <strong>API Key Security:</strong> Never expose your <code>GEMINI_API_KEY</code> in browser code. The Node.js server securely signs requests while providing rate limiting, logging, and user authentication.
+              </p>
+              <div class="key-term-list" style="margin-top:0.6rem;">
+                <div class="key-term-item">
+                  <strong>When to use:</strong> General tasks like text editing, translation, grammar fixing, creative writing.
+                </div>
+                <div class="key-term-item">
+                  <strong>Limitation:</strong> The LLM only knows its training cutoff data. It cannot access proprietary company records or real-time information.
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="code-col">
+            <div class="code-container">
+              <div class="code-header">
+                <span class="code-file-badge"><span class="file-icon">📄</span> demos/05-llm-api.js</span>
+                <div class="code-actions">
+                  <span style="font-size:0.75rem; color:var(--text-muted);">Express.js API</span>
+                  <button class="copy-btn">Copy</button>
+                </div>
+              </div>
+              <div class="code-scroll-area">
+                <pre class="line-numbers"><code class="language-javascript">// 05-llm-api.js
+import express from 'express';
+import { ai, MODEL } from './ai.js';
+
+const app = express();
+app.use(express.json());
+
+app.post('/ask', async (req, res) => {
+  const r = await ai.models.generateContent({ model: MODEL, contents: req.body.question });
+  res.json({ answer: r.text });
+});
+
+app.listen(3000, () => console.log('http://localhost:3000'));
+// Test: curl -X POST localhost:3000/ask -H "Content-Type: application/json" -d '{"question":"What is Node.js?"}'</code></pre>
+              </div>
+              <div class="code-run-hint">
+                <span>▶ Run: <code>node demos/05-llm-api.js</code></span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===================================================================
+           SLIDE 9: Architecture 2, RAG
+           =================================================================== -->
+      <section class="slide" id="slide-9">
+        <div class="slide-header">
+          <div class="slide-category">System Architecture 2 of 3</div>
+          <h2 class="slide-title">Architecture 2: <span class="highlight">RAG Pipeline</span></h2>
+        </div>
+        <div class="split-layout">
+          <div class="concept-col">
+            <div class="concept-card accent-border">
+              <h3 class="concept-title">📚 Retrieval-Augmented Generation</h3>
+              <p class="concept-text">
+                <strong>RAG</strong> fetches relevant information from your own database first, then provides that retrieved context to the LLM. This prevents <strong>hallucination</strong> and grounds answers in factual company data.
+              </p>
+            </div>
+
+            <!-- RAG Flow Diagram -->
+            <div class="diagram-flow-box">
+              <h4 style="font-size:0.95rem; color:var(--accent-cyan); font-weight:700;">1. Ingestion &amp; 2. Query Pipeline</h4>
+              <div class="flow-step-row">
+                <div class="flow-node">📄 Private Docs</div>
+                <span class="flow-arrow-icon">→</span>
+                <div class="flow-node indigo-node">🔢 Embeddings</div>
+                <span class="flow-arrow-icon">→</span>
+                <div class="flow-node active-node">🗄️ Vector Store</div>
+              </div>
+              <div class="flow-step-row" style="margin-top:0.35rem;">
+                <div class="flow-node amber-node">❓ User Question</div>
+                <span class="flow-arrow-icon">→</span>
+                <div class="flow-node">📐 Cosine Match</div>
+                <span class="flow-arrow-icon">→</span>
+                <div class="flow-node emerald-node">🧠 LLM + Context</div>
+                <span class="flow-arrow-icon">→</span>
+                <div class="flow-node">🎯 Accurate Answer</div>
+              </div>
+            </div>
+
+            <div class="concept-card">
+              <h3 class="concept-title">🔑 Core Concepts</h3>
+              <div class="key-term-list">
+                <div class="key-term-item">
+                  <span class="key-term-name">Embedding</span>: A numerical vector representing the semantic meaning of text.
+                </div>
+                <div class="key-term-item">
+                  <span class="key-term-name">Cosine Similarity</span>: Mathematical metric calculating angle between two vectors (1 = identical meaning).
+                </div>
+                <div class="key-term-item">
+                  <span class="key-term-name">Hallucination</span>: When an LLM confidently invents untrue facts. RAG eliminates this by restricting generation to retrieved context.
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="code-col">
+            <div class="code-container">
+              <div class="code-header">
+                <span class="code-file-badge"><span class="file-icon">📄</span> demos/06-rag.js</span>
+                <div class="code-actions">
+                  <span style="font-size:0.75rem; color:var(--text-muted);">Embed + Search</span>
+                  <button class="copy-btn">Copy</button>
+                </div>
+              </div>
+              <div class="code-scroll-area">
+                <pre class="line-numbers"><code class="language-javascript">// 06-rag.js
+import { ai, MODEL } from './ai.js';
+
+const docs = [
+  'Classes run Monday to Friday, 10 AM to 1 PM.',
+  'Placement support starts after course completion.',
+  'Students get lifetime access to recorded sessions.',
+];
+
+const embed = async (texts) =>
+  (await ai.models.embedContent({ model: 'gemini-embedding-001', contents: texts }))
+    .embeddings.map(e => e.values);
+
+const cosine = (a, b) => {
+  let dot = 0, na = 0, nb = 0;
+  for (let i = 0; i < a.length; i++) { dot += a[i] * b[i]; na += a[i] ** 2; nb += b[i] ** 2; }
+  return dot / Math.sqrt(na * nb);
+};
+
+const question = 'What time are the classes?';
+const docVecs = await embed(docs);           // 1. Index
+const [qVec] = await embed([question]);      // 2. Embed question
+const scores = docVecs.map(v => cosine(qVec, v));
+const best = docs[scores.indexOf(Math.max(...scores))]; // 3. Retrieve
+console.log('Retrieved:', best);
+
+const res = await ai.models.generateContent({  // 4. Generate
+  model: MODEL,
+  contents: `Answer only from this context:\n${best}\n\nQuestion: ${question}`,
+});
+console.log('Answer:', res.text);</code></pre>
+              </div>
+              <div class="code-run-hint">
+                <span>▶ Run: <code>node demos/06-rag.js</code></span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===================================================================
+           SLIDE 10: Architecture 3, AI Agent
+           =================================================================== -->
+      <section class="slide" id="slide-10">
+        <div class="slide-header">
+          <div class="slide-category">System Architecture 3 of 3</div>
+          <h2 class="slide-title">Architecture 3: <span class="highlight">Autonomous AI Agent</span></h2>
+        </div>
+        <div class="split-layout">
+          <div class="concept-col">
+            <div class="concept-card accent-border">
+              <h3 class="concept-title">🤖 What is an AI Agent?</h3>
+              <p class="concept-text">
+                An <strong>AI Agent</strong> is an LLM that autonomously decides which actions to take, calls external tools (functions/APIs), observes results, and loops until it completes a high-level goal.
+              </p>
+              <div class="example-box" style="margin-top:0.6rem;">
+                <strong>💡 LLM App vs Agent:</strong> An LLM App only <em>talks</em>; an Agent <em>talks and acts</em>!
+              </div>
+            </div>
+
+            <!-- Agent Loop Diagram -->
+            <div class="agent-loop-diagram">
+              <div class="agent-step">
+                <span class="agent-step-num">STEP 01</span>
+                <span class="agent-step-title">🎯 Goal Prompt</span>
+                <span class="agent-step-desc">"Should I carry an umbrella in Kochi?"</span>
+              </div>
+              <div class="agent-step" style="border-color:var(--accent-cyan);">
+                <span class="agent-step-num">STEP 02</span>
+                <span class="agent-step-title">🧠 LLM Thinks</span>
+                <span class="agent-step-desc">Decides it needs weather data</span>
+              </div>
+              <div class="agent-step" style="border-color:var(--accent-amber);">
+                <span class="agent-step-num">STEP 03</span>
+                <span class="agent-step-title">🔧 Call Tool</span>
+                <span class="agent-step-desc">Invokes <code>getWeather({ city: 'Kochi' })</code></span>
+              </div>
+              <div class="agent-step" style="border-color:var(--accent-emerald);">
+                <span class="agent-step-num">STEP 04</span>
+                <span class="agent-step-title">🔄 Loop &amp; Output</span>
+                <span class="agent-step-desc">Receives "Rainy" &amp; formulates final answer</span>
+              </div>
+            </div>
+
+            <div class="concept-card violet-border">
+              <h3 class="concept-title">🔑 Key Agent Mechanics</h3>
+              <div class="key-term-list">
+                <div class="key-term-item">
+                  <span class="key-term-name">Function Declarations</span>: Giving the model a schema of your code tools.
+                </div>
+                <div class="key-term-item">
+                  <span class="key-term-name">Agent Loop</span>: Think → Act (execute tool) → Observe result → Repeat until objective resolved.
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="code-col">
+            <div class="code-container">
+              <div class="code-header">
+                <span class="code-file-badge"><span class="file-icon">📄</span> demos/07-agent.js</span>
+                <div class="code-actions">
+                  <span style="font-size:0.75rem; color:var(--text-muted);">Tool Calling Loop</span>
+                  <button class="copy-btn">Copy</button>
+                </div>
+              </div>
+              <div class="code-scroll-area">
+                <pre class="line-numbers"><code class="language-javascript">// 07-agent.js
+import { ai, MODEL } from './ai.js';
+
+const tools = {
+  getWeather: ({ city }) => ({ city, temp: '31°C', sky: 'Rainy' }), // fake tool
+};
+
+const config = {
+  tools: [{
+    functionDeclarations: [{
+      name: 'getWeather',
+      description: 'Get current weather for a city',
+      parameters: { type: 'object', properties: { city: { type: 'string' } }, required: ['city'] },
+    }],
+  }],
+};
+
+const contents = [{ role: 'user', parts: [{ text: 'Should I carry an umbrella in Kochi today?' }] }];
+
+while (true) {
+  const res = await ai.models.generateContent({ model: MODEL, contents, config });
+  if (!res.functionCalls?.length) { console.log('Agent:', res.text); break; }
+
+  contents.push(res.candidates[0].content);
+  for (const call of res.functionCalls) {
+    console.log('🔧 Tool call:', call.name, call.args);
+    const result = tools[call.name](call.args);
+    contents.push({ role: 'user', parts: [{ functionResponse: { name: call.name, response: result } }] });
+  }
+}</code></pre>
+              </div>
+              <div class="code-run-hint">
+                <span>▶ Run: <code>node demos/07-agent.js</code></span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===================================================================
+           SLIDE 11: Multimodal AI
+           =================================================================== -->
+      <section class="slide" id="slide-11">
+        <div class="slide-header">
+          <div class="slide-category">Next-Gen Capabilities</div>
+          <h2 class="slide-title">Multimodal <span class="highlight">Artificial Intelligence</span></h2>
+        </div>
+        <div class="split-layout">
+          <div class="concept-col">
+            <div class="concept-card accent-border">
+              <h3 class="concept-title">🌐 Definition &amp; Modalities</h3>
+              <p class="concept-text">
+                <strong>Multimodal AI</strong> can understand, reason over, and combine multiple input modalities (text, images, audio, video) simultaneously inside a unified model.
+              </p>
+            </div>
+
+            <div class="concept-card">
+              <h3 class="concept-title">🔄 Unimodal vs Multimodal</h3>
+              <div class="key-term-list">
+                <div class="key-term-item">
+                  <strong>Unimodal (Legacy):</strong> Text in → Text out. Models could only parse text tokens.
+                </div>
+                <div class="key-term-item" style="border-color:var(--accent-cyan); background:rgba(56, 189, 248, 0.08);">
+                  <strong>Multimodal (Modern):</strong> Image + Text in → Text out (or Image/Audio out). Visual features and tokens share unified embedding space.
+                </div>
+              </div>
+            </div>
+
+            <div class="concept-card emerald-border">
+              <h3 class="concept-title">🚀 Real-World Examples</h3>
+              <ul style="margin-left:1.2rem; color:var(--text-secondary); line-height:1.7;">
+                <li>Photo of a damaged bicycle part + <em>“What is this and how do I replace it?”</em></li>
+                <li><strong>Google Lens:</strong> Translating street signboards in foreign languages.</li>
+                <li>Photographing handwritten mathematical equations to receive step-by-step solutions.</li>
+                <li><strong>Leading Models:</strong> Gemini 2.5 Flash, GPT-4o, Claude 3.5 Sonnet.</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="code-col">
+            <div class="code-container">
+              <div class="code-header">
+                <span class="code-file-badge"><span class="file-icon">📄</span> demos/08-multimodal.js</span>
+                <div class="code-actions">
+                  <span style="font-size:0.75rem; color:var(--text-muted);">Vision Prompt</span>
+                  <button class="copy-btn">Copy</button>
+                </div>
+              </div>
+              <div class="code-scroll-area">
+                <pre class="line-numbers"><code class="language-javascript">// 08-multimodal.js
+import fs from 'node:fs';
+import { ai, MODEL } from './ai.js';
+
+const image = fs.readFileSync('photo.jpg').toString('base64');
+
+const res = await ai.models.generateContent({
+  model: MODEL,
+  contents: [
+    { inlineData: { mimeType: 'image/jpeg', data: image } },
+    { text: 'Describe this image and list the objects in it.' },
+  ],
+});
+console.log(res.text);</code></pre>
+              </div>
+              <div class="code-run-hint">
+                <span>▶ Run: <code>node demos/08-multimodal.js</code> (Requires photo.jpg in demos/)</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===================================================================
+           SLIDE 12: Recap + Practice Task
+           =================================================================== -->
+      <section class="slide" id="slide-12">
+        <div class="slide-header">
+          <div class="slide-category">Session Summary &amp; Homework</div>
+          <h2 class="slide-title">Recap &amp; <span class="highlight">Hands-On Practice Task</span></h2>
+        </div>
+        <div class="split-layout">
+          <div class="concept-col">
+            <div class="table-wrapper">
+              <table class="styled-table">
+                <thead>
+                  <tr>
+                    <th>Topic</th>
+                    <th>One-Line Takeaway</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="tag-col">GenAI</td>
+                    <td>AI that creates new, original content by predicting tokens</td>
+                  </tr>
+                  <tr>
+                    <td class="tag-col">AI → ML → DL → GenAI</td>
+                    <td>Each concept is a specialized subset of the previous layer</td>
+                  </tr>
+                  <tr>
+                    <td class="tag-col">Traditional vs GenAI</td>
+                    <td>Classifies/predicts vs creates novel output across domains</td>
+                  </tr>
+                  <tr>
+                    <td class="tag-col">Types</td>
+                    <td>Text, image, audio, video, and code generation</td>
+                  </tr>
+                  <tr>
+                    <td class="tag-col">Applications</td>
+                    <td>Customer support, coding assistants, education, document search</td>
+                  </tr>
+                  <tr>
+                    <td class="tag-col">LLM App</td>
+                    <td>Prompt in → response out via secure backend API</td>
+                  </tr>
+                  <tr>
+                    <td class="tag-col">RAG</td>
+                    <td>Retrieve private data first → ground LLM answer without hallucination</td>
+                  </tr>
+                  <tr>
+                    <td class="tag-col">Agent</td>
+                    <td>LLM + autonomous tool execution loop to achieve high-level goals</td>
+                  </tr>
+                  <tr>
+                    <td class="tag-col">Multimodal</td>
+                    <td>Multiple input modalities (text, vision, audio) in one unified model</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="code-col">
+            <div class="concept-card emerald-border" style="height:100%; display:flex; flex-direction:column; justify-content:space-between;">
+              <div>
+                <div class="card-top" style="margin-bottom:1rem;">
+                  <span class="card-heading" style="color:var(--accent-emerald);">🎯 Student Practice Task</span>
+                  <span class="card-type-tag" style="color:var(--accent-emerald); background:rgba(52, 211, 153, 0.1);">Homework</span>
+                </div>
+                <div class="example-box" style="background:rgba(52, 211, 153, 0.08); border-color:rgba(52, 211, 153, 0.3);">
+                  <p style="font-size:1.15rem; color:#d1fae5; line-height:1.6;">
+                    <strong>Your Challenge:</strong><br>
+                    Open <code>demos/06-rag.js</code> and customize it:
+                  </p>
+                  <ol style="margin-left:1.5rem; margin-top:0.75rem; color:#a7f3d0; line-height:1.7;">
+                    <li>Replace the sample docs with <strong>5 factual sentences about yourself</strong> (education, hobbies, tech stack, career goals).</li>
+                    <li>Write <strong>3 distinct questions</strong> to test the cosine retrieval.</li>
+                    <li>Verify that the LLM only answers from your provided sentences!</li>
+                  </ol>
+                </div>
+              </div>
+
+              <div class="concept-card violet-border" style="margin-top:1.25rem;">
+                <h4 style="font-size:0.95rem; color:var(--text-main); margin-bottom:0.35rem;">🔔 Trainer Notice</h4>
+                <p style="font-size:0.85rem; color:var(--text-muted); line-height:1.5;">
+                  Model names change periodically. Always verify current Gemini model IDs (e.g. <code>gemini-2.5-flash</code>, <code>gemini-1.5-flash</code>, or <code>gemini-embedding-001</code>) before class.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- Bottom Controls Bar -->
+    <footer class="bottom-bar">
+      <div class="nav-hint">
+        <span>Navigate:</span>
+        <span class="kbd-badge">←</span>
+        <span class="kbd-badge">→</span>
+        <span class="kbd-badge">Space</span>
+        <span style="margin: 0 0.5rem;">|</span>
+        <span class="kbd-badge">F</span> Fullscreen
+        <span class="kbd-badge">T</span> Topics
+        <span class="kbd-badge">?</span> Shortcuts
+      </div>
+      <div class="nav-buttons">
+        <button class="nav-btn" id="prevBtn" disabled>
+          <span>←</span> Previous
+        </button>
+        <button class="nav-btn" id="nextBtn">
+          Next <span>→</span>
+        </button>
+      </div>
+    </footer>
+
+    <!-- Table of Contents Modal -->
+    <div class="modal-overlay" id="tocModal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3 class="modal-title">Table of Contents</h3>
+          <button class="modal-close-btn" id="tocCloseBtn">&times;</button>
+        </div>
+        <div class="modal-body" id="tocList"></div>
+      </div>
+    </div>
+
+    <!-- Help / Keyboard Shortcuts Modal -->
+    <div class="modal-overlay" id="helpModal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3 class="modal-title">Keyboard Shortcuts</h3>
+          <button class="modal-close-btn" id="helpCloseBtn">&times;</button>
+        </div>
+        <div class="modal-body">
+          <div class="toc-item"><span><span class="kbd-badge">→</span> or <span class="kbd-badge">Space</span></span> <span>Next Slide</span></div>
+          <div class="toc-item"><span><span class="kbd-badge">←</span></span> <span>Previous Slide</span></div>
+          <div class="toc-item"><span><span class="kbd-badge">Home</span></span> <span>First Slide</span></div>
+          <div class="toc-item"><span><span class="kbd-badge">End</span></span> <span>Last Slide</span></div>
+          <div class="toc-item"><span><span class="kbd-badge">F</span></span> <span>Toggle Fullscreen</span></div>
+          <div class="toc-item"><span><span class="kbd-badge">T</span></span> <span>Toggle Table of Contents</span></div>
+          <div class="toc-item"><span><span class="kbd-badge">?</span></span> <span>Toggle Shortcuts Cheat Sheet</span></div>
+          <div class="toc-item"><span><span class="kbd-badge">Esc</span></span> <span>Close Modal Dialogs</span></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Prism.js Scripts -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-javascript.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-bash.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-json.min.js"></script>
+</body>
+</html>
+

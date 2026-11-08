@@ -1,0 +1,1461 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MERN Node.js — Day 8: Implementing User Sessions</title>
+  <meta name="description" content="Beginner-friendly classroom presentation: Session-based authentication using Express, express-session, cookies, connect-mongo, and MongoDB.">
+  <link rel="stylesheet" href="style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <div class="presentation-container">
+
+    <!-- =====================================================================
+         TOP NAVIGATION BAR
+         ===================================================================== -->
+    <header class="top-bar">
+      <!-- Animated Progress Track -->
+      <div class="progress-track">
+        <div class="progress-fill" id="progressFill"></div>
+      </div>
+
+      <div class="top-left">
+        <div class="brand-badge">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+            <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+          </svg>
+          <span>MERN · Node.js Day 8</span>
+        </div>
+        <div class="deck-title">
+          <span>User Sessions (Express &amp; MongoDB)</span>
+          <span class="deck-divider">/</span>
+          <span class="section-indicator" id="sectionIndicator">Welcome &amp; Overview</span>
+        </div>
+      </div>
+
+      <div class="top-right">
+        <div class="slide-counter" id="slideCounter">01 / 18</div>
+        <button class="top-btn" id="tocBtn" title="Table of Contents (T)">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="3" y1="12" x2="21" y2="12"></line>
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <line x1="3" y1="18" x2="21" y2="18"></line>
+          </svg>
+        </button>
+        <button class="top-btn" id="helpBtn" title="Keyboard Shortcuts (?)">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"></circle>
+            <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+            <line x1="12" y1="17" x2="12.01" y2="17"></line>
+          </svg>
+        </button>
+        <button class="top-btn" id="fullscreenBtn" title="Toggle Fullscreen (F)">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="15 3 21 3 21 9"></polyline>
+            <polyline points="9 21 3 21 3 15"></polyline>
+            <line x1="21" y1="3" x2="14" y2="10"></line>
+            <line x1="3" y1="21" x2="10" y2="14"></line>
+          </svg>
+        </button>
+      </div>
+    </header>
+
+    <!-- =====================================================================
+         MAIN SLIDES VIEWPORT (EXACTLY 18 SLIDES)
+         ===================================================================== -->
+    <main class="slide-viewport">
+
+      <!-- -------------------------------------------------------------------
+           SLIDE 1: INTRODUCTION
+           ------------------------------------------------------------------- -->
+      <section class="slide active" id="slide-1">
+        <div class="hero-container">
+          <div class="hero-badge-wrap">
+            <span class="badge-dot"></span>
+            <span>MERN Stack Development · State &amp; Session Management</span>
+          </div>
+
+          <h1 class="hero-title">
+            Implementing User Sessions in <br>
+            <span class="highlight-text">Node.js, Express &amp; MongoDB</span>
+          </h1>
+
+          <p class="hero-subtitle">
+            A comprehensive, practical guide to session-based authentication: understanding cookies, session IDs, express-session middleware, protected routes, and persistent storage with connect-mongo.
+          </p>
+
+          <div class="hero-topics-grid">
+            <div class="hero-topic-item">
+              <span class="bullet-icon">&#x2714;</span>
+              <span>What Are User Sessions?</span>
+            </div>
+            <div class="hero-topic-item">
+              <span class="bullet-icon">&#x2714;</span>
+              <span>JWT vs. Session Auth</span>
+            </div>
+            <div class="hero-topic-item">
+              <span class="bullet-icon">&#x2714;</span>
+              <span>Cookies &amp; Security Flags</span>
+            </div>
+            <div class="hero-topic-item">
+              <span class="bullet-icon">&#x2714;</span>
+              <span>express-session Middleware</span>
+            </div>
+            <div class="hero-topic-item">
+              <span class="bullet-icon">&#x2714;</span>
+              <span>Protected Routes &amp; Auth Guard</span>
+            </div>
+            <div class="hero-topic-item">
+              <span class="bullet-icon">&#x2714;</span>
+              <span>MongoDB Session Persistence</span>
+            </div>
+          </div>
+
+          <div class="hero-footer-meta">
+            <span><strong>Target Audience:</strong> Beginner to Intermediate MERN Developers</span>
+            <span>&bull;</span>
+            <span><strong>Prerequisite:</strong> Completed Day 7 (JWT Fundamentals)</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- -------------------------------------------------------------------
+           SLIDE 2: WHAT IS A USER SESSION?
+           ------------------------------------------------------------------- -->
+      <section class="slide" id="slide-2">
+        <header class="slide-header">
+          <div class="slide-title-wrap">
+            <span class="slide-category">Core Concepts</span>
+            <h2 class="slide-title">What Is a User Session?</h2>
+            <p class="slide-subtitle">How servers remember a user's login state across multiple stateless HTTP requests.</p>
+          </div>
+          <span class="slide-num-pill">Slide 02</span>
+        </header>
+
+        <div class="slide-body">
+          <div class="grid-2">
+            <!-- Concept Card -->
+            <div class="card highlight border-accent">
+              <h3 class="card-title">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                The Stateless HTTP Problem
+              </h3>
+              <p>By default, <strong>HTTP is a stateless protocol</strong>. This means the server treats every single request as completely independent. Once the response is sent, the server forgets who made the request!</p>
+              <div class="callout callout-warning">
+                <strong>Without Sessions:</strong> If a student logs in, navigates to their profile page, and then clicks on their grades, the server would ask them to log in again on every single click!
+              </div>
+              <p style="margin-top:0.4rem;"><strong>The Solution:</strong> A <strong>session</strong> is a server-side data structure created upon login. It gives the client a temporary identity card (session ID cookie) so the server instantly recognizes the user on future requests.</p>
+            </div>
+
+            <!-- Analogy & Flow -->
+            <div class="card">
+              <h3 class="card-title">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                Real-World Analogy: The Event Wristband
+              </h3>
+              <p>When you buy a ticket at an amusement park or concert:</p>
+              <ul class="feature-list" style="margin-top:0.35rem;">
+                <li><span class="bullet-icon">&bull;</span> You present your ID and ticket at the gate <em>(Login)</em>.</li>
+                <li><span class="bullet-icon">&bull;</span> The gatekeeper straps a numbered wristband to your wrist <em>(Session ID Cookie)</em>.</li>
+                <li><span class="bullet-icon">&bull;</span> Whenever you enter a ride, security glances at your wristband rather than asking for your full ticket and ID every single time <em>(Protected Requests)</em>!</li>
+              </ul>
+
+              <div class="diagram-container" style="margin-top:0.6rem;">
+                <div class="flow-horizontal">
+                  <div class="flow-box">
+                    <span class="flow-step-num">Step 1</span>
+                    <div class="flow-step-text"><strong>User Logs In</strong><br><small>Verifies password</small></div>
+                  </div>
+                  <div class="flow-arrow">&rarr;</div>
+                  <div class="flow-box active-box">
+                    <span class="flow-step-num">Step 2</span>
+                    <div class="flow-step-text"><strong>Server Creates Session</strong><br><small>Stores userId in DB</small></div>
+                  </div>
+                  <div class="flow-arrow">&rarr;</div>
+                  <div class="flow-box">
+                    <span class="flow-step-num">Step 3</span>
+                    <div class="flow-step-text"><strong>Sends Session ID</strong><br><small>Cookie in browser</small></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- -------------------------------------------------------------------
+           SLIDE 3: DIFFERENCE BETWEEN JWT AND SESSIONS
+           ------------------------------------------------------------------- -->
+      <section class="slide" id="slide-3">
+        <header class="slide-header">
+          <div class="slide-title-wrap">
+            <span class="slide-category">Architectural Comparison</span>
+            <h2 class="slide-title">What Is the Difference Between JWT &amp; Sessions?</h2>
+            <p class="slide-subtitle">Connecting Day 7 (stateless tokens) with Day 8 (server-side stateful sessions).</p>
+          </div>
+          <span class="slide-num-pill">Slide 03</span>
+        </header>
+
+        <div class="slide-body">
+          <div class="table-responsive">
+            <table class="custom-table">
+              <thead>
+                <tr>
+                  <th>Dimension</th>
+                  <th>JWT Authentication (Day 7)</th>
+                  <th>Session Authentication (Day 8)</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Where data is stored</strong></td>
+                  <td>Client-side (encoded in the JWT payload)</td>
+                  <td>Server-side (stored in memory or MongoDB)</td>
+                </tr>
+                <tr>
+                  <td><strong>What client holds</strong></td>
+                  <td>Self-contained cryptographic token</td>
+                  <td>Only a lightweight Session ID cookie (pointer)</td>
+                </tr>
+                <tr>
+                  <td><strong>Verification method</strong></td>
+                  <td>Cryptographic signature math (stateless)</td>
+                  <td>Database lookup in session store (stateful)</td>
+                </tr>
+                <tr>
+                  <td><strong>Instant Revocation</strong></td>
+                  <td>Difficult (requires token blacklists in Redis)</td>
+                  <td>Instantaneous (simply delete row from database)</td>
+                </tr>
+                <tr>
+                  <td><strong>Horizontal Scale</strong></td>
+                  <td>Zero database dependency across clusters</td>
+                  <td>Requires shared session store (MongoDB / Redis)</td>
+                </tr>
+                <tr>
+                  <td><strong>Transmission</strong></td>
+                  <td>Manual <code>Authorization: Bearer</code> header</td>
+                  <td>Browser automatically sends <code>Cookie</code> header</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="grid-2" style="margin-top:0.4rem;">
+            <!-- JWT Flow -->
+            <div class="card">
+              <h4 style="font-size:0.9rem; font-weight:700; color:#6d28d9;">JWT Flow (Day 7)</h4>
+              <div class="flow-horizontal">
+                <div class="flow-box"><span class="flow-step-num">1</span>Login</div>
+                <div class="flow-arrow">&rarr;</div>
+                <div class="flow-box"><span class="flow-step-num">2</span>Sign Token</div>
+                <div class="flow-arrow">&rarr;</div>
+                <div class="flow-box"><span class="flow-step-num">3</span>Client Stores</div>
+                <div class="flow-arrow">&rarr;</div>
+                <div class="flow-box"><span class="flow-step-num">4</span>Verify Math</div>
+              </div>
+            </div>
+
+            <!-- Session Flow -->
+            <div class="card highlight">
+              <h4 style="font-size:0.9rem; font-weight:700; color:#0369a1;">Session Flow (Day 8)</h4>
+              <div class="flow-horizontal">
+                <div class="flow-box"><span class="flow-step-num">1</span>Login</div>
+                <div class="flow-arrow">&rarr;</div>
+                <div class="flow-box active-box"><span class="flow-step-num">2</span>DB Session</div>
+                <div class="flow-arrow">&rarr;</div>
+                <div class="flow-box"><span class="flow-step-num">3</span>Set Cookie</div>
+                <div class="flow-arrow">&rarr;</div>
+                <div class="flow-box"><span class="flow-step-num">4</span>Lookup DB</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- -------------------------------------------------------------------
+           SLIDE 4: WHAT ARE COOKIES?
+           ------------------------------------------------------------------- -->
+      <section class="slide" id="slide-4">
+        <header class="slide-header">
+          <div class="slide-title-wrap">
+            <span class="slide-category">Web Protocols &amp; Security</span>
+            <h2 class="slide-title">What Are Cookies &amp; How Do They Work?</h2>
+            <p class="slide-subtitle">The browser's automatic credential carrier and essential security flags.</p>
+          </div>
+          <span class="slide-num-pill">Slide 04</span>
+        </header>
+
+        <div class="slide-body">
+          <div class="grid-2">
+            <!-- Left: Concepts -->
+            <div class="card highlight">
+              <h3 class="card-title">How Cookies Work in HTTP</h3>
+              <p>A <strong>cookie</strong> is a small piece of data (key-value pair) sent by the server in the HTTP response using the <code>Set-Cookie</code> header.</p>
+              
+              <div class="code-container" style="margin-top:0.4rem;">
+                <div class="code-header">
+                  <div class="code-file-badge"><span class="file-dot"></span><span>HTTP Response Header</span></div>
+                  <button class="copy-btn">Copy</button>
+                </div>
+                <pre><code>Set-Cookie: student.sid=s%3Aabc123...; Path=/; HttpOnly; SameSite=Lax</code></pre>
+              </div>
+
+              <p style="margin-top:0.5rem; font-size:0.88rem;">Once stored, the browser automatically attaches this cookie to every future HTTP request to the same domain via the <code>Cookie:</code> header:</p>
+              <div class="code-container" style="margin-top:0.35rem;">
+                <pre><code>Cookie: student.sid=s%3Aabc123...</code></pre>
+              </div>
+            </div>
+
+            <!-- Right: Cookie Security Flags -->
+            <div class="card">
+              <h3 class="card-title">Critical Cookie Security Properties</h3>
+              <div class="table-responsive">
+                <table class="custom-table" style="font-size:0.83rem;">
+                  <thead>
+                    <tr>
+                      <th>Property</th>
+                      <th>Security Purpose &amp; Protection</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><code>httpOnly: true</code></td>
+                      <td>Blocks JavaScript from reading <code>document.cookie</code>. <strong>Stops XSS attacks!</strong></td>
+                    </tr>
+                    <tr>
+                      <td><code>secure: true</code></td>
+                      <td>Cookie is only transmitted over HTTPS. <strong>Stops packet sniffing!</strong></td>
+                    </tr>
+                    <tr>
+                      <td><code>sameSite: "lax"</code></td>
+                      <td>Controls cross-origin transmission. <strong>Stops CSRF attacks!</strong></td>
+                    </tr>
+                    <tr>
+                      <td><code>maxAge: 3600000</code></td>
+                      <td>Sets cookie expiration in ms (e.g. 1 hour). Prevents zombie sessions.</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <div class="callout callout-danger" style="margin-top:0.6rem;">
+                <strong>Crucial Security Truth:</strong> The session ID stored in the cookie is <em>never</em> the user's password or database record. It is merely an unforgeable, cryptographically signed reference key.
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- -------------------------------------------------------------------
+           SLIDE 5: HOW SESSION AUTHENTICATION WORKS
+           ------------------------------------------------------------------- -->
+      <section class="slide" id="slide-5">
+        <header class="slide-header">
+          <div class="slide-title-wrap">
+            <span class="slide-category">System Architecture</span>
+            <h2 class="slide-title">How Session Authentication Works (End-to-End)</h2>
+            <p class="slide-subtitle">The full communication lifecycle between the Browser Client, Express Server, and MongoDB.</p>
+          </div>
+          <span class="slide-num-pill">Slide 05</span>
+        </header>
+
+        <div class="slide-body">
+          <div class="flow-horizontal" style="gap:0.5rem;">
+            <div class="flow-box">
+              <span class="flow-step-num">Step 1</span>
+              <div class="flow-step-text"><strong>Client POST</strong><br><small>Submits email &amp; password</small></div>
+            </div>
+            <div class="flow-arrow">&rarr;</div>
+            <div class="flow-box">
+              <span class="flow-step-num">Step 2</span>
+              <div class="flow-step-text"><strong>Verify bcrypt</strong><br><small>Compares password hash</small></div>
+            </div>
+            <div class="flow-arrow">&rarr;</div>
+            <div class="flow-box active-box">
+              <span class="flow-step-num">Step 3</span>
+              <div class="flow-step-text"><strong>Create Session</strong><br><small>Regenerates SID &amp; saves to DB</small></div>
+            </div>
+            <div class="flow-arrow">&rarr;</div>
+            <div class="flow-box">
+              <span class="flow-step-num">Step 4</span>
+              <div class="flow-step-text"><strong>Set-Cookie</strong><br><small>Sends signed cookie to browser</small></div>
+            </div>
+            <div class="flow-arrow">&rarr;</div>
+            <div class="flow-box">
+              <span class="flow-step-num">Step 5</span>
+              <div class="flow-step-text"><strong>Future Calls</strong><br><small>Browser auto-sends cookie</small></div>
+            </div>
+          </div>
+
+          <div class="grid-2" style="margin-top:0.5rem;">
+            <div class="card highlight">
+              <h3 class="card-title">Phase A: Login &amp; Session Creation</h3>
+              <ol class="feature-list" style="font-size:0.86rem; margin-top:0.25rem;">
+                <li><span class="bullet-icon">1.</span> Student submits login credentials via HTTPS POST.</li>
+                <li><span class="bullet-icon">2.</span> Express checks the database and validates the password using <code>bcrypt.compare()</code>.</li>
+                <li><span class="bullet-icon">3.</span> Server creates a new session in MongoDB and saves <code>req.session.userId = user.id</code>.</li>
+                <li><span class="bullet-icon">4.</span> Server returns HTTP 200 with the header: <code>Set-Cookie: student.sid=&lt;signed_id&gt;; HttpOnly</code>.</li>
+              </ol>
+            </div>
+
+            <div class="card">
+              <h3 class="card-title">Phase B: Authenticating Protected Routes</h3>
+              <ol class="feature-list" style="font-size:0.86rem; margin-top:0.25rem;">
+                <li><span class="bullet-icon">5.</span> Browser accesses <code>GET /profile</code> and automatically includes the cookie.</li>
+                <li><span class="bullet-icon">6.</span> Session middleware reads the cookie, verifies the signature, and fetches session data from MongoDB.</li>
+                <li><span class="bullet-icon">7.</span> <code>authMiddleware</code> inspects <code>req.session.userId</code>. If present, calls <code>next()</code>!</li>
+                <li><span class="bullet-icon">8.</span> The controller sends back the student profile!</li>
+              </ol>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- -------------------------------------------------------------------
+           SLIDE 6: WHAT IS EXPRESS-SESSION?
+           ------------------------------------------------------------------- -->
+      <section class="slide" id="slide-6">
+        <header class="slide-header">
+          <div class="slide-title-wrap">
+            <span class="slide-category">Express Middleware</span>
+            <h2 class="slide-title">What Is express-session?</h2>
+            <p class="slide-subtitle">The standard Express middleware for creating, signing, reading, and destroying user sessions.</p>
+          </div>
+          <span class="slide-num-pill">Slide 06</span>
+        </header>
+
+        <div class="slide-body">
+          <div class="grid-2">
+            <!-- Code Block -->
+            <div class="code-container">
+              <div class="code-header">
+                <div class="code-file-badge"><span class="file-dot"></span><span>Basic express-session Setup</span></div>
+                <button class="copy-btn">Copy</button>
+              </div>
+              <pre><code><span class="syn-comment">// 1. Install via npm: npm install express-session</span>
+<span class="syn-kw">const</span> express = <span class="syn-fn">require</span>(<span class="syn-str">"express"</span>);
+<span class="syn-kw">const</span> session = <span class="syn-fn">require</span>(<span class="syn-str">"express-session"</span>);
+
+<span class="syn-kw">const</span> app = <span class="syn-fn">express</span>();
+
+<span class="syn-comment">// 2. Configure session middleware</span>
+app.<span class="syn-fn">use</span>(
+  <span class="syn-fn">session</span>({
+    secret: <span class="syn-str">"my-secret-key-12345"</span>, <span class="syn-comment">// Signs the session ID cookie</span>
+    resave: <span class="syn-num">false</span>,                <span class="syn-comment">// Don't resave if unmodified</span>
+    saveUninitialized: <span class="syn-num">false</span>       <span class="syn-comment">// Don't save empty sessions</span>
+  })
+);</code></pre>
+            </div>
+
+            <!-- Parameters & Warning -->
+            <div class="card">
+              <h3 class="card-title">Configuration Options Explained</h3>
+              <ul class="feature-list" style="font-size:0.86rem;">
+                <li><span class="bullet-icon">&bull;</span> <code>secret</code>: Secret key used by the server to cryptographically sign the cookie. This guarantees that an attacker cannot alter their session ID in the browser.</li>
+                <li><span class="bullet-icon">&bull;</span> <code>resave: false</code>: Prevents saving the session back to the database on every request if nothing in <code>req.session</code> was modified. Dramatically reduces DB load!</li>
+                <li><span class="bullet-icon">&bull;</span> <code>saveUninitialized: false</code>: Ensures unauthenticated visitors don't create empty session documents in MongoDB, keeping your database clean.</li>
+              </ul>
+
+              <div class="callout callout-danger" style="margin-top:0.75rem;">
+                <strong>CRITICAL WARNING: The MemoryStore Trap</strong><br>
+                By default, <code>express-session</code> uses an in-memory store. In production, <em>memory stores leak memory, don't scale across multiple servers, and erase every active user on server restart!</em> Always use a database store like <strong>connect-mongo</strong>!
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- -------------------------------------------------------------------
+           SLIDE 7: PRACTICAL — CREATE YOUR FIRST SESSION
+           ------------------------------------------------------------------- -->
+      <section class="slide" id="slide-7">
+        <header class="slide-header">
+          <div class="slide-title-wrap">
+            <span class="slide-category">Hands-on Implementation</span>
+            <h2 class="slide-title">Practical: Create Your First Session</h2>
+            <p class="slide-subtitle">Build a visit counter route and observe how the session cookie persists across requests.</p>
+          </div>
+          <span class="slide-num-pill">Slide 07</span>
+        </header>
+
+        <div class="slide-body">
+          <div class="grid-2">
+            <!-- Code Block -->
+            <div class="code-container">
+              <div class="code-header">
+                <div class="code-file-badge"><span class="file-dot"></span><span>visit-demo.js</span></div>
+                <button class="copy-btn">Copy</button>
+              </div>
+              <pre><code><span class="syn-kw">const</span> express = <span class="syn-fn">require</span>(<span class="syn-str">"express"</span>);
+<span class="syn-kw">const</span> session = <span class="syn-fn">require</span>(<span class="syn-str">"express-session"</span>);
+
+<span class="syn-kw">const</span> app = <span class="syn-fn">express</span>();
+
+app.<span class="syn-fn">use</span>(
+  <span class="syn-fn">session</span>({
+    secret: <span class="syn-str">"student-session-secret"</span>,
+    resave: <span class="syn-num">false</span>,
+    saveUninitialized: <span class="syn-num">true</span>
+  })
+);
+
+<span class="syn-comment">// GET /visit — Increments session counter</span>
+app.<span class="syn-fn">get</span>(<span class="syn-str">"/visit"</span>, (req, res) => {
+  req.session.<span class="syn-prop">visits</span> = (req.session.<span class="syn-prop">visits</span> || <span class="syn-num">0</span>) + <span class="syn-num">1</span>;
+
+  res.<span class="syn-fn">json</span>({
+    message: <span class="syn-str">"Session example"</span>,
+    visits: req.session.<span class="syn-prop">visits</span>
+  });
+});
+
+app.<span class="syn-fn">listen</span>(<span class="syn-num">3000</span>, () => console.<span class="syn-fn">log</span>(<span class="syn-str">"Running on port 3000"</span>));</code></pre>
+            </div>
+
+            <!-- Interactive Visit Counter Simulator -->
+            <div class="sandbox-card">
+              <div class="sandbox-header">
+                <div class="sandbox-title">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                  <span>Interactive Session Simulator</span>
+                </div>
+                <span id="visitCountBadge" class="status-pill status-pill-success">visits: 0</span>
+              </div>
+
+              <div class="sandbox-controls">
+                <button id="visitSendBtn" class="sandbox-btn">Send GET /visit</button>
+                <button id="visitResetBtn" class="sandbox-btn sandbox-btn-secondary">Reset Session</button>
+              </div>
+
+              <div>
+                <label style="font-size:0.75rem; text-transform:uppercase; font-weight:700; color:var(--text-muted);">Browser Cookie Header (Auto Sent by Client)</label>
+                <div id="visitCookieDisplay" style="font-family:var(--font-mono); font-size:0.78rem; background:#0b1329; color:#38bdf8; padding:0.45rem 0.65rem; border-radius:6px; margin-top:0.25rem;">
+                  // No session cookie stored yet
+                </div>
+              </div>
+
+              <div>
+                <label style="font-size:0.75rem; text-transform:uppercase; font-weight:700; color:var(--text-muted);">Server Response JSON</label>
+                <pre style="background:#0b1329; color:#34d399; padding:0.5rem; border-radius:6px; font-family:var(--font-mono); font-size:0.8rem; margin-top:0.2rem;"><code id="visitOutputResult">// Click "Send GET /visit" to trigger session middleware</code></pre>
+              </div>
+
+              <div id="visitExplainBox" style="margin-top:0.35rem;">
+                <span style="font-size:0.82rem; color:var(--text-muted);">Clicking the button simulates multiple browser visits using the same session.</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- -------------------------------------------------------------------
+           SLIDE 8: PROJECT SETUP
+           ------------------------------------------------------------------- -->
+      <section class="slide" id="slide-8">
+        <header class="slide-header">
+          <div class="slide-title-wrap">
+            <span class="slide-category">Project Architecture</span>
+            <h2 class="slide-title">Project Setup: Student Session Auth API</h2>
+            <p class="slide-subtitle">Install packages, organize folder structure, and configure environment variables.</p>
+          </div>
+          <span class="slide-num-pill">Slide 08</span>
+        </header>
+
+        <div class="slide-body">
+          <div class="grid-2">
+            <!-- Left: Terminal & Packages -->
+            <div>
+              <div class="code-container">
+                <div class="code-header">
+                  <div class="code-file-badge"><span class="file-dot"></span><span>Terminal Commands</span></div>
+                  <button class="copy-btn">Copy</button>
+                </div>
+                <pre><code><span class="syn-comment"># 1. Initialize project</span>
+mkdir student-session-api &amp;&amp; cd student-session-api
+npm init -y
+
+<span class="syn-comment"># 2. Install production dependencies</span>
+npm install express express-session bcryptjs dotenv connect-mongo
+
+<span class="syn-comment"># 3. Install nodemon for live reload</span>
+npm install -D nodemon</code></pre>
+              </div>
+
+              <div class="card" style="margin-top:0.85rem;">
+                <h4 style="font-size:0.9rem; font-weight:700; color:var(--primary-dark);">Package Responsibilities:</h4>
+                <ul class="feature-list" style="margin-top:0.35rem; font-size:0.85rem;">
+                  <li><code>express-session</code>: Generates and validates session cookies.</li>
+                  <li><code>connect-mongo</code>: Persists session data in MongoDB collections.</li>
+                  <li><code>bcryptjs</code>: Hashes and securely verifies passwords.</li>
+                  <li><code>dotenv</code>: Loads connection strings and session secrets from <code>.env</code>.</li>
+                </ul>
+              </div>
+            </div>
+
+            <!-- Right: Folder Structure & .env -->
+            <div>
+              <div class="code-container">
+                <div class="code-header">
+                  <div class="code-file-badge"><span class="file-dot"></span><span>Project Structure</span></div>
+                </div>
+                <pre><code>student-session-api/
+├── middleware/
+│   └── authMiddleware.js   <span class="syn-comment"># Session guard for protected routes</span>
+├── .env                    <span class="syn-comment"># Secrets &amp; MongoDB connection</span>
+├── .gitignore              <span class="syn-comment"># Protects node_modules &amp; .env</span>
+├── server.js               <span class="syn-comment"># Express entry point &amp; routes</span>
+└── package.json</code></pre>
+              </div>
+
+              <div class="code-container" style="margin-top:0.85rem;">
+                <div class="code-header">
+                  <div class="code-file-badge"><span class="file-dot"></span><span>.env (Environment Variables)</span></div>
+                  <button class="copy-btn">Copy</button>
+                </div>
+                <pre><code>PORT=3000
+SESSION_SECRET=super_long_random_session_secret_2026_MERN!
+MONGO_URI=mongodb://127.0.0.1:27017/session_demo
+NODE_ENV=development</code></pre>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- -------------------------------------------------------------------
+           SLIDE 9: PRACTICAL — CONFIGURE SESSION MIDDLEWARE
+           ------------------------------------------------------------------- -->
+      <section class="slide" id="slide-9">
+        <header class="slide-header">
+          <div class="slide-title-wrap">
+            <span class="slide-category">Production Architecture</span>
+            <h2 class="slide-title">Practical: Configure Session Middleware with MongoDB</h2>
+            <p class="slide-subtitle">Connect <code>express-session</code> to MongoDB using <code>connect-mongo</code> for durable storage.</p>
+          </div>
+          <span class="slide-num-pill">Slide 09</span>
+        </header>
+
+        <div class="slide-body">
+          <div class="grid-2">
+            <!-- Code Block -->
+            <div class="code-container">
+              <div class="code-header">
+                <div class="code-file-badge"><span class="file-dot"></span><span>server.js (Session Configuration)</span></div>
+                <button class="copy-btn">Copy</button>
+              </div>
+              <pre><code><span class="syn-fn">require</span>(<span class="syn-str">"dotenv"</span>).<span class="syn-fn">config</span>();
+<span class="syn-kw">const</span> express = <span class="syn-fn">require</span>(<span class="syn-str">"express"</span>);
+<span class="syn-kw">const</span> session = <span class="syn-fn">require</span>(<span class="syn-str">"express-session"</span>);
+<span class="syn-kw">const</span> MongoStore = <span class="syn-fn">require</span>(<span class="syn-str">"connect-mongo"</span>);
+
+<span class="syn-kw">const</span> app = <span class="syn-fn">express</span>();
+app.<span class="syn-fn">use</span>(express.<span class="syn-fn">json</span>());
+
+app.<span class="syn-fn">use</span>(
+  <span class="syn-fn">session</span>({
+    name: <span class="syn-str">"student.sid"</span>,
+    secret: process.env.<span class="syn-prop">SESSION_SECRET</span>,
+    resave: <span class="syn-num">false</span>,
+    saveUninitialized: <span class="syn-num">false</span>,
+
+    <span class="syn-comment">// Store sessions in MongoDB</span>
+    store: MongoStore.<span class="syn-fn">create</span>({
+      mongoUrl: process.env.<span class="syn-prop">MONGO_URI</span>,
+      collectionName: <span class="syn-str">"sessions"</span>,
+      ttl: <span class="syn-num">60</span> * <span class="syn-num">60</span> * <span class="syn-num">24</span> <span class="syn-comment">// 1 day in seconds</span>
+    }),
+
+    cookie: {
+      httpOnly: <span class="syn-num">true</span>,
+      secure: process.env.<span class="syn-prop">NODE_ENV</span> === <span class="syn-str">"production"</span>,
+      sameSite: <span class="syn-str">"lax"</span>,
+      maxAge: <span class="syn-num">1000</span> * <span class="syn-num">60</span> * <span class="syn-num">60</span> <span class="syn-comment">// 1 hour in ms</span>
+    }
+  })
+);</code></pre>
+            </div>
+
+            <!-- Reference Table -->
+            <div class="card">
+              <h3 class="card-title">Production Configuration Breakdown</h3>
+              <div class="table-responsive">
+                <table class="custom-table" style="font-size:0.83rem;">
+                  <thead>
+                    <tr>
+                      <th>Property</th>
+                      <th>Explanation &amp; Security Impact</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><code>name</code></td>
+                      <td>Custom cookie name (<code>student.sid</code>) masks framework fingerprint.</td>
+                    </tr>
+                    <tr>
+                      <td><code>MongoStore</code></td>
+                      <td>Persists session documents in MongoDB collection named <code>sessions</code>.</td>
+                    </tr>
+                    <tr>
+                      <td><code>ttl</code></td>
+                      <td>Time To Live in MongoDB. Automatically deletes expired sessions via TTL index.</td>
+                    </tr>
+                    <tr>
+                      <td><code>cookie.httpOnly</code></td>
+                      <td>Protects session ID from client-side JavaScript access (Anti-XSS).</td>
+                    </tr>
+                    <tr>
+                      <td><code>cookie.secure</code></td>
+                      <td>Enforces HTTPS in production; permits HTTP in local development.</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <div class="callout callout-tip" style="margin-top:0.75rem;">
+                <strong>Database Prerequisite:</strong> Ensure MongoDB is running locally at <code>mongodb://127.0.0.1:27017</code> or via MongoDB Atlas before starting the Express server!
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- -------------------------------------------------------------------
+           SLIDE 10: HOW TO STORE USER INFORMATION IN A SESSION
+           ------------------------------------------------------------------- -->
+      <section class="slide" id="slide-10">
+        <header class="slide-header">
+          <div class="slide-title-wrap">
+            <span class="slide-category">Session State Management</span>
+            <h2 class="slide-title">How to Store User Information in a Session</h2>
+            <p class="slide-subtitle">Understand what belongs inside server session storage vs. what stays in browser cookies.</p>
+          </div>
+          <span class="slide-num-pill">Slide 10</span>
+        </header>
+
+        <div class="slide-body">
+          <div class="grid-2">
+            <!-- Diagram / Concept -->
+            <div class="card highlight">
+              <h3 class="card-title">The Server-Client Split</h3>
+              <p>When a student logs in, we attach minimal identifying data to <code>req.session</code>:</p>
+              
+              <div class="code-container" style="margin-top:0.35rem;">
+                <pre><code><span class="syn-comment">// Inside login route handler:</span>
+req.session.<span class="syn-prop">userId</span> = user.<span class="syn-prop">id</span>;
+req.session.<span class="syn-prop">email</span> = user.<span class="syn-prop">email</span>;</code></pre>
+              </div>
+
+              <div class="diagram-container" style="margin-top:0.75rem;">
+                <div class="flow-horizontal" style="align-items:center;">
+                  <div class="flow-box" style="background:#eff6ff; border-color:#93c5fd;">
+                    <strong style="color:#1e40af;">SERVER SESSION (MongoDB)</strong><br>
+                    <small><code>{ userId: 101, email: "john@gmail.com" }</code></small>
+                  </div>
+                  <div class="flow-arrow">&harr;</div>
+                  <div class="flow-box" style="background:#f0fdf4; border-color:#86efac;">
+                    <strong style="color:#166534;">BROWSER COOKIE</strong><br>
+                    <small><code>student.sid = s%3Aabc123...</code></small>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Best Practices -->
+            <div class="card">
+              <h3 class="card-title">What to Store vs. What to Exclude</h3>
+              <div class="callout callout-danger">
+                <strong>NEVER STORE PASSWORDS:</strong> Even though session data resides on the server, storing passwords (even hashed ones) inside session documents creates unnecessary security risks!
+              </div>
+
+              <ul class="feature-list" style="margin-top:0.6rem;">
+                <li><span class="bullet-icon">&check;</span> <strong>DO STORE:</strong> The primary key identifier (e.g. <code>userId</code>) and user role (<code>role: "student"</code>).</li>
+                <li><span class="bullet-icon">&times;</span> <strong>DON'T STORE:</strong> Entire user profile objects, large blobs of data, or credit card numbers. Keep sessions lean and lightning fast!</li>
+                <li><span class="bullet-icon">&check;</span> <strong>Cryptographic Tamper Proofing:</strong> The cookie contains a HMAC signature of the session ID signed with <code>SESSION_SECRET</code>. If an attacker modifies the cookie value, Express immediately rejects it!</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- -------------------------------------------------------------------
+           SLIDE 11: PRACTICAL — USER REGISTRATION
+           ------------------------------------------------------------------- -->
+      <section class="slide" id="slide-11">
+        <header class="slide-header">
+          <div class="slide-title-wrap">
+            <span class="slide-category">Hands-on Implementation</span>
+            <h2 class="slide-title">Practical: User Registration Endpoint</h2>
+            <p class="slide-subtitle">Accept student registration data, hash passwords using <code>bcryptjs</code>, and store safely.</p>
+          </div>
+          <span class="slide-num-pill">Slide 11</span>
+        </header>
+
+        <div class="slide-body">
+          <div class="grid-2">
+            <!-- Code Block -->
+            <div class="code-container">
+              <div class="code-header">
+                <div class="code-file-badge"><span class="file-dot"></span><span>server.js (Registration Route)</span></div>
+                <button class="copy-btn">Copy</button>
+              </div>
+              <pre><code><span class="syn-kw">const</span> bcrypt = <span class="syn-fn">require</span>(<span class="syn-str">"bcryptjs"</span>);
+
+<span class="syn-comment">// In-memory users array for demonstration</span>
+<span class="syn-kw">const</span> users = [];
+
+<span class="syn-comment">// POST /register</span>
+app.<span class="syn-fn">post</span>(<span class="syn-str">"/register"</span>, <span class="syn-kw">async</span> (req, res) => {
+  <span class="syn-kw">try</span> {
+    <span class="syn-kw">const</span> { name, email, password } = req.body;
+
+    <span class="syn-comment">// 1. Check if email already registered</span>
+    <span class="syn-kw">const</span> existingUser = users.<span class="syn-fn">find</span>(u => u.email === email);
+    <span class="syn-kw">if</span> (existingUser) {
+      <span class="syn-kw">return</span> res.<span class="syn-fn">status</span>(<span class="syn-num">409</span>).<span class="syn-fn">json</span>({ message: <span class="syn-str">"User already exists"</span> });
+    }
+
+    <span class="syn-comment">// 2. Hash password with 10 salt rounds</span>
+    <span class="syn-kw">const</span> hashedPassword = <span class="syn-kw">await</span> bcrypt.<span class="syn-fn">hash</span>(password, <span class="syn-num">10</span>);
+
+    <span class="syn-comment">// 3. Create user record</span>
+    <span class="syn-kw">const</span> user = {
+      id: Date.<span class="syn-fn">now</span>(),
+      name,
+      email,
+      password: hashedPassword
+    };
+    users.<span class="syn-fn">push</span>(user);
+
+    <span class="syn-comment">// 4. Return 201 Created</span>
+    res.<span class="syn-fn">status</span>(<span class="syn-num">201</span>).<span class="syn-fn">json</span>({ message: <span class="syn-str">"Registration successful"</span> });
+  } <span class="syn-kw">catch</span> (error) {
+    res.<span class="syn-fn">status</span>(<span class="syn-num">500</span>).<span class="syn-fn">json</span>({ message: <span class="syn-str">"Registration failed"</span> });
+  }
+});</code></pre>
+            </div>
+
+            <!-- Workflow Highlights -->
+            <div class="card">
+              <h3 class="card-title">Registration Lifecycle Steps</h3>
+              <ol class="feature-list" style="font-size:0.86rem;">
+                <li><span class="bullet-icon">1.</span> <strong>Extract Inputs:</strong> Pull <code>name</code>, <code>email</code>, and <code>password</code> from <code>req.body</code>.</li>
+                <li><span class="bullet-icon">2.</span> <strong>Duplicate Prevention (409):</strong> Ensure no two students share the same email address.</li>
+                <li><span class="bullet-icon">3.</span> <strong>One-Way Cryptographic Hashing:</strong> Convert plain text passwords into salt-reinforced bcrypt strings.</li>
+                <li><span class="bullet-icon">4.</span> <strong>Store Record:</strong> Push user object into storage. In Day 9, this array will be replaced by a Mongoose schema!</li>
+              </ol>
+
+              <div class="callout callout-tip" style="margin-top:0.75rem;">
+                <strong>Expected Output (201 Created):</strong>
+                <pre style="margin-top:0.3rem; font-size:0.78rem; background:#0b1329; color:#a5f3fc; padding:0.5rem; border-radius:4px;"><code>{
+  "message": "Registration successful"
+}</code></pre>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- -------------------------------------------------------------------
+           SLIDE 12: PRACTICAL — USER LOGIN AND SESSION CREATION
+           ------------------------------------------------------------------- -->
+      <section class="slide" id="slide-12">
+        <header class="slide-header">
+          <div class="slide-title-wrap">
+            <span class="slide-category">Hands-on Implementation</span>
+            <h2 class="slide-title">Practical: User Login &amp; Session Creation</h2>
+            <p class="slide-subtitle">Verify passwords, regenerate session IDs to prevent fixation, and issue the session cookie.</p>
+          </div>
+          <span class="slide-num-pill">Slide 12</span>
+        </header>
+
+        <div class="slide-body">
+          <div class="grid-2">
+            <!-- Code Block -->
+            <div class="code-container">
+              <div class="code-header">
+                <div class="code-file-badge"><span class="file-dot"></span><span>server.js (Login Route)</span></div>
+                <button class="copy-btn">Copy</button>
+              </div>
+              <pre><code><span class="syn-comment">// POST /login</span>
+app.<span class="syn-fn">post</span>(<span class="syn-str">"/login"</span>, <span class="syn-kw">async</span> (req, res, next) => {
+  <span class="syn-kw">try</span> {
+    <span class="syn-kw">const</span> { email, password } = req.body;
+
+    <span class="syn-comment">// 1. Locate student by email</span>
+    <span class="syn-kw">const</span> user = users.<span class="syn-fn">find</span>(u => u.email === email);
+    <span class="syn-kw">if</span> (!user) {
+      <span class="syn-kw">return</span> res.<span class="syn-fn">status</span>(<span class="syn-num">401</span>).<span class="syn-fn">json</span>({ message: <span class="syn-str">"Invalid email or password"</span> });
+    }
+
+    <span class="syn-comment">// 2. Verify password with bcrypt</span>
+    <span class="syn-kw">const</span> isMatch = <span class="syn-kw">await</span> bcrypt.<span class="syn-fn">compare</span>(password, user.password);
+    <span class="syn-kw">if</span> (!isMatch) {
+      <span class="syn-kw">return</span> res.<span class="syn-fn">status</span>(<span class="syn-num">401</span>).<span class="syn-fn">json</span>({ message: <span class="syn-str">"Invalid email or password"</span> });
+    }
+
+    <span class="syn-comment">// 3. Regenerate session ID (Anti-Fixation)</span>
+    req.session.<span class="syn-fn">regenerate</span>(error => {
+      <span class="syn-kw">if</span> (error) <span class="syn-kw">return</span> <span class="syn-fn">next</span>(error);
+
+      <span class="syn-comment">// 4. Store user ID in session</span>
+      req.session.<span class="syn-prop">userId</span> = user.id;
+
+      <span class="syn-comment">// 5. Persist to MongoDB session store</span>
+      req.session.<span class="syn-fn">save</span>(err => {
+        <span class="syn-kw">if</span> (err) <span class="syn-kw">return</span> <span class="syn-fn">next</span>(err);
+        res.<span class="syn-fn">json</span>({ message: <span class="syn-str">"Login successful"</span> });
+      });
+    });
+  } <span class="syn-kw">catch</span> (err) {
+    <span class="syn-fn">next</span>(err);
+  }
+});</code></pre>
+            </div>
+
+            <!-- Deep Dive on Regenerate -->
+            <div class="card">
+              <h3 class="card-title">Why Use req.session.regenerate()?</h3>
+              <div class="callout callout-warning">
+                <strong>Session Fixation Attack Defense:</strong> In a session fixation attack, a malicious actor gives a victim a known session ID (e.g. through a phishing link). If the server continues using that same session ID after the victim logs in, the attacker gains full unauthorized access!
+              </div>
+
+              <ul class="feature-list" style="margin-top:0.6rem; font-size:0.86rem;">
+                <li><span class="bullet-icon">&check;</span> <code>req.session.regenerate()</code> wipes the old anonymous session ID and produces a completely fresh, random session ID upon successful login.</li>
+                <li><span class="bullet-icon">&check;</span> <code>req.session.save()</code> ensures the session document is committed to MongoDB before the HTTP response headers (and <code>Set-Cookie</code>) are sent.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- -------------------------------------------------------------------
+           SLIDE 13: WHAT IS AUTHENTICATION MIDDLEWARE?
+           ------------------------------------------------------------------- -->
+      <section class="slide" id="slide-13">
+        <header class="slide-header">
+          <div class="slide-title-wrap">
+            <span class="slide-category">Middleware Pattern</span>
+            <h2 class="slide-title">What Is Authentication Middleware?</h2>
+            <p class="slide-subtitle">The gatekeeper pattern: Inspecting <code>req.session.userId</code> before granting route access.</p>
+          </div>
+          <span class="slide-num-pill">Slide 13</span>
+        </header>
+
+        <div class="slide-body">
+          <div class="flow-horizontal" style="gap:1rem;">
+            <div class="flow-box">
+              <span class="flow-step-num">Step 1</span>
+              <div class="flow-step-text"><strong>Client Request</strong><br><small>GET /profile with cookie</small></div>
+            </div>
+            <div class="flow-arrow">&rarr;</div>
+            <div class="flow-box" style="border:2px solid var(--primary); background:var(--bg-card-blue);">
+              <span class="flow-step-num">Step 2: Gatekeeper</span>
+              <div class="flow-step-text"><strong>authMiddleware</strong><br><small>Checks req.session.userId</small></div>
+            </div>
+            <div class="flow-arrow">&rarr;</div>
+            <div class="flow-box">
+              <span class="flow-step-num">Step 3 (If Valid)</span>
+              <div class="flow-step-text"><strong>calls next()</strong><br><small>Proceeds to Controller</small></div>
+            </div>
+            <div class="flow-arrow">&rarr;</div>
+            <div class="flow-box">
+              <span class="flow-step-num">Step 4 (If Missing)</span>
+              <div class="flow-step-text"><strong>401 Unauthorized</strong><br><small>"Please login first"</small></div>
+            </div>
+          </div>
+
+          <div class="grid-2" style="margin-top:0.5rem;">
+            <div class="card">
+              <h3 class="card-title">How the Gatekeeper Works</h3>
+              <p>In Express, middleware functions execute sequentially. By inserting <code>authMiddleware</code> between the route path and your controller, unauthorized visitors are blocked before your controller even executes.</p>
+              <ul class="feature-list" style="margin-top:0.35rem; font-size:0.86rem;">
+                <li><span class="bullet-icon">&bull;</span> If <code>req.session.userId</code> exists &rarr; Session is active &rarr; calls <code>next()</code>.</li>
+                <li><span class="bullet-icon">&bull;</span> If <code>req.session.userId</code> is missing &rarr; No active session &rarr; returns <code>401</code> immediately.</li>
+              </ul>
+            </div>
+
+            <div class="card highlight">
+              <h3 class="card-title">Reusability across 50+ Routes</h3>
+              <p>You write <code>authMiddleware.js</code> once, and you can attach it to protect any number of routes across your application:</p>
+              <div class="code-container" style="margin-top:0.4rem;">
+                <pre><code>app.<span class="syn-fn">get</span>(<span class="syn-str">"/profile"</span>, authMiddleware, profileController);
+app.<span class="syn-fn">get</span>(<span class="syn-str">"/grades"</span>, authMiddleware, gradesController);
+app.<span class="syn-fn">post</span>(<span class="syn-str">"/submit-quiz"</span>, authMiddleware, quizController);</code></pre>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- -------------------------------------------------------------------
+           SLIDE 14: PRACTICAL — CREATE AUTHENTICATION MIDDLEWARE
+           ------------------------------------------------------------------- -->
+      <section class="slide" id="slide-14">
+        <header class="slide-header">
+          <div class="slide-title-wrap">
+            <span class="slide-category">Hands-on Implementation</span>
+            <h2 class="slide-title">Practical: Creating authMiddleware.js</h2>
+            <p class="slide-subtitle">Build the reusable session validation middleware in its own modular file.</p>
+          </div>
+          <span class="slide-num-pill">Slide 14</span>
+        </header>
+
+        <div class="slide-body">
+          <div class="grid-2">
+            <!-- Code Block -->
+            <div class="code-container">
+              <div class="code-header">
+                <div class="code-file-badge"><span class="file-dot"></span><span>middleware/authMiddleware.js</span></div>
+                <button class="copy-btn">Copy</button>
+              </div>
+              <pre><code><span class="syn-comment">// Session Authentication Guard</span>
+<span class="syn-kw">function</span> <span class="syn-fn">authMiddleware</span>(req, res, next) {
+  <span class="syn-comment">// 1. Check if session exists and has userId</span>
+  <span class="syn-kw">if</span> (!req.session || !req.session.<span class="syn-prop">userId</span>) {
+    <span class="syn-kw">return</span> res.<span class="syn-fn">status</span>(<span class="syn-num">401</span>).<span class="syn-fn">json</span>({
+      success: <span class="syn-num">false</span>,
+      message: <span class="syn-str">"Please login first"</span>
+    });
+  }
+
+  <span class="syn-comment">// 2. Valid active session found -> proceed!</span>
+  <span class="syn-fn">next</span>();
+}
+
+module.exports = authMiddleware;</code></pre>
+            </div>
+
+            <!-- Code Breakdown -->
+            <div class="card">
+              <h3 class="card-title">Code Walkthrough &amp; Error Handling</h3>
+              <div class="table-responsive">
+                <table class="custom-table">
+                  <thead>
+                    <tr>
+                      <th>Condition</th>
+                      <th>Server Response</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>No cookie sent</td>
+                      <td><code>401 Unauthorized</code> ("Please login first")</td>
+                    </tr>
+                    <tr>
+                      <td>Cookie tampered or expired</td>
+                      <td><code>401 Unauthorized</code> ("Please login first")</td>
+                    </tr>
+                    <tr>
+                      <td>Session deleted (logged out)</td>
+                      <td><code>401 Unauthorized</code> ("Please login first")</td>
+                    </tr>
+                    <tr>
+                      <td>Valid active session</td>
+                      <td>Calls <code>next()</code> to run controller</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <div class="callout callout-tip" style="margin-top:0.75rem;">
+                <strong>Notice:</strong> The middleware does not need to send custom database queries manually. <code>express-session</code> and <code>connect-mongo</code> already populated <code>req.session</code> automatically before this middleware runs!
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- -------------------------------------------------------------------
+           SLIDE 15: PRACTICAL — CREATE A PROTECTED PROFILE ROUTE
+           ------------------------------------------------------------------- -->
+      <section class="slide" id="slide-15">
+        <header class="slide-header">
+          <div class="slide-title-wrap">
+            <span class="slide-category">Hands-on Implementation</span>
+            <h2 class="slide-title">Practical: Create Protected Profile Route</h2>
+            <p class="slide-subtitle">Attach <code>authMiddleware</code> to <code>GET /profile</code> and retrieve user data using <code>req.session.userId</code>.</p>
+          </div>
+          <span class="slide-num-pill">Slide 15</span>
+        </header>
+
+        <div class="slide-body">
+          <div class="grid-2">
+            <!-- Code Block -->
+            <div class="code-container">
+              <div class="code-header">
+                <div class="code-file-badge"><span class="file-dot"></span><span>server.js (Protected Route)</span></div>
+                <button class="copy-btn">Copy</button>
+              </div>
+              <pre><code><span class="syn-kw">const</span> authMiddleware = <span class="syn-fn">require</span>(<span class="syn-str">"./middleware/authMiddleware"</span>);
+
+<span class="syn-comment">// GET /profile — PROTECTED ROUTE</span>
+app.<span class="syn-fn">get</span>(<span class="syn-str">"/profile"</span>, authMiddleware, (req, res) => {
+  <span class="syn-comment">// 1. Retrieve user using ID stored in session</span>
+  <span class="syn-kw">const</span> user = users.<span class="syn-fn">find</span>(u => u.id === req.session.<span class="syn-prop">userId</span>);
+
+  <span class="syn-kw">if</span> (!user) {
+    <span class="syn-kw">return</span> res.<span class="syn-fn">status</span>(<span class="syn-num">401</span>).<span class="syn-fn">json</span>({ message: <span class="syn-str">"User not found"</span> });
+  }
+
+  <span class="syn-comment">// 2. Return student profile (omit password!)</span>
+  res.<span class="syn-fn">json</span>({
+    message: <span class="syn-str">"Welcome to your profile"</span>,
+    user: {
+      id: user.id,
+      name: user.name,
+      email: user.email
+    }
+  });
+});</code></pre>
+            </div>
+
+            <!-- Explanation & Highlights -->
+            <div class="card">
+              <h3 class="card-title">How the Request Is Authenticated</h3>
+              <ol class="feature-list" style="font-size:0.86rem;">
+                <li><span class="bullet-icon">1.</span> When the student navigates to <code>/profile</code>, the browser sends <code>Cookie: student.sid=...</code>.</li>
+                <li><span class="bullet-icon">2.</span> <code>express-session</code> reads the session document from MongoDB and attaches it to <code>req.session</code>.</li>
+                <li><span class="bullet-icon">3.</span> <code>authMiddleware</code> verifies that <code>req.session.userId</code> is present and calls <code>next()</code>.</li>
+                <li><span class="bullet-icon">4.</span> The route handler looks up the student record and sends the profile response.</li>
+              </ol>
+
+              <div class="callout callout-tip" style="margin-top:0.75rem;">
+                <strong>Expected Output (200 OK):</strong>
+                <pre style="margin-top:0.3rem; font-size:0.78rem; background:#0b1329; color:#a5f3fc; padding:0.5rem; border-radius:4px;"><code>{
+  "message": "Welcome to your profile",
+  "user": {
+    "id": 1700000000,
+    "name": "Sarah Connor",
+    "email": "sarah@college.edu"
+  }
+}</code></pre>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- -------------------------------------------------------------------
+           SLIDE 16: PRACTICAL — LOGOUT AND DESTROY SESSION
+           ------------------------------------------------------------------- -->
+      <section class="slide" id="slide-16">
+        <header class="slide-header">
+          <div class="slide-title-wrap">
+            <span class="slide-category">Session Destruction</span>
+            <h2 class="slide-title">Practical: Logout &amp; Destroy Session</h2>
+            <p class="slide-subtitle">Destroy server-side MongoDB session documents and clear browser cookies.</p>
+          </div>
+          <span class="slide-num-pill">Slide 16</span>
+        </header>
+
+        <div class="slide-body">
+          <div class="grid-2">
+            <!-- Code Block -->
+            <div class="code-container">
+              <div class="code-header">
+                <div class="code-file-badge"><span class="file-dot"></span><span>server.js (Logout Route)</span></div>
+                <button class="copy-btn">Copy</button>
+              </div>
+              <pre><code><span class="syn-comment">// POST /logout</span>
+app.<span class="syn-fn">post</span>(<span class="syn-str">"/logout"</span>, (req, res, next) => {
+  <span class="syn-comment">// 1. Destroy session in MongoDB session store</span>
+  req.session.<span class="syn-fn">destroy</span>(error => {
+    <span class="syn-kw">if</span> (error) {
+      <span class="syn-kw">return</span> <span class="syn-fn">next</span>(error);
+    }
+
+    <span class="syn-comment">// 2. Clear browser cookie</span>
+    res.<span class="syn-fn">clearCookie</span>(<span class="syn-str">"student.sid"</span>, {
+      path: <span class="syn-str">"/"</span>
+    });
+
+    <span class="syn-comment">// 3. Return confirmation</span>
+    res.<span class="syn-fn">json</span>({
+      message: <span class="syn-str">"Logout successful"</span>
+    });
+  });
+});</code></pre>
+            </div>
+
+            <!-- Logout Pipeline Diagram -->
+            <div class="card">
+              <h3 class="card-title">The Complete Logout Pipeline</h3>
+              <div class="diagram-container">
+                <div class="flow-horizontal" style="flex-direction:column; gap:0.4rem;">
+                  <div class="flow-box" style="width:100%;">
+                    <span class="flow-step-num">Step 1</span>
+                    <div class="flow-step-text"><strong>User Clicks Logout</strong> &rarr; Client calls POST /logout</div>
+                  </div>
+                  <div class="flow-arrow">&darr;</div>
+                  <div class="flow-box active-box" style="width:100%;">
+                    <span class="flow-step-num">Step 2</span>
+                    <div class="flow-step-text"><strong>Destroy Server Session</strong> &rarr; Deleted from MongoDB</div>
+                  </div>
+                  <div class="flow-arrow">&darr;</div>
+                  <div class="flow-box" style="width:100%;">
+                    <span class="flow-step-num">Step 3</span>
+                    <div class="flow-step-text"><strong>Clear Browser Cookie</strong> &rarr; <code>res.clearCookie("student.sid")</code></div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="callout callout-warning" style="margin-top:0.6rem;">
+                <strong>Instant Invalidation:</strong> Once <code>req.session.destroy()</code> finishes, any subsequent request to <code>GET /profile</code> fails with <code>401 Unauthorized</code>!
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- -------------------------------------------------------------------
+           SLIDE 17: TESTING SESSION AUTHENTICATION USING POSTMAN
+           ------------------------------------------------------------------- -->
+      <section class="slide" id="slide-17">
+        <header class="slide-header">
+          <div class="slide-title-wrap">
+            <span class="slide-category">Testing &amp; Verification</span>
+            <h2 class="slide-title">Testing Session Authentication with Postman</h2>
+            <p class="slide-subtitle">Step-by-step verification: Register &rarr; Login &rarr; Profile &rarr; Logout &rarr; Re-test Profile.</p>
+          </div>
+          <span class="slide-num-pill">Slide 17</span>
+        </header>
+
+        <div class="slide-body">
+          <!-- Interactive Postman Console Simulator -->
+          <div class="sandbox-card" style="padding:1.1rem 1.35rem;">
+            <div class="sandbox-header" style="margin-bottom:0.6rem;">
+              <div class="sandbox-title">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>
+                <span>Interactive Session API Console (Built-in Postman)</span>
+              </div>
+              <div style="display:flex; gap:0.5rem; align-items:center;">
+                <span id="pmCookieJarBadge" class="status-pill">Cookie Jar: Empty</span>
+                <span class="sandbox-badge">Interactive Lab</span>
+              </div>
+            </div>
+
+            <!-- Tab Navigation for the 5 Scenarios -->
+            <div style="display:flex; flex-wrap:wrap; gap:0.45rem; margin-bottom:0.75rem; border-bottom:1px solid var(--border-subtle); padding-bottom:0.6rem;">
+              <button class="postman-tab active" data-action="register">1. POST /register</button>
+              <button class="postman-tab" data-action="login">2. POST /login</button>
+              <button class="postman-tab" data-action="profileWithCookie">3. GET /profile (Logged In)</button>
+              <button class="postman-tab" data-action="logout">4. POST /logout</button>
+              <button class="postman-tab" data-action="profileAfterLogout">5. GET /profile (After Logout &rarr; 401)</button>
+            </div>
+
+            <!-- Request Bar -->
+            <div style="display:flex; gap:0.6rem; align-items:center; margin-bottom:0.75rem;">
+              <span id="pmMethodBadge" class="status-badge badge-post" style="height:38px; display:inline-flex; align-items:center;">POST</span>
+              <input type="text" id="pmUrlInput" class="sandbox-input" value="http://localhost:3000/register" readonly style="flex:1; background:#f8fafc;">
+              <button id="pmSendBtn" class="sandbox-btn">
+                <span>Send Request</span>
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+              </button>
+            </div>
+
+            <div class="grid-2">
+              <!-- Request Details -->
+              <div>
+                <label style="font-size:0.75rem; text-transform:uppercase; font-weight:700; color:var(--text-muted); display:flex; justify-content:space-between;">
+                  <span>Request Headers &amp; Payload</span>
+                  <span id="pmHeaderDisplay" style="font-family:var(--font-mono); font-size:0.72rem; color:var(--primary);">Content-Type: application/json</span>
+                </label>
+                <textarea id="pmReqBody" class="sandbox-input" style="width:100%; height:120px; margin-top:0.3rem; resize:none; font-size:0.8rem;">{
+  "name": "Sarah Connor",
+  "email": "sarah@college.edu",
+  "password": "student123"
+}</textarea>
+              </div>
+
+              <!-- Response Details -->
+              <div>
+                <div style="display:flex; justify-content:space-between; align-items:center;">
+                  <label style="font-size:0.75rem; text-transform:uppercase; font-weight:700; color:var(--text-muted);">Response Output</label>
+                  <div style="display:flex; gap:0.4rem; align-items:center;">
+                    <span id="pmTimeBadge" style="font-family:var(--font-mono); font-size:0.72rem; color:var(--text-muted);">0 ms</span>
+                    <span id="pmStatusBadge" class="status-pill">Status: Waiting</span>
+                  </div>
+                </div>
+                <pre style="margin-top:0.3rem; background:#0b1329; border:1px solid #1e293b; border-radius:6px; padding:0.75rem; height:120px; overflow-y:auto; font-family:var(--font-mono); font-size:0.78rem; color:#38bdf8;"><code id="pmResBody">// Click "Send Request" to test simulated Express session flow</code></pre>
+              </div>
+            </div>
+          </div>
+
+          <div class="callout callout-info" style="margin-top:0.4rem;">
+            <strong>Postman Cookie Manager:</strong> Unlike JWTs where you manually copy and paste tokens into headers, Postman has a built-in <strong>Cookie Jar</strong>. It automatically saves <code>student.sid</code> from <code>Set-Cookie</code> and attaches it to subsequent requests!
+          </div>
+        </div>
+      </section>
+
+      <!-- -------------------------------------------------------------------
+           SLIDE 18: RECAP AND PRACTICAL CHALLENGE
+           ------------------------------------------------------------------- -->
+      <section class="slide" id="slide-18">
+        <header class="slide-header">
+          <div class="slide-title-wrap">
+            <span class="slide-category">Summary &amp; Homework Lab</span>
+            <h2 class="slide-title">Recap &amp; Practical Student Challenges</h2>
+            <p class="slide-subtitle">Mastery summary table and 5 progressive challenges to solidify your session authentication skills.</p>
+          </div>
+          <span class="slide-num-pill">Slide 18</span>
+        </header>
+
+        <div class="slide-body">
+          <div class="grid-2">
+            <!-- Left: Recap Table -->
+            <div class="card highlight">
+              <h3 class="card-title">Day 8 Core Concepts Recap</h3>
+              <div class="table-responsive">
+                <table class="custom-table" style="font-size:0.83rem;">
+                  <thead>
+                    <tr>
+                      <th>Module / Concept</th>
+                      <th>Primary Function / Role</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><code>express-session</code></td>
+                      <td>Middleware for generating, signing &amp; managing user sessions</td>
+                    </tr>
+                    <tr>
+                      <td><code>connect-mongo</code></td>
+                      <td>Durable MongoDB session store (replaces volatile MemoryStore)</td>
+                    </tr>
+                    <tr>
+                      <td><code>req.session.userId</code></td>
+                      <td>Stores logged-in student identifier on the server</td>
+                    </tr>
+                    <tr>
+                      <td><code>req.session.regenerate()</code></td>
+                      <td>Issues fresh session ID on login to defeat fixation attacks</td>
+                    </tr>
+                    <tr>
+                      <td><code>req.session.destroy()</code></td>
+                      <td>Wipes session document from MongoDB upon user logout</td>
+                    </tr>
+                    <tr>
+                      <td><code>res.clearCookie()</code></td>
+                      <td>Instructs browser to delete the session ID cookie</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <!-- Right: 5 Challenges -->
+            <div class="card">
+              <h3 class="card-title">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                5 Practical Student Challenges
+              </h3>
+              <ol class="feature-list" style="font-size:0.86rem; gap:0.45rem;">
+                <li><span class="bullet-icon">1.</span> <strong>Remember Me Feature:</strong> Support a <code>rememberMe: true</code> checkbox in login that dynamically extends cookie <code>maxAge</code> to 30 days!</li>
+                <li><span class="bullet-icon">2.</span> <strong>Role-Based Access Control (RBAC):</strong> Store <code>role</code> in session and create an <code>adminOnly</code> middleware for <code>GET /admin/dashboard</code>.</li>
+                <li><span class="bullet-icon">3.</span> <strong>Inspect MongoDB Sessions:</strong> Open MongoDB Compass or <code>mongosh</code> to inspect the raw JSON documents inside the <code>sessions</code> collection.</li>
+                <li><span class="bullet-icon">4.</span> <strong>Change Password Endpoint:</strong> Build <code>POST /change-password</code> that verifies current password, updates the hash, and calls <code>req.session.regenerate()</code>.</li>
+                <li><span class="bullet-icon">5.</span> <strong>Mongoose User Persistence:</strong> Replace the in-memory <code>users</code> array with a full Mongoose <code>User</code> schema with email validation!</li>
+              </ol>
+
+              <div class="callout callout-tip" style="margin-top:0.6rem;">
+                <strong>Next Session (Day 9):</strong> Mongoose Models, Schemas, Validation &amp; Persistent Database Authentication!
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- =====================================================================
+         BOTTOM NAVIGATION BAR
+         ===================================================================== -->
+    <footer class="bottom-bar">
+      <div class="bottom-left">
+        <span>Use <kbd>&larr;</kbd> <kbd>&rarr;</kbd> or <kbd>Space</kbd> to navigate</span>
+        <span>&bull;</span>
+        <span>Press <kbd>T</kbd> for Contents</span>
+        <span>&bull;</span>
+        <span>Press <kbd>?</kbd> for Help</span>
+      </div>
+
+      <div class="bottom-right">
+        <button class="nav-btn" id="prevBtn" disabled>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+          <span>Previous</span>
+        </button>
+        <button class="nav-btn nav-btn-primary" id="nextBtn">
+          <span>Next</span>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        </button>
+      </div>
+    </footer>
+
+    <!-- =====================================================================
+         TABLE OF CONTENTS DRAWER
+         ===================================================================== -->
+    <div class="toc-overlay" id="tocOverlay">
+      <div class="toc-drawer">
+        <div class="toc-header">
+          <div class="toc-title">Table of Contents</div>
+          <button class="toc-close" id="tocClose" title="Close (Esc)">&times;</button>
+        </div>
+        <div class="toc-list" id="tocList">
+          <!-- Dynamically populated by script.js -->
+        </div>
+      </div>
+    </div>
+
+    <!-- =====================================================================
+         HELP SHORTCUTS MODAL
+         ===================================================================== -->
+    <div class="help-modal-overlay" id="helpModal">
+      <div class="help-modal">
+        <div class="help-header">
+          <div class="help-title">Keyboard Navigation &amp; Shortcuts</div>
+          <button class="toc-close" id="helpClose" title="Close (Esc)">&times;</button>
+        </div>
+        <div class="help-body">
+          <div class="shortcut-row">
+            <span>Next Slide</span>
+            <div><span class="shortcut-key">&rarr;</span> <span class="shortcut-key">Down</span> <span class="shortcut-key">Space</span> <span class="shortcut-key">PgDn</span></div>
+          </div>
+          <div class="shortcut-row">
+            <span>Previous Slide</span>
+            <div><span class="shortcut-key">&larr;</span> <span class="shortcut-key">Up</span> <span class="shortcut-key">PgUp</span></div>
+          </div>
+          <div class="shortcut-row">
+            <span>First / Last Slide</span>
+            <div><span class="shortcut-key">Home</span> / <span class="shortcut-key">End</span></div>
+          </div>
+          <div class="shortcut-row">
+            <span>Table of Contents Drawer</span>
+            <span class="shortcut-key">T</span>
+          </div>
+          <div class="shortcut-row">
+            <span>Toggle Fullscreen</span>
+            <span class="shortcut-key">F</span>
+          </div>
+          <div class="shortcut-row">
+            <span>Keyboard Shortcuts Help</span>
+            <span class="shortcut-key">?</span> or <span class="shortcut-key">H</span>
+          </div>
+          <div class="shortcut-row">
+            <span>Close Modal / Drawer</span>
+            <span class="shortcut-key">Esc</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
+
