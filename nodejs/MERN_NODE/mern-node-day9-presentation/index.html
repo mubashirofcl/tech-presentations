@@ -1,0 +1,1631 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MERN Node.js — Day 9: File Uploads, Axios &amp; Environment Variables</title>
+  
+  <!-- Plus Jakarta Sans & JetBrains Mono Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="style.css">
+  <script src="script.js" defer></script>
+</head>
+<body>
+  <div id="presentation-app">
+    
+    <!-- Top Progress Bar -->
+    <div class="progress-container">
+      <div class="progress-fill" id="progressFill"></div>
+    </div>
+
+    <!-- Top Navigation Bar -->
+    <header class="top-bar">
+      <div class="brand-section">
+        <span class="brand-badge">MERN Stack · Day 9</span>
+        <span class="brand-title">Node.js &amp; Express</span>
+        <span class="section-indicator" id="sectionIndicator">Welcome &amp; Overview</span>
+      </div>
+      <div class="top-controls">
+        <div class="slide-counter" id="slideCounter">01 / 18</div>
+        <button class="top-btn" id="tocBtn" title="Table of Contents (T)">
+          <span>☰</span> <span>Topics</span>
+        </button>
+        <button class="top-btn" id="helpBtn" title="Keyboard Shortcuts (?)">
+          <span>?</span> <span>Help</span>
+        </button>
+        <button class="top-btn" id="fullscreenBtn" title="Toggle Fullscreen (F)">
+          <span>⛶</span> <span>Fullscreen</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Main Slides Viewport -->
+    <main class="slides-viewport">
+
+      <!-- ===================================================================
+           SLIDE 1: Title Slide
+           =================================================================== -->
+      <section class="slide active" data-slide="1" id="slide-1">
+        <div class="title-slide-content">
+          <div class="title-badge">
+            <span>⚡ MERN Stack Development · Backend Track</span>
+          </div>
+          <h1 class="title-main">
+            MERN Node.js — Day 9<br>
+            <span class="highlight">File Uploads, Axios &amp; Environment Variables</span>
+          </h1>
+          <p class="title-subtitle">
+            Master handling binary file uploads using Multer, bridging React frontends to Express APIs with Axios, and securing application secrets using dotenv.
+          </p>
+          <div class="title-features-pills">
+            <div class="feature-pill"><span class="pill-dot"></span> Handling File Uploads with Multer</div>
+            <div class="feature-pill"><span class="pill-dot"></span> Connecting Frontend &amp; Backend with Axios</div>
+            <div class="feature-pill"><span class="pill-dot"></span> Managing Variables with dotenv</div>
+            <div class="feature-pill"><span class="pill-dot"></span> Project: Student Profile Management</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===================================================================
+           SLIDE 2: What Are We Building?
+           =================================================================== -->
+      <section class="slide" data-slide="2" id="slide-2">
+        <div class="slide-header">
+          <div class="slide-category">Application Architecture</div>
+          <h2 class="slide-title">What Are We Building? <span class="highlight">Student Profile Management</span></h2>
+        </div>
+        <div class="split-layout">
+          <div class="concept-col">
+            <div class="concept-card accent-border">
+              <h3 class="concept-title">🎯 Project Objective</h3>
+              <p class="concept-text">
+                Today we build a complete <strong>Student Profile Management</strong> application connecting a React frontend to a Node.js Express backend. Students enter their details, select a profile picture, and transmit it securely across the network.
+              </p>
+            </div>
+
+            <div class="concept-card">
+              <h3 class="concept-title">🔄 6-Step Application Lifecycle</h3>
+              <div class="key-term-list">
+                <div class="key-term-item"><strong>1. Input:</strong> Student enters their name and email in a React form.</div>
+                <div class="key-term-item"><strong>2. File Selection:</strong> Student picks an image from their computer file picker.</div>
+                <div class="key-term-item"><strong>3. Client Transmission:</strong> Axios packages data into <code>FormData</code> and sends a <code>multipart/form-data</code> POST request.</div>
+                <div class="key-term-item"><strong>4. Server Reception:</strong> Express route passes the request through <strong>Multer</strong> middleware.</div>
+                <div class="key-term-item"><strong>5. Disk Storage:</strong> Multer parses the binary stream and writes the image into the <code>uploads/</code> folder.</div>
+                <div class="key-term-item"><strong>6. Response:</strong> Express returns a JSON payload with student information and stored filename.</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="code-col">
+            <div class="concept-card" style="height: 100%; display: flex; flex-direction: column; justify-content: center;">
+              <h3 class="concept-title" style="margin-bottom: 1.25rem;">📊 End-to-End Request Flow Diagram</h3>
+              
+              <div class="flow-vertical">
+                <div class="flow-vertical-step" style="border-left: 4px solid var(--primary); background: var(--primary-light);">
+                  <span>⚛️ <strong>React Frontend</strong></span>
+                  <small style="color: var(--primary-dark); font-weight:700;">User Form &amp; File Picker</small>
+                </div>
+                <div class="flow-arrow">↓ <small style="font-size:0.75rem; color:var(--text-light); font-weight:600;">Axios HTTP Request (FormData)</small></div>
+                
+                <div class="flow-vertical-step" style="border-left: 4px solid var(--accent-purple); background: var(--accent-purple-bg);">
+                  <span>🚀 <strong>Express Backend API</strong></span>
+                  <small style="color: var(--accent-purple); font-weight:700;">Route Controller (/students)</small>
+                </div>
+                <div class="flow-arrow">↓ <small style="font-size:0.75rem; color:var(--text-light); font-weight:600;">Multer Middleware Processing</small></div>
+                
+                <div class="flow-vertical-step" style="border-left: 4px solid var(--accent-green); background: var(--accent-green-bg);">
+                  <span>💾 <strong>File Storage</strong></span>
+                  <small style="color: var(--accent-green); font-weight:700;">Saved to /uploads/ folder</small>
+                </div>
+                <div class="flow-arrow">↓ <small style="font-size:0.75rem; color:var(--text-light); font-weight:600;">Returns JSON Confirmation</small></div>
+                
+                <div class="flow-vertical-step" style="border-left: 4px solid var(--accent-amber); background: var(--accent-amber-bg);">
+                  <span>📦 <strong>JSON Response (201 Created)</strong></span>
+                  <small style="color: var(--accent-amber); font-weight:700;">Rendered in React Component</small>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===================================================================
+           SLIDE 3: What Are Environment Variables?
+           =================================================================== -->
+      <section class="slide" data-slide="3" id="slide-3">
+        <div class="slide-header">
+          <div class="slide-category">Topic 1: Environment Variables (dotenv)</div>
+          <h2 class="slide-title">What Are <span class="highlight">Environment Variables?</span></h2>
+        </div>
+        <div class="split-layout">
+          <div class="concept-col">
+            <div class="concept-card accent-border">
+              <h3 class="concept-title">📖 Definition</h3>
+              <p class="concept-text">
+                <strong>Environment variables</strong> are dynamic values stored <em>outside</em> our application source code. They allow us to configure how our server behaves in different environments (development, testing, production) without altering code files.
+              </p>
+            </div>
+
+            <div class="concept-card">
+              <h3 class="concept-title">💡 Why Do We Use Them?</h3>
+              <div class="key-term-list">
+                <div class="key-term-item">
+                  <strong>1. Separation of Concerns:</strong> Keep environment configuration strictly decoupled from business logic.
+                </div>
+                <div class="key-term-item">
+                  <strong>2. Security &amp; Privacy:</strong> Prevent hardcoded database passwords, API tokens, and JWT secret keys from being leaked to public repositories (like GitHub).
+                </div>
+                <div class="key-term-item">
+                  <strong>3. Seamless Environment Switching:</strong> Run locally on port <code>3000</code> with local MongoDB, then deploy to cloud servers on port <code>8080</code> with MongoDB Atlas without modifying a single line of code!
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="code-col">
+            <div class="concept-card rose-border" style="margin-bottom: 1rem;">
+              <h4 style="color: var(--accent-rose); font-weight: 800; font-size: 0.95rem; margin-bottom: 0.35rem;">
+                ⚠️ The Hardcoding Anti-Pattern (Common Mistake)
+              </h4>
+              <p class="concept-text" style="font-size: 0.92rem;">
+                Writing credentials directly inside JavaScript files is dangerous. If you push this code to GitHub, your secrets are exposed to automated bots within seconds!
+              </p>
+            </div>
+
+            <div class="code-container">
+              <div class="code-header">
+                <div style="display:flex; align-items:center;">
+                  <div class="code-dots">
+                    <span class="code-dot red"></span>
+                    <span class="code-dot yellow"></span>
+                    <span class="code-dot green"></span>
+                  </div>
+                  <span class="code-file-badge">.env (Configuration File)</span>
+                </div>
+                <button class="copy-btn">Copy</button>
+              </div>
+              <div class="code-scroll-area">
+                <pre><code># Application Port
+PORT=3000
+
+# Database Connection URI
+MONGO_URI=mongodb://localhost:27017/studentDB
+
+# Authentication Secret
+JWT_SECRET=super_secret_student_key_98765
+
+# Cloud Services & API Keys
+UPLOAD_DIR=uploads/</code></pre>
+              </div>
+              <div class="code-run-hint">
+                <span>🔒 <strong>Rule:</strong> The <code>.env</code> file stores key-value pairs separated by <code>=</code>. No spaces around <code>=</code>!</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===================================================================
+           SLIDE 4: Installing and Configuring dotenv
+           =================================================================== -->
+      <section class="slide" data-slide="4" id="slide-4">
+        <div class="slide-header">
+          <div class="slide-category">Topic 1: Environment Variables (dotenv)</div>
+          <h2 class="slide-title">Installing &amp; Configuring <span class="highlight">dotenv</span></h2>
+        </div>
+        <div class="split-layout">
+          <div class="concept-col">
+            <div class="concept-card accent-border">
+              <h3 class="concept-title">⚙️ What is dotenv?</h3>
+              <p class="concept-text">
+                <code>dotenv</code> is a lightweight npm package that loads environment variables from a <code>.env</code> file into the Node.js runtime object: <strong><code>process.env</code></strong>.
+              </p>
+            </div>
+
+            <div class="concept-card green-border">
+              <h3 class="concept-title">📦 Step-by-Step Installation</h3>
+              <div class="code-container" style="height: auto; margin-top: 0.4rem;">
+                <div class="code-header">
+                  <span class="code-file-badge">⚡ Terminal</span>
+                  <button class="copy-btn">Copy</button>
+                </div>
+                <div class="code-scroll-area">
+                  <pre><code>npm install dotenv</code></pre>
+                </div>
+              </div>
+            </div>
+
+            <div class="concept-card">
+              <h3 class="concept-title">🔑 3 Essential Concepts</h3>
+              <div class="key-term-list">
+                <div class="key-term-item">
+                  <strong>1. <code>require("dotenv").config()</code>:</strong> Must be called at the very top of your entry file before accessing any environment variable.
+                </div>
+                <div class="key-term-item">
+                  <strong>2. <code>process.env</code>:</strong> The global Node.js object where all environment variables are mounted as properties.
+                </div>
+                <div class="key-term-item">
+                  <strong>3. String Format:</strong> All values in <code>process.env</code> are parsed as <strong>strings</strong> (e.g. <code>process.env.PORT</code> is <code>"3000"</code>).
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="code-col">
+            <div class="code-container">
+              <div class="code-header">
+                <div style="display:flex; align-items:center;">
+                  <div class="code-dots">
+                    <span class="code-dot red"></span>
+                    <span class="code-dot yellow"></span>
+                    <span class="code-dot green"></span>
+                  </div>
+                  <span class="code-file-badge">server.js</span>
+                </div>
+                <button class="copy-btn">Copy</button>
+              </div>
+              <div class="code-scroll-area">
+                <pre><code>// 1. Load environment variables first!
+require("dotenv").config();
+
+const express = require("express");
+const app = express();
+
+// 2. Read values from process.env
+const PORT = process.env.PORT || 5000;
+const APP_NAME = process.env.APP_NAME;
+
+app.get("/", (req, res) => {
+    res.json({
+        message: "Server is running smoothly",
+        app: APP_NAME,
+        environment: process.env.NODE_ENV || "development"
+    });
+});
+
+app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
+});</code></pre>
+              </div>
+              <div class="code-run-hint">
+                <span>▶ Run: <code>node server.js</code> → Output: <code>Server running on port 3000</code></span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===================================================================
+           SLIDE 5: Practical: Using dotenv in a Real Project
+           =================================================================== -->
+      <section class="slide" data-slide="5" id="slide-5">
+        <div class="slide-header">
+          <div class="slide-category">Topic 1: Environment Variables (dotenv)</div>
+          <h2 class="slide-title">Practical: Using dotenv in a <span class="highlight">Real Project</span></h2>
+        </div>
+        <div class="split-layout">
+          <div class="concept-col">
+            <div class="concept-card rose-border">
+              <h3 class="concept-title" style="color:var(--accent-rose);">❌ Without dotenv (Bad Practice)</h3>
+              <p class="concept-text" style="font-size:0.92rem;">
+                Hardcoded values: Cannot change port without changing code. Credentials committed to version control.
+              </p>
+              <div class="code-container" style="height: auto; margin-top: 0.5rem;">
+                <div class="code-scroll-area">
+                  <pre><code>// Insecure: Hardcoded in source code!
+const PORT = 3000;
+const DB_URL = "mongodb://localhost:27017/studentDB";</code></pre>
+                </div>
+              </div>
+            </div>
+
+            <div class="concept-card green-border">
+              <h3 class="concept-title" style="color:var(--accent-green);">✅ With dotenv (Best Practice)</h3>
+              <p class="concept-text" style="font-size:0.92rem;">
+                Decoupled values: Stored in <code>.env</code>. Code reads from <code>process.env</code> dynamically.
+              </p>
+              <div class="code-container" style="height: auto; margin-top: 0.5rem;">
+                <div class="code-scroll-area">
+                  <pre><code>// Secure: Read from runtime environment!
+require("dotenv").config();
+
+const PORT = process.env.PORT;
+const DB_URL = process.env.DB_URL;</code></pre>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="code-col">
+            <div class="concept-card accent-border" style="height:100%; display:flex; flex-direction:column; justify-content:space-between;">
+              <div>
+                <h3 class="concept-title">🛡️ Protecting the .env File</h3>
+                <p class="concept-text">
+                  The most crucial rule in modern backend development: <strong>Never upload your <code>.env</code> file to GitHub or any public repository!</strong>
+                </p>
+                
+                <div class="key-term-list" style="margin-top: 1rem;">
+                  <div class="key-term-item">
+                    <strong>Step 4: Create a <code>.gitignore</code> file</strong> in your project root:
+                  </div>
+                </div>
+
+                <div class="code-container" style="height: auto; margin-top: 0.5rem;">
+                  <div class="code-header">
+                    <span class="code-file-badge">.gitignore</span>
+                    <button class="copy-btn">Copy</button>
+                  </div>
+                  <div class="code-scroll-area">
+                    <pre><code># Dependencies
+node_modules/
+
+# Environment files (NEVER COMMIT!)
+.env
+.env.local
+.env.production
+
+# Uploaded files cache
+uploads/</code></pre>
+                  </div>
+                </div>
+              </div>
+
+              <div class="example-box" style="margin-top:1rem;">
+                <strong>💡 Pro Tip (.env.example):</strong> Commit a sanitized <code>.env.example</code> with placeholder values (e.g. <code>PORT=3000</code>, <code>DB_URL=</code>) so teammates know which keys they need to supply!
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===================================================================
+           SLIDE 6: What Is File Upload?
+           =================================================================== -->
+      <section class="slide" data-slide="6" id="slide-6">
+        <div class="slide-header">
+          <div class="slide-category">Topic 2: Handling File Uploads with Multer</div>
+          <h2 class="slide-title">What Is <span class="highlight">File Upload?</span></h2>
+        </div>
+        <div class="split-layout">
+          <div class="concept-col">
+            <div class="concept-card accent-border">
+              <h3 class="concept-title">📁 Concept Overview</h3>
+              <p class="concept-text">
+                <strong>File upload</strong> is the process of transmitting raw binary files (images, documents, PDFs) from a client frontend across the network to a backend server for processing and storage.
+              </p>
+            </div>
+
+            <div class="cards-grid-3">
+              <div class="feature-card">
+                <div class="card-icon-badge">🖼️</div>
+                <div class="card-heading">Profile Pictures</div>
+                <div class="card-meta-line">User avatars (PNG, JPG, WebP)</div>
+              </div>
+              <div class="feature-card">
+                <div class="card-icon-badge">📄</div>
+                <div class="card-heading">Resumes &amp; PDFs</div>
+                <div class="card-meta-line">Student resumes, certificates</div>
+              </div>
+              <div class="feature-card">
+                <div class="card-icon-badge">📦</div>
+                <div class="card-heading">Product Images</div>
+                <div class="card-meta-line">E-commerce catalogs &amp; receipts</div>
+              </div>
+            </div>
+
+            <div class="concept-card purple-border">
+              <h3 class="concept-title">🌐 Why Regular JSON Cannot Handle Files</h3>
+              <p class="concept-text">
+                Standard HTTP requests use <code>application/json</code>, which is designed exclusively for structured text. Raw binary files cannot be sent cleanly as JSON without expensive encoding like Base64 (which increases file size by ~33%).
+              </p>
+            </div>
+          </div>
+
+          <div class="code-col">
+            <div class="concept-card" style="height:100%; display:flex; flex-direction:column; justify-content:space-between;">
+              <div>
+                <h3 class="concept-title">🔑 The Solution: multipart/form-data</h3>
+                <p class="concept-text">
+                  When sending files, the browser uses the specialized encoding format:
+                </p>
+                <div style="margin: 0.85rem 0;">
+                  <span class="status-pill status-pill-info" style="font-size:0.9rem; padding:0.4rem 0.8rem;">Content-Type: multipart/form-data</span>
+                </div>
+                <p class="concept-text">
+                  This format divides the HTTP request body into multiple distinct sections separated by unique <strong>boundary markers</strong>. Each section contains its own headers and can carry binary chunks or text strings!
+                </p>
+              </div>
+
+              <!-- Flow Diagram -->
+              <div class="flow-horizontal" style="justify-content:center; margin: 1rem 0;">
+                <div class="flow-box blue">User File<small>Selected</small></div>
+                <span class="flow-arrow">→</span>
+                <div class="flow-box purple">FormData<small>multipart</small></div>
+                <span class="flow-arrow">→</span>
+                <div class="flow-box green">Express API<small>Multer stream</small></div>
+                <span class="flow-arrow">→</span>
+                <div class="flow-box amber">Disk/RAM<small>Storage</small></div>
+              </div>
+
+              <div class="example-box">
+                <strong>💡 Core Takeaway:</strong> Regular Express <code>express.json()</code> cannot parse <code>multipart/form-data</code>. We need <strong>Multer</strong>!
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===================================================================
+           SLIDE 7: What Is Multer?
+           =================================================================== -->
+      <section class="slide" data-slide="7" id="slide-7">
+        <div class="slide-header">
+          <div class="slide-category">Topic 2: Handling File Uploads with Multer</div>
+          <h2 class="slide-title">What Is <span class="highlight">Multer?</span></h2>
+        </div>
+        <div class="split-layout">
+          <div class="concept-col">
+            <div class="concept-card accent-border">
+              <h3 class="concept-title">🛡️ Definition</h3>
+              <p class="concept-text">
+                <strong>Multer</strong> is an Express middleware written primarily for handling <code>multipart/form-data</code>. It intercepts incoming HTTP requests, extracts uploaded files, saves them to disk or RAM, and populates <code>req.file</code> and <code>req.body</code>.
+              </p>
+            </div>
+
+            <div class="concept-card green-border">
+              <h3 class="concept-title">📦 Installation</h3>
+              <div class="code-container" style="height: auto; margin-top: 0.4rem;">
+                <div class="code-header">
+                  <span class="code-file-badge">⚡ Terminal</span>
+                  <button class="copy-btn">Copy</button>
+                </div>
+                <div class="code-scroll-area">
+                  <pre><code>npm install multer</code></pre>
+                </div>
+              </div>
+            </div>
+
+            <div class="concept-card">
+              <h3 class="concept-title">⚙️ What Does Multer Do?</h3>
+              <div class="key-term-list">
+                <div class="key-term-item"><strong>1. Stream Interception:</strong> Reads binary streams directly from the client network socket.</div>
+                <div class="key-term-item"><strong>2. req.file Attachment:</strong> Makes file metadata (size, mimetype, path) available under <code>req.file</code>.</div>
+                <div class="key-term-item"><strong>3. req.body Population:</strong> Parses accompanying text fields (like <code>name</code> and <code>email</code>) into <code>req.body</code>.</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="code-col">
+            <div class="code-container">
+              <div class="code-header">
+                <div style="display:flex; align-items:center;">
+                  <div class="code-dots">
+                    <span class="code-dot red"></span>
+                    <span class="code-dot yellow"></span>
+                    <span class="code-dot green"></span>
+                  </div>
+                  <span class="code-file-badge">Basic Multer Configuration</span>
+                </div>
+                <button class="copy-btn">Copy</button>
+              </div>
+              <div class="code-scroll-area">
+                <pre><code>const express = require("express");
+const multer = require("multer");
+
+const app = express();
+
+// Basic Multer initialization with destination folder
+const upload = multer({
+    dest: "uploads/" // Multer will auto-create this directory
+});
+
+// Single file upload route
+app.post("/upload", upload.single("file"), (req, res) => {
+    // req.file contains the uploaded file info
+    // req.body contains any text fields sent alongside
+    res.json({
+        message: "File received successfully!",
+        fileInfo: req.file
+    });
+});</code></pre>
+              </div>
+              <div class="code-run-hint">
+                <span>⚠️ <strong>Remember:</strong> Multer is server middleware. It does not automatically upload files to cloud providers like AWS S3 or Cloudinary.</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===================================================================
+           SLIDE 8: Understanding Multer Storage – Disk vs Memory
+           =================================================================== -->
+      <section class="slide" data-slide="8" id="slide-8">
+        <div class="slide-header">
+          <div class="slide-category">Topic 2: Handling File Uploads with Multer</div>
+          <h2 class="slide-title">Understanding Multer Storage: <span class="highlight">Disk vs Memory</span></h2>
+        </div>
+        <div class="split-layout">
+          <div class="concept-col">
+            <div class="table-wrapper">
+              <table class="styled-table">
+                <thead>
+                  <tr>
+                    <th>Feature</th>
+                    <th>Disk Storage</th>
+                    <th>Memory Storage</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><strong>Where File Lives</strong></td>
+                    <td>Saved directly on server hard disk</td>
+                    <td>Held temporarily in RAM as Buffer</td>
+                  </tr>
+                  <tr>
+                    <td><strong>File Access Property</strong></td>
+                    <td class="tag-col">req.file.path</td>
+                    <td class="tag-col" style="color:var(--accent-purple);">req.file.buffer</td>
+                  </tr>
+                  <tr>
+                    <td><strong>Best Use Case</strong></td>
+                    <td>Local uploads, student files, static web serving</td>
+                    <td>Image resizing (Sharp), document parsing, direct cloud upload (S3)</td>
+                  </tr>
+                  <tr>
+                    <td><strong>Resource Usage</strong></td>
+                    <td>Uses server disk space</td>
+                    <td>Consumes server RAM (dangerous if unmonitored)</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="concept-card rose-border" style="margin-top: 0.5rem;">
+              <h4 style="color:var(--accent-rose); font-weight:800; font-size:0.95rem; margin-bottom:0.35rem;">
+                ⚠️ Memory Storage Caution
+              </h4>
+              <p class="concept-text" style="font-size:0.92rem;">
+                If 100 users upload 20MB files simultaneously with <code>memoryStorage()</code>, your server requires <strong>2 GB of RAM</strong> instantly! Always enforce strict file-size limits.
+              </p>
+            </div>
+          </div>
+
+          <div class="code-col">
+            <div class="code-container">
+              <div class="code-header">
+                <div style="display:flex; align-items:center;">
+                  <div class="code-dots">
+                    <span class="code-dot red"></span>
+                    <span class="code-dot yellow"></span>
+                    <span class="code-dot green"></span>
+                  </div>
+                  <span class="code-file-badge">multerStorageOptions.js</span>
+                </div>
+                <button class="copy-btn">Copy</button>
+              </div>
+              <div class="code-scroll-area">
+                <pre><code>const multer = require("multer");
+
+// 1. DISK STORAGE ENGINE (Custom names & folder)
+const diskStorage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, "uploads/"); // folder path
+    },
+    filename: (req, file, cb) => {
+        // Prepend timestamp to avoid filename collisions
+        const uniqueSuffix = Date.now() + "-" + file.originalname;
+        cb(null, uniqueSuffix);
+    }
+});
+
+const uploadToDisk = multer({ storage: diskStorage });
+
+// 2. MEMORY STORAGE ENGINE (Buffer in RAM)
+const memoryStorage = multer.memoryStorage();
+const uploadToMemory = multer({ storage: memoryStorage });</code></pre>
+              </div>
+              <div class="code-run-hint">
+                <span>💡 <code>Date.now()</code> ensures two users uploading <code>avatar.png</code> don't overwrite each other!</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===================================================================
+           SLIDE 9: Practical: Create a File Upload API
+           =================================================================== -->
+      <section class="slide" data-slide="9" id="slide-9">
+        <div class="slide-header">
+          <div class="slide-category">Topic 2: Handling File Uploads with Multer</div>
+          <h2 class="slide-title">Practical: Create a <span class="highlight">File Upload API</span></h2>
+        </div>
+        <div class="split-layout">
+          <div class="concept-col">
+            <div class="code-container">
+              <div class="code-header">
+                <div style="display:flex; align-items:center;">
+                  <div class="code-dots">
+                    <span class="code-dot red"></span>
+                    <span class="code-dot yellow"></span>
+                    <span class="code-dot green"></span>
+                  </div>
+                  <span class="code-file-badge">server.js</span>
+                </div>
+                <button class="copy-btn">Copy</button>
+              </div>
+              <div class="code-scroll-area">
+                <pre><code>require("dotenv").config();
+const express = require("express");
+const multer = require("multer");
+
+const app = express();
+
+// Configure Multer with destination and size limit (2MB)
+const upload = multer({
+    dest: "uploads/",
+    limits: {
+        fileSize: 2 * 1024 * 1024 // 2 Megabytes in bytes
+    }
+});
+
+// Single file upload route
+app.post("/upload", upload.single("file"), (req, res) => {
+    console.log(req.file);
+
+    res.json({
+        message: "File uploaded successfully",
+        file: req.file
+    });
+});
+
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => console.log(`Server on ${PORT}`));</code></pre>
+              </div>
+              <div class="code-run-hint">
+                <span>▶ Run: <code>node server.js</code></span>
+              </div>
+            </div>
+          </div>
+
+          <div class="code-col">
+            <div class="concept-card accent-border" style="margin-bottom:1rem;">
+              <h3 class="concept-title">📮 Step-by-Step Postman Testing</h3>
+              <ol style="margin-left:1.25rem; font-size:0.92rem; color:var(--text-muted); line-height:1.6;">
+                <li>Set HTTP Method to <strong>POST</strong>.</li>
+                <li>Enter URL: <code>http://localhost:3000/upload</code>.</li>
+                <li>Navigate to <strong>Body</strong> tab → Select <strong>form-data</strong>.</li>
+                <li>In Key column, enter <code>file</code> (must match <code>upload.single("file")</code>).</li>
+                <li>Hover over key field → Change dropdown from <strong>Text</strong> to <strong>File</strong>.</li>
+                <li>Click <strong>Select Files</strong> → Choose an image → Click <strong>Send</strong>.</li>
+              </ol>
+            </div>
+
+            <!-- Interactive Multer Lab Simulator -->
+            <div class="sandbox-card">
+              <div style="display:flex; justify-content:space-between; align-items:center;">
+                <span style="font-weight:800; font-size:0.95rem; color:var(--primary-deep);">🧪 Live Multer Request Sandbox</span>
+                <span id="multerSimStatus" class="status-pill status-pill-info">Ready</span>
+              </div>
+              
+              <div class="sandbox-form-row">
+                <select id="multerSimFile" class="sandbox-select" style="flex:1;">
+                  <option value="student-photo.png" data-mime="image/png" data-size="819200">student-photo.png (800 KB - Image)</option>
+                  <option value="profile-banner.jpg" data-mime="image/jpeg" data-size="1572864">profile-banner.jpg (1.5 MB - Image)</option>
+                  <option value="large-video.mp4" data-mime="video/mp4" data-size="4194304">large-video.mp4 (4.0 MB - Too Large)</option>
+                  <option value="malware-script.exe" data-mime="application/x-msdownload" data-size="204800">script.exe (200 KB - Executable)</option>
+                </select>
+
+                <input type="text" id="multerSimField" class="sandbox-input" value="file" placeholder="Key (e.g. file)" style="width:110px;">
+                
+                <select id="multerSimStorage" class="sandbox-select" style="width:130px;">
+                  <option value="disk">Disk Storage</option>
+                  <option value="memory">Memory Storage</option>
+                </select>
+
+                <button id="multerSimSend" class="sandbox-btn">Simulate Upload</button>
+              </div>
+
+              <div style="display:flex; align-items:center; gap:0.5rem; font-size:0.85rem; color:var(--text-muted);">
+                <input type="checkbox" id="multerSimValidate" checked>
+                <label for="multerSimValidate">Enforce Image Filter (fileFilter)</label>
+              </div>
+
+              <pre id="multerSimOutput" class="sandbox-output">// Click "Simulate Upload" to test Multer middleware processing</pre>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===================================================================
+           SLIDE 10: Understanding req.file
+           =================================================================== -->
+      <section class="slide" data-slide="10" id="slide-10">
+        <div class="slide-header">
+          <div class="slide-category">Topic 2: Handling File Uploads with Multer</div>
+          <h2 class="slide-title">Understanding <span class="highlight">req.file</span></h2>
+        </div>
+        <div class="split-layout">
+          <div class="concept-col">
+            <div class="concept-card accent-border">
+              <h3 class="concept-title">📋 What is req.file?</h3>
+              <p class="concept-text">
+                When Multer successfully receives an uploaded file, it creates a JavaScript metadata object and mounts it directly onto the Express request object as <strong><code>req.file</code></strong>.
+              </p>
+            </div>
+
+            <div class="table-wrapper">
+              <table class="styled-table">
+                <thead>
+                  <tr>
+                    <th>Property</th>
+                    <th>Data Type</th>
+                    <th>Purpose / Value</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="tag-col">originalname</td>
+                    <td>String</td>
+                    <td>Original file name on user's computer (e.g. <code>avatar.png</code>)</td>
+                  </tr>
+                  <tr>
+                    <td class="tag-col">filename</td>
+                    <td>String</td>
+                    <td>Stored unique name on disk (e.g. <code>1714529381-avatar.png</code>)</td>
+                  </tr>
+                  <tr>
+                    <td class="tag-col">mimetype</td>
+                    <td>String</td>
+                    <td>MIME type of file (e.g. <code>image/png</code>, <code>application/pdf</code>)</td>
+                  </tr>
+                  <tr>
+                    <td class="tag-col">size</td>
+                    <td>Number</td>
+                    <td>File size in bytes (e.g. <code>1048576</code> = 1 MB)</td>
+                  </tr>
+                  <tr>
+                    <td class="tag-col">path</td>
+                    <td>String</td>
+                    <td>Full path where file was saved on server disk</td>
+                  </tr>
+                  <tr>
+                    <td class="tag-col">buffer</td>
+                    <td>Buffer</td>
+                    <td>Entire binary file stored in RAM (MemoryStorage only)</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="code-col">
+            <div class="concept-card green-border" style="margin-bottom:1rem;">
+              <h3 class="concept-title">🔄 Single File vs Multiple Files</h3>
+              <div class="key-term-list">
+                <div class="key-term-item">
+                  <strong>Single File:</strong> <code>upload.single("file")</code> mounts a single object at <strong><code>req.file</code></strong>.
+                </div>
+                <div class="key-term-item">
+                  <strong>Multiple Files:</strong> <code>upload.array("photos", 5)</code> mounts an array of file objects at <strong><code>req.files</code></strong>.
+                </div>
+                <div class="key-term-item">
+                  <strong>Multiple Fields:</strong> <code>upload.fields([{ name: 'avatar' }, { name: 'resume' }])</code> mounts named arrays on <strong><code>req.files</code></strong>.
+                </div>
+              </div>
+            </div>
+
+            <div class="code-container">
+              <div class="code-header">
+                <div style="display:flex; align-items:center;">
+                  <div class="code-dots">
+                    <span class="code-dot red"></span>
+                    <span class="code-dot yellow"></span>
+                    <span class="code-dot green"></span>
+                  </div>
+                  <span class="code-file-badge">Reading req.file in Route Handler</span>
+                </div>
+                <button class="copy-btn">Copy</button>
+              </div>
+              <div class="code-scroll-area">
+                <pre><code>app.post("/upload", upload.single("file"), (req, res) => {
+    // 1. Guard check: Did the client send a file?
+    if (!req.file) {
+        return res.status(400).json({ error: "Please select a file to upload" });
+    }
+
+    // 2. Access properties cleanly
+    const { filename, originalname, size, mimetype, path } = req.file;
+
+    res.json({
+        success: true,
+        savedAs: filename,
+        originalName: originalname,
+        sizeInKb: (size / 1024).toFixed(2) + " KB",
+        fileType: mimetype
+    });
+});</code></pre>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===================================================================
+           SLIDE 11: File Validation and Error Handling
+           =================================================================== -->
+      <section class="slide" data-slide="11" id="slide-11">
+        <div class="slide-header">
+          <div class="slide-category">Topic 2: Handling File Uploads with Multer</div>
+          <h2 class="slide-title">File Validation &amp; <span class="highlight">Error Handling</span></h2>
+        </div>
+        <div class="split-layout">
+          <div class="concept-col">
+            <div class="concept-card accent-border">
+              <h3 class="concept-title">🛡️ Why Validate Files?</h3>
+              <p class="concept-text">
+                Never accept arbitrary files from untrusted users. A student profile upload endpoint should strictly restrict:
+              </p>
+              <div class="key-term-list" style="margin-top:0.4rem;">
+                <div class="key-term-item"><strong>1. File Type:</strong> Only allow safe image formats (PNG, JPEG, WebP). Reject executables (<code>.exe</code>, <code>.sh</code>) or scripts (<code>.js</code>).</div>
+                <div class="key-term-item"><strong>2. File Size:</strong> Cap files to reasonable dimensions (e.g. 2 MB) to prevent Denial of Service (DoS) attacks.</div>
+              </div>
+            </div>
+
+            <div class="concept-card rose-border">
+              <h3 class="concept-title" style="color:var(--accent-rose);">⚠️ Handling Multer Errors in Express</h3>
+              <p class="concept-text" style="font-size:0.92rem;">
+                When a file exceeds <code>limits.fileSize</code>, Multer throws a <code>MulterError</code> with code <code>LIMIT_FILE_SIZE</code>. Always register a global error handler to return a clean 400 response instead of crashing!
+              </p>
+            </div>
+          </div>
+
+          <div class="code-col">
+            <div class="code-container">
+              <div class="code-header">
+                <div style="display:flex; align-items:center;">
+                  <div class="code-dots">
+                    <span class="code-dot red"></span>
+                    <span class="code-dot yellow"></span>
+                    <span class="code-dot green"></span>
+                  </div>
+                  <span class="code-file-badge">multerValidation.js</span>
+                </div>
+                <button class="copy-btn">Copy</button>
+              </div>
+              <div class="code-scroll-area">
+                <pre><code>const multer = require("multer");
+
+const upload = multer({
+    storage: multer.diskStorage({
+        destination: "uploads/",
+        filename: (req, file, cb) => {
+            cb(null, Date.now() + "-" + file.originalname);
+        }
+    }),
+    limits: {
+        fileSize: 2 * 1024 * 1024 // 2 Megabytes
+    },
+    fileFilter: (req, file, cb) => {
+        // Accept images only
+        if (file.mimetype.startsWith("image/")) {
+            cb(null, true);
+        } else {
+            cb(new Error("Only image files (JPG/PNG) are allowed"), false);
+        }
+    }
+});
+
+// Express Error-Handling Middleware
+app.use((err, req, res, next) => {
+    if (err instanceof multer.MulterError) {
+        return res.status(400).json({ error: `Upload error: ${err.message}` });
+    } else if (err) {
+        return res.status(400).json({ error: err.message });
+    }
+    next();
+});</code></pre>
+              </div>
+              <div class="code-run-hint">
+                <span>🔒 <code>file.mimetype.startsWith("image/")</code> safely matches <code>image/jpeg</code>, <code>image/png</code>, etc.</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===================================================================
+           SLIDE 12: What Is Axios?
+           =================================================================== -->
+      <section class="slide" data-slide="12" id="slide-12">
+        <div class="slide-header">
+          <div class="slide-category">Topic 3: Connecting Frontend to Backend Using Axios</div>
+          <h2 class="slide-title">What Is <span class="highlight">Axios?</span></h2>
+        </div>
+        <div class="split-layout">
+          <div class="concept-col">
+            <div class="concept-card accent-border">
+              <h3 class="concept-title">🌐 Definition</h3>
+              <p class="concept-text">
+                <strong>Axios</strong> is a popular, promise-based JavaScript HTTP client used to send asynchronous network requests from a browser or React application to backend REST APIs.
+              </p>
+            </div>
+
+            <div class="concept-card">
+              <h3 class="concept-title">⭐ Why Use Axios Instead of fetch()?</h3>
+              <div class="key-term-list">
+                <div class="key-term-item">
+                  <strong>1. Automatic JSON Parsing:</strong> Unlike native <code>fetch()</code> which requires <code>res.json()</code>, Axios parses JSON response bodies automatically into <code>response.data</code>.
+                </div>
+                <div class="key-term-item">
+                  <strong>2. Better Error Handling:</strong> Axios automatically throws errors for 4xx and 5xx HTTP status codes, routing them straight to your <code>catch</code> block.
+                </div>
+                <div class="key-term-item">
+                  <strong>3. Seamless FormData Handling:</strong> Handles multipart headers and boundary strings automatically when uploading files.
+                </div>
+              </div>
+            </div>
+
+            <div class="concept-card green-border">
+              <h3 class="concept-title">📦 Installation in React Project</h3>
+              <div class="code-container" style="height: auto; margin-top: 0.4rem;">
+                <div class="code-header">
+                  <span class="code-file-badge">⚡ Terminal (Frontend)</span>
+                  <button class="copy-btn">Copy</button>
+                </div>
+                <div class="code-scroll-area">
+                  <pre><code>npm install axios</code></pre>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="code-col">
+            <div class="code-container">
+              <div class="code-header">
+                <div style="display:flex; align-items:center;">
+                  <div class="code-dots">
+                    <span class="code-dot red"></span>
+                    <span class="code-dot yellow"></span>
+                    <span class="code-dot green"></span>
+                  </div>
+                  <span class="code-file-badge">Basic Axios Request</span>
+                </div>
+                <button class="copy-btn">Copy</button>
+              </div>
+              <div class="code-scroll-area">
+                <pre><code>import axios from "axios";
+
+// Clean async/await syntax
+async function getStudents() {
+    try {
+        const response = await axios.get("http://localhost:3000/students");
+        
+        // response.data is ALREADY a parsed JavaScript object/array!
+        console.log("Students List:", response.data);
+        console.log("Status Code:", response.status); // 200
+    } catch (error) {
+        console.error("API Request Failed:", error.message);
+    }
+}
+
+getStudents();</code></pre>
+              </div>
+              <div class="code-run-hint">
+                <span>💡 <strong>Analogy:</strong> Axios is the delivery vehicle; Express is the kitchen preparing the order!</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===================================================================
+           SLIDE 13: Axios HTTP Methods
+           =================================================================== -->
+      <section class="slide" data-slide="13" id="slide-13">
+        <div class="slide-header">
+          <div class="slide-category">Topic 3: Connecting Frontend to Backend Using Axios</div>
+          <h2 class="slide-title">Axios <span class="highlight">HTTP Methods</span></h2>
+        </div>
+        <div class="split-layout">
+          <div class="concept-col">
+            <div class="code-container">
+              <div class="code-header">
+                <div style="display:flex; align-items:center;">
+                  <div class="code-dots">
+                    <span class="code-dot red"></span>
+                    <span class="code-dot yellow"></span>
+                    <span class="code-dot green"></span>
+                  </div>
+                  <span class="code-file-badge">Axios CRUD Operations</span>
+                </div>
+                <button class="copy-btn">Copy</button>
+              </div>
+              <div class="code-scroll-area">
+                <pre><code>import axios from "axios";
+
+// 1. GET — Fetch existing student data
+const res1 = await axios.get("http://localhost:3000/students");
+
+// 2. POST — Create a new student record
+const res2 = await axios.post("http://localhost:3000/students", {
+    name: "Arun",
+    email: "arun@gmail.com"
+});
+
+// 3. PUT — Update existing student by ID
+const res3 = await axios.put("http://localhost:3000/students/1", {
+    name: "Arun Kumar",
+    email: "arun.kumar@gmail.com"
+});
+
+// 4. DELETE — Remove student by ID
+await axios.delete("http://localhost:3000/students/1");</code></pre>
+              </div>
+            </div>
+          </div>
+
+          <div class="code-col">
+            <div class="concept-card accent-border" style="height:100%; display:flex; flex-direction:column; justify-content:center;">
+              <h3 class="concept-title" style="margin-bottom:1.25rem;">📊 Complete Client-Server Cycle</h3>
+              
+              <div class="flow-vertical">
+                <div class="flow-vertical-step" style="border-left: 4px solid var(--primary); background: var(--primary-light);">
+                  <span>1. React UI Component</span>
+                  <small style="color:var(--primary-dark); font-weight:700;">User triggers action (e.g. click button)</small>
+                </div>
+                <div class="flow-arrow">↓</div>
+                
+                <div class="flow-vertical-step" style="border-left: 4px solid var(--accent-purple); background: var(--accent-purple-bg);">
+                  <span>2. Axios HTTP Request</span>
+                  <small style="color:var(--accent-purple); font-weight:700;">Dispatches GET / POST / PUT / DELETE</small>
+                </div>
+                <div class="flow-arrow">↓</div>
+                
+                <div class="flow-vertical-step" style="border-left: 4px solid var(--accent-green); background: var(--accent-green-bg);">
+                  <span>3. Express Route &amp; Controller</span>
+                  <small style="color:var(--accent-green); font-weight:700;">Executes logic &amp; database query</small>
+                </div>
+                <div class="flow-arrow">↓</div>
+                
+                <div class="flow-vertical-step" style="border-left: 4px solid var(--accent-amber); background: var(--accent-amber-bg);">
+                  <span>4. JSON HTTP Response</span>
+                  <small style="color:var(--accent-amber); font-weight:700;">Delivered back to <code>response.data</code></small>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===================================================================
+           SLIDE 14: Practical: Connect React with Express
+           =================================================================== -->
+      <section class="slide" data-slide="14" id="slide-14">
+        <div class="slide-header">
+          <div class="slide-category">Topic 3: Connecting Frontend to Backend Using Axios</div>
+          <h2 class="slide-title">Practical: Connect <span class="highlight">React with Express</span></h2>
+        </div>
+        <div class="split-layout">
+          <div class="concept-col">
+            <div class="concept-card accent-border">
+              <h3 class="concept-title">🔒 Understanding CORS (Cross-Origin Resource Sharing)</h3>
+              <p class="concept-text" style="font-size:0.92rem;">
+                React runs on <code>http://localhost:5173</code> and Express runs on <code>http://localhost:3000</code>. By default, web browsers block requests across different ports for security. We install the <strong><code>cors</code></strong> middleware on Express to permit access.
+              </p>
+            </div>
+
+            <div class="code-container">
+              <div class="code-header">
+                <div style="display:flex; align-items:center;">
+                  <div class="code-dots">
+                    <span class="code-dot red"></span>
+                    <span class="code-dot yellow"></span>
+                    <span class="code-dot green"></span>
+                  </div>
+                  <span class="code-file-badge">Backend: server.js (Express)</span>
+                </div>
+                <button class="copy-btn">Copy</button>
+              </div>
+              <div class="code-scroll-area">
+                <pre><code>const express = require("express");
+const cors = require("cors");
+
+const app = express();
+
+// 1. Enable CORS for all frontend origins
+app.use(cors());
+app.use(express.json());
+
+app.get("/students", (req, res) => {
+    res.json([
+        { id: 1, name: "Arun" },
+        { id: 2, name: "Meera" }
+    ]);
+});
+
+app.listen(3000, () => console.log("Backend running on port 3000"));</code></pre>
+              </div>
+            </div>
+          </div>
+
+          <div class="code-col">
+            <div class="code-container">
+              <div class="code-header">
+                <div style="display:flex; align-items:center;">
+                  <div class="code-dots">
+                    <span class="code-dot red"></span>
+                    <span class="code-dot yellow"></span>
+                    <span class="code-dot green"></span>
+                  </div>
+                  <span class="code-file-badge">Frontend: Students.jsx (React)</span>
+                </div>
+                <button class="copy-btn">Copy</button>
+              </div>
+              <div class="code-scroll-area">
+                <pre><code>import { useEffect, useState } from "react";
+import axios from "axios";
+
+function Students() {
+    const [students, setStudents] = useState([]);
+
+    useEffect(() => {
+        // Fetch student list on component mount
+        axios.get("http://localhost:3000/students")
+            .then((response) => {
+                setStudents(response.data);
+            })
+            .catch((error) => {
+                console.error("Error fetching students:", error);
+            });
+    }, []);
+
+    return (
+        <div style={{ padding: "1rem" }}>
+            <h2>Student List</h2>
+            {students.map((student) => (
+                <p key={student.id}>👤 {student.name}</p>
+            ))}
+        </div>
+    );
+}
+
+export default Students;</code></pre>
+              </div>
+              <div class="code-run-hint">
+                <span>🖥️ <strong>Rendered Output:</strong> Displays Arun and Meera in React from Express API!</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===================================================================
+           SLIDE 15: Axios POST Request and Error Handling
+           =================================================================== -->
+      <section class="slide" data-slide="15" id="slide-15">
+        <div class="slide-header">
+          <div class="slide-category">Topic 3: Connecting Frontend to Backend Using Axios</div>
+          <h2 class="slide-title">Axios POST Request &amp; <span class="highlight">Error Handling</span></h2>
+        </div>
+        <div class="split-layout">
+          <div class="concept-col">
+            <div class="code-container">
+              <div class="code-header">
+                <div style="display:flex; align-items:center;">
+                  <div class="code-dots">
+                    <span class="code-dot red"></span>
+                    <span class="code-dot yellow"></span>
+                    <span class="code-dot green"></span>
+                  </div>
+                  <span class="code-file-badge">addStudent.js (Frontend Action)</span>
+                </div>
+                <button class="copy-btn">Copy</button>
+              </div>
+              <div class="code-scroll-area">
+                <pre><code>import axios from "axios";
+
+async function addStudent() {
+    try {
+        // axios.post(URL, dataObject)
+        const response = await axios.post(
+            "http://localhost:3000/students",
+            {
+                name: "Rahul",
+                email: "rahul@gmail.com"
+            }
+        );
+
+        console.log("Created successfully:", response.data);
+        alert("Student added!");
+
+    } catch (error) {
+        // Proper error extraction from backend response
+        if (error.response) {
+            // Server responded with status code 4xx or 5xx
+            console.error("Server Error:", error.response.data);
+            alert(error.response.data.message || "Failed to create student");
+        } else {
+            // Network dropped or server offline
+            console.error("Network Error:", error.message);
+        }
+    }
+}</code></pre>
+              </div>
+            </div>
+          </div>
+
+          <div class="code-col">
+            <div class="concept-card accent-border" style="height:100%; display:flex; flex-direction:column; justify-content:space-between;">
+              <div>
+                <h3 class="concept-title">🔍 Inspecting Axios Errors</h3>
+                <p class="concept-text">
+                  When a request fails, Axios wraps the failure in a rich error object. Knowing where to look avoids hours of debugging:
+                </p>
+
+                <div class="key-term-list" style="margin-top:0.75rem;">
+                  <div class="key-term-item">
+                    <strong style="color:var(--primary);">error.response.data:</strong> The actual JSON error payload sent by your Express backend (e.g. <code>{ message: "Email already registered" }</code>).
+                  </div>
+                  <div class="key-term-item">
+                    <strong style="color:var(--accent-amber);">error.response.status:</strong> The HTTP status code returned by the server (e.g. <code>400</code>, <code>401</code>, <code>404</code>, <code>500</code>).
+                  </div>
+                  <div class="key-term-item">
+                    <strong style="color:var(--accent-rose);">error.message:</strong> General network message (e.g. <code>"Network Error"</code> when backend is turned off).
+                  </div>
+                </div>
+              </div>
+
+              <div class="example-box">
+                <strong>💡 Best Practice:</strong> Always use the optional chaining operator: <code>error.response?.data?.message || error.message</code>!
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===================================================================
+           SLIDE 16: Practical: Upload a File Using Axios
+           =================================================================== -->
+      <section class="slide" data-slide="16" id="slide-16">
+        <div class="slide-header">
+          <div class="slide-category">Topic 3: Connecting Frontend to Backend Using Axios</div>
+          <h2 class="slide-title">Practical: Upload a File <span class="highlight">Using Axios</span></h2>
+        </div>
+        <div class="split-layout">
+          <div class="concept-col">
+            <div class="concept-card accent-border">
+              <h3 class="concept-title">🔑 How React Uploads Files to Express</h3>
+              <p class="concept-text">
+                Files cannot be passed as raw JavaScript objects. We use the browser's native <strong><code>FormData</code></strong> API to construct a multipart payload and append the file object:
+              </p>
+              <div class="key-term-list" style="margin-top:0.4rem;">
+                <div class="key-term-item">1. <code>useState(null)</code> holds the selected file object.</div>
+                <div class="key-term-item">2. <code>const formData = new FormData()</code> initializes the multipart container.</div>
+                <div class="key-term-item">3. <code>formData.append("file", file)</code> pairs the key with the binary file.</div>
+              </div>
+            </div>
+
+            <div class="concept-card rose-border">
+              <h4 style="color:var(--accent-rose); font-weight:800; font-size:0.95rem; margin-bottom:0.35rem;">
+                🚨 CRITICAL WARNING (Most Common Beginner Bug)
+              </h4>
+              <p class="concept-text" style="font-size:0.92rem;">
+                <strong>Do NOT manually set the <code>Content-Type: multipart/form-data</code> header!</strong><br>
+                When you pass a <code>FormData</code> object to Axios, the browser automatically attaches the header <em>AND calculates the dynamic boundary string</em>. Manually overriding it strips the boundary, causing Multer to fail!
+              </p>
+            </div>
+          </div>
+
+          <div class="code-col">
+            <div class="code-container">
+              <div class="code-header">
+                <div style="display:flex; align-items:center;">
+                  <div class="code-dots">
+                    <span class="code-dot red"></span>
+                    <span class="code-dot yellow"></span>
+                    <span class="code-dot green"></span>
+                  </div>
+                  <span class="code-file-badge">ProfileUpload.jsx (React)</span>
+                </div>
+                <button class="copy-btn">Copy</button>
+              </div>
+              <div class="code-scroll-area">
+                <pre><code>import { useState } from "react";
+import axios from "axios";
+
+function ProfileUpload() {
+    const [file, setFile] = useState(null);
+
+    const uploadFile = async () => {
+        if (!file) return alert("Please select an image first!");
+
+        // 1. Create multipart container
+        const formData = new FormData();
+
+        // 2. Key "file" MUST match backend upload.single("file")!
+        formData.append("file", file);
+
+        try {
+            // 3. Send via Axios POST without manual headers
+            const response = await axios.post(
+                "http://localhost:3000/upload",
+                formData
+            );
+
+            console.log("Uploaded successfully:", response.data);
+            alert("File uploaded!");
+        } catch (error) {
+            console.error(error.response?.data || error.message);
+        }
+    };
+
+    return (
+        <div>
+            <input type="file" onChange={(e) => setFile(e.target.files[0])} />
+            <button onClick={uploadFile}>Upload Image</button>
+        </div>
+    );
+}
+
+export default ProfileUpload;</code></pre>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===================================================================
+           SLIDE 17: Complete Student Profile Upload Flow
+           =================================================================== -->
+      <section class="slide" data-slide="17" id="slide-17">
+        <div class="slide-header">
+          <div class="slide-category">Topic 4: Final Practical Integration</div>
+          <h2 class="slide-title">Complete Student Profile <span class="highlight">Upload Flow</span></h2>
+        </div>
+        <div class="split-layout">
+          <div class="concept-col">
+            <div class="code-container" style="height:260px;">
+              <div class="code-header">
+                <div style="display:flex; align-items:center;">
+                  <div class="code-dots">
+                    <span class="code-dot red"></span>
+                    <span class="code-dot yellow"></span>
+                    <span class="code-dot green"></span>
+                  </div>
+                  <span class="code-file-badge">Final Route: server.js</span>
+                </div>
+                <button class="copy-btn">Copy</button>
+              </div>
+              <div class="code-scroll-area">
+                <pre><code>// Handles text fields (name, email) + binary image
+app.post("/students", upload.single("image"), (req, res) => {
+    const { name, email } = req.body;
+
+    if (!req.file) {
+        return res.status(400).json({ message: "Profile image is required" });
+    }
+
+    res.status(201).json({
+        message: "Student profile created successfully",
+        student: {
+            name,
+            email,
+            image: req.file.filename,
+            imageUrl: `http://localhost:3000/uploads/${req.file.filename}`
+        }
+    });
+});</code></pre>
+              </div>
+            </div>
+
+            <div class="concept-card" style="margin-top:0.75rem;">
+              <h4 style="font-size:0.95rem; font-weight:700; color:var(--primary-deep); margin-bottom:0.35rem;">
+                📁 Complete Application Structure
+              </h4>
+              <div class="tree-view">
+student-profile-app/
+├── backend/
+│   ├── uploads/          # Saved student pictures
+│   ├── .env              # PORT=3000
+│   ├── .gitignore        # Ignores .env and uploads/
+│   ├── server.js         # Express + Multer routes
+│   └── package.json
+└── frontend/
+    ├── src/
+    │   ├── App.jsx
+    │   └── components/
+    │       └── ProfileUpload.jsx
+    └── package.json</div>
+            </div>
+          </div>
+
+          <div class="code-col">
+            <!-- Full Interactive Student Profile Simulator -->
+            <div class="sandbox-card">
+              <div style="display:flex; justify-content:space-between; align-items:center;">
+                <span style="font-weight:800; font-size:1rem; color:var(--primary-deep);">🚀 Interactive Profile Upload Console</span>
+                <span id="studentResStatus" class="status-pill status-pill-info">Ready</span>
+              </div>
+              
+              <div class="sandbox-form-row">
+                <input type="text" id="studentName" class="sandbox-input" value="Arun Kumar" placeholder="Student Name" style="flex:1;">
+                <input type="email" id="studentEmail" class="sandbox-input" value="arun@example.com" placeholder="Student Email" style="flex:1;">
+              </div>
+
+              <div class="sandbox-form-row">
+                <select id="studentAvatar" class="sandbox-select" style="flex:1;">
+                  <option value="arun-photo.jpg" data-size="420 KB">arun-photo.jpg (Profile Avatar - 420 KB)</option>
+                  <option value="meera-avatar.png" data-size="780 KB">meera-avatar.png (Profile Avatar - 780 KB)</option>
+                  <option value="">[None - Simulate Missing File]</option>
+                </select>
+
+                <button id="studentSubmitBtn" class="sandbox-btn">Submit via Axios</button>
+                <button id="studentResetBtn" class="sandbox-btn sandbox-btn-secondary">Reset</button>
+              </div>
+
+              <div style="font-size:0.78rem; font-weight:700; color:var(--primary-dark); margin-top:0.25rem;">
+                1. Generated Request Headers (Auto Multipart Boundary):
+              </div>
+              <pre id="studentReqHeader" class="sandbox-output" style="max-height:55px;">// Click "Submit via Axios" to inspect outgoing request</pre>
+
+              <div style="font-size:0.78rem; font-weight:700; color:var(--primary-dark); margin-top:0.25rem;">
+                2. Outgoing Multipart Payload (FormData):
+              </div>
+              <pre id="studentFormData" class="sandbox-output" style="max-height:65px;">// Form data payload will appear here</pre>
+
+              <div style="font-size:0.78rem; font-weight:700; color:var(--primary-dark); margin-top:0.25rem;">
+                3. Server JSON Response (Express + Multer):
+              </div>
+              <pre id="studentResBox" class="sandbox-output" style="max-height:90px;">// Server JSON response will appear here</pre>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===================================================================
+           SLIDE 18: Recap and Practical Challenge
+           =================================================================== -->
+      <section class="slide" data-slide="18" id="slide-18">
+        <div class="slide-header">
+          <div class="slide-category">Review &amp; Student Assignment</div>
+          <h2 class="slide-title">Recap &amp; <span class="highlight">Practical Challenge</span></h2>
+        </div>
+        <div class="split-layout">
+          <div class="concept-col">
+            <div class="table-wrapper">
+              <table class="styled-table">
+                <thead>
+                  <tr>
+                    <th>Topic</th>
+                    <th>Core Concept Learned</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="tag-col">dotenv</td>
+                    <td>Store environment secrets outside source code; accessed via <code>process.env</code></td>
+                  </tr>
+                  <tr>
+                    <td class="tag-col">Multer</td>
+                    <td>Express middleware to process <code>multipart/form-data</code> requests</td>
+                  </tr>
+                  <tr>
+                    <td class="tag-col">Disk Storage</td>
+                    <td>Saves uploaded files directly on disk with unique timestamps</td>
+                  </tr>
+                  <tr>
+                    <td class="tag-col">Memory Storage</td>
+                    <td>Keeps uploaded files in RAM as Buffers for image processing / cloud upload</td>
+                  </tr>
+                  <tr>
+                    <td class="tag-col">Axios</td>
+                    <td>Promise-based HTTP client in React with automatic JSON parsing</td>
+                  </tr>
+                  <tr>
+                    <td class="tag-col">FormData</td>
+                    <td>Browser API to bundle binary files + text fields without manual headers</td>
+                  </tr>
+                  <tr>
+                    <td class="tag-col">CORS</td>
+                    <td>Express middleware permitting requests across different ports/origins</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="code-col">
+            <div class="concept-card green-border" style="height:100%; display:flex; flex-direction:column; justify-content:space-between;">
+              <div>
+                <div class="card-top" style="margin-bottom:0.75rem;">
+                  <span class="card-heading" style="color:var(--accent-green);">🏆 Student Practical Challenge</span>
+                  <span class="status-pill status-pill-success">Homework Lab</span>
+                </div>
+                
+                <p class="concept-text" style="font-size:0.95rem; margin-bottom:0.75rem;">
+                  Build the <strong>Student Profile Upload Application</strong> from scratch:
+                </p>
+
+                <ol style="margin-left:1.35rem; font-size:0.9rem; color:var(--text-muted); line-height:1.6;">
+                  <li>Create Express backend &amp; configure <code>dotenv</code> with port <code>5000</code>.</li>
+                  <li>Enable <code>cors()</code> middleware.</li>
+                  <li>Configure Multer with 2MB limit and image <code>fileFilter</code>.</li>
+                  <li>Create a React frontend using Vite.</li>
+                  <li>Install <code>axios</code> in React.</li>
+                  <li>Build a form with Name, Email, and File inputs.</li>
+                  <li>Package inputs into <code>FormData</code> and dispatch via Axios POST.</li>
+                  <li>Handle success and display server confirmation message.</li>
+                </ol>
+              </div>
+
+              <div class="example-box" style="margin-top:1rem;">
+                <strong>⭐ Bonus Challenge:</strong> Serve the uploads folder statically with <code>app.use("/uploads", express.static("uploads"))</code> and display the uploaded image directly in the React frontend!
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- Bottom Controls Bar -->
+    <footer class="bottom-bar">
+      <div class="nav-hint">
+        <span>Navigate:</span>
+        <span class="kbd-badge">←</span>
+        <span class="kbd-badge">→</span>
+        <span class="kbd-badge">Space</span>
+        <span style="margin: 0 0.5rem;">|</span>
+        <span class="kbd-badge">F</span> Fullscreen
+        <span class="kbd-badge">T</span> Topics
+        <span class="kbd-badge">?</span> Shortcuts
+      </div>
+      <div class="nav-buttons">
+        <button class="nav-btn" id="prevBtn" disabled>
+          <span>←</span> Previous
+        </button>
+        <button class="nav-btn" id="nextBtn">
+          Next <span>→</span>
+        </button>
+      </div>
+    </footer>
+
+    <!-- Table of Contents Modal Overlay -->
+    <div class="modal-overlay" id="tocOverlay">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3 class="modal-title">Table of Contents</h3>
+          <button class="modal-close-btn" id="tocClose">&times;</button>
+        </div>
+        <div class="modal-body" id="tocList"></div>
+      </div>
+    </div>
+
+    <!-- Help / Keyboard Shortcuts Modal -->
+    <div class="modal-overlay" id="helpModal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3 class="modal-title">Keyboard Shortcuts</h3>
+          <button class="modal-close-btn" id="helpClose">&times;</button>
+        </div>
+        <div class="modal-body">
+          <div class="toc-item"><span><span class="kbd-badge">→</span> or <span class="kbd-badge">Space</span></span> <span>Next Slide</span></div>
+          <div class="toc-item"><span><span class="kbd-badge">←</span></span> <span>Previous Slide</span></div>
+          <div class="toc-item"><span><span class="kbd-badge">Home</span></span> <span>First Slide</span></div>
+          <div class="toc-item"><span><span class="kbd-badge">End</span></span> <span>Last Slide</span></div>
+          <div class="toc-item"><span><span class="kbd-badge">F</span></span> <span>Toggle Fullscreen</span></div>
+          <div class="toc-item"><span><span class="kbd-badge">T</span></span> <span>Toggle Table of Contents</span></div>
+          <div class="toc-item"><span><span class="kbd-badge">?</span></span> <span>Toggle Shortcuts Cheat Sheet</span></div>
+          <div class="toc-item"><span><span class="kbd-badge">Esc</span></span> <span>Close Modal Dialogs</span></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</body>
+</html>
