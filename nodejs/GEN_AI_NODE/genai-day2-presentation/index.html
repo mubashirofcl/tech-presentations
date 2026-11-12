@@ -1,0 +1,1917 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Node.js – Gen-AI Day 2 | LLM Fundamentals, Tokens, Parameters &amp; Transformers</title>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&amp;family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap"
+    rel="stylesheet"
+  />
+
+  <!-- Prism.js Syntax Highlighting -->
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css"
+  />
+
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div id="presentation-app">
+    <!-- Top Progress Bar -->
+    <div class="progress-container" aria-hidden="true">
+      <div class="progress-fill" id="progressFill"></div>
+    </div>
+
+    <!-- Top Navigation Bar -->
+    <header class="top-bar">
+      <div class="brand-section">
+        <span class="brand-badge">GEN-AI NODE.JS • DAY 2</span>
+        <span class="brand-title">LLM Playground API</span>
+        <span class="section-indicator" id="sectionIndicator">Section 1 • Introduction</span>
+      </div>
+
+      <div class="top-controls">
+        <span class="slide-counter" id="slideCounter">01 / 20</span>
+        <button type="button" class="top-btn" id="tocBtn" title="Table of Contents (T)">
+          <span>☰</span> Slides
+        </button>
+        <button type="button" class="top-btn" id="helpBtn" title="Keyboard Shortcuts (?)">
+          <span>?</span> Help
+        </button>
+        <button type="button" class="top-btn" id="fullscreenBtn" title="Toggle Fullscreen (F)">
+          <span>⛶</span> Fullscreen
+        </button>
+      </div>
+    </header>
+
+    <!-- Main Slides Viewport -->
+    <main class="slides-viewport" id="slidesViewport">
+
+      <!-- =====================================================
+           SLIDE 1: INTRODUCTION TO LLMs
+      ====================================================== -->
+      <section class="slide active" data-slide="1" id="slide-1">
+        <div class="title-slide-content">
+          <div class="title-badge">NODE.JS – GEN-AI DAY 2 • BEGINNER FRIENDLY</div>
+          <h1 class="title-main">
+            LLM Fundamentals, Tokens,<br />
+            <span style="color: var(--primary);">Model Parameters &amp; Transformers</span>
+          </h1>
+          <p class="title-subtitle">
+            Understand how Large Language Models actually work under the hood, then connect every
+            concept directly to one continuous Node.js project: your own <strong>LLM Playground API</strong>.
+          </p>
+
+          <div class="title-topics-grid">
+            <div class="title-topic-chip">01. What Is an LLM?</div>
+            <div class="title-topic-chip">02. Training vs Inference</div>
+            <div class="title-topic-chip">03. Tokens &amp; Tokenization</div>
+            <div class="title-topic-chip">04. Context Window &amp; Budget</div>
+            <div class="title-topic-chip">05. Weights vs API Parameters</div>
+            <div class="title-topic-chip">06. Temperature &amp; Max Tokens</div>
+            <div class="title-topic-chip">07. Hallucinations &amp; Cutoff</div>
+            <div class="title-topic-chip">08. Transformers &amp; Attention</div>
+          </div>
+
+          <div class="title-features-pills">
+            <span class="feature-pill"><span class="pill-dot"></span>Stack: Node.js (CommonJS) + Express</span>
+            <span class="feature-pill"><span class="pill-dot"></span>OpenAI SDK (<code>gpt-4.1-mini</code>) + dotenv</span>
+            <span class="feature-pill"><span class="pill-dot"></span>20 Slides • 12 Visual Diagrams • 4 Interactive Labs</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- =====================================================
+           SLIDE 2: WHAT IS AN LLM?
+      ====================================================== -->
+      <section class="slide" data-slide="2" id="slide-2">
+        <div class="slide-header">
+          <span class="slide-category">Section 1 • LLM Basics</span>
+          <h2 class="slide-title">What Is an <span class="highlight">LLM (Large Language Model)</span>?</h2>
+        </div>
+
+        <div class="split-layout">
+          <div class="concept-col">
+            <div class="concept-card accent-border">
+              <div class="concept-title">Plain-English Definition</div>
+              <p class="concept-text">
+                A <strong>Large Language Model (LLM)</strong> is a deep learning model trained on massive
+                amounts of text—documentation, books, articles, and source code—so it learns patterns in
+                human language and programming.
+              </p>
+              <ul class="key-term-list" style="margin-top: 10px;">
+                <li class="key-term-item">
+                  <span class="key-term-name">How it replies</span>
+                  It predicts the most likely <strong>next token</strong> step by step until a complete answer forms.
+                </li>
+                <li class="key-term-item">
+                  <span class="key-term-name">Why developers care</span>
+                  Instead of hardcoding thousands of <code>if/else</code> rules, your Node.js app sends a prompt over an API and receives flexible text or structured JSON.
+                </li>
+                <li class="key-term-item">
+                  <span class="key-term-name">Common API tasks</span>
+                  Chatbots, code explanation, summarization, translation, and Q&amp;A over provided documents.
+                </li>
+              </ul>
+            </div>
+
+            <div class="example-box">
+              <strong>Key Mental Model:</strong> Think of an LLM as an advanced <em>autocomplete engine</em> scaled up to billions of learned parameters—not a lookup database of stored answers.
+            </div>
+          </div>
+
+          <div class="code-col">
+            <!-- DIAGRAM 1: LLM Input-to-Output Flow -->
+            <div class="diagram-panel" style="flex: 1; display: flex; flex-direction: column; justify-content: center;">
+              <div class="diagram-caption">Diagram 1 • LLM Input-to-Output Flow</div>
+
+              <div class="flow-horizontal" style="margin: 14px 0;">
+                <div class="flow-box blue">
+                  <strong>1. User Prompt</strong><br />
+                  <small>"Explain Express middleware simply"</small>
+                </div>
+                <div class="flow-arrow">→</div>
+                <div class="flow-box purple">
+                  <strong>2. Tokenizer</strong><br />
+                  <small>Splits text into numeric token IDs</small>
+                </div>
+                <div class="flow-arrow">→</div>
+                <div class="flow-box amber">
+                  <strong>3. LLM Core</strong><br />
+                  <small>Predicts next token repeatedly</small>
+                </div>
+                <div class="flow-arrow">→</div>
+                <div class="flow-box green">
+                  <strong>4. Output Text</strong><br />
+                  <small>"Middleware runs before routes..."</small>
+                </div>
+              </div>
+
+              <div class="flow-vertical" style="margin-top: 12px;">
+                <div class="flow-vertical-step">
+                  <span class="status-pill status-pill-info">Step A</span>
+                  <span>Prompt is converted into a sequence of tokens: <code>["Explain", " Express", " middle", "ware"]</code></span>
+                </div>
+                <div class="flow-vertical-step">
+                  <span class="status-pill status-pill-warning">Step B</span>
+                  <span>Model calculates probabilities for the next token: <code>"is" (54%)</code>, <code>"acts" (21%)</code>, <code>"helps" (12%)</code></span>
+                </div>
+                <div class="flow-vertical-step">
+                  <span class="status-pill status-pill-success">Step C</span>
+                  <span>Chosen token is appended and the loop repeats until the stop token appears!</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- =====================================================
+           SLIDE 3: HOW DOES AN LLM LEARN?
+      ====================================================== -->
+      <section class="slide" data-slide="3" id="slide-3">
+        <div class="slide-header">
+          <span class="slide-category">Section 1 • Learning Process</span>
+          <h2 class="slide-title">How Does an LLM <span class="highlight">Learn from Data</span>?</h2>
+        </div>
+
+        <div class="split-layout equal">
+          <div class="concept-col">
+            <div class="concept-card purple-border">
+              <div class="concept-title">3 Stages of Teaching an LLM</div>
+              <ul class="key-term-list" style="margin-top: 6px;">
+                <li class="key-term-item">
+                  <span class="key-term-name">1. Pre-Training (Pattern Learning)</span>
+                  The model reads huge datasets and practices guessing the hidden next word. When it guesses wrong, training adjusts billions of internal weights.
+                </li>
+                <li class="key-term-item">
+                  <span class="key-term-name">2. Instruction Tuning (SFT)</span>
+                  Curated question-and-answer examples teach the model how to follow instructions politely and stay on topic instead of just rambling.
+                </li>
+                <li class="key-term-item">
+                  <span class="key-term-name">3. Alignment (RLHF / Safety)</span>
+                  Human reviewers rate helpful, harmless replies higher so the model learns safe boundaries and clear formatting.
+                </li>
+              </ul>
+            </div>
+
+            <div class="example-box success">
+              <strong>Remember:</strong> As an application developer, you do <strong>not</strong> retrain GPT models from scratch on Day 2—you consume already-trained models via an API!
+            </div>
+          </div>
+
+          <div class="code-col">
+            <!-- DIAGRAM 2: LLM Training Process -->
+            <div class="diagram-panel" style="flex: 1; display: flex; flex-direction: column; justify-content: center;">
+              <div class="diagram-caption">Diagram 2 • How Training Updates Model Weights</div>
+
+              <div class="flow-horizontal" style="margin-bottom: 14px;">
+                <div class="flow-box blue">
+                  <strong>Massive Text Corpus</strong><br />
+                  <small>"JavaScript runs on the..."</small>
+                </div>
+                <div class="flow-arrow">→</div>
+                <div class="flow-box amber">
+                  <strong>Guess Next Word</strong><br />
+                  <small>Predicts: "moon" (Wrong!)</small>
+                </div>
+                <div class="flow-arrow">→</div>
+                <div class="flow-box rose">
+                  <strong>Compare vs Answer</strong><br />
+                  <small>Actual: "server" → Error Loss</small>
+                </div>
+                <div class="flow-arrow">→</div>
+                <div class="flow-box green">
+                  <strong>Update Weights</strong><br />
+                  <small>Nudge billions of numbers</small>
+                </div>
+              </div>
+
+              <div class="concept-card" style="padding: 12px 14px; background: #f8fafc;">
+                <div class="concept-title" style="font-size: 0.92rem;">From Raw Next-Word Guesser to Helpful Assistant</div>
+                <div class="flow-vertical">
+                  <div class="flow-vertical-step">
+                    <span class="status-pill status-pill-info">Stage 1</span>
+                    <span><strong>Base Model:</strong> Predicts internet text statistically.</span>
+                  </div>
+                  <div class="flow-vertical-step">
+                    <span class="status-pill status-pill-warning">Stage 2</span>
+                    <span><strong>Instruction Tuned:</strong> Learns chat prompt → clear answer structure.</span>
+                  </div>
+                  <div class="flow-vertical-step">
+                    <span class="status-pill status-pill-success">Stage 3</span>
+                    <span><strong>Aligned Model (<code>gpt-4.1-mini</code>):</strong> Ready for production API calls.</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- =====================================================
+           SLIDE 4: TRAINING VS INFERENCE
+      ====================================================== -->
+      <section class="slide" data-slide="4" id="slide-4">
+        <div class="slide-header">
+          <span class="slide-category">Section 1 • Training vs Inference</span>
+          <h2 class="slide-title"><span class="highlight">Training vs Inference</span>: Know the Difference</h2>
+        </div>
+
+        <div class="split-layout">
+          <div class="concept-col">
+            <div class="table-wrapper">
+              <table class="styled-table">
+                <thead>
+                  <tr>
+                    <th>Aspect</th>
+                    <th>Training</th>
+                    <th>Inference (API Usage)</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="tag-col">Purpose</td>
+                    <td>Teach the model language patterns</td>
+                    <td>Generate answers for users</td>
+                  </tr>
+                  <tr>
+                    <td class="tag-col">Model Weights</td>
+                    <td>Continuously updated</td>
+                    <td><strong>Frozen (read-only)</strong></td>
+                  </tr>
+                  <tr>
+                    <td class="tag-col">Cost &amp; Time</td>
+                    <td>Months + thousands of GPUs ($M+)</td>
+                    <td>Milliseconds–seconds per call (cents)</td>
+                  </tr>
+                  <tr>
+                    <td class="tag-col">Who Runs It?</td>
+                    <td>AI labs (OpenAI, Google, Anthropic)</td>
+                    <td><strong>You in Node.js!</strong></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="example-box warning">
+              <strong>Crucial Misconception Check:</strong> Calling <code>client.responses.create()</code> in Node.js is <strong>inference</strong>, NOT training! Sending prompts to the API does not permanently modify the model's weights.
+            </div>
+          </div>
+
+          <div class="code-col">
+            <!-- DIAGRAM 3: Training vs Inference Comparison -->
+            <div class="diagram-panel" style="flex: 1; display: flex; flex-direction: column; justify-content: center; gap: 12px;">
+              <div class="diagram-caption">Diagram 3 • Training Time vs Runtime Inference</div>
+
+              <div class="concept-card amber-border" style="padding: 12px 14px;">
+                <div class="concept-title" style="font-size: 0.92rem; margin-bottom: 6px;">Phase 1: Training (Offline, Before Release)</div>
+                <div class="flow-horizontal">
+                  <div class="flow-box amber">Terabytes of Data</div>
+                  <div class="flow-arrow">→</div>
+                  <div class="flow-box rose">GPU Cluster</div>
+                  <div class="flow-arrow">→</div>
+                  <div class="flow-box purple">Weights Tuned &amp; Saved</div>
+                </div>
+              </div>
+
+              <div class="concept-card green-border" style="padding: 12px 14px;">
+                <div class="concept-title" style="font-size: 0.92rem; margin-bottom: 6px;">Phase 2: Inference (Your Node.js App Live)</div>
+                <div class="flow-horizontal">
+                  <div class="flow-box blue">Express Request</div>
+                  <div class="flow-arrow">→</div>
+                  <div class="flow-box purple">Frozen Weights Read Only</div>
+                  <div class="flow-arrow">→</div>
+                  <div class="flow-box green">Generated Answer JSON</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- =====================================================
+           SLIDE 5: PRACTICAL – FIRST LLM INFERENCE REQUEST
+      ====================================================== -->
+      <section class="slide" data-slide="5" id="slide-5">
+        <div class="slide-header">
+          <span class="slide-category">Section 2 • Practical: First Inference</span>
+          <h2 class="slide-title">Practical: <span class="highlight">Make Your First Inference Request</span></h2>
+        </div>
+
+        <div class="split-layout equal">
+          <div class="concept-col">
+            <div class="code-container">
+              <div class="code-header">
+                <div class="code-header-left">
+                  <div class="code-dots">
+                    <span class="code-dot red"></span>
+                    <span class="code-dot yellow"></span>
+                    <span class="code-dot green"></span>
+                  </div>
+                  <span class="code-file-badge">setup-commands</span>
+                  <span class="lang-tag term">TERMINAL</span>
+                </div>
+                <div class="code-actions">
+                  <button type="button" class="copy-btn">Copy</button>
+                </div>
+              </div>
+              <div class="code-scroll-area">
+                <pre><code class="language-bash">mkdir llm-playground
+cd llm-playground
+npm init -y
+npm install express openai dotenv</code></pre>
+              </div>
+            </div>
+
+            <div class="code-container">
+              <div class="code-header">
+                <div class="code-header-left">
+                  <div class="code-dots">
+                    <span class="code-dot red"></span>
+                    <span class="code-dot yellow"></span>
+                    <span class="code-dot green"></span>
+                  </div>
+                  <span class="code-file-badge">.env</span>
+                  <span class="lang-tag env">ENV</span>
+                </div>
+                <div class="code-actions">
+                  <button type="button" class="copy-btn">Copy</button>
+                </div>
+              </div>
+              <div class="code-scroll-area">
+                <pre><code class="language-bash">OPENAI_API_KEY=your_openai_api_key_here
+PORT=3000</code></pre>
+              </div>
+            </div>
+
+            <div class="example-box">
+              <strong>Security Tip:</strong> Never commit your real <code>.env</code> file to GitHub. Always keep <code>node_modules</code> and <code>.env</code> inside <code>.gitignore</code>!
+            </div>
+          </div>
+
+          <div class="code-col">
+            <div class="code-container stretch">
+              <div class="code-header">
+                <div class="code-header-left">
+                  <div class="code-dots">
+                    <span class="code-dot red"></span>
+                    <span class="code-dot yellow"></span>
+                    <span class="code-dot green"></span>
+                  </div>
+                  <span class="code-file-badge">test-llm.js</span>
+                  <span class="lang-tag js">JAVASCRIPT</span>
+                </div>
+                <div class="code-actions">
+                  <button type="button" class="copy-btn">Copy</button>
+                </div>
+              </div>
+              <div class="code-scroll-area">
+                <pre><code class="language-javascript">require("dotenv").config();
+const OpenAI = require("openai");
+
+const client = new OpenAI({
+  apiKey: process.env.OPENAI_API_KEY
+});
+
+async function run() {
+  // This is INFERENCE: using pre-trained frozen weights
+  const response = await client.responses.create({
+    model: "gpt-4.1-mini",
+    input: "Explain Node.js in one simple sentence."
+  });
+
+  console.log("AI Reply:", response.output_text);
+  console.log("Token Usage:", response.usage);
+}
+
+run().catch((err) =&gt; {
+  console.error("API call failed:", err.message);
+});</code></pre>
+              </div>
+              <div class="code-run-hint">Run with: <span>node test-llm.js</span></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- =====================================================
+           SLIDE 6: PRACTICAL – SEND A PROMPT IN EXPRESS
+      ====================================================== -->
+      <section class="slide" data-slide="6" id="slide-6">
+        <div class="slide-header">
+          <span class="slide-category">Section 2 • Practical: Prompt &amp; Usage</span>
+          <h2 class="slide-title">Practical: <span class="highlight">Build the Playground /ask Route</span></h2>
+        </div>
+
+        <div class="split-layout">
+          <div class="concept-col">
+            <div class="concept-card accent-border">
+              <div class="concept-title">What Happens Inside <code>POST /ask</code>?</div>
+              <ul class="key-term-list">
+                <li class="key-term-item">
+                  <span class="key-term-name">1. Validate Input</span>
+                  Check <code>req.body.prompt</code> first so empty requests immediately return <code>400 Bad Request</code> instead of wasting API credits.
+                </li>
+                <li class="key-term-item">
+                  <span class="key-term-name">2. Call OpenAI Responses API</span>
+                  Pass <code>model: "gpt-4.1-mini"</code> and <code>input: prompt</code> asynchronously using <code>await</code>.
+                </li>
+                <li class="key-term-item">
+                  <span class="key-term-name">3. Inspect Text + Usage</span>
+                  Return both <code>response.output_text</code> and <code>response.usage</code> so we can monitor token costs on every request!
+                </li>
+              </ul>
+            </div>
+
+            <div class="code-container">
+              <div class="code-header">
+                <div class="code-header-left">
+                  <div class="code-dots">
+                    <span class="code-dot red"></span>
+                    <span class="code-dot yellow"></span>
+                    <span class="code-dot green"></span>
+                  </div>
+                  <span class="code-file-badge">Sample Response JSON</span>
+                  <span class="lang-tag json">JSON</span>
+                </div>
+                <div class="code-actions">
+                  <button type="button" class="copy-btn">Copy</button>
+                </div>
+              </div>
+              <div class="code-scroll-area">
+                <pre><code class="language-json">{
+  "answer": "Express is a minimal web framework for building Node.js APIs.",
+  "usage": {
+    "input_tokens": 14,
+    "output_tokens": 13,
+    "total_tokens": 27
+  }
+}</code></pre>
+              </div>
+            </div>
+          </div>
+
+          <div class="code-col">
+            <div class="code-container stretch">
+              <div class="code-header">
+                <div class="code-header-left">
+                  <div class="code-dots">
+                    <span class="code-dot red"></span>
+                    <span class="code-dot yellow"></span>
+                    <span class="code-dot green"></span>
+                  </div>
+                  <span class="code-file-badge">server.js (Step 1: Basic /ask)</span>
+                  <span class="lang-tag js">JAVASCRIPT</span>
+                </div>
+                <div class="code-actions">
+                  <button type="button" class="copy-btn">Copy</button>
+                </div>
+              </div>
+              <div class="code-scroll-area">
+                <pre><code class="language-javascript">require("dotenv").config();
+const express = require("express");
+const OpenAI = require("openai");
+
+const app = express();
+app.use(express.json());
+
+const client = new OpenAI({
+  apiKey: process.env.OPENAI_API_KEY
+});
+
+app.post("/ask", async (req, res) =&gt; {
+  try {
+    const { prompt } = req.body;
+
+    if (!prompt || typeof prompt !== "string" || !prompt.trim()) {
+      return res.status(400).json({ error: "A non-empty prompt is required" });
+    }
+
+    const response = await client.responses.create({
+      model: "gpt-4.1-mini",
+      input: prompt.trim()
+    });
+
+    res.json({
+      answer: response.output_text,
+      usage: response.usage
+    });
+  } catch (error) {
+    console.error("OpenAI Error:", error.message);
+    res.status(500).json({ error: "Failed to get LLM response" });
+  }
+});
+
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () =&gt; {
+  console.log(`LLM Playground running on http://localhost:${PORT}`);
+});</code></pre>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- =====================================================
+           SLIDE 7: WHAT ARE TOKENS?
+      ====================================================== -->
+      <section class="slide" data-slide="7" id="slide-7">
+        <div class="slide-header">
+          <span class="slide-category">Section 3 • Tokens &amp; Tokenization</span>
+          <h2 class="slide-title">What Are <span class="highlight">Tokens</span>?</h2>
+        </div>
+
+        <div class="split-layout">
+          <div class="concept-col">
+            <div class="concept-card accent-border">
+              <div class="concept-title">LLMs Do Not Read Characters or Whole Sentences Directly</div>
+              <p class="concept-text">
+                Before an LLM can process your text, a <strong>tokenizer</strong> breaks the text into small pieces
+                called <strong>tokens</strong>. A token can be a whole common word, part of a word (subword),
+                punctuation, or whitespace.
+              </p>
+              <ul class="key-term-list" style="margin-top: 10px;">
+                <li class="key-term-item">
+                  <span class="key-term-name">Rule of Thumb (English)</span>
+                  1 token ≈ <strong>~4 characters</strong> or roughly ¾ of an average English word.
+                </li>
+                <li class="key-term-item">
+                  <span class="key-term-name">Why Developers Track Tokens</span>
+                  1) API pricing bills per 1M input/output tokens. 2) Models have strict context limits measured in tokens. 3) More tokens = higher latency.
+                </li>
+              </ul>
+            </div>
+
+            <div class="example-box warning">
+              <strong>Important:</strong> Exact tokenization depends on the model's vocabulary! <code>gpt-4.1-mini</code> uses its own BPE tokenizer, so <code>response.usage</code> is always the real source of truth.
+            </div>
+          </div>
+
+          <div class="code-col">
+            <!-- DIAGRAM 4: Tokenization Example -->
+            <div class="diagram-panel" style="flex: 1; display: flex; flex-direction: column; justify-content: center; gap: 14px;">
+              <div class="diagram-caption">Diagram 4 • Tokenization Example</div>
+
+              <div class="concept-card" style="padding: 12px; background: #f8fafc;">
+                <div style="font-size: 0.78rem; color: var(--text-muted); margin-bottom: 6px;">Input String (25 characters):</div>
+                <div style="font-family: var(--font-mono); font-size: 1rem; font-weight: 700; color: var(--primary-deep);">
+                  "Node.js builds fast APIs!"
+                </div>
+              </div>
+
+              <div>
+                <div style="font-size: 0.78rem; color: var(--text-muted); margin-bottom: 6px;">Split Into Conceptual Token Chunks (6 tokens):</div>
+                <div class="token-chip-row">
+                  <span class="token-chip c1">Node</span>
+                  <span class="token-chip c2">.js</span>
+                  <span class="token-chip c3"> builds</span>
+                  <span class="token-chip c4"> fast</span>
+                  <span class="token-chip c5"> APIs</span>
+                  <span class="token-chip c1">!</span>
+                </div>
+              </div>
+
+              <div class="table-wrapper">
+                <table class="styled-table">
+                  <thead>
+                    <tr>
+                      <th>Metric</th>
+                      <th>Count</th>
+                      <th>Developer Meaning</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td class="tag-col">Characters</td>
+                      <td>25</td>
+                      <td><code>text.length</code> in JS</td>
+                    </tr>
+                    <tr>
+                      <td class="tag-col">Words</td>
+                      <td>4</td>
+                      <td>Human word count</td>
+                    </tr>
+                    <tr>
+                      <td class="tag-col">Tokens</td>
+                      <td>~6–7</td>
+                      <td>What the LLM reads &amp; bills!</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- =====================================================
+           SLIDE 8: PRACTICAL – UNDERSTANDING TOKENIZATION
+      ====================================================== -->
+      <section class="slide" data-slide="8" id="slide-8">
+        <div class="slide-header">
+          <span class="slide-category">Section 3 • Practical: Tokenization</span>
+          <h2 class="slide-title">Practical: <span class="highlight">Estimate Tokens &amp; Read Usage</span></h2>
+        </div>
+
+        <div class="split-layout equal">
+          <div class="concept-col">
+            <div class="code-container">
+              <div class="code-header">
+                <div class="code-header-left">
+                  <div class="code-dots">
+                    <span class="code-dot red"></span>
+                    <span class="code-dot yellow"></span>
+                    <span class="code-dot green"></span>
+                  </div>
+                  <span class="code-file-badge">token-helper.js</span>
+                  <span class="lang-tag js">JAVASCRIPT</span>
+                </div>
+                <div class="code-actions">
+                  <button type="button" class="copy-btn">Copy</button>
+                </div>
+              </div>
+              <div class="code-scroll-area">
+                <pre><code class="language-javascript">// Approximate helper for quick pre-checks (NOT exact!)
+function estimateTokensApprox(text) {
+  return Math.ceil(text.length / 4);
+}
+
+app.post("/token-estimate", (req, res) =&gt; {
+  const { text = "" } = req.body;
+  res.json({
+    characters: text.length,
+    estimatedTokensApprox: estimateTokensApprox(text),
+    note: "Approximate only (~4 chars/token). Check response.usage for exact count."
+  });
+});</code></pre>
+              </div>
+            </div>
+
+            <div class="example-box">
+              <strong>Real Count vs Estimate:</strong> Use <code>Math.ceil(text.length / 4)</code> only as a rough safety guard before sending; rely on <code>response.usage.input_tokens</code> and <code>output_tokens</code> for accurate tracking.
+            </div>
+          </div>
+
+          <div class="code-col">
+            <!-- INTERACTIVE SANDBOX 1: Token Estimator -->
+            <div class="sandbox-card" style="flex: 1;">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                <strong style="color: var(--primary-deep); font-size: 0.95rem;">Interactive Token Estimator Lab</strong>
+                <span class="status-pill status-pill-info" id="tokenSimEst">~0 estimated tokens</span>
+              </div>
+
+              <div class="sandbox-form-row">
+                <input
+                  type="text"
+                  id="tokenSimInput"
+                  class="sandbox-input"
+                  value="Explain how Express middleware works in Node.js!"
+                  aria-label="Prompt text for token estimator"
+                />
+                <button type="button" id="tokenSimBtn" class="sandbox-btn">Estimate</button>
+              </div>
+
+              <div style="display: flex; justify-content: space-between; font-size: 0.78rem; color: var(--text-muted); margin-bottom: 6px;">
+                <span>Visual piece preview (educational split):</span>
+                <span id="tokenSimChars">0 chars</span>
+              </div>
+
+              <div id="tokenSimChips" class="token-chip-row" style="background: #f8fafc; padding: 10px; border-radius: 8px; border: 1px solid var(--border-subtle); min-height: 44px; margin-bottom: 8px;"></div>
+
+              <pre id="tokenSimUsage" class="sandbox-output" style="min-height: 110px;"></pre>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- =====================================================
+           SLIDE 9: WHAT IS A CONTEXT WINDOW?
+      ====================================================== -->
+      <section class="slide" data-slide="9" id="slide-9">
+        <div class="slide-header">
+          <span class="slide-category">Section 4 • Context Window</span>
+          <h2 class="slide-title">What Is a <span class="highlight">Context Window</span>?</h2>
+        </div>
+
+        <div class="split-layout">
+          <div class="concept-col">
+            <div class="concept-card accent-border">
+              <div class="concept-title">The Model's Working Memory Per Request</div>
+              <p class="concept-text">
+                A <strong>context window</strong> is the maximum number of tokens an LLM can see and work with in
+                a single API call—including <strong>both</strong> everything you send in and the reply it generates back.
+              </p>
+              <ul class="key-term-list" style="margin-top: 10px;">
+                <li class="key-term-item">
+                  <span class="key-term-name">Total Token Budget Formula</span>
+                  <code>System Instructions + Context/History + User Question + Generated Output &le; Context Window</code>
+                </li>
+                <li class="key-term-item">
+                  <span class="key-term-name">Model-Specific Sizes</span>
+                  Capacity varies by model (from 8K/32K on older models to 128K–1M+ tokens on modern models like the GPT-4.1 family).
+                </li>
+                <li class="key-term-item">
+                  <span class="key-term-name">What Happens If You Exceed It?</span>
+                  The API rejects the request with an error, or older conversation turns get dropped.
+                </li>
+              </ul>
+            </div>
+
+            <div class="example-box warning">
+              <strong>Remember:</strong> LLMs are <strong>stateless</strong> across HTTP requests. If you want "memory" in a chat app, your Node.js backend must resend earlier messages inside the context window!
+            </div>
+          </div>
+
+          <div class="code-col">
+            <!-- DIAGRAM 5: Context Window & Token Budget -->
+            <div class="diagram-panel" style="flex: 1; display: flex; flex-direction: column; justify-content: center; gap: 14px;">
+              <div class="diagram-caption">Diagram 5 • Context Window Token Budget Inside 1 API Call</div>
+
+              <div>
+                <div style="font-size: 0.84rem; font-weight: 700; color: var(--primary-deep); margin-bottom: 6px;">
+                  Total Model Context Window (Shared Space: Input + Output)
+                </div>
+                <div class="budget-bar">
+                  <div class="budget-seg" style="width: 15%; background: #0284c7;">System 15%</div>
+                  <div class="budget-seg" style="width: 35%; background: #7c3aed;">Docs / History 35%</div>
+                  <div class="budget-seg" style="width: 15%; background: #d97706;">Prompt 15%</div>
+                  <div class="budget-seg" style="width: 20%; background: #059669;">Output 20%</div>
+                  <div class="budget-seg" style="width: 15%; background: #64748b;">Free 15%</div>
+                </div>
+                <div class="budget-legend">
+                  <span><i class="legend-dot" style="background: #0284c7;"></i>System Rules</span>
+                  <span><i class="legend-dot" style="background: #7c3aed;"></i>Chat History / Reference Context</span>
+                  <span><i class="legend-dot" style="background: #d97706;"></i>Current Question</span>
+                  <span><i class="legend-dot" style="background: #059669;"></i>Reserved Output (<code>max_output_tokens</code>)</span>
+                  <span><i class="legend-dot" style="background: #64748b;"></i>Remaining Headroom</span>
+                </div>
+              </div>
+
+              <div class="concept-card green-border" style="padding: 12px 14px;">
+                <div class="concept-title" style="font-size: 0.9rem;">Why Not Paste Entire 500-Page PDFs Every Call?</div>
+                <p class="concept-text" style="font-size: 0.85rem;">
+                  Even when a model has a large context window, huge inputs cost more money, slow down responses, and can dilute the model's focus on the most relevant facts.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- =====================================================
+           SLIDE 10: PRACTICAL – CONTEXT WINDOW MANAGEMENT
+      ====================================================== -->
+      <section class="slide" data-slide="10" id="slide-10">
+        <div class="slide-header">
+          <span class="slide-category">Section 4 • Practical: Context Management</span>
+          <h2 class="slide-title">Practical: <span class="highlight">Manage Context &amp; Avoid Overflow</span></h2>
+        </div>
+
+        <div class="split-layout equal">
+          <div class="concept-col">
+            <div class="concept-card purple-border">
+              <div class="concept-title">3 Beginner Strategies to Protect Context</div>
+              <ul class="key-term-list" style="margin-top: 6px;">
+                <li class="key-term-item">
+                  <span class="key-term-name">1. Keep Only Recent Turns (Sliding Window)</span>
+                  Use <code>messages.slice(-6)</code> so chat history stays bounded instead of growing forever.
+                </li>
+                <li class="key-term-item">
+                  <span class="key-term-name">2. Enforce Input Size Guards</span>
+                  Check estimated tokens or character length before calling OpenAI and return a clean <code>400</code> message if too large.
+                </li>
+                <li class="key-term-item">
+                  <span class="key-term-name">3. Send Only Relevant Snippets</span>
+                  Filter or summarize long text before putting it inside your prompt.
+                </li>
+              </ul>
+            </div>
+
+            <div class="example-box">
+              <strong>Production Habit:</strong> Checking request budget in Express prevents surprise token bills and user-facing crashes.
+            </div>
+          </div>
+
+          <div class="code-col">
+            <div class="code-container stretch">
+              <div class="code-header">
+                <div class="code-header-left">
+                  <div class="code-dots">
+                    <span class="code-dot red"></span>
+                    <span class="code-dot yellow"></span>
+                    <span class="code-dot green"></span>
+                  </div>
+                  <span class="code-file-badge">context-manager.js</span>
+                  <span class="lang-tag js">JAVASCRIPT</span>
+                </div>
+                <div class="code-actions">
+                  <button type="button" class="copy-btn">Copy</button>
+                </div>
+              </div>
+              <div class="code-scroll-area">
+                <pre><code class="language-javascript">// Keep only the latest 6 conversation messages (sliding window)
+function trimHistory(messages, maxMessages = 6) {
+  if (!Array.isArray(messages)) return [];
+  return messages.slice(-maxMessages);
+}
+
+app.post("/chat-window", async (req, res) =&gt; {
+  try {
+    const { history = [], question } = req.body;
+    if (!question) {
+      return res.status(400).json({ error: "Question is required" });
+    }
+
+    const recentHistory = trimHistory(history, 6);
+    const formatted = recentHistory
+      .map((m) =&gt; `${m.role}: ${m.text}`)
+      .join("\n");
+
+    const fullPrompt = `${formatted}\nuser: ${question}`.trim();
+
+    // Quick approximate guard (e.g., max ~3,000 estimated input tokens)
+    if (Math.ceil(fullPrompt.length / 4) &gt; 3000) {
+      return res.status(400).json({
+        error: "Input exceeds Playground budget. Please shorten history."
+      });
+    }
+
+    const response = await client.responses.create({
+      model: "gpt-4.1-mini",
+      input: fullPrompt
+    });
+
+    res.json({ answer: response.output_text, usage: response.usage });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});</code></pre>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- =====================================================
+           SLIDE 11: PARAMETERS AND MODEL WEIGHTS
+      ====================================================== -->
+      <section class="slide" data-slide="11" id="slide-11">
+        <div class="slide-header">
+          <span class="slide-category">Section 5 • Parameters &amp; Weights</span>
+          <h2 class="slide-title">Model <span class="highlight">Weights vs API Parameters</span></h2>
+        </div>
+
+        <div class="split-layout">
+          <div class="concept-col">
+            <div class="table-wrapper">
+              <table class="styled-table">
+                <thead>
+                  <tr>
+                    <th>Concept</th>
+                    <th>Internal Model Weights</th>
+                    <th>API Generation Settings</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="tag-col">Also Called</td>
+                    <td>Trained parameters (e.g., 8B, 70B)</td>
+                    <td>Inference / runtime parameters</td>
+                  </tr>
+                  <tr>
+                    <td class="tag-col">Examples</td>
+                    <td>Billions of floating-point neural weights</td>
+                    <td><code>temperature</code>, <code>max_output_tokens</code>, <code>model</code></td>
+                  </tr>
+                  <tr>
+                    <td class="tag-col">When Set?</td>
+                    <td>During model training (frozen afterward)</td>
+                    <td>By you on every Node.js API call</td>
+                  </tr>
+                  <tr>
+                    <td class="tag-col">What They Control</td>
+                    <td>The model's stored language knowledge</td>
+                    <td>How creatively or how long the model replies</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="example-box warning">
+              <strong>Watch Out for the Word "Parameter":</strong> AI researchers say "a 70-billion-parameter model" meaning internal neural <em>weights</em>, while Node.js API docs say "API parameters" meaning JSON options you pass to <code>client.responses.create()</code>. They are completely different things!
+            </div>
+          </div>
+
+          <div class="code-col">
+            <!-- DIAGRAM 6: Model Parameters & Weights -->
+            <div class="diagram-panel" style="flex: 1; display: flex; flex-direction: column; justify-content: center; gap: 12px;">
+              <div class="diagram-caption">Diagram 6 • Frozen Internal Weights vs Runtime Request Controls</div>
+
+              <div class="concept-card purple-border" style="padding: 12px;">
+                <div class="concept-title" style="font-size: 0.9rem;">Inside the Hosted Model (Read-Only)</div>
+                <div class="flow-horizontal">
+                  <div class="flow-box purple">w₁ = 0.042</div>
+                  <div class="flow-box purple">w₂ = -1.18</div>
+                  <div class="flow-box purple">... Billions of Weights</div>
+                </div>
+              </div>
+
+              <div style="text-align: center; font-weight: 700; color: var(--primary); font-size: 0.85rem;">
+                ⬆ Influenced at runtime by your Node.js request options ⬇
+              </div>
+
+              <div class="concept-card amber-border" style="padding: 12px;">
+                <div class="concept-title" style="font-size: 0.9rem;">Your Express Request Controls (Per Call)</div>
+                <div class="flow-horizontal">
+                  <div class="flow-box amber"><code>temperature: 0.2</code><br /><small>Controls randomness</small></div>
+                  <div class="flow-box green"><code>max_output_tokens: 150</code><br /><small>Caps output length</small></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- =====================================================
+           SLIDE 12: WHAT IS TEMPERATURE?
+      ====================================================== -->
+      <section class="slide" data-slide="12" id="slide-12">
+        <div class="slide-header">
+          <span class="slide-category">Section 5 • Temperature</span>
+          <h2 class="slide-title">What Is <span class="highlight">Temperature</span>?</h2>
+        </div>
+
+        <div class="split-layout">
+          <div class="concept-col">
+            <div class="concept-card amber-border">
+              <div class="concept-title">Controlling Predictability vs Creativity</div>
+              <p class="concept-text">
+                For every next token, the LLM assigns probabilities to possible words.
+                <strong>Temperature</strong> controls how much risk the model takes when picking from those options:
+              </p>
+              <ul class="key-term-list" style="margin-top: 10px;">
+                <li class="key-term-item">
+                  <span class="key-term-name">Low Temperature (0.0 – 0.2)</span>
+                  Picks the highest-probability words almost every time. Best for factual Q&amp;A, JSON output, classification, and coding help.
+                </li>
+                <li class="key-term-item">
+                  <span class="key-term-name">Medium Temperature (0.5 – 0.7)</span>
+                  Natural balance between clarity and mild variety. Great default for general chatbots and tutors.
+                </li>
+                <li class="key-term-item">
+                  <span class="key-term-name">High Temperature (0.9 – 1.2+)</span>
+                  Flattens probabilities so less likely words get picked more often. Good for brainstorming ideas—higher risk of weird phrasing.
+                </li>
+              </ul>
+            </div>
+
+            <div class="example-box danger">
+              <strong>Myth Busted:</strong> Higher temperature increases <strong>variation</strong>, NOT accuracy or intelligence! Turning temperature up on a math or policy question only makes answers less predictable.
+            </div>
+          </div>
+
+          <div class="code-col">
+            <!-- DIAGRAM 7: Temperature Comparison -->
+            <div class="diagram-panel" style="flex: 1; display: flex; flex-direction: column; justify-content: center;">
+              <div class="diagram-caption">Diagram 7 • Next-Token Probabilities for: "Node.js is very ___"</div>
+
+              <div class="temp-bars-grid">
+                <div class="temp-bar-group">
+                  <h4 style="color: #0284c7;">Temperature: 0.1 (Focused)</h4>
+                  <div class="prob-row">
+                    <span class="prob-label">"fast"</span>
+                    <div class="prob-track"><div class="prob-fill" style="width: 86%; background: #0284c7;"></div></div>
+                    <span class="prob-pct">86%</span>
+                  </div>
+                  <div class="prob-row">
+                    <span class="prob-label">"popular"</span>
+                    <div class="prob-track"><div class="prob-fill" style="width: 11%; background: #38bdf8;"></div></div>
+                    <span class="prob-pct">11%</span>
+                  </div>
+                  <div class="prob-row">
+                    <span class="prob-label">"magical"</span>
+                    <div class="prob-track"><div class="prob-fill" style="width: 3%; background: #94a3b8;"></div></div>
+                    <span class="prob-pct">3%</span>
+                  </div>
+                </div>
+
+                <div class="temp-bar-group">
+                  <h4 style="color: #7c3aed;">Temperature: 0.7 (Balanced)</h4>
+                  <div class="prob-row">
+                    <span class="prob-label">"fast"</span>
+                    <div class="prob-track"><div class="prob-fill" style="width: 58%; background: #7c3aed;"></div></div>
+                    <span class="prob-pct">58%</span>
+                  </div>
+                  <div class="prob-row">
+                    <span class="prob-label">"popular"</span>
+                    <div class="prob-track"><div class="prob-fill" style="width: 29%; background: #a78bfa;"></div></div>
+                    <span class="prob-pct">29%</span>
+                  </div>
+                  <div class="prob-row">
+                    <span class="prob-label">"magical"</span>
+                    <div class="prob-track"><div class="prob-fill" style="width: 13%; background: #c4b5fd;"></div></div>
+                    <span class="prob-pct">13%</span>
+                  </div>
+                </div>
+
+                <div class="temp-bar-group">
+                  <h4 style="color: #d97706;">Temperature: 1.2 (Creative / Risky)</h4>
+                  <div class="prob-row">
+                    <span class="prob-label">"fast"</span>
+                    <div class="prob-track"><div class="prob-fill" style="width: 37%; background: #d97706;"></div></div>
+                    <span class="prob-pct">37%</span>
+                  </div>
+                  <div class="prob-row">
+                    <span class="prob-label">"popular"</span>
+                    <div class="prob-track"><div class="prob-fill" style="width: 34%; background: #f59e0b;"></div></div>
+                    <span class="prob-pct">34%</span>
+                  </div>
+                  <div class="prob-row">
+                    <span class="prob-label">"magical"</span>
+                    <div class="prob-track"><div class="prob-fill" style="width: 29%; background: #fbbf24;"></div></div>
+                    <span class="prob-pct">29%</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- =====================================================
+           SLIDE 13: PRACTICAL – EXPERIMENT WITH TEMPERATURE
+      ====================================================== -->
+      <section class="slide" data-slide="13" id="slide-13">
+        <div class="slide-header">
+          <span class="slide-category">Section 5 • Practical: Temperature</span>
+          <h2 class="slide-title">Practical: <span class="highlight">Experiment with Temperature</span></h2>
+        </div>
+
+        <div class="split-layout equal">
+          <div class="concept-col">
+            <div class="code-container stretch">
+              <div class="code-header">
+                <div class="code-header-left">
+                  <div class="code-dots">
+                    <span class="code-dot red"></span>
+                    <span class="code-dot yellow"></span>
+                    <span class="code-dot green"></span>
+                  </div>
+                  <span class="code-file-badge">experiment-temp.js</span>
+                  <span class="lang-tag js">JAVASCRIPT</span>
+                </div>
+                <div class="code-actions">
+                  <button type="button" class="copy-btn">Copy</button>
+                </div>
+              </div>
+              <div class="code-scroll-area">
+                <pre><code class="language-javascript">app.post("/experiment-temp", async (req, res) =&gt; {
+  try {
+    const {
+      prompt,
+      temperature = 0.7,
+      max_output_tokens = 150
+    } = req.body;
+
+    if (!prompt) {
+      return res.status(400).json({ error: "Prompt is required" });
+    }
+
+    const response = await client.responses.create({
+      model: "gpt-4.1-mini",
+      input: prompt,
+      temperature: Number(temperature),
+      max_output_tokens: Number(max_output_tokens)
+    });
+
+    res.json({
+      temperatureUsed: temperature,
+      maxOutputTokens: max_output_tokens,
+      answer: response.output_text,
+      usage: response.usage
+    });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});</code></pre>
+              </div>
+            </div>
+          </div>
+
+          <div class="code-col">
+            <!-- INTERACTIVE SANDBOX 2: Temperature & Max Tokens -->
+            <div class="sandbox-card" style="flex: 1;">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                <strong style="color: var(--primary-deep); font-size: 0.95rem;">Temperature &amp; Max Tokens Lab</strong>
+                <span class="status-pill status-pill-warning">temp = <span id="tempSimVal">0.7</span></span>
+              </div>
+
+              <label for="tempSimSlider" style="font-size: 0.82rem; font-weight: 600; color: var(--text-main);">
+                Slide Temperature (0.0 Focused → 1.2 Creative):
+              </label>
+              <input
+                type="range"
+                id="tempSimSlider"
+                min="0"
+                max="1.2"
+                step="0.1"
+                value="0.7"
+                style="width: 100%; margin: 8px 0 12px;"
+              />
+
+              <div class="sandbox-form-row">
+                <label for="tempSimMaxTokens" style="font-size: 0.82rem; font-weight: 600; display: flex; align-items: center;">
+                  max_output_tokens:
+                </label>
+                <input
+                  type="number"
+                  id="tempSimMaxTokens"
+                  class="sandbox-input"
+                  value="150"
+                  min="10"
+                  max="500"
+                  style="max-width: 110px;"
+                />
+                <button type="button" id="tempSimRunBtn" class="sandbox-btn">Simulate Reply</button>
+              </div>
+
+              <p style="font-size: 0.78rem; color: var(--text-muted); margin-bottom: 8px;">
+                Tip: Try <code>temperature = 0.1</code> vs <code>1.1</code>, or drop <code>max_output_tokens</code> to <code>20</code> to see early truncation!
+              </p>
+
+              <pre id="tempSimOutput" class="sandbox-output" style="min-height: 155px;"></pre>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- =====================================================
+           SLIDE 14: WHAT IS MAXIMUM OUTPUT TOKENS?
+      ====================================================== -->
+      <section class="slide" data-slide="14" id="slide-14">
+        <div class="slide-header">
+          <span class="slide-category">Section 5 • Max Output Tokens</span>
+          <h2 class="slide-title">What Is <span class="highlight">max_output_tokens</span>?</h2>
+        </div>
+
+        <div class="split-layout equal">
+          <div class="concept-col">
+            <div class="concept-card green-border">
+              <div class="concept-title">Upper Ceiling for the Model's Reply</div>
+              <p class="concept-text">
+                <code>max_output_tokens</code> sets the <strong>maximum budget</strong> of tokens the model is
+                allowed to generate in a single response. If the answer finishes sooner, the model stops naturally.
+              </p>
+              <ul class="key-term-list" style="margin-top: 10px;">
+                <li class="key-term-item">
+                  <span class="key-term-name">Not a Word Count!</span>
+                  <code>max_output_tokens: 100</code> gives roughly ~75 English words, because tokens are subwords and punctuation—not whole words.
+                </li>
+                <li class="key-term-item">
+                  <span class="key-term-name">Why Set It in Production?</span>
+                  Prevents accidentally long answers from inflating costs, exceeding client timeouts, or breaking UI cards.
+                </li>
+                <li class="key-term-item">
+                  <span class="key-term-name">Risk When Set Too Low</span>
+                  The model cuts off mid-sentence or mid-JSON object when it hits the limit!
+                </li>
+              </ul>
+            </div>
+
+            <div class="example-box warning">
+              <strong>Rule of Thumb:</strong> If you want a short answer AND clean endings, combine a prompt instruction (<em>"Answer in 2 sentences"</em>) with a safe ceiling like <code>max_output_tokens: 150</code>.
+            </div>
+          </div>
+
+          <div class="code-col">
+            <div class="code-container">
+              <div class="code-header">
+                <div class="code-header-left">
+                  <div class="code-dots">
+                    <span class="code-dot red"></span>
+                    <span class="code-dot yellow"></span>
+                    <span class="code-dot green"></span>
+                  </div>
+                  <span class="code-file-badge">check-truncation.js</span>
+                  <span class="lang-tag js">JAVASCRIPT</span>
+                </div>
+                <div class="code-actions">
+                  <button type="button" class="copy-btn">Copy</button>
+                </div>
+              </div>
+              <div class="code-scroll-area">
+                <pre><code class="language-javascript">const response = await client.responses.create({
+  model: "gpt-4.1-mini",
+  input: "Explain REST APIs in detail.",
+  max_output_tokens: 25 // Very small cap for demo
+});
+
+console.log("Status:", response.status); // Might be "incomplete"!
+console.log("Details:", response.incomplete_details);
+console.log("Text:", response.output_text);</code></pre>
+              </div>
+            </div>
+
+            <div class="code-container">
+              <div class="code-header">
+                <div class="code-header-left">
+                  <div class="code-dots">
+                    <span class="code-dot red"></span>
+                    <span class="code-dot yellow"></span>
+                    <span class="code-dot green"></span>
+                  </div>
+                  <span class="code-file-badge">Truncated Output Example</span>
+                  <span class="lang-tag json">JSON</span>
+                </div>
+                <div class="code-actions">
+                  <button type="button" class="copy-btn">Copy</button>
+                </div>
+              </div>
+              <div class="code-scroll-area">
+                <pre><code class="language-json">{
+  "status": "incomplete",
+  "incomplete_details": { "reason": "max_output_tokens" },
+  "output_text": "A REST API allows two applications to communicate over HTTP using standard methods such as GET, POST,"
+}</code></pre>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- =====================================================
+           SLIDE 15: WHAT IS AN LLM HALLUCINATION?
+      ====================================================== -->
+      <section class="slide" data-slide="15" id="slide-15">
+        <div class="slide-header">
+          <span class="slide-category">Section 6 • Hallucinations</span>
+          <h2 class="slide-title">What Is an <span class="highlight">LLM Hallucination</span>?</h2>
+        </div>
+
+        <div class="split-layout">
+          <div class="concept-col">
+            <div class="concept-card rose-border">
+              <div class="concept-title">Confident-Sounding Information That Is False</div>
+              <p class="concept-text">
+                An <strong>LLM hallucination</strong> happens when a model invents facts, wrong API method names,
+                fake citations, or guessed policies while sounding 100% confident and fluent.
+              </p>
+              <ul class="key-term-list" style="margin-top: 10px;">
+                <li class="key-term-item">
+                  <span class="key-term-name">Why Does It Happen?</span>
+                  Because LLMs are trained to generate <strong>plausible-sounding next tokens</strong>, not to verify facts against your database before speaking.
+                </li>
+                <li class="key-term-item">
+                  <span class="key-term-name">When Risk Is Highest</span>
+                  Private company rules, niche math/dates, unseen codebases, or vague questions with no reference data.
+                </li>
+              </ul>
+            </div>
+
+            <div class="example-box danger">
+              <strong>Developer Responsibility:</strong> Never trust ungrounded LLM output blindly for pricing, medical/legal advice, or production SQL queries!
+            </div>
+          </div>
+
+          <div class="code-col">
+            <!-- DIAGRAM 8: Hallucination Example -->
+            <div class="diagram-panel" style="flex: 1; display: flex; flex-direction: column; justify-content: center; gap: 12px;">
+              <div class="diagram-caption">Diagram 8 • Why Ungrounded Prompts Trigger Hallucinations</div>
+
+              <div class="flow-horizontal">
+                <div class="flow-box blue">
+                  <strong>Unknown Prompt</strong><br />
+                  <small>"What is HACA Batch 7 refund deadline?"</small>
+                </div>
+                <div class="flow-arrow">→</div>
+                <div class="flow-box amber">
+                  <strong>No Context Provided</strong><br />
+                  <small>Model has never seen private doc</small>
+                </div>
+                <div class="flow-arrow">→</div>
+                <div class="flow-box rose">
+                  <strong>Probabilistic Guess</strong><br />
+                  <small>"Refunds are accepted for 14 days." (FAKE!)</small>
+                </div>
+              </div>
+
+              <div class="flow-vertical" style="margin-top: 8px;">
+                <div class="flow-vertical-step">
+                  <span class="status-pill status-pill-danger">Without Guardrails</span>
+                  <span>Model fills missing knowledge with words that <em>look</em> like typical refund policies.</span>
+                </div>
+                <div class="flow-vertical-step">
+                  <span class="status-pill status-pill-success">With Grounding Context</span>
+                  <span>We inject trusted facts + instruct the model to say <strong>"I do not know"</strong> when facts are absent.</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- =====================================================
+           SLIDE 16: PRACTICAL – REDUCE HALLUCINATIONS USING CONTEXT
+      ====================================================== -->
+      <section class="slide" data-slide="16" id="slide-16">
+        <div class="slide-header">
+          <span class="slide-category">Section 6 • Practical: Grounding Context</span>
+          <h2 class="slide-title">Practical: <span class="highlight">Reduce Hallucinations Using Context</span></h2>
+        </div>
+
+        <div class="split-layout equal">
+          <div class="concept-col">
+            <div class="code-container">
+              <div class="code-header">
+                <div class="code-header-left">
+                  <div class="code-dots">
+                    <span class="code-dot red"></span>
+                    <span class="code-dot yellow"></span>
+                    <span class="code-dot green"></span>
+                  </div>
+                  <span class="code-file-badge">grounding-helper.js</span>
+                  <span class="lang-tag js">JAVASCRIPT</span>
+                </div>
+                <div class="code-actions">
+                  <button type="button" class="copy-btn">Copy</button>
+                </div>
+              </div>
+              <div class="code-scroll-area">
+                <pre><code class="language-javascript">function buildGroundedPrompt(question, context) {
+  if (!context || !context.trim()) {
+    return question;
+  }
+
+  return `Answer the user's question ONLY using the context below.
+If the answer is not in the context, reply: "I do not know from the provided context."
+
+Context:
+${context.trim()}
+
+Question:
+${question.trim()}`;
+}</code></pre>
+              </div>
+            </div>
+
+            <div class="example-box warning">
+              <strong>Honest Caveat:</strong> Grounding with manual <code>context</code> + low temperature <strong>reduces</strong> hallucinations, though it cannot guarantee zero mistakes—and pasting context manually here is a stepping stone toward full RAG (covered in later lessons).
+            </div>
+          </div>
+
+          <div class="code-col">
+            <!-- INTERACTIVE SANDBOX 3: Context Grounding Guard -->
+            <div class="sandbox-card" style="flex: 1;">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; gap: 8px; flex-wrap: wrap;">
+                <strong style="color: var(--primary-deep); font-size: 0.95rem;">Context Grounding Lab</strong>
+                <span class="status-pill status-pill-danger" id="ragGuardStatus">No Context Provided</span>
+              </div>
+
+              <div class="sandbox-form-row">
+                <select id="ragGuardQuestion" class="sandbox-select" aria-label="Choose test question">
+                  <option value="campus">Q1: What is the tuition fee for GenAI Batch 7 at HACA?</option>
+                  <option value="policy">Q2: What does our Node.js Playground /ask endpoint return?</option>
+                  <option value="latest">Q3: Who won the tech conference keynote award yesterday?</option>
+                </select>
+                <button type="button" id="ragGuardBtn" class="sandbox-btn">Test Prompt</button>
+              </div>
+
+              <label style="display: flex; align-items: center; gap: 8px; font-size: 0.84rem; font-weight: 600; color: var(--text-main); margin-bottom: 10px; cursor: pointer;">
+                <input type="checkbox" id="ragGuardToggle" />
+                Attach trusted <code>context</code> + fallback refusal instruction
+              </label>
+
+              <pre id="ragGuardOutput" class="sandbox-output" style="min-height: 145px;"></pre>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- =====================================================
+           SLIDE 17: KNOWLEDGE CUTOFF & LLM LIMITATIONS
+      ====================================================== -->
+      <section class="slide" data-slide="17" id="slide-17">
+        <div class="slide-header">
+          <span class="slide-category">Section 6 • Knowledge Cutoff</span>
+          <h2 class="slide-title"><span class="highlight">Knowledge Cutoff</span> &amp; LLM Limitations</h2>
+        </div>
+
+        <div class="split-layout">
+          <div class="concept-col">
+            <div class="concept-card amber-border">
+              <div class="concept-title">Why LLMs Need External Data &amp; Tools</div>
+              <ul class="key-term-list" style="margin-top: 8px;">
+                <li class="key-term-item">
+                  <span class="key-term-name">Knowledge Cutoff</span>
+                  An LLM only knows public information available up to the date its training dataset ended. Events, library releases, or prices after that date are outside its static weights.
+                </li>
+                <li class="key-term-item">
+                  <span class="key-term-name">No Private Data Access</span>
+                  Unless you supply it at runtime, an LLM cannot read your MySQL database, local files, or company policies.
+                </li>
+                <li class="key-term-item">
+                  <span class="key-term-name">Not a Calculator or Live Search Engine</span>
+                  For exact math, live weather, or up-to-date facts, modern apps pair LLMs with <strong>tools</strong>, <strong>APIs</strong>, or <strong>RAG</strong>.
+                </li>
+              </ul>
+            </div>
+
+            <div class="example-box success">
+              <strong>Remember Day 1?</strong> This is exactly why real GenAI architectures use <strong>RAG</strong> (retrieval + context injection) and <strong>Agents</strong> (LLM + external tools)!
+            </div>
+          </div>
+
+          <div class="code-col">
+            <!-- DIAGRAM 9: Knowledge Cutoff & External Information -->
+            <div class="diagram-panel" style="flex: 1; display: flex; flex-direction: column; justify-content: center; gap: 14px;">
+              <div class="diagram-caption">Diagram 9 • Knowledge Cutoff Boundary &amp; How Apps Bridge It</div>
+
+              <div>
+                <div class="timeline-bar">
+                  <div class="timeline-past">Pre-Training Data (Frozen Knowledge)</div>
+                  <div class="timeline-wall" title="Knowledge Cutoff"></div>
+                  <div class="timeline-present">New World Events, Live APIs &amp; Private Docs</div>
+                </div>
+                <div style="display: flex; justify-content: space-between; font-size: 0.78rem; color: var(--text-muted); margin-top: 6px;">
+                  <span>Model knows public history inside weights</span>
+                  <strong style="color: #dc2626;">Cutoff Date</strong>
+                  <span>Blind unless you inject context/tools</span>
+                </div>
+              </div>
+
+              <div class="flow-horizontal" style="margin-top: 8px;">
+                <div class="flow-box blue">Live DB / Docs / Web</div>
+                <div class="flow-arrow">→</div>
+                <div class="flow-box purple">Node.js App Injects Context</div>
+                <div class="flow-arrow">→</div>
+                <div class="flow-box green">Up-to-Date Grounded Answer</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- =====================================================
+           SLIDE 18: INTRODUCTION TO TRANSFORMERS
+      ====================================================== -->
+      <section class="slide" data-slide="18" id="slide-18">
+        <div class="slide-header">
+          <span class="slide-category">Section 7 • Transformer Architecture</span>
+          <h2 class="slide-title">Introduction to <span class="highlight">Transformers</span></h2>
+        </div>
+
+        <div class="split-layout">
+          <div class="concept-col">
+            <div class="concept-card purple-border">
+              <div class="concept-title">The Architecture Behind Modern LLMs ("T" in GPT)</div>
+              <p class="concept-text">
+                Introduced in 2017 (<em>"Attention Is All You Need"</em>), the <strong>Transformer</strong> changed AI by
+                processing all tokens in a sentence <strong>in parallel</strong> instead of slowly reading one word after another like older RNN models.
+              </p>
+              <ul class="key-term-list" style="margin-top: 10px;">
+                <li class="key-term-item">
+                  <span class="key-term-name">1. Embeddings + Positional Info</span>
+                  Turns token IDs into rich number vectors (meaning) plus their position in the sentence (word order).
+                </li>
+                <li class="key-term-item">
+                  <span class="key-term-name">2. Transformer Blocks (Repeated Layers)</span>
+                  Each block combines <strong>Self-Attention</strong> (understanding relationships) and a <strong>Feed-Forward Network</strong> (processing features).
+                </li>
+                <li class="key-term-item">
+                  <span class="key-term-name">3. Output Prediction</span>
+                  Produces probabilities for the next token across the vocabulary.
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="code-col">
+            <!-- DIAGRAM 10: Transformer Architecture -->
+            <div class="diagram-panel" style="flex: 1; display: flex; flex-direction: column; justify-content: center;">
+              <div class="diagram-caption">Diagram 10 • High-Level Transformer Pipeline</div>
+
+              <div class="flow-vertical">
+                <div class="flow-vertical-step">
+                  <span class="status-pill status-pill-info">1. Input</span>
+                  <span>Prompt string split into <strong>Token IDs</strong></span>
+                </div>
+                <div class="flow-vertical-step">
+                  <span class="status-pill status-pill-info">2. Embeddings</span>
+                  <span>Convert IDs to meaning vectors + add <strong>Positional Encoding</strong> (token order)</span>
+                </div>
+                <div class="flow-vertical-step" style="border-color: #7c3aed; background: #faf5ff;">
+                  <span class="status-pill status-pill-warning">3. Transformer Layer × N</span>
+                  <span>
+                    <strong>Self-Attention</strong> (tokens look at related tokens) +
+                    <strong>Feed-Forward Neural Net</strong> (deep pattern processing)
+                  </span>
+                </div>
+                <div class="flow-vertical-step">
+                  <span class="status-pill status-pill-success">4. Output Head</span>
+                  <span>Scores every vocabulary token → picks next token (guided by <code>temperature</code>!)</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- =====================================================
+           SLIDE 19: ATTENTION, SELF-ATTENTION, ENCODER & DECODER
+      ====================================================== -->
+      <section class="slide" data-slide="19" id="slide-19">
+        <div class="slide-header">
+          <span class="slide-category">Section 7 • Attention &amp; Variants</span>
+          <h2 class="slide-title"><span class="highlight">Attention, Self-Attention</span>, Encoder &amp; Decoder</h2>
+        </div>
+
+        <div class="split-layout equal">
+          <div class="concept-col">
+            <!-- DIAGRAM 11: Attention & Self-Attention Sentence Example -->
+            <div class="diagram-panel">
+              <div class="diagram-caption">Diagram 11 • Self-Attention Links Related Words Across Distance</div>
+              <p style="font-size: 0.84rem; color: var(--text-main); margin-bottom: 10px;">
+                How does the model know who <strong>"she"</strong> refers to in this sentence?
+              </p>
+
+              <svg viewBox="0 0 520 118" style="width: 100%; height: auto; display: block;" role="img" aria-label="Self-attention diagram linking she to student and her">
+                <defs>
+                  <marker id="arrowBlue" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+                    <path d="M0,0 L6,3 L0,6 Z" fill="#0284c7" />
+                  </marker>
+                </defs>
+                <!-- Strong link: she -> student -->
+                <path d="M 326 66 Q 190 8 64 66" fill="none" stroke="#0284c7" stroke-width="3.2" marker-end="url(#arrowBlue)" />
+                <text x="190" y="22" text-anchor="middle" font-size="11" font-weight="700" fill="#0369a1">High Attention Weight (0.78)</text>
+
+                <!-- Medium link: she -> her -->
+                <path d="M 326 66 Q 250 32 178 66" fill="none" stroke="#7c3aed" stroke-width="2" stroke-dasharray="4 3" />
+                <text x="252" y="45" text-anchor="middle" font-size="10" font-weight="600" fill="#6d28d9">Related (0.16)</text>
+
+                <!-- Words -->
+                <rect x="26" y="70" width="76" height="32" rx="8" fill="#dbeafe" stroke="#0284c7" stroke-width="1.5" />
+                <text x="64" y="90" text-anchor="middle" font-size="12" font-weight="700" fill="#0c4a6e">student</text>
+
+                <rect x="110" y="70" width="96" height="32" rx="8" fill="#f1f5f9" stroke="#cbd5e1" />
+                <text x="158" y="90" text-anchor="middle" font-size="11" fill="#334155">opened her</text>
+
+                <rect x="214" y="70" width="84" height="32" rx="8" fill="#f1f5f9" stroke="#cbd5e1" />
+                <text x="256" y="90" text-anchor="middle" font-size="11" fill="#334155">laptop bec.</text>
+
+                <rect x="306" y="70" width="44" height="32" rx="8" fill="#fef3c7" stroke="#d97706" stroke-width="1.8" />
+                <text x="328" y="90" text-anchor="middle" font-size="12" font-weight="800" fill="#92400e">she</text>
+
+                <rect x="358" y="70" width="136" height="32" rx="8" fill="#f1f5f9" stroke="#cbd5e1" />
+                <text x="426" y="90" text-anchor="middle" font-size="11" fill="#334155">wanted to code.</text>
+              </svg>
+
+              <p style="font-size: 0.82rem; color: var(--text-main); margin-top: 8px;">
+                <strong>Self-Attention</strong> lets every token weigh how important every other token in the prompt is, resolving context even across long paragraphs.
+              </p>
+            </div>
+          </div>
+
+          <div class="code-col">
+            <!-- DIAGRAM 12: Encoder-only vs Decoder-only vs Encoder-Decoder -->
+            <div class="diagram-panel" style="flex: 1; display: flex; flex-direction: column; justify-content: center;">
+              <div class="diagram-caption">Diagram 12 • 3 Transformer Families Compared</div>
+
+              <div class="table-wrapper">
+                <table class="styled-table">
+                  <thead>
+                    <tr>
+                      <th>Architecture</th>
+                      <th>Best At</th>
+                      <th>Examples</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td class="tag-col">Encoder-Only</td>
+                      <td>Understanding text, search embeddings, sentiment/classification</td>
+                      <td>BERT, RoBERTa</td>
+                    </tr>
+                    <tr style="background: #f0fdf4;">
+                      <td class="tag-col">Decoder-Only</td>
+                      <td>Generating next tokens (chatbots, code, playground APIs)</td>
+                      <td><strong>GPT-4.1-mini</strong>, Claude, LLaMA</td>
+                    </tr>
+                    <tr>
+                      <td class="tag-col">Encoder-Decoder</td>
+                      <td>Converting sequence A → sequence B (translation, seq2seq)</td>
+                      <td>T5, BART</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <div class="example-box success" style="margin-top: 10px;">
+                <strong>Connection to Today's Code:</strong> Modern GPT APIs like <code>gpt-4.1-mini</code> are <strong>Decoder-Only Transformers</strong>—they read your prompt left-to-right and generate tokens one step at a time!
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- =====================================================
+           SLIDE 20: RECAP & PRACTICAL CHALLENGE
+      ====================================================== -->
+      <section class="slide" data-slide="20" id="slide-20">
+        <div class="slide-header">
+          <span class="slide-category">Section 8 • Recap &amp; Playground Challenge</span>
+          <h2 class="slide-title">Day 2 Recap &amp; <span class="highlight">LLM Playground Challenge</span></h2>
+        </div>
+
+        <div class="split-layout equal">
+          <div class="concept-col">
+            <div class="concept-card accent-border">
+              <div class="concept-title">What You Mastered Today</div>
+              <ul class="key-term-list" style="margin-top: 6px;">
+                <li class="key-term-item">
+                  <span class="key-term-name">LLM &amp; Inference</span>
+                  Your Node.js app runs inference using frozen model weights via <code>client.responses.create()</code>.
+                </li>
+                <li class="key-term-item">
+                  <span class="key-term-name">Tokens &amp; Context Window</span>
+                  Input + output share one token budget; inspect exact usage via <code>response.usage</code>.
+                </li>
+                <li class="key-term-item">
+                  <span class="key-term-name">Temperature &amp; Max Tokens</span>
+                  Control output randomness and cap reply length cleanly.
+                </li>
+                <li class="key-term-item">
+                  <span class="key-term-name">Grounding &amp; Transformers</span>
+                  Context grounding reduces hallucinations; Decoder-only Transformers power next-token generation using self-attention.
+                </li>
+              </ul>
+            </div>
+
+            <div class="example-box">
+              <strong>Build Challenge:</strong> Complete <code>POST /ask</code> in <code>server.js</code> accepting <code>{ question, temperature, max_output_tokens, context }</code> with validation, grounding, and <code>usage</code> returned!
+              <div style="margin-top: 10px;">
+                <button type="button" id="solutionBtn" class="sandbox-btn">View Complete server.js Solution</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="code-col">
+            <!-- INTERACTIVE SANDBOX 4: Final LLM Playground Simulator -->
+            <div class="sandbox-card" style="flex: 1;">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; flex-wrap: wrap; gap: 6px;">
+                <strong style="color: var(--primary-deep); font-size: 0.95rem;">POST /ask Playground Simulator</strong>
+                <span class="status-pill status-pill-success" id="pgStatusBadge">Ready</span>
+              </div>
+
+              <div class="sandbox-form-row">
+                <input
+                  type="text"
+                  id="pgQuestionInput"
+                  class="sandbox-input"
+                  value="What happens if I set temperature high and omit context?"
+                  aria-label="Playground question"
+                />
+              </div>
+
+              <div class="sandbox-form-row">
+                <label style="font-size: 0.78rem; font-weight: 600; display: flex; align-items: center; gap: 4px;">
+                  temp:
+                  <input type="number" id="pgTempInput" class="sandbox-input" value="0.2" step="0.1" min="0" max="1.2" style="width: 72px;" />
+                </label>
+                <label style="font-size: 0.78rem; font-weight: 600; display: flex; align-items: center; gap: 4px;">
+                  max_output_tokens:
+                  <input type="number" id="pgMaxTokensInput" class="sandbox-input" value="150" min="16" max="500" style="width: 86px;" />
+                </label>
+                <button type="button" id="pgSendBtn" class="sandbox-btn">Send POST /ask</button>
+              </div>
+
+              <textarea
+                id="pgContextInput"
+                class="sandbox-input"
+                rows="2"
+                placeholder="Optional grounding context (leave blank for general reply)..."
+                style="width: 100%; resize: vertical; margin-bottom: 8px;"
+              ></textarea>
+
+              <pre id="pgOutputBox" class="sandbox-output" style="min-height: 155px;"></pre>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- Bottom Navigation Bar -->
+    <footer class="bottom-bar">
+      <div class="nav-hint">
+        Use <span class="kbd-badge">←</span> <span class="kbd-badge">→</span> or
+        <span class="kbd-badge">Space</span> to navigate • <span class="kbd-badge">T</span> Slides •
+        <span class="kbd-badge">?</span> Shortcuts
+      </div>
+      <div class="nav-buttons">
+        <button type="button" class="nav-btn" id="prevBtn" disabled>← Previous</button>
+        <button type="button" class="nav-btn" id="nextBtn">Next →</button>
+      </div>
+    </footer>
+  </div>
+
+  <!-- Table of Contents Modal -->
+  <div class="modal-overlay" id="tocOverlay" role="dialog" aria-modal="true" aria-labelledby="tocModalTitle">
+    <div class="modal-content">
+      <div class="modal-header">
+        <span class="modal-title" id="tocModalTitle">All 20 Slides • Gen-AI Day 2</span>
+        <button type="button" class="modal-close-btn" id="tocClose" aria-label="Close">×</button>
+      </div>
+      <div class="modal-body" id="tocList"></div>
+    </div>
+  </div>
+
+  <!-- Keyboard Shortcuts Help Modal -->
+  <div class="modal-overlay" id="helpModal" role="dialog" aria-modal="true" aria-labelledby="helpModalTitle">
+    <div class="modal-content" style="max-width: 520px;">
+      <div class="modal-header">
+        <span class="modal-title" id="helpModalTitle">Presentation Shortcuts</span>
+        <button type="button" class="modal-close-btn" id="helpClose" aria-label="Close">×</button>
+      </div>
+      <div class="modal-body">
+        <div class="table-wrapper">
+          <table class="styled-table">
+            <tbody>
+              <tr><td class="tag-col"><span class="kbd-badge">→</span> / <span class="kbd-badge">Space</span> / <span class="kbd-badge">PgDn</span></td><td>Next slide</td></tr>
+              <tr><td class="tag-col"><span class="kbd-badge">←</span> / <span class="kbd-badge">PgUp</span></td><td>Previous slide</td></tr>
+              <tr><td class="tag-col"><span class="kbd-badge">Home</span> / <span class="kbd-badge">End</span></td><td>Jump to Slide 1 / Slide 20</td></tr>
+              <tr><td class="tag-col"><span class="kbd-badge">T</span></td><td>Open Table of Contents</td></tr>
+              <tr><td class="tag-col"><span class="kbd-badge">F</span></td><td>Toggle Fullscreen</td></tr>
+              <tr><td class="tag-col"><span class="kbd-badge">Esc</span></td><td>Close active modal</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Complete server.js Solution Modal (Slide 20) -->
+  <div class="modal-overlay" id="solutionModal" role="dialog" aria-modal="true" aria-labelledby="solutionModalTitle">
+    <div class="modal-content" style="max-width: 860px;">
+      <div class="modal-header">
+        <span class="modal-title" id="solutionModalTitle">Complete Practical Project • llm-playground/server.js</span>
+        <button type="button" class="modal-close-btn" id="solutionClose" aria-label="Close">×</button>
+      </div>
+      <div class="modal-body">
+        <div class="code-container">
+          <div class="code-header">
+            <div class="code-header-left">
+              <div class="code-dots">
+                <span class="code-dot red"></span>
+                <span class="code-dot yellow"></span>
+                <span class="code-dot green"></span>
+              </div>
+              <span class="code-file-badge">llm-playground/server.js</span>
+              <span class="lang-tag js">JAVASCRIPT</span>
+            </div>
+            <div class="code-actions">
+              <button type="button" class="copy-btn">Copy</button>
+            </div>
+          </div>
+          <div class="code-scroll-area" style="max-height: 55vh;">
+            <pre><code class="language-javascript">require("dotenv").config();
+const express = require("express");
+const OpenAI = require("openai");
+
+const app = express();
+app.use(express.json());
+
+const client = new OpenAI({
+  apiKey: process.env.OPENAI_API_KEY
+});
+
+// Approximate helper for quick pre-checks (NOT exact tokenization!)
+function estimateTokensApprox(text) {
+  return Math.ceil(text.length / 4);
+}
+
+app.get("/", (req, res) =&gt; {
+  res.json({
+    service: "LLM Playground API - GenAI Day 2",
+    status: "running"
+  });
+});
+
+app.post("/ask", async (req, res) =&gt; {
+  try {
+    const {
+      question,
+      temperature = 0.7,
+      max_output_tokens = 150,
+      context = ""
+    } = req.body;
+
+    if (!question || typeof question !== "string" || !question.trim()) {
+      return res.status(400).json({ error: "A non-empty question is required" });
+    }
+
+    const safeTemp = Number(temperature);
+    if (Number.isNaN(safeTemp) || safeTemp &lt; 0 || safeTemp &gt; 2) {
+      return res.status(400).json({ error: "temperature must be between 0 and 2" });
+    }
+
+    const safeMaxTokens = Number(max_output_tokens);
+    if (Number.isNaN(safeMaxTokens) || safeMaxTokens &lt; 16 || safeMaxTokens &gt; 2000) {
+      return res.status(400).json({ error: "max_output_tokens must be between 16 and 2000" });
+    }
+
+    const hasContext = typeof context === "string" &amp;&amp; context.trim().length &gt; 0;
+    const promptInput = hasContext
+      ? `Answer the question ONLY using the provided context. If the answer is not in the context, reply: "I do not know from the provided context."\n\nContext:\n${context.trim()}\n\nQuestion:\n${question.trim()}`
+      : question.trim();
+
+    const estimatedInputTokens = estimateTokensApprox(promptInput);
+    if (estimatedInputTokens &gt; 4000) {
+      return res.status(400).json({ error: "Prompt exceeds Playground token budget." });
+    }
+
+    const response = await client.responses.create({
+      model: "gpt-4.1-mini",
+      input: promptInput,
+      temperature: safeTemp,
+      max_output_tokens: safeMaxTokens
+    });
+
+    res.json({
+      answer: response.output_text,
+      usage: response.usage,
+      estimatedInputTokensApprox: estimatedInputTokens,
+      groundedWithContext: hasContext,
+      status: response.status
+    });
+  } catch (error) {
+    console.error("Playground API Error:", error.message);
+    res.status(500).json({ error: "Failed to process LLM request" });
+  }
+});
+
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () =&gt; {
+  console.log(`LLM Playground API listening on http://localhost:${PORT}`);
+});</code></pre>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Prism.js Core & Languages -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-javascript.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-bash.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-json.min.js"></script>
+
+  <script src="script.js"></script>
+</body>
+</html>
