@@ -1,0 +1,1896 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Node.js – Gen-AI Day 3 | LLM Providers, Model Selection &amp; Node.js Integration</title>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&amp;family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap"
+    rel="stylesheet"
+  />
+
+  <!-- Prism.js Syntax Highlighting -->
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css"
+  />
+
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div id="presentation-app">
+    <!-- Top Progress Bar -->
+    <div class="progress-container" aria-hidden="true">
+      <div class="progress-fill" id="progressFill"></div>
+    </div>
+
+    <!-- Top Navigation Bar -->
+    <header class="top-bar">
+      <div class="brand-section">
+        <span class="brand-badge">GEN-AI NODE.JS • DAY 3</span>
+        <span class="brand-title">Multi-Provider AI Playground</span>
+        <span class="section-indicator" id="sectionIndicator">Section 1 • Introduction</span>
+      </div>
+
+      <div class="top-controls">
+        <span class="slide-counter" id="slideCounter">01 / 20</span>
+        <button type="button" class="top-btn" id="tocBtn" title="Table of Contents (T)">
+          <span>☰</span> Slides
+        </button>
+        <button type="button" class="top-btn" id="helpBtn" title="Keyboard Shortcuts (?)">
+          <span>?</span> Help
+        </button>
+        <button type="button" class="top-btn" id="fullscreenBtn" title="Toggle Fullscreen (F)">
+          <span>⛶</span> Fullscreen
+        </button>
+      </div>
+    </header>
+
+    <!-- Main Slides Viewport -->
+    <main class="slides-viewport" id="slidesViewport">
+
+      <!-- =====================================================
+           SLIDE 1: INTRODUCTION TO LLM PROVIDERS
+      ====================================================== -->
+      <section class="slide active" data-slide="1" id="slide-1">
+        <div class="title-slide-content">
+          <div class="title-badge">NODE.JS – GEN-AI DAY 3 • BEGINNER FRIENDLY</div>
+          <h1 class="title-main">
+            LLM Providers, Model Selection<br />
+            <span style="color: var(--primary);">&amp; Node.js Integration</span>
+          </h1>
+          <p class="title-subtitle">
+            You are never locked into one AI model or one vendor. Learn how to evaluate local and cloud models,
+            navigate trade-offs in quality, speed, and cost, and connect <strong>Ollama, OpenAI, Gemini, Claude, and Groq</strong>
+            to Node.js using a single clean architecture.
+          </p>
+
+          <div class="title-topics-grid">
+            <div class="title-topic-chip">01. Closed vs Open-Weight Models</div>
+            <div class="title-topic-chip">02. Local LLMs vs Cloud LLMs</div>
+            <div class="title-topic-chip">03. Quality vs Latency vs Cost</div>
+            <div class="title-topic-chip">04. Small vs Large &amp; Multimodal</div>
+            <div class="title-topic-chip">05. Ollama &amp; Llama 3.2 Locally</div>
+            <div class="title-topic-chip">06. OpenAI, Gemini, Claude, Groq</div>
+            <div class="title-topic-chip">07. OpenAI-Compatible APIs</div>
+            <div class="title-topic-chip">08. Multi-Provider Express API</div>
+          </div>
+
+          <div class="title-features-pills">
+            <span class="feature-pill"><span class="pill-dot"></span>Practical: <code>multi-provider-ai/</code></span>
+            <span class="feature-pill"><span class="pill-dot"></span>CommonJS + Dynamic ESM Imports</span>
+            <span class="feature-pill"><span class="pill-dot"></span>20 Slides • 13 Diagrams • 4 Interactive Labs</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- =====================================================
+           SLIDE 2: CLOSED-SOURCE vs OPEN-SOURCE MODELS
+      ====================================================== -->
+      <section class="slide" data-slide="2" id="slide-2">
+        <div class="slide-header">
+          <span class="slide-category">Section 1 • Model Licensing</span>
+          <h2 class="slide-title">Closed-Source vs <span class="highlight">Open-Weight Models</span></h2>
+        </div>
+
+        <div class="split-layout">
+          <div class="concept-col">
+            <div class="concept-card accent-border">
+              <div class="concept-title">3 Tiers of Model Availability</div>
+              <ul class="key-term-list">
+                <li class="key-term-item">
+                  <span class="key-term-name">1. Closed-Source Models (Hosted APIs)</span>
+                  Providers keep architecture, training datasets, and model weights private. You access them exclusively via hosted cloud APIs (e.g. OpenAI GPT-4o, Anthropic Claude, Google Gemini).
+                </li>
+                <li class="key-term-item">
+                  <span class="key-term-name">2. Open-Weight Models (Downloadable Weights)</span>
+                  Trained neural weights are published for download under provider licenses (e.g. Meta Llama 3.2, Qwen 2.5, Google Gemma). Developers can run them on their own hardware or via third-party cloud hosts.
+                </li>
+                <li class="key-term-item">
+                  <span class="key-term-name">3. Open-Source AI (Fully Transparent)</span>
+                  Traditional open-source releases full training code, weights, data recipes, and evaluation code under permissive licenses (e.g. Apache 2.0 / MIT).
+                </li>
+              </ul>
+            </div>
+
+            <div class="example-box warning">
+              <strong>Crucial Distinction:</strong> "Open-weight" does <em>not</em> automatically mean fully open-source! Meta releases Llama weights under the Meta Llama Community License, which permits free commercial use up to 700M monthly active users but is not an OSI-approved license.
+            </div>
+          </div>
+
+          <div class="code-col">
+            <!-- DIAGRAM 1: Closed-source vs Open-weight vs Open-source -->
+            <div class="diagram-panel" style="flex: 1; display: flex; flex-direction: column; justify-content: center; gap: 12px;">
+              <div class="diagram-caption">Diagram 1 • Model Access &amp; Transparency Spectrum</div>
+
+              <div class="table-wrapper">
+                <table class="styled-table">
+                  <thead>
+                    <tr>
+                      <th>Model Category</th>
+                      <th>Weights Downloadable?</th>
+                      <th>Run Offline?</th>
+                      <th>Primary Node.js Access</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td class="tag-col">Closed-Source</td>
+                      <td><span class="status-pill status-pill-danger">No</span></td>
+                      <td><span class="status-pill status-pill-danger">No</span></td>
+                      <td>Provider Cloud SDK (HTTPS API)</td>
+                    </tr>
+                    <tr style="background: #f0fdf4;">
+                      <td class="tag-col">Open-Weight</td>
+                      <td><span class="status-pill status-pill-success">Yes</span></td>
+                      <td><span class="status-pill status-pill-success">Yes (Ollama)</span></td>
+                      <td>Local Ollama or Groq/Cloud host</td>
+                    </tr>
+                    <tr>
+                      <td class="tag-col">Open-Source</td>
+                      <td><span class="status-pill status-pill-success">Yes</span></td>
+                      <td><span class="status-pill status-pill-success">Yes</span></td>
+                      <td>Self-hosted inference / vLLM</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <div class="flow-horizontal" style="margin-top: 6px;">
+                <div class="flow-box blue">
+                  <strong>Proprietary API</strong><br />
+                  <small>OpenAI / Claude / Gemini</small>
+                </div>
+                <div class="flow-arrow">⟷</div>
+                <div class="flow-box purple">
+                  <strong>Open-Weight</strong><br />
+                  <small>Meta Llama / Qwen</small>
+                </div>
+                <div class="flow-arrow">⟷</div>
+                <div class="flow-box green">
+                  <strong>Open-Source Code</strong><br />
+                  <small>Permissive Apache 2.0</small>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- =====================================================
+           SLIDE 3: LOCAL LLM vs CLOUD LLM
+      ====================================================== -->
+      <section class="slide" data-slide="3" id="slide-3">
+        <div class="slide-header">
+          <span class="slide-category">Section 2 • Local vs Cloud</span>
+          <h2 class="slide-title"><span class="highlight">Local LLMs vs Cloud LLMs</span>: Architectural Trade-offs</h2>
+        </div>
+
+        <div class="split-layout equal">
+          <div class="concept-col">
+            <!-- DIAGRAM 2: Local LLM Architecture -->
+            <div class="concept-card green-border">
+              <div class="diagram-caption" style="margin-bottom: 4px;">Diagram 2 • Local LLM Architecture</div>
+              <div class="concept-title">
+                <span class="status-pill status-pill-success">Local LLM</span>
+                Running on Your Own Machine / Infrastructure
+              </div>
+              <p class="concept-text">
+                The model weights reside in local storage, running on your computer's CPU or GPU (e.g. using Ollama).
+              </p>
+              <div class="flow-vertical" style="margin: 8px 0;">
+                <div class="flow-vertical-step">
+                  <span class="status-pill status-pill-info">Node.js</span>
+                  <span>Sends HTTP request to <code>http://localhost:11434</code></span>
+                </div>
+                <div class="flow-vertical-step">
+                  <span class="status-pill status-pill-success">Ollama</span>
+                  <span>Executes model on local RAM/GPU; zero external network traffic!</span>
+                </div>
+              </div>
+              <div class="key-term-list">
+                <div class="key-term-item">
+                  <strong>Pros:</strong> 100% data privacy, works offline, zero per-token API charges, complete environment control.
+                </div>
+                <div class="key-term-item">
+                  <strong>Cons:</strong> High RAM/VRAM requirements (8GB–64GB+), slower on modest hardware, maintenance overhead.
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="code-col">
+            <!-- DIAGRAM 3: Cloud LLM Architecture -->
+            <div class="concept-card accent-border">
+              <div class="diagram-caption" style="margin-bottom: 4px;">Diagram 3 • Cloud LLM Architecture</div>
+              <div class="concept-title">
+                <span class="status-pill status-pill-info">Cloud LLM</span>
+                Hosted on Provider Infrastructure
+              </div>
+              <p class="concept-text">
+                The model is hosted on large enterprise clusters (thousands of H100 GPUs) managed by OpenAI, Google, Anthropic, or Groq.
+              </p>
+              <div class="flow-vertical" style="margin: 8px 0;">
+                <div class="flow-vertical-step">
+                  <span class="status-pill status-pill-info">Node.js</span>
+                  <span>Sends secure HTTPS request to provider gateway with API key</span>
+                </div>
+                <div class="flow-vertical-step">
+                  <span class="status-pill status-pill-purple">Cloud GPU</span>
+                  <span>Generates tokens in milliseconds; streams back JSON answer</span>
+                </div>
+              </div>
+              <div class="key-term-list">
+                <div class="key-term-item">
+                  <strong>Pros:</strong> Instant access to massive models (GPT-4o, Claude 3.5), zero hardware setup, extreme speed, high reliability.
+                </div>
+                <div class="key-term-item">
+                  <strong>Cons:</strong> Requires active internet, per-token billing, prompt data travels over the wire, rate limits apply.
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- =====================================================
+           SLIDE 4: OLLAMA: RUN LLMs LOCALLY
+      ====================================================== -->
+      <section class="slide" data-slide="4" id="slide-4">
+        <div class="slide-header">
+          <span class="slide-category">Section 2 • Ollama Runtime</span>
+          <h2 class="slide-title">Ollama: <span class="highlight">Run Open LLMs on Your Laptop</span></h2>
+        </div>
+
+        <div class="split-layout">
+          <div class="concept-col">
+            <div class="concept-card purple-border">
+              <div class="concept-title">What Is Ollama?</div>
+              <p class="concept-text">
+                <strong>Ollama</strong> is a lightweight, open-source tool and background daemon that packages
+                model weights, configuration, and GPU acceleration into an easy local CLI and HTTP REST API.
+              </p>
+              <ul class="key-term-list" style="margin-top: 8px;">
+                <li class="key-term-item">
+                  <span class="key-term-name">1. Local Daemon Address</span>
+                  Runs quietly in the background on <code>http://localhost:11434</code>.
+                </li>
+                <li class="key-term-item">
+                  <span class="key-term-name">2. Automatic Hardware Detection</span>
+                  Automatically utilizes Apple Silicon (Metal), NVIDIA CUDA, or CPU fallback.
+                </li>
+                <li class="key-term-item">
+                  <span class="key-term-name">3. Built-in Model Library</span>
+                  Pulls and manages models like <code>llama3.2</code>, <code>mistral</code>, <code>qwen2.5</code>, and <code>gemma2</code>.
+                </li>
+              </ul>
+            </div>
+
+            <div class="example-box warning">
+              <strong>Crucial Rule:</strong> Ollama is the <strong>engine / runtime</strong>. Llama is the <strong>model family</strong>. Ollama runs Llama, but they are created by different organizations!
+            </div>
+          </div>
+
+          <div class="code-col">
+            <!-- DIAGRAM 4: Ollama Runtime Stack -->
+            <div class="code-container">
+              <div class="code-header">
+                <div class="code-header-left">
+                  <div class="code-dots">
+                    <span class="code-dot red"></span>
+                    <span class="code-dot yellow"></span>
+                    <span class="code-dot green"></span>
+                  </div>
+                  <span class="code-file-badge">Ollama CLI Commands</span>
+                  <span class="lang-tag term">TERMINAL</span>
+                </div>
+                <div class="code-actions">
+                  <button type="button" class="copy-btn">Copy</button>
+                </div>
+              </div>
+              <div class="code-scroll-area">
+                <pre><code class="language-bash"># 1. Download model weights from Ollama registry (~2.0 GB)
+ollama pull llama3.2
+
+# 2. Test chat directly in your terminal
+ollama run llama3.2
+
+# 3. View downloaded local models
+ollama list
+
+# 4. Check currently active models in memory
+ollama ps</code></pre>
+              </div>
+            </div>
+
+            <div class="diagram-panel">
+              <div class="diagram-caption">Diagram 4 • Ollama Local Node.js Architecture</div>
+              <div class="flow-horizontal">
+                <div class="flow-box blue">
+                  <strong>Node.js App</strong><br />
+                  <small>Express / scripts</small>
+                </div>
+                <div class="flow-arrow">→</div>
+                <div class="flow-box purple">
+                  <strong>Ollama Service</strong><br />
+                  <small>localhost:11434</small>
+                </div>
+                <div class="flow-arrow">→</div>
+                <div class="flow-box green">
+                  <strong>Llama 3.2 Model</strong><br />
+                  <small>Local RAM / VRAM</small>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- =====================================================
+           SLIDE 5: PRACTICAL – CONNECT OLLAMA WITH NODE.JS
+      ====================================================== -->
+      <section class="slide" data-slide="5" id="slide-5">
+        <div class="slide-header">
+          <span class="slide-category">Section 2 • Practical: Ollama</span>
+          <h2 class="slide-title">Practical: <span class="highlight">Connect Ollama to Node.js</span></h2>
+        </div>
+
+        <div class="split-layout equal">
+          <div class="concept-col">
+            <div class="code-container stretch">
+              <div class="code-header">
+                <div class="code-header-left">
+                  <div class="code-dots">
+                    <span class="code-dot red"></span>
+                    <span class="code-dot yellow"></span>
+                    <span class="code-dot green"></span>
+                  </div>
+                  <span class="code-file-badge">ollamaTest.js</span>
+                  <span class="lang-tag js">JAVASCRIPT</span>
+                </div>
+                <div class="code-actions">
+                  <button type="button" class="copy-btn">Copy</button>
+                </div>
+              </div>
+              <div class="code-scroll-area">
+                <pre><code class="language-javascript">async function main() {
+  // 1. Dynamic import because the official ollama package is an ES Module
+  const { default: ollama } = await import("ollama");
+
+  // 2. Send prompt to local daemon on http://localhost:11434
+  const response = await ollama.chat({
+    model: "llama3.2",
+    messages: [
+      {
+        role: "user",
+        content: "Explain Node.js in simple words."
+      }
+    ]
+  });
+
+  // 3. Extract the generated content
+  console.log("Local Llama Reply:\n", response.message.content);
+}
+
+main().catch(console.error);</code></pre>
+              </div>
+              <div class="code-run-hint">Terminal command: <span>node ollamaTest.js</span></div>
+            </div>
+
+            <div class="example-box success">
+              <strong>No API Key Needed:</strong> Because this runs against your local Ollama daemon, you don't need any credit card, cloud account, or <code>OPENAI_API_KEY</code>!
+            </div>
+          </div>
+
+          <div class="code-col">
+            <!-- INTERACTIVE SANDBOX 1: Local vs Cloud Offline Simulator -->
+            <div class="sandbox-card" style="flex: 1;">
+              <div style="display: flex; justify-content: space-between; align-items: center;">
+                <strong style="color: var(--primary-deep); font-size: 0.95rem;">Lab 1 • Offline &amp; Privacy Simulator</strong>
+                <span class="status-pill status-pill-success" id="simStatusBadge">Ready</span>
+              </div>
+
+              <div class="sandbox-form-row">
+                <label for="simProviderSelect" style="font-size: 0.82rem; font-weight: 700;">Provider:</label>
+                <select id="simProviderSelect" class="sandbox-select">
+                  <option value="ollama">Ollama (Local Llama 3.2)</option>
+                  <option value="openai">OpenAI (Cloud GPT-4o-mini)</option>
+                  <option value="groq">Groq (Cloud Llama 3.3)</option>
+                  <option value="gemini">Google Gemini (Cloud)</option>
+                </select>
+                <button type="button" id="simRunBtn" class="sandbox-btn">Send Test Call</button>
+              </div>
+
+              <label style="display: flex; align-items: center; gap: 8px; font-size: 0.84rem; font-weight: 700; color: #dc2626; cursor: pointer;">
+                <input type="checkbox" id="simOfflineCheck" />
+                Simulate Disconnected Internet (Offline Mode)
+              </label>
+
+              <pre id="simOutputBox" class="sandbox-output" style="min-height: 140px;"></pre>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- =====================================================
+           SLIDE 6: WHAT IS LLAMA?
+      ====================================================== -->
+      <section class="slide" data-slide="6" id="slide-6">
+        <div class="slide-header">
+          <span class="slide-category">Section 2 • Llama Model Family</span>
+          <h2 class="slide-title">What Is <span class="highlight">Llama</span>? Understanding the Model Family</h2>
+        </div>
+
+        <div class="split-layout">
+          <div class="concept-col">
+            <div class="concept-card accent-border">
+              <div class="concept-title">Meta's Open-Weight Foundation Models</div>
+              <p class="concept-text">
+                <strong>Llama</strong> (Large Language Model Meta AI) is a family of state-of-the-art open-weight models
+                developed and published by Meta. It forms the backbone of the open-source AI ecosystem.
+              </p>
+              <ul class="key-term-list" style="margin-top: 8px;">
+                <li class="key-term-item">
+                  <span class="key-term-name">Model Sizes for Every Use Case</span>
+                  Available in lightweight edge sizes (<strong>1B, 3B</strong> params - ideal for laptops and phones) up to massive reasoning engines (<strong>8B, 70B, 405B</strong> params).
+                </li>
+                <li class="key-term-item">
+                  <span class="key-term-name">Run Anywhere</span>
+                  You can run Llama locally on your laptop via Ollama, or run Llama at 500+ tokens/second in the cloud via hosted providers like Groq and Together AI!
+                </li>
+              </ul>
+            </div>
+
+            <div class="example-box">
+              <strong>Mental Formula:</strong> <code>Llama</code> is the engine design (the weights). <code>Ollama</code> is one car that drives it locally on your PC. <code>Groq</code> is a supersonic jet that runs it in the cloud.
+            </div>
+          </div>
+
+          <div class="code-col">
+            <div class="table-wrapper">
+              <table class="styled-table">
+                <thead>
+                  <tr>
+                    <th>Feature</th>
+                    <th>Llama (Meta)</th>
+                    <th>Ollama</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="tag-col">What is it?</td>
+                    <td>AI Model weights &amp; neural architecture</td>
+                    <td>Software tool &amp; runtime daemon</td>
+                  </tr>
+                  <tr>
+                    <td class="tag-col">Creator</td>
+                    <td>Meta AI Research</td>
+                    <td>Ollama Inc.</td>
+                  </tr>
+                  <tr>
+                    <td class="tag-col">Where does it live?</td>
+                    <td>GGUF weight files (math numbers)</td>
+                    <td>Executable binary on your computer</td>
+                  </tr>
+                  <tr>
+                    <td class="tag-col">Role in your app</td>
+                    <td>Generates intelligence &amp; text</td>
+                    <td>Provides HTTP API at port 11434</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="diagram-panel" style="margin-top: 8px;">
+              <div class="diagram-caption">Where Developers Run Llama Models</div>
+              <div class="flow-horizontal">
+                <div class="flow-box green">
+                  <strong>Local Laptop</strong><br />
+                  <small>Llama 3.2 3B via Ollama</small>
+                </div>
+                <div class="flow-arrow">or</div>
+                <div class="flow-box amber">
+                  <strong>Cloud Inference</strong><br />
+                  <small>Llama 3.3 70B via Groq</small>
+                </div>
+                <div class="flow-arrow">or</div>
+                <div class="flow-box purple">
+                  <strong>Private Cloud</strong><br />
+                  <small>vLLM / AWS Bedrock</small>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- =====================================================
+           SLIDE 7: MODEL SELECTION – QUALITY vs LATENCY vs COST
+      ====================================================== -->
+      <section class="slide" data-slide="7" id="slide-7">
+        <div class="slide-header">
+          <span class="slide-category">Section 3 • Selection Triangle</span>
+          <h2 class="slide-title">Model Selection: <span class="highlight">Quality vs Latency vs Cost</span></h2>
+        </div>
+
+        <div class="split-layout">
+          <div class="concept-col">
+            <div class="concept-card amber-border">
+              <div class="concept-title">The Developer's Trilemma</div>
+              <p class="concept-text">
+                No single model is the best for every project. Professional AI engineering is about picking
+                the right trade-off across three critical dimensions:
+              </p>
+              <ul class="key-term-list" style="margin-top: 8px;">
+                <li class="key-term-item">
+                  <span class="key-term-name">1. Quality (Intelligence &amp; Accuracy)</span>
+                  Reasoning power, coding benchmarks, complex instruction following, and factual fidelity.
+                </li>
+                <li class="key-term-item">
+                  <span class="key-term-name">2. Latency (Response Speed)</span>
+                  Time-to-first-token (TTFT) and throughput. Critical for voice agents, autocompletes, and live chat.
+                </li>
+                <li class="key-term-item">
+                  <span class="key-term-name">3. Cost (Dollars per Million Tokens)</span>
+                  Input/output token pricing, server hosting costs, and scalability under high user traffic.
+                </li>
+              </ul>
+            </div>
+
+            <div class="example-box success">
+              <strong>Engineering Rule:</strong> A simple customer support router should never use an expensive 400B model. Match the model to the job!
+            </div>
+          </div>
+
+          <div class="code-col">
+            <!-- DIAGRAM 5: Selection Matrix -->
+            <div class="sandbox-card" style="flex: 1;">
+              <div class="diagram-caption" style="margin-bottom: 2px;">Diagram 5 • Quality vs Latency vs Cost Selection Matrix</div>
+              <div style="display: flex; justify-content: space-between; align-items: center;">
+                <strong style="color: var(--primary-deep); font-size: 0.95rem;">Lab 2 • Model Selection Wizard</strong>
+                <span class="status-pill status-pill-purple" id="recModelBadge">Recommendation</span>
+              </div>
+
+              <div class="sandbox-form-row">
+                <label style="font-size: 0.78rem; font-weight: 700;">Reasoning Quality:</label>
+                <select id="selPriorityQuality" class="sandbox-select">
+                  <option value="high">High (Deep logic &amp; code)</option>
+                  <option value="medium" selected>Balanced (Standard Q&amp;A)</option>
+                  <option value="any">Basic (Simple routing/tags)</option>
+                </select>
+              </div>
+
+              <div class="sandbox-form-row">
+                <label style="font-size: 0.78rem; font-weight: 700;">Speed &amp; Latency:</label>
+                <select id="selPriorityLatency" class="sandbox-select">
+                  <option value="fastest">Real-time (&lt;300ms / Groq)</option>
+                  <option value="standard" selected>Standard (500ms - 2s)</option>
+                </select>
+
+                <label style="font-size: 0.78rem; font-weight: 700;">Cost Budget:</label>
+                <select id="selPriorityCost" class="sandbox-select">
+                  <option value="free">100% Free / Local</option>
+                  <option value="budget" selected>Low Cost ($0.10/1M tokens)</option>
+                  <option value="premium">Premium (Best possible)</option>
+                </select>
+
+                <button type="button" id="btnRecommendModel" class="sandbox-btn">Find Best Model</button>
+              </div>
+
+              <pre id="recDetailsBox" class="sandbox-output" style="min-height: 125px;"></pre>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- =====================================================
+           SLIDE 8: SMALL vs LARGE MODELS
+      ====================================================== -->
+      <section class="slide" data-slide="8" id="slide-8">
+        <div class="slide-header">
+          <span class="slide-category">Section 3 • Model Sizing</span>
+          <h2 class="slide-title"><span class="highlight">Small vs Large Models</span>: Size and Efficiency</h2>
+        </div>
+
+        <div class="split-layout equal">
+          <div class="concept-col">
+            <!-- Small Models Card -->
+            <div class="concept-card green-border">
+              <div class="concept-title">
+                <span class="status-pill status-pill-success">Small Models</span>
+                Lightweight &amp; Fast (1B – 8B Parameters)
+              </div>
+              <p class="concept-text">
+                Examples: <strong>Llama 3.2 (1B/3B)</strong>, <strong>Qwen 2.5 (3B/7B)</strong>, <strong>Gemma 2 (2B)</strong>, <strong>GPT-4.1-mini</strong>.
+              </p>
+              <ul class="key-term-list" style="margin-top: 6px;">
+                <li class="key-term-item">
+                  <strong>Resource Demands:</strong> Runs smoothly on standard laptop RAM (4GB–8GB) or mobile devices.
+                </li>
+                <li class="key-term-item">
+                  <strong>Speed &amp; Cost:</strong> Ultra-fast response times and extremely cheap API costs.
+                </li>
+                <li class="key-term-item">
+                  <strong>Best For:</strong> Text classification, entity extraction, sentiment analysis, translation, drafting simple emails.
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="code-col">
+            <!-- Large Models Card -->
+            <div class="concept-card purple-border">
+              <div class="concept-title">
+                <span class="status-pill status-pill-purple">Large Models</span>
+                High Capacity (70B – 400B+ Parameters)
+              </div>
+              <p class="concept-text">
+                Examples: <strong>Llama 3.3 (70B)</strong>, <strong>Claude 3.5 Sonnet</strong>, <strong>GPT-4o</strong>, <strong>Llama 3.1 405B</strong>.
+              </p>
+              <ul class="key-term-list" style="margin-top: 6px;">
+                <li class="key-term-item">
+                  <strong>Resource Demands:</strong> Requires multi-GPU server infrastructure with 140GB+ of VRAM.
+                </li>
+                <li class="key-term-item">
+                  <strong>Reasoning Power:</strong> Superior multi-step logic, edge-case handling, and complex architectural programming.
+                </li>
+                <li class="key-term-item">
+                  <strong>Best For:</strong> Complex code debugging, legal/medical review, multi-turn reasoning agents, math proofs.
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- DIAGRAM 6: Spectrum Bar -->
+        <div class="diagram-panel" style="margin-top: 0.85rem;">
+          <div class="diagram-caption">Diagram 6 • Model Sizing &amp; Hardware Requirements Spectrum</div>
+          <div class="flow-horizontal">
+            <div class="flow-box blue">
+              <strong>1B – 3B (Edge)</strong><br />
+              <small>Phones &amp; Laptops • $0</small>
+            </div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-box green">
+              <strong>7B – 14B (Workstation)</strong><br />
+              <small>Desktop GPU • Local Dev</small>
+            </div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-box amber">
+              <strong>70B (Enterprise Open)</strong><br />
+              <small>Groq / Cloud GPU Cluster</small>
+            </div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-box purple">
+              <strong>Frontier Models</strong><br />
+              <small>GPT-4o / Claude 3.5 Sonnet</small>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- =====================================================
+           SLIDE 9: GENERAL vs SPECIALIZED MODELS
+      ====================================================== -->
+      <section class="slide" data-slide="9" id="slide-9">
+        <div class="slide-header">
+          <span class="slide-category">Section 3 • General vs Specialized</span>
+          <h2 class="slide-title">General vs <span class="highlight">Specialized AI Models</span></h2>
+        </div>
+
+        <div class="split-layout">
+          <div class="concept-col">
+            <div class="concept-card accent-border">
+              <div class="concept-title">Combining Strengths in One Application</div>
+              <ul class="key-term-list">
+                <li class="key-term-item">
+                  <span class="key-term-name">General-Purpose Models (Broad Intelligence)</span>
+                  Trained to chat, answer broad questions, write creative copy, summarize, and solve logic problems across thousands of domains (e.g. GPT-4.1, Claude 3.5, Gemini 2.5).
+                </li>
+                <li class="key-term-item">
+                  <span class="key-term-name">Specialized Models (Optimized for One Job)</span>
+                  Fine-tuned or built from scratch to excel at a single task with maximum speed and accuracy:
+                  <br />• <strong>Speech-to-Text:</strong> Whisper (OpenAI)
+                  <br />• <strong>Vector Embeddings:</strong> <code>text-embedding-3-small</code>
+                  <br />• <strong>Code Generation:</strong> Qwen 2.5 Coder
+                  <br />• <strong>Image Synthesis:</strong> FLUX / Stable Diffusion
+                </li>
+              </ul>
+            </div>
+
+            <div class="example-box success">
+              <strong>Key Architectural Lesson:</strong> Production Node.js backends rarely use only one model! They chain specialized models together into high-performance pipelines.
+            </div>
+          </div>
+
+          <div class="code-col">
+            <!-- DIAGRAM 7: Multi-Model Pipeline -->
+            <div class="diagram-panel" style="flex: 1; display: flex; flex-direction: column; justify-content: center; gap: 12px;">
+              <div class="diagram-caption">Diagram 7 • Real-World Composite AI Pipeline</div>
+
+              <div class="flow-vertical">
+                <div class="flow-vertical-step" style="border-left: 4px solid #38bdf8;">
+                  <span class="status-pill status-pill-info">Step 1</span>
+                  <div>
+                    <strong>User Speaks Audio Query:</strong><br />
+                    Processed by <strong>Whisper API</strong> (Specialized Audio Model) → outputs text string.
+                  </div>
+                </div>
+
+                <div class="flow-vertical-step" style="border-left: 4px solid #7c3aed;">
+                  <span class="status-pill status-pill-purple">Step 2</span>
+                  <div>
+                    <strong>Semantic Search in Database:</strong><br />
+                    Query converted to vectors by <strong>Embedding Model</strong> → retrieves relevant docs.
+                  </div>
+                </div>
+
+                <div class="flow-vertical-step" style="border-left: 4px solid #10b981;">
+                  <span class="status-pill status-pill-success">Step 3</span>
+                  <div>
+                    <strong>Reasoning &amp; Solution Synthesis:</strong><br />
+                    Handled by <strong>General LLM</strong> (Claude / GPT-4.1) → composes the final answer.
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- =====================================================
+           SLIDE 10: WHAT ARE MULTIMODAL MODELS?
+      ====================================================== -->
+      <section class="slide" data-slide="10" id="slide-10">
+        <div class="slide-header">
+          <span class="slide-category">Section 3 • Multimodal Models</span>
+          <h2 class="slide-title">What Are <span class="highlight">Multimodal Models</span>?</h2>
+        </div>
+
+        <div class="split-layout">
+          <div class="concept-col">
+            <div class="concept-card purple-border">
+              <div class="concept-title">Beyond Plain Text</div>
+              <p class="concept-text">
+                A <strong>multimodal model</strong> can ingest and process multiple types of sensory input—such as
+                text, images, audio, and video—within the same unified context window.
+              </p>
+              <ul class="key-term-list" style="margin-top: 8px;">
+                <li class="key-term-item">
+                  <span class="key-term-name">Vision (Images &amp; Documents)</span>
+                  Upload screenshots, UI designs, invoices, or receipts to extract structured JSON data.
+                </li>
+                <li class="key-term-item">
+                  <span class="key-term-name">Audio &amp; Voice</span>
+                  Direct native speech understanding without needing a separate transcription step.
+                </li>
+                <li class="key-term-item">
+                  <span class="key-term-name">Video Understanding</span>
+                  Gemini 2.5 and GPT-4o can analyze video clips and identify timestamps and actions.
+                </li>
+              </ul>
+            </div>
+
+            <div class="example-box warning">
+              <strong>Check Provider Capabilities:</strong> Not every model supports vision or audio! For example, <code>llama-3.2-3b</code> is text-only, while <code>llama-3.2-11b-vision</code> and <code>gemini-2.5-flash</code> support native images.
+            </div>
+          </div>
+
+          <div class="code-col">
+            <!-- DIAGRAM 8: Multimodal Model Flow -->
+            <div class="diagram-panel" style="flex: 1; display: flex; flex-direction: column; justify-content: center; gap: 14px;">
+              <div class="diagram-caption">Diagram 8 • Multimodal Input Processing</div>
+
+              <div class="flow-horizontal">
+                <div class="flow-box blue">
+                  <strong>Text Prompt</strong><br />
+                  <small>"Extract receipt total"</small>
+                </div>
+                <div class="flow-box purple">
+                  <strong>Image / PDF</strong><br />
+                  <small>receipt.jpg</small>
+                </div>
+                <div class="flow-box green">
+                  <strong>Audio / Video</strong><br />
+                  <small>voice-memo.mp3</small>
+                </div>
+              </div>
+
+              <div style="text-align: center; font-size: 1.4rem; color: var(--primary); font-weight: 800;">
+                ⬇
+              </div>
+
+              <div class="concept-card accent-border" style="text-align: center; padding: 12px;">
+                <strong style="color: var(--primary-deep); font-size: 1rem;">Unified Multimodal LLM</strong><br />
+                <small style="color: var(--text-muted);">(e.g. Google Gemini 2.5 Flash / OpenAI GPT-4o)</small>
+              </div>
+
+              <div style="text-align: center; font-size: 1.4rem; color: var(--primary); font-weight: 800;">
+                ⬇
+              </div>
+
+              <div class="flow-box amber" style="text-align: center;">
+                <strong>Structured JSON Output</strong><br />
+                <code>{ "merchant": "Coffee Shop", "total": "$4.50" }</code>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- =====================================================
+           SLIDE 11: INTRODUCTION TO CLOUD LLM PROVIDERS
+      ====================================================== -->
+      <section class="slide" data-slide="11" id="slide-11">
+        <div class="slide-header">
+          <span class="slide-category">Section 4 • Cloud Providers</span>
+          <h2 class="slide-title">Introduction to <span class="highlight">Cloud LLM Providers</span></h2>
+        </div>
+
+        <div class="split-layout">
+          <div class="concept-col">
+            <div class="concept-card accent-border">
+              <div class="concept-title">The Major Cloud Providers We Will Connect</div>
+              <div class="providers-grid">
+                <div class="provider-card-chip">
+                  <span class="provider-badge openai"><span class="provider-badge-dot"></span>OpenAI</span>
+                  <div class="provider-chip-name">GPT-4.1 / GPT-4o</div>
+                  <div class="provider-chip-type">Proprietary Leader</div>
+                </div>
+                <div class="provider-card-chip">
+                  <span class="provider-badge gemini"><span class="provider-badge-dot"></span>Google</span>
+                  <div class="provider-chip-name">Gemini 2.5</div>
+                  <div class="provider-chip-type">Massive Context</div>
+                </div>
+                <div class="provider-card-chip">
+                  <span class="provider-badge claude"><span class="provider-badge-dot"></span>Anthropic</span>
+                  <div class="provider-chip-name">Claude 3.5</div>
+                  <div class="provider-chip-type">Best Code &amp; Logic</div>
+                </div>
+                <div class="provider-card-chip">
+                  <span class="provider-badge groq"><span class="provider-badge-dot"></span>Groq</span>
+                  <div class="provider-chip-name">Llama on LPU</div>
+                  <div class="provider-chip-type">Ultra Fast Speed</div>
+                </div>
+                <div class="provider-card-chip">
+                  <span class="provider-badge ollama"><span class="provider-badge-dot"></span>Ollama</span>
+                  <div class="provider-chip-name">Local Models</div>
+                  <div class="provider-chip-type">100% Offline</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="example-box warning">
+              <strong>Three Distinct Concepts:</strong>
+              <br />• <strong>Provider:</strong> The organization hosting the service (e.g. Google).
+              <br />• <strong>SDK:</strong> The npm package managing HTTP connections (e.g. <code>@google/genai</code>).
+              <br />• <strong>Model:</strong> The neural weights executing the prompt (e.g. <code>gemini-2.5-flash</code>).
+            </div>
+          </div>
+
+          <div class="code-col">
+            <!-- DIAGRAM 9: Cloud Provider Request Flow -->
+            <div class="diagram-panel" style="flex: 1; display: flex; flex-direction: column; justify-content: center;">
+              <div class="diagram-caption">Diagram 9 • Cloud API Request Flow</div>
+
+              <div class="flow-vertical">
+                <div class="flow-vertical-step">
+                  <span class="status-pill status-pill-info">1. Express App</span>
+                  <span>Receives client request <code>POST /ask/:provider</code></span>
+                </div>
+                <div class="flow-vertical-step">
+                  <span class="status-pill status-pill-warning">2. Provider SDK</span>
+                  <span>Serializes JSON prompt + signs with <code>process.env.API_KEY</code></span>
+                </div>
+                <div class="flow-vertical-step">
+                  <span class="status-pill status-pill-purple">3. HTTPS Transit</span>
+                  <span>Sent securely over TLS to provider's distributed API gateway</span>
+                </div>
+                <div class="flow-vertical-step">
+                  <span class="status-pill status-pill-success">4. Model Cluster</span>
+                  <span>Hosted GPUs run inference and generate response tokens</span>
+                </div>
+                <div class="flow-vertical-step">
+                  <span class="status-pill status-pill-info">5. Normalized JSON</span>
+                  <span>Node.js extracts text and returns clean answer to caller</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- =====================================================
+           SLIDE 12: OPENAI AND GEMINI
+      ====================================================== -->
+      <section class="slide" data-slide="12" id="slide-12">
+        <div class="slide-header">
+          <span class="slide-category">Section 4 • OpenAI &amp; Gemini</span>
+          <h2 class="slide-title">Connecting to <span class="highlight">OpenAI &amp; Google Gemini</span></h2>
+        </div>
+
+        <div class="split-layout equal">
+          <div class="concept-col">
+            <div class="code-container stretch">
+              <div class="code-header">
+                <div class="code-header-left">
+                  <div class="code-dots">
+                    <span class="code-dot red"></span>
+                    <span class="code-dot yellow"></span>
+                    <span class="code-dot green"></span>
+                  </div>
+                  <span class="code-file-badge">1. OpenAI SDK (CommonJS)</span>
+                  <span class="lang-tag js">JAVASCRIPT</span>
+                </div>
+                <div class="code-actions">
+                  <button type="button" class="copy-btn">Copy</button>
+                </div>
+              </div>
+              <div class="code-scroll-area">
+                <pre><code class="language-javascript">require("dotenv").config();
+const OpenAI = require("openai");
+
+const client = new OpenAI({
+  apiKey: process.env.OPENAI_API_KEY
+});
+
+async function askOpenAI(prompt) {
+  const response = await client.responses.create({
+    model: process.env.OPENAI_MODEL, // e.g. "gpt-4.1-mini"
+    input: prompt
+  });
+
+  // Extract clean text
+  return response.output_text;
+}</code></pre>
+              </div>
+              <div class="code-run-hint">Install: <span>npm install openai</span></div>
+            </div>
+          </div>
+
+          <div class="code-col">
+            <div class="code-container stretch">
+              <div class="code-header">
+                <div class="code-header-left">
+                  <div class="code-dots">
+                    <span class="code-dot red"></span>
+                    <span class="code-dot yellow"></span>
+                    <span class="code-dot green"></span>
+                  </div>
+                  <span class="code-file-badge">2. Google GenAI (Dynamic Import)</span>
+                  <span class="lang-tag js">JAVASCRIPT</span>
+                </div>
+                <div class="code-actions">
+                  <button type="button" class="copy-btn">Copy</button>
+                </div>
+              </div>
+              <div class="code-scroll-area">
+                <pre><code class="language-javascript">require("dotenv").config();
+
+async function askGemini(prompt) {
+  // ESM package loaded smoothly inside CommonJS project
+  const { GoogleGenAI } = await import("@google/genai");
+
+  const client = new GoogleGenAI({
+    apiKey: process.env.GEMINI_API_KEY
+  });
+
+  const response = await client.interactions.create({
+    model: process.env.GEMINI_MODEL, // e.g. "gemini-2.5-flash"
+    input: prompt
+  });
+
+  // Extract clean text
+  return response.output_text;
+}</code></pre>
+              </div>
+              <div class="code-run-hint">Install: <span>npm install @google/genai</span></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- =====================================================
+           SLIDE 13: CLAUDE AND GROQ
+      ====================================================== -->
+      <section class="slide" data-slide="13" id="slide-13">
+        <div class="slide-header">
+          <span class="slide-category">Section 4 • Claude &amp; Groq</span>
+          <h2 class="slide-title">Connecting to <span class="highlight">Anthropic Claude &amp; Groq</span></h2>
+        </div>
+
+        <div class="split-layout equal">
+          <div class="concept-col">
+            <div class="code-container stretch">
+              <div class="code-header">
+                <div class="code-header-left">
+                  <div class="code-dots">
+                    <span class="code-dot red"></span>
+                    <span class="code-dot yellow"></span>
+                    <span class="code-dot green"></span>
+                  </div>
+                  <span class="code-file-badge">1. Anthropic SDK (CommonJS)</span>
+                  <span class="lang-tag js">JAVASCRIPT</span>
+                </div>
+                <div class="code-actions">
+                  <button type="button" class="copy-btn">Copy</button>
+                </div>
+              </div>
+              <div class="code-scroll-area">
+                <pre><code class="language-javascript">require("dotenv").config();
+const Anthropic = require("@anthropic-ai/sdk");
+
+const client = new Anthropic({
+  apiKey: process.env.ANTHROPIC_API_KEY
+});
+
+async function askClaude(prompt) {
+  const response = await client.messages.create({
+    model: process.env.CLAUDE_MODEL, // e.g. "claude-3-5-sonnet-latest"
+    max_tokens: 300,
+    messages: [{ role: "user", content: prompt }]
+  });
+
+  // Claude returns content blocks; filter and join text
+  return response.content
+    .filter((item) =&gt; item.type === "text")
+    .map((item) =&gt; item.text)
+    .join("\n");
+}</code></pre>
+              </div>
+              <div class="code-run-hint">Install: <span>npm install @anthropic-ai/sdk</span></div>
+            </div>
+          </div>
+
+          <div class="code-col">
+            <div class="code-container stretch">
+              <div class="code-header">
+                <div class="code-header-left">
+                  <div class="code-dots">
+                    <span class="code-dot red"></span>
+                    <span class="code-dot yellow"></span>
+                    <span class="code-dot green"></span>
+                  </div>
+                  <span class="code-file-badge">2. Groq SDK (CommonJS)</span>
+                  <span class="lang-tag js">JAVASCRIPT</span>
+                </div>
+                <div class="code-actions">
+                  <button type="button" class="copy-btn">Copy</button>
+                </div>
+              </div>
+              <div class="code-scroll-area">
+                <pre><code class="language-javascript">require("dotenv").config();
+const Groq = require("groq-sdk");
+
+const client = new Groq({
+  apiKey: process.env.GROQ_API_KEY
+});
+
+async function askGroq(prompt) {
+  const response = await client.chat.completions.create({
+    model: process.env.GROQ_MODEL, // e.g. "llama-3.3-70b-versatile"
+    messages: [{ role: "user", content: prompt }]
+  });
+
+  // Extract chat completion message
+  return response.choices[0].message.content;
+}</code></pre>
+              </div>
+              <div class="code-run-hint">Install: <span>npm install groq-sdk</span></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- =====================================================
+           SLIDE 14: WHAT ARE OPENAI-COMPATIBLE APIs?
+      ====================================================== -->
+      <section class="slide" data-slide="14" id="slide-14">
+        <div class="slide-header">
+          <span class="slide-category">Section 4 • OpenAI-Compatible APIs</span>
+          <h2 class="slide-title">What Are <span class="highlight">OpenAI-Compatible APIs</span>?</h2>
+        </div>
+
+        <div class="split-layout">
+          <div class="concept-col">
+            <div class="concept-card accent-border">
+              <div class="concept-title">One SDK to Rule Many Providers</div>
+              <p class="concept-text">
+                Many modern cloud providers (Groq, Together AI, DeepSeek, vLLM, and even local Ollama)
+                support the exact same HTTP request/response format as OpenAI's <code>/v1/chat/completions</code>.
+              </p>
+              <ul class="key-term-list" style="margin-top: 8px;">
+                <li class="key-term-item">
+                  <span class="key-term-name">The Magic Property: <code>baseURL</code></span>
+                  Instead of installing 10 different SDKs, you can use the standard <code>openai</code> package and simply swap the <code>baseURL</code> and <code>apiKey</code>!
+                </li>
+                <li class="key-term-item">
+                  <span class="key-term-name">Why Developers Love It</span>
+                  Zero vendor lock-in! You can switch from OpenAI to Groq or local Ollama by changing two lines in your <code>.env</code> file.
+                </li>
+              </ul>
+            </div>
+
+            <div class="example-box warning">
+              <strong>Keep in Mind:</strong> "OpenAI-compatible" means the API endpoint speaks the same protocol; it does <em>not</em> mean the model was created by OpenAI or behaves identically.
+            </div>
+          </div>
+
+          <div class="code-col">
+            <!-- DIAGRAM 10: Compatible Adapter -->
+            <div class="sandbox-card" style="flex: 1;">
+              <div class="diagram-caption" style="margin-bottom: 2px;">Diagram 10 • OpenAI-Compatible API Routing via baseURL</div>
+              <div style="display: flex; justify-content: space-between; align-items: center;">
+                <strong style="color: var(--primary-deep); font-size: 0.95rem;">Lab 3 • OpenAI SDK baseURL Switcher</strong>
+                <span class="status-pill status-pill-success" id="compatStatusBadge">Ready</span>
+              </div>
+
+              <div class="sandbox-form-row">
+                <label for="compatBaseUrlSelect" style="font-size: 0.8rem; font-weight: 700;">Target Provider:</label>
+                <select id="compatBaseUrlSelect" class="sandbox-select">
+                  <option value="groq">Groq (https://api.groq.com/openai/v1)</option>
+                  <option value="ollama">Local Ollama (http://localhost:11434/v1)</option>
+                  <option value="together">Together AI (https://api.together.xyz/v1)</option>
+                  <option value="deepseek">DeepSeek (https://api.deepseek.com/v1)</option>
+                </select>
+              </div>
+
+              <div class="sandbox-form-row">
+                <input
+                  type="text"
+                  id="compatInputPrompt"
+                  class="sandbox-input"
+                  value="Explain Node.js event loop"
+                  aria-label="Prompt for compatible adapter"
+                />
+                <button type="button" id="compatRunBtn" class="sandbox-btn">Simulate Call</button>
+              </div>
+
+              <pre id="compatCodeSnippet" class="sandbox-output" style="max-height: 110px; font-size: 0.76rem;"></pre>
+              <pre id="compatOutputBox" class="sandbox-output" style="max-height: 110px; font-size: 0.76rem;"></pre>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- =====================================================
+           SLIDE 15: PRACTICAL – MULTIPLE PROVIDERS IN ONE PROJECT
+      ====================================================== -->
+      <section class="slide" data-slide="15" id="slide-15">
+        <div class="slide-header">
+          <span class="slide-category">Section 5 • Practical: Project Setup</span>
+          <h2 class="slide-title">Practical: <span class="highlight">Multi-Provider Project Structure</span></h2>
+        </div>
+
+        <div class="split-layout equal">
+          <div class="concept-col">
+            <div class="code-container">
+              <div class="code-header">
+                <div class="code-header-left">
+                  <div class="code-dots">
+                    <span class="code-dot red"></span>
+                    <span class="code-dot yellow"></span>
+                    <span class="code-dot green"></span>
+                  </div>
+                  <span class="code-file-badge">Project Setup &amp; Dependencies</span>
+                  <span class="lang-tag term">TERMINAL</span>
+                </div>
+                <div class="code-actions">
+                  <button type="button" class="copy-btn">Copy</button>
+                </div>
+              </div>
+              <div class="code-scroll-area">
+                <pre><code class="language-bash">mkdir multi-provider-ai
+cd multi-provider-ai
+npm init -y
+
+# Install Express, dotenv, and all 5 AI Provider SDKs
+npm install express dotenv openai
+npm install @anthropic-ai/sdk @google/genai
+npm install groq-sdk ollama</code></pre>
+              </div>
+            </div>
+
+            <div class="diagram-panel" style="flex: 1;">
+              <div class="diagram-caption">Diagram 11 • Clean Folder Architecture</div>
+              <pre style="font-family: var(--font-mono); font-size: 0.82rem; line-height: 1.45; color: var(--primary-deep); background: #f8fafc; padding: 10px; border-radius: 6px; border: 1px solid var(--border-subtle);">
+multi-provider-ai/
+├── .env                  # API keys & model identifiers
+├── .gitignore             # node_modules/ and .env
+├── package.json           # Dependencies
+├── services/
+│   └── aiService.js       # Unified provider adapter functions
+└── server.js              # Express routing & dispatcher
+              </pre>
+            </div>
+          </div>
+
+          <div class="code-col">
+            <div class="code-container stretch">
+              <div class="code-header">
+                <div class="code-header-left">
+                  <div class="code-dots">
+                    <span class="code-dot red"></span>
+                    <span class="code-dot yellow"></span>
+                    <span class="code-dot green"></span>
+                  </div>
+                  <span class="code-file-badge">.env Configuration Template</span>
+                  <span class="lang-tag env">ENV</span>
+                </div>
+                <div class="code-actions">
+                  <button type="button" class="copy-btn">Copy</button>
+                </div>
+              </div>
+              <div class="code-scroll-area">
+                <pre><code class="language-bash">PORT=3000
+
+# OpenAI
+OPENAI_API_KEY=sk-proj-...
+OPENAI_MODEL=gpt-4.1-mini
+
+# Google Gemini
+GEMINI_API_KEY=AIzaSy...
+GEMINI_MODEL=gemini-2.5-flash
+
+# Anthropic Claude
+ANTHROPIC_API_KEY=sk-ant-...
+CLAUDE_MODEL=claude-3-5-sonnet-latest
+
+# Groq
+GROQ_API_KEY=gsk_...
+GROQ_MODEL=llama-3.3-70b-versatile
+
+# Ollama Local (no API key needed)
+OLLAMA_MODEL=llama3.2
+
+# Optional OpenAI-Compatible endpoint
+COMPATIBLE_API_KEY=your_key
+COMPATIBLE_BASE_URL=https://api.groq.com/openai/v1
+COMPATIBLE_MODEL=llama-3.3-70b-versatile</code></pre>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- =====================================================
+           SLIDE 16: PRACTICAL – CREATE A COMMON AI SERVICE
+      ====================================================== -->
+      <section class="slide" data-slide="16" id="slide-16">
+        <div class="slide-header">
+          <span class="slide-category">Section 5 • Practical: Common Service</span>
+          <h2 class="slide-title">Practical: <span class="highlight">The Provider Adapter Pattern</span></h2>
+        </div>
+
+        <div class="split-layout">
+          <div class="concept-col">
+            <!-- DIAGRAM 12: Provider Adapter Pattern -->
+            <div class="concept-card accent-border">
+              <div class="diagram-caption" style="margin-bottom: 4px;">Diagram 12 • The Provider Adapter Pattern</div>
+              <div class="concept-title">Why Do We Need an Adapter?</div>
+              <p class="concept-text">
+                Every SDK formats its reply differently. Without an adapter, your Express route would be polluted with messy <code>if/else</code> checks:
+              </p>
+              <div class="table-wrapper" style="margin: 8px 0;">
+                <table class="styled-table">
+                  <thead>
+                    <tr><th>Provider</th><th>Raw Response Structure</th></tr>
+                  </thead>
+                  <tbody>
+                    <tr><td class="tag-col">OpenAI</td><td><code>response.output_text</code></td></tr>
+                    <tr><td class="tag-col">Claude</td><td><code>response.content[0].text</code></td></tr>
+                    <tr><td class="tag-col">Groq</td><td><code>response.choices[0].message.content</code></td></tr>
+                    <tr><td class="tag-col">Ollama</td><td><code>response.message.content</code></td></tr>
+                    <tr><td class="tag-col">Gemini</td><td><code>response.output_text</code></td></tr>
+                  </tbody>
+                </table>
+              </div>
+              <div class="example-box success">
+                <strong>Adapter Pattern Goal:</strong> Wrap each provider into its own async function that returns a pure JavaScript <code>string</code>. Express never needs to know SDK internals!
+              </div>
+            </div>
+          </div>
+
+          <div class="code-col">
+            <div class="code-container stretch">
+              <div class="code-header">
+                <div class="code-header-left">
+                  <div class="code-dots">
+                    <span class="code-dot red"></span>
+                    <span class="code-dot yellow"></span>
+                    <span class="code-dot green"></span>
+                  </div>
+                  <span class="code-file-badge">services/aiService.js (Part 1)</span>
+                  <span class="lang-tag js">JAVASCRIPT</span>
+                </div>
+                <div class="code-actions">
+                  <button type="button" class="copy-btn">Copy</button>
+                </div>
+              </div>
+              <div class="code-scroll-area">
+                <pre><code class="language-javascript">const OpenAI = require("openai");
+const Anthropic = require("@anthropic-ai/sdk");
+const Groq = require("groq-sdk");
+
+// Initialize reusable clients ONCE at file load
+const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
+const groq = new Groq({ apiKey: process.env.GROQ_API_KEY });
+
+async function askOpenAI(question) {
+  const response = await openai.responses.create({
+    model: process.env.OPENAI_MODEL,
+    input: question
+  });
+  return response.output_text;
+}
+
+async function askClaude(question) {
+  const response = await anthropic.messages.create({
+    model: process.env.CLAUDE_MODEL,
+    max_tokens: 300,
+    messages: [{ role: "user", content: question }]
+  });
+  return response.content
+    .filter((item) =&gt; item.type === "text")
+    .map((item) =&gt; item.text)
+    .join("\n");
+}
+
+async function askGroq(question) {
+  const response = await groq.chat.completions.create({
+    model: process.env.GROQ_MODEL,
+    messages: [{ role: "user", content: question }]
+  });
+  return response.choices[0].message.content;
+}
+
+module.exports = { askOpenAI, askClaude, askGroq };</code></pre>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- =====================================================
+           SLIDE 17: PRACTICAL – ADD GEMINI AND OLLAMA
+      ====================================================== -->
+      <section class="slide" data-slide="17" id="slide-17">
+        <div class="slide-header">
+          <span class="slide-category">Section 5 • Practical: Gemini &amp; Ollama</span>
+          <h2 class="slide-title">Practical: <span class="highlight">Add Gemini &amp; Ollama (Dynamic ESM)</span></h2>
+        </div>
+
+        <div class="split-layout">
+          <div class="concept-col">
+            <div class="concept-card purple-border">
+              <div class="concept-title">Handling ESM Packages in CommonJS</div>
+              <p class="concept-text">
+                Some modern packages (like <code>@google/genai</code> and <code>ollama</code>) are published
+                as pure ECMAScript Modules (ESM).
+              </p>
+              <ul class="key-term-list" style="margin-top: 8px;">
+                <li class="key-term-item">
+                  <span class="key-term-name">The Solution: Dynamic <code>import()</code></span>
+                  You do not need to convert your entire Node.js project to `"type": "module"`! You can asynchronously load ESM packages inside standard CommonJS functions with <code>await import("...")</code>.
+                </li>
+                <li class="key-term-item">
+                  <span class="key-term-name">Local Daemon Pre-requisite</span>
+                  Ensure Ollama is running (<code>http://localhost:11434</code>) and <code>ollama pull llama3.2</code> has finished before calling <code>askOllama()</code>.
+                </li>
+              </ul>
+            </div>
+
+            <div class="example-box success">
+              <strong>All 5 Providers Ready:</strong> Exporting all 5 functions gives our application full coverage of closed, cloud-open, and local offline models!
+            </div>
+          </div>
+
+          <div class="code-col">
+            <div class="code-container stretch">
+              <div class="code-header">
+                <div class="code-header-left">
+                  <div class="code-dots">
+                    <span class="code-dot red"></span>
+                    <span class="code-dot yellow"></span>
+                    <span class="code-dot green"></span>
+                  </div>
+                  <span class="code-file-badge">services/aiService.js (Part 2 - Complete)</span>
+                  <span class="lang-tag js">JAVASCRIPT</span>
+                </div>
+                <div class="code-actions">
+                  <button type="button" class="copy-btn">Copy</button>
+                </div>
+              </div>
+              <div class="code-scroll-area">
+                <pre><code class="language-javascript">// Continued inside services/aiService.js:
+
+async function askGemini(question) {
+  const { GoogleGenAI } = await import("@google/genai");
+  const client = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
+
+  const response = await client.interactions.create({
+    model: process.env.GEMINI_MODEL,
+    input: question
+  });
+  return response.output_text;
+}
+
+async function askOllama(question) {
+  const { default: ollama } = await import("ollama");
+
+  const response = await ollama.chat({
+    model: process.env.OLLAMA_MODEL || "llama3.2",
+    messages: [{ role: "user", content: question }]
+  });
+  return response.message.content;
+}
+
+// Export all 5 standardized provider adapters:
+module.exports = {
+  askOpenAI,
+  askClaude,
+  askGroq,
+  askGemini,
+  askOllama
+};</code></pre>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- =====================================================
+           SLIDE 18: PRACTICAL – CREATE THE MULTI-PROVIDER EXPRESS API
+      ====================================================== -->
+      <section class="slide" data-slide="18" id="slide-18">
+        <div class="slide-header">
+          <span class="slide-category">Section 5 • Practical: Express API</span>
+          <h2 class="slide-title">Practical: <span class="highlight">Build <code>POST /ask/:provider</code></span></h2>
+        </div>
+
+        <div class="split-layout">
+          <div class="concept-col">
+            <div class="code-container stretch">
+              <div class="code-header">
+                <div class="code-header-left">
+                  <div class="code-dots">
+                    <span class="code-dot red"></span>
+                    <span class="code-dot yellow"></span>
+                    <span class="code-dot green"></span>
+                  </div>
+                  <span class="code-file-badge">server.js</span>
+                  <span class="lang-tag js">JAVASCRIPT</span>
+                </div>
+                <div class="code-actions">
+                  <button type="button" class="copy-btn">Copy</button>
+                </div>
+              </div>
+              <div class="code-scroll-area">
+                <pre><code class="language-javascript">require("dotenv").config();
+const express = require("express");
+const {
+  askOpenAI,
+  askClaude,
+  askGroq,
+  askGemini,
+  askOllama
+} = require("./services/aiService");
+
+const app = express();
+app.use(express.json());
+
+// Provider Lookup Dictionary
+const providers = {
+  openai: askOpenAI,
+  claude: askClaude,
+  groq: askGroq,
+  gemini: askGemini,
+  ollama: askOllama
+};
+
+app.post("/ask/:provider", async (req, res) =&gt; {
+  try {
+    const { provider } = req.params;
+    const { question } = req.body;
+
+    if (!question || typeof question !== "string") {
+      return res.status(400).json({
+        success: false,
+        message: "Question is required"
+      });
+    }
+
+    const selectedProvider = providers[provider.toLowerCase()];
+    if (!selectedProvider) {
+      return res.status(400).json({
+        success: false,
+        message: "Unsupported provider"
+      });
+    }
+
+    // Call chosen adapter uniformly
+    const answer = await selectedProvider(question);
+
+    res.json({
+      success: true,
+      provider,
+      answer
+    });
+  } catch (error) {
+    console.error("AI Error:", error.message);
+    res.status(500).json({
+      success: false,
+      message: "AI request failed"
+    });
+  }
+});
+
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () =&gt; {
+  console.log(`Multi-provider AI server running on port ${PORT}`);
+});</code></pre>
+              </div>
+            </div>
+          </div>
+
+          <div class="code-col">
+            <!-- DIAGRAM 13: Express Route Dispatcher -->
+            <div class="sandbox-card" style="flex: 1;">
+              <div class="diagram-caption" style="margin-bottom: 2px;">Diagram 13 • Express Route Dispatcher Flow</div>
+              <div style="display: flex; justify-content: space-between; align-items: center;">
+                <strong style="color: var(--primary-deep); font-size: 0.95rem;">Lab 4 • POST /ask/:provider Simulator</strong>
+                <span class="status-pill status-pill-success" id="pgStatusBadge">Ready</span>
+              </div>
+
+              <div class="sandbox-form-row">
+                <label for="pgProviderSelect" style="font-size: 0.8rem; font-weight: 700;">Route param (<code>:provider</code>):</label>
+                <select id="pgProviderSelect" class="sandbox-select">
+                  <option value="openai">/ask/openai</option>
+                  <option value="gemini">/ask/gemini</option>
+                  <option value="claude">/ask/claude</option>
+                  <option value="groq" selected>/ask/groq</option>
+                  <option value="ollama">/ask/ollama</option>
+                  <option value="unknown">/ask/unknown (Test 400)</option>
+                </select>
+              </div>
+
+              <div class="sandbox-form-row">
+                <input
+                  type="text"
+                  id="pgQuestionInput"
+                  class="sandbox-input"
+                  value="Explain the Node.js event loop."
+                  aria-label="Question prompt"
+                />
+                <button type="button" id="pgSendBtn" class="sandbox-btn">Send Request</button>
+              </div>
+
+              <pre id="pgOutputBox" class="sandbox-output" style="min-height: 150px;"></pre>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- =====================================================
+           SLIDE 19: HOW TO CHOOSE THE RIGHT PROVIDER?
+      ====================================================== -->
+      <section class="slide" data-slide="19" id="slide-19">
+        <div class="slide-header">
+          <span class="slide-category">Section 6 • Decision Matrix</span>
+          <h2 class="slide-title">How to Choose the <span class="highlight">Right AI Provider</span></h2>
+        </div>
+
+        <div class="split-layout">
+          <div class="concept-col">
+            <div class="concept-card accent-border">
+              <div class="concept-title">8-Point Engineering Checklist</div>
+              <ul class="key-term-list" style="margin-top: 6px;">
+                <li class="key-term-item">1. <strong>Task Capability:</strong> Does the model support your reasoning, coding, or math demands?</li>
+                <li class="key-term-item">2. <strong>Speed / Latency:</strong> Is it interactive (&lt;500ms) or an asynchronous background job?</li>
+                <li class="key-term-item">3. <strong>Cost at Scale:</strong> Can you afford this model when handling 100,000 daily requests?</li>
+                <li class="key-term-item">4. <strong>Input Modality:</strong> Does your workflow require reading images, audio, or video?</li>
+                <li class="key-term-item">5. <strong>Data Privacy &amp; Compliance:</strong> Can prompt data leave the country or must it stay on-premise?</li>
+                <li class="key-term-item">6. <strong>Context Length:</strong> Does the model support your needed document size (8K vs 1M+ tokens)?</li>
+                <li class="key-term-item">7. <strong>Rate Limits &amp; Uptime:</strong> Does the provider offer enterprise SLAs?</li>
+                <li class="key-term-item">8. <strong>License Restrictions:</strong> Does the model license permit your commercial use-case?</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="code-col">
+            <div class="table-wrapper">
+              <table class="styled-table">
+                <thead>
+                  <tr>
+                    <th>Application Use-Case</th>
+                    <th>Recommended Provider Choice</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="tag-col">Offline / Air-gapped Healthcare</td>
+                    <td><span class="provider-badge ollama">Ollama</span> Local Llama 3.2 (100% on-device privacy)</td>
+                  </tr>
+                  <tr>
+                    <td class="tag-col">Ultra-Fast Real-Time Voice Bot</td>
+                    <td><span class="provider-badge groq">Groq</span> Hosted Llama 3.3 (Sub-200ms latency)</td>
+                  </tr>
+                  <tr>
+                    <td class="tag-col">Complex Codebase Refactoring</td>
+                    <td><span class="provider-badge claude">Claude</span> Claude 3.5 Sonnet (Benchmark leader)</td>
+                  </tr>
+                  <tr>
+                    <td class="tag-col">Large PDF &amp; Video Analysis</td>
+                    <td><span class="provider-badge gemini">Gemini</span> Gemini 2.5 Flash (1M+ token context)</td>
+                  </tr>
+                  <tr>
+                    <td class="tag-col">General Scalable Web Backend</td>
+                    <td><span class="provider-badge openai">OpenAI</span> GPT-4.1-mini (Reliable, cheap, standard)</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="example-box success" style="margin-top: 10px;">
+              <strong>The Golden Rule:</strong> Never hardcode your business logic to a single model. Benchmark the exact same prompts across multiple providers using your Node.js test suite!
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- =====================================================
+           SLIDE 20: RECAP & PRACTICAL CHALLENGE
+      ====================================================== -->
+      <section class="slide" data-slide="20" id="slide-20">
+        <div class="slide-header">
+          <span class="slide-category">Section 6 • Recap &amp; Challenge</span>
+          <h2 class="slide-title">Day 3 Recap &amp; <span class="highlight">Playground Challenge</span></h2>
+        </div>
+
+        <div class="split-layout equal">
+          <div class="concept-col">
+            <div class="concept-card accent-border">
+              <div class="concept-title">What You Mastered Today</div>
+              <ul class="key-term-list" style="margin-top: 6px;">
+                <li class="key-term-item">
+                  <span class="key-term-name">Model Deployment Spectrum</span>
+                  Understood closed-source (OpenAI, Claude, Gemini) vs open-weight (Llama) and local (Ollama) vs cloud (Groq).
+                </li>
+                <li class="key-term-item">
+                  <span class="key-term-name">Quality, Latency &amp; Cost Trade-offs</span>
+                  Evaluated small vs large models and multimodal pipelines.
+                </li>
+                <li class="key-term-item">
+                  <span class="key-term-name">OpenAI-Compatible Protocols</span>
+                  Reused the standard <code>openai</code> SDK across third-party endpoints using <code>baseURL</code>.
+                </li>
+                <li class="key-term-item">
+                  <span class="key-term-name">Unified Adapter Architecture</span>
+                  Built an Express server with <code>POST /ask/:provider</code> routing to 5 distinct LLM providers!
+                </li>
+              </ul>
+            </div>
+
+            <div class="example-box">
+              <strong>Your Challenge:</strong> Build the complete <code>multi-provider-ai</code> project, test all endpoints in Postman, and implement latency timing!
+              <div style="margin-top: 10px;">
+                <button type="button" id="solutionBtn" class="sandbox-btn">View Complete Multi-Provider Project Solution</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="code-col">
+            <div class="table-wrapper">
+              <table class="styled-table">
+                <thead>
+                  <tr><th>Concept</th><th>Key Takeaway for Node.js Devs</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td class="tag-col">Closed-Source</td><td>Hosted proprietary API access</td></tr>
+                  <tr><td class="tag-col">Open-Weight</td><td>Downloadable weights with license terms</td></tr>
+                  <tr><td class="tag-col">Local LLM</td><td>Runs on <code>localhost</code>; private &amp; offline</td></tr>
+                  <tr><td class="tag-col">Cloud LLM</td><td>Runs on remote GPUs via HTTPS APIs</td></tr>
+                  <tr><td class="tag-col">Ollama</td><td>Runtime runner software (not the model!)</td></tr>
+                  <tr><td class="tag-col">Llama</td><td>Meta's open-weight model family</td></tr>
+                  <tr><td class="tag-col">Groq</td><td>LPU inference engine delivering 500+ tok/s</td></tr>
+                  <tr><td class="tag-col">OpenAI-Compatible</td><td>Swap <code>baseURL</code> to reuse <code>openai</code> package</td></tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="example-box success" style="margin-top: 10px;">
+              <strong>Final Takeaway:</strong> Developers who master multi-provider architectures build resilient, future-proof applications that can adapt to changing prices, new models, and strict privacy laws overnight.
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- Bottom Navigation Bar -->
+    <footer class="bottom-bar">
+      <div class="nav-hint">
+        Use <span class="kbd-badge">←</span> <span class="kbd-badge">→</span> or
+        <span class="kbd-badge">Space</span> to navigate • <span class="kbd-badge">T</span> Slides •
+        <span class="kbd-badge">?</span> Shortcuts
+      </div>
+      <div class="nav-buttons">
+        <button type="button" class="nav-btn" id="prevBtn" disabled>← Previous</button>
+        <button type="button" class="nav-btn" id="nextBtn">Next →</button>
+      </div>
+    </footer>
+  </div>
+
+  <!-- Table of Contents Modal -->
+  <div class="modal-overlay" id="tocOverlay" role="dialog" aria-modal="true" aria-labelledby="tocModalTitle">
+    <div class="modal-content">
+      <div class="modal-header">
+        <span class="modal-title" id="tocModalTitle">All 20 Slides • Gen-AI Day 3</span>
+        <button type="button" class="modal-close-btn" id="tocClose" aria-label="Close">×</button>
+      </div>
+      <div class="modal-body" id="tocList"></div>
+    </div>
+  </div>
+
+  <!-- Keyboard Shortcuts Help Modal -->
+  <div class="modal-overlay" id="helpModal" role="dialog" aria-modal="true" aria-labelledby="helpModalTitle">
+    <div class="modal-content" style="max-width: 520px;">
+      <div class="modal-header">
+        <span class="modal-title" id="helpModalTitle">Presentation Shortcuts</span>
+        <button type="button" class="modal-close-btn" id="helpClose" aria-label="Close">×</button>
+      </div>
+      <div class="modal-body">
+        <div class="table-wrapper">
+          <table class="styled-table">
+            <tbody>
+              <tr><td class="tag-col"><span class="kbd-badge">→</span> / <span class="kbd-badge">Space</span> / <span class="kbd-badge">PgDn</span></td><td>Next slide</td></tr>
+              <tr><td class="tag-col"><span class="kbd-badge">←</span> / <span class="kbd-badge">PgUp</span></td><td>Previous slide</td></tr>
+              <tr><td class="tag-col"><span class="kbd-badge">Home</span> / <span class="kbd-badge">End</span></td><td>Jump to Slide 1 / Slide 20</td></tr>
+              <tr><td class="tag-col"><span class="kbd-badge">T</span></td><td>Open Table of Contents</td></tr>
+              <tr><td class="tag-col"><span class="kbd-badge">F</span></td><td>Toggle Fullscreen</td></tr>
+              <tr><td class="tag-col"><span class="kbd-badge">Esc</span></td><td>Close active modal</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Complete Solution Modal (Slide 20) -->
+  <div class="modal-overlay" id="solutionModal" role="dialog" aria-modal="true" aria-labelledby="solutionModalTitle">
+    <div class="modal-content" style="max-width: 880px;">
+      <div class="modal-header">
+        <span class="modal-title" id="solutionModalTitle">Complete Project Solution • multi-provider-ai</span>
+        <button type="button" class="modal-close-btn" id="solutionClose" aria-label="Close">×</button>
+      </div>
+      <div class="modal-body">
+        <div class="code-container">
+          <div class="code-header">
+            <div class="code-header-left">
+              <div class="code-dots">
+                <span class="code-dot red"></span>
+                <span class="code-dot yellow"></span>
+                <span class="code-dot green"></span>
+              </div>
+              <span class="code-file-badge">server.js (Production Multi-Provider API)</span>
+              <span class="lang-tag js">JAVASCRIPT</span>
+            </div>
+            <div class="code-actions">
+              <button type="button" class="copy-btn">Copy</button>
+            </div>
+          </div>
+          <div class="code-scroll-area" style="max-height: 52vh;">
+            <pre><code class="language-javascript">require("dotenv").config();
+const express = require("express");
+const {
+  askOpenAI,
+  askClaude,
+  askGroq,
+  askGemini,
+  askOllama
+} = require("./services/aiService");
+
+const app = express();
+app.use(express.json());
+
+const providers = {
+  openai: askOpenAI,
+  claude: askClaude,
+  groq: askGroq,
+  gemini: askGemini,
+  ollama: askOllama
+};
+
+app.get("/", (req, res) =&gt; {
+  res.json({
+    service: "Multi-Provider AI Playground API - GenAI Day 3",
+    supportedProviders: Object.keys(providers),
+    status: "running"
+  });
+});
+
+app.post("/ask/:provider", async (req, res) =&gt; {
+  const startTime = Date.now();
+  try {
+    const { provider } = req.params;
+    const { question } = req.body;
+
+    if (!question || typeof question !== "string" || !question.trim()) {
+      return res.status(400).json({
+        success: false,
+        message: "Question is required"
+      });
+    }
+
+    const selectedProvider = providers[provider.toLowerCase()];
+    if (!selectedProvider) {
+      return res.status(400).json({
+        success: false,
+        message: `Unsupported provider: ${provider}. Supported: ${Object.keys(providers).join(", ")}`
+      });
+    }
+
+    const answer = await selectedProvider(question.trim());
+    const latencyMs = Date.now() - startTime;
+
+    res.json({
+      success: true,
+      provider: provider.toLowerCase(),
+      latencyMs,
+      answer
+    });
+  } catch (error) {
+    console.error(`Error on provider ${req.params.provider}:`, error.message);
+    res.status(500).json({
+      success: false,
+      provider: req.params.provider,
+      message: "AI request failed",
+      error: error.message
+    });
+  }
+});
+
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () =&gt; {
+  console.log(`Multi-provider AI server running on http://localhost:${PORT}`);
+});</code></pre>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Prism.js Core & Languages -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-javascript.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-bash.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-json.min.js"></script>
+
+  <script src="script.js"></script>
+</body>
+</html>
