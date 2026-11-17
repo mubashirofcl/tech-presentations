@@ -1,0 +1,1665 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Node.js GenAI – Day 6: LLM API Integration & Production Basics</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="app-container">
+    <!-- Top Presentation Header -->
+    <header class="pres-header">
+      <div class="brand-section">
+        <span class="brand-badge">Node.js GenAI</span>
+        <div class="pres-title">
+          Day 6 <span>• LLM API Integration & Production Basics</span>
+        </div>
+      </div>
+      <div class="header-center">
+        <div class="slide-counter-badge" id="slideCounter">1 / 20</div>
+      </div>
+      <div class="header-actions">
+        <button class="btn-header" id="fullscreenBtn" title="Toggle Fullscreen (F)">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path></svg>
+          Full
+        </button>
+        <button class="btn-header" id="tocBtn" title="Table of Contents (T)">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+          Index
+        </button>
+        <button class="btn-header" id="helpBtn" title="Keyboard Shortcuts (?)">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+          Help
+        </button>
+      </div>
+    </header>
+
+    <!-- Progress Bar -->
+    <div class="progress-container">
+      <div class="progress-bar" id="progressBar"></div>
+    </div>
+
+    <!-- Slide Viewport -->
+    <main class="slide-viewport">
+
+      <!-- ==========================================
+           SLIDE 1: Title
+           ========================================== -->
+      <section class="slide active" data-slide="1" id="slide-1">
+        <div class="slide-meta-row">
+          <span class="slide-category">Day 6 • Production Foundations</span>
+          <span class="slide-num-pill">01 / 20</span>
+        </div>
+        <h1 class="slide-title">LLM API Integration & Production Basics</h1>
+        <p class="slide-subtitle">Connecting Node.js to cloud LLMs with Groq SDK, controlling inference parameters, streaming tokens via SSE, and managing enterprise reliability.</p>
+
+        <div class="slide-body">
+          <div class="slide-grid-2">
+            <div class="info-card">
+              <div class="info-card-header">
+                <div class="card-icon icon-blue">📚</div>
+                <div class="info-card-title">Topics Covered Today</div>
+              </div>
+              <ul class="info-list">
+                <li><strong>LLM API Integration & Groq SDK:</strong> Using <code>groq-sdk</code> for clean, high-speed model communication.</li>
+                <li><strong>API Keys & dotenv:</strong> Protecting credentials outside source control with <code>.env</code> and <code>.gitignore</code>.</li>
+                <li><strong>Model Parameters:</strong> Controlling creativity with <code>temperature</code> and bounds with <code>max_completion_tokens</code>.</li>
+                <li><strong>Async/Await & Event Loop:</strong> Preventing event loop blocking during external network I/O.</li>
+                <li><strong>Streaming with SSE:</strong> Delivering real-time token streams over Server-Sent Events for instant UX.</li>
+                <li><strong>Resilience & Production:</strong> Built-in retries, timeouts, rate limits (429), and HTTP status handling.</li>
+                <li><strong>Token Analytics & Cost:</strong> Inspecting <code>usage</code> objects and budgeting token spend.</li>
+              </ul>
+            </div>
+
+            <div class="info-card" style="justify-content: space-between;">
+              <div>
+                <div class="info-card-header">
+                  <div class="card-icon icon-green">🎯</div>
+                  <div class="info-card-title">Primary Learning Objective</div>
+                </div>
+                <p class="info-card-desc" style="margin-top: 8px;">
+                  Build a production-grade <strong>AI Chat API</strong> using Node.js, Express, and Groq that handles standard completions, real-time SSE streaming, automatic retries, and token auditing.
+                </p>
+              </div>
+
+              <!-- DIAGRAM 1: High-Level Architecture -->
+              <div class="diagram-panel" style="margin-top: 14px;">
+                <div class="diagram-caption">Diagram 1 • End-to-End LLM Integration Architecture</div>
+                <div class="diagram-flow-row">
+                  <div class="diagram-node primary-highlight">
+                    <div class="node-title">React UI</div>
+                    <div class="node-subtitle">User Prompt</div>
+                  </div>
+                  <div class="diagram-arrow">&rarr;</div>
+                  <div class="diagram-node active-highlight">
+                    <div class="node-title">Express API</div>
+                    <div class="node-subtitle">Node.js Server</div>
+                  </div>
+                  <div class="diagram-arrow">&rarr;</div>
+                  <div class="diagram-node purple-highlight">
+                    <div class="node-title">Groq SDK</div>
+                    <div class="node-subtitle">Client Wrapper</div>
+                  </div>
+                  <div class="diagram-arrow">&rarr;</div>
+                  <div class="diagram-node amber-highlight">
+                    <div class="node-title">Groq Cloud</div>
+                    <div class="node-subtitle">LPU Inference</div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="callout-box success" style="margin-top: 12px;">
+                <div class="callout-icon">⚡</div>
+                <div class="callout-content">
+                  <div class="callout-title">Why Groq SDK?</div>
+                  <div class="callout-text">Groq provides ultra-fast inference speeds (~300–500 tokens/sec) on open-weights models like Llama 3.3, giving students instant feedback during classroom testing.</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==========================================
+           SLIDE 2: How Does an LLM API Integration Work?
+           ========================================== -->
+      <section class="slide" data-slide="2" id="slide-2">
+        <div class="slide-meta-row">
+          <span class="slide-category">Module 1 • Architecture</span>
+          <span class="slide-num-pill">02 / 20</span>
+        </div>
+        <h1 class="slide-title">How Does an LLM API Integration Work?</h1>
+        <p class="slide-subtitle">Tracing the complete lifecycle of a message from the browser, through Node.js, to cloud LPUs, and back.</p>
+
+        <div class="slide-body">
+          <!-- DIAGRAM 2: Detailed Lifecycle -->
+          <div class="diagram-panel">
+            <div class="diagram-caption">Diagram 2 • Request & Response Flow Across Network Boundaries</div>
+            <div class="diagram-flow-row">
+              <div class="diagram-node">
+                <div style="font-size: 16px;">💻</div>
+                <div class="node-title">1. React Frontend</div>
+                <div class="node-subtitle">User submits message</div>
+              </div>
+              <div class="diagram-arrow">&rarr;</div>
+              <div class="diagram-node primary-highlight">
+                <div style="font-size: 16px;">🛡️</div>
+                <div class="node-title">2. Express Server</div>
+                <div class="node-subtitle">Validates input & auth</div>
+              </div>
+              <div class="diagram-arrow">&rarr;</div>
+              <div class="diagram-node purple-highlight">
+                <div style="font-size: 16px;">📦</div>
+                <div class="node-title">3. Groq SDK</div>
+                <div class="node-subtitle">Formats HTTPS request</div>
+              </div>
+              <div class="diagram-arrow">&rarr;</div>
+              <div class="diagram-node active-highlight">
+                <div style="font-size: 16px;">🧠</div>
+                <div class="node-title">4. Groq Cloud LLM</div>
+                <div class="node-subtitle">Computes token logits</div>
+              </div>
+              <div class="diagram-arrow">&rarr;</div>
+              <div class="diagram-node amber-highlight">
+                <div style="font-size: 16px;">✨</div>
+                <div class="node-title">5. Client Response</div>
+                <div class="node-subtitle">Text or SSE stream</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="slide-grid-4">
+            <div class="info-card">
+              <div class="info-card-title" style="color: var(--primary-accent);">API (Application Interface)</div>
+              <p class="info-card-desc">The standardized HTTPS contract defining how two software systems exchange data.</p>
+            </div>
+            <div class="info-card">
+              <div class="info-card-title" style="color: var(--accent-purple);">SDK (Development Kit)</div>
+              <p class="info-card-desc">A helper library (e.g. <code>groq-sdk</code>) that handles URLs, headers, retries, and serialization automatically.</p>
+            </div>
+            <div class="info-card">
+              <div class="info-card-title" style="color: var(--accent-green);">API Key (Credential)</div>
+              <p class="info-card-desc">A secret cryptographic token identifying your backend and billing account to the provider.</p>
+            </div>
+            <div class="info-card">
+              <div class="info-card-title" style="color: var(--accent-amber);">Model (Inference Engine)</div>
+              <p class="info-card-desc">The neural network (e.g. <code>llama-3.3-70b-versatile</code>) hosted on Groq that generates response tokens.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==========================================
+           SLIDE 3: What Is an SDK? Introduction to Groq SDK
+           ========================================== -->
+      <section class="slide" data-slide="3" id="slide-3">
+        <div class="slide-meta-row">
+          <span class="slide-category">Module 2 • Groq SDK</span>
+          <span class="slide-num-pill">03 / 20</span>
+        </div>
+        <h1 class="slide-title">What Is an SDK? Introduction to Groq SDK</h1>
+        <p class="slide-subtitle">Eliminating boilerplate HTTP headers, manual parsing, and authentication with official SDK clients.</p>
+
+        <div class="slide-body">
+          <div class="slide-grid-2">
+            <!-- Left: What is an SDK & Comparison -->
+            <div class="info-card">
+              <div class="info-card-header">
+                <div class="card-icon icon-blue">📦</div>
+                <div class="info-card-title">Why Developers Use SDKs</div>
+              </div>
+              <p class="info-card-desc">
+                An SDK is a collection of helper functions and classes provided by an API vendor to simplify network communication.
+              </p>
+              <ul class="info-list">
+                <li><strong>Without SDK:</strong> You must manually write <code>fetch()</code>, construct <code>Authorization: Bearer</code> headers, format JSON strings, parse streams byte-by-byte, and handle network retries manually.</li>
+                <li><strong>With SDK:</strong> You call clean, typed methods like <code>groq.chat.completions.create()</code>.</li>
+              </ul>
+
+              <div class="table-container" style="margin-top: 6px;">
+                <table class="comparison-table">
+                  <thead>
+                    <tr><th>SDK Package</th><th>Provider</th><th>Install Command</th></tr>
+                  </thead>
+                  <tbody>
+                    <tr><td><strong>groq-sdk</strong></td><td>GroqCloud</td><td><code>npm i groq-sdk</code></td></tr>
+                    <tr><td><strong>openai</strong></td><td>OpenAI</td><td><code>npm i openai</code></td></tr>
+                    <tr><td><strong>@anthropic-ai/sdk</strong></td><td>Anthropic</td><td><code>npm i @anthropic-ai/sdk</code></td></tr>
+                    <tr><td><strong>@google/genai</strong></td><td>Google Gemini</td><td><code>npm i @google/genai</code></td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <!-- Right: Initialization Code -->
+            <div class="code-container">
+              <div class="code-header">
+                <div class="code-lang-tag">
+                  <div class="code-dots">
+                    <span class="code-dot dot-red"></span>
+                    <span class="code-dot dot-yellow"></span>
+                    <span class="code-dot dot-green"></span>
+                  </div>
+                  JAVASCRIPT • groq-init.js (CommonJS)
+                </div>
+                <button class="copy-btn">Copy</button>
+              </div>
+              <pre class="code-block"><span class="tok-com">// 1. Import official Groq SDK</span>
+<span class="tok-kw">const</span> Groq = <span class="tok-fn">require</span>(<span class="tok-str">"groq-sdk"</span>);
+
+<span class="tok-com">// 2. Initialize client with authenticated API key</span>
+<span class="tok-kw">const</span> groq = <span class="tok-kw">new</span> <span class="tok-type">Groq</span>({
+  apiKey: process.env.<span class="tok-var">GROQ_API_KEY</span>
+});
+
+<span class="tok-com">// 3. Configurable model identifier</span>
+<span class="tok-kw">const</span> MODEL = process.env.<span class="tok-var">GROQ_MODEL</span> || <span class="tok-str">"llama-3.3-70b-versatile"</span>;
+
+console.<span class="tok-fn">log</span>(<span class="tok-str">"Groq client initialized for:"</span>, MODEL);</pre>
+
+              <div class="info-card" style="margin-top: 10px; background: #0B111E; border-color: #1E293B;">
+                <div class="info-card-title" style="color: #60A5FA; font-size: 13px;">Code Explanation</div>
+                <ul class="info-list" style="color: #CBD5E1; font-size: 12px;">
+                  <li><code>require("groq-sdk")</code> loads the Node.js library.</li>
+                  <li><code>new Groq({ apiKey })</code> authenticates all subsequent API requests.</li>
+                  <li>The <code>groq</code> object exposes <code>chat.completions</code> for completions and streaming.</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==========================================
+           SLIDE 4: API Keys and Environment Variables (.env)
+           ========================================== -->
+      <section class="slide" data-slide="4" id="slide-4">
+        <div class="slide-meta-row">
+          <span class="slide-category">Module 2 • Security & Config</span>
+          <span class="slide-num-pill">04 / 20</span>
+        </div>
+        <h1 class="slide-title">API Keys and Environment Variables (.env)</h1>
+        <p class="slide-subtitle">Safeguarding secret credentials outside the codebase using <code>dotenv</code> and <code>process.env</code>.</p>
+
+        <div class="slide-body">
+          <!-- DIAGRAM 3: Dotenv Flow -->
+          <div class="diagram-panel">
+            <div class="diagram-caption">Diagram 3 • Environment Configuration & Secret Injection Flow</div>
+            <div class="diagram-flow-row">
+              <div class="diagram-node">
+                <div class="node-title">.env File (Local)</div>
+                <div class="node-subtitle">GROQ_API_KEY=gsk_...</div>
+              </div>
+              <div class="diagram-arrow">&rarr;</div>
+              <div class="diagram-node primary-highlight">
+                <div class="node-title">require("dotenv").config()</div>
+                <div class="node-subtitle">Reads file on startup</div>
+              </div>
+              <div class="diagram-arrow">&rarr;</div>
+              <div class="diagram-node active-highlight">
+                <div class="node-title">process.env Object</div>
+                <div class="node-subtitle">Node.js global memory</div>
+              </div>
+              <div class="diagram-arrow">&rarr;</div>
+              <div class="diagram-node purple-highlight">
+                <div class="node-title">new Groq({ apiKey })</div>
+                <div class="node-subtitle">Authenticated HTTPS Calls</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="slide-grid-2">
+            <!-- Rules -->
+            <div class="info-card">
+              <div class="info-card-header">
+                <div class="card-icon icon-rose">🛡️</div>
+                <div class="info-card-title">Golden Security Rules</div>
+              </div>
+              <ul class="info-list">
+                <li><strong>Never Hardcode Keys:</strong> Never write <code>apiKey: "gsk_xxxx"</code> inside source code files.</li>
+                <li><strong>Never Commit .env:</strong> Always include <code>.env</code> in your <code>.gitignore</code> before running <code>git commit</code>.</li>
+                <li><strong>Keep on Backend:</strong> Never expose API keys to React or browser frontend bundles.</li>
+                <li><strong>Instant Rotation:</strong> If a key leaks onto GitHub, revoke it immediately in the GroqCloud Console.</li>
+              </ul>
+            </div>
+
+            <!-- Dotenv snippet -->
+            <div class="code-container">
+              <div class="code-header">
+                <div class="code-lang-tag">ENV &amp; GITIGNORE SETUP</div>
+                <button class="copy-btn">Copy</button>
+              </div>
+              <pre class="code-block"><span class="tok-com"># .env (Do NOT commit to git!)</span>
+PORT=3000
+GROQ_API_KEY=gsk_your_secret_groq_api_key_here
+GROQ_MODEL=llama-3.3-70b-versatile
+
+<span class="tok-com"># .gitignore</span>
+node_modules/
+.env
+.DS_Store</pre>
+              <div class="expected-output-box">
+                <span class="output-label">Terminal Installation:</span>
+npm install dotenv
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==========================================
+           SLIDE 5: Practical: Make Your First Groq API Request
+           ========================================== -->
+      <section class="slide" data-slide="5" id="slide-5">
+        <div class="slide-meta-row">
+          <span class="slide-category">Module 3 • Practical</span>
+          <span class="slide-num-pill">05 / 20</span>
+        </div>
+        <h1 class="slide-title">Practical: Make Your First Groq API Request</h1>
+        <p class="slide-subtitle">Building and executing a minimal runnable Node.js script using <code>groq.chat.completions.create()</code>.</p>
+
+        <div class="slide-body">
+          <div class="slide-grid-2">
+            <!-- Steps -->
+            <div class="info-card">
+              <div class="info-card-header">
+                <div class="card-icon icon-blue">🚀</div>
+                <div class="info-card-title">Setup Steps (3 Minutes)</div>
+              </div>
+              <div style="font-size: 12.5px; color: var(--text-muted); line-height: 1.6;">
+                <strong>Step 1:</strong> Initialize workspace &amp; install dependencies:<br>
+                <code style="background: #E2E8F0; padding: 2px 6px; border-radius: 4px; font-family: monospace;">npm init -y &amp;&amp; npm i express groq-sdk dotenv</code><br><br>
+                <strong>Step 2:</strong> Configure your secret <code>.env</code> file.<br><br>
+                <strong>Step 3:</strong> Create <code>server.js</code> and run: <code>node server.js</code>.
+              </div>
+
+              <div class="callout-box warning" style="margin-top: auto;">
+                <div class="callout-icon">💡</div>
+                <div class="callout-content">
+                  <div class="callout-title">Model Availability</div>
+                  <div class="callout-text">Ensure the model ID in <code>.env</code> matches active models in your Groq console (e.g. <code>llama-3.3-70b-versatile</code>).</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Code block -->
+            <div class="code-container">
+              <div class="code-header">
+                <div class="code-lang-tag">
+                  <div class="code-dots">
+                    <span class="code-dot dot-red"></span>
+                    <span class="code-dot dot-yellow"></span>
+                    <span class="code-dot dot-green"></span>
+                  </div>
+                  JAVASCRIPT • first-request.js
+                </div>
+                <button class="copy-btn">Copy</button>
+              </div>
+              <pre class="code-block"><span class="tok-fn">require</span>(<span class="tok-str">"dotenv"</span>).<span class="tok-fn">config</span>();
+<span class="tok-kw">const</span> Groq = <span class="tok-fn">require</span>(<span class="tok-str">"groq-sdk"</span>);
+
+<span class="tok-kw">const</span> groq = <span class="tok-kw">new</span> <span class="tok-type">Groq</span>({
+  apiKey: process.env.<span class="tok-var">GROQ_API_KEY</span>
+});
+
+<span class="tok-kw">async function</span> <span class="tok-fn">main</span>() {
+  <span class="tok-kw">const</span> response = <span class="tok-kw">await</span> groq.chat.completions.<span class="tok-fn">create</span>({
+    messages: [
+      { role: <span class="tok-str">"user"</span>, content: <span class="tok-str">"Explain Node.js in simple English."</span> }
+    ],
+    model: process.env.<span class="tok-var">GROQ_MODEL</span> || <span class="tok-str">"llama-3.3-70b-versatile"</span>
+  });
+
+  <span class="tok-com">// Extract first choice response</span>
+  console.<span class="tok-fn">log</span>(response.choices[<span class="tok-num">0</span>].message.content);
+}
+
+<span class="tok-fn">main</span>();</pre>
+              <div class="expected-output-box">
+                <span class="output-label">Sample Terminal Output:</span>
+Node.js is an open-source tool that allows developers to run JavaScript on computers and servers, not just inside web browsers...
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==========================================
+           SLIDE 6: Understanding Chat Completion Messages
+           ========================================== -->
+      <section class="slide" data-slide="6" id="slide-6">
+        <div class="slide-meta-row">
+          <span class="slide-category">Module 3 • Chat Structure</span>
+          <span class="slide-num-pill">06 / 20</span>
+        </div>
+        <h1 class="slide-title">Understanding Chat Completion Messages</h1>
+        <p class="slide-subtitle">Structuring multi-turn conversations using the 3 core roles: <code>system</code>, <code>user</code>, and <code>assistant</code>.</p>
+
+        <div class="slide-body">
+          <div class="slide-grid-3">
+            <div class="info-card">
+              <div class="info-card-header">
+                <div class="card-icon icon-purple">⚙️</div>
+                <div class="info-card-title">1. System Role</div>
+              </div>
+              <p class="info-card-desc">Defines persistent instructions, tone, guardrails, and persona.</p>
+              <pre class="code-block" style="padding: 8px; font-size: 11px;"><span class="tok-punc">{</span>
+  <span class="tok-attr">"role"</span><span class="tok-punc">:</span> <span class="tok-str">"system"</span><span class="tok-punc">,</span>
+  <span class="tok-attr">"content"</span><span class="tok-punc">:</span> <span class="tok-str">"You are a friendly Node.js mentor."</span>
+<span class="tok-punc">}</span></pre>
+            </div>
+
+            <div class="info-card">
+              <div class="info-card-header">
+                <div class="card-icon icon-blue">👤</div>
+                <div class="info-card-title">2. User Role</div>
+              </div>
+              <p class="info-card-desc">The dynamic query or input submitted by the end user.</p>
+              <pre class="code-block" style="padding: 8px; font-size: 11px;"><span class="tok-punc">{</span>
+  <span class="tok-attr">"role"</span><span class="tok-punc">:</span> <span class="tok-str">"user"</span><span class="tok-punc">,</span>
+  <span class="tok-attr">"content"</span><span class="tok-punc">:</span> <span class="tok-str">"Explain Express.js middleware."</span>
+<span class="tok-punc">}</span></pre>
+            </div>
+
+            <div class="info-card">
+              <div class="info-card-header">
+                <div class="card-icon icon-green">🤖</div>
+                <div class="info-card-title">3. Assistant Role</div>
+              </div>
+              <p class="info-card-desc">Prior AI responses injected to maintain conversational memory.</p>
+              <pre class="code-block" style="padding: 8px; font-size: 11px;"><span class="tok-punc">{</span>
+  <span class="tok-attr">"role"</span><span class="tok-punc">:</span> <span class="tok-str">"assistant"</span><span class="tok-punc">,</span>
+  <span class="tok-attr">"content"</span><span class="tok-punc">:</span> <span class="tok-str">"Middleware functions run between..."</span>
+<span class="tok-punc">}</span></pre>
+            </div>
+          </div>
+
+          <!-- Code for Multi-Role messages -->
+          <div class="code-container">
+            <div class="code-header">
+              <div class="code-lang-tag">MULTI-ROLE COMPLETION EXECUTION</div>
+              <button class="copy-btn">Copy</button>
+            </div>
+            <pre class="code-block"><span class="tok-kw">const</span> response = <span class="tok-kw">await</span> groq.chat.completions.<span class="tok-fn">create</span>({
+  model: process.env.<span class="tok-var">GROQ_MODEL</span>,
+  messages: [
+    { role: <span class="tok-str">"system"</span>, content: <span class="tok-str">"You are a beginner-friendly Node.js teacher."</span> },
+    { role: <span class="tok-str">"user"</span>, content: <span class="tok-str">"Explain Express.js in two sentences."</span> }
+  ]
+});
+
+<span class="tok-com">// Access response text</span>
+console.<span class="tok-fn">log</span>(response.choices[<span class="tok-num">0</span>].message.content);</pre>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==========================================
+           SLIDE 7: Model Parameters: What Are They?
+           ========================================== -->
+      <section class="slide" data-slide="7" id="slide-7">
+        <div class="slide-meta-row">
+          <span class="slide-category">Module 4 • Parameters</span>
+          <span class="slide-num-pill">07 / 20</span>
+        </div>
+        <h1 class="slide-title">Model Parameters – Introduction</h1>
+        <p class="slide-subtitle">Controlling randomness, output length, sampling, and streaming formats at inference time.</p>
+
+        <div class="slide-body">
+          <!-- DIAGRAM 4: Parameters Overview -->
+          <div class="diagram-panel">
+            <div class="diagram-caption">Diagram 4 • Request Parameter Controls</div>
+            <div class="diagram-flow-row">
+              <div class="diagram-node primary-highlight">
+                <div class="node-title">temperature</div>
+                <div class="node-subtitle">0.0 to 2.0 (Creativity)</div>
+              </div>
+              <div class="diagram-arrow">+</div>
+              <div class="diagram-node active-highlight">
+                <div class="node-title">max_completion_tokens</div>
+                <div class="node-subtitle">Token Ceiling</div>
+              </div>
+              <div class="diagram-arrow">+</div>
+              <div class="diagram-node purple-highlight">
+                <div class="node-title">stream</div>
+                <div class="node-subtitle">true / false (SSE)</div>
+              </div>
+              <div class="diagram-arrow">&rarr;</div>
+              <div class="diagram-node amber-highlight">
+                <div class="node-title">Tailored Output</div>
+                <div class="node-subtitle">Production Safe</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="table-container">
+            <table class="comparison-table">
+              <thead>
+                <tr><th>Parameter</th><th>Type</th><th>Default / Range</th><th>Production Purpose</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><code>temperature</code></td>
+                  <td>Number</td>
+                  <td><code>0.0</code> – <code>2.0</code></td>
+                  <td>Controls probabilistic randomness. Low for facts/code; high for brainstorming.</td>
+                </tr>
+                <tr>
+                  <td><code>max_completion_tokens</code></td>
+                  <td>Integer</td>
+                  <td>Model dependent</td>
+                  <td>Caps generated output length to avoid runaway costs and latency.</td>
+                </tr>
+                <tr>
+                  <td><code>top_p</code></td>
+                  <td>Number</td>
+                  <td><code>0.0</code> – <code>1.0</code></td>
+                  <td>Nucleus sampling: alternative to temperature controlling token probability mass.</td>
+                </tr>
+                <tr>
+                  <td><code>stream</code></td>
+                  <td>Boolean</td>
+                  <td><code>false</code></td>
+                  <td>When <code>true</code>, returns an async iterable stream of token chunks.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==========================================
+           SLIDE 8: Temperature: Control Response Randomness
+           ========================================== -->
+      <section class="slide" data-slide="8" id="slide-8">
+        <div class="slide-meta-row">
+          <span class="slide-category">Module 4 • Parameters</span>
+          <span class="slide-num-pill">08 / 20</span>
+        </div>
+        <h1 class="slide-title">Temperature: Control Response Randomness</h1>
+        <p class="slide-subtitle">Calibrating output variance between deterministic precision and creative brainstorming.</p>
+
+        <div class="slide-body">
+          <div class="slide-grid-2">
+            <!-- Left Info Panel -->
+            <div class="info-card">
+              <div class="info-card-header">
+                <div class="card-icon icon-amber">🌡️</div>
+                <div class="info-card-title">Low vs High Temperature</div>
+              </div>
+              <ul class="info-list">
+                <li><strong>Low Temperature (e.g. 0.2):</strong> Highly focused, deterministic, minimal variation. Essential for JSON extraction, SQL queries, and factual coding.</li>
+                <li><strong>High Temperature (e.g. 1.2):</strong> Diverse, unexpected word pairings, creative brainstorming.</li>
+                <li><strong>Groq Range:</strong> Supports <code>0.0</code> to <code>2.0</code> for Chat Completions.</li>
+              </ul>
+
+              <div class="callout-box warning" style="margin-top: auto;">
+                <div class="callout-icon">💡</div>
+                <div class="callout-content">
+                  <div class="callout-title">Critical Insight</div>
+                  <div class="callout-text">Higher temperature does <strong>not</strong> make the model smarter! It increases token selection entropy (randomness), not cognitive capability.</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Right Interactive Sandbox 1 -->
+            <div class="sandbox-card">
+              <div class="sandbox-header">
+                <span class="sandbox-badge">Interactive Lab • Temperature</span>
+                <span style="font-size: 11px; color: var(--text-light);">Startup Name Generator</span>
+              </div>
+
+              <div class="sandbox-form-row">
+                <label class="sandbox-label" for="tempSlider">
+                  <span>Temperature:</span>
+                  <span id="tempValDisplay" style="color: var(--primary-accent); font-family: monospace; font-weight: bold;">0.2</span>
+                </label>
+                <input type="range" id="tempSlider" min="0.0" max="1.5" step="0.1" value="0.2" style="width: 100%;">
+                <div style="display: flex; justify-content: space-between; font-size: 10px; color: var(--text-light);">
+                  <span>0.0 (Deterministic)</span>
+                  <span>0.7 (Balanced)</span>
+                  <span>1.5 (High Entropy)</span>
+                </div>
+              </div>
+
+              <button class="sandbox-btn" id="runTempTestBtn">
+                <span>🔄 Simulate Inference at Temperature</span>
+              </button>
+
+              <div class="sandbox-output-box" id="tempOutputBox">
+Click "Simulate Inference" to observe output divergence...
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==========================================
+           SLIDE 9: Maximum Completion Tokens
+           ========================================== -->
+      <section class="slide" data-slide="9" id="slide-9">
+        <div class="slide-meta-row">
+          <span class="slide-category">Module 4 • Parameters</span>
+          <span class="slide-num-pill">09 / 20</span>
+        </div>
+        <h1 class="slide-title">Maximum Completion Tokens</h1>
+        <p class="slide-subtitle">Setting output ceilings with <code>max_completion_tokens</code> to prevent runaway generation.</p>
+
+        <div class="slide-body">
+          <div class="slide-grid-2">
+            <!-- Left Info Panel -->
+            <div class="info-card">
+              <div class="info-card-header">
+                <div class="card-icon icon-blue">🔢</div>
+                <div class="info-card-title">Token Limits &amp; Deprecation</div>
+              </div>
+              <ul class="info-list">
+                <li><strong>What are Tokens?</strong> Units of text (~4 characters or 0.75 words in English).</li>
+                <li><strong>Context Window:</strong> Total tokens allowed for Prompt + Completion combined.</li>
+                <li><strong>max_completion_tokens:</strong> Upper ceiling specifically on generated output tokens.</li>
+                <li><strong>Technical Notice:</strong> Groq documents <code>max_completion_tokens</code> as the active parameter; <code>max_tokens</code> is deprecated.</li>
+              </ul>
+
+              <div class="callout-box warning" style="margin-top: auto;">
+                <div class="callout-icon">⚠️</div>
+                <div class="callout-content">
+                  <div class="callout-title">Finish Reason: Length</div>
+                  <div class="callout-text">If <code>max_completion_tokens</code> is set too low, the model abruptly halts mid-sentence with <code>finish_reason: "length"</code>.</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Right Interactive Sandbox 2 -->
+            <div class="sandbox-card">
+              <div class="sandbox-header">
+                <span class="sandbox-badge">Interactive Lab • Token Cap</span>
+                <span style="font-size: 11px; color: var(--text-light);">Observe Truncation</span>
+              </div>
+
+              <div class="sandbox-form-row">
+                <label class="sandbox-label" for="maxTokensSelect">Select max_completion_tokens:</label>
+                <select class="sandbox-select" id="maxTokensSelect">
+                  <option value="12">12 tokens (Severe Cutoff)</option>
+                  <option value="40">40 tokens (Concise Summary)</option>
+                  <option value="150" selected>150 tokens (Complete Explanation)</option>
+                </select>
+              </div>
+
+              <button class="sandbox-btn" id="runTokensTestBtn">
+                <span>⚡ Test Generation Length</span>
+              </button>
+
+              <div class="sandbox-output-box" id="maxTokensOutput">
+Click "Test Generation Length" to inspect finish_reason...
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==========================================
+           SLIDE 10: Synchronous vs Asynchronous LLM Calls
+           ========================================== -->
+      <section class="slide" data-slide="10" id="slide-10">
+        <div class="slide-meta-row">
+          <span class="slide-category">Module 5 • Async I/O</span>
+          <span class="slide-num-pill">10 / 20</span>
+        </div>
+        <h1 class="slide-title">Synchronous vs Asynchronous LLM Calls</h1>
+        <p class="slide-subtitle">Why external network latency demands non-blocking asynchronous event loop handling.</p>
+
+        <div class="slide-body">
+          <!-- DIAGRAM 5: Sync vs Async -->
+          <div class="diagram-panel">
+            <div class="diagram-caption">Diagram 5 • Event Loop: Synchronous Blocking vs Asynchronous Non-Blocking</div>
+            <div class="slide-grid-2">
+              <div style="background: #FFF1F2; border: 1px solid #FECDD3; border-radius: 8px; padding: 10px;">
+                <div style="font-weight: 700; color: #E11D48; font-size: 11.5px; margin-bottom: 4px;">Synchronous (Blocking)</div>
+                <div style="font-size: 11px; color: #475569;">Op 1 &rarr; <strong>BLOCKED WAITING FOR 2s</strong> &rarr; Op 2</div>
+                <div style="font-size: 10px; color: #991B1B; margin-top: 4px;">Entire server hangs; zero concurrent users handled!</div>
+              </div>
+              <div style="background: #ECFDF5; border: 1px solid #A7F3D0; border-radius: 8px; padding: 10px;">
+                <div style="font-weight: 700; color: #059669; font-size: 11.5px; margin-bottom: 4px;">Asynchronous (Non-Blocking)</div>
+                <div style="font-size: 11px; color: #475569;">Dispatches HTTPS call &rarr; Handles other users &rarr; Resolves</div>
+                <div style="font-size: 10px; color: #065F46; margin-top: 4px;">Node.js serves thousands of concurrent API requests!</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="slide-grid-2">
+            <!-- Sync example -->
+            <div class="code-container">
+              <div class="code-header">
+                <div class="code-lang-tag">SYNCHRONOUS CODE (BLOCKING)</div>
+                <button class="copy-btn">Copy</button>
+              </div>
+              <pre class="code-block">console.<span class="tok-fn">log</span>(<span class="tok-str">"Start"</span>);
+<span class="tok-kw">const</span> result = <span class="tok-num">10</span> + <span class="tok-num">20</span>;
+console.<span class="tok-fn">log</span>(result);
+console.<span class="tok-fn">log</span>(<span class="tok-str">"End"</span>);
+
+<span class="tok-com">// Output: Start -> 30 -> End</span></pre>
+            </div>
+
+            <!-- Async example -->
+            <div class="code-container">
+              <div class="code-header">
+                <div class="code-lang-tag">ASYNCHRONOUS CODE (NON-BLOCKING)</div>
+                <button class="copy-btn">Copy</button>
+              </div>
+              <pre class="code-block">console.<span class="tok-fn">log</span>(<span class="tok-str">"Start"</span>);
+<span class="tok-fn">setTimeout</span>(() => {
+  console.<span class="tok-fn">log</span>(<span class="tok-str">"Network LLM response received"</span>);
+}, <span class="tok-num">2000</span>);
+console.<span class="tok-fn">log</span>(<span class="tok-str">"End"</span>);
+
+<span class="tok-com">// Output: Start -> End -> Network response</span></pre>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==========================================
+           SLIDE 11: Promises and async/await with LLM APIs
+           ========================================== -->
+      <section class="slide" data-slide="11" id="slide-11">
+        <div class="slide-meta-row">
+          <span class="slide-category">Module 5 • Async I/O</span>
+          <span class="slide-num-pill">11 / 20</span>
+        </div>
+        <h1 class="slide-title">Promises and async/await with LLM APIs</h1>
+        <p class="slide-subtitle">Harnessing the 3 states of a Promise to write clean, linear asynchronous AI workflows.</p>
+
+        <div class="slide-body">
+          <!-- DIAGRAM 6: Promise State Machine -->
+          <div class="diagram-panel">
+            <div class="diagram-caption">Diagram 6 • Promise State Machine Lifecycle</div>
+            <div class="diagram-flow-row">
+              <div class="diagram-node primary-highlight">
+                <div class="node-title">1. Pending</div>
+                <div class="node-subtitle">HTTP Request in Flight</div>
+              </div>
+              <div class="diagram-arrow">&rarr;</div>
+              <div class="diagram-node active-highlight">
+                <div class="node-title">2. Fulfilled (Resolved)</div>
+                <div class="node-subtitle">.then() / await returns choices</div>
+              </div>
+              <div class="diagram-arrow">OR</div>
+              <div class="diagram-node" style="background: #FFF1F2; border-color: #FECDD3;">
+                <div class="node-title" style="color: #E11D48;">3. Rejected (Failed)</div>
+                <div class="node-subtitle">.catch() / try-catch triggers</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="slide-grid-2">
+            <!-- async/await code -->
+            <div class="code-container">
+              <div class="code-header">
+                <div class="code-lang-tag">ASYNC / AWAIT PATTERN</div>
+                <button class="copy-btn">Copy</button>
+              </div>
+              <pre class="code-block"><span class="tok-kw">async function</span> <span class="tok-fn">getAIResponse</span>() {
+  <span class="tok-com">// await pauses inside function until Promise settles</span>
+  <span class="tok-kw">const</span> response = <span class="tok-kw">await</span> groq.chat.completions.<span class="tok-fn">create</span>({
+    model: process.env.<span class="tok-var">GROQ_MODEL</span>,
+    messages: [{ role: <span class="tok-str">"user"</span>, content: <span class="tok-str">"Explain JavaScript."</span> }]
+  });
+
+  console.<span class="tok-fn">log</span>(response.choices[<span class="tok-num">0</span>].message.content);
+}
+
+<span class="tok-fn">getAIResponse</span>();</pre>
+            </div>
+
+            <!-- Interactive Sandbox 3 -->
+            <div class="sandbox-card">
+              <div class="sandbox-header">
+                <span class="sandbox-badge">Interactive Lab • Promise Flow</span>
+                <span style="font-size: 11px; color: var(--text-light);">State Visualizer</span>
+              </div>
+              <p style="font-size: 12.5px; color: var(--text-muted);">
+                Watch how a Promise transitions from <strong>Pending</strong> to <strong>Fulfilled</strong> without freezing the main UI thread.
+              </p>
+              <button class="sandbox-btn" id="runPromiseDemoBtn">
+                <span>⚡ Simulate Async Promise Lifecycle</span>
+              </button>
+              <div class="sandbox-output-box" id="promiseDemoOutput">
+Click button to dispatch simulated async operation...
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==========================================
+           SLIDE 12: Error Handling in LLM API Integration
+           ========================================== -->
+      <section class="slide" data-slide="12" id="slide-12">
+        <div class="slide-meta-row">
+          <span class="slide-category">Module 6 • Production Basics</span>
+          <span class="slide-num-pill">12 / 20</span>
+        </div>
+        <h1 class="slide-title">Error Handling in LLM API Integration</h1>
+        <p class="slide-subtitle">Intercepting HTTP status codes defensively with <code>try/catch</code> to prevent process termination.</p>
+
+        <div class="slide-body">
+          <div class="slide-grid-2">
+            <!-- Status table -->
+            <div class="table-container">
+              <table class="comparison-table">
+                <thead>
+                  <tr><th>Status</th><th>Meaning</th><th>Actionable Fix</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td><strong>400</strong></td><td>Bad Request</td><td>Verify payload parameters &amp; types</td></tr>
+                  <tr><td><strong>401</strong></td><td>Unauthorized</td><td>Check <code>GROQ_API_KEY</code> in <code>.env</code></td></tr>
+                  <tr><td><strong>403</strong></td><td>Forbidden</td><td>Check account permissions / tier</td></tr>
+                  <tr><td><strong>404</strong></td><td>Not Found</td><td>Verify model name in Groq catalog</td></tr>
+                  <tr><td><strong>429</strong></td><td>Rate Limit</td><td>Wait or back off requests</td></tr>
+                  <tr><td><strong>500+</strong></td><td>Server Error</td><td>Retry with exponential backoff</td></tr>
+                </tbody>
+              </table>
+            </div>
+
+            <!-- Implementation Code -->
+            <div class="code-container">
+              <div class="code-header">
+                <div class="code-lang-tag">TRY / CATCH ERROR HANDLING</div>
+                <button class="copy-btn">Copy</button>
+              </div>
+              <pre class="code-block"><span class="tok-kw">async function</span> <span class="tok-fn">askAI</span>(question) {
+  <span class="tok-kw">try</span> {
+    <span class="tok-kw">const</span> res = <span class="tok-kw">await</span> groq.chat.completions.<span class="tok-fn">create</span>({
+      model: process.env.<span class="tok-var">GROQ_MODEL</span>,
+      messages: [{ role: <span class="tok-str">"user"</span>, content: question }]
+    });
+    <span class="tok-kw">return</span> res.choices[<span class="tok-num">0</span>].message.content;
+  } <span class="tok-kw">catch</span> (error) {
+    console.<span class="tok-fn">error</span>(<span class="tok-str">"Groq Error:"</span>, error.message);
+    <span class="tok-kw">if</span> (error.status === <span class="tok-num">401</span>) <span class="tok-kw">return</span> <span class="tok-str">"Invalid API key."</span>;
+    <span class="tok-kw">if</span> (error.status === <span class="tok-num">429</span>) <span class="tok-kw">return</span> <span class="tok-str">"Rate limit exceeded. Try later."</span>;
+    <span class="tok-kw">return</span> <span class="tok-str">"AI service temporarily unavailable."</span>;
+  }
+}</pre>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==========================================
+           SLIDE 13: Retries, Timeouts and Rate Limits
+           ========================================== -->
+      <section class="slide" data-slide="13" id="slide-13">
+        <div class="slide-meta-row">
+          <span class="slide-category">Module 6 • Production Basics</span>
+          <span class="slide-num-pill">13 / 20</span>
+        </div>
+        <h1 class="slide-title">Retries, Timeouts and Rate Limits</h1>
+        <p class="slide-subtitle">Configuring exponential backoff and request timeouts to build fault-tolerant production pipelines.</p>
+
+        <div class="slide-body">
+          <!-- DIAGRAM 7: Exponential Backoff -->
+          <div class="diagram-panel">
+            <div class="diagram-caption">Diagram 7 • Exponential Backoff Timeline (Handled Automatically by Groq SDK)</div>
+            <div class="diagram-flow-row">
+              <div class="diagram-node" style="background: #FFF1F2; border-color: #FECDD3;">
+                <div class="node-title" style="color: #E11D48;">Request 1 (Fail)</div>
+                <div class="node-subtitle">HTTP 429 / 503</div>
+              </div>
+              <div class="diagram-arrow">&rarr;</div>
+              <div class="diagram-node amber-highlight">
+                <div class="node-title">Wait 1s</div>
+                <div class="node-subtitle">Jitter Delay</div>
+              </div>
+              <div class="diagram-arrow">&rarr;</div>
+              <div class="diagram-node" style="background: #FFF1F2; border-color: #FECDD3;">
+                <div class="node-title" style="color: #E11D48;">Request 2 (Fail)</div>
+                <div class="node-subtitle">HTTP 500</div>
+              </div>
+              <div class="diagram-arrow">&rarr;</div>
+              <div class="diagram-node amber-highlight">
+                <div class="node-title">Wait 2s</div>
+                <div class="node-subtitle">Exponential</div>
+              </div>
+              <div class="diagram-arrow">&rarr;</div>
+              <div class="diagram-node active-highlight">
+                <div class="node-title">Request 3 (Success)</div>
+                <div class="node-subtitle">HTTP 200 OK</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="slide-grid-2">
+            <!-- Client configuration -->
+            <div class="code-container">
+              <div class="code-header">
+                <div class="code-lang-tag">GROQ CLIENT RETRY CONFIG</div>
+                <button class="copy-btn">Copy</button>
+              </div>
+              <pre class="code-block"><span class="tok-kw">const</span> groq = <span class="tok-kw">new</span> <span class="tok-type">Groq</span>({
+  apiKey: process.env.<span class="tok-var">GROQ_API_KEY</span>,
+  maxRetries: <span class="tok-num">2</span>,      <span class="tok-com">// Retries 408, 409, 429, 500+</span>
+  timeout: <span class="tok-num">20000</span>      <span class="tok-com">// Abort after 20 seconds</span>
+});</pre>
+              <div class="info-card" style="margin-top: 10px;">
+                <div class="info-card-title">Rate Limit Acronyms</div>
+                <ul class="info-list" style="font-size: 12px;">
+                  <li><strong>RPM / RPD:</strong> Requests Per Minute / Day</li>
+                  <li><strong>TPM / TPD:</strong> Tokens Per Minute / Day</li>
+                </ul>
+              </div>
+            </div>
+
+            <!-- Interactive Sandbox 4 -->
+            <div class="sandbox-card">
+              <div class="sandbox-header">
+                <span class="sandbox-badge">Interactive Lab • Retry Simulation</span>
+                <span style="font-size: 11px; color: var(--text-light);">Backoff Visualizer</span>
+              </div>
+              <p style="font-size: 12.5px; color: var(--text-muted);">
+                Groq SDK automatically retries temporary errors twice by default. Test how the backoff loop operates:
+              </p>
+              <button class="sandbox-btn" id="runRetryDemoBtn">
+                <span>🔄 Simulate Transient 429 &amp; Backoff</span>
+              </button>
+              <div class="sandbox-output-box" id="retryDemoOutput">
+Click button to run automatic backoff simulation...
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==========================================
+           SLIDE 14: What Is Streaming in LLM Applications?
+           ========================================== -->
+      <section class="slide" data-slide="14" id="slide-14">
+        <div class="slide-meta-row">
+          <span class="slide-category">Module 7 • Streaming</span>
+          <span class="slide-num-pill">14 / 20</span>
+        </div>
+        <h1 class="slide-title">What Is Streaming in LLM Applications?</h1>
+        <p class="slide-subtitle">Delivering partial output chunks to minimize Time-to-First-Token (TTFT) and elevate user experience.</p>
+
+        <div class="slide-body">
+          <!-- DIAGRAM 8: Blocking vs Streaming -->
+          <div class="diagram-panel">
+            <div class="diagram-caption">Diagram 8 • Full Payload Response vs Progressive Token Streaming</div>
+            <div class="slide-grid-2">
+              <div style="background: #F8FAFD; border: 1px solid #CBD5E1; border-radius: 8px; padding: 12px;">
+                <div style="font-weight: 700; color: #142B4D; font-size: 12px; margin-bottom: 6px;">Traditional Blocking Response</div>
+                <div style="font-size: 11.5px; color: #64748B;">User submits prompt &rarr; <strong>Waits 4 seconds in silence</strong> &rarr; Entire 200-word block pops up all at once.</div>
+              </div>
+              <div style="background: #F0FDF4; border: 1px solid #86EFAC; border-radius: 8px; padding: 12px;">
+                <div style="font-weight: 700; color: #059669; font-size: 12px; margin-bottom: 6px;">Real-Time Streaming Response</div>
+                <div style="font-size: 11.5px; color: #1E293B;">First token in <strong>150ms</strong> &rarr; Words arrive continuously &rarr; User reads immediately while model thinks!</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="slide-grid-3">
+            <div class="info-card">
+              <div class="info-card-header">
+                <div class="card-icon icon-blue">⚡</div>
+                <div class="info-card-title">Instant Perception</div>
+              </div>
+              <p class="info-card-desc">Users feel immediate engagement, eliminating the perceived lag of long LLM generations.</p>
+            </div>
+            <div class="info-card">
+              <div class="info-card-header">
+                <div class="card-icon icon-green">💬</div>
+                <div class="info-card-title">ChatGPT-Style UX</div>
+              </div>
+              <p class="info-card-desc">Provides the dynamic typewriter effect that users modernly expect from conversational assistants.</p>
+            </div>
+            <div class="info-card">
+              <div class="info-card-header">
+                <div class="card-icon icon-amber">💡</div>
+                <div class="info-card-title">Crucial Nuance</div>
+              </div>
+              <p class="info-card-desc">Streaming does <strong>not</strong> make the model compute faster; it lets users see partial progress earlier!</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==========================================
+           SLIDE 15: Server-Sent Events (SSE)
+           ========================================== -->
+      <section class="slide" data-slide="15" id="slide-15">
+        <div class="slide-meta-row">
+          <span class="slide-category">Module 7 • Streaming</span>
+          <span class="slide-num-pill">15 / 20</span>
+        </div>
+        <h1 class="slide-title">Server-Sent Events (SSE)</h1>
+        <p class="slide-subtitle">The standard HTTP protocol for continuous one-way server-to-browser streaming.</p>
+
+        <div class="slide-body">
+          <!-- DIAGRAM 9: SSE Architecture -->
+          <div class="diagram-panel">
+            <div class="diagram-caption">Diagram 9 • Server-Sent Events (SSE) Communication Flow</div>
+            <div class="diagram-flow-row">
+              <div class="diagram-node">
+                <div class="node-title">Browser</div>
+                <div class="node-subtitle">HTTP POST /stream</div>
+              </div>
+              <div class="diagram-arrow">&rarr;</div>
+              <div class="diagram-node primary-highlight">
+                <div class="node-title">Node.js Server</div>
+                <div class="node-subtitle">text/event-stream header</div>
+              </div>
+              <div class="diagram-arrow">&rarr;</div>
+              <div class="diagram-node purple-highlight">
+                <div class="node-title">Groq Cloud</div>
+                <div class="node-subtitle">Token deltas</div>
+              </div>
+              <div class="diagram-arrow">&rarr;</div>
+              <div class="diagram-node active-highlight">
+                <div class="node-title">res.write("data: ...\n\n")</div>
+                <div class="node-subtitle">Continuous push</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="slide-grid-2">
+            <!-- Headers -->
+            <div class="info-card">
+              <div class="info-card-header">
+                <div class="card-icon icon-blue">📋</div>
+                <div class="info-card-title">Mandatory HTTP Headers</div>
+              </div>
+              <pre class="code-block" style="padding: 10px; font-size: 11.5px;"><span class="tok-com">// Keep connection open for event streaming</span>
+res.<span class="tok-fn">setHeader</span>(<span class="tok-str">"Content-Type"</span>, <span class="tok-str">"text/event-stream"</span>);
+res.<span class="tok-fn">setHeader</span>(<span class="tok-str">"Cache-Control"</span>, <span class="tok-str">"no-cache"</span>);
+res.<span class="tok-fn">setHeader</span>(<span class="tok-str">"Connection"</span>, <span class="tok-str">"keep-alive"</span>);</pre>
+            </div>
+
+            <!-- SSE Protocol Format -->
+            <div class="info-card">
+              <div class="info-card-header">
+                <div class="card-icon icon-green">✉️</div>
+                <div class="info-card-title">SSE Frame Protocol</div>
+              </div>
+              <p class="info-card-desc">Every event line begins with <code>data: </code> and finishes with a double newline <code>\n\n</code>:</p>
+              <pre class="code-block" style="padding: 10px; font-size: 11.5px;">res.<span class="tok-fn">write</span>(<span class="tok-str">`data: ${JSON.stringify({ token: "Hello" })}\n\n`</span>);
+<span class="tok-com">// End marker</span>
+res.<span class="tok-fn">write</span>(<span class="tok-str">"data: [DONE]\n\n"</span>);
+res.<span class="tok-fn">end</span>();</pre>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==========================================
+           SLIDE 16: Node.js Practical: Create a Streaming LLM API
+           ========================================== -->
+      <section class="slide" data-slide="16" id="slide-16">
+        <div class="slide-meta-row">
+          <span class="slide-category">Module 7 • Streaming</span>
+          <span class="slide-num-pill">16 / 20</span>
+        </div>
+        <h1 class="slide-title">Node.js Practical: Create a Streaming LLM API</h1>
+        <p class="slide-subtitle">Implementing <code>POST /chat/stream</code> using <code>stream: true</code> and <code>for await...of</code> in Express.</p>
+
+        <div class="slide-body">
+          <div class="code-container">
+            <div class="code-header">
+              <div class="code-lang-tag">
+                <div class="code-dots">
+                  <span class="code-dot dot-red"></span>
+                  <span class="code-dot dot-yellow"></span>
+                  <span class="code-dot dot-green"></span>
+                </div>
+                EXPRESS ROUTE • POST /chat/stream
+              </div>
+              <button class="copy-btn">Copy</button>
+            </div>
+            <pre class="code-block">app.<span class="tok-fn">post</span>(<span class="tok-str">"/chat/stream"</span>, <span class="tok-kw">async</span> (req, res) => {
+  <span class="tok-kw">try</span> {
+    <span class="tok-kw">const</span> { question } = req.body;
+    <span class="tok-kw">if</span> (!question) <span class="tok-kw">return</span> res.<span class="tok-fn">status</span>(<span class="tok-num">400</span>).<span class="tok-fn">json</span>({ error: <span class="tok-str">"Question is required"</span> });
+
+    <span class="tok-com">// 1. Initialize SSE Response Headers</span>
+    res.<span class="tok-fn">setHeader</span>(<span class="tok-str">"Content-Type"</span>, <span class="tok-str">"text/event-stream"</span>);
+    res.<span class="tok-fn">setHeader</span>(<span class="tok-str">"Cache-Control"</span>, <span class="tok-str">"no-cache"</span>);
+    res.<span class="tok-fn">setHeader</span>(<span class="tok-str">"Connection"</span>, <span class="tok-str">"keep-alive"</span>);
+
+    <span class="tok-com">// 2. Request stream from Groq SDK</span>
+    <span class="tok-kw">const</span> stream = <span class="tok-kw">await</span> groq.chat.completions.<span class="tok-fn">create</span>({
+      model: process.env.<span class="tok-var">GROQ_MODEL</span>,
+      messages: [{ role: <span class="tok-str">"user"</span>, content: question }],
+      stream: <span class="tok-kw">true</span>
+    });
+
+    <span class="tok-com">// 3. Iterate over async stream and write SSE frames</span>
+    <span class="tok-kw">for await</span> (<span class="tok-kw">const</span> chunk <span class="tok-kw">of</span> stream) {
+      <span class="tok-kw">const</span> token = chunk.choices[<span class="tok-num">0</span>]?.delta?.content || <span class="tok-str">""</span>;
+      <span class="tok-kw">if</span> (token) {
+        res.<span class="tok-fn">write</span>(<span class="tok-str">`data: ${JSON.stringify({ token })}\n\n`</span>);
+      }
+    }
+
+    res.<span class="tok-fn">write</span>(<span class="tok-str">"data: [DONE]\n\n"</span>);
+    res.<span class="tok-fn">end</span>();
+  } <span class="tok-kw">catch</span> (error) {
+    console.<span class="tok-fn">error</span>(<span class="tok-str">"Streaming Error:"</span>, error.message);
+    <span class="tok-kw">if</span> (res.headersSent) {
+      res.<span class="tok-fn">write</span>(<span class="tok-str">`event: error\ndata: ${JSON.stringify({ message: "Streaming failed" })}\n\n`</span>);
+      <span class="tok-kw">return</span> res.<span class="tok-fn">end</span>();
+    }
+    res.<span class="tok-fn">status</span>(<span class="tok-num">500</span>).<span class="tok-fn">json</span>({ error: <span class="tok-str">"AI streaming failed"</span> });
+  }
+});</pre>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==========================================
+           SLIDE 17: Practical: Receive Streaming Data in the Frontend
+           ========================================== -->
+      <section class="slide" data-slide="17" id="slide-17">
+        <div class="slide-meta-row">
+          <span class="slide-category">Module 7 • Streaming</span>
+          <span class="slide-num-pill">17 / 20</span>
+        </div>
+        <h1 class="slide-title">Practical: Receive Streaming Data in Frontend</h1>
+        <p class="slide-subtitle">Consuming raw chunk buffers reliably with <code>ReadableStream</code> and <code>TextDecoder</code>.</p>
+
+        <div class="slide-body">
+          <div class="slide-grid-2">
+            <!-- Client code -->
+            <div class="code-container">
+              <div class="code-header">
+                <div class="code-lang-tag">FRONTEND STREAM CONSUMER</div>
+                <button class="copy-btn">Copy</button>
+              </div>
+              <pre class="code-block"><span class="tok-kw">const</span> response = <span class="tok-kw">await</span> <span class="tok-fn">fetch</span>(<span class="tok-str">"http://localhost:3000/chat/stream"</span>, {
+  method: <span class="tok-str">"POST"</span>,
+  headers: { <span class="tok-str">"Content-Type"</span>: <span class="tok-str">"application/json"</span> },
+  body: JSON.<span class="tok-fn">stringify</span>({ question: <span class="tok-str">"Explain Node.js"</span> })
+});
+
+<span class="tok-kw">const</span> reader = response.body.<span class="tok-fn">getReader</span>();
+<span class="tok-kw">const</span> decoder = <span class="tok-kw">new</span> <span class="tok-type">TextDecoder</span>();
+<span class="tok-kw">let</span> buffer = <span class="tok-str">""</span>;
+
+<span class="tok-kw">while</span> (<span class="tok-kw">true</span>) {
+  <span class="tok-kw">const</span> { value, done } = <span class="tok-kw">await</span> reader.<span class="tok-fn">read</span>();
+  <span class="tok-kw">if</span> (done) <span class="tok-kw">break</span>;
+  buffer += decoder.<span class="tok-fn">decode</span>(value, { stream: <span class="tok-kw">true</span> });
+  
+  <span class="tok-com">// Split complete SSE frames on \n\n</span>
+  <span class="tok-kw">const</span> events = buffer.<span class="tok-fn">split</span>(<span class="tok-str">"\n\n"</span>);
+  buffer = events.<span class="tok-fn">pop</span>(); <span class="tok-com">// Keep trailing incomplete frame</span>
+
+  <span class="tok-kw">for</span> (<span class="tok-kw">const</span> event <span class="tok-kw">of</span> events) {
+    <span class="tok-kw">const</span> line = event.<span class="tok-fn">split</span>(<span class="tok-str">"\n"</span>).<span class="tok-fn">find</span>(l => l.<span class="tok-fn">startsWith</span>(<span class="tok-str">"data: "</span>));
+    <span class="tok-kw">if</span> (!line) <span class="tok-kw">continue</span>;
+    <span class="tok-kw">const</span> data = line.<span class="tok-fn">slice</span>(<span class="tok-num">6</span>);
+    <span class="tok-kw">if</span> (data === <span class="tok-str">"[DONE]"</span>) <span class="tok-kw">return</span>;
+    answerDiv.textContent += JSON.<span class="tok-fn">parse</span>(data).token;
+  }
+}</pre>
+            </div>
+
+            <!-- Interactive Sandbox 5 -->
+            <div class="sandbox-card">
+              <div class="sandbox-header">
+                <span class="sandbox-badge">Interactive Lab • Live Streamer</span>
+                <span id="streamStatusPill" style="font-size: 11px; color: var(--text-light); font-weight: 700;">Idle</span>
+              </div>
+
+              <div class="sandbox-form-row">
+                <label class="sandbox-label" for="streamPromptInput">Prompt to Stream:</label>
+                <input type="text" class="sandbox-input" id="streamPromptInput" value="Explain how Node.js event loop handles concurrency.">
+              </div>
+
+              <button class="sandbox-btn" id="runStreamDemoBtn">
+                <span>⚡ Simulate SSE Streaming Client</span>
+              </button>
+
+              <div class="sandbox-output-box" id="streamOutputBox">
+Click "Simulate SSE Streaming Client" to see tokens stream in real time...
+              </div>
+
+              <div class="callout-box warning">
+                <div class="callout-icon">💡</div>
+                <div class="callout-content">
+                  <div class="callout-title">The Buffer Lesson</div>
+                  <div class="callout-text">Network chunks do not always line up with complete SSE lines! Always buffer incoming bytes and split on <code>\n\n</code>.</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==========================================
+           SLIDE 18: Token Usage: Monitor Your API Usage
+           ========================================== -->
+      <section class="slide" data-slide="18" id="slide-18">
+        <div class="slide-meta-row">
+          <span class="slide-category">Module 8 • Monitoring</span>
+          <span class="slide-num-pill">18 / 20</span>
+        </div>
+        <h1 class="slide-title">Token Usage: Monitor Your API Usage</h1>
+        <p class="slide-subtitle">Extracting token telemetry from <code>response.usage</code> to audit application consumption.</p>
+
+        <div class="slide-body">
+          <!-- DIAGRAM 10: Token Breakdown -->
+          <div class="diagram-panel">
+            <div class="diagram-caption">Diagram 10 • Token Ledger Anatomy</div>
+            <div class="diagram-flow-row">
+              <div class="diagram-node primary-highlight">
+                <div class="node-title">prompt_tokens (Input)</div>
+                <div class="node-subtitle">Instructions + Question</div>
+              </div>
+              <div class="diagram-arrow">+</div>
+              <div class="diagram-node active-highlight">
+                <div class="node-title">completion_tokens (Output)</div>
+                <div class="node-subtitle">Tokens generated by LLM</div>
+              </div>
+              <div class="diagram-arrow">=</div>
+              <div class="diagram-node amber-highlight">
+                <div class="node-title">total_tokens (Billed)</div>
+                <div class="node-subtitle">Complete Turn Footprint</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="slide-grid-2">
+            <!-- Usage object code -->
+            <div class="code-container">
+              <div class="code-header">
+                <div class="code-lang-tag">READING RESPONSE.USAGE</div>
+                <button class="copy-btn">Copy</button>
+              </div>
+              <pre class="code-block"><span class="tok-kw">const</span> response = <span class="tok-kw">await</span> groq.chat.completions.<span class="tok-fn">create</span>({
+  model: process.env.<span class="tok-var">GROQ_MODEL</span>,
+  messages: [{ role: <span class="tok-str">"user"</span>, content: <span class="tok-str">"Explain Node.js."</span> }]
+});
+
+console.<span class="tok-fn">log</span>(response.usage);
+
+<span class="tok-com">// Returns exact JSON ledger:</span>
+<span class="tok-com">/*
+{
+  "prompt_tokens": 10,
+  "completion_tokens": 50,
+  "total_tokens": 60
+}
+*/</span></pre>
+            </div>
+
+            <div class="info-card">
+              <div class="info-card-header">
+                <div class="card-icon icon-blue">📊</div>
+                <div class="info-card-title">Why Monitor Token Usage in Production?</div>
+              </div>
+              <ul class="info-list">
+                <li><strong>Track API Quotas:</strong> Avoid hitting hard account limits (TPM / TPD).</li>
+                <li><strong>Per-User Billing &amp; Auditing:</strong> Store token counts in your MongoDB/MySQL user collection.</li>
+                <li><strong>Prompt Optimization:</strong> Identify bloated system prompts that waste tokens on every request.</li>
+                <li><strong>Cost Projections:</strong> Forecast monthly API infrastructure expenses accurately.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==========================================
+           SLIDE 19: Cost Awareness: How to Control LLM Usage
+           ========================================== -->
+      <section class="slide" data-slide="19" id="slide-19">
+        <div class="slide-meta-row">
+          <span class="slide-category">Module 8 • Cost & Budget</span>
+          <span class="slide-num-pill">19 / 20</span>
+        </div>
+        <h1 class="slide-title">Cost Awareness: How to Control LLM Usage</h1>
+        <p class="slide-subtitle">Understanding token pricing formulas and applying 8 architectural controls to curb runaway spend.</p>
+
+        <div class="slide-body">
+          <div class="slide-grid-2">
+            <!-- Pricing formula & tips -->
+            <div class="info-card">
+              <div class="info-card-header">
+                <div class="card-icon icon-amber">💰</div>
+                <div class="info-card-title">Token Cost Calculation Model</div>
+              </div>
+              <p class="info-card-desc">
+                Standard token pricing calculates input and output tokens separately per million tokens:
+              </p>
+              <div style="background: #FFFBEB; border: 1px solid #FDE68A; border-radius: 6px; padding: 10px; font-family: monospace; font-size: 11px; color: #92400E; margin: 4px 0;">
+                Total Cost = (Input Tokens / 1M × Rate) + (Output Tokens / 1M × Rate)
+              </div>
+              <ul class="info-list" style="margin-top: 6px;">
+                <li><strong>Limit History:</strong> Don't resend 50 past chat turns on every message.</li>
+                <li><strong>Cap Output:</strong> Always configure <code>max_completion_tokens</code>.</li>
+                <li><strong>Cache Responses:</strong> Use Redis to serve identical queries instantly.</li>
+                <li><strong>Tier Selection:</strong> Use smaller 8B models for simple tasks and 70B for reasoning.</li>
+              </ul>
+            </div>
+
+            <!-- Interactive Sandbox 6 -->
+            <div class="sandbox-card">
+              <div class="sandbox-header">
+                <span class="sandbox-badge">Interactive Lab • Cost Calculator</span>
+                <span style="font-size: 11px; color: var(--text-light);">*Illustrative Pricing</span>
+              </div>
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+                <div class="sandbox-form-row">
+                  <label class="sandbox-label" for="calcInputTokens">Input Tokens:</label>
+                  <input type="number" class="sandbox-input" id="calcInputTokens" value="100000">
+                </div>
+                <div class="sandbox-form-row">
+                  <label class="sandbox-label" for="calcOutputTokens">Output Tokens:</label>
+                  <input type="number" class="sandbox-input" id="calcOutputTokens" value="50000">
+                </div>
+              </div>
+
+              <button class="sandbox-btn" id="runCostCalcBtn">
+                <span>💵 Calculate Estimated Cost</span>
+              </button>
+
+              <div class="sandbox-output-box" id="costCalcOutput" style="min-height: 80px;">
+Click "Calculate Estimated Cost" to run token billing formula...
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==========================================
+           SLIDE 20: Final Practical Project: AI Chat API
+           ========================================== -->
+      <section class="slide" data-slide="20" id="slide-20">
+        <div class="slide-meta-row">
+          <span class="slide-category">Module 9 • Capstone Project</span>
+          <span class="slide-num-pill">20 / 20</span>
+        </div>
+        <h1 class="slide-title">Final Practical Project: AI Chat API</h1>
+        <p class="slide-subtitle">Unifying Express, Groq SDK, dotenv, normal &amp; streaming endpoints, retries, and token telemetry.</p>
+
+        <div class="slide-body">
+          <div class="slide-grid-2">
+            <!-- Left: Capstone Specs -->
+            <div class="info-card">
+              <div class="info-card-header">
+                <div class="card-icon icon-green">🏆</div>
+                <div class="info-card-title">Capstone Architecture: groq-ai-app</div>
+              </div>
+              <pre class="code-block" style="padding: 8px; font-size: 11px;"><span class="tok-str">groq-ai-app/
+├── .env
+├── .gitignore
+├── package.json
+├── server.js
+└── README.md</span></pre>
+              <ul class="info-list" style="margin-top: 6px;">
+                <li><strong>GET /:</strong> Health check endpoint.</li>
+                <li><strong>POST /chat:</strong> Standard JSON endpoint with temperature &amp; usage.</li>
+                <li><strong>POST /chat/stream:</strong> Real-time SSE streaming with <code>for await</code>.</li>
+                <li><strong>Resilience:</strong> <code>maxRetries: 2</code> and <code>timeout: 20000</code> configured.</li>
+              </ul>
+
+              <div style="margin-top: 10px;">
+                <button class="sandbox-btn" id="openSolutionBtn" style="width: 100%;">
+                  <span>📂 Open Full server.js Reference Code</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Right: Postman Testing Card -->
+            <div style="display: flex; flex-direction: column; gap: 10px;">
+              <div class="postman-card">
+                <div class="postman-header">
+                  <div>
+                    <span class="postman-method-pill postman-post">POST</span>
+                    <span class="postman-url">http://localhost:3000/chat</span>
+                  </div>
+                  <span style="font-size: 10.5px; color: #9A3412; font-weight: 700;">Normal JSON</span>
+                </div>
+                <div style="padding: 10px;">
+                  <pre class="code-block" style="background: #1E293B; padding: 8px; font-size: 11px;"><span class="tok-punc">{</span>
+  <span class="tok-attr">"question"</span><span class="tok-punc">:</span> <span class="tok-str">"Explain async and await in JavaScript."</span><span class="tok-punc">,</span>
+  <span class="tok-attr">"temperature"</span><span class="tok-punc">:</span> <span class="tok-num">0.5</span>
+<span class="tok-punc">}</span></pre>
+                </div>
+              </div>
+
+              <div class="postman-card">
+                <div class="postman-header">
+                  <div>
+                    <span class="postman-method-pill postman-post">POST</span>
+                    <span class="postman-url">http://localhost:3000/chat/stream</span>
+                  </div>
+                  <span style="font-size: 10.5px; color: #059669; font-weight: 700;">SSE Stream</span>
+                </div>
+                <div style="padding: 10px;">
+                  <pre class="code-block" style="background: #1E293B; padding: 8px; font-size: 11px;"><span class="tok-punc">{</span>
+  <span class="tok-attr">"question"</span><span class="tok-punc">:</span> <span class="tok-str">"Explain how the Node.js event loop works."</span>
+<span class="tok-punc">}</span></pre>
+                </div>
+              </div>
+
+              <div class="callout-box success">
+                <div class="callout-icon">🎓</div>
+                <div class="callout-content">
+                  <div class="callout-title">Production Readiness Achieved</div>
+                  <div class="callout-text">You have built a high-performance backend communicating with modern cloud LLMs, managing streams, and monitoring token usage!</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- Presentation Footer Controls -->
+    <footer class="pres-footer">
+      <div class="footer-nav-group">
+        <button class="btn-nav" id="prevBtn" title="Previous Slide (← / Page Up)">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+          Previous
+        </button>
+        <button class="btn-nav primary" id="nextBtn" title="Next Slide (→ / Space / Page Down)">
+          Next
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+        </button>
+      </div>
+
+      <div class="footer-hint">
+        Use <span class="kbd">←</span> <span class="kbd">→</span> or <span class="kbd">Space</span> • Press <span class="kbd">T</span> for Index • <span class="kbd">F</span> for Fullscreen • <span class="kbd">?</span> for Help
+      </div>
+    </footer>
+  </div>
+
+  <!-- ==========================================
+       MODALS
+       ========================================== -->
+
+  <!-- Table of Contents Modal -->
+  <div class="modal-overlay" id="tocModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div class="modal-title">Table of Contents • Day 6 (20 Slides)</div>
+        <button class="modal-close-btn" title="Close (Esc)">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="toc-grid" id="tocGrid"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Keyboard Shortcuts Help Modal -->
+  <div class="modal-overlay" id="helpModal">
+    <div class="modal-content" style="max-width: 500px;">
+      <div class="modal-header">
+        <div class="modal-title">Keyboard & Navigation Shortcuts</div>
+        <button class="modal-close-btn" title="Close (Esc)">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div style="display: flex; flex-direction: column; gap: 12px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; padding-bottom: 8px; border-bottom: 1px solid #E2E8F0;">
+            <span style="font-size: 13.5px; color: #475569;">Next Slide</span>
+            <div><span class="kbd">→</span> <span class="kbd">Space</span> <span class="kbd">PageDown</span></div>
+          </div>
+          <div style="display: flex; justify-content: space-between; align-items: center; padding-bottom: 8px; border-bottom: 1px solid #E2E8F0;">
+            <span style="font-size: 13.5px; color: #475569;">Previous Slide</span>
+            <div><span class="kbd">←</span> <span class="kbd">PageUp</span></div>
+          </div>
+          <div style="display: flex; justify-content: space-between; align-items: center; padding-bottom: 8px; border-bottom: 1px solid #E2E8F0;">
+            <span style="font-size: 13.5px; color: #475569;">First Slide</span>
+            <span class="kbd">Home</span>
+          </div>
+          <div style="display: flex; justify-content: space-between; align-items: center; padding-bottom: 8px; border-bottom: 1px solid #E2E8F0;">
+            <span style="font-size: 13.5px; color: #475569;">Last Slide</span>
+            <span class="kbd">End</span>
+          </div>
+          <div style="display: flex; justify-content: space-between; align-items: center; padding-bottom: 8px; border-bottom: 1px solid #E2E8F0;">
+            <span style="font-size: 13.5px; color: #475569;">Toggle Fullscreen</span>
+            <span class="kbd">F</span>
+          </div>
+          <div style="display: flex; justify-content: space-between; align-items: center; padding-bottom: 8px; border-bottom: 1px solid #E2E8F0;">
+            <span style="font-size: 13.5px; color: #475569;">Toggle Table of Contents</span>
+            <span class="kbd">T</span>
+          </div>
+          <div style="display: flex; justify-content: space-between; align-items: center; padding-bottom: 8px; border-bottom: 1px solid #E2E8F0;">
+            <span style="font-size: 13.5px; color: #475569;">Toggle Keyboard Help</span>
+            <span class="kbd">?</span>
+          </div>
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <span style="font-size: 13.5px; color: #475569;">Close Any Modal</span>
+            <span class="kbd">Esc</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Capstone Solution Modal -->
+  <div class="modal-overlay" id="solutionModal">
+    <div class="modal-content" style="max-width: 900px;">
+      <div class="modal-header">
+        <div class="modal-title">Capstone Solution • groq-ai-app/server.js</div>
+        <button class="modal-close-btn" title="Close (Esc)">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="code-container">
+          <div class="code-header">
+            <div class="code-lang-tag">JAVASCRIPT • server.js (Complete Implementation)</div>
+            <button class="copy-btn">Copy Solution</button>
+          </div>
+          <pre class="code-block"><span class="tok-fn">require</span>(<span class="tok-str">"dotenv"</span>).<span class="tok-fn">config</span>();
+<span class="tok-kw">const</span> express = <span class="tok-fn">require</span>(<span class="tok-str">"express"</span>);
+<span class="tok-kw">const</span> Groq = <span class="tok-fn">require</span>(<span class="tok-str">"groq-sdk"</span>);
+
+<span class="tok-kw">const</span> app = <span class="tok-fn">express</span>();
+app.<span class="tok-fn">use</span>(express.<span class="tok-fn">json</span>());
+
+<span class="tok-kw">const</span> groq = <span class="tok-kw">new</span> <span class="tok-type">Groq</span>({
+  apiKey: process.env.<span class="tok-var">GROQ_API_KEY</span>,
+  maxRetries: <span class="tok-num">2</span>,
+  timeout: <span class="tok-num">20000</span>
+});
+
+<span class="tok-kw">const</span> MODEL = process.env.<span class="tok-var">GROQ_MODEL</span> || <span class="tok-str">"llama-3.3-70b-versatile"</span>;
+
+<span class="tok-com">// Health check</span>
+app.<span class="tok-fn">get</span>(<span class="tok-str">"/"</span>, (req, res) => {
+  res.<span class="tok-fn">send</span>(<span class="tok-str">"Groq AI Server is running!"</span>);
+});
+
+<span class="tok-com">// Normal AI request</span>
+app.<span class="tok-fn">post</span>(<span class="tok-str">"/chat"</span>, <span class="tok-kw">async</span> (req, res) => {
+  <span class="tok-kw">try</span> {
+    <span class="tok-kw">const</span> { question, temperature = <span class="tok-num">0.7</span> } = req.body;
+
+    <span class="tok-kw">if</span> (<span class="tok-kw">typeof</span> question !== <span class="tok-str">"string"</span> || !question.<span class="tok-fn">trim</span>()) {
+      <span class="tok-kw">return</span> res.<span class="tok-fn">status</span>(<span class="tok-num">400</span>).<span class="tok-fn">json</span>({ error: <span class="tok-str">"Valid question is required"</span> });
+    }
+
+    <span class="tok-kw">if</span> (<span class="tok-kw">typeof</span> temperature !== <span class="tok-str">"number"</span> || temperature &lt; <span class="tok-num">0</span> || temperature &gt; <span class="tok-num">2</span>) {
+      <span class="tok-kw">return</span> res.<span class="tok-fn">status</span>(<span class="tok-num">400</span>).<span class="tok-fn">json</span>({ error: <span class="tok-str">"Temperature must be between 0 and 2"</span> });
+    }
+
+    <span class="tok-kw">const</span> response = <span class="tok-kw">await</span> groq.chat.completions.<span class="tok-fn">create</span>({
+      model: MODEL,
+      messages: [
+        { role: <span class="tok-str">"system"</span>, content: <span class="tok-str">"You are a helpful AI assistant."</span> },
+        { role: <span class="tok-str">"user"</span>, content: question }
+      ],
+      temperature,
+      max_completion_tokens: <span class="tok-num">300</span>
+    });
+
+    res.<span class="tok-fn">json</span>({
+      success: <span class="tok-kw">true</span>,
+      answer: response.choices[<span class="tok-num">0</span>].message.content,
+      usage: response.usage
+    });
+  } <span class="tok-kw">catch</span> (error) {
+    console.<span class="tok-fn">error</span>(<span class="tok-str">"Groq API Error:"</span>, error.message);
+    <span class="tok-kw">const</span> status = error.status === <span class="tok-num">429</span> ? <span class="tok-num">429</span> : <span class="tok-num">502</span>;
+    res.<span class="tok-fn">status</span>(status).<span class="tok-fn">json</span>({ success: <span class="tok-kw">false</span>, error: <span class="tok-str">"Unable to generate AI response"</span> });
+  }
+});
+
+<span class="tok-com">// Streaming AI request (SSE)</span>
+app.<span class="tok-fn">post</span>(<span class="tok-str">"/chat/stream"</span>, <span class="tok-kw">async</span> (req, res) => {
+  <span class="tok-kw">try</span> {
+    <span class="tok-kw">const</span> { question } = req.body;
+
+    <span class="tok-kw">if</span> (<span class="tok-kw">typeof</span> question !== <span class="tok-str">"string"</span> || !question.<span class="tok-fn">trim</span>()) {
+      <span class="tok-kw">return</span> res.<span class="tok-fn">status</span>(<span class="tok-num">400</span>).<span class="tok-fn">json</span>({ error: <span class="tok-str">"Valid question is required"</span> });
+    }
+
+    res.<span class="tok-fn">setHeader</span>(<span class="tok-str">"Content-Type"</span>, <span class="tok-str">"text/event-stream"</span>);
+    res.<span class="tok-fn">setHeader</span>(<span class="tok-str">"Cache-Control"</span>, <span class="tok-str">"no-cache"</span>);
+    res.<span class="tok-fn">setHeader</span>(<span class="tok-str">"Connection"</span>, <span class="tok-str">"keep-alive"</span>);
+
+    <span class="tok-kw">const</span> stream = <span class="tok-kw">await</span> groq.chat.completions.<span class="tok-fn">create</span>({
+      model: MODEL,
+      messages: [{ role: <span class="tok-str">"user"</span>, content: question }],
+      stream: <span class="tok-kw">true</span>
+    });
+
+    <span class="tok-kw">for await</span> (<span class="tok-kw">const</span> chunk <span class="tok-kw">of</span> stream) {
+      <span class="tok-kw">const</span> token = chunk.choices[<span class="tok-num">0</span>]?.delta?.content || <span class="tok-str">""</span>;
+      <span class="tok-kw">if</span> (token) {
+        res.<span class="tok-fn">write</span>(<span class="tok-str">`data: ${JSON.stringify({ token })}\n\n`</span>);
+      }
+    }
+
+    res.<span class="tok-fn">write</span>(<span class="tok-str">"data: [DONE]\n\n"</span>);
+    res.<span class="tok-fn">end</span>();
+  } <span class="tok-kw">catch</span> (error) {
+    console.<span class="tok-fn">error</span>(<span class="tok-str">"Streaming Error:"</span>, error.message);
+    <span class="tok-kw">if</span> (res.headersSent) {
+      res.<span class="tok-fn">write</span>(<span class="tok-str">`event: error\ndata: ${JSON.stringify({ message: "Streaming failed" })}\n\n`</span>);
+      <span class="tok-kw">return</span> res.<span class="tok-fn">end</span>();
+    }
+    res.<span class="tok-fn">status</span>(<span class="tok-num">502</span>).<span class="tok-fn">json</span>({ error: <span class="tok-str">"Unable to stream AI response"</span> });
+  }
+});
+
+<span class="tok-kw">const</span> PORT = process.env.<span class="tok-var">PORT</span> || <span class="tok-num">3000</span>;
+app.<span class="tok-fn">listen</span>(PORT, () => {
+  console.<span class="tok-fn">log</span>(<span class="tok-str">`Server running on port ${PORT}`</span>);
+});</pre>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Notification Toast -->
+  <div class="toast" id="toast"></div>
+
+  <script src="script.js"></script>
+</body>
+</html>

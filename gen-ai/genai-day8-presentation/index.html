@@ -1,0 +1,1684 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Node.js GenAI – Day 8: Function Calling & Tool Calling</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="app-container">
+
+    <!-- Top Presentation Header -->
+    <header class="pres-header">
+      <div class="brand-section">
+        <span class="brand-badge">Node.js GenAI</span>
+        <div class="pres-title">
+          Day 8 <span>• Function Calling & Tool Calling</span>
+        </div>
+      </div>
+      <div class="header-center">
+        <div class="slide-counter-badge" id="slideCounter">1 / 20</div>
+      </div>
+      <div class="header-actions">
+        <button class="btn-header" id="fullscreenBtn" title="Toggle Fullscreen (F)">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path></svg>
+          Full
+        </button>
+        <button class="btn-header" id="tocBtn" title="Table of Contents (T)">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+          Index
+        </button>
+        <button class="btn-header" id="helpBtn" title="Keyboard Shortcuts (?)">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+          Help
+        </button>
+      </div>
+    </header>
+
+    <!-- Progress Bar -->
+    <div class="progress-container">
+      <div class="progress-bar" id="progressBar"></div>
+    </div>
+
+    <!-- Slide Viewport -->
+    <main class="slide-viewport">
+
+      <!-- ==========================================
+           SLIDE 1: Introduction to Function Calling
+           ========================================== -->
+      <section class="slide active" id="slide-1">
+        <div class="slide-header">
+          <div class="slide-title-group">
+            <span class="slide-category">Course Kickoff • Day 8</span>
+            <h1 class="slide-title">Function Calling & Tool Calling in Node.js</h1>
+            <p class="slide-subtitle">Empowering Large Language Models to request actions, query databases, and execute backend code</p>
+          </div>
+          <span class="slide-tag">DAY 08 • TOOLS</span>
+        </div>
+
+        <div class="slide-body">
+          <div class="grid-60-40">
+            <div class="card card-accent" style="gap: 14px;">
+              <div class="card-title"><span class="icon">🎯</span> What We Will Master Today</div>
+              <p class="card-desc">Moving from an LLM that only generates text to an intelligent agent that can request real-world actions from our Node.js application.</p>
+              
+              <div class="grid-2col" style="gap: 10px;">
+                <div class="card" style="padding: 10px 14px;">
+                  <strong style="color: var(--primary-deep); font-size: 0.88rem;">1. Function Calling Core</strong>
+                  <span style="font-size: 0.78rem; color: var(--text-body);">What it is & why it changes everything</span>
+                </div>
+                <div class="card" style="padding: 10px 14px;">
+                  <strong style="color: var(--primary-deep); font-size: 0.88rem;">2. Tool Schemas</strong>
+                  <span style="font-size: 0.78rem; color: var(--text-body);">Defining parameters with JSON Schema</span>
+                </div>
+                <div class="card" style="padding: 10px 14px;">
+                  <strong style="color: var(--primary-deep); font-size: 0.88rem;">3. Tool Arguments & Zod</strong>
+                  <span style="font-size: 0.78rem; color: var(--text-body);">Parsing strings & runtime validation</span>
+                </div>
+                <div class="card" style="padding: 10px 14px;">
+                  <strong style="color: var(--primary-deep); font-size: 0.88rem;">4. Groq Tool Flow</strong>
+                  <span style="font-size: 0.78rem; color: var(--text-body);">Sending definitions & parsing tool calls</span>
+                </div>
+                <div class="card" style="padding: 10px 14px;">
+                  <strong style="color: var(--primary-deep); font-size: 0.88rem;">5. Execution & Results</strong>
+                  <span style="font-size: 0.78rem; color: var(--text-body);">Tool registries & role: "tool" responses</span>
+                </div>
+                <div class="card" style="padding: 10px 14px;">
+                  <strong style="color: var(--primary-deep); font-size: 0.88rem;">6. AI Student Assistant</strong>
+                  <span style="font-size: 0.78rem; color: var(--text-body);">Complete Express capstone backend</span>
+                </div>
+              </div>
+
+              <div class="card card-green" style="padding: 12px 16px; margin-top: 4px;">
+                <div style="font-size: 0.85rem; font-weight: 700; color: var(--accent-green); margin-bottom: 2px;">💡 THE GOLDEN RULE</div>
+                <div style="font-size: 0.84rem; color: var(--text-main);">
+                  The LLM decides <em>what capability is needed</em>. Your Node.js application controls <em>what actually happens</em>. The LLM never executes code directly!
+                </div>
+              </div>
+            </div>
+
+            <div class="card" style="justify-content: space-between;">
+              <div>
+                <div class="card-title" style="margin-bottom: 12px;"><span class="icon">🛠️</span> Practical Stack</div>
+                <ul class="feature-list" style="gap: 12px;">
+                  <li><span class="bullet-dot"></span><div><strong>Runtime:</strong> Node.js (CommonJS / LTS)</div></li>
+                  <li><span class="bullet-dot"></span><div><strong>Web Framework:</strong> Express.js 4.x</div></li>
+                  <li><span class="bullet-dot"></span><div><strong>LLM Provider:</strong> Groq Cloud SDK</div></li>
+                  <li><span class="bullet-dot"></span><div><strong>Target Model:</strong> <code>openai/gpt-oss-120b</code></div></li>
+                  <li><span class="bullet-dot"></span><div><strong>Validation:</strong> Zod Runtime Schemas</div></li>
+                  <li><span class="bullet-dot"></span><div><strong>Capstone Project:</strong> AI Student Assistant</div></li>
+                </ul>
+              </div>
+
+              <div class="diagram-container" style="background: var(--light-blue-chip); border-color: rgba(37, 99, 235, 0.25);">
+                <div class="diagram-title" style="font-size: 0.78rem; color: var(--primary-deep);">Tool Calling Loop Preview</div>
+                <div class="flow-steps" style="justify-content: center; gap: 6px;">
+                  <div class="flow-node" style="min-width: 65px; padding: 6px; font-size: 0.72rem;">User Query</div>
+                  <div class="flow-arrow">➔</div>
+                  <div class="flow-node primary" style="min-width: 65px; padding: 6px; font-size: 0.72rem;">Tool Request</div>
+                  <div class="flow-arrow">➔</div>
+                  <div class="flow-node" style="min-width: 65px; padding: 6px; font-size: 0.72rem; background:#FEF3C7; border-color:#F59E0B;">Node.js Run</div>
+                  <div class="flow-arrow">➔</div>
+                  <div class="flow-node success" style="min-width: 65px; padding: 6px; font-size: 0.72rem;">Final Answer</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==========================================
+           SLIDE 2: What Is Function Calling?
+           ========================================== -->
+      <section class="slide" id="slide-2">
+        <div class="slide-header">
+          <div class="slide-title-group">
+            <span class="slide-category">Core Concepts</span>
+            <h2 class="slide-title">What Is Function Calling?</h2>
+            <p class="slide-subtitle">Bridging the gap between static text generation and dynamic software execution</p>
+          </div>
+          <span class="slide-tag">CONCEPT</span>
+        </div>
+
+        <div class="slide-body">
+          <div class="grid-2col">
+            <div class="card">
+              <div class="card-title"><span class="icon">📖</span> Definition & Purpose</div>
+              <p class="card-desc">
+                <strong>Function Calling (Tool Calling)</strong> is an architectural technique that allows an LLM to request the execution of a specific function inside our Node.js application.
+              </p>
+              <p class="card-desc" style="margin-top: 4px;">
+                Normally, an LLM only predicts words based on training data. With function calling, it can request our application to perform real-world tasks:
+              </p>
+
+              <ul class="feature-list" style="gap: 8px; margin-top: 6px;">
+                <li><span class="bullet-check">✓</span> <div><strong>Retrieve student details</strong> from a database</div></li>
+                <li><span class="bullet-check">✓</span> <div><strong>Check real-time attendance</strong> percentages</div></li>
+                <li><span class="bullet-check">✓</span> <div><strong>Calculate accurate totals</strong> without math hallucinations</div></li>
+                <li><span class="bullet-check">✓</span> <div><strong>Query internal SQL / MongoDB databases</strong></div></li>
+                <li><span class="bullet-check">✓</span> <div><strong>Call external REST APIs</strong> (weather, payments, email)</div></li>
+              </ul>
+            </div>
+
+            <div class="card card-accent" style="justify-content: space-between;">
+              <div>
+                <div class="card-title"><span class="icon">💡</span> Concrete Scenario</div>
+                <div class="output-box" style="margin-top: 4px;">
+                  <div class="output-label">User Asks:</div>
+                  <div class="output-content" style="color: #F8FAFC;">"What is the attendance percentage of student 101?"</div>
+                </div>
+
+                <div class="diagram-container" style="margin-top: 10px; padding: 12px;">
+                  <div style="font-size: 0.8rem; font-weight: 700; color: var(--text-heading); margin-bottom: 6px;">Application Bridge:</div>
+                  <div class="flow-vertical">
+                    <div class="flow-v-node"><span>1. LLM requests:</span> <code>getStudentAttendance({ studentId: 101 })</code></div>
+                    <div class="flow-v-arrow">↓</div>
+                    <div class="flow-v-node" style="background: #EFF6FF; border-color: var(--primary-blue);"><span>2. Node.js executes:</span> <code>db.query(101) ➔ returns 85%</code></div>
+                    <div class="flow-v-arrow">↓</div>
+                    <div class="flow-v-node" style="background: var(--accent-green-bg); border-color: var(--accent-green);"><span>3. LLM replies:</span> <span>"Arun's attendance is 85%."</span></div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="card card-rose" style="padding: 10px 14px; margin-top: 6px;">
+                <strong style="color: var(--accent-rose); font-size: 0.82rem;">⚠️ Critical Security Fact:</strong>
+                <p style="font-size: 0.78rem; color: var(--text-main); margin-top: 2px;">
+                  The LLM does <strong>NOT</strong> directly execute our JavaScript function. It only outputs a structured request containing the tool name and arguments. Your Node.js backend decides whether and how to execute it!
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==========================================
+           SLIDE 3: Normal LLM vs Function Calling
+           ========================================== -->
+      <section class="slide" id="slide-3">
+        <div class="slide-header">
+          <div class="slide-title-group">
+            <span class="slide-category">Architectural Comparison</span>
+            <h2 class="slide-title">Normal LLM vs Function Calling</h2>
+            <p class="slide-subtitle">Comparing isolated text generation against tool-augmented intelligence</p>
+          </div>
+          <span class="slide-tag">COMPARISON</span>
+        </div>
+
+        <div class="slide-body">
+          <div class="grid-2col">
+            <div class="card">
+              <div class="card-title" style="color: var(--text-heading);"><span class="icon">💬</span> Mode 1: Normal LLM (Text Generation Only)</div>
+              <div class="diagram-container" style="background: var(--bg-card); padding: 12px;">
+                <div class="flow-steps" style="justify-content: center;">
+                  <div class="flow-node">User Question</div>
+                  <div class="flow-arrow">➔</div>
+                  <div class="flow-node primary">LLM Internal Weights</div>
+                  <div class="flow-arrow">➔</div>
+                  <div class="flow-node success">Generated Text</div>
+                </div>
+              </div>
+
+              <div class="output-box">
+                <div class="output-label">Example Query & Response:</div>
+                <div class="output-content" style="color: #93C5FD;">User: "What is 25 × 4?"
+LLM: "The answer is 100."</div>
+              </div>
+
+              <p style="font-size: 0.84rem; color: var(--text-body); margin-top: 6px;">
+                <strong>Limitation:</strong> The model has no access to your private database or current real-time state. If asked about "student 101", it either hallucinates or refuses to answer.
+              </p>
+            </div>
+
+            <div class="card card-accent">
+              <div class="card-title" style="color: var(--primary-blue);"><span class="icon">⚡</span> Mode 2: LLM with Function Calling</div>
+              <div class="diagram-container" style="background: var(--light-blue-bg); padding: 12px;">
+                <div class="flow-steps" style="justify-content: center; gap: 4px;">
+                  <div class="flow-node" style="min-width: 65px; font-size: 0.72rem;">User Question</div>
+                  <div class="flow-arrow">➔</div>
+                  <div class="flow-node primary" style="min-width: 65px; font-size: 0.72rem;">Tool Request</div>
+                  <div class="flow-arrow">➔</div>
+                  <div class="flow-node" style="min-width: 65px; font-size: 0.72rem; background:#FEF3C7; border-color:#F59E0B;">Node.js Run</div>
+                  <div class="flow-arrow">➔</div>
+                  <div class="flow-node success" style="min-width: 65px; font-size: 0.72rem;">Final Answer</div>
+                </div>
+              </div>
+
+              <div class="output-box">
+                <div class="output-label">Example Query & Response:</div>
+                <div class="output-content" style="color: #34D399;">User: "What is the attendance of student 101?"
+LLM Request: get_attendance({ studentId: 101 })
+Node.js Result: { studentId: 101, attendance: 85 }
+LLM Final Answer: "Arun's attendance is 85%."</div>
+              </div>
+
+              <p style="font-size: 0.84rem; color: var(--text-body); margin-top: 6px;">
+                <strong>Key Difference:</strong> The LLM requests real application capabilities instead of relying solely on probabilistic text generation.
+              </p>
+            </div>
+          </div>
+
+          <div class="sandbox-card" style="margin-top: 2px;">
+            <div class="sandbox-header">
+              <div class="sandbox-title"><span class="icon">🧪</span> Interactive Workflow Comparator</div>
+              <div style="display: flex; gap: 8px;">
+                <button id="s3BtnNormal" class="btn-sandbox btn-sandbox-secondary">Mode 1: Normal LLM</button>
+                <button id="s3BtnTool" class="btn-sandbox active">Mode 2: Tool Calling</button>
+              </div>
+            </div>
+            <div id="s3WorkflowDisplay" style="background: #F8FAFC; border: 1px solid var(--border-subtle); border-radius: 8px; padding: 12px;">
+              <div class="flow-steps" style="margin-bottom: 6px;">
+                <div class="flow-node">User: "Attendance of 101?"</div>
+                <div class="flow-arrow">➔</div>
+                <div class="flow-node primary">LLM requests get_attendance(101)</div>
+                <div class="flow-arrow">➔</div>
+                <div class="flow-node" style="background:#FEF3C7; border-color:#F59E0B;">Node.js runs function</div>
+                <div class="flow-arrow">➔</div>
+                <div class="flow-node success">Returns { attendance: 85 }</div>
+                <div class="flow-arrow">➔</div>
+                <div class="flow-node primary">LLM: "Arun has 85% attendance."</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==========================================
+           SLIDE 4: How Does Function Calling Work?
+           ========================================== -->
+      <section class="slide" id="slide-4">
+        <div class="slide-header">
+          <div class="slide-title-group">
+            <span class="slide-category">Step-by-Step Lifecycle</span>
+            <h2 class="slide-title">How Does Function Calling Work?</h2>
+            <p class="slide-subtitle">The five critical phases of the tool-calling handshake</p>
+          </div>
+          <span class="slide-tag">5 PHASES</span>
+        </div>
+
+        <div class="slide-body">
+          <div class="diagram-container">
+            <div class="diagram-title"><span class="icon">🗺️</span> End-to-End Orchestration Flow</div>
+            <div class="flow-steps">
+              <div class="flow-node">
+                <span style="font-size: 0.72rem; color: var(--text-muted);">Step 1</span><br>
+                <strong>User Sends Query</strong>
+              </div>
+              <div class="flow-arrow">➔</div>
+              <div class="flow-node primary">
+                <span style="font-size: 0.72rem; color: var(--primary-blue);">Step 2</span><br>
+                <strong>Pass Tool Schemas</strong>
+              </div>
+              <div class="flow-arrow">➔</div>
+              <div class="flow-node primary">
+                <span style="font-size: 0.72rem; color: var(--primary-blue);">Step 3</span><br>
+                <strong>LLM Picks Tool</strong>
+              </div>
+              <div class="flow-arrow">➔</div>
+              <div class="flow-node" style="background: #FEF3C7; border-color: #F59E0B;">
+                <span style="font-size: 0.72rem; color: var(--accent-amber);">Step 4</span><br>
+                <strong>Node.js Executes</strong>
+              </div>
+              <div class="flow-arrow">➔</div>
+              <div class="flow-node success">
+                <span style="font-size: 0.72rem; color: var(--accent-green);">Step 5</span><br>
+                <strong>LLM Explains Result</strong>
+              </div>
+            </div>
+          </div>
+
+          <div class="grid-2col" style="margin-top: 8px;">
+            <div class="card card-accent">
+              <div class="card-title"><span class="icon">📋</span> Detailed Step Breakdown</div>
+              <ol style="margin-left: 20px; font-size: 0.88rem; display: flex; flex-direction: column; gap: 8px; color: var(--text-main);">
+                <li><strong>User Query:</strong> User asks a question (e.g. <em>"Who is student 101?"</em>).</li>
+                <li><strong>Tool Schemas:</strong> Node.js sends the question + available tool schemas to Groq.</li>
+                <li><strong>Tool Selection:</strong> The LLM decides a tool is needed, pauses generation, and returns the tool name & arguments.</li>
+                <li><strong>Node.js Execution:</strong> Node.js validates arguments with Zod and executes the local JavaScript function.</li>
+                <li><strong>Final Synthesis:</strong> Node.js sends tool results back to Groq; the model generates a friendly final answer.</li>
+              </ol>
+            </div>
+
+            <div class="card card-cyan" style="justify-content: center;">
+              <div class="card-title" style="color: var(--accent-cyan);"><span class="icon">⚖️</span> Responsibility Division</div>
+              <div class="table-container" style="margin-top: 6px;">
+                <table class="styled-table" style="font-size: 0.84rem;">
+                  <thead>
+                    <tr>
+                      <th>Action</th>
+                      <th>Controlled By</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>Deciding <em>which</em> tool is needed</td>
+                      <td><strong>LLM (Groq)</strong></td>
+                    </tr>
+                    <tr>
+                      <td>Generating argument values</td>
+                      <td><strong>LLM (Groq)</strong></td>
+                    </tr>
+                    <tr>
+                      <td>Validating argument data types</td>
+                      <td><strong>Node.js (Zod)</strong></td>
+                    </tr>
+                    <tr>
+                      <td>Connecting to DB / running function</td>
+                      <td><strong>Node.js Backend</strong></td>
+                    </tr>
+                    <tr>
+                      <td>Explaining result in plain English</td>
+                      <td><strong>LLM (Groq)</strong></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==========================================
+           SLIDE 5: What Is a Tool?
+           ========================================== -->
+      <section class="slide" id="slide-5">
+        <div class="slide-header">
+          <div class="slide-title-group">
+            <span class="slide-category">Components of a Tool</span>
+            <h2 class="slide-title">What Is a Tool?</h2>
+            <p class="slide-subtitle">A backend capability made available to an LLM through three essential parts</p>
+          </div>
+          <span class="slide-tag">TOOL ANATOMY</span>
+        </div>
+
+        <div class="slide-body">
+          <div class="grid-2col">
+            <div class="card">
+              <div class="card-title"><span class="icon">🧩</span> The Three Parts of a Tool</div>
+              <ul class="feature-list" style="gap: 12px; margin-top: 4px;">
+                <li>
+                  <span class="bullet-dot"></span>
+                  <div>
+                    <strong>1. Tool Definition (Schema):</strong>
+                    <div style="font-size: 0.82rem; color: var(--text-muted);">The JSON Schema describing what the tool does, its parameters, and required arguments to the model.</div>
+                  </div>
+                </li>
+                <li>
+                  <span class="bullet-dot"></span>
+                  <div>
+                    <strong>2. Tool Implementation (Function):</strong>
+                    <div style="font-size: 0.82rem; color: var(--text-muted);">The real, ordinary JavaScript function inside your Node.js application that does the work.</div>
+                  </div>
+                </li>
+                <li>
+                  <span class="bullet-dot"></span>
+                  <div>
+                    <strong>3. Tool Execution (Orchestrator):</strong>
+                    <div style="font-size: 0.82rem; color: var(--text-muted);">The glue code that matches the LLM's requested tool name, validates arguments, calls the function, and returns the result.</div>
+                  </div>
+                </li>
+              </ul>
+
+              <div class="table-container" style="margin-top: 8px;">
+                <table class="styled-table" style="font-size: 0.8rem;">
+                  <thead>
+                    <tr>
+                      <th>Tool Name</th>
+                      <th>Purpose</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr><td><code>getStudentDetails</code></td><td>Fetch student name & course by ID</td></tr>
+                    <tr><td><code>getAttendance</code></td><td>Fetch student attendance percentage</td></tr>
+                    <tr><td><code>calculateTotal</code></td><td>Compute fees or invoice sums</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <div class="card card-accent">
+              <div class="card-title"><span class="icon">💻</span> Ordinary JavaScript Implementation</div>
+              <p class="card-desc">Notice that the function itself knows nothing about AI or LLMs—it is standard Node.js:</p>
+              
+              <div class="code-panel">
+                <div class="code-header">
+                  <span class="code-file">studentFunctions.js</span>
+                  <button class="copy-btn">Copy</button>
+                </div>
+                <pre><code><span class="kw">function</span> <span class="fn">getStudentDetails</span>(<span class="vr">studentId</span>) {
+  <span class="kw">const</span> <span class="vr">students</span> = [
+    { <span class="prop">id</span>: <span class="num">101</span>, <span class="prop">name</span>: <span class="str">"Arun"</span>, <span class="prop">course</span>: <span class="str">"MERN"</span> },
+    { <span class="prop">id</span>: <span class="num">102</span>, <span class="prop">name</span>: <span class="str">"Rahul"</span>, <span class="prop">course</span>: <span class="str">"Python"</span> }
+  ];
+
+  <span class="kw">return</span> <span class="vr">students</span>.<span class="fn">find</span>(<span class="vr">student</span> => <span class="vr">student</span>.<span class="prop">id</span> === <span class="vr">studentId</span>) || <span class="bool">null</span>;
+}
+
+<span class="cm">// Testing plain JavaScript execution:</span>
+console.<span class="fn">log</span>(<span class="fn">getStudentDetails</span>(<span class="num">101</span>));</code></pre>
+              </div>
+
+              <div class="output-box">
+                <div class="output-label">Direct Execution Output:</div>
+                <div class="output-content">{ id: 101, name: 'Arun', course: 'MERN' }</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==========================================
+           SLIDE 6: What Is a Tool Schema?
+           ========================================== -->
+      <section class="slide" id="slide-6">
+        <div class="slide-header">
+          <div class="slide-title-group">
+            <span class="slide-category">Tool Specification</span>
+            <h2 class="slide-title">What Is a Tool Schema?</h2>
+            <p class="slide-subtitle">Teaching the model what functions exist and how to call them</p>
+          </div>
+          <span class="slide-tag">TOOL DEFINITION</span>
+        </div>
+
+        <div class="slide-body">
+          <div class="grid-60-40">
+            <div class="code-panel">
+              <div class="code-header">
+                <span class="code-file">tools.js (Groq-Compatible Tool Schema)</span>
+                <button class="copy-btn">Copy</button>
+              </div>
+              <pre><code><span class="kw">const</span> <span class="vr">tools</span> = [
+  {
+    <span class="prop">type</span>: <span class="str">"function"</span>,
+    <span class="prop">function</span>: {
+      <span class="prop">name</span>: <span class="str">"get_student"</span>,
+      <span class="prop">description</span>: <span class="str">"Get student details using student ID"</span>,
+      <span class="prop">parameters</span>: {
+        <span class="prop">type</span>: <span class="str">"object"</span>,
+        <span class="prop">properties</span>: {
+          <span class="prop">studentId</span>: {
+            <span class="prop">type</span>: <span class="str">"number"</span>,
+            <span class="prop">description</span>: <span class="str">"The unique student ID"</span>
+          }
+        },
+        <span class="prop">required</span>: [<span class="str">"studentId"</span>]
+      }
+    }
+  }
+];</code></pre>
+            </div>
+
+            <div class="card card-accent" style="justify-content: space-between;">
+              <div>
+                <div class="card-title"><span class="icon">🔍</span> Anatomy of the Schema</div>
+                <div class="table-container" style="margin-top: 6px;">
+                  <table class="styled-table" style="font-size: 0.8rem;">
+                    <thead>
+                      <tr><th>Field</th><th>Meaning</th></tr>
+                    </thead>
+                    <tbody>
+                      <tr><td><code>type</code></td><td>Must be <code>"function"</code></td></tr>
+                      <tr><td><code>name</code></td><td>Unique function identifier for model</td></tr>
+                      <tr><td><code>description</code></td><td>Crucial! Explains <em>when</em> to use it</td></tr>
+                      <tr><td><code>parameters</code></td><td>JSON Schema describing argument object</td></tr>
+                      <tr><td><code>required</code></td><td>Array of mandatory argument keys</td></tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              <div class="card card-amber" style="padding: 10px 14px;">
+                <strong style="color: var(--accent-amber); font-size: 0.82rem;">⚠️ Prompt Engineering Note:</strong>
+                <p style="font-size: 0.76rem; color: var(--text-main); margin-top: 2px;">
+                  The <code>description</code> is the prompt! The model reads this description to decide if the tool matches the user's intent. Clear descriptions prevent tool misuse.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==========================================
+           SLIDE 7: Understanding JSON Schema for Tools
+           ========================================== -->
+      <section class="slide" id="slide-7">
+        <div class="slide-header">
+          <div class="slide-title-group">
+            <span class="slide-category">Parameter Specifications</span>
+            <h2 class="slide-title">Understanding JSON Schema for Tools</h2>
+            <p class="slide-subtitle">The standard vocabulary for describing tool parameter types and shapes</p>
+          </div>
+          <span class="slide-tag">JSON SCHEMA</span>
+        </div>
+
+        <div class="slide-body">
+          <div class="grid-2col">
+            <div class="card">
+              <div class="card-title"><span class="icon">📊</span> Supported JSON Schema Types</div>
+              <div class="table-container">
+                <table class="styled-table">
+                  <thead>
+                    <tr><th>Type</th><th>Example</th><th>Tool Usage</th></tr>
+                  </thead>
+                  <tbody>
+                    <tr><td><code>string</code></td><td><code>"Arun"</code></td><td>Names, search queries, filters</td></tr>
+                    <tr><td><code>number</code></td><td><code>101.5</code></td><td>Generic float or numeric value</td></tr>
+                    <tr><td><code>integer</code></td><td><code>101</code></td><td>Student IDs, quantities, counts</td></tr>
+                    <tr><td><code>boolean</code></td><td><code>true</code></td><td>Flags (e.g. <code>includeInactive</code>)</td></tr>
+                    <tr><td><code>array</code></td><td><code>["MERN"]</code></td><td>Lists of tags, IDs, or skills</td></tr>
+                    <tr><td><code>object</code></td><td><code>{...}</code></td><td>Nested configuration objects</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <div class="card card-accent">
+              <div class="card-title"><span class="icon">📝</span> Complete Student Object Schema</div>
+              <div class="code-panel">
+                <div class="code-header">
+                  <span class="code-file">studentSchema.json</span>
+                  <button class="copy-btn">Copy</button>
+                </div>
+                <pre><code><span class="kw">const</span> <span class="vr">studentSchema</span> = {
+  <span class="prop">type</span>: <span class="str">"object"</span>,
+  <span class="prop">properties</span>: {
+    <span class="prop">name</span>: { <span class="prop">type</span>: <span class="str">"string"</span> },
+    <span class="prop">age</span>: { <span class="prop">type</span>: <span class="str">"integer"</span> },
+    <span class="prop">course</span>: { <span class="prop">type</span>: <span class="str">"string"</span> }
+  },
+  <span class="prop">required</span>: [<span class="str">"name"</span>, <span class="str">"age"</span>, <span class="str">"course"</span>]
+};</code></pre>
+              </div>
+
+              <div class="card card-purple" style="padding: 10px 14px; margin-top: 4px;">
+                <strong style="color: var(--accent-purple); font-size: 0.82rem;">Key Takeaway:</strong>
+                <p style="font-size: 0.78rem; color: var(--text-main); margin-top: 2px;">
+                  JSON Schema tells the LLM the <em>structure</em> to produce. But the LLM produces a text string. Node.js still requires an active runtime validator (Zod) to ensure the data is safe.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==========================================
+           SLIDE 8: What Are Tool Arguments?
+           ========================================== -->
+      <section class="slide" id="slide-8">
+        <div class="slide-header">
+          <div class="slide-title-group">
+            <span class="slide-category">Argument Extraction</span>
+            <h2 class="slide-title">What Are Tool Arguments?</h2>
+            <p class="slide-subtitle">Understanding how the model packages and returns parameter values</p>
+          </div>
+          <span class="slide-tag">ARGUMENTS PARSING</span>
+        </div>
+
+        <div class="slide-body">
+          <div class="grid-2col">
+            <div class="card">
+              <div class="card-title"><span class="icon">📦</span> Tool Arguments Are Stringified JSON</div>
+              <p class="card-desc">When an LLM requests a tool, it passes the required parameters as a <strong>JSON-encoded string</strong>:</p>
+              
+              <div class="code-panel">
+                <div class="code-header"><span class="code-file">tool-call-snippet.json</span></div>
+                <pre><code>{
+  <span class="prop">"name"</span>: <span class="str">"get_student"</span>,
+  <span class="prop">"arguments"</span>: <span class="str">"{\"studentId\":101}"</span>
+}</code></pre>
+              </div>
+
+              <p style="font-size: 0.84rem; color: var(--text-body); margin-top: 4px;">
+                Notice that <code>arguments</code> is NOT a JavaScript object yet—it is escaped stringified text. We must deserialize it with <code>JSON.parse()</code>.
+              </p>
+            </div>
+
+            <div class="card card-accent">
+              <div class="card-title"><span class="icon">⚙️</span> Node.js Parsing Example</div>
+              <div class="code-panel">
+                <div class="code-header">
+                  <span class="code-file">parseArguments.js</span>
+                  <button class="copy-btn">Copy</button>
+                </div>
+                <pre><code><span class="kw">const</span> <span class="vr">argumentsString</span> = <span class="str">'{"studentId":101}'</span>;
+
+<span class="cm">// Step 1: Parse the JSON string into an object</span>
+<span class="kw">const</span> <span class="vr">args</span> = JSON.<span class="fn">parse</span>(<span class="vr">argumentsString</span>);
+
+<span class="cm">// Step 2: Access extracted properties</span>
+console.<span class="fn">log</span>(<span class="vr">args</span>.<span class="prop">studentId</span>); <span class="cm">// 101</span></code></pre>
+              </div>
+
+              <div class="output-box">
+                <div class="output-label">Terminal Output:</div>
+                <div class="output-content">101</div>
+              </div>
+
+              <div class="card card-rose" style="padding: 10px 14px; margin-top: 8px;">
+                <strong style="color: var(--accent-rose); font-size: 0.82rem;">⚠️ Safety Warning:</strong>
+                <span style="font-size: 0.78rem; color: var(--text-main);">Never blindly execute functions with raw parsed arguments! What if the model outputs <code>{ "studentId": "DROP TABLE" }</code> or <code>-999</code>? Always validate with Zod first.</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==========================================
+           SLIDE 9: What Is Zod and Why Do We Need It?
+           ========================================== -->
+      <section class="slide" id="slide-9">
+        <div class="slide-header">
+          <div class="slide-title-group">
+            <span class="slide-category">Argument Guardrails</span>
+            <h2 class="slide-title">What Is Zod and Why Do We Need It?</h2>
+            <p class="slide-subtitle">Runtime validation to protect backend functions against bad AI arguments</p>
+          </div>
+          <span class="slide-tag">ZOD VALIDATION</span>
+        </div>
+
+        <div class="slide-body">
+          <div class="grid-2col">
+            <div class="card">
+              <div class="card-title"><span class="icon">🛡️</span> Why Argument Validation Is Crucial</div>
+              <p class="card-desc">An LLM can occasionally return unexpected types: <code>{ studentId: "hello" }</code> when your function expects an integer. Zod prevents crashes.</p>
+              
+              <div class="code-panel">
+                <div class="code-header"><span class="code-file">terminal</span></div>
+                <pre><code>npm install zod</code></pre>
+              </div>
+
+              <div class="code-panel">
+                <div class="code-header"><span class="code-file">zodValidation.js</span></div>
+                <pre><code><span class="kw">const</span> { <span class="vr">z</span> } = <span class="kw">require</span>(<span class="str">"zod"</span>);
+
+<span class="kw">const</span> <span class="vr">studentSchema</span> = <span class="vr">z</span>.<span class="fn">object</span>({
+  <span class="prop">studentId</span>: <span class="vr">z</span>.<span class="fn">number</span>().<span class="fn">int</span>().<span class="fn">positive</span>()
+});
+
+<span class="cm">// Test 1: Valid argument</span>
+<span class="kw">const</span> <span class="vr">res1</span> = <span class="vr">studentSchema</span>.<span class="fn">safeParse</span>({ <span class="prop">studentId</span>: <span class="num">101</span> });
+console.<span class="fn">log</span>(<span class="vr">res1</span>.<span class="prop">success</span>); <span class="cm">// true</span>
+
+<span class="cm">// Test 2: Invalid argument string</span>
+<span class="kw">const</span> <span class="vr">res2</span> = <span class="vr">studentSchema</span>.<span class="fn">safeParse</span>({ <span class="prop">studentId</span>: <span class="str">"hello"</span> });
+console.<span class="fn">log</span>(<span class="vr">res2</span>.<span class="prop">success</span>); <span class="cm">// false</span></code></pre>
+              </div>
+            </div>
+
+            <div class="sandbox-card">
+              <div class="sandbox-header">
+                <div class="sandbox-title"><span class="icon">🧪</span> Live Argument Validator Sandbox</div>
+                <span class="sandbox-badge">Real-Time</span>
+              </div>
+              <p style="font-size: 0.8rem; color: var(--text-muted);">Test how Zod evaluates different candidate arguments:</p>
+
+              <div>
+                <label class="sandbox-label">Candidate Payload (JSON):</label>
+                <input id="s9InputVal" type="text" value='{"studentId": 101}' class="slide-select" style="width: 100%;">
+              </div>
+
+              <div style="display: flex; gap: 8px;">
+                <button id="s9TestBtn" class="btn-sandbox" style="flex: 1;">Run safeParse()</button>
+              </div>
+
+              <div id="s9Result" class="sandbox-result card-green" style="font-size: 0.78rem;">
+Click 'Run safeParse()' to test the candidate against z.number().int().positive().
+              </div>
+
+              <div class="card card-purple" style="padding: 10px 14px;">
+                <strong style="color: var(--accent-purple); font-size: 0.8rem;">Summary:</strong>
+                <span style="font-size: 0.76rem; color: var(--text-main);">JSON Schema describes what the model <em>should</em> send. Zod enforces what the backend <em>actually</em> receives.</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==========================================
+           SLIDE 10: Connecting Tool Schema with Zod
+           ========================================== -->
+      <section class="slide" id="slide-10">
+        <div class="slide-header">
+          <div class="slide-title-group">
+            <span class="slide-category">The Dual-Schema Pattern</span>
+            <h2 class="slide-title">Connecting Tool Schema with Zod</h2>
+            <p class="slide-subtitle">How JSON Schema for the LLM pairs with Zod validation in Node.js</p>
+          </div>
+          <span class="slide-tag">DUAL SCHEMAS</span>
+        </div>
+
+        <div class="slide-body">
+          <div class="grid-2col">
+            <div class="card card-accent">
+              <div class="card-title"><span class="icon">1️⃣</span> Step 1: Tool Schema for the LLM</div>
+              <p class="card-desc">JSON Schema passed in the Groq API call to tell the model what parameters to produce:</p>
+              
+              <div class="code-panel">
+                <div class="code-header"><span class="code-file">for-the-llm.js</span></div>
+                <pre><code><span class="kw">const</span> <span class="vr">tools</span> = [{
+  <span class="prop">type</span>: <span class="str">"function"</span>,
+  <span class="prop">function</span>: {
+    <span class="prop">name</span>: <span class="str">"get_student"</span>,
+    <span class="prop">description</span>: <span class="str">"Get student details using student ID"</span>,
+    <span class="prop">parameters</span>: {
+      <span class="prop">type</span>: <span class="str">"object"</span>,
+      <span class="prop">properties</span>: {
+        <span class="prop">studentId</span>: { <span class="prop">type</span>: <span class="str">"number"</span> }
+      },
+      <span class="prop">required</span>: [<span class="str">"studentId"</span>]
+    }
+  }
+}];</code></pre>
+              </div>
+            </div>
+
+            <div class="card card-green">
+              <div class="card-title" style="color: var(--accent-green);"><span class="icon">2️⃣</span> Step 2 & 3: Zod Schema in Node.js</div>
+              <p class="card-desc">Zod schema executed before calling our internal JavaScript function:</p>
+              
+              <div class="code-panel">
+                <div class="code-header"><span class="code-file">for-node-backend.js</span></div>
+                <pre><code><span class="cm">// Step 2: Define Zod Schema</span>
+<span class="kw">const</span> <span class="vr">studentSchema</span> = <span class="vr">z</span>.<span class="fn">object</span>({
+  <span class="prop">studentId</span>: <span class="vr">z</span>.<span class="fn">number</span>().<span class="fn">int</span>().<span class="fn">positive</span>()
+});
+
+<span class="cm">// Step 3: Validate Model Arguments</span>
+<span class="kw">const</span> <span class="vr">args</span> = { <span class="prop">studentId</span>: <span class="num">101</span> };
+<span class="kw">const</span> <span class="vr">result</span> = <span class="vr">studentSchema</span>.<span class="fn">safeParse</span>(<span class="vr">args</span>);
+
+<span class="kw">if</span> (!<span class="vr">result</span>.<span class="prop">success</span>) {
+  <span class="kw">throw new</span> <span class="fn">Error</span>(<span class="str">"Invalid student ID"</span>);
+}
+
+console.<span class="fn">log</span>(<span class="str">"Safe data:"</span>, <span class="vr">result</span>.<span class="prop">data</span>);</code></pre>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==========================================
+           SLIDE 11: How Does the LLM Select a Tool?
+           ========================================== -->
+      <section class="slide" id="slide-11">
+        <div class="slide-header">
+          <div class="slide-title-group">
+            <span class="slide-category">Model Decision Engine</span>
+            <h2 class="slide-title">How Does the LLM Select a Tool?</h2>
+            <p class="slide-subtitle">Understanding tool descriptions, intent mapping, and the tool_choice parameter</p>
+          </div>
+          <span class="slide-tag">TOOL_CHOICE</span>
+        </div>
+
+        <div class="slide-body">
+          <div class="grid-2col">
+            <div class="card">
+              <div class="card-title"><span class="icon">🧠</span> How the Model Evaluates Intent</div>
+              <p class="card-desc">The LLM compares the user's prompt against all available tool descriptions:</p>
+              
+              <div class="table-container">
+                <table class="styled-table" style="font-size: 0.82rem;">
+                  <thead>
+                    <tr><th>User Question</th><th>Model Selection</th></tr>
+                  </thead>
+                  <tbody>
+                    <tr><td>"Who is student 101?"</td><td><code>get_student</code></td></tr>
+                    <tr><td>"Check student 101 attendance"</td><td><code>get_attendance</code></td></tr>
+                    <tr><td>"Calculate the total fee"</td><td><code>calculate_fee</code></td></tr>
+                    <tr><td>"Explain what React is"</td><td><em>No tool required (Direct text)</em></td></tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <div class="table-container" style="margin-top: 10px;">
+                <table class="styled-table" style="font-size: 0.8rem;">
+                  <thead>
+                    <tr><th>tool_choice Value</th><th>Behavior</th></tr>
+                  </thead>
+                  <tbody>
+                    <tr><td><code>"auto"</code></td><td><strong>Standard:</strong> Model decides whether to call a tool or reply with text</td></tr>
+                    <tr><td><code>"required"</code></td><td>Model is forced to select at least one tool call</td></tr>
+                    <tr><td><code>"none"</code></td><td>Forces model to reply with plain text; disables all tools</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <div class="sandbox-card">
+              <div class="sandbox-header">
+                <div class="sandbox-title"><span class="icon">🧪</span> Tool Selection Simulator</div>
+                <span class="sandbox-badge">Interactive</span>
+              </div>
+              <p style="font-size: 0.8rem; color: var(--text-muted);">Test how the model maps prompts to tools:</p>
+
+              <div style="display: flex; gap: 6px; flex-wrap: wrap;">
+                <button class="btn-sandbox btn-sandbox-secondary s11-preset" data-prompt="Who is student 101?" style="font-size: 0.72rem; padding: 4px 8px;">Who is 101?</button>
+                <button class="btn-sandbox btn-sandbox-secondary s11-preset" data-prompt="What is the attendance of student 102?" style="font-size: 0.72rem; padding: 4px 8px;">Attendance 102</button>
+                <button class="btn-sandbox btn-sandbox-secondary s11-preset" data-prompt="What is Node.js and Express?" style="font-size: 0.72rem; padding: 4px 8px;">General Question</button>
+              </div>
+
+              <div>
+                <label class="sandbox-label">User Prompt:</label>
+                <input id="s11PromptInput" type="text" value="Who is student 101?" class="slide-select" style="width: 100%;">
+              </div>
+
+              <div>
+                <label class="sandbox-label">tool_choice Mode:</label>
+                <select id="s11ChoiceSelect" class="slide-select" style="width: 100%;">
+                  <option value="auto">tool_choice: "auto"</option>
+                  <option value="required">tool_choice: "required"</option>
+                  <option value="none">tool_choice: "none"</option>
+                </select>
+              </div>
+
+              <button id="s11SelectBtn" class="btn-sandbox">Simulate Model Decision ➔</button>
+
+              <div id="s11DecisionBox" class="sandbox-result" style="font-size: 0.76rem; min-height: 80px;">
+Click 'Simulate Model Decision' to view tool selection reasoning.
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==========================================
+           SLIDE 12: Practical: Sending Tools to Groq
+           ========================================== -->
+      <section class="slide" id="slide-12">
+        <div class="slide-header">
+          <div class="slide-title-group">
+            <span class="slide-category">Groq API Integration</span>
+            <h2 class="slide-title">Practical: Sending Tools to Groq</h2>
+            <p class="slide-subtitle">Configuring the Groq SDK client and passing tool schemas in chat completions</p>
+          </div>
+          <span class="slide-tag">GROQ COMPLETION</span>
+        </div>
+
+        <div class="slide-body">
+          <div class="grid-60-40">
+            <div class="code-panel">
+              <div class="code-header">
+                <span class="code-file">groq-tools-demo.js</span>
+                <button class="copy-btn">Copy</button>
+              </div>
+              <pre><code><span class="kw">require</span>(<span class="str">"dotenv"</span>).<span class="fn">config</span>();
+<span class="kw">const</span> <span class="vr">Groq</span> = <span class="kw">require</span>(<span class="str">"groq-sdk"</span>);
+
+<span class="kw">const</span> <span class="vr">groq</span> = <span class="kw">new</span> <span class="vr">Groq</span>({ <span class="prop">apiKey</span>: process.env.<span class="vr">GROQ_API_KEY</span> });
+<span class="kw">const</span> <span class="vr">MODEL</span> = <span class="str">"openai/gpt-oss-120b"</span>;
+
+<span class="kw">async function</span> <span class="fn">askAssistant</span>() {
+  <span class="kw">const</span> <span class="vr">response</span> = <span class="kw">await</span> <span class="vr">groq</span>.chat.completions.<span class="fn">create</span>({
+    <span class="prop">model</span>: <span class="vr">MODEL</span>,
+    <span class="prop">messages</span>: [
+      { <span class="prop">role</span>: <span class="str">"user"</span>, <span class="prop">content</span>: <span class="str">"Who is student 101?"</span> }
+    ],
+    <span class="prop">tools</span>: <span class="vr">tools</span>,
+    <span class="prop">tool_choice</span>: <span class="str">"auto"</span>
+  });
+
+  <span class="cm">// The response may contain a tool call instead of normal text!</span>
+  console.<span class="fn">log</span>(<span class="vr">response</span>.choices[<span class="num">0</span>].message);
+}
+
+<span class="fn">askAssistant</span>();</code></pre>
+            </div>
+
+            <div class="card card-accent" style="justify-content: space-between;">
+              <div>
+                <div class="card-title"><span class="icon">🔍</span> Critical Observations</div>
+                <ul class="feature-list" style="gap: 10px; margin-top: 6px;">
+                  <li>
+                    <span class="bullet-dot"></span>
+                    <div><strong>Model:</strong> Uses <code>openai/gpt-oss-120b</code>, an open-weight enterprise model optimized for tool use on Groq.</div>
+                  </li>
+                  <li>
+                    <span class="bullet-dot"></span>
+                    <div><strong>Passing Tools:</strong> The <code>tools</code> array is passed directly into <code>chat.completions.create</code>.</div>
+                  </li>
+                  <li>
+                    <span class="bullet-dot"></span>
+                    <div><strong>No Execution Yet:</strong> Groq returns an intention/request. Your server must inspect the response to see if a tool call was issued!</div>
+                  </li>
+                </ul>
+              </div>
+
+              <div class="card card-purple" style="padding: 10px 14px;">
+                <strong style="color: var(--accent-purple); font-size: 0.82rem;">Groq Ecosystem Note:</strong>
+                <span style="font-size: 0.76rem; color: var(--text-main);">Groq supports native tool calling with ultra-low latency, making multi-turn function calling fast enough for real-time applications.</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==========================================
+           SLIDE 13: Understanding the Tool Call Response
+           ========================================== -->
+      <section class="slide" id="slide-13">
+        <div class="slide-header">
+          <div class="slide-title-group">
+            <span class="slide-category">Payload Inspection</span>
+            <h2 class="slide-title">Understanding the Tool Call Response</h2>
+            <p class="slide-subtitle">Inspecting response.choices[0].message.tool_calls</p>
+          </div>
+          <span class="slide-tag">RESPONSE PAYLOAD</span>
+        </div>
+
+        <div class="slide-body">
+          <div class="grid-2col">
+            <div class="card">
+              <div class="card-title"><span class="icon">📦</span> Realistic Tool Call Response Object</div>
+              <p class="card-desc">When the model decides to invoke a tool, <code>content</code> is usually <code>null</code> and <code>tool_calls</code> is populated:</p>
+              
+              <div class="code-panel">
+                <div class="code-header"><span class="code-file">assistantMessage.json</span></div>
+                <pre><code>{
+  <span class="prop">"role"</span>: <span class="str">"assistant"</span>,
+  <span class="prop">"content"</span>: <span class="bool">null</span>,
+  <span class="prop">"tool_calls"</span>: [
+    {
+      <span class="prop">"id"</span>: <span class="str">"call_123"</span>,
+      <span class="prop">"type"</span>: <span class="str">"function"</span>,
+      <span class="prop">"function"</span>: {
+        <span class="prop">"name"</span>: <span class="str">"get_student"</span>,
+        <span class="prop">"arguments"</span>: <span class="str">"{\"studentId\":101}"</span>
+      }
+    }
+  ]
+}</code></pre>
+              </div>
+            </div>
+
+            <div class="card card-accent">
+              <div class="card-title"><span class="icon">🔍</span> Accessing Properties in Node.js</div>
+              <div class="code-panel">
+                <div class="code-header">
+                  <span class="code-file">inspectResponse.js</span>
+                  <button class="copy-btn">Copy</button>
+                </div>
+                <pre><code><span class="kw">const</span> <span class="vr">message</span> = <span class="vr">response</span>.choices[<span class="num">0</span>].message;
+<span class="kw">const</span> <span class="vr">toolCalls</span> = <span class="vr">message</span>.<span class="prop">tool_calls</span>;
+
+<span class="kw">if</span> (<span class="vr">toolCalls</span> &amp;&amp; <span class="vr">toolCalls</span>.<span class="prop">length</span> > <span class="num">0</span>) {
+  <span class="kw">const</span> <span class="vr">firstCall</span> = <span class="vr">toolCalls</span>[<span class="num">0</span>];
+  console.<span class="fn">log</span>(<span class="str">"ID:"</span>, <span class="vr">firstCall</span>.<span class="prop">id</span>);
+  console.<span class="fn">log</span>(<span class="str">"Function:"</span>, <span class="vr">firstCall</span>.<span class="prop">function</span>.<span class="prop">name</span>);
+  console.<span class="fn">log</span>(<span class="str">"Raw Args:"</span>, <span class="vr">firstCall</span>.<span class="prop">function</span>.<span class="prop">arguments</span>);
+} <span class="kw">else</span> {
+  <span class="cm">// No tool requested; plain text answer</span>
+  console.<span class="fn">log</span>(<span class="vr">message</span>.<span class="prop">content</span>);
+}</code></pre>
+              </div>
+
+              <div class="card card-green" style="padding: 10px 14px; margin-top: 6px;">
+                <strong style="color: var(--accent-green); font-size: 0.82rem;">Always Check tool_calls First:</strong>
+                <span style="font-size: 0.78rem; color: var(--text-main);">Never attempt to execute a function unless <code>message.tool_calls</code> is defined and non-empty.</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==========================================
+           SLIDE 14: How to Execute a Tool in Node.js
+           ========================================== -->
+      <section class="slide" id="slide-14">
+        <div class="slide-header">
+          <div class="slide-title-group">
+            <span class="slide-category">Execution Engine</span>
+            <h2 class="slide-title">How to Execute a Tool in Node.js</h2>
+            <p class="slide-subtitle">Connecting the LLM's requested tool name to actual JavaScript functions via a tool map</p>
+          </div>
+          <span class="slide-tag">TOOL REGISTRY</span>
+        </div>
+
+        <div class="slide-body">
+          <div class="grid-60-40">
+            <div class="code-panel">
+              <div class="code-header">
+                <span class="code-file">toolExecution.js</span>
+                <button class="copy-btn">Copy</button>
+              </div>
+              <pre><code><span class="cm">// Step 1: Real JavaScript functions</span>
+<span class="kw">function</span> <span class="fn">getStudent</span>(<span class="vr">studentId</span>) {
+  <span class="kw">const</span> <span class="vr">students</span> = [
+    { <span class="prop">id</span>: <span class="num">101</span>, <span class="prop">name</span>: <span class="str">"Arun"</span>, <span class="prop">course</span>: <span class="str">"MERN"</span> },
+    { <span class="prop">id</span>: <span class="num">102</span>, <span class="prop">name</span>: <span class="str">"Rahul"</span>, <span class="prop">course</span>: <span class="str">"Python"</span> }
+  ];
+  <span class="kw">return</span> <span class="vr">students</span>.<span class="fn">find</span>(<span class="vr">s</span> => <span class="vr">s</span>.<span class="prop">id</span> === <span class="vr">studentId</span>) || <span class="bool">null</span>;
+}
+
+<span class="cm">// Step 2: Tool Registry Map (Crucial security boundary!)</span>
+<span class="kw">const</span> <span class="vr">availableTools</span> = {
+  <span class="prop">get_student</span>: <span class="vr">getStudent</span>
+};
+
+<span class="cm">// Step 3: Execute safely by lookup</span>
+<span class="kw">const</span> <span class="vr">toolName</span> = <span class="str">"get_student"</span>;
+<span class="kw">const</span> <span class="vr">args</span> = { <span class="prop">studentId</span>: <span class="num">101</span> };
+
+<span class="kw">const</span> <span class="vr">result</span> = <span class="vr">availableTools</span>[<span class="vr">toolName</span>](<span class="vr">args</span>.<span class="prop">studentId</span>);
+console.<span class="fn">log</span>(<span class="vr">result</span>);</code></pre>
+            </div>
+
+            <div class="sandbox-card">
+              <div class="sandbox-header">
+                <div class="sandbox-title"><span class="icon">⚙️</span> Tool Execution Sandbox</div>
+                <span class="sandbox-badge">Registry Test</span>
+              </div>
+              <p style="font-size: 0.8rem; color: var(--text-muted);">Simulate runtime tool dispatch:</p>
+
+              <div>
+                <label class="sandbox-label">Select Tool:</label>
+                <select id="s14ToolSelect" class="slide-select" style="width: 100%;">
+                  <option value="get_student">get_student</option>
+                  <option value="get_attendance">get_attendance</option>
+                </select>
+              </div>
+
+              <div>
+                <label class="sandbox-label">Select Student ID:</label>
+                <select id="s14StudentIdSelect" class="slide-select" style="width: 100%;">
+                  <option value="101">101 (Arun)</option>
+                  <option value="102">102 (Rahul)</option>
+                  <option value="999">999 (Not Found)</option>
+                </select>
+              </div>
+
+              <button id="s14ExecBtn" class="btn-sandbox">Execute Tool Function ➔</button>
+
+              <div id="s14ExecResult" class="sandbox-result" style="font-size: 0.78rem; min-height: 80px;">
+Click 'Execute Tool Function' to see JavaScript execution.
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==========================================
+           SLIDE 15: Tool Result: Sending Data Back to the LLM
+           ========================================== -->
+      <section class="slide" id="slide-15">
+        <div class="slide-header">
+          <div class="slide-title-group">
+            <span class="slide-category">Completing the Handshake</span>
+            <h2 class="slide-title">Tool Result: Sending Data Back to the LLM</h2>
+            <p class="slide-subtitle">Appending role: "tool" messages to conversation history for final answer synthesis</p>
+          </div>
+          <span class="slide-tag">TOOL ROLE</span>
+        </div>
+
+        <div class="slide-body">
+          <div class="grid-2col">
+            <div class="card">
+              <div class="card-title"><span class="icon">🔁</span> Constructing the Tool Result Message</div>
+              <p class="card-desc">After your JavaScript function runs, format its output as a <code>tool</code> role message:</p>
+              
+              <div class="code-panel">
+                <div class="code-header"><span class="code-file">appendToolResult.js</span></div>
+                <pre><code><span class="cm">// 1. Push assistant's tool-call request</span>
+<span class="vr">messages</span>.<span class="fn">push</span>(<span class="vr">assistantMessage</span>);
+
+<span class="cm">// 2. Push tool result with matching tool_call_id</span>
+<span class="vr">messages</span>.<span class="fn">push</span>({
+  <span class="prop">role</span>: <span class="str">"tool"</span>,
+  <span class="prop">tool_call_id</span>: <span class="vr">toolCall</span>.<span class="prop">id</span>,
+  <span class="prop">name</span>: <span class="str">"get_student"</span>,
+  <span class="prop">content</span>: JSON.<span class="fn">stringify</span>(<span class="vr">result</span>)
+});
+
+<span class="cm">// 3. Request final conversational answer</span>
+<span class="kw">const</span> <span class="vr">finalResponse</span> = <span class="kw">await</span> <span class="vr">groq</span>.chat.completions.<span class="fn">create</span>({
+  <span class="prop">model</span>: <span class="vr">MODEL</span>,
+  <span class="prop">messages</span>: <span class="vr">messages</span>,
+  <span class="prop">tools</span>: <span class="vr">tools</span>,
+  <span class="prop">tool_choice</span>: <span class="str">"none"</span>
+});</code></pre>
+              </div>
+            </div>
+
+            <div class="card card-accent" style="justify-content: space-between;">
+              <div>
+                <div class="card-title"><span class="icon">🔑</span> Why tool_call_id Is Crucial</div>
+                <p class="card-desc">The <code>tool_call_id</code> binds the result to the specific invocation requested by the model. This is especially vital when an LLM requests multiple tools in parallel.</p>
+
+                <div class="output-box" style="margin-top: 10px;">
+                  <div class="output-label">Final Synthesized Answer:</div>
+                  <div class="output-content" style="color: #34D399;">"Student 101 is Arun. He is enrolled in the MERN Stack course."</div>
+                </div>
+              </div>
+
+              <div class="card card-purple" style="padding: 10px 14px;">
+                <strong style="color: var(--accent-purple); font-size: 0.82rem;">tool_choice: "none" in Step 3</strong>
+                <p style="font-size: 0.76rem; color: var(--text-main); margin-top: 2px;">
+                  Setting <code>tool_choice: "none"</code> guarantees the model will not loop or request another tool; it immediately synthesizes the final human response.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==========================================
+           SLIDE 16: Tool Execution: Error Handling
+           ========================================== -->
+      <section class="slide" id="slide-16">
+        <div class="slide-header">
+          <div class="slide-title-group">
+            <span class="slide-category">Defensive Engineering</span>
+            <h2 class="slide-title">Tool Execution: Error Handling</h2>
+            <p class="slide-subtitle">Gracefully handling invalid arguments, missing records, and unknown tool requests</p>
+          </div>
+          <span class="slide-tag">RESILIENCE</span>
+        </div>
+
+        <div class="slide-body">
+          <div class="grid-2col">
+            <div class="card">
+              <div class="card-title"><span class="icon">⚠️</span> Four Common Failure Modes</div>
+              <ul class="feature-list" style="gap: 10px; margin-top: 4px;">
+                <li><span class="bullet-cross">✗</span> <div><strong>Unknown Tool:</strong> Model requests a hallucinated tool name.</div></li>
+                <li><span class="bullet-cross">✗</span> <div><strong>Malformed JSON:</strong> Argument string fails <code>JSON.parse()</code>.</div></li>
+                <li><span class="bullet-cross">✗</span> <div><strong>Invalid Types:</strong> Negative ID or string passed to number parameter.</div></li>
+                <li><span class="bullet-cross">✗</span> <div><strong>Record Not Found:</strong> Query for student ID <code>999</code> returns <code>null</code>.</div></li>
+              </ul>
+
+              <div class="code-panel" style="margin-top: 10px;">
+                <div class="code-header"><span class="code-file">safeExecute.js</span></div>
+                <pre><code><span class="kw">function</span> <span class="fn">executeTool</span>(<span class="vr">toolName</span>, <span class="vr">args</span>) {
+  <span class="kw">try</span> {
+    <span class="kw">const</span> <span class="vr">tool</span> = <span class="vr">availableTools</span>[<span class="vr">toolName</span>];
+    <span class="kw">if</span> (!<span class="vr">tool</span>) <span class="kw">throw new</span> <span class="fn">Error</span>(<span class="str">"Unknown tool"</span>);
+    <span class="kw">return</span> <span class="fn">tool</span>(<span class="vr">args</span>.<span class="prop">studentId</span>);
+  } <span class="kw">catch</span> (<span class="vr">error</span>) {
+    <span class="kw">return</span> { <span class="prop">error</span>: <span class="bool">true</span>, <span class="prop">message</span>: <span class="vr">error</span>.<span class="prop">message</span> };
+  }
+}</code></pre>
+              </div>
+            </div>
+
+            <div class="sandbox-card">
+              <div class="sandbox-header">
+                <div class="sandbox-title"><span class="icon">🧪</span> Error Handling Simulator</div>
+                <span class="sandbox-badge">Defensive Test</span>
+              </div>
+              <p style="font-size: 0.8rem; color: var(--text-muted);">Select a failure scenario to see the safe return payload:</p>
+
+              <div>
+                <label class="sandbox-label">Select Failure Scenario:</label>
+                <select id="s16ScenarioSelect" class="slide-select" style="width: 100%;">
+                  <option value="valid">Valid Execution (ID: 101)</option>
+                  <option value="unknown_tool">Unknown Tool Name ("delete_database")</option>
+                  <option value="invalid_arg">Invalid Argument Type (string "hello")</option>
+                  <option value="not_found">Student Not Found (ID: 999)</option>
+                </select>
+              </div>
+
+              <button id="s16TestBtn" class="btn-sandbox">Test Safe Handling ➔</button>
+
+              <div id="s16ResultBox" class="sandbox-result card-green" style="font-size: 0.78rem; min-height: 100px;">
+Click 'Test Safe Handling' to simulate error returns.
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==========================================
+           SLIDE 17: The Complete Tool Calling Cycle
+           ========================================== -->
+      <section class="slide" id="slide-17">
+        <div class="slide-header">
+          <div class="slide-title-group">
+            <span class="slide-category">System Architecture</span>
+            <h2 class="slide-title">The Complete Tool Calling Cycle</h2>
+            <p class="slide-subtitle">A holistic view of the 9-stage production orchestration pipeline</p>
+          </div>
+          <span class="slide-tag">SYSTEM PIPELINE</span>
+        </div>
+
+        <div class="slide-body">
+          <div class="diagram-container">
+            <div class="diagram-title"><span class="icon">🗺️</span> Complete 9-Stage Orchestration Cycle</div>
+            <div class="flow-steps">
+              <div class="flow-node">1. User Question</div>
+              <div class="flow-arrow">➔</div>
+              <div class="flow-node">2. Express API</div>
+              <div class="flow-arrow">➔</div>
+              <div class="flow-node primary">3. Groq + Tools</div>
+              <div class="flow-arrow">➔</div>
+              <div class="flow-node primary">4. Tool Call</div>
+              <div class="flow-arrow">➔</div>
+              <div class="flow-node" style="background:#FEF3C7; border-color:#F59E0B;">5. JSON.parse</div>
+              <div class="flow-arrow">➔</div>
+              <div class="flow-node success">6. Zod Validate</div>
+              <div class="flow-arrow">➔</div>
+              <div class="flow-node" style="background:#E0E7FF; border-color:#6366F1;">7. Run JS Func</div>
+              <div class="flow-arrow">➔</div>
+              <div class="flow-node primary">8. Send Result</div>
+              <div class="flow-arrow">➔</div>
+              <div class="flow-node success">9. Final Answer</div>
+            </div>
+          </div>
+
+          <div class="grid-2col" style="margin-top: 8px;">
+            <div class="table-container">
+              <table class="styled-table" style="font-size: 0.82rem;">
+                <thead>
+                  <tr><th>Concept</th><th>Meaning & Function</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td><strong>Tool Schema</strong></td><td>Describes tool capability to the model</td></tr>
+                  <tr><td><strong>Tool Arguments</strong></td><td>Parameter values suggested by the model</td></tr>
+                  <tr><td><strong>Tool Implementation</strong></td><td>Actual JavaScript backend function</td></tr>
+                  <tr><td><strong>Tool Result</strong></td><td>Data returned by our JavaScript function</td></tr>
+                  <tr><td><strong>Orchestration</strong></td><td>Backend glue coordinating the turns</td></tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="card card-accent" style="justify-content: center;">
+              <div class="card-title"><span class="icon">🏆</span> Core Architectural Rule</div>
+              <p class="card-desc" style="font-size: 0.95rem;">
+                <em>"The LLM is the brain that reasons; your Node.js backend is the hands that execute."</em>
+              </p>
+              <p style="font-size: 0.82rem; color: var(--text-muted); line-height: 1.6; margin-top: 4px;">
+                You never give an LLM direct shell or database access. You expose narrow, authenticated, parameter-checked functions that your application safely executes.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==========================================
+           SLIDE 18: Practical Project: AI Student Assistant
+           ========================================== -->
+      <section class="slide" id="slide-18">
+        <div class="slide-header">
+          <div class="slide-title-group">
+            <span class="slide-category">Capstone Architecture</span>
+            <h2 class="slide-title">Practical Project: AI Student Assistant</h2>
+            <p class="slide-subtitle">Building an Express API with Groq SDK, Zod, and dual tools (get_student & get_attendance)</p>
+          </div>
+          <span class="slide-tag">PROJECT SPEC</span>
+        </div>
+
+        <div class="slide-body">
+          <div class="grid-2col">
+            <div class="card">
+              <div class="card-title"><span class="icon">📋</span> Project Specifications</div>
+              <p class="card-desc">We will build a production assistant with two registered capabilities:</p>
+              
+              <ul class="feature-list" style="gap: 12px; margin-top: 6px;">
+                <li>
+                  <span class="bullet-check">✓</span>
+                  <div>
+                    <strong>Tool 1: get_student</strong>
+                    <div style="font-size: 0.8rem; color: var(--text-muted);">Returns student name, course, and enrollment status using <code>studentId</code>.</div>
+                  </div>
+                </li>
+                <li>
+                  <span class="bullet-check">✓</span>
+                  <div>
+                    <strong>Tool 2: get_attendance</strong>
+                    <div style="font-size: 0.8rem; color: var(--text-muted);">Returns student name and attendance percentage using <code>studentId</code>.</div>
+                  </div>
+                </li>
+              </ul>
+
+              <div class="output-box" style="margin-top: 10px;">
+                <div class="output-label">Sample Questions Handled:</div>
+                <div class="output-content" style="color: #93C5FD;">• "Who is student 101?"
+• "What course is student 102 studying?"
+• "What is the attendance of student 101?"
+• "Is student 102's attendance above 75%?"</div>
+              </div>
+            </div>
+
+            <div class="card card-accent" style="justify-content: space-between;">
+              <div>
+                <div class="card-title"><span class="icon">🏗️</span> Project Flow Architecture</div>
+                <div class="flow-vertical" style="gap: 6px; margin-top: 6px;">
+                  <div class="flow-v-node"><span>React / Postman Client</span> <span>➔ POST /chat</span></div>
+                  <div class="flow-v-arrow">↓</div>
+                  <div class="flow-v-node" style="background: #EFF6FF;"><span>Express Server</span> <span>➔ Validate req.body</span></div>
+                  <div class="flow-v-arrow">↓</div>
+                  <div class="flow-v-node" style="background: #DBEAFE;"><span>Groq LLM (openai/gpt-oss-120b)</span> <span>➔ Tool Request</span></div>
+                  <div class="flow-v-arrow">↓</div>
+                  <div class="flow-v-node" style="background: #FEF3C7;"><span>Zod Validator & JS Functions</span> <span>➔ In-Memory Data</span></div>
+                  <div class="flow-v-arrow">↓</div>
+                  <div class="flow-v-node" style="background: var(--accent-green-bg);"><span>Groq Final Synthesis</span> <span>➔ Final Response</span></div>
+                </div>
+              </div>
+
+              <div class="card card-purple" style="padding: 10px 14px; margin-top: 6px;">
+                <span style="font-size: 0.76rem; color: var(--text-main);">For this classroom project, we use in-memory student arrays. The exact same pattern seamlessly attaches to MongoDB or PostgreSQL in production!</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==========================================
+           SLIDE 19: Practical Code: Setup & Tool Definitions (Part 1)
+           ========================================== -->
+      <section class="slide" id="slide-19">
+        <div class="slide-header">
+          <div class="slide-title-group">
+            <span class="slide-category">Implementation Part 1</span>
+            <h2 class="slide-title">Practical Code: Setup & Tool Definitions</h2>
+            <p class="slide-subtitle">Dependencies, in-memory data, functions, JSON Schema, and Zod schemas</p>
+          </div>
+          <span class="slide-tag">SERVER.JS PART 1</span>
+        </div>
+
+        <div class="slide-body">
+          <div class="grid-60-40">
+            <div class="code-panel">
+              <div class="code-header">
+                <span class="code-file">ai-student-assistant/server.js (Part 1)</span>
+                <button class="copy-btn">Copy</button>
+              </div>
+              <pre><code><span class="kw">require</span>(<span class="str">"dotenv"</span>).<span class="fn">config</span>();
+<span class="kw">const</span> <span class="vr">express</span> = <span class="kw">require</span>(<span class="str">"express"</span>);
+<span class="kw">const</span> <span class="vr">Groq</span> = <span class="kw">require</span>(<span class="str">"groq-sdk"</span>);
+<span class="kw">const</span> { <span class="vr">z</span> } = <span class="kw">require</span>(<span class="str">"zod"</span>);
+
+<span class="kw">const</span> <span class="vr">app</span> = <span class="fn">express</span>();
+<span class="vr">app</span>.<span class="fn">use</span>(<span class="vr">express</span>.<span class="fn">json</span>());
+
+<span class="kw">const</span> <span class="vr">groq</span> = <span class="kw">new</span> <span class="vr">Groq</span>({ <span class="prop">apiKey</span>: process.env.<span class="vr">GROQ_API_KEY</span> });
+<span class="kw">const</span> <span class="vr">MODEL</span> = <span class="str">"openai/gpt-oss-120b"</span>;
+
+<span class="cm">// In-memory student records</span>
+<span class="kw">const</span> <span class="vr">students</span> = [
+  { <span class="prop">id</span>: <span class="num">101</span>, <span class="prop">name</span>: <span class="str">"Arun"</span>, <span class="prop">course</span>: <span class="str">"MERN Stack"</span>, <span class="prop">attendance</span>: <span class="num">85</span> },
+  { <span class="prop">id</span>: <span class="num">102</span>, <span class="prop">name</span>: <span class="str">"Rahul"</span>, <span class="prop">course</span>: <span class="str">"Python"</span>, <span class="prop">attendance</span>: <span class="num">72</span> }
+];
+
+<span class="cm">// Real JavaScript Functions</span>
+<span class="kw">function</span> <span class="fn">getStudent</span>(<span class="vr">studentId</span>) {
+  <span class="kw">return</span> <span class="vr">students</span>.<span class="fn">find</span>(<span class="vr">s</span> => <span class="vr">s</span>.<span class="prop">id</span> === <span class="vr">studentId</span>) || <span class="bool">null</span>;
+}
+
+<span class="kw">function</span> <span class="fn">getAttendance</span>(<span class="vr">studentId</span>) {
+  <span class="kw">const</span> <span class="vr">student</span> = <span class="fn">getStudent</span>(<span class="vr">studentId</span>);
+  <span class="kw">if</span> (!<span class="vr">student</span>) <span class="kw">return</span> { <span class="prop">error</span>: <span class="str">"Student not found"</span> };
+  <span class="kw">return</span> { <span class="prop">studentId</span>, <span class="prop">name</span>: <span class="vr">student</span>.<span class="prop">name</span>, <span class="prop">attendance</span>: <span class="vr">student</span>.<span class="prop">attendance</span> };
+}
+
+<span class="cm">// Tool Definitions for Groq</span>
+<span class="kw">const</span> <span class="vr">tools</span> = [
+  {
+    <span class="prop">type</span>: <span class="str">"function"</span>,
+    <span class="prop">function</span>: {
+      <span class="prop">name</span>: <span class="str">"get_student"</span>,
+      <span class="prop">description</span>: <span class="str">"Get student details using student ID"</span>,
+      <span class="prop">parameters</span>: {
+        <span class="prop">type</span>: <span class="str">"object"</span>,
+        <span class="prop">properties</span>: { <span class="prop">studentId</span>: { <span class="prop">type</span>: <span class="str">"integer"</span>, <span class="prop">description</span>: <span class="str">"Unique student ID"</span> } },
+        <span class="prop">required</span>: [<span class="str">"studentId"</span>]
+      }
+    }
+  },
+  {
+    <span class="prop">type</span>: <span class="str">"function"</span>,
+    <span class="prop">function</span>: {
+      <span class="prop">name</span>: <span class="str">"get_attendance"</span>,
+      <span class="prop">description</span>: <span class="str">"Get attendance percentage using student ID"</span>,
+      <span class="prop">parameters</span>: {
+        <span class="prop">type</span>: <span class="str">"object"</span>,
+        <span class="prop">properties</span>: { <span class="prop">studentId</span>: { <span class="prop">type</span>: <span class="str">"integer"</span>, <span class="prop">description</span>: <span class="str">"Unique student ID"</span> } },
+        <span class="prop">required</span>: [<span class="str">"studentId"</span>]
+      }
+    }
+  }
+];
+
+<span class="cm">// Zod Schemas & Tool Map</span>
+<span class="kw">const</span> <span class="vr">argumentSchemas</span> = {
+  <span class="prop">get_student</span>: <span class="vr">z</span>.<span class="fn">object</span>({ <span class="prop">studentId</span>: <span class="vr">z</span>.<span class="fn">number</span>().<span class="fn">int</span>().<span class="fn">positive</span>() }),
+  <span class="prop">get_attendance</span>: <span class="vr">z</span>.<span class="fn">object</span>({ <span class="prop">studentId</span>: <span class="vr">z</span>.<span class="fn">number</span>().<span class="fn">int</span>().<span class="fn">positive</span>() })
+};
+
+<span class="kw">const</span> <span class="vr">availableTools</span> = {
+  <span class="prop">get_student</span>: <span class="vr">getStudent</span>,
+  <span class="prop">get_attendance</span>: <span class="vr">getAttendance</span>
+};</code></pre>
+            </div>
+
+            <div class="card card-accent" style="justify-content: space-between;">
+              <div>
+                <div class="card-title"><span class="icon">📦</span> Project Files Structure</div>
+                <div class="code-panel">
+                  <div class="code-header"><span class="code-file">ai-student-assistant/</span></div>
+                  <pre style="font-size: 0.8rem; padding: 10px;"><code>├── .env
+├── .gitignore
+├── package.json
+└── server.js</code></pre>
+                </div>
+
+                <div class="code-panel" style="margin-top: 8px;">
+                  <div class="code-header"><span class="code-file">terminal</span></div>
+                  <pre style="font-size: 0.8rem; padding: 10px;"><code>npm init -y
+npm install express groq-sdk dotenv zod</code></pre>
+                </div>
+              </div>
+
+              <div class="card card-green" style="padding: 10px 14px;">
+                <strong style="color: var(--accent-green); font-size: 0.8rem;">Ready for Execution:</strong>
+                <span style="font-size: 0.76rem; color: var(--text-main);">Notice how <code>availableTools</code> maps string names to real functions, while <code>argumentSchemas</code> matches each with a Zod guard!</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==========================================
+           SLIDE 20: Practical Code: Tool Execution & Express API (Part 2)
+           ========================================== -->
+      <section class="slide" id="slide-20">
+        <div class="slide-header">
+          <div class="slide-title-group">
+            <span class="slide-category">Implementation Part 2</span>
+            <h2 class="slide-title">Practical Code: Tool Execution & Express API</h2>
+            <p class="slide-subtitle">The complete executeTool, runAssistant, and POST /chat implementation</p>
+          </div>
+          <span class="slide-tag">SERVER.JS PART 2</span>
+        </div>
+
+        <div class="slide-body">
+          <div class="grid-60-40">
+            <div class="code-panel">
+              <div class="code-header">
+                <span class="code-file">ai-student-assistant/server.js (Part 2)</span>
+                <button class="copy-btn">Copy</button>
+              </div>
+              <pre><code><span class="cm">// Safe Tool Execution Helper</span>
+<span class="kw">function</span> <span class="fn">executeTool</span>(<span class="vr">toolCall</span>) {
+  <span class="kw">const</span> <span class="vr">toolName</span> = <span class="vr">toolCall</span>.<span class="prop">function</span>.<span class="prop">name</span>;
+  <span class="kw">try</span> {
+    <span class="kw">const</span> <span class="vr">tool</span> = <span class="vr">availableTools</span>[<span class="vr">toolName</span>];
+    <span class="kw">const</span> <span class="vr">schema</span> = <span class="vr">argumentSchemas</span>[<span class="vr">toolName</span>];
+    <span class="kw">if</span> (!<span class="vr">tool</span> || !<span class="vr">schema</span>) <span class="kw">throw new</span> <span class="fn">Error</span>(<span class="str">"Unknown tool"</span>);
+
+    <span class="kw">const</span> <span class="vr">args</span> = JSON.<span class="fn">parse</span>(<span class="vr">toolCall</span>.<span class="prop">function</span>.<span class="prop">arguments</span>);
+    <span class="kw">const</span> <span class="vr">validated</span> = <span class="vr">schema</span>.<span class="fn">safeParse</span>(<span class="vr">args</span>);
+    <span class="kw">if</span> (!<span class="vr">validated</span>.<span class="prop">success</span>) <span class="kw">throw new</span> <span class="fn">Error</span>(<span class="str">"Invalid tool arguments"</span>);
+
+    <span class="kw">return</span> <span class="fn">tool</span>(<span class="vr">validated</span>.<span class="prop">data</span>.<span class="prop">studentId</span>);
+  } <span class="kw">catch</span> (<span class="vr">error</span>) {
+    <span class="kw">return</span> { <span class="prop">error</span>: <span class="bool">true</span>, <span class="prop">message</span>: <span class="vr">error</span>.<span class="prop">message</span> };
+  }
+}
+
+<span class="cm">// Orchestration Engine</span>
+<span class="kw">async function</span> <span class="fn">runAssistant</span>(<span class="vr">question</span>) {
+  <span class="kw">const</span> <span class="vr">messages</span> = [
+    { <span class="prop">role</span>: <span class="str">"system"</span>, <span class="prop">content</span>: <span class="str">"You are an AI Student Assistant. Use available tools to answer questions. Do not invent facts."</span> },
+    { <span class="prop">role</span>: <span class="str">"user"</span>, <span class="prop">content</span>: <span class="vr">question</span> }
+  ];
+
+  <span class="cm">// Request 1: Let LLM decide whether to use tools</span>
+  <span class="kw">const</span> <span class="vr">response</span> = <span class="kw">await</span> <span class="vr">groq</span>.chat.completions.<span class="fn">create</span>({
+    <span class="prop">model</span>: <span class="vr">MODEL</span>, <span class="prop">messages</span>, <span class="prop">tools</span>, <span class="prop">tool_choice</span>: <span class="str">"auto"</span>
+  });
+
+  <span class="kw">const</span> <span class="vr">assistantMessage</span> = <span class="vr">response</span>.choices[<span class="num">0</span>].message;
+  <span class="kw">if</span> (!<span class="vr">assistantMessage</span>.<span class="prop">tool_calls</span>?.<span class="prop">length</span>) {
+    <span class="kw">return</span> <span class="vr">assistantMessage</span>.<span class="prop">content</span>;
+  }
+
+  <span class="vr">messages</span>.<span class="fn">push</span>(<span class="vr">assistantMessage</span>);
+
+  <span class="cm">// Execute each tool call</span>
+  <span class="kw">for</span> (<span class="kw">const</span> <span class="vr">toolCall</span> <span class="kw">of</span> <span class="vr">assistantMessage</span>.<span class="prop">tool_calls</span>) {
+    <span class="kw">const</span> <span class="vr">result</span> = <span class="fn">executeTool</span>(<span class="vr">toolCall</span>);
+    <span class="vr">messages</span>.<span class="fn">push</span>({
+      <span class="prop">role</span>: <span class="str">"tool"</span>,
+      <span class="prop">tool_call_id</span>: <span class="vr">toolCall</span>.<span class="prop">id</span>,
+      <span class="prop">name</span>: <span class="vr">toolCall</span>.<span class="prop">function</span>.<span class="prop">name</span>,
+      <span class="prop">content</span>: JSON.<span class="fn">stringify</span>(<span class="vr">result</span>)
+    });
+  }
+
+  <span class="cm">// Request 2: Final synthesis</span>
+  <span class="kw">const</span> <span class="vr">finalResponse</span> = <span class="kw">await</span> <span class="vr">groq</span>.chat.completions.<span class="fn">create</span>({
+    <span class="prop">model</span>: <span class="vr">MODEL</span>, <span class="prop">messages</span>, <span class="prop">tools</span>, <span class="prop">tool_choice</span>: <span class="str">"none"</span>
+  });
+
+  <span class="kw">return</span> <span class="vr">finalResponse</span>.choices[<span class="num">0</span>].message.content;
+}
+
+<span class="cm">// Express Endpoint</span>
+<span class="vr">app</span>.<span class="fn">post</span>(<span class="str">"/chat"</span>, <span class="kw">async</span> (<span class="vr">req</span>, <span class="vr">res</span>) => {
+  <span class="kw">try</span> {
+    <span class="kw">const</span> { <span class="prop">question</span> } = <span class="vr">req</span>.<span class="prop">body</span>;
+    <span class="kw">if</span> (<span class="kw">typeof</span> <span class="vr">question</span> !== <span class="str">"string"</span> || !<span class="vr">question</span>.<span class="fn">trim</span>()) {
+      <span class="kw">return</span> <span class="vr">res</span>.<span class="fn">status</span>(<span class="num">400</span>).<span class="fn">json</span>({ <span class="prop">error</span>: <span class="str">"Question is required"</span> });
+    }
+    <span class="kw">const</span> <span class="vr">answer</span> = <span class="kw">await</span> <span class="fn">runAssistant</span>(<span class="vr">question</span>);
+    <span class="vr">res</span>.<span class="fn">json</span>({ <span class="prop">success</span>: <span class="bool">true</span>, <span class="prop">answer</span> });
+  } <span class="kw">catch</span> (<span class="vr">err</span>) {
+    <span class="vr">res</span>.<span class="fn">status</span>(<span class="num">500</span>).<span class="fn">json</span>({ <span class="prop">success</span>: <span class="bool">false</span>, <span class="prop">message</span>: <span class="str">"Something went wrong"</span> });
+  }
+});
+
+<span class="vr">app</span>.<span class="fn">listen</span>(process.env.<span class="vr">PORT</span> || <span class="num">3000</span>, () => console.<span class="fn">log</span>(<span class="str">"Assistant running"</span>));</code></pre>
+            </div>
+
+            <div class="sandbox-card">
+              <div class="sandbox-header">
+                <div class="sandbox-title"><span class="icon">🧪</span> Live AI Assistant Interactive Simulator</div>
+                <span class="sandbox-badge">POST /chat</span>
+              </div>
+              <p style="font-size: 0.78rem; color: var(--text-muted);">Try asking student queries or pick a preset:</p>
+
+              <div style="display: flex; gap: 6px; flex-wrap: wrap;">
+                <button class="btn-sandbox btn-sandbox-secondary s20-preset" data-query="Who is student 101?" style="font-size: 0.72rem; padding: 4px 8px;">Who is 101?</button>
+                <button class="btn-sandbox btn-sandbox-secondary s20-preset" data-query="What is the attendance of student 102?" style="font-size: 0.72rem; padding: 4px 8px;">Attendance 102</button>
+                <button class="btn-sandbox btn-sandbox-secondary s20-preset" data-query="What course is student 101 enrolled in?" style="font-size: 0.72rem; padding: 4px 8px;">Course of 101</button>
+              </div>
+
+              <input id="s20InputQuery" type="text" value="Who is student 101?" class="slide-select" style="width: 100%;">
+
+              <button id="s20ChatBtn" class="btn-sandbox">Send to AI Assistant ➔</button>
+
+              <div id="s20ChatLog" class="sandbox-result" style="font-size: 0.76rem; min-height: 120px; max-height: 160px;">
+Click 'Send to AI Assistant' to watch tool selection, Node.js execution, and response synthesis!
+              </div>
+
+              <div class="card card-green" style="padding: 8px 12px; margin-top: 4px;">
+                <strong style="color: var(--accent-green); font-size: 0.8rem;">🎉 Day 8 Milestone Achieved:</strong>
+                <span style="font-size: 0.74rem; color: var(--text-main);">Your Node.js LLM application is now an active agent that safely executes backend functions!</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- Bottom Presentation Control Bar -->
+    <nav class="pres-controls">
+      <button class="control-btn" id="prevBtn" title="Previous Slide (← / PageUp)">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+      </button>
+
+      <div class="slide-select-container">
+        <select class="slide-select" id="slideSelect" title="Jump to Slide"></select>
+      </div>
+
+      <button class="control-btn" id="nextBtn" title="Next Slide (→ / PageDown / Space)">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+      </button>
+
+      <div class="shortcuts-pill">
+        <kbd>←</kbd> / <kbd>→</kbd>
+      </div>
+    </nav>
+
+    <!-- Table of Contents Sidebar / Drawer -->
+    <div class="toc-overlay" id="tocOverlay">
+      <div class="toc-drawer">
+        <div class="toc-header">
+          <div class="toc-title">Table of Contents</div>
+          <button class="toc-close" id="tocClose" title="Close TOC (Esc)">✕</button>
+        </div>
+        <ul class="toc-list" id="tocList"></ul>
+      </div>
+    </div>
+
+    <!-- Help & Keyboard Shortcuts Modal -->
+    <div class="modal-overlay" id="helpModal">
+      <div class="modal-card">
+        <div class="modal-header">
+          <div class="modal-title">Keyboard Navigation & Shortcuts</div>
+          <button class="toc-close" id="helpClose" title="Close (Esc)">✕</button>
+        </div>
+        <div class="modal-body">
+          <div class="shortcut-row">
+            <span>Next Slide</span>
+            <div style="display:flex; gap:4px;"><span class="shortcut-key">→</span> <span class="shortcut-key">Space</span> <span class="shortcut-key">PageDown</span></div>
+          </div>
+          <div class="shortcut-row">
+            <span>Previous Slide</span>
+            <div style="display:flex; gap:4px;"><span class="shortcut-key">←</span> <span class="shortcut-key">PageUp</span></div>
+          </div>
+          <div class="shortcut-row">
+            <span>First / Last Slide</span>
+            <div style="display:flex; gap:4px;"><span class="shortcut-key">Home</span> / <span class="shortcut-key">End</span></div>
+          </div>
+          <div class="shortcut-row">
+            <span>Toggle Fullscreen</span>
+            <span class="shortcut-key">F</span>
+          </div>
+          <div class="shortcut-row">
+            <span>Table of Contents</span>
+            <span class="shortcut-key">T</span>
+          </div>
+          <div class="shortcut-row">
+            <span>Close Modal / Sidebar</span>
+            <span class="shortcut-key">Esc</span>
+          </div>
+          <div class="shortcut-row">
+            <span>Help Shortcuts</span>
+            <span class="shortcut-key">?</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div class="toast-notice" id="toastNotice">Notification</div>
+
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
