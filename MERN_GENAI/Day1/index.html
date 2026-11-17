@@ -1,0 +1,1231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MERN Gen-AI – Day 1: Introduction to Generative AI &amp; Prompt Engineering</title>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&amp;family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap"
+    rel="stylesheet"
+  />
+
+  <!-- Prism.js Syntax Highlighting -->
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css"
+  />
+
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div id="presentation-app">
+    <!-- Top Progress Bar -->
+    <div class="progress-container" aria-hidden="true">
+      <div class="progress-fill" id="progressFill"></div>
+    </div>
+
+    <!-- Top Navigation Bar -->
+    <header class="top-bar">
+      <div class="brand-section">
+        <span class="brand-badge">MERN GEN-AI • DAY 1</span>
+        <span class="brand-title">Introduction to GenAI &amp; Prompt Engineering</span>
+        <span class="section-indicator" id="sectionIndicator">Section 1 • Foundations</span>
+      </div>
+
+      <div class="top-controls">
+        <span class="slide-counter" id="slideCounter">01 / 15</span>
+        <button type="button" class="top-btn" id="tocBtn" title="Table of Contents (T)">
+          <span>☰</span> Slides
+        </button>
+        <button type="button" class="top-btn" id="helpBtn" title="Keyboard Shortcuts (?)">
+          <span>?</span> Help
+        </button>
+        <button type="button" class="top-btn" id="fullscreenBtn" title="Toggle Fullscreen (F)">
+          <span>⛶</span> Fullscreen
+        </button>
+      </div>
+    </header>
+
+    <!-- Main Slides Viewport -->
+    <main class="slides-viewport" id="slidesViewport">
+
+      <!-- =====================================================
+           SLIDE 1: WHAT IS GENERATIVE AI?
+      ====================================================== -->
+      <section class="slide active" data-slide="1" id="slide-1">
+        <div class="slide-header">
+          <span class="slide-category">Section 1 • Foundations</span>
+          <h2 class="slide-title">What Is <span class="highlight">Generative AI</span>?</h2>
+        </div>
+
+        <div class="split-layout">
+          <div class="concept-col">
+            <div class="concept-card accent-border">
+              <div class="concept-title">Definition &amp; Fundamental Concept</div>
+              <p class="concept-text">
+                <strong>Generative AI</strong> is a category of artificial intelligence that creates new, original content
+                based on patterns learned from vast datasets and the input instructions it receives.
+              </p>
+              <ul class="key-term-list" style="margin-top: 8px;">
+                <li class="key-term-item">
+                  <span class="key-term-name">1. Text Generation</span>
+                  Conversational responses, technical documentation, marketing copy, and automated emails.
+                </li>
+                <li class="key-term-item">
+                  <span class="key-term-name">2. Code Generation</span>
+                  Complete functions, bug explanations, unit test suites, and schema boilerplate.
+                </li>
+                <li class="key-term-item">
+                  <span class="key-term-name">3. Multimodal Media</span>
+                  High-fidelity images, UI mockups, realistic speech audio, and video synthesis.
+                </li>
+              </ul>
+            </div>
+
+            <div class="example-box">
+              <strong>Core Mental Model:</strong> Traditional software strictly executes pre-written <code>if/else</code> rules.
+              Generative AI generates novel, context-aware content based on probabilistic neural patterns.
+            </div>
+          </div>
+
+          <div class="code-col">
+            <div class="concept-card green-border" style="flex: 1; display: flex; flex-direction: column; justify-content: center; gap: 12px;">
+              <div class="concept-title">Everyday Industry Examples</div>
+
+              <div class="flow-vertical">
+                <div class="flow-vertical-step" style="border-left: 4px solid #10a37f;">
+                  <span class="status-pill status-pill-success">ChatGPT</span>
+                  <span>General reasoning, text generation, and customer assistance.</span>
+                </div>
+                <div class="flow-vertical-step" style="border-left: 4px solid #0284c7;">
+                  <span class="status-pill status-pill-info">GitHub Copilot</span>
+                  <span>Real-time code completions, inline refactoring, and bug fixes.</span>
+                </div>
+                <div class="flow-vertical-step" style="border-left: 4px solid #7c3aed;">
+                  <span class="status-pill status-pill-purple">Midjourney / DALL-E</span>
+                  <span>Visual design assets, concept art, and photo synthesis.</span>
+                </div>
+                <div class="flow-vertical-step" style="border-left: 4px solid #d97706;">
+                  <span class="status-pill status-pill-warning">AI Voice Agents</span>
+                  <span>Human-like customer support calls and real-time audio translation.</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- =====================================================
+           SLIDE 2: AI VS ML VS DL VS GENERATIVE AI
+      ====================================================== -->
+      <section class="slide" data-slide="2" id="slide-2">
+        <div class="slide-header">
+          <span class="slide-category">Section 1 • Foundations</span>
+          <h2 class="slide-title">AI vs ML vs DL vs <span class="highlight">Generative AI</span></h2>
+        </div>
+
+        <div class="split-layout">
+          <div class="concept-col">
+            <div class="concept-card accent-border">
+              <div class="concept-title">Understanding the Technology Hierarchy</div>
+              <ul class="key-term-list">
+                <li class="key-term-item">
+                  <span class="key-term-name">1. Artificial Intelligence (AI)</span>
+                  The overarching discipline of creating software and machines that perform tasks requiring human intelligence.
+                </li>
+                <li class="key-term-item">
+                  <span class="key-term-name">2. Machine Learning (ML)</span>
+                  A subset of AI where systems automatically learn patterns from data instead of being explicitly programmed.
+                </li>
+                <li class="key-term-item">
+                  <span class="key-term-name">3. Deep Learning (DL)</span>
+                  A subset of ML powered by multi-layered neural networks inspired by human brain biology.
+                </li>
+                <li class="key-term-item">
+                  <span class="key-term-name">4. Generative AI (GenAI)</span>
+                  Deep learning architectures (like Transformers) optimized specifically to generate new output content.
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="code-col">
+            <!-- DIAGRAM 1: AI -> ML -> DL -> GenAI -->
+            <div class="diagram-panel" style="flex: 1; display: flex; flex-direction: column; justify-content: center;">
+              <div class="diagram-caption">Diagram 1 • The Nested Hierarchy of AI Technologies</div>
+
+              <div class="venn-container">
+                <div class="venn-level ai">
+                  <strong style="color: #0369a1; font-size: 0.88rem;">Artificial Intelligence (AI)</strong>
+                  <span style="font-size: 0.78rem; color: var(--text-muted);">Broad discipline of intelligent machines</span>
+
+                  <div class="venn-level ml">
+                    <strong style="color: #6d28d9; font-size: 0.85rem;">Machine Learning (ML)</strong>
+                    <span style="font-size: 0.78rem; color: var(--text-muted);">Learning statistical patterns from data (e.g. spam detection)</span>
+
+                    <div class="venn-level dl">
+                      <strong style="color: #b45309; font-size: 0.82rem;">Deep Learning (DL)</strong>
+                      <span style="font-size: 0.76rem; color: var(--text-muted);">Multi-layer neural networks (e.g. computer vision)</span>
+
+                      <div class="venn-level genai">
+                        <strong style="color: #047857; font-size: 0.82rem;">Generative AI (GenAI)</strong>
+                        <span style="font-size: 0.74rem; color: #065f46;">Generates new text, code, audio, and images</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- =====================================================
+           SLIDE 3: TRADITIONAL AI VS GENERATIVE AI
+      ====================================================== -->
+      <section class="slide" data-slide="3" id="slide-3">
+        <div class="slide-header">
+          <span class="slide-category">Section 1 • Foundations</span>
+          <h2 class="slide-title"><span class="highlight">Traditional AI vs Generative AI</span></h2>
+        </div>
+
+        <div class="split-layout">
+          <div class="concept-col">
+            <div class="table-wrapper">
+              <table class="styled-table">
+                <thead>
+                  <tr>
+                    <th>Feature</th>
+                    <th>Traditional (Discriminative) AI</th>
+                    <th>Generative AI</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="tag-col">Primary Goal</td>
+                    <td>Classifies, predicts, or scores</td>
+                    <td><strong>Generates new, original content</strong></td>
+                  </tr>
+                  <tr>
+                    <td class="tag-col">Output Nature</td>
+                    <td>Predetermined category or number</td>
+                    <td>Flexible human-like text or media</td>
+                  </tr>
+                  <tr>
+                    <td class="tag-col">Input-Output Example</td>
+                    <td>Transaction &rarr; <code>Fraud / Not Fraud</code></td>
+                    <td>Transaction &rarr; <code>"Polite explanation email"</code></td>
+                  </tr>
+                  <tr>
+                    <td class="tag-col">Common Uses</td>
+                    <td>Spam filter, fraud detection</td>
+                    <td>Chatbots, code writers, summarizers</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="example-box success" style="margin-top: 10px;">
+              <strong>Developer Insight:</strong> Traditional AI answers <em>"Which category does this belong to?"</em>. Generative AI answers <em>"Create a solution for this situation."</em>
+            </div>
+          </div>
+
+          <div class="code-col">
+            <!-- DIAGRAM 2: Traditional AI vs Generative AI -->
+            <div class="diagram-panel" style="flex: 1; display: flex; flex-direction: column; justify-content: center; gap: 14px;">
+              <div class="diagram-caption">Diagram 2 • Workflow Contrast in E-Commerce</div>
+
+              <div class="concept-card accent-border" style="padding: 10px 14px;">
+                <div class="concept-title" style="font-size: 0.88rem; color: #0284c7;">Traditional AI Workflow</div>
+                <div class="flow-horizontal">
+                  <div class="flow-box blue">User Browsing Data</div>
+                  <div class="flow-arrow">&rarr;</div>
+                  <div class="flow-box purple">Recommendation Model</div>
+                  <div class="flow-arrow">&rarr;</div>
+                  <div class="flow-box green">Product ID #419</div>
+                </div>
+              </div>
+
+              <div class="concept-card green-border" style="padding: 10px 14px;">
+                <div class="concept-title" style="font-size: 0.88rem; color: #059669;">Generative AI Workflow</div>
+                <div class="flow-horizontal">
+                  <div class="flow-box blue">User Question &amp; Tone</div>
+                  <div class="flow-arrow">&rarr;</div>
+                  <div class="flow-box amber">Large Language Model</div>
+                  <div class="flow-arrow">&rarr;</div>
+                  <div class="flow-box green">Personalized 3-paragraph sales guide</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- =====================================================
+           SLIDE 4: TYPES AND APPLICATIONS OF GENERATIVE AI
+      ====================================================== -->
+      <section class="slide" data-slide="4" id="slide-4">
+        <div class="slide-header">
+          <span class="slide-category">Section 1 • Applications</span>
+          <h2 class="slide-title">Types &amp; Applications in <span class="highlight">MERN Projects</span></h2>
+        </div>
+
+        <div class="split-layout equal">
+          <div class="concept-col">
+            <div class="concept-card accent-border">
+              <div class="concept-title">5 Core Types of Generative AI</div>
+              <ul class="key-term-list" style="margin-top: 6px;">
+                <li class="key-term-item">
+                  <strong>1. Text:</strong> Chatbots, email automation, technical summaries, language translation.
+                </li>
+                <li class="key-term-item">
+                  <strong>2. Code:</strong> Suggesting Express routes, debugging async promises, schema generation.
+                </li>
+                <li class="key-term-item">
+                  <strong>3. Image:</strong> Generating product avatars, banner marketing, UI placeholder assets.
+                </li>
+                <li class="key-term-item">
+                  <strong>4. Audio:</strong> Dynamic podcast synthesis, voice responses in interactive apps.
+                </li>
+                <li class="key-term-item">
+                  <strong>5. Video:</strong> Automated product demo reels and educational animations.
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="code-col">
+            <div class="concept-card purple-border">
+              <div class="concept-title">Real-World MERN Stack AI Projects</div>
+              <ul class="key-term-list" style="margin-top: 6px;">
+                <li class="key-term-item">
+                  <span class="key-term-name">AI Resume Analyzer (MERN)</span>
+                  React uploads PDF &rarr; Express sends text to LLM &rarr; extracts structured skills into MongoDB.
+                </li>
+                <li class="key-term-item">
+                  <span class="key-term-name">AI Customer Support Desk</span>
+                  Real-time ticket classification and draft generation directly inside React admin panels.
+                </li>
+                <li class="key-term-item">
+                  <span class="key-term-name">AI Document Q&amp;A Assistant</span>
+                  Students upload PDF study notes; the backend answers queries using document context.
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- =====================================================
+           SLIDE 5: WHAT IS AN LLM?
+      ====================================================== -->
+      <section class="slide" data-slide="5" id="slide-5">
+        <div class="slide-header">
+          <span class="slide-category">Section 2 • LLM Concepts</span>
+          <h2 class="slide-title">What Is an <span class="highlight">LLM (Large Language Model)</span>?</h2>
+        </div>
+
+        <div class="split-layout">
+          <div class="concept-col">
+            <div class="concept-card accent-border">
+              <div class="concept-title">Definition &amp; Capabilities</div>
+              <p class="concept-text">
+                An <strong>LLM</strong> is a deep learning model trained on terabytes of text from the internet, books,
+                and code repositories to predict and generate natural human language.
+              </p>
+              <ul class="key-term-list" style="margin-top: 8px;">
+                <li class="key-term-item">
+                  <span class="key-term-name">What Can an LLM Do?</span>
+                  Answer complex questions, write programming code, summarize documents, translate languages, and extract structured data.
+                </li>
+                <li class="key-term-item">
+                  <span class="key-term-name">Prominent Frontier LLMs</span>
+                  GPT-4o / GPT-4.1 (OpenAI), Gemini 2.5 (Google), Claude 3.5 (Anthropic), Llama 3.2 (Meta).
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="code-col">
+            <!-- DIAGRAM 3: User -> Prompt -> LLM -> Response -->
+            <div class="diagram-panel" style="flex: 1; display: flex; flex-direction: column; justify-content: center; gap: 14px;">
+              <div class="diagram-caption">Diagram 3 • Fundamental LLM Communication Flow</div>
+
+              <div class="flow-horizontal">
+                <div class="flow-box blue">
+                  <strong>1. User Query</strong><br />
+                  <small>"Explain React state"</small>
+                </div>
+                <div class="flow-arrow">&rarr;</div>
+                <div class="flow-box purple">
+                  <strong>2. Node.js Prompt</strong><br />
+                  <small>Context &amp; instructions</small>
+                </div>
+                <div class="flow-arrow">&rarr;</div>
+                <div class="flow-box amber">
+                  <strong>3. LLM Model</strong><br />
+                  <small>Predicts next tokens</small>
+                </div>
+                <div class="flow-arrow">&rarr;</div>
+                <div class="flow-box green">
+                  <strong>4. Output Text</strong><br />
+                  <small>Clear explanation</small>
+                </div>
+              </div>
+
+              <div class="example-box success">
+                <strong>Key Mechanism:</strong> The model does not look up answers in an SQL database; it calculates the statistical probability of each succeeding token based on learned weights!
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- =====================================================
+           SLIDE 6: HOW DOES AN LLM WORK?
+      ====================================================== -->
+      <section class="slide" data-slide="6" id="slide-6">
+        <div class="slide-header">
+          <span class="slide-category">Section 2 • How LLMs Work</span>
+          <h2 class="slide-title">How Does an LLM Work? <span class="highlight">Training vs Inference</span></h2>
+        </div>
+
+        <div class="split-layout">
+          <div class="concept-col">
+            <div class="table-wrapper">
+              <table class="styled-table">
+                <thead>
+                  <tr>
+                    <th>Dimension</th>
+                    <th>Stage 1: Training</th>
+                    <th>Stage 2: Inference</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="tag-col">When It Happens</td>
+                    <td>Offline by AI labs (OpenAI, Google)</td>
+                    <td><strong>Live when our Node.js app runs</strong></td>
+                  </tr>
+                  <tr>
+                    <td class="tag-col">What Happens</td>
+                    <td>Billions of weights adjusted using GPUs</td>
+                    <td>Weights are frozen; answers generated</td>
+                  </tr>
+                  <tr>
+                    <td class="tag-col">Hardware Cost</td>
+                    <td>Millions of dollars in supercomputers</td>
+                    <td>Fractions of a cent per API call</td>
+                  </tr>
+                  <tr>
+                    <td class="tag-col">Developer Role</td>
+                    <td>We do NOT train frontier models</td>
+                    <td><strong>We send prompts &amp; consume APIs</strong></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="example-box warning" style="margin-top: 10px;">
+              <strong>Crucial Distinction:</strong> Calling <code>client.responses.create()</code> is <strong>inference</strong>. You are asking an already-trained model to evaluate your prompt.
+            </div>
+          </div>
+
+          <div class="code-col">
+            <!-- DIAGRAM 4: Training vs Inference -->
+            <div class="diagram-panel" style="flex: 1; display: flex; flex-direction: column; justify-content: center; gap: 14px;">
+              <div class="diagram-caption">Diagram 4 • Training Phase vs Runtime Inference Phase</div>
+
+              <div class="concept-card purple-border" style="padding: 10px 14px;">
+                <div class="concept-title" style="font-size: 0.88rem; color: #7c3aed;">1. Training (Months of GPU Computing)</div>
+                <div class="flow-horizontal">
+                  <div class="flow-box purple">Internet Data</div>
+                  <div class="flow-arrow">&rarr;</div>
+                  <div class="flow-box rose">GPU Cluster</div>
+                  <div class="flow-arrow">&rarr;</div>
+                  <div class="flow-box green">Frozen Weights</div>
+                </div>
+              </div>
+
+              <div class="concept-card accent-border" style="padding: 10px 14px;">
+                <div class="concept-title" style="font-size: 0.88rem; color: #0284c7;">2. Inference (Milliseconds via Node.js)</div>
+                <div class="flow-horizontal">
+                  <div class="flow-box blue">Express Prompt</div>
+                  <div class="flow-arrow">&rarr;</div>
+                  <div class="flow-box purple">API Gateway</div>
+                  <div class="flow-arrow">&rarr;</div>
+                  <div class="flow-box green">Generated JSON</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- =====================================================
+           SLIDE 7: TOKENS, CONTEXT WINDOW AND HALLUCINATION
+      ====================================================== -->
+      <section class="slide" data-slide="7" id="slide-7">
+        <div class="slide-header">
+          <span class="slide-category">Section 2 • Tokens &amp; Limits</span>
+          <h2 class="slide-title">Tokens, Context Window &amp; <span class="highlight">Hallucinations</span></h2>
+        </div>
+
+        <div class="split-layout equal">
+          <div class="concept-col">
+            <div class="concept-card accent-border">
+              <div class="concept-title">Tokens: The Language of LLMs</div>
+              <p class="concept-text">
+                An LLM does not read whole words or characters directly. Text is sliced into <strong>tokens</strong>
+                (chunks of ~4 characters or &frac34; of an English word).
+              </p>
+              <div class="example-box" style="margin-top: 8px;">
+                <code>"MERN Stack builds fast APIs"</code> &rarr; <code>["M", "ERN", " Stack", " builds", " fast", " APIs"]</code>
+              </div>
+            </div>
+
+            <div class="concept-card purple-border">
+              <div class="concept-title">Context Window</div>
+              <p class="concept-text">
+                The total token budget (input prompt + generated output) that a model can process in one call. Exceeding it triggers truncation or API errors!
+              </p>
+            </div>
+          </div>
+
+          <div class="code-col">
+            <div class="concept-card rose-border" style="flex: 1;">
+              <div class="concept-title" style="color: #9f1239;">Hallucinations &amp; Model Limitations</div>
+              <p class="concept-text">
+                A <strong>hallucination</strong> occurs when an LLM generates plausible-sounding information that is
+                factually incorrect or completely invented.
+              </p>
+              <ul class="key-term-list" style="margin-top: 8px;">
+                <li class="key-term-item">
+                  <strong>Why it happens:</strong> The model generates the next statistically likely word, not a verified database query!
+                </li>
+                <li class="key-term-item">
+                  <strong>Knowledge Cutoff:</strong> The model does not know events or libraries released after its training date unless provided in the prompt.
+                </li>
+                <li class="key-term-item">
+                  <strong>Developer Defense:</strong> Always validate critical responses, provide grounding context, and avoid blindly trusting raw outputs!
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- =====================================================
+           SLIDE 8: LLM MODELS AND PROVIDERS
+      ====================================================== -->
+      <section class="slide" data-slide="8" id="slide-8">
+        <div class="slide-header">
+          <span class="slide-category">Section 2 • Model Providers</span>
+          <h2 class="slide-title">LLM Models &amp; <span class="highlight">Cloud vs Local Providers</span></h2>
+        </div>
+
+        <div class="split-layout">
+          <div class="concept-col">
+            <div class="table-wrapper">
+              <table class="styled-table">
+                <thead>
+                  <tr>
+                    <th>Provider</th>
+                    <th>Model Family / Tool</th>
+                    <th>Primary Deployment</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr><td class="tag-col">OpenAI</td><td>GPT-4.1 / GPT-4o</td><td>Hosted Cloud API</td></tr>
+                  <tr><td class="tag-col">Google</td><td>Gemini 2.5 Flash</td><td>Hosted Cloud API</td></tr>
+                  <tr><td class="tag-col">Anthropic</td><td>Claude 3.5 Sonnet</td><td>Hosted Cloud API</td></tr>
+                  <tr><td class="tag-col">Meta</td><td>Llama 3.2 / 3.3</td><td>Open-weight (Cloud or Local)</td></tr>
+                  <tr><td class="tag-col">Groq</td><td>LPU Accelerated Engine</td><td>High-speed Cloud Inference</td></tr>
+                  <tr><td class="tag-col">Ollama</td><td>Local Runtime CLI</td><td><strong>On-Device Localhost</strong></td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="code-col">
+            <!-- DIAGRAM 5: Cloud LLM vs Local LLM -->
+            <div class="diagram-panel" style="flex: 1; display: flex; flex-direction: column; justify-content: center; gap: 12px;">
+              <div class="diagram-caption">Diagram 5 • Cloud LLM vs Local LLM Architecture</div>
+
+              <div class="concept-card accent-border" style="padding: 10px 14px;">
+                <div class="concept-title" style="font-size: 0.88rem; color: #0284c7;">Cloud LLM (OpenAI, Gemini, Claude)</div>
+                <div class="flow-horizontal">
+                  <div class="flow-box blue">Express App</div>
+                  <div class="flow-arrow">&rarr;</div>
+                  <div class="flow-box purple">Internet / HTTPS</div>
+                  <div class="flow-arrow">&rarr;</div>
+                  <div class="flow-box green">Enterprise GPUs</div>
+                </div>
+                <div style="font-size: 0.76rem; color: var(--text-muted); margin-top: 6px;">Pros: Instant scale, massive power. Cons: API bills, requires internet.</div>
+              </div>
+
+              <div class="concept-card green-border" style="padding: 10px 14px;">
+                <div class="concept-title" style="font-size: 0.88rem; color: #059669;">Local LLM (Ollama + Llama 3.2)</div>
+                <div class="flow-horizontal">
+                  <div class="flow-box blue">Express App</div>
+                  <div class="flow-arrow">&rarr;</div>
+                  <div class="flow-box green">http://localhost:11434</div>
+                  <div class="flow-arrow">&rarr;</div>
+                  <div class="flow-box purple">Laptop RAM/GPU</div>
+                </div>
+                <div style="font-size: 0.76rem; color: var(--text-muted); margin-top: 6px;">Pros: 100% offline, private, $0 cost. Cons: Requires laptop VRAM.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- =====================================================
+           SLIDE 9: WHAT IS PROMPT ENGINEERING?
+      ====================================================== -->
+      <section class="slide" data-slide="9" id="slide-9">
+        <div class="slide-header">
+          <span class="slide-category">Section 3 • Prompt Engineering</span>
+          <h2 class="slide-title">What Is <span class="highlight">Prompt Engineering</span>?</h2>
+        </div>
+
+        <div class="split-layout equal">
+          <div class="concept-col">
+            <div class="concept-card accent-border">
+              <div class="concept-title">The Art &amp; Science of Guiding AI</div>
+              <p class="concept-text">
+                <strong>Prompt Engineering</strong> is the process of crafting and structuring instructions
+                so an AI model returns predictable, relevant, and format-compliant results.
+              </p>
+              <ul class="key-term-list" style="margin-top: 8px;">
+                <li class="key-term-item">
+                  <strong>Why it matters:</strong> Small changes in prompt wording create massive differences in response quality.
+                </li>
+                <li class="key-term-item">
+                  <strong>Reduces Fluff:</strong> Eliminates boilerplate conversation and forces concise answers.
+                </li>
+                <li class="key-term-item">
+                  <strong>Enforces Consistency:</strong> Guarantees output formats needed by downstream Node.js code.
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="code-col">
+            <div class="concept-card rose-border" style="padding: 12px 14px;">
+              <div class="concept-title" style="font-size: 0.92rem; color: #9f1239;">Weak Prompt</div>
+              <div style="font-style: italic; color: var(--text-muted); font-size: 0.88rem;">"Explain JavaScript."</div>
+              <div style="font-size: 0.78rem; color: #dc2626; margin-top: 4px;">&times; Too broad, unpredictable length, no audience specified.</div>
+            </div>
+
+            <div class="concept-card green-border" style="padding: 12px 14px; margin-top: 10px;">
+              <div class="concept-title" style="font-size: 0.92rem; color: #065f46;">Better Prompt</div>
+              <div style="font-style: italic; color: var(--text-muted); font-size: 0.88rem;">
+                "Explain JavaScript to a beginner in simple English. Include three important features and one practical example."
+              </div>
+              <div style="font-size: 0.78rem; color: #16a34a; margin-top: 4px;">&check; Specific audience, structured deliverables, actionable format!</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- =====================================================
+           SLIDE 10: ANATOMY OF A GOOD PROMPT
+      ====================================================== -->
+      <section class="slide" data-slide="10" id="slide-10">
+        <div class="slide-header">
+          <span class="slide-category">Section 3 • Prompt Anatomy</span>
+          <h2 class="slide-title">Anatomy of a <span class="highlight">Good Prompt</span></h2>
+        </div>
+
+        <div class="split-layout">
+          <div class="concept-col">
+            <div class="concept-card accent-border">
+              <div class="concept-title">5 Essential Components</div>
+              <ul class="key-term-list">
+                <li class="key-term-item"><strong>1. Role:</strong> Who the AI should act as (e.g. <em>"Experienced Node.js teacher"</em>).</li>
+                <li class="key-term-item"><strong>2. Task:</strong> What the AI must do (e.g. <em>"Explain Express middleware"</em>).</li>
+                <li class="key-term-item"><strong>3. Context:</strong> What background it knows (e.g. <em>"Student knows JavaScript basics"</em>).</li>
+                <li class="key-term-item"><strong>4. Instructions:</strong> Steps to follow (e.g. <em>"Use simple English and code"</em>).</li>
+                <li class="key-term-item"><strong>5. Constraints:</strong> Rules/Limits (e.g. <em>"Under 200 words, CommonJS only"</em>).</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="code-col">
+            <!-- INTERACTIVE LAB 1: Prompt Anatomy Builder -->
+            <div class="sandbox-card" style="flex: 1;">
+              <div style="display: flex; justify-content: space-between; align-items: center;">
+                <strong style="color: var(--primary-deep); font-size: 0.95rem;">Lab 1 • Prompt Anatomy Builder</strong>
+                <span class="status-pill status-pill-info">Interactive</span>
+              </div>
+
+              <div style="display: flex; flex-direction: column; gap: 5px;">
+                <label style="display: flex; align-items: center; gap: 6px; font-size: 0.78rem; font-weight: 700;">
+                  <input type="checkbox" id="anaRoleCheck" checked /> Role:
+                  <input type="text" id="anaRoleText" class="sandbox-input" value="Experienced Node.js instructor" />
+                </label>
+                <label style="display: flex; align-items: center; gap: 6px; font-size: 0.78rem; font-weight: 700;">
+                  <input type="checkbox" id="anaTaskCheck" checked /> Task:
+                  <input type="text" id="anaTaskText" class="sandbox-input" value="Explain Express middleware functions" />
+                </label>
+                <label style="display: flex; align-items: center; gap: 6px; font-size: 0.78rem; font-weight: 700;">
+                  <input type="checkbox" id="anaContextCheck" checked /> Context:
+                  <input type="text" id="anaContextText" class="sandbox-input" value="Student knows JavaScript but is new to Express" />
+                </label>
+                <label style="display: flex; align-items: center; gap: 6px; font-size: 0.78rem; font-weight: 700;">
+                  <input type="checkbox" id="anaInstrCheck" checked /> Instructions:
+                  <input type="text" id="anaInstrText" class="sandbox-input" value="Provide a clean 3-line CommonJS example" />
+                </label>
+                <label style="display: flex; align-items: center; gap: 6px; font-size: 0.78rem; font-weight: 700;">
+                  <input type="checkbox" id="anaConstraintCheck" checked /> Constraints:
+                  <input type="text" id="anaConstraintText" class="sandbox-input" value="Under 150 words. Avoid complex databases." />
+                </label>
+              </div>
+
+              <pre id="anaOutputBox" class="sandbox-output" style="min-height: 95px; font-size: 0.76rem;"></pre>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- =====================================================
+           SLIDE 11: SYSTEM PROMPT VS USER PROMPT
+      ====================================================== -->
+      <section class="slide" data-slide="11" id="slide-11">
+        <div class="slide-header">
+          <span class="slide-category">Section 3 • System vs User</span>
+          <h2 class="slide-title">System Prompt vs <span class="highlight">User Prompt</span></h2>
+        </div>
+
+        <div class="split-layout equal">
+          <div class="concept-col">
+            <div class="concept-card purple-border">
+              <div class="concept-title">System Instructions</div>
+              <p class="concept-text">
+                High-level persistent guidelines that define the model's persona, boundaries, and tone.
+              </p>
+              <div class="key-term-list" style="margin-top: 6px;">
+                <div class="key-term-item">
+                  <strong>Example:</strong> "You are a helpful programming teacher. Explain concepts using simple English."
+                </div>
+              </div>
+            </div>
+
+            <div class="concept-card accent-border">
+              <div class="concept-title">User Prompt</div>
+              <p class="concept-text">
+                The dynamic query or problem submitted by the end-user in each request.
+              </p>
+              <div class="key-term-list" style="margin-top: 6px;">
+                <div class="key-term-item">
+                  <strong>Example:</strong> "What is Express middleware?"
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="code-col">
+            <!-- DIAGRAM 6: System Prompt + User Prompt -> LLM -> Response -->
+            <div class="diagram-panel" style="flex: 1; display: flex; flex-direction: column; justify-content: center; gap: 12px;">
+              <div class="diagram-caption">Diagram 6 • System + User Prompt Execution Flow</div>
+
+              <div class="flow-vertical">
+                <div class="flow-vertical-step" style="border-left: 4px solid #7c3aed;">
+                  <span class="status-pill status-pill-purple">System Instructions</span>
+                  <span>"You are a friendly MERN Stack teacher."</span>
+                </div>
+                <div style="text-align: center; font-weight: 800; color: var(--primary);">+</div>
+                <div class="flow-vertical-step" style="border-left: 4px solid #0284c7;">
+                  <span class="status-pill status-pill-info">User Prompt</span>
+                  <span>"What is Express middleware?"</span>
+                </div>
+                <div style="text-align: center; font-weight: 800; color: var(--primary);">⬇</div>
+                <div class="flow-box green" style="text-align: left; padding: 10px 14px;">
+                  <strong style="color: #065f46;">Generated Response:</strong><br />
+                  <small style="color: var(--text-main);">
+                    "Welcome! Think of middleware like a security guard checking tickets before you enter a movie theater..."
+                  </small>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- =====================================================
+           SLIDE 12: ROLE PROMPTING, ZERO-SHOT AND FEW-SHOT
+      ====================================================== -->
+      <section class="slide" data-slide="12" id="slide-12">
+        <div class="slide-header">
+          <span class="slide-category">Section 4 • Prompt Techniques</span>
+          <h2 class="slide-title">Role Prompting, <span class="highlight">Zero-Shot &amp; Few-Shot</span></h2>
+        </div>
+
+        <div class="split-layout">
+          <div class="concept-col">
+            <!-- DIAGRAM 7: Zero-shot vs Few-shot -->
+            <div class="diagram-panel">
+              <div class="diagram-caption">Diagram 7 • Zero-Shot vs Few-Shot Structure</div>
+              <div class="flow-vertical" style="gap: 6px;">
+                <div class="flow-vertical-step" style="border-left: 4px solid #0284c7; padding: 6px 10px;">
+                  <span class="status-pill status-pill-info">Zero-Shot</span>
+                  <span>Instruction Only &rarr; Model classifies directly</span>
+                </div>
+                <div class="flow-vertical-step" style="border-left: 4px solid #10b981; padding: 6px 10px;">
+                  <span class="status-pill status-pill-success">Few-Shot</span>
+                  <span>Instruction + 2–3 Examples &rarr; Model matches pattern</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="concept-card accent-border" style="padding: 10px 14px; margin-top: 8px;">
+              <div class="concept-title" style="font-size: 0.95rem;">Technique Summary</div>
+              <ul class="key-term-list">
+                <li class="key-term-item"><strong>Role Prompting:</strong> "Act as a senior MERN Stack developer..."</li>
+                <li class="key-term-item"><strong>Zero-Shot:</strong> "Classify as Positive/Negative/Neutral: 'Fast app!'"</li>
+                <li class="key-term-item"><strong>Few-Shot:</strong> Showing 3 examples before classifying the target.</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="code-col">
+            <!-- INTERACTIVE LAB 2: Zero-Shot vs Few-Shot Classifier Simulator -->
+            <div class="sandbox-card" style="flex: 1;">
+              <div style="display: flex; justify-content: space-between; align-items: center;">
+                <strong style="color: var(--primary-deep); font-size: 0.95rem;">Lab 2 • Prompt Technique Classifier</strong>
+                <span class="status-pill status-pill-success" id="clsStatusBadge">Ready</span>
+              </div>
+
+              <div class="sandbox-form-row">
+                <label for="clsModeSelect" style="font-size: 0.8rem; font-weight: 700;">Prompting Mode:</label>
+                <select id="clsModeSelect" class="sandbox-select">
+                  <option value="zero">Zero-Shot (No Examples)</option>
+                  <option value="few" selected>Few-Shot (3 Examples)</option>
+                </select>
+              </div>
+
+              <div class="sandbox-form-row">
+                <input
+                  type="text"
+                  id="clsInputText"
+                  class="sandbox-input"
+                  value="The application crashes frequently but has great design."
+                  aria-label="Review text to classify"
+                />
+                <button type="button" id="clsRunBtn" class="sandbox-btn">Classify</button>
+              </div>
+
+              <pre id="clsOutputBox" class="sandbox-output" style="min-height: 125px; font-size: 0.78rem;"></pre>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- =====================================================
+           SLIDE 13: PRACTICAL: CONNECT NODE.JS WITH AN LLM
+      ====================================================== -->
+      <section class="slide" data-slide="13" id="slide-13">
+        <div class="slide-header">
+          <span class="slide-category">Section 5 • Node.js Setup</span>
+          <h2 class="slide-title">Practical: <span class="highlight">Connect Node.js with an LLM</span></h2>
+        </div>
+
+        <div class="split-layout equal">
+          <div class="concept-col">
+            <div class="code-container">
+              <div class="code-header">
+                <div class="code-header-left">
+                  <div class="code-dots"><span class="code-dot red"></span><span class="code-dot yellow"></span><span class="code-dot green"></span></div>
+                  <span class="code-file-badge">Terminal Setup</span>
+                  <span class="lang-tag term">TERMINAL</span>
+                </div>
+                <div class="code-actions"><button type="button" class="copy-btn">Copy</button></div>
+              </div>
+              <div class="code-scroll-area">
+                <pre><code class="language-bash">mkdir mern-genai-day1
+cd mern-genai-day1
+
+npm init -y
+npm install express openai dotenv</code></pre>
+              </div>
+            </div>
+
+            <div class="diagram-panel" style="flex: 1;">
+              <div class="diagram-caption">Project Folder Architecture</div>
+              <pre style="font-family: var(--font-mono); font-size: 0.85rem; line-height: 1.5; color: var(--primary-deep); background: #f8fafc; padding: 12px; border-radius: 6px; border: 1px solid var(--border-subtle);">
+mern-genai-day1/
+│
+├── server.js      # Express server & OpenAI API logic
+├── .env           # Protected API keys & model name
+└── .gitignore     # node_modules and .env
+              </pre>
+            </div>
+          </div>
+
+          <div class="code-col">
+            <div class="code-container">
+              <div class="code-header">
+                <div class="code-header-left">
+                  <div class="code-dots"><span class="code-dot red"></span><span class="code-dot yellow"></span><span class="code-dot green"></span></div>
+                  <span class="code-file-badge">.env Configuration</span>
+                  <span class="lang-tag env">ENV</span>
+                </div>
+                <div class="code-actions"><button type="button" class="copy-btn">Copy</button></div>
+              </div>
+              <div class="code-scroll-area">
+                <pre><code class="language-bash">PORT=3000
+OPENAI_API_KEY=your_api_key_here
+OPENAI_MODEL=gpt-4.1-mini</code></pre>
+              </div>
+            </div>
+
+            <div class="code-container">
+              <div class="code-header">
+                <div class="code-header-left">
+                  <div class="code-dots"><span class="code-dot red"></span><span class="code-dot yellow"></span><span class="code-dot green"></span></div>
+                  <span class="code-file-badge">.gitignore</span>
+                  <span class="lang-tag term">TERMINAL</span>
+                </div>
+                <div class="code-actions"><button type="button" class="copy-btn">Copy</button></div>
+              </div>
+              <div class="code-scroll-area">
+                <pre><code class="language-bash">node_modules/
+.env</code></pre>
+              </div>
+            </div>
+
+            <div class="example-box danger">
+              <strong>Security Protocol:</strong> Never commit <code>.env</code> to GitHub. Keep API keys strictly in server-side environment variables.
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- =====================================================
+           SLIDE 14: PRACTICAL: BUILD AN AI CHAT API
+      ====================================================== -->
+      <section class="slide" data-slide="14" id="slide-14">
+        <div class="slide-header">
+          <span class="slide-category">Section 5 • AI Chat API</span>
+          <h2 class="slide-title">Practical: <span class="highlight">Build <code>POST /api/chat</code></span></h2>
+        </div>
+
+        <div class="split-layout">
+          <div class="concept-col">
+            <div class="code-container stretch">
+              <div class="code-header">
+                <div class="code-header-left">
+                  <div class="code-dots"><span class="code-dot red"></span><span class="code-dot yellow"></span><span class="code-dot green"></span></div>
+                  <span class="code-file-badge">server.js</span>
+                  <span class="lang-tag js">JAVASCRIPT</span>
+                </div>
+                <div class="code-actions"><button type="button" class="copy-btn">Copy</button></div>
+              </div>
+              <div class="code-scroll-area">
+                <pre><code class="language-javascript">require("dotenv").config();
+const express = require("express");
+const OpenAI = require("openai");
+
+const app = express();
+app.use(express.json());
+
+const client = new OpenAI({
+  apiKey: process.env.OPENAI_API_KEY
+});
+
+app.post("/api/chat", async (req, res) => {
+  try {
+    const { question } = req.body;
+
+    if (!question) {
+      return res.status(400).json({
+        message: "Question is required"
+      });
+    }
+
+    const response = await client.responses.create({
+      model: process.env.OPENAI_MODEL,
+      input: question
+    });
+
+    res.json({
+      answer: response.output_text
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      message: "AI request failed"
+    });
+  }
+});
+
+app.listen(process.env.PORT || 3000, () => {
+  console.log("AI Server running on port 3000");
+});</code></pre>
+              </div>
+            </div>
+          </div>
+
+          <div class="code-col">
+            <div class="postman-card">
+              <div class="postman-header">
+                <span class="postman-method">POST</span>
+                <span class="postman-url">http://localhost:3000/api/chat</span>
+              </div>
+              <div class="code-container">
+                <div class="code-header">
+                  <div class="code-header-left">
+                    <span class="code-file-badge">Request Body</span>
+                    <span class="lang-tag json">JSON</span>
+                  </div>
+                  <div class="code-actions"><button type="button" class="copy-btn">Copy</button></div>
+                </div>
+                <div class="code-scroll-area">
+                  <pre><code class="language-json">{
+  "question": "Explain React components in simple English"
+}</code></pre>
+                </div>
+              </div>
+              <div class="code-container">
+                <div class="code-header">
+                  <div class="code-header-left">
+                    <span class="code-file-badge">Expected Response (200 OK)</span>
+                    <span class="lang-tag json">JSON</span>
+                  </div>
+                  <div class="code-actions"><button type="button" class="copy-btn">Copy</button></div>
+                </div>
+                <div class="code-scroll-area">
+                  <pre><code class="language-json">{
+  "answer": "React components are reusable building blocks of a user interface. They are JavaScript functions that return JSX..."
+}</code></pre>
+                </div>
+              </div>
+            </div>
+
+            <div class="example-box success" style="margin-top: 6px;">
+              <strong>Lifecycle:</strong> Postman &rarr; Express &rarr; OpenAI SDK &rarr; LLM &rarr; Express &rarr; JSON Response.
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- =====================================================
+           SLIDE 15: DAY 1 PRACTICAL CHALLENGE
+      ====================================================== -->
+      <section class="slide" data-slide="15" id="slide-15">
+        <div class="slide-header">
+          <span class="slide-category">Section 6 • Practical Challenge</span>
+          <h2 class="slide-title">Day 1 <span class="highlight">Practical Challenge</span></h2>
+        </div>
+
+        <div class="split-layout equal">
+          <div class="concept-col">
+            <div class="concept-card accent-border">
+              <div class="concept-title">Extend Your AI Chat API</div>
+              <ul class="key-term-list" style="margin-top: 6px;">
+                <li class="key-term-item">1. <strong>System Instructions:</strong> Create a persistent MERN Stack Teacher persona.</li>
+                <li class="key-term-item">2. <strong>Role Endpoint:</strong> Add <code>POST /api/role-chat</code> accepting <code>{ role, question }</code>.</li>
+                <li class="key-term-item">3. <strong>Zero-Shot Classifier:</strong> Add <code>POST /api/classify</code> for sentiment.</li>
+                <li class="key-term-item">4. <strong>Few-Shot Classifier:</strong> Provide 3 review examples to anchor output.</li>
+                <li class="key-term-item">5. <strong>Validation &amp; Errors:</strong> Handle missing inputs and API exceptions.</li>
+              </ul>
+            </div>
+
+            <div class="example-box">
+              <strong>Complete Solution:</strong> Click below to view the ready-to-run <code>server.js</code> for Day 1!
+              <div style="margin-top: 8px;">
+                <button type="button" id="solutionBtn" class="sandbox-btn">View Complete Day 1 Solution</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="code-col">
+            <!-- INTERACTIVE LAB 3: Live /api/chat Simulator -->
+            <div class="sandbox-card" style="flex: 1;">
+              <div style="display: flex; justify-content: space-between; align-items: center;">
+                <strong style="color: var(--primary-deep); font-size: 0.95rem;">Lab 3 • POST /api/chat Simulator</strong>
+                <span class="status-pill status-pill-success" id="chatStatusBadge">Ready</span>
+              </div>
+
+              <div class="sandbox-form-row">
+                <input
+                  type="text"
+                  id="chatInputQuestion"
+                  class="sandbox-input"
+                  value="Explain React components in simple English"
+                  aria-label="Question prompt"
+                />
+                <button type="button" id="chatSendBtn" class="sandbox-btn">Send POST</button>
+              </div>
+
+              <pre id="chatOutputBox" class="sandbox-output" style="min-height: 150px; font-size: 0.78rem;"></pre>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- Bottom Navigation Bar -->
+    <footer class="bottom-bar">
+      <div class="nav-hint">
+        Use <span class="kbd-badge">←</span> <span class="kbd-badge">→</span> or
+        <span class="kbd-badge">Space</span> to navigate • <span class="kbd-badge">T</span> Slides •
+        <span class="kbd-badge">?</span> Shortcuts
+      </div>
+      <div class="nav-buttons">
+        <button type="button" class="nav-btn" id="prevBtn" disabled>← Previous</button>
+        <button type="button" class="nav-btn" id="nextBtn">Next →</button>
+      </div>
+    </footer>
+  </div>
+
+  <!-- Table of Contents Modal -->
+  <div class="modal-overlay" id="tocOverlay" role="dialog" aria-modal="true" aria-labelledby="tocModalTitle">
+    <div class="modal-content">
+      <div class="modal-header">
+        <span class="modal-title" id="tocModalTitle">All 15 Slides • MERN Gen-AI Day 1</span>
+        <button type="button" class="modal-close-btn" id="tocClose" aria-label="Close">×</button>
+      </div>
+      <div class="modal-body" id="tocList"></div>
+    </div>
+  </div>
+
+  <!-- Keyboard Shortcuts Help Modal -->
+  <div class="modal-overlay" id="helpModal" role="dialog" aria-modal="true" aria-labelledby="helpModalTitle">
+    <div class="modal-content" style="max-width: 520px;">
+      <div class="modal-header">
+        <span class="modal-title" id="helpModalTitle">Presentation Shortcuts</span>
+        <button type="button" class="modal-close-btn" id="helpClose" aria-label="Close">×</button>
+      </div>
+      <div class="modal-body">
+        <div class="table-wrapper">
+          <table class="styled-table">
+            <tbody>
+              <tr><td class="tag-col"><span class="kbd-badge">→</span> / <span class="kbd-badge">Space</span> / <span class="kbd-badge">PgDn</span></td><td>Next slide</td></tr>
+              <tr><td class="tag-col"><span class="kbd-badge">←</span> / <span class="kbd-badge">PgUp</span></td><td>Previous slide</td></tr>
+              <tr><td class="tag-col"><span class="kbd-badge">Home</span> / <span class="kbd-badge">End</span></td><td>Jump to Slide 1 / Slide 15</td></tr>
+              <tr><td class="tag-col"><span class="kbd-badge">T</span></td><td>Open Table of Contents</td></tr>
+              <tr><td class="tag-col"><span class="kbd-badge">F</span></td><td>Toggle Fullscreen</td></tr>
+              <tr><td class="tag-col"><span class="kbd-badge">Esc</span></td><td>Close active modal</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Complete Solution Modal (Slide 15) -->
+  <div class="modal-overlay" id="solutionModal" role="dialog" aria-modal="true" aria-labelledby="solutionModalTitle">
+    <div class="modal-content" style="max-width: 880px;">
+      <div class="modal-header">
+        <span class="modal-title" id="solutionModalTitle">Complete Solution • mern-genai-day1/server.js</span>
+        <button type="button" class="modal-close-btn" id="solutionClose" aria-label="Close">×</button>
+      </div>
+      <div class="modal-body">
+        <div class="code-container">
+          <div class="code-header">
+            <div class="code-header-left">
+              <div class="code-dots"><span class="code-dot red"></span><span class="code-dot yellow"></span><span class="code-dot green"></span></div>
+              <span class="code-file-badge">mern-genai-day1/server.js</span>
+              <span class="lang-tag js">JAVASCRIPT</span>
+            </div>
+            <div class="code-actions"><button type="button" class="copy-btn">Copy</button></div>
+          </div>
+          <div class="code-scroll-area" style="max-height: 52vh;">
+            <pre><code class="language-javascript">require("dotenv").config();
+const express = require("express");
+const OpenAI = require("openai");
+
+const app = express();
+app.use(express.json());
+
+const client = new OpenAI({
+  apiKey: process.env.OPENAI_API_KEY
+});
+
+// 1. Basic AI Chat Route
+app.post("/api/chat", async (req, res) => {
+  try {
+    const { question } = req.body;
+    if (!question) {
+      return res.status(400).json({ message: "Question is required" });
+    }
+
+    const response = await client.responses.create({
+      model: process.env.OPENAI_MODEL,
+      instructions: "You are a helpful MERN Stack teacher. Explain technical concepts simply.",
+      input: question
+    });
+
+    res.json({ answer: response.output_text });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "AI request failed" });
+  }
+});
+
+// 2. Role-Based Prompting Route
+app.post("/api/role-chat", async (req, res) => {
+  try {
+    const { role, question } = req.body;
+    if (!role || !question) {
+      return res.status(400).json({ message: "Role and question are required" });
+    }
+
+    const response = await client.responses.create({
+      model: process.env.OPENAI_MODEL,
+      instructions: `Act as a ${role}. Provide clear answers and practical code examples.`,
+      input: question
+    });
+
+    res.json({ role, answer: response.output_text });
+  } catch (error) {
+    res.status(500).json({ message: "Role chat failed" });
+  }
+});
+
+// 3. Zero-Shot Review Classifier
+app.post("/api/classify", async (req, res) => {
+  try {
+    const { review } = req.body;
+    if (!review) {
+      return res.status(400).json({ message: "Review is required" });
+    }
+
+    const response = await client.responses.create({
+      model: process.env.OPENAI_MODEL,
+      instructions: "Classify the review as Positive, Negative, or Neutral. Return only one word.",
+      input: review
+    });
+
+    res.json({ category: response.output_text.trim() });
+  } catch (error) {
+    res.status(500).json({ message: "Classification failed" });
+  }
+});
+
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+  console.log(`MERN GenAI Day 1 server running on http://localhost:${PORT}`);
+});</code></pre>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Prism.js Core & Languages -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-javascript.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-bash.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-json.min.js"></script>
+
+  <script src="script.js"></script>
+</body>
+</html>
