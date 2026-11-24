@@ -12,28 +12,29 @@ By completing Day 1, students build an intuitive understanding of JavaScript var
 
 ---
 
-## 📑 Slide Outline (18 Slides)
+## 📑 Slide Outline (19 Slides)
 
 | Slide | Title | Key Concepts & Python Comparison |
 | :---: | :--- | :--- |
 | **01** | **Introduction to JavaScript** | Syllabus roadmap: Variables, Functions, Operators, Scope, Closures, and Final Project. |
 | **02** | **What Is JavaScript?** | Web runtime, V8 engine, Node.js, and client vs server. Direct syntax comparison with Python. |
-| **03** | **How to Run JavaScript Code** | Browser Developer Tools Console (`F12`), Node.js CLI (`node app.js`), and REPL. |
-| **04** | **What Are Variables?** | Memory storage, naming conventions (camelCase vs snake_case), dynamic typing. |
-| **05** | **`var`, `let`, and `const`** | Modern scoping rules: why `var` is legacy, why `let` is for reassignments, and why `const` is the default. |
-| **06** | **Practical: Student Profile** | Hands-on variable declaration exercise storing name, age, enrolled course, and tuition. |
-| **07** | **What Is a Function?** | Reusable blocks of logic. Comparing `def func():` in Python with `function func() {}` in JavaScript. |
-| **08** | **Function Parameters and Arguments** | Positional parameters, default arguments (`tax = 0.05`), and rest parameters. |
-| **09** | **The Return Statement** | Returning values, early exit execution, and JavaScript returning `undefined` vs Python's `None`. |
-| **10** | **Types of Functions in JavaScript** | Function Declarations (hoisted), Function Expressions, and ES6 Arrow Functions (`=>`). |
-| **11** | **Practical: Calculator Function** | Building a modular calculator handling addition, subtraction, multiplication, and division with error guarding. |
-| **12** | **Arithmetic Operators** | `+`, `-`, `*`, `/`, `%`, `**`. Type coercion warnings when adding strings and numbers. |
-| **13** | **Modulus and Increment** | Even/odd detection with `%`, and increment/decrement operators (`++`, `--`) which do not exist in Python. |
-| **14** | **Operator Precedence** | Order of operations (PEMDAS), grouping expressions with parentheses `()`, and boolean short-circuiting. |
-| **15** | **Practical: Build a Unit Converter** | Converting Celsius to Fahrenheit, Kilometers to Miles, and KG to Pounds. |
-| **16** | **What Is Scope?** | Global Scope, Function Scope, and Block Scope (`{}`). Contrasting with Python's lack of block scope. |
-| **17** | **What Is a Closure?** | Lexical environment preservation: inner functions retaining access to outer variables for private state. |
-| **18** | **Final Practical: Calculator + Converter** | Full integrated utility tool combining arithmetic, closures, objects, and validation. |
+| **03** | **Python vs JavaScript: Core Differences** | Architectural comparison: Strong vs Weak Typing, Event Loop vs GIL, Strict Block Scoping, None vs null/undefined, Class vs Prototype OOP. |
+| **04** | **How to Run JavaScript Code** | Browser Developer Tools Console (`F12`), Node.js CLI (`node app.js`), and REPL. |
+| **05** | **What Are Variables?** | Memory storage, naming conventions (camelCase vs snake_case), dynamic typing. |
+| **06** | **`var`, `let`, and `const`** | Modern scoping rules: why `var` is legacy, why `let` is for reassignments, and why `const` is the default. |
+| **07** | **Practical: Student Profile** | Hands-on variable declaration exercise storing name, age, enrolled course, and tuition. |
+| **08** | **What Is a Function?** | Reusable blocks of logic. Comparing `def func():` in Python with `function func() {}` in JavaScript. |
+| **09** | **Function Parameters and Arguments** | Positional parameters, default arguments (`tax = 0.05`), and rest parameters. |
+| **10** | **The Return Statement** | Returning values, early exit execution, and JavaScript returning `undefined` vs Python's `None`. |
+| **11** | **Types of Functions in JavaScript** | Function Declarations (hoisted), Function Expressions, and ES6 Arrow Functions (`=>`). |
+| **12** | **Practical: Calculator Function** | Building a modular calculator handling addition, subtraction, multiplication, and division with error guarding. |
+| **13** | **Arithmetic Operators** | `+`, `-`, `*`, `/`, `%`, `**`. Type coercion warnings when adding strings and numbers. |
+| **14** | **Modulus and Increment** | Even/odd detection with `%`, and increment/decrement operators (`++`, `--`) which do not exist in Python. |
+| **15** | **Operator Precedence** | Order of operations (PEMDAS), grouping expressions with parentheses `()`, and boolean short-circuiting. |
+| **16** | **Practical: Build a Unit Converter** | Converting Celsius to Fahrenheit, Kilometers to Miles, and KG to Pounds. |
+| **17** | **What Is Scope?** | Global Scope, Function Scope, and Block Scope (`{}`). Contrasting with Python's lack of block scope. |
+| **18** | **What Is a Closure?** | Lexical environment preservation: inner functions retaining access to outer variables for private state. |
+| **19** | **Final Practical: Calculator + Converter** | Full integrated utility tool combining arithmetic, closures, objects, and validation. |
 
 ---
 
@@ -94,13 +95,14 @@ The presentation includes an integrated navigation controller:
 ## 🛠️ Interactive Sandboxes Included in Slides
 
 1. **Slide 2**: Interactive Python vs JavaScript Syntax Switcher.
-2. **Slide 5**: Live `var` vs `let` vs `const` Reassignment Playground (demonstrates runtime `TypeError`).
-3. **Slide 6**: Live Student Profile Data Model Updater.
-4. **Slide 10**: Function Declaration vs Expression vs Arrow Function Runner.
-5. **Slide 11**: Real-Time Arithmetic Calculator with Zero-Division Guard.
-6. **Slide 15**: Live Temperature and Metric Unit Converter.
-7. **Slide 17**: Interactive Closure Counter Clicker (demonstrates encapsulated private state).
-8. **Slide 18**: Final Mini-Project: Multi-Purpose Utility Tool Suite.
+2. **Slide 3**: Live Python vs JavaScript Behavior & Type Coercion Tester (5 live comparative scenarios).
+3. **Slide 6**: Live `var` vs `let` vs `const` Reassignment Playground (demonstrates runtime `TypeError`).
+4. **Slide 7**: Live Student Profile Data Model Updater.
+5. **Slide 11**: Function Declaration vs Expression vs Arrow Function Runner.
+6. **Slide 12**: Real-Time Arithmetic Calculator with Zero-Division Guard.
+7. **Slide 16**: Live Temperature and Metric Unit Converter.
+8. **Slide 18**: Interactive Closure Counter Clicker (demonstrates encapsulated private state).
+9. **Slide 19**: Final Mini-Project: Multi-Purpose Utility Tool Suite.
 
 ---
 

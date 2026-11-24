@@ -5,7 +5,7 @@
 
 document.addEventListener('DOMContentLoaded', () => {
   // --- Presentation State ---
-  const totalSlides = 18;
+  const totalSlides = 19;
   let currentSlide = 1;
 
   // DOM Elements
@@ -29,6 +29,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const slideTitles = [
     "Introduction to JavaScript",
     "What Is JavaScript?",
+    "Python vs JavaScript: Core Differences",
     "How to Run JavaScript Code",
     "What Are Variables?",
     "var, let, and const",
@@ -348,7 +349,108 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // --- Sandbox 2: Slide 5 var, let, const Tester ---
+  // --- Sandbox 1.5: Slide 3 Python vs JS Behavioral Differences ---
+  const btnDiffCoercionAdd = document.getElementById('btnDiffCoercionAdd');
+  const btnDiffCoercionSub = document.getElementById('btnDiffCoercionSub');
+  const btnDiffEquality = document.getElementById('btnDiffEquality');
+  const btnDiffNullUndefined = document.getElementById('btnDiffNullUndefined');
+  const btnDiffScopeLeak = document.getElementById('btnDiffScopeLeak');
+  const diffTitle = document.getElementById('diffTitle');
+  const diffPyOutput = document.getElementById('diffPyOutput');
+  const diffJsOutput = document.getElementById('diffJsOutput');
+
+  function showDiffScenario(title, pyCode, pyResult, jsCode, jsResult) {
+    if (diffTitle) diffTitle.textContent = title;
+    if (diffPyOutput) {
+      diffPyOutput.innerHTML = `<code>${pyCode}</code><br><span style="color:#FCA5A5;">➜ ${pyResult}</span>`;
+    }
+    if (diffJsOutput) {
+      diffJsOutput.innerHTML = `<code>${jsCode}</code><br><span style="color:#86EFAC;">➜ ${jsResult}</span>`;
+    }
+  }
+
+  function setActiveDiffBtn(activeBtn) {
+    [btnDiffCoercionAdd, btnDiffCoercionSub, btnDiffEquality, btnDiffNullUndefined, btnDiffScopeLeak].forEach(b => {
+      if (b) {
+        if (b === activeBtn) {
+          b.classList.remove('btn-secondary');
+          b.classList.add('btn-primary');
+        } else {
+          b.classList.remove('btn-primary');
+          b.classList.add('btn-secondary');
+        }
+      }
+    });
+  }
+
+  if (btnDiffCoercionAdd) {
+    btnDiffCoercionAdd.addEventListener('click', () => {
+      setActiveDiffBtn(btnDiffCoercionAdd);
+      showDiffScenario(
+        '1. String + Number ("5" + 2)',
+        '"5" + 2',
+        'TypeError: can only concatenate str (not "int") to str',
+        '"5" + 2',
+        '"52" (number 2 implicitly coerced to string, then concatenated)'
+      );
+    });
+  }
+
+  if (btnDiffCoercionSub) {
+    btnDiffCoercionSub.addEventListener('click', () => {
+      setActiveDiffBtn(btnDiffCoercionSub);
+      showDiffScenario(
+        '2. String - Number ("5" - 2)',
+        '"5" - 2',
+        'TypeError: unsupported operand type(s) for -: \'str\' and \'int\'',
+        '"5" - 2',
+        '3 (math minus operator implicitly coerces string "5" to number 5!)'
+      );
+    });
+  }
+
+  if (btnDiffEquality) {
+    btnDiffEquality.addEventListener('click', () => {
+      setActiveDiffBtn(btnDiffEquality);
+      showDiffScenario(
+        '3. Equality: 5 == "5" vs 5 === "5"',
+        '5 == "5"',
+        'False (Python enforces strict type comparison with ==)',
+        '5 == "5" is true (loose: coerces string to number)\n5 === "5" is false (strict: compares both value AND type)',
+        'Best Practice: Always use === in JavaScript!'
+      );
+    });
+  }
+
+  if (btnDiffNullUndefined) {
+    btnDiffNullUndefined.addEventListener('click', () => {
+      setActiveDiffBtn(btnDiffNullUndefined);
+      showDiffScenario(
+        '4. Emptiness: None vs null & undefined',
+        'x = None\nprint(type(x))  # <class \'NoneType\'>',
+        'Python uses one canonical None singleton',
+        'let a;         // undefined (variable declared, no value yet)\nlet b = null;  // null (intentional absence of object value)',
+        'Two distinct primitive types representing missing values!'
+      );
+    });
+  }
+
+  if (btnDiffScopeLeak) {
+    btnDiffScopeLeak.addEventListener('click', () => {
+      setActiveDiffBtn(btnDiffScopeLeak);
+      showDiffScenario(
+        '5. Block Scope: if statement variable leak',
+        'if True:\n    x = 10\nprint(x)  # prints 10! (Variables leak outside if/for)',
+        'Python only scopes variables to Functions, not { } blocks!',
+        'if (true) {\n    let x = 10;\n}\nconsole.log(x); // ReferenceError: x is not defined',
+        'let and const are strictly confined to { } block scope!'
+      );
+    });
+    // Trigger default selection on initial load
+    btnDiffCoercionAdd.click();
+  }
+
+  // --- Sandbox 2: Slide 6 var, let, const Tester ---
   const s5TypeSelect = document.getElementById('s5TypeSelect');
   const s5TestBtn = document.getElementById('s5TestBtn');
   const s5Result = document.getElementById('s5Result');

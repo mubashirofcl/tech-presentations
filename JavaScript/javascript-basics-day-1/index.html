@@ -21,7 +21,7 @@
         </div>
       </div>
       <div class="header-center">
-        <div class="slide-counter-badge" id="slideCounter">1 / 18</div>
+        <div class="slide-counter-badge" id="slideCounter">1 / 19</div>
       </div>
       <div class="header-actions">
         <button class="btn-header" id="fullscreenBtn" title="Toggle Fullscreen (F)">
@@ -207,10 +207,162 @@ console.<span class="fn">log</span>(<span class="vr">name</span>);</code></pre>
         </div>
       </section>
 
+
       <!-- ==========================================
-           SLIDE 3: How to Run JavaScript Code
+           SLIDE 3: Python vs JavaScript: Core Differences
            ========================================== -->
       <section class="slide" id="slide-3">
+        <div class="slide-header">
+          <div class="slide-title-group">
+            <span class="slide-category">Language Architecture • Transition Guide</span>
+            <h2 class="slide-title">Python vs JavaScript: Core Differences</h2>
+            <p class="slide-subtitle">A comprehensive breakdown of execution models, type systems, scoping, and runtime behavior</p>
+          </div>
+          <span class="slide-tag">PYTHON VS JS COMPARISON</span>
+        </div>
+
+        <div class="slide-body">
+          <div class="grid-60-40">
+            <!-- Left Side: Comprehensive Comparison Categories -->
+            <div style="display: flex; flex-direction: column; gap: 10px;">
+              <!-- Comparison Table -->
+              <div class="card" style="padding: 10px 14px;">
+                <div class="card-title" style="margin-bottom: 6px;"><span class="icon">⚖️</span> Architectural & Syntax Face-off</div>
+                <div class="table-container">
+                  <table class="styled-table" style="font-size: 0.77rem;">
+                    <thead>
+                      <tr>
+                        <th style="width: 22%;">Dimension</th>
+                        <th style="width: 39%;"><span class="badge-python">Python</span></th>
+                        <th style="width: 39%;"><span class="badge-js">JavaScript (ES6+)</span></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td><strong>Type System</strong></td>
+                        <td><strong>Strong & Dynamic</strong>: <code>"5" + 2</code> throws <code>TypeError</code>. Explicit conversion required.</td>
+                        <td><strong>Weak & Dynamic</strong>: <code>"5" + 2</code> results in <code>"52"</code> (implicit coercion). Has <code>===</code> vs <code>==</code>.</td>
+                      </tr>
+                      <tr>
+                        <td><strong>Execution Model</strong></td>
+                        <td>Bytecode interpreted (CPython), single-threaded CPU bound by <strong>GIL</strong>, synchronous by default.</td>
+                        <td>JIT-compiled (V8), <strong>Event Loop</strong> with non-blocking async I/O built-in (Promises, async/await).</td>
+                      </tr>
+                      <tr>
+                        <td><strong>Block Scoping</strong></td>
+                        <td><strong>No block scope</strong>: variables inside <code>if</code> or <code>for</code> leak into the surrounding function.</td>
+                        <td><strong>Strict block scope</strong>: <code>let</code> & <code>const</code> are strictly confined inside <code>{ }</code> braces.</td>
+                      </tr>
+                      <tr>
+                        <td><strong>Absence / Null</strong></td>
+                        <td>Single <code>None</code> object (type <code>NoneType</code>).</td>
+                        <td>Dual: <code>null</code> (intentional empty) and <code>undefined</code> (declared without value).</td>
+                      </tr>
+                      <tr>
+                        <td><strong>OOP Model</strong></td>
+                        <td>Class-based with explicit <code>self</code>, multiple inheritance supported natively.</td>
+                        <td>Prototype-based with syntactic <code>class</code> sugar, dynamic/lexical <code>this</code> binding.</td>
+                      </tr>
+                      <tr>
+                        <td><strong>Ecosystem</strong></td>
+                        <td><code>pip</code>, <code>PyPI</code>, <code>venv</code>, data science / AI backend focus.</td>
+                        <td><code>npm</code>, <code>yarn</code>, full-stack browser DOM + Node.js backend + React UI.</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              <!-- Quick Mental Shifts -->
+              <div class="grid-3col" style="gap: 8px;">
+                <div class="card card-accent" style="padding: 8px 10px;">
+                  <strong style="color: var(--primary-deep); font-size: 0.76rem;">1. Equality Check</strong>
+                  <div style="font-size: 0.72rem; color: var(--text-body); margin-top: 2px;">
+                    Python: <code>==</code> checks value.<br>
+                    JS: Always use <code>===</code> (strict) to prevent unexpected coercion!
+                  </div>
+                </div>
+                <div class="card card-purple" style="padding: 8px 10px;">
+                  <strong style="color: var(--accent-purple); font-size: 0.76rem;">2. Block Scoping</strong>
+                  <div style="font-size: 0.72rem; color: var(--text-body); margin-top: 2px;">
+                    Python: <code>if True: x = 5</code> leaks.<br>
+                    JS: <code>if (true) { let x = 5; }</code> is isolated to block!
+                  </div>
+                </div>
+                <div class="card card-green" style="padding: 8px 10px;">
+                  <strong style="color: var(--accent-green); font-size: 0.76rem;">3. Functions</strong>
+                  <div style="font-size: 0.72rem; color: var(--text-body); margin-top: 2px;">
+                    Python: <code>def func():</code><br>
+                    JS: Functions are first-class, passed as callbacks & arrow functions <code>() =></code>.
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Right Side: Interactive Comparison Lab -->
+            <div class="card sandbox-card" style="padding: 12px 14px; justify-content: space-between;">
+              <div>
+                <div class="card-title" style="margin-bottom: 4px;">
+                  <span class="icon">🧪</span> Interactive Behavior Tester
+                </div>
+                <p class="card-desc" style="font-size: 0.75rem; margin-bottom: 8px;">
+                  Click any scenario below to observe how Python and JavaScript handle the exact same expression differently:
+                </p>
+
+                <!-- Scenario Selector Buttons -->
+                <div style="display: flex; flex-direction: column; gap: 6px; margin-bottom: 10px;">
+                  <button class="btn btn-secondary btn-sm" id="btnDiffCoercionAdd" style="text-align: left; justify-content: space-between; font-size: 0.76rem; padding: 6px 10px;">
+                    <span><strong>1. String + Number:</strong> <code>"5" + 2</code></span>
+                    <span style="font-size: 0.68rem; opacity: 0.7;">Coercion</span>
+                  </button>
+                  <button class="btn btn-secondary btn-sm" id="btnDiffCoercionSub" style="text-align: left; justify-content: space-between; font-size: 0.76rem; padding: 6px 10px;">
+                    <span><strong>2. String - Number:</strong> <code>"5" - 2</code></span>
+                    <span style="font-size: 0.68rem; opacity: 0.7;">Math Coercion</span>
+                  </button>
+                  <button class="btn btn-secondary btn-sm" id="btnDiffEquality" style="text-align: left; justify-content: space-between; font-size: 0.76rem; padding: 6px 10px;">
+                    <span><strong>3. Equality:</strong> <code>5 == "5"</code> vs <code>5 === "5"</code></span>
+                    <span style="font-size: 0.68rem; opacity: 0.7;">Strictness</span>
+                  </button>
+                  <button class="btn btn-secondary btn-sm" id="btnDiffNullUndefined" style="text-align: left; justify-content: space-between; font-size: 0.76rem; padding: 6px 10px;">
+                    <span><strong>4. Emptiness:</strong> <code>None</code> vs <code>null</code> / <code>undefined</code></span>
+                    <span style="font-size: 0.68rem; opacity: 0.7;">Nullish</span>
+                  </button>
+                  <button class="btn btn-secondary btn-sm" id="btnDiffScopeLeak" style="text-align: left; justify-content: space-between; font-size: 0.76rem; padding: 6px 10px;">
+                    <span><strong>5. Scope Leak:</strong> <code>if</code> block variable access</span>
+                    <span style="font-size: 0.68rem; opacity: 0.7;">Block Scope</span>
+                  </button>
+                </div>
+
+                <!-- Live Test Output Comparison Display -->
+                <div id="diffOutputContainer" style="background: var(--code-bg); border-radius: 8px; padding: 10px; color: var(--code-text); font-family: var(--font-mono); font-size: 0.74rem;">
+                  <div style="color: var(--accent-blue); font-weight: 700; margin-bottom: 4px;" id="diffTitle">
+                    Select a scenario above to test
+                  </div>
+                  <div style="margin-bottom: 6px; padding-bottom: 6px; border-bottom: 1px solid rgba(255,255,255,0.1);">
+                    <span class="badge-python" style="font-size: 0.65rem;">Python</span>
+                    <div id="diffPyOutput" style="color: #F87171; margin-top: 2px;">Select a test above...</div>
+                  </div>
+                  <div>
+                    <span class="badge-js" style="font-size: 0.65rem;">JavaScript</span>
+                    <div id="diffJsOutput" style="color: #4ADE80; margin-top: 2px;">Click a button to execute...</div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="card card-amber" style="margin-top: 8px; padding: 6px 10px;">
+                <div style="font-size: 0.72rem; color: #92400E;">
+                  <strong>💡 Python Dev Pro-Tip:</strong> In JavaScript, always declare variables with <code>const</code> by default (or <code>let</code> if reassigning), and always use <code>===</code> instead of <code>==</code>!
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==========================================
+           SLIDE 4: How to Run JavaScript Code
+           ========================================== -->
+      <section class="slide" id="slide-4">
         <div class="slide-header">
           <div class="slide-title-group">
             <span class="slide-category">Execution Environments</span>
@@ -275,9 +427,9 @@ console.<span class="fn">log</span>(<span class="num">10</span> + <span class="n
       </section>
 
       <!-- ==========================================
-           SLIDE 4: What Are Variables?
+           SLIDE 5: What Are Variables?
            ========================================== -->
-      <section class="slide" id="slide-4">
+      <section class="slide" id="slide-5">
         <div class="slide-header">
           <div class="slide-title-group">
             <span class="slide-category">Data Storage</span>
@@ -361,9 +513,9 @@ console.<span class="fn">log</span>(<span class="vr">age</span>);</code></pre>
       </section>
 
       <!-- ==========================================
-           SLIDE 5: var, let, and const
+           SLIDE 6: var, let, and const
            ========================================== -->
-      <section class="slide" id="slide-5">
+      <section class="slide" id="slide-6">
         <div class="slide-header">
           <div class="slide-title-group">
             <span class="slide-category">Declaration Keywords</span>
@@ -439,9 +591,9 @@ Click 'Test Reassignment' to inspect runtime behavior.
       </section>
 
       <!-- ==========================================
-           SLIDE 6: Practical: Student Profile
+           SLIDE 7: Practical: Student Profile
            ========================================== -->
-      <section class="slide" id="slide-6">
+      <section class="slide" id="slide-7">
         <div class="slide-header">
           <div class="slide-title-group">
             <span class="slide-category">Hands-On Practice</span>
@@ -509,9 +661,9 @@ Click 'Update Marks' to simulate execution.
       </section>
 
       <!-- ==========================================
-           SLIDE 7: What Is a Function?
+           SLIDE 8: What Is a Function?
            ========================================== -->
-      <section class="slide" id="slide-7">
+      <section class="slide" id="slide-8">
         <div class="slide-header">
           <div class="slide-title-group">
             <span class="slide-category">Modular Code</span>
@@ -580,9 +732,9 @@ Click 'Update Marks' to simulate execution.
       </section>
 
       <!-- ==========================================
-           SLIDE 8: Function Parameters and Arguments
+           SLIDE 9: Function Parameters and Arguments
            ========================================== -->
-      <section class="slide" id="slide-8">
+      <section class="slide" id="slide-9">
         <div class="slide-header">
           <div class="slide-title-group">
             <span class="slide-category">Passing Data</span>
@@ -648,9 +800,9 @@ Rahul is learning Python</div>
       </section>
 
       <!-- ==========================================
-           SLIDE 9: Return Statement
+           SLIDE 10: Return Statement
            ========================================== -->
-      <section class="slide" id="slide-9">
+      <section class="slide" id="slide-10">
         <div class="slide-header">
           <div class="slide-title-group">
             <span class="slide-category">Outputting Data</span>
@@ -706,9 +858,9 @@ console.<span class="fn">log</span>(<span class="vr">total</span> * <span class=
       </section>
 
       <!-- ==========================================
-           SLIDE 10: Types of Functions in JavaScript
+           SLIDE 11: Types of Functions in JavaScript
            ========================================== -->
-      <section class="slide" id="slide-10">
+      <section class="slide" id="slide-11">
         <div class="slide-header">
           <div class="slide-title-group">
             <span class="slide-category">Syntax Varieties</span>
@@ -781,9 +933,9 @@ console.<span class="fn">log</span>(<span class="fn">divide</span>(<span class="
       </section>
 
       <!-- ==========================================
-           SLIDE 11: Practical: Create a Calculator Function
+           SLIDE 12: Practical: Create a Calculator Function
            ========================================== -->
-      <section class="slide" id="slide-11">
+      <section class="slide" id="slide-12">
         <div class="slide-header">
           <div class="slide-title-group">
             <span class="slide-category">Hands-On Practice</span>
@@ -856,9 +1008,9 @@ console.<span class="fn">log</span>(<span class="fn">divide</span>(<span class="
       </section>
 
       <!-- ==========================================
-           SLIDE 12: What Are Arithmetic Operators?
+           SLIDE 13: What Are Arithmetic Operators?
            ========================================== -->
-      <section class="slide" id="slide-12">
+      <section class="slide" id="slide-13">
         <div class="slide-header">
           <div class="slide-title-group">
             <span class="slide-category">Mathematical Operations</span>
@@ -919,9 +1071,9 @@ console.<span class="fn">log</span>(<span class="vr">a</span> ** <span class="vr
       </section>
 
       <!-- ==========================================
-           SLIDE 13: Understanding Modulus and Increment
+           SLIDE 14: Understanding Modulus and Increment
            ========================================== -->
-      <section class="slide" id="slide-13">
+      <section class="slide" id="slide-14">
         <div class="slide-header">
           <div class="slide-title-group">
             <span class="slide-category">Key Operators</span>
@@ -981,9 +1133,9 @@ console.<span class="fn">log</span>(<span class="vr">count</span>); <span class=
       </section>
 
       <!-- ==========================================
-           SLIDE 14: Operator Precedence
+           SLIDE 15: Operator Precedence
            ========================================== -->
-      <section class="slide" id="slide-14">
+      <section class="slide" id="slide-15">
         <div class="slide-header">
           <div class="slide-title-group">
             <span class="slide-category">Order of Operations</span>
@@ -1042,9 +1194,9 @@ console.<span class="fn">log</span>(<span class="str">"Total:"</span>, <span cla
       </section>
 
       <!-- ==========================================
-           SLIDE 15: Practical: Build a Unit Converter
+           SLIDE 16: Practical: Build a Unit Converter
            ========================================== -->
-      <section class="slide" id="slide-15">
+      <section class="slide" id="slide-16">
         <div class="slide-header">
           <div class="slide-title-group">
             <span class="slide-category">Hands-On Practice</span>
@@ -1109,9 +1261,9 @@ console.<span class="fn">log</span>(<span class="fn">kmToMiles</span>(<span clas
       </section>
 
       <!-- ==========================================
-           SLIDE 16: What Is Scope?
+           SLIDE 17: What Is Scope?
            ========================================== -->
-      <section class="slide" id="slide-16">
+      <section class="slide" id="slide-17">
         <div class="slide-header">
           <div class="slide-title-group">
             <span class="slide-category">Variable Visibility</span>
@@ -1179,9 +1331,9 @@ console.<span class="fn">log</span>(<span class="vr">a</span>); <span class="cm"
       </section>
 
       <!-- ==========================================
-           SLIDE 17: What Is a Closure?
+           SLIDE 18: What Is a Closure?
            ========================================== -->
-      <section class="slide" id="slide-17">
+      <section class="slide" id="slide-18">
         <div class="slide-header">
           <div class="slide-title-group">
             <span class="slide-category">Advanced Fundamentals</span>
@@ -1254,9 +1406,9 @@ console.<span class="fn">log</span>(<span class="fn">counter</span>()); <span cl
       </section>
 
       <!-- ==========================================
-           SLIDE 18: Final Practical: Calculator + Unit Converter
+           SLIDE 19: Final Practical: Calculator + Unit Converter
            ========================================== -->
-      <section class="slide" id="slide-18">
+      <section class="slide" id="slide-19">
         <div class="slide-header">
           <div class="slide-title-group">
             <span class="slide-category">Capstone Project</span>
