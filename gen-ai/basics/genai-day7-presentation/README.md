@@ -1,119 +1,101 @@
-# Node.js GenAI – Day 7: Structured Output, JSON Schema & Zod Validation
+# Node.js GenAI – Day 7: Structured Output, Zod & Function Calling
 
 > **Classroom Presentation & Code Companion**  
 > **Course:** Node.js + Generative AI Full Stack  
-> **Topic:** Structured Output, JSON Format, JSON Schema Standard, Zod Validation, Type Safety & Production AI Extraction  
-> **Format:** 20-Slide Interactive Presentation + Live Browser Sandboxes + Production Express Backend
+> **Combined Masterclass:** Day 7 (Structured Output & Zod) + Day 8 (Function Calling / Tool Calling)  
+> **Target Models:** `llama-3.3-70b-versatile` / `openai/gpt-oss-120b` (Groq Tool-Calling Engine)  
+> **Length:** Exactly 23 Slides (Max 25 Pages, Zero Redundancy)
 
 ---
 
 ## 📖 Presentation Overview
 
-In this class, students move beyond freeform conversational AI responses into deterministic, enterprise-grade software engineering. Students learn how to instruct LLMs to emit strict JSON, define structural contracts using JSON Schema, and validate runtime payloads using **Zod** in Node.js.
+This presentation unifies two essential pillars of building enterprise AI applications with Node.js:
+1. **Data Predictability (Structured Output):** Getting reliable, typed JSON data out of LLMs instead of unpredictable natural language paragraphs, and validating it using JSON Schema and **Zod**.
+2. **Agentic Execution (Function / Tool Calling):** Empowering the model to request real backend actions (database queries, calculations, external APIs), with your Node.js application securely validating arguments and executing code.
 
-### 20-Slide Curriculum Outline
+By combining these two topics into a single presentation, students learn to build resilient, agentic applications where LLMs reason and Node.js executes.
+
+---
+
+## 📋 23-Slide Curriculum Syllabus
 
 | Slide | Title | Focus & Core Concepts |
 |---|---|---|
-| **01** | Title: Structured Output & Data Validation | Course kickoff, agenda, learning objectives, and practical stack |
-| **02** | Why Do We Need Structured Output? | Natural language inconsistency, why freeform text breaks backends, structured JSON solution |
-| **03** | What Is JSON? | JavaScript Object Notation standard, 6 strict syntax rules, common data types |
-| **04** | JSON vs JavaScript Object | In-memory heap objects vs serialized strings, `JSON.stringify()`, `JSON.parse()` |
-| **05** | JSON Output from an LLM | Prompt design for JSON, required fields list, why prompt instructions alone cannot guarantee validity |
-| **06** | Node.js Practical: Generate JSON Using Groq | Calling Groq SDK (`temperature: 0.2`), parsing response, property extraction |
-| **07** | What Is JSON Schema? | The IETF structural contract standard, `properties`, `required`, `additionalProperties` |
-| **08** | Practical: Understand JSON Schema Validation | Syntax validity vs structural validity, diagnosing type & required field mismatches |
-| **09** | What Is Zod? | Runtime validation library for JS/TS, why use Zod, comparison with Python's Pydantic |
-| **10** | Zod Schema: Define Student Data | Building chained schema rules: `.string().min()`, `.int().min().max()`, `.email()`, `.enum()`, `.array()` |
-| **11** | Zod Parsing: What Is Parse? | Meaning of parsing, `.parse()` method, exception flow, and catching `ZodError` |
-| **12** | Zod SafeParse: Validate Without Throwing | Safe evaluation, discriminated union return (`success: true/false`), clean error handling |
-| **13** | Zod Validation Errors | Inspecting `result.error.issues`, path, message, error formatting for APIs |
-| **14** | Practical: Zod Validation in Express API | Building a production `POST /students` endpoint with HTTP 400 & 201 handlers |
-| **15** | Zod and Type Safety | Runtime validation vs TypeScript compile-time type checking |
-| **16** | Zod with TypeScript: Infer Types | Deriving TypeScript types with `z.infer<typeof schema>`, eliminating code duplication |
-| **17** | Zod Advanced Features: Defaults, Optional & Transform | `.optional()`, `.nullable()`, `.default()`, `.transform()`, data sanitization |
-| **18** | Structured Output + JSON Schema + Zod in AI Applications | End-to-end architecture flowchart, component responsibility matrix |
-| **19** | Practical: Validate AI-Generated Data Using Groq & Zod | End-to-end Node.js script combining Groq SDK, `JSON.parse`, and Zod validation |
-| **20** | Final Practical Project: AI Student Extractor | Complete Express API (`POST /extract-student`) with Groq, Zod, and full HTTP status codes |
+| **01** | Title: Structured Output, Zod & Function Calling | Unified curriculum, learning objectives, and practical stack |
+| **02** | The Problem with Unstructured LLM Text | Freeform text breakdown, property access failure, and structured JSON solution |
+| **03** | JSON & Serialization in Node.js | In-memory heap objects vs serialized strings, `JSON.stringify()`, `JSON.parse()` |
+| **04** | Generating JSON from an LLM | System prompts, low temperature (0.2), and why prompts alone cannot guarantee validity |
+| **05** | What Is JSON Schema? | The IETF structural description standard, properties, required fields, additionalProperties |
+| **06** | What Is Zod & Why Do We Need It? | Runtime validation in Node.js, comparison with Python's Pydantic |
+| **07** | Defining Rich Zod Schemas | Chained methods: `.min()`, `.int()`, `.max()`, `.email()`, `.enum()`, `.array()`, `.optional()`, `.default()` |
+| **08** | Zod parse() vs safeParse() | Exception throwing vs discriminated union return (`success: true/false`) |
+| **09** | Handling Validation Errors | Inspecting `result.error.issues` and formatting user-friendly error objects |
+| **10** | Practical: Validating AI Structured Output | Two-tier shield: `JSON.parse` (syntax) + `studentSchema.safeParse` (schema/types) |
+| **11** | From Structured Output to Function Calling | Moving from passive data output to active backend capability requests |
+| **12** | How Function Calling Works (The 5 Steps) | User query $\rightarrow$ Schemas $\rightarrow$ Model tool request $\rightarrow$ Node.js execution $\rightarrow$ Final synthesis |
+| **13** | Defining Tool Schemas for Groq | Groq-compatible JSON Schema tool definitions (`get_student`, `get_attendance`) |
+| **14** | Tool Selection & tool_choice | Matching user intent to descriptions; `tool_choice: "auto"` vs `"required"` vs `"none"` |
+| **15** | Inspecting the Tool Call Response | Parsing `response.choices[0].message.tool_calls`, `id`, `function.name`, `function.arguments` |
+| **16** | Validating Tool Arguments with Zod | Parsing stringified JSON arguments and validating with Zod before running database queries |
+| **17** | Tool Execution via Tool Registry Map | Whitelisting functions in `availableTools` map without dangerous `eval()` |
+| **18** | Sending Tool Results Back to the LLM | Appending `role: "tool"` messages with `tool_call_id` and generating final natural language response |
+| **19** | Error Handling in Tool Calling | Handling unknown tools, invalid arguments, missing records, and returning safe error objects |
+| **20** | The Complete Combined Architecture | Full system pipeline uniting Structured Output, JSON Schema, Zod, and Function Calling |
+| **21** | Capstone Project: Setup & Schemas (Part 1) | In-memory student records, JavaScript functions, tools array, and Zod argument schemas |
+| **22** | Capstone Project: Execution & API (Part 2) | Complete `executeTool`, two-turn `runAssistant`, Express `POST /chat` endpoint, and cURL tests |
+| **23** | Key Takeaways & Production Checklist | 5 essential production rules + Live Interactive AI Student Assistant Simulator |
 
 ---
 
 ## 🚀 How to Open and Navigate the Presentation
 
 ### Running Locally
-Simply open `index.html` in any modern web browser:
-```bash
-# On Windows PowerShell:
-Start-Process "c:\Users\ADMIN\OneDrive\Desktop\HACA\Presentation\gen-ai\day-7-structured-output-zod\index.html"
+Open `index.html` in your browser:
+```powershell
+Start-Process "c:\Users\ADMIN\OneDrive\Desktop\HACA\Presentation\gen-ai\day7\index.html"
 ```
-Or double-click `index.html` from Windows File Explorer.
 
 ### Keyboard Shortcuts
-- `→` / `Space` / `PageDown`: Next Slide
+- `→` / `Space`: Next Slide
 - `←` / `PageUp`: Previous Slide
 - `Home`: Jump to Slide 1
-- `End`: Jump to Slide 20
+- `End`: Jump to Slide 23
 - `F`: Toggle Fullscreen Mode
-- `T`: Toggle Table of Contents Sidebar
+- `T`: Toggle Table of Contents Drawer
 - `?`: Open Keyboard Shortcuts Help Modal
-- `Esc`: Close open modals or sidebar
+- `Esc`: Close open overlays or modals
 
 ---
 
-## 🛠️ Interactive Sandboxes Included in Slides
+## 🧪 Interactive Sandboxes in Slides
 
 1. **Slide 2:** Unstructured vs Structured Format Comparator
-2. **Slide 3:** Live JSON Syntax & Rules Inspector (single quotes, trailing commas, comments)
-3. **Slide 4:** Live `JSON.stringify()` vs `JSON.parse()` Playground
-4. **Slide 8:** JSON Schema Validation Diagnostic Tester (Valid vs Wrong Type vs Missing Fields)
-5. **Slide 12:** Real-Time `safeParse()` Evaluator with issues inspector
-6. **Slide 14:** Express `POST /students` API Client Simulator
-7. **Slide 17:** Zod `.transform()` Trimming & Casing Tester
-8. **Slide 20:** Live AI Student Information Extractor Simulator
+2. **Slide 3:** Live JSON Syntax & Parse Inspector
+3. **Slide 8:** Live Zod `parse()` vs `safeParse()` Evaluator
+4. **Slide 11:** Normal LLM vs Function Calling Workflow Runner
+5. **Slide 14:** Intent-to-Tool Selection Simulator
+6. **Slide 16:** Zod Tool Argument Validator
+7. **Slide 23:** Complete AI Student Assistant Live Chat Simulator
 
 ---
 
-## 💻 Running the Practical Code Examples
+## 💻 Running the Capstone Project
 
-### 1. Prerequisites & Environment Setup
-
-Create a new directory for Day 7 practical exercises:
+### 1. Setup Project Folder
 ```bash
-mkdir ai-student-extractor && cd ai-student-extractor
+mkdir ai-student-assistant && cd ai-student-assistant
 npm init -y
-```
-
-Install the required production dependencies:
-```bash
 npm install express groq-sdk dotenv zod
 ```
 
-### 2. Configure Environment Variables (`.env`)
-
-Create a `.env` file in the root directory:
+### 2. Environment Configuration (`.env`)
 ```env
 PORT=3000
 GROQ_API_KEY=gsk_your_groq_api_key_here
-GROQ_MODEL=llama-3.3-70b-versatile
 ```
 
-> **Note on Model ID:** `llama-3.3-70b-versatile` is Groq's high-speed production model. You can also use `llama-3.1-8b-instant` or check your current Groq console catalogue.
-
----
-
-## 📦 Capstone Project: `ai-student-extractor`
-
-### Project Structure
-```text
-ai-student-extractor/
-├── .env
-├── .gitignore
-├── package.json
-└── server.js
-```
-
-### Server Implementation (`server.js`)
-
+### 3. Complete Server Code (`server.js`)
 ```javascript
 require("dotenv").config();
 const express = require("express");
@@ -123,146 +105,178 @@ const { z } = require("zod");
 const app = express();
 app.use(express.json());
 
-// Initialize Groq Client
-const groq = new Groq({
-  apiKey: process.env.GROQ_API_KEY
-});
+const groq = new Groq({ apiKey: process.env.GROQ_API_KEY });
+const MODEL = "openai/gpt-oss-120b"; // Or "llama-3.3-70b-versatile"
 
-const MODEL = process.env.GROQ_MODEL || "llama-3.3-70b-versatile";
+// In-Memory Student Database
+const students = [
+  { id: 101, name: "Arun", course: "MERN Stack", attendance: 85 },
+  { id: 102, name: "Rahul", course: "Python", attendance: 72 }
+];
 
-// 1. Define Zod Validation Schema
-const studentSchema = z.object({
-  name: z.string().min(2, "Name must have at least 2 characters"),
-  age: z.number().int().min(16, "Minimum age is 16").max(60, "Maximum age is 60"),
-  email: z.string().email("Invalid email address"),
-  course: z.string().min(1, "Course name is required"),
-  skills: z.array(z.string()).min(1, "At least one skill is required")
-});
+// Backend Functions
+function getStudent(studentId) {
+  return students.find(s => s.id === studentId) || null;
+}
 
-// 2. Student Extraction Route
-app.post("/extract-student", async (req, res) => {
+function getAttendance(studentId) {
+  const student = getStudent(studentId);
+  if (!student) return { error: "Student not found" };
+  return { studentId, name: student.name, attendance: student.attendance };
+}
+
+// Tool Schemas for Groq
+const tools = [
+  {
+    type: "function",
+    function: {
+      name: "get_student",
+      description: "Get student details using unique student ID",
+      parameters: {
+        type: "object",
+        properties: { studentId: { type: "integer", description: "Unique student ID" } },
+        required: ["studentId"]
+      }
+    }
+  },
+  {
+    type: "function",
+    function: {
+      name: "get_attendance",
+      description: "Get attendance percentage using student ID",
+      parameters: {
+        type: "object",
+        properties: { studentId: { type: "integer", description: "Unique student ID" } },
+        required: ["studentId"]
+      }
+    }
+  }
+];
+
+// Zod Schemas for Runtime Argument Validation
+const argumentSchemas = {
+  get_student: z.object({ studentId: z.number().int().positive() }),
+  get_attendance: z.object({ studentId: z.number().int().positive() })
+};
+
+// Safe Tool Registry Map
+const availableTools = {
+  get_student: getStudent,
+  get_attendance: getAttendance
+};
+
+// Execution Helper
+function executeTool(toolCall) {
+  const toolName = toolCall.function.name;
   try {
-    const { message } = req.body;
+    const tool = availableTools[toolName];
+    const schema = argumentSchemas[toolName];
+    if (!tool || !schema) throw new Error("Unknown tool: " + toolName);
 
-    // Validate incoming HTTP request payload
-    if (typeof message !== "string" || !message.trim()) {
-      return res.status(400).json({
-        success: false,
-        message: "Student information message is required in request body"
-      });
-    }
+    const args = JSON.parse(toolCall.function.arguments);
+    const validated = schema.safeParse(args);
+    if (!validated.success) throw new Error("Invalid tool arguments: " + JSON.stringify(validated.error.issues));
 
-    // Call Groq LLM with structured instruction
-    const response = await groq.chat.completions.create({
-      model: MODEL,
-      messages: [
-        {
-          role: "system",
-          content: `You are a student information extractor.
-Extract student data from the user message.
-Return ONLY valid JSON with these fields:
-- name (string)
-- age (integer)
-- email (string)
-- course (string)
-- skills (array of strings)
+    return tool(validated.data.studentId);
+  } catch (error) {
+    return { error: true, message: error.message };
+  }
+}
 
-Do NOT include markdown backticks or conversational explanations.`
-        },
-        {
-          role: "user",
-          content: message
-        }
-      ],
-      temperature: 0.2,
-      max_completion_tokens: 300
+// Two-Turn Orchestration
+async function runAssistant(question) {
+  const messages = [
+    {
+      role: "system",
+      content: "You are an AI Student Assistant. Use available tools to answer questions about students. Do not invent facts."
+    },
+    { role: "user", content: question }
+  ];
+
+  // Turn 1: Let model evaluate intent and select tool
+  const res1 = await groq.chat.completions.create({
+    model: MODEL,
+    messages,
+    tools,
+    tool_choice: "auto"
+  });
+
+  const msg = res1.choices[0].message;
+  if (!msg.tool_calls?.length) return msg.content;
+
+  messages.push(msg);
+
+  // Execute each requested tool
+  for (const toolCall of msg.tool_calls) {
+    const result = executeTool(toolCall);
+    messages.push({
+      role: "tool",
+      tool_call_id: toolCall.id,
+      name: toolCall.function.name,
+      content: JSON.stringify(result)
     });
+  }
 
-    const aiText = response.choices[0].message.content;
+  // Turn 2: Synthesize final answer from tool output
+  const finalRes = await groq.chat.completions.create({
+    model: MODEL,
+    messages,
+    tools,
+    tool_choice: "none"
+  });
 
-    // Tier 1 Validation: Syntax Check
-    let parsedData;
-    try {
-      parsedData = JSON.parse(aiText);
-    } catch (parseErr) {
-      return res.status(502).json({
-        success: false,
-        message: "AI returned invalid JSON syntax",
-        rawOutput: aiText
-      });
+  return finalRes.choices[0].message.content;
+}
+
+// Express Endpoint
+app.post("/chat", async (req, res) => {
+  try {
+    const { question } = req.body;
+    if (!question || typeof question !== "string") {
+      return res.status(400).json({ error: "Question string is required" });
     }
-
-    // Tier 2 Validation: Structure & Type Check
-    const validation = studentSchema.safeParse(parsedData);
-    if (!validation.success) {
-      return res.status(422).json({
-        success: false,
-        message: "AI data schema validation failed",
-        errors: validation.error.issues
-      });
-    }
-
-    // Return Validated Data
-    res.status(200).json({
-      success: true,
-      message: "Student information extracted successfully",
-      data: validation.data
-    });
-
+    const answer = await runAssistant(question);
+    res.json({ success: true, answer });
   } catch (err) {
-    console.error("AI Error:", err.message);
-    res.status(502).json({
-      success: false,
-      message: "Unable to process AI request"
-    });
+    console.error("Server error:", err);
+    res.status(500).json({ success: false, message: "Internal server error" });
   }
 });
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-  console.log(`Server running on http://localhost:${PORT}`);
+  console.log(`AI Student Assistant running on http://localhost:${PORT}`);
 });
 ```
 
 ---
 
-## 🧪 Testing with Postman or cURL
+## 📡 Testing with cURL
 
-### cURL Test Command
+### Student Info Query
 ```bash
-curl -X POST http://localhost:3000/extract-student \
+curl -X POST http://localhost:3000/chat \
   -H "Content-Type: application/json" \
-  -d '{"message": "Rahul is 22 years old. His email is rahul@gmail.com. He is learning MERN Stack and knows JavaScript and React."}'
+  -d '{"question": "Who is student 101?"}'
 ```
-
-### Expected HTTP 200 Response
+**Response:**
 ```json
 {
   "success": true,
-  "message": "Student information extracted successfully",
-  "data": {
-    "name": "Rahul",
-    "age": 22,
-    "email": "rahul@gmail.com",
-    "course": "MERN Stack",
-    "skills": [
-      "JavaScript",
-      "React"
-    ]
-  }
+  "answer": "Student 101 is Arun, enrolled in the MERN Stack course."
 }
 ```
 
----
-
-## 🎨 Classroom Design System & Palette
-
-- **Background Canvas:** `#F3F8FF` (Light classroom blue gradient)
-- **Slide Background:** `#FFFFFF` (Crisp white slide card with soft elevation)
-- **Headings & Badges:** `#142B4D` (Deep navy blue)
-- **Primary Accent:** `#3478F6` (Electric royal blue)
-- **Light Accent:** `#DCEBFF` (Ice blue container chips)
-- **Code Panel Background:** `#101827` (Charcoal terminal dark)
-- **Code Text:** `#F1F5F9` (High contrast readable syntax)
-- **Status Green:** `#059669` (Validated schemas)
-- **Status Rose:** `#DC2626` (Validation errors)
+### Attendance Query
+```bash
+curl -X POST http://localhost:3000/chat \
+  -H "Content-Type: application/json" \
+  -d '{"question": "What is Rahul's attendance percentage?"}'
+```
+**Response:**
+```json
+{
+  "success": true,
+  "answer": "Rahul's attendance is 72%."
+}
+```

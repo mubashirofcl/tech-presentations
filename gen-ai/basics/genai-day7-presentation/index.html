@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Node.js GenAI – Day 7: Structured Output, JSON Schema & Zod Validation</title>
+  <title>Node.js GenAI – Day 7: Structured Output, Zod & Function Calling</title>
   <link rel="stylesheet" href="style.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -17,11 +17,11 @@
       <div class="brand-section">
         <span class="brand-badge">Node.js GenAI</span>
         <div class="pres-title">
-          Day 7 <span>• Structured Output, JSON Schema & Zod</span>
+          Day 7 <span>• Structured Output, Zod & Function Calling</span>
         </div>
       </div>
       <div class="header-center">
-        <div class="slide-counter-badge" id="slideCounter">1 / 20</div>
+        <div class="slide-counter-badge" id="slideCounter">1 / 23</div>
       </div>
       <div class="header-actions">
         <button class="btn-header" id="fullscreenBtn" title="Toggle Fullscreen (F)">
@@ -53,95 +53,66 @@
       <section class="slide active" id="slide-1">
         <div class="slide-header">
           <div class="slide-title-group">
-            <span class="slide-category">Course Kickoff • Day 7</span>
-            <h1 class="slide-title">Structured Output & Data Validation</h1>
-            <p class="slide-subtitle">Making LLM responses predictable, schema-defined, and runtime-safe with Zod in Node.js</p>
+            <span class="slide-category">Course Masterclass • Day 7</span>
+            <h1 class="slide-title">Structured Output, Zod & Function Calling</h1>
+            <p class="slide-subtitle">From unpredictable text to typed JSON contracts and agentic backend tool execution in Node.js</p>
           </div>
-          <span class="slide-tag">NODE.JS GENAI #07</span>
+          <span class="slide-tag">DAY 07 • 23 SLIDES</span>
         </div>
 
         <div class="slide-body">
           <div class="grid-60-40">
-            <div class="card card-accent" style="gap: 16px;">
-              <div class="card-title"><span class="icon">🎯</span> Today's Core Agenda</div>
-              <p class="card-desc">Moving from unpredictable raw conversational text to enterprise-grade, typed, schema-enforced backend data pipelines.</p>
+            <div class="card card-accent" style="gap: 12px;">
+              <div class="card-title"><span class="icon">🎯</span> Unified Masterclass Curriculum</div>
+              <p class="card-desc">Combining data predictability and agentic execution into a single, cohesive engineering pattern:</p>
               
               <div class="grid-2col" style="gap: 10px;">
-                <div class="card" style="padding: 10px 14px;">
-                  <strong style="color: var(--primary-deep); font-size: 0.88rem;">1. Why Structured Output?</strong>
-                  <span style="font-size: 0.78rem; color: var(--text-muted);">The chaos of freeform AI responses</span>
+                <div class="card" style="padding: 10px 12px;">
+                  <strong style="color: var(--primary-deep); font-size: 0.85rem;">Part 1: Structured Output</strong>
+                  <span style="font-size: 0.76rem; color: var(--text-body);">JSON responses, JSON Schema contracts & prompt design</span>
                 </div>
-                <div class="card" style="padding: 10px 14px;">
-                  <strong style="color: var(--primary-deep); font-size: 0.88rem;">2. JSON Fundamentals</strong>
-                  <span style="font-size: 0.78rem; color: var(--text-muted);">Rules, types & stringify vs parse</span>
+                <div class="card" style="padding: 10px 12px;">
+                  <strong style="color: var(--primary-deep); font-size: 0.85rem;">Part 2: Runtime Zod Validation</strong>
+                  <span style="font-size: 0.76rem; color: var(--text-body);">safeParse(), schema chaining & handling issues</span>
                 </div>
-                <div class="card" style="padding: 10px 14px;">
-                  <strong style="color: var(--primary-deep); font-size: 0.88rem;">3. JSON Schema Standard</strong>
-                  <span style="font-size: 0.78rem; color: var(--text-muted);">IETF structural contracts</span>
+                <div class="card" style="padding: 10px 12px;">
+                  <strong style="color: var(--primary-deep); font-size: 0.85rem;">Part 3: Function & Tool Calling</strong>
+                  <span style="font-size: 0.76rem; color: var(--text-body);">Groq tool schemas, selection & argument passing</span>
                 </div>
-                <div class="card" style="padding: 10px 14px;">
-                  <strong style="color: var(--primary-deep); font-size: 0.88rem;">4. Zod Validation Engine</strong>
-                  <span style="font-size: 0.78rem; color: var(--text-muted);">Schemas, parse() vs safeParse()</span>
-                </div>
-                <div class="card" style="padding: 10px 14px;">
-                  <strong style="color: var(--primary-deep); font-size: 0.88rem;">5. Express API Validation</strong>
-                  <span style="font-size: 0.78rem; color: var(--text-muted);">Handling issues & HTTP 400/422</span>
-                </div>
-                <div class="card" style="padding: 10px 14px;">
-                  <strong style="color: var(--primary-deep); font-size: 0.88rem;">6. AI Student Extractor</strong>
-                  <span style="font-size: 0.78rem; color: var(--text-muted);">Full production capstone project</span>
+                <div class="card" style="padding: 10px 12px;">
+                  <strong style="color: var(--primary-deep); font-size: 0.85rem;">Part 4: AI Student Assistant</strong>
+                  <span style="font-size: 0.76rem; color: var(--text-body);">Complete Express backend with dual tools</span>
                 </div>
               </div>
 
-              <div class="card card-cyan" style="padding: 12px 16px; margin-top: 4px;">
-                <div style="font-size: 0.85rem; font-weight: 700; color: var(--accent-cyan); margin-bottom: 4px;">🎓 LEARNING OBJECTIVE</div>
-                <div style="font-size: 0.86rem; color: var(--text-main);">
-                  Learn how to convert unpredictable AI text responses into structured, validated data that Node.js applications can safely consume and store in databases.
+              <div class="card card-green" style="padding: 10px 14px; margin-top: 2px;">
+                <div style="font-size: 0.82rem; font-weight: 700; color: var(--accent-green);">💡 CORE LESSON OBJECTIVE</div>
+                <div style="font-size: 0.8rem; color: var(--text-main); margin-top: 2px;">
+                  Learn how to make LLMs output predictable JSON, validate all external data with Zod, and empower models to query live backend capabilities via tools without sacrificing security.
                 </div>
               </div>
             </div>
 
             <div class="card" style="justify-content: space-between;">
               <div>
-                <div class="card-title" style="margin-bottom: 12px;"><span class="icon">🛠️</span> Practical Stack</div>
-                <ul class="feature-list" style="gap: 12px;">
-                  <li>
-                    <span class="bullet-dot"></span>
-                    <div><strong>Runtime:</strong> Node.js (CommonJS / LTS)</div>
-                  </li>
-                  <li>
-                    <span class="bullet-dot"></span>
-                    <div><strong>Web Framework:</strong> Express.js 4.x</div>
-                  </li>
-                  <li>
-                    <span class="bullet-dot"></span>
-                    <div><strong>LLM Provider:</strong> Groq Cloud SDK (Llama 3.3 70B)</div>
-                  </li>
-                  <li>
-                    <span class="bullet-dot"></span>
-                    <div><strong>Validation Library:</strong> Zod (Runtime Schema Validator)</div>
-                  </li>
-                  <li>
-                    <span class="bullet-dot"></span>
-                    <div><strong>Data Standards:</strong> JSON & JSON Schema</div>
-                  </li>
-                  <li>
-                    <span class="bullet-dot"></span>
-                    <div><strong>Environment:</strong> dotenv for secure API keys</div>
-                  </li>
+                <div class="card-title" style="margin-bottom: 10px;"><span class="icon">🛠️</span> Production Tech Stack</div>
+                <ul class="feature-list" style="gap: 10px;">
+                  <li><span class="bullet-dot"></span><div><strong>Runtime:</strong> Node.js (CommonJS)</div></li>
+                  <li><span class="bullet-dot"></span><div><strong>Web Framework:</strong> Express.js 4.x</div></li>
+                  <li><span class="bullet-dot"></span><div><strong>LLM Provider:</strong> Groq Cloud SDK</div></li>
+                  <li><span class="bullet-dot"></span><div><strong>Target Models:</strong> <code>openai/gpt-oss-120b</code> / <code>llama-3.3-70b</code></div></li>
+                  <li><span class="bullet-dot"></span><div><strong>Validation:</strong> Zod Runtime Schemas</div></li>
+                  <li><span class="bullet-dot"></span><div><strong>Data Standards:</strong> JSON & JSON Schema</div></li>
                 </ul>
               </div>
 
-              <div class="diagram-container" style="background: var(--light-accent); border-color: rgba(52, 120, 246, 0.25);">
-                <div class="diagram-title" style="font-size: 0.78rem; color: var(--primary-deep);">Pipeline Architecture Preview</div>
-                <div class="flow-steps" style="justify-content: center; gap: 6px;">
-                  <div class="flow-node" style="min-width: 70px; padding: 6px 8px; font-size: 0.75rem;">Raw Text</div>
-                  <div class="flow-arrow">→</div>
-                  <div class="flow-node primary" style="min-width: 70px; padding: 6px 8px; font-size: 0.75rem;">Groq LLM</div>
-                  <div class="flow-arrow">→</div>
-                  <div class="flow-node" style="min-width: 70px; padding: 6px 8px; font-size: 0.75rem;">JSON.parse</div>
-                  <div class="flow-arrow">→</div>
-                  <div class="flow-node success" style="min-width: 70px; padding: 6px 8px; font-size: 0.75rem;">Zod Safe</div>
+              <div class="diagram-container" style="background: var(--light-blue-chip); border-color: rgba(37, 99, 235, 0.25); padding: 10px;">
+                <div class="flow-steps" style="justify-content: center; gap: 4px;">
+                  <div class="flow-node" style="min-width: 65px; font-size: 0.7rem; padding: 5px;">Raw Prompt</div>
+                  <div class="flow-arrow">➔</div>
+                  <div class="flow-node primary" style="min-width: 65px; font-size: 0.7rem; padding: 5px;">Groq Tool/JSON</div>
+                  <div class="flow-arrow">➔</div>
+                  <div class="flow-node success" style="min-width: 65px; font-size: 0.7rem; padding: 5px;">Zod Safe</div>
                 </div>
               </div>
             </div>
@@ -150,14 +121,14 @@
       </section>
 
       <!-- ==========================================
-           SLIDE 2: Why Do We Need Structured Output?
+           SLIDE 2: The Problem with Unstructured LLM Text
            ========================================== -->
       <section class="slide" id="slide-2">
         <div class="slide-header">
           <div class="slide-title-group">
-            <span class="slide-category">The Architectural Challenge</span>
-            <h2 class="slide-title">Why Do We Need Structured Output?</h2>
-            <p class="slide-subtitle">The problem with unpredictable natural language in software backends</p>
+            <span class="slide-category">Part 1: Structured Output</span>
+            <h2 class="slide-title">The Problem with Unstructured LLM Text</h2>
+            <p class="slide-subtitle">Why natural language breaks backend applications, and how JSON solves it</p>
           </div>
           <span class="slide-tag">FOUNDATIONS</span>
         </div>
@@ -165,38 +136,34 @@
         <div class="slide-body">
           <div class="grid-2col">
             <div class="card card-rose">
-              <div class="card-title" style="color: var(--accent-rose);"><span class="icon">⚠️</span> The Problem: Natural Language Inconsistency</div>
-              <p class="card-desc">Ask an AI to extract student information from: <em>"Rahul is 22 years old. He is learning MERN Stack. His email is rahul@gmail.com."</em></p>
+              <div class="card-title" style="color: var(--accent-rose);"><span class="icon">⚠️</span> The Freeform Output Problem</div>
+              <p class="card-desc">Ask an LLM to extract student details: <em>"Rahul is 22 years old. He is learning MERN Stack. Email: rahul@gmail.com."</em></p>
               
-              <div style="display: flex; gap: 8px; margin-top: 4px;">
-                <button class="btn-sandbox btn-sandbox-secondary format-tab-btn active" data-format="paragraph">Response 1</button>
-                <button class="btn-sandbox btn-sandbox-secondary format-tab-btn" data-format="csv">Response 2</button>
-                <button class="btn-sandbox btn-sandbox-secondary format-tab-btn" data-format="bullets">Response 3</button>
-                <button class="btn-sandbox format-tab-btn" data-format="json">JSON Target</button>
+              <div style="display: flex; gap: 6px; margin-top: 4px;">
+                <button class="btn-sandbox btn-sandbox-secondary s2-format-btn active" data-format="paragraph">Paragraph Format</button>
+                <button class="btn-sandbox btn-sandbox-secondary s2-format-btn" data-format="csv">CSV Format</button>
+                <button class="btn-sandbox s2-format-btn" data-format="json">JSON Target</button>
               </div>
 
-              <div class="output-box" style="margin-top: 8px; min-height: 90px;">
-                <div class="output-label">Sample Model Output:</div>
-                <div class="output-content" id="formatDisplayBox" style="color: #F8FAFC;">The student's name is Rahul. He is 22 years old and learning MERN Stack. His email address is rahul@gmail.com.</div>
+              <div class="output-box" style="margin-top: 8px;">
+                <div class="output-label">Sample Output:</div>
+                <div class="output-content" id="s2Display" style="color: #F8FAFC; min-height: 48px;">The student's name is Rahul. He is 22 years old and learning MERN Stack. His email is rahul@gmail.com.</div>
               </div>
 
-              <div class="output-box" style="background: #1E293B; border-color: #334155;">
-                <div class="output-label" style="color: #F87171;">Node.js Integration Evaluation:</div>
-                <div class="output-content" id="formatAccessBox" style="color: #FCA5A5; font-size: 0.8rem; white-space: pre-wrap;">❌ student.name => undefined
+              <div class="output-box" style="background: #1E293B;">
+                <div class="output-label" style="color: #F87171;">Node.js Access Result:</div>
+                <div class="output-content" id="s2Eval" style="color: #FCA5A5; font-size: 0.78rem;">❌ student.name => undefined
 ❌ student.age => undefined
-Requires complex, brittle regex that breaks on tiny wording changes!</div>
+Result is unstructured prose. Requires fragile regex to parse.</div>
               </div>
             </div>
 
             <div class="card card-green">
-              <div class="card-title" style="color: var(--accent-green);"><span class="icon">✨</span> The Solution: Structured Output (JSON)</div>
-              <p class="card-desc">We instruct the LLM to reply strictly within a defined data contract:</p>
+              <div class="card-title" style="color: var(--accent-green);"><span class="icon">✨</span> The Solution: Structured JSON</div>
+              <p class="card-desc">We constrain the model to emit a strictly formatted JSON object:</p>
               
               <div class="code-panel">
-                <div class="code-header">
-                  <span class="code-file">structured-student.json</span>
-                  <span class="code-lang-badge">JSON</span>
-                </div>
+                <div class="code-header"><span class="code-file">structuredStudent.json</span></div>
                 <pre><code>{
   <span class="prop">"name"</span>: <span class="str">"Rahul"</span>,
   <span class="prop">"age"</span>: <span class="num">22</span>,
@@ -205,23 +172,14 @@ Requires complex, brittle regex that breaks on tiny wording changes!</div>
 }</code></pre>
               </div>
 
-              <div style="font-weight: 700; font-size: 0.88rem; color: var(--text-heading); margin-top: 6px;">Key Production Benefits:</div>
-              <div class="grid-2col" style="gap: 8px;">
+              <div class="grid-2col" style="gap: 8px; margin-top: 6px;">
                 <div class="card" style="padding: 8px 12px; background: #FFFFFF;">
-                  <strong style="color: var(--primary-accent); font-size: 0.82rem;">Predictable Format</strong>
-                  <span style="font-size: 0.75rem; color: var(--text-muted);">Direct property access (<code style="font-size: 0.72rem;">student.name</code>)</span>
+                  <strong style="color: var(--primary-blue); font-size: 0.8rem;">Direct Property Access</strong>
+                  <span style="font-size: 0.74rem; color: var(--text-muted);">Access <code>student.name</code> directly</span>
                 </div>
                 <div class="card" style="padding: 8px 12px; background: #FFFFFF;">
-                  <strong style="color: var(--primary-accent); font-size: 0.82rem;">Database Ready</strong>
-                  <span style="font-size: 0.75rem; color: var(--text-muted);">Matches MongoDB or SQL schemas directly</span>
-                </div>
-                <div class="card" style="padding: 8px 12px; background: #FFFFFF;">
-                  <strong style="color: var(--primary-accent); font-size: 0.82rem;">API Integration</strong>
-                  <span style="font-size: 0.75rem; color: var(--text-muted);">Standard payload across microservices</span>
-                </div>
-                <div class="card" style="padding: 8px 12px; background: #FFFFFF;">
-                  <strong style="color: var(--primary-accent); font-size: 0.82rem;">Error Resilient</strong>
-                  <span style="font-size: 0.75rem; color: var(--text-muted);">Can be machine-verified at runtime</span>
+                  <strong style="color: var(--primary-blue); font-size: 0.8rem;">Database Ready</strong>
+                  <span style="font-size: 0.74rem; color: var(--text-muted);">Matches MongoDB & SQL records</span>
                 </div>
               </div>
             </div>
@@ -230,376 +188,131 @@ Requires complex, brittle regex that breaks on tiny wording changes!</div>
       </section>
 
       <!-- ==========================================
-           SLIDE 3: What Is JSON?
+           SLIDE 3: JSON & Serialization in Node.js
            ========================================== -->
       <section class="slide" id="slide-3">
         <div class="slide-header">
           <div class="slide-title-group">
-            <span class="slide-category">Data Standards</span>
-            <h2 class="slide-title">What Is JSON?</h2>
-            <p class="slide-subtitle">JavaScript Object Notation: The universal text protocol of modern web and AI</p>
+            <span class="slide-category">JavaScript Runtime</span>
+            <h2 class="slide-title">JSON & Serialization in Node.js</h2>
+            <p class="slide-subtitle">In-memory objects vs serializable text strings, stringify and parse</p>
           </div>
-          <span class="slide-tag">JSON SPEC</span>
+          <span class="slide-tag">JSON & PARSE</span>
         </div>
 
         <div class="slide-body">
           <div class="grid-2col">
             <div class="card">
-              <div class="card-title"><span class="icon">📄</span> Core Definition & Usage</div>
-              <p class="card-desc"><strong>JSON (JavaScript Object Notation)</strong> is an open standard, language-independent, lightweight data-interchange text format.</p>
-              
-              <div class="code-panel">
-                <div class="code-header">
-                  <span class="code-file">student.json</span>
-                  <button class="copy-btn">Copy</button>
-                </div>
-                <pre><code>{
-  <span class="prop">"name"</span>: <span class="str">"Rahul"</span>,
-  <span class="prop">"age"</span>: <span class="num">22</span>,
-  <span class="prop">"isStudent"</span>: <span class="bool">true</span>,
-  <span class="prop">"skills"</span>: [<span class="str">"JavaScript"</span>, <span class="str">"React"</span>, <span class="str">"Node.js"</span>]
-}</code></pre>
-              </div>
-
+              <div class="card-title"><span class="icon">📄</span> In-Memory Object vs Serialized String</div>
               <div class="table-container">
                 <table class="styled-table">
                   <thead>
-                    <tr>
-                      <th>JSON Type</th>
-                      <th>Example</th>
-                      <th>Notes</th>
-                    </tr>
+                    <tr><th>Feature</th><th>JavaScript Object</th><th>JSON String</th></tr>
                   </thead>
                   <tbody>
-                    <tr>
-                      <td><strong>String</strong></td>
-                      <td><code>"Rahul"</code></td>
-                      <td>Must use double quotes (<code>"</code>)</td>
-                    </tr>
-                    <tr>
-                      <td><strong>Number</strong></td>
-                      <td><code>22</code>, <code>3.14</code></td>
-                      <td>Integer or floating point</td>
-                    </tr>
-                    <tr>
-                      <td><strong>Boolean</strong></td>
-                      <td><code>true</code> / <code>false</code></td>
-                      <td>Lowercase literals</td>
-                    </tr>
-                    <tr>
-                      <td><strong>Array</strong></td>
-                      <td><code>["React", "Node.js"]</code></td>
-                      <td>Ordered list in brackets <code>[]</code></td>
-                    </tr>
-                    <tr>
-                      <td><strong>Object</strong></td>
-                      <td><code>{"name": "Rahul"}</code></td>
-                      <td>Key-value pairs in braces <code>{}</code></td>
-                    </tr>
-                    <tr>
-                      <td><strong>Null</strong></td>
-                      <td><code>null</code></td>
-                      <td>Explicit empty value</td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-            </div>
-
-            <div class="card card-accent">
-              <div class="card-title"><span class="icon">⚖️</span> 6 Critical JSON Syntax Rules</div>
-              <ul class="feature-list" style="gap: 8px;">
-                <li><span class="bullet-check">✓</span> <div><strong>Rule 1:</strong> Keys MUST be wrapped in double quotes (<code>"name"</code>).</div></li>
-                <li><span class="bullet-check">✓</span> <div><strong>Rule 2:</strong> String values MUST use double quotes (not single quotes).</div></li>
-                <li><span class="bullet-check">✓</span> <div><strong>Rule 3:</strong> Objects use curly braces <code>{}</code>.</div></li>
-                <li><span class="bullet-check">✓</span> <div><strong>Rule 4:</strong> Arrays use square brackets <code>[]</code>.</div></li>
-                <li><span class="bullet-cross">✗</span> <div><strong>Rule 5:</strong> NO comments allowed (no <code>//</code> or <code>/* */</code>).</div></li>
-                <li><span class="bullet-cross">✗</span> <div><strong>Rule 6:</strong> NO trailing commas allowed after the last item.</div></li>
-              </ul>
-
-              <div class="sandbox-card" style="margin-top: 6px;">
-                <div class="sandbox-header">
-                  <div class="sandbox-title"><span class="icon">🧪</span> Live JSON Syntax Inspector</div>
-                  <select id="jsonPresetSelect" class="slide-select" style="font-size: 0.75rem;">
-                    <option value="valid">Preset: Valid JSON</option>
-                    <option value="singleQuote">Preset: Single Quotes Error</option>
-                    <option value="trailingComma">Preset: Trailing Comma Error</option>
-                    <option value="unquotedKey">Preset: Unquoted Key Error</option>
-                    <option value="commentIncluded">Preset: Comment Error</option>
-                  </select>
-                </div>
-                <textarea id="jsonTestInput" class="sandbox-textarea" style="height: 70px;">{
-  "name": "Rahul",
-  "age": 22,
-  "isStudent": true
-}</textarea>
-                <div style="display: flex; gap: 8px;">
-                  <button id="jsonTestBtn" class="btn-sandbox" style="padding: 6px 12px; font-size: 0.8rem;">Validate Syntax</button>
-                </div>
-                <div id="jsonRuleResult" class="sandbox-result card-green" style="font-size: 0.78rem;">Click 'Validate Syntax' or choose a preset error to inspect.</div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- ==========================================
-           SLIDE 4: JSON vs JavaScript Object
-           ========================================== -->
-      <section class="slide" id="slide-4">
-        <div class="slide-header">
-          <div class="slide-title-group">
-            <span class="slide-category">JavaScript Runtime Mechanics</span>
-            <h2 class="slide-title">JSON vs JavaScript Object</h2>
-            <p class="slide-subtitle">Understanding in-memory objects vs serializable string representations</p>
-          </div>
-          <span class="slide-tag">PARSE & STRINGIFY</span>
-        </div>
-
-        <div class="slide-body">
-          <div class="grid-2col">
-            <div class="card">
-              <div class="card-title"><span class="icon">🧠</span> In-Memory Object vs Serialized Text</div>
-              <p class="card-desc">They look similar in source code, but their runtime nature is fundamentally different:</p>
-              
-              <div class="table-container">
-                <table class="styled-table">
-                  <thead>
-                    <tr>
-                      <th>Feature</th>
-                      <th>JavaScript Object</th>
-                      <th>JSON String</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td><strong>Nature</strong></td>
-                      <td>Live heap memory data structure</td>
-                      <td>Plain sequence of UTF-8 characters</td>
-                    </tr>
-                    <tr>
-                      <td><strong>Keys</strong></td>
-                      <td>Can be unquoted identifiers</td>
-                      <td><strong>Must</strong> be double-quoted strings</td>
-                    </tr>
-                    <tr>
-                      <td><strong>Values</strong></td>
-                      <td>Functions, Symbols, undefined, etc.</td>
-                      <td>Strict primitives, arrays & objects only</td>
-                    </tr>
-                    <tr>
-                      <td><strong>Transport</strong></td>
-                      <td>Cannot be sent directly over HTTP</td>
-                      <td>Standard payload for HTTP requests</td>
-                    </tr>
+                    <tr><td><strong>Nature</strong></td><td>Live heap memory structure</td><td>Plain UTF-8 text string</td></tr>
+                    <tr><td><strong>Keys</strong></td><td>Unquoted identifiers</td><td><strong>Must</strong> be double-quoted</td></tr>
+                    <tr><td><strong>Comments</strong></td><td>Allowed (<code>//</code>)</td><td><strong>Strictly forbidden</strong></td></tr>
+                    <tr><td><strong>Trailing Commas</strong></td><td>Permitted in JS</td><td><strong>Strictly forbidden</strong></td></tr>
                   </tbody>
                 </table>
               </div>
 
               <div class="code-panel">
-                <div class="code-header">
-                  <span class="code-file">serialization.js</span>
-                  <button class="copy-btn">Copy</button>
-                </div>
-                <pre><code><span class="cm">// 1. JavaScript In-Memory Object</span>
-<span class="kw">const</span> <span class="vr">student</span> = { <span class="prop">name</span>: <span class="str">"Rahul"</span>, <span class="prop">age</span>: <span class="num">22</span>, <span class="prop">isStudent</span>: <span class="bool">true</span> };
+                <div class="code-header"><span class="code-file">serialization.js</span><button class="copy-btn">Copy</button></div>
+                <pre><code><span class="cm">// Object ➔ String (Serialization)</span>
+<span class="kw">const</span> <span class="vr">jsonStr</span> = JSON.<span class="fn">stringify</span>({ <span class="prop">name</span>: <span class="str">"Rahul"</span>, <span class="prop">age</span>: <span class="num">22</span> });
 
-<span class="cm">// 2. JS Object → JSON String (Serialization)</span>
-<span class="kw">const</span> <span class="vr">studentJSON</span> = JSON.<span class="fn">stringify</span>(<span class="vr">student</span>);
-console.<span class="fn">log</span>(<span class="kw">typeof</span> <span class="vr">studentJSON</span>); <span class="cm">// "string"</span>
-
-<span class="cm">// 3. JSON String → JS Object (Deserialization)</span>
-<span class="kw">const</span> <span class="vr">parsed</span> = JSON.<span class="fn">parse</span>(<span class="vr">studentJSON</span>);
-console.<span class="fn">log</span>(<span class="vr">parsed</span>.<span class="prop">name</span>); <span class="cm">// "Rahul"</span></code></pre>
+<span class="cm">// String ➔ Object (Deserialization)</span>
+<span class="kw">const</span> <span class="vr">student</span> = JSON.<span class="fn">parse</span>(<span class="vr">jsonStr</span>);
+console.<span class="fn">log</span>(<span class="vr">student</span>.<span class="prop">name</span>); <span class="cm">// "Rahul"</span></code></pre>
               </div>
             </div>
 
             <div class="sandbox-card">
               <div class="sandbox-header">
-                <div class="sandbox-title"><span class="icon">⚙️</span> Live Serialization Transformer</div>
-                <span class="sandbox-badge">Interactive</span>
-              </div>
-              <p style="font-size: 0.82rem; color: var(--text-muted);">Edit live JavaScript object values below and trigger stringify / parse:</p>
-              
-              <div class="grid-3col" style="gap: 8px;">
-                <div>
-                  <label class="sandbox-label">name:</label>
-                  <input id="s4ObjName" type="text" value="Rahul" class="slide-select" style="width: 100%;">
-                </div>
-                <div>
-                  <label class="sandbox-label">age:</label>
-                  <input id="s4ObjAge" type="number" value="22" class="slide-select" style="width: 100%;">
-                </div>
-                <div>
-                  <label class="sandbox-label">course:</label>
-                  <input id="s4ObjCourse" type="text" value="MERN Stack" class="slide-select" style="width: 100%;">
-                </div>
+                <div class="sandbox-title"><span class="icon">🧪</span> Live JSON Syntax Inspector</div>
+                <select id="s3PresetSelect" class="slide-select" style="font-size: 0.75rem;">
+                  <option value="valid">Valid JSON</option>
+                  <option value="singleQuotes">Error: Single Quotes</option>
+                  <option value="trailingComma">Error: Trailing Comma</option>
+                  <option value="comments">Error: Comments</option>
+                </select>
               </div>
 
-              <div style="display: flex; gap: 8px; margin-top: 4px;">
-                <button id="s4BtnStringify" class="btn-sandbox" style="flex: 1;">JSON.stringify() ➔</button>
-                <button id="s4BtnParse" class="btn-sandbox btn-sandbox-secondary" style="flex: 1;">➔ JSON.parse()</button>
-              </div>
-
-              <div>
-                <label class="sandbox-label">JSON Text Output / Input:</label>
-                <textarea id="s4JsonText" class="sandbox-textarea" style="height: 70px;">{
+              <textarea id="s3Input" class="sandbox-textarea" style="height: 65px;">{
   "name": "Rahul",
   "age": 22,
   "course": "MERN Stack"
 }</textarea>
-              </div>
 
-              <div id="s4ConsoleLog" class="sandbox-result" style="font-size: 0.78rem;">Click stringify or parse to inspect in-memory JavaScript state.</div>
+              <button id="s3BtnValidate" class="btn-sandbox" style="align-self: flex-start;">Run JSON.parse() ➔</button>
+
+              <div id="s3Result" class="sandbox-result card-green" style="font-size: 0.78rem;">
+Click 'Run JSON.parse()' to test syntax.
+              </div>
             </div>
           </div>
         </div>
       </section>
 
       <!-- ==========================================
-           SLIDE 5: JSON Output from an LLM
+           SLIDE 4: Generating JSON from an LLM
            ========================================== -->
-      <section class="slide" id="slide-5">
+      <section class="slide" id="slide-4">
         <div class="slide-header">
           <div class="slide-title-group">
-            <span class="slide-category">Prompting Strategy</span>
-            <h2 class="slide-title">JSON Output from an LLM</h2>
-            <p class="slide-subtitle">Guiding language models to emit machine-readable payloads</p>
+            <span class="slide-category">Prompt Engineering</span>
+            <h2 class="slide-title">Generating JSON from an LLM</h2>
+            <p class="slide-subtitle">Guiding the model to emit machine-readable text without conversational fluff</p>
           </div>
-          <span class="slide-tag">PROMPT DESIGN</span>
+          <span class="slide-tag">PROMPT TO JSON</span>
         </div>
 
         <div class="slide-body">
           <div class="grid-2col">
-            <div class="card card-rose">
-              <div class="card-title" style="color: var(--accent-rose);"><span class="icon">❌</span> The Vague Prompt</div>
-              <div class="code-panel">
-                <div class="code-header"><span class="code-file">weak-prompt.txt</span></div>
-                <pre><code>Extract the student details from this message:
-Rahul is 22 years old. He is learning MERN Stack. His email is rahul@gmail.com.</code></pre>
-              </div>
-              <div style="font-size: 0.85rem; color: var(--text-muted);">
-                <strong>Risk:</strong> The model responds with conversational fluff:
-                <blockquote style="background: #FFF1F2; border-left: 3px solid var(--accent-rose); padding: 8px 12px; margin-top: 6px; font-style: italic; border-radius: 4px;">
-                  "Sure, here is the information: Rahul is a 22-year-old student studying MERN..."
-                </blockquote>
-                This completely crashes <code>JSON.parse()</code>!
-              </div>
-            </div>
-
-            <div class="card card-green">
-              <div class="card-title" style="color: var(--accent-green);"><span class="icon">✅</span> The Improved Structured Prompt</div>
-              <div class="code-panel">
-                <div class="code-header"><span class="code-file">structured-prompt.txt</span></div>
-                <pre><code>Extract student details from this message.
-Return ONLY valid JSON. Do not include markdown ticks or conversational text.
-
-Required fields:
-- name (string)
-- age (integer)
-- course (string)
-- email (string)
-
-Message:
-Rahul is 22 years old. He is learning MERN Stack. His email is rahul@gmail.com.</code></pre>
-              </div>
-              <div class="output-box" style="margin-top: 4px;">
-                <div class="output-label">Expected Clean Response:</div>
-                <div class="output-content">{ "name": "Rahul", "age": 22, "course": "MERN Stack", "email": "rahul@gmail.com" }</div>
-              </div>
-            </div>
-          </div>
-
-          <div class="card card-amber" style="padding: 14px 20px;">
-            <div style="font-size: 0.9rem; font-weight: 700; color: var(--accent-amber); display: flex; align-items: center; gap: 8px;">
-              <span>⚠️</span> CRITICAL PRODUCTION LESSON: Prompts Cannot Guarantee Valid JSON
-            </div>
-            <p style="font-size: 0.86rem; color: var(--text-main); margin-top: 4px;">
-              Even with explicit instructions, temperature fluctuations or unexpected user inputs can cause models to hallucinate extra properties, miss required fields, or wrap output in <code>```json ... ```</code>. <strong>Prompt engineering is necessary to guide the LLM, but runtime validation in Node.js is mandatory to protect your backend!</strong>
-            </p>
-          </div>
-        </div>
-      </section>
-
-      <!-- ==========================================
-           SLIDE 6: Node.js Practical: Generate JSON Using Groq
-           ========================================== -->
-      <section class="slide" id="slide-6">
-        <div class="slide-header">
-          <div class="slide-title-group">
-            <span class="slide-category">Live Backend Implementation</span>
-            <h2 class="slide-title">Node.js Practical: Generate JSON Using Groq</h2>
-            <p class="slide-subtitle">Communicating with Groq SDK and converting LLM output into an object</p>
-          </div>
-          <span class="slide-tag">GROQ SDK</span>
-        </div>
-
-        <div class="slide-body">
-          <div class="grid-60-40">
             <div class="code-panel">
-              <div class="code-header">
-                <span class="code-file">groq-json-demo.js</span>
-                <button class="copy-btn">Copy</button>
-              </div>
-              <pre><code><span class="kw">require</span>(<span class="str">"dotenv"</span>).<span class="fn">config</span>();
-<span class="kw">const</span> <span class="vr">Groq</span> = <span class="kw">require</span>(<span class="str">"groq-sdk"</span>);
-<span class="kw">const</span> <span class="vr">groq</span> = <span class="kw">new</span> <span class="vr">Groq</span>({ <span class="prop">apiKey</span>: process.env.<span class="vr">GROQ_API_KEY</span> });
+              <div class="code-header"><span class="code-file">generateJson.js</span><button class="copy-btn">Copy</button></div>
+              <pre><code><span class="kw">const</span> <span class="vr">response</span> = <span class="kw">await</span> <span class="vr">groq</span>.chat.completions.<span class="fn">create</span>({
+  <span class="prop">model</span>: <span class="str">"llama-3.3-70b-versatile"</span>,
+  <span class="prop">messages</span>: [
+    {
+      <span class="prop">role</span>: <span class="str">"system"</span>,
+      <span class="prop">content</span>: <span class="str">`Extract student details from message.
+Return ONLY valid JSON with keys: name, age, course, email.
+No markdown backticks. No conversational text.`</span>
+    },
+    {
+      <span class="prop">role</span>: <span class="str">"user"</span>,
+      <span class="prop">content</span>: <span class="str">"Rahul is 22. Email: rahul@gmail.com. Course: MERN Stack."</span>
+    }
+  ],
+  <span class="prop">temperature</span>: <span class="num">0.2</span>
+});
 
-<span class="kw">async function</span> <span class="fn">extractStudent</span>() {
-  <span class="kw">const</span> <span class="vr">prompt</span> = <span class="str">`Extract student information. Return ONLY valid JSON.
-Required fields: name, age, course, email.
-Message: Rahul is 22 years old. He is learning MERN Stack. Email: rahul@gmail.com.`</span>;
-
-  <span class="kw">const</span> <span class="vr">response</span> = <span class="kw">await</span> <span class="vr">groq</span>.chat.completions.<span class="fn">create</span>({
-    <span class="prop">model</span>: process.env.<span class="vr">GROQ_MODEL</span> || <span class="str">"llama-3.3-70b-versatile"</span>,
-    <span class="prop">messages</span>: [
-      { <span class="prop">role</span>: <span class="str">"system"</span>, <span class="prop">content</span>: <span class="str">"You extract information and return valid JSON."</span> },
-      { <span class="prop">role</span>: <span class="str">"user"</span>, <span class="prop">content</span>: <span class="vr">prompt</span> }
-    ],
-    <span class="prop">temperature</span>: <span class="num">0.2</span>
-  });
-
-  <span class="kw">const</span> <span class="vr">aiResponse</span> = <span class="vr">response</span>.choices[<span class="num">0</span>].message.content;
-  <span class="kw">const</span> <span class="vr">student</span> = JSON.<span class="fn">parse</span>(<span class="vr">aiResponse</span>);
-
-  console.<span class="fn">log</span>(<span class="str">"Student Name:"</span>, <span class="vr">student</span>.<span class="prop">name</span>);
-  console.<span class="fn">log</span>(<span class="str">"Student Email:"</span>, <span class="vr">student</span>.<span class="prop">email</span>);
-}
-
-<span class="fn">extractStudent</span>();</code></pre>
+<span class="kw">const</span> <span class="vr">rawText</span> = <span class="vr">response</span>.choices[<span class="num">0</span>].message.content;
+<span class="kw">const</span> <span class="vr">student</span> = JSON.<span class="fn">parse</span>(<span class="vr">rawText</span>);
+console.<span class="fn">log</span>(<span class="vr">student</span>.<span class="prop">name</span>); <span class="cm">// "Rahul"</span></code></pre>
             </div>
 
-            <div class="card card-accent" style="justify-content: space-between;">
+            <div class="card card-amber" style="justify-content: space-between;">
               <div>
-                <div class="card-title"><span class="icon">🔍</span> Step-by-Step Code Walkthrough</div>
-                <ul class="feature-list" style="gap: 10px; margin-top: 8px;">
-                  <li>
-                    <span class="bullet-dot"></span>
-                    <div><strong>1. Prompt Construction:</strong> Explicitly state fields and demand JSON format.</div>
-                  </li>
-                  <li>
-                    <span class="bullet-dot"></span>
-                    <div><strong>2. System Role Conditioning:</strong> Keep model objective strictly focused on structured extraction.</div>
-                  </li>
-                  <li>
-                    <span class="bullet-dot"></span>
-                    <div><strong>3. Low Temperature (0.2):</strong> Reduces random creativity to favor factual precision.</div>
-                  </li>
-                  <li>
-                    <span class="bullet-dot"></span>
-                    <div><strong>4. Parsing String to Object:</strong> <code>JSON.parse()</code> converts string response to JavaScript memory object.</div>
-                  </li>
-                  <li>
-                    <span class="bullet-dot"></span>
-                    <div><strong>5. Property Access:</strong> Code directly reads <code>student.name</code> and <code>student.email</code>.</div>
-                  </li>
+                <div class="card-title" style="color: var(--accent-amber);"><span class="icon">⚠️</span> The Golden Rule of AI JSON</div>
+                <p class="card-desc" style="font-size: 0.92rem; margin-top: 4px;">
+                  <strong>Prompts guide intent, but cannot guarantee valid data.</strong>
+                </p>
+                <ul class="feature-list" style="margin-top: 8px;">
+                  <li><span class="bullet-cross">✗</span> Models can wrap output in <code>```json ... ```</code> markdown fences.</li>
+                  <li><span class="bullet-cross">✗</span> Models can output conversational preamble (<em>"Sure, here is your JSON:"</em>).</li>
+                  <li><span class="bullet-cross">✗</span> Models can hallucinate missing fields or output invalid data types (<code>age: "twenty-two"</code>).</li>
                 </ul>
               </div>
 
-              <div class="output-box">
-                <div class="output-label">Terminal Execution Output:</div>
-                <div class="output-content">Student Name: Rahul
-Student Email: rahul@gmail.com</div>
+              <div class="card card-purple" style="padding: 10px 14px;">
+                <strong style="color: var(--accent-purple); font-size: 0.82rem;">The Engineering Implication:</strong>
+                <p style="font-size: 0.78rem; color: var(--text-main); margin-top: 2px;">
+                  Prompt instructions reduce failure rates, but <strong>server-side runtime validation</strong> is non-negotiable before touching databases or business logic!
+                </p>
               </div>
             </div>
           </div>
@@ -607,34 +320,27 @@ Student Email: rahul@gmail.com</div>
       </section>
 
       <!-- ==========================================
-           SLIDE 7: What Is JSON Schema?
+           SLIDE 5: What Is JSON Schema?
            ========================================== -->
-      <section class="slide" id="slide-7">
+      <section class="slide" id="slide-5">
         <div class="slide-header">
           <div class="slide-title-group">
-            <span class="slide-category">Schema Specifications</span>
+            <span class="slide-category">Structural Contracts</span>
             <h2 class="slide-title">What Is JSON Schema?</h2>
-            <p class="slide-subtitle">The standard language-independent specification for describing JSON structure</p>
+            <p class="slide-subtitle">The standard IETF specification for declaring expected data shapes</p>
           </div>
           <span class="slide-tag">SPECIFICATION</span>
         </div>
 
         <div class="slide-body">
-          <div class="grid-2col">
-            <div class="card">
-              <div class="card-title"><span class="icon">📜</span> Schema Specification Example</div>
-              <p class="card-desc">JSON Schema defines the structural contract, types, bounds, and requirements of JSON data:</p>
-              
-              <div class="code-panel">
-                <div class="code-header">
-                  <span class="code-file">student.schema.json</span>
-                  <button class="copy-btn">Copy</button>
-                </div>
-                <pre><code>{
+          <div class="grid-60-40">
+            <div class="code-panel">
+              <div class="code-header"><span class="code-file">student.schema.json</span><button class="copy-btn">Copy</button></div>
+              <pre><code>{
   <span class="prop">"$schema"</span>: <span class="str">"http://json-schema.org/draft-07/schema#"</span>,
   <span class="prop">"type"</span>: <span class="str">"object"</span>,
   <span class="prop">"properties"</span>: {
-    <span class="prop">"name"</span>: { <span class="prop">"type"</span>: <span class="str">"string"</span>, <span class="prop">"minLength"</span>: <span class="num">2</span> },
+    <span class="prop">"name"</span>: { <span class="prop">"type"</span>: <span class="str">"string"</span> },
     <span class="prop">"age"</span>: { <span class="prop">"type"</span>: <span class="str">"integer"</span>, <span class="prop">"minimum"</span>: <span class="num">16</span>, <span class="prop">"maximum"</span>: <span class="num">60</span> },
     <span class="prop">"course"</span>: { <span class="prop">"type"</span>: <span class="str">"string"</span> },
     <span class="prop">"email"</span>: { <span class="prop">"type"</span>: <span class="str">"string"</span>, <span class="prop">"format"</span>: <span class="str">"email"</span> }
@@ -642,52 +348,28 @@ Student Email: rahul@gmail.com</div>
   <span class="prop">"required"</span>: [<span class="str">"name"</span>, <span class="str">"age"</span>, <span class="str">"course"</span>, <span class="str">"email"</span>],
   <span class="prop">"additionalProperties"</span>: <span class="bool">false</span>
 }</code></pre>
-              </div>
             </div>
 
-            <div class="card card-accent">
-              <div class="card-title"><span class="icon">🔑</span> Core JSON Schema Keywords</div>
-              <div class="table-container">
-                <table class="styled-table">
-                  <thead>
-                    <tr>
-                      <th>Keyword</th>
-                      <th>Meaning & Purpose</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td><code>type</code></td>
-                      <td>Defines primitive data type (<code>"object"</code>, <code>"string"</code>, <code>"integer"</code>, etc.)</td>
-                    </tr>
-                    <tr>
-                      <td><code>properties</code></td>
-                      <td>Dictionary defining permitted keys and their individual sub-schemas</td>
-                    </tr>
-                    <tr>
-                      <td><code>required</code></td>
-                      <td>Array of property names that MUST be present on the object</td>
-                    </tr>
-                    <tr>
-                      <td><code>format</code></td>
-                      <td>Semantic validation rules (e.g. <code>"email"</code>, <code>"date-time"</code>, <code>"uri"</code>)</td>
-                    </tr>
-                    <tr>
-                      <td><code>minimum</code> / <code>maximum</code></td>
-                      <td>Numerical boundary constraints for ranges</td>
-                    </tr>
-                    <tr>
-                      <td><code>additionalProperties</code></td>
-                      <td>When <code>false</code>, rejects objects containing undeclared extra keys</td>
-                    </tr>
-                  </tbody>
-                </table>
+            <div class="card card-accent" style="justify-content: space-between;">
+              <div>
+                <div class="card-title"><span class="icon">🔑</span> Core JSON Schema Keywords</div>
+                <div class="table-container" style="margin-top: 6px;">
+                  <table class="styled-table" style="font-size: 0.8rem;">
+                    <thead><tr><th>Keyword</th><th>Function</th></tr></thead>
+                    <tbody>
+                      <tr><td><code>type</code></td><td>Specifies primitive type (<code>string</code>, <code>integer</code>, etc.)</td></tr>
+                      <tr><td><code>properties</code></td><td>Declares permitted object keys and nested rules</td></tr>
+                      <tr><td><code>required</code></td><td>Array of keys that MUST be present</td></tr>
+                      <tr><td><code>additionalProperties</code></td><td>When <code>false</code>, rejects unexpected extra keys</td></tr>
+                    </tbody>
+                  </table>
+                </div>
               </div>
 
-              <div class="card card-purple" style="margin-top: 10px; padding: 12px 16px;">
-                <strong style="color: var(--accent-purple); font-size: 0.85rem;">💡 KEY TAKEAWAY</strong>
-                <p style="font-size: 0.82rem; color: var(--text-main); margin-top: 2px;">
-                  JSON Schema only <strong>describes</strong> the structure. It cannot validate data by itself; it requires an external validation engine (like Ajv, Zod, or an LLM provider's structured output API) to enforce the rules.
+              <div class="card card-cyan" style="padding: 10px 14px;">
+                <strong style="color: var(--accent-cyan); font-size: 0.8rem;">Describing vs Validating:</strong>
+                <p style="font-size: 0.76rem; color: var(--text-main); margin-top: 2px;">
+                  JSON Schema <em>describes</em> structure. It doesn't validate data in Node.js on its own—that's where <strong>Zod</strong> comes in!
                 </p>
               </div>
             </div>
@@ -696,84 +378,14 @@ Student Email: rahul@gmail.com</div>
       </section>
 
       <!-- ==========================================
-           SLIDE 8: Practical: Understand JSON Schema Validation
+           SLIDE 6: What Is Zod & Why Do We Need It?
            ========================================== -->
-      <section class="slide" id="slide-8">
+      <section class="slide" id="slide-6">
         <div class="slide-header">
           <div class="slide-title-group">
-            <span class="slide-category">Validation Diagnostics</span>
-            <h2 class="slide-title">Practical: Understand JSON Schema Validation</h2>
-            <p class="slide-subtitle">Distinguishing between JSON syntax validity and data structure validity</p>
-          </div>
-          <span class="slide-tag">DATA INTEGRITY</span>
-        </div>
-
-        <div class="slide-body">
-          <div class="grid-2col">
-            <div class="card">
-              <div class="card-title"><span class="icon">⚖️</span> Syntax Validation vs Structure Validation</div>
-              <div class="grid-2col" style="gap: 12px; margin-top: 4px;">
-                <div class="card card-purple" style="padding: 12px 14px;">
-                  <strong style="color: var(--accent-purple); font-size: 0.88rem;">1. JSON Syntax Check</strong>
-                  <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 4px;">Performed by <code>JSON.parse()</code>. Only checks if quotes, braces, commas, and tokens conform to JSON format.</p>
-                </div>
-                <div class="card card-cyan" style="padding: 12px 14px;">
-                  <strong style="color: var(--accent-cyan); font-size: 0.88rem;">2. Schema Validation</strong>
-                  <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 4px;">Checks whether valid JSON values conform to expected business logic, types, ranges, and required fields.</p>
-                </div>
-              </div>
-
-              <div style="font-size: 0.85rem; font-weight: 700; color: var(--text-heading); margin-top: 10px;">Select Scenario to Test:</div>
-              <div style="display: flex; gap: 8px;">
-                <button class="btn-sandbox s8-preset-btn active" data-preset="valid">Case A: Valid Data</button>
-                <button class="btn-sandbox btn-sandbox-secondary s8-preset-btn" data-preset="wrongTypes">Case B: Wrong Types</button>
-                <button class="btn-sandbox btn-sandbox-secondary s8-preset-btn" data-preset="missingFields">Case C: Missing Fields</button>
-              </div>
-
-              <div class="output-box" style="margin-top: 8px;">
-                <div class="output-label">Incoming Candidate Payload:</div>
-                <div class="output-content" id="s8PayloadView">{
-  "name": "Rahul",
-  "age": 22,
-  "course": "MERN Stack",
-  "email": "rahul@gmail.com"
-}</div>
-              </div>
-            </div>
-
-            <div class="card card-accent" style="justify-content: space-between;">
-              <div>
-                <div class="card-title"><span class="icon">🩺</span> Schema Evaluation Diagnostic</div>
-                <p class="card-desc">How a production validator evaluates the candidate payload against the Student schema:</p>
-                
-                <div id="s8ValidationResult" class="sandbox-result card-green" style="min-height: 140px; margin-top: 10px;">
-✅ VALID DATA: Conforms perfectly to JSON Schema.
-• name: string (Passed)
-• age: integer (Passed)
-• course: string (Passed)
-• email: valid format (Passed)
-• additionalProperties: false (Passed)
-                </div>
-              </div>
-
-              <div class="card card-amber" style="padding: 10px 14px;">
-                <strong style="color: var(--accent-amber); font-size: 0.82rem;">⚠️ Key Realization:</strong>
-                <span style="font-size: 0.78rem; color: var(--text-main);">Case B is 100% valid JSON syntax! <code>JSON.parse()</code> will succeed without error, but your database or calculations will fail downstream without schema validation.</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- ==========================================
-           SLIDE 9: What Is Zod?
-           ========================================== -->
-      <section class="slide" id="slide-9">
-        <div class="slide-header">
-          <div class="slide-title-group">
-            <span class="slide-category">Validation Libraries</span>
-            <h2 class="slide-title">What Is Zod?</h2>
-            <p class="slide-subtitle">TypeScript-first runtime schema declaration and validation for Node.js</p>
+            <span class="slide-category">Part 2: Runtime Validation</span>
+            <h2 class="slide-title">What Is Zod & Why Do We Need It?</h2>
+            <p class="slide-subtitle">TypeScript-first schema declaration and runtime validation for Node.js</p>
           </div>
           <span class="slide-tag">ZOD INTRO</span>
         </div>
@@ -781,25 +393,19 @@ Student Email: rahul@gmail.com</div>
         <div class="slide-body">
           <div class="grid-2col">
             <div class="card">
-              <div class="card-title"><span class="icon">⚡</span> Why Do Developers Choose Zod?</div>
-              <p class="card-desc">In Node.js, data from HTTP requests, third-party APIs, and AI models cannot be trusted. Zod validates runtime data and eliminates <em>"undefined is not a function"</em> crashes.</p>
+              <div class="card-title"><span class="icon">⚡</span> Why Node.js Developers Choose Zod</div>
+              <p class="card-desc">JavaScript has no runtime type checking. When AI outputs data, Zod verifies types and prevents crashes before touching your code.</p>
               
               <div class="code-panel">
-                <div class="code-header">
-                  <span class="code-file">terminal</span>
-                  <button class="copy-btn">Copy</button>
-                </div>
+                <div class="code-header"><span class="code-file">terminal</span></div>
                 <pre><code>npm install zod</code></pre>
               </div>
 
               <div class="code-panel">
-                <div class="code-header">
-                  <span class="code-file">zod-basic.js</span>
-                  <button class="copy-btn">Copy</button>
-                </div>
+                <div class="code-header"><span class="code-file">zodDemo.js</span><button class="copy-btn">Copy</button></div>
                 <pre><code><span class="kw">const</span> { <span class="vr">z</span> } = <span class="kw">require</span>(<span class="str">"zod"</span>);
 
-<span class="cm">// Define the schema</span>
+<span class="cm">// Define schema</span>
 <span class="kw">const</span> <span class="vr">studentSchema</span> = <span class="vr">z</span>.<span class="fn">object</span>({
   <span class="prop">name</span>: <span class="vr">z</span>.<span class="fn">string</span>(),
   <span class="prop">age</span>: <span class="vr">z</span>.<span class="fn">number</span>(),
@@ -808,41 +414,25 @@ Student Email: rahul@gmail.com</div>
               </div>
             </div>
 
-            <div class="card card-accent">
-              <div class="card-title"><span class="icon">🌐</span> Ecosystem Comparison</div>
-              <div class="table-container">
-                <table class="styled-table">
-                  <thead>
-                    <tr>
-                      <th>Tool / Standard</th>
-                      <th>Primary Purpose</th>
-                      <th>Language / Ecosystem</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td><strong>JSON Schema</strong></td>
-                      <td>Data structure specification standard</td>
-                      <td>Language agnostic (IETF standard)</td>
-                    </tr>
-                    <tr>
-                      <td><strong>Zod</strong></td>
-                      <td>Developer-friendly schema declaration & runtime validation</td>
-                      <td><strong>Node.js / JavaScript / TypeScript</strong></td>
-                    </tr>
-                    <tr>
-                      <td><strong>Pydantic</strong></td>
-                      <td>Data validation using Python type hints</td>
-                      <td>Python</td>
-                    </tr>
-                  </tbody>
-                </table>
+            <div class="card card-accent" style="justify-content: space-between;">
+              <div>
+                <div class="card-title"><span class="icon">🌐</span> Ecosystem Comparison</div>
+                <div class="table-container" style="margin-top: 6px;">
+                  <table class="styled-table" style="font-size: 0.82rem;">
+                    <thead><tr><th>Tool</th><th>Role</th><th>Ecosystem</th></tr></thead>
+                    <tbody>
+                      <tr><td><strong>JSON Schema</strong></td><td>Structural specification format</td><td>Language agnostic (IETF)</td></tr>
+                      <tr><td><strong>Zod</strong></td><td>Schema declaration & runtime validation</td><td><strong>Node.js / JS / TypeScript</strong></td></tr>
+                      <tr><td><strong>Pydantic</strong></td><td>Data validation models</td><td>Python</td></tr>
+                    </tbody>
+                  </table>
+                </div>
               </div>
 
-              <div class="card card-cyan" style="margin-top: 12px; padding: 12px 16px;">
-                <strong style="color: var(--accent-cyan); font-size: 0.85rem;">Node.js Counterpart to Pydantic</strong>
-                <p style="font-size: 0.82rem; color: var(--text-main); margin-top: 4px;">
-                  In Python GenAI, developers use Pydantic models. In the Node.js and TypeScript ecosystem, <strong>Zod is the industry gold standard</strong> for validating structured outputs, API payloads, and AI responses.
+              <div class="card card-green" style="padding: 10px 14px;">
+                <strong style="color: var(--accent-green); font-size: 0.82rem;">The Node.js Gold Standard:</strong>
+                <p style="font-size: 0.78rem; color: var(--text-main); margin-top: 2px;">
+                  Just as Python GenAI applications use Pydantic, modern Node.js GenAI backends use <strong>Zod</strong> for API requests, tool arguments, and structured LLM outputs.
                 </p>
               </div>
             </div>
@@ -851,86 +441,58 @@ Student Email: rahul@gmail.com</div>
       </section>
 
       <!-- ==========================================
-           SLIDE 10: Zod Schema: Define Student Data
+           SLIDE 7: Defining Rich Zod Schemas
            ========================================== -->
-      <section class="slide" id="slide-10">
+      <section class="slide" id="slide-7">
         <div class="slide-header">
           <div class="slide-title-group">
-            <span class="slide-category">Schema Design</span>
-            <h2 class="slide-title">Zod Schema: Define Student Data</h2>
-            <p class="slide-subtitle">Building rich, chained validation rules for our student entity</p>
+            <span class="slide-category">Schema Construction</span>
+            <h2 class="slide-title">Defining Rich Zod Schemas</h2>
+            <p class="slide-subtitle">Chained validation rules, enums, arrays, and modifier methods</p>
           </div>
-          <span class="slide-tag">CHAINABLE METHODS</span>
+          <span class="slide-tag">ZOD METHODS</span>
         </div>
 
         <div class="slide-body">
           <div class="grid-60-40">
             <div class="code-panel">
-              <div class="code-header">
-                <span class="code-file">studentSchema.js</span>
-                <button class="copy-btn">Copy</button>
-              </div>
+              <div class="code-header"><span class="code-file">richStudentSchema.js</span><button class="copy-btn">Copy</button></div>
               <pre><code><span class="kw">const</span> { <span class="vr">z</span> } = <span class="kw">require</span>(<span class="str">"zod"</span>);
 
 <span class="kw">const</span> <span class="vr">studentSchema</span> = <span class="vr">z</span>.<span class="fn">object</span>({
-  <span class="cm">// String with min length constraint</span>
   <span class="prop">name</span>: <span class="vr">z</span>.<span class="fn">string</span>().<span class="fn">min</span>(<span class="num">2</span>),
-
-  <span class="cm">// Integer with numerical boundary</span>
   <span class="prop">age</span>: <span class="vr">z</span>.<span class="fn">number</span>().<span class="fn">int</span>().<span class="fn">min</span>(<span class="num">16</span>).<span class="fn">max</span>(<span class="num">60</span>),
-
-  <span class="cm">// Valid email regex format</span>
   <span class="prop">email</span>: <span class="vr">z</span>.<span class="fn">string</span>().<span class="fn">email</span>(),
-
-  <span class="cm">// Strict enum matching</span>
   <span class="prop">course</span>: <span class="vr">z</span>.<span class="fn">enum</span>([<span class="str">"MERN Stack"</span>, <span class="str">"Python"</span>, <span class="str">"Data Science"</span>]),
+  <span class="prop">skills</span>: <span class="vr">z</span>.<span class="fn">array</span>(<span class="vr">z</span>.<span class="fn">string</span>()),
 
-  <span class="cm">// Array of strings</span>
-  <span class="prop">skills</span>: <span class="vr">z</span>.<span class="fn">array</span>(<span class="vr">z</span>.<span class="fn">string</span>())
+  <span class="cm">// Real-world modifiers:</span>
+  <span class="prop">phone</span>: <span class="vr">z</span>.<span class="fn">string</span>().<span class="fn">optional</span>(),        <span class="cm">// Allows undefined</span>
+  <span class="prop">notes</span>: <span class="vr">z</span>.<span class="fn">string</span>().<span class="fn">nullable</span>(),        <span class="cm">// Allows null</span>
+  <span class="prop">status</span>: <span class="vr">z</span>.<span class="fn">string</span>().<span class="fn">default</span>(<span class="str">"active"</span>) <span class="cm">// Fallback value</span>
 });</code></pre>
             </div>
 
-            <div class="card card-accent">
-              <div class="card-title"><span class="icon">📚</span> Method Reference Guide</div>
-              <div class="table-container">
-                <table class="styled-table" style="font-size: 0.8rem;">
-                  <thead>
-                    <tr>
-                      <th>Method</th>
-                      <th>Validation Purpose</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td><code>z.object()</code></td>
-                      <td>Validates that input is a non-null object</td>
-                    </tr>
-                    <tr>
-                      <td><code>z.string().min(2)</code></td>
-                      <td>Ensures string has at least 2 characters</td>
-                    </tr>
-                    <tr>
-                      <td><code>.int()</code></td>
-                      <td>Rejects decimal/floating numbers (e.g. 22.5)</td>
-                    </tr>
-                    <tr>
-                      <td><code>.min(16).max(60)</code></td>
-                      <td>Enforces numeric range for student age</td>
-                    </tr>
-                    <tr>
-                      <td><code>.email()</code></td>
-                      <td>Standard RFC 5322 email regex check</td>
-                    </tr>
-                    <tr>
-                      <td><code>z.enum([...])</code></td>
-                      <td>Must match one of the exact string options</td>
-                    </tr>
-                    <tr>
-                      <td><code>z.array(...)</code></td>
-                      <td>Ensures value is an array of typed elements</td>
-                    </tr>
-                  </tbody>
-                </table>
+            <div class="card card-accent" style="justify-content: space-between;">
+              <div>
+                <div class="card-title"><span class="icon">📚</span> Method Cheat Sheet</div>
+                <div class="table-container" style="margin-top: 6px;">
+                  <table class="styled-table" style="font-size: 0.8rem;">
+                    <thead><tr><th>Method</th><th>Rule Enforced</th></tr></thead>
+                    <tbody>
+                      <tr><td><code>.int()</code></td><td>Rejects decimal numbers (e.g. 22.5)</td></tr>
+                      <tr><td><code>.min(2)</code></td><td>String must be at least 2 characters</td></tr>
+                      <tr><td><code>.email()</code></td><td>Valid RFC 5322 email address format</td></tr>
+                      <tr><td><code>z.enum([...])</code></td><td>Must strictly match one of allowed strings</td></tr>
+                      <tr><td><code>z.array(...)</code></td><td>Must be an array of specified types</td></tr>
+                      <tr><td><code>.transform(fn)</code></td><td>Mutates data during parse (e.g. <code>.trim()</code>)</td></tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              <div class="card card-purple" style="padding: 10px 14px;">
+                <span style="font-size: 0.76rem; color: var(--text-main);"><strong>optional() vs nullable():</strong> <code>.optional()</code> permits <code>undefined</code>. <code>.nullable()</code> permits <code>null</code>. If an LLM returns <code>null</code>, use <code>.nullish()</code> to allow both!</span>
               </div>
             </div>
           </div>
@@ -938,84 +500,14 @@ Student Email: rahul@gmail.com</div>
       </section>
 
       <!-- ==========================================
-           SLIDE 11: Zod Parsing: What Is Parse?
+           SLIDE 8: Zod parse() vs safeParse()
            ========================================== -->
-      <section class="slide" id="slide-11">
+      <section class="slide" id="slide-8">
         <div class="slide-header">
           <div class="slide-title-group">
-            <span class="slide-category">Runtime Execution</span>
-            <h2 class="slide-title">Zod Parsing: What Is Parse?</h2>
-            <p class="slide-subtitle">How .parse() validates data and throws exceptions on validation failure</p>
-          </div>
-          <span class="slide-tag">EXCEPTION FLOW</span>
-        </div>
-
-        <div class="slide-body">
-          <div class="grid-2col">
-            <div class="card">
-              <div class="card-title"><span class="icon">🎯</span> What Does "Parsing" Mean?</div>
-              <p class="card-desc">In Zod, parsing means taking unknown external data, testing it against the schema's rules, and returning clean, validated data.</p>
-              
-              <div class="code-panel">
-                <div class="code-header">
-                  <span class="code-file">parse-success.js</span>
-                  <button class="copy-btn">Copy</button>
-                </div>
-                <pre><code><span class="kw">const</span> { <span class="vr">z</span> } = <span class="kw">require</span>(<span class="str">"zod"</span>);
-<span class="kw">const</span> <span class="vr">schema</span> = <span class="vr">z</span>.<span class="fn">object</span>({ <span class="prop">name</span>: <span class="vr">z</span>.<span class="fn">string</span>(), <span class="prop">age</span>: <span class="vr">z</span>.<span class="fn">number</span>() });
-
-<span class="kw">const</span> <span class="vr">student</span> = { <span class="prop">name</span>: <span class="str">"Rahul"</span>, <span class="prop">age</span>: <span class="num">22</span> };
-<span class="kw">const</span> <span class="vr">result</span> = <span class="vr">schema</span>.<span class="fn">parse</span>(<span class="vr">student</span>);
-
-console.<span class="fn">log</span>(<span class="vr">result</span>);
-<span class="cm">// Output: { name: 'Rahul', age: 22 }</span></code></pre>
-              </div>
-
-              <div class="output-box">
-                <div class="output-label">Success Characteristic:</div>
-                <div class="output-content">Returns the validated object directly. Safe to use immediately.</div>
-              </div>
-            </div>
-
-            <div class="card card-rose">
-              <div class="card-title" style="color: var(--accent-rose);"><span class="icon">💥</span> What Happens When Data Is Invalid?</div>
-              <p class="card-desc">If the input violates even a single rule, <code>parse()</code> immediately throws a <strong>ZodError</strong> exception:</p>
-              
-              <div class="code-panel">
-                <div class="code-header">
-                  <span class="code-file">parse-failure.js</span>
-                  <button class="copy-btn">Copy</button>
-                </div>
-                <pre><code><span class="kw">const</span> <span class="vr">badStudent</span> = { <span class="prop">name</span>: <span class="str">"Rahul"</span>, <span class="prop">age</span>: <span class="str">"twenty"</span> };
-
-<span class="kw">try</span> {
-  <span class="vr">schema</span>.<span class="fn">parse</span>(<span class="vr">badStudent</span>);
-} <span class="kw">catch</span> (<span class="vr">error</span>) {
-  <span class="kw">if</span> (<span class="vr">error</span> <span class="kw">instanceof</span> <span class="vr">z</span>.<span class="vr">ZodError</span>) {
-    console.<span class="fn">log</span>(<span class="str">"Validation Failed!"</span>);
-    console.<span class="fn">log</span>(<span class="vr">error</span>.<span class="prop">issues</span>);
-  }
-}</code></pre>
-              </div>
-
-              <div class="card card-amber" style="padding: 10px 14px;">
-                <strong style="color: var(--accent-amber); font-size: 0.82rem;">⚠️ Why Exception-Based Parsing Isn't Ideal for APIs:</strong>
-                <span style="font-size: 0.78rem; color: var(--text-main);">In web servers and AI pipelines, invalid data is an expected condition, not an exceptional crash. Wrapping every check in <code>try/catch</code> adds boilerplate.</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- ==========================================
-           SLIDE 12: Zod SafeParse: Validate Without Throwing
-           ========================================== -->
-      <section class="slide" id="slide-12">
-        <div class="slide-header">
-          <div class="slide-title-group">
-            <span class="slide-category">Production Best Practice</span>
-            <h2 class="slide-title">Zod SafeParse: Validate Without Throwing</h2>
-            <p class="slide-subtitle">Using discriminated union returns for clean, exception-free validation</p>
+            <span class="slide-category">Execution Paradigms</span>
+            <h2 class="slide-title">Zod parse() vs safeParse()</h2>
+            <p class="slide-subtitle">Exception throwing vs discriminated union results</p>
           </div>
           <span class="slide-tag">SAFEPARSE</span>
         </div>
@@ -1023,84 +515,54 @@ console.<span class="fn">log</span>(<span class="vr">result</span>);
         <div class="slide-body">
           <div class="grid-2col">
             <div class="card">
-              <div class="card-title"><span class="icon">🛡️</span> The safeParse() Pattern</div>
-              <p class="card-desc"><code>safeParse()</code> wraps the validation in an object containing a boolean <code>success</code> flag:</p>
-              
-              <div class="code-panel">
-                <div class="code-header">
-                  <span class="code-file">safeParse-demo.js</span>
-                  <button class="copy-btn">Copy</button>
-                </div>
-                <pre><code><span class="kw">const</span> <span class="vr">result</span> = <span class="vr">studentSchema</span>.<span class="fn">safeParse</span>(<span class="vr">candidate</span>);
-
-<span class="kw">if</span> (<span class="vr">result</span>.<span class="prop">success</span>) {
-  <span class="cm">// Valid data accessible at result.data</span>
-  console.<span class="fn">log</span>(<span class="str">"Valid Student:"</span>, <span class="vr">result</span>.<span class="prop">data</span>.<span class="prop">name</span>);
-} <span class="kw">else</span> {
-  <span class="cm">// Errors accessible at result.error.issues</span>
-  console.<span class="fn">log</span>(<span class="str">"Errors:"</span>, <span class="vr">result</span>.<span class="prop">error</span>.<span class="prop">issues</span>);
-}</code></pre>
-              </div>
-
+              <div class="card-title"><span class="icon">⚖️</span> The Two Parsing Methods</div>
               <div class="table-container">
                 <table class="styled-table">
-                  <thead>
-                    <tr>
-                      <th><code>parse()</code></th>
-                      <th><code>safeParse()</code></th>
-                    </tr>
-                  </thead>
+                  <thead><tr><th><code>parse()</code></th><th><code>safeParse()</code> (Recommended)</th></tr></thead>
                   <tbody>
-                    <tr>
-                      <td>Throws <code>ZodError</code> on failure</td>
-                      <td>Returns object with <code>success: false</code></td>
-                    </tr>
-                    <tr>
-                      <td>Requires <code>try/catch</code> block</td>
-                      <td>Uses simple <code>if (result.success)</code></td>
-                    </tr>
-                    <tr>
-                      <td>Returns parsed data directly</td>
-                      <td>Returns data inside <code>result.data</code></td>
-                    </tr>
+                    <tr><td>Throws <code>ZodError</code> on failure</td><td>Returns object with <code>success: false</code></td></tr>
+                    <tr><td>Requires <code>try / catch</code> wrapper</td><td>Uses simple <code>if (result.success)</code></td></tr>
+                    <tr><td>Best for hard fail assertions</td><td>Best for external APIs and AI outputs</td></tr>
                   </tbody>
                 </table>
+              </div>
+
+              <div class="code-panel">
+                <div class="code-header"><span class="code-file">safeParsePattern.js</span><button class="copy-btn">Copy</button></div>
+                <pre><code><span class="kw">const</span> <span class="vr">result</span> = <span class="vr">studentSchema</span>.<span class="fn">safeParse</span>(<span class="vr">data</span>);
+
+<span class="kw">if</span> (<span class="vr">result</span>.<span class="prop">success</span>) {
+  console.<span class="fn">log</span>(<span class="str">"Valid:"</span>, <span class="vr">result</span>.<span class="prop">data</span>);
+} <span class="kw">else</span> {
+  console.<span class="fn">log</span>(<span class="str">"Issues:"</span>, <span class="vr">result</span>.<span class="prop">error</span>.<span class="prop">issues</span>);
+}</code></pre>
               </div>
             </div>
 
             <div class="sandbox-card">
               <div class="sandbox-header">
-                <div class="sandbox-title"><span class="icon">🧪</span> safeParse() Live Interactive Tester</div>
-                <span class="sandbox-badge">Real-Time</span>
+                <div class="sandbox-title"><span class="icon">🧪</span> Live Evaluator Sandbox</div>
+                <span class="sandbox-badge">Interactive</span>
               </div>
+
               <div class="grid-2col" style="gap: 8px;">
                 <div>
-                  <label class="sandbox-label">Name (&ge; 2 chars):</label>
-                  <input id="s12InputName" type="text" value="Rahul" class="slide-select" style="width: 100%;">
+                  <label class="sandbox-label">Name (min 2 chars):</label>
+                  <input id="s8InputName" type="text" value="Rahul" class="slide-select" style="width: 100%;">
                 </div>
                 <div>
-                  <label class="sandbox-label">Age (16 - 60 int):</label>
-                  <input id="s12InputAge" type="text" value="22" class="slide-select" style="width: 100%;">
-                </div>
-                <div>
-                  <label class="sandbox-label">Email:</label>
-                  <input id="s12InputEmail" type="text" value="rahul@gmail.com" class="slide-select" style="width: 100%;">
-                </div>
-                <div>
-                  <label class="sandbox-label">Course (Enum):</label>
-                  <select id="s12InputCourse" class="slide-select" style="width: 100%;">
-                    <option value="MERN Stack">MERN Stack</option>
-                    <option value="Python">Python</option>
-                    <option value="Data Science">Data Science</option>
-                    <option value="Invalid Course">Invalid Course (Error)</option>
-                  </select>
+                  <label class="sandbox-label">Age (number):</label>
+                  <input id="s8InputAge" type="text" value="twenty" class="slide-select" style="width: 100%;">
                 </div>
               </div>
 
-              <button id="s12RunBtn" class="btn-sandbox" style="margin-top: 6px;">Execute safeParse() ➔</button>
+              <div style="display: flex; gap: 8px; margin-top: 4px;">
+                <button id="s8BtnParse" class="btn-sandbox btn-sandbox-secondary">Test .parse()</button>
+                <button id="s8BtnSafe" class="btn-sandbox">Test .safeParse()</button>
+              </div>
 
-              <div id="s12Output" class="sandbox-result card-green" style="font-size: 0.78rem;">
-Click 'Execute safeParse()' to test the candidate data against our Zod schema.
+              <div id="s8Result" class="sandbox-result" style="font-size: 0.78rem;">
+Click a button to compare how parse() and safeParse() handle the bad 'age' value.
               </div>
             </div>
           </div>
@@ -1108,72 +570,59 @@ Click 'Execute safeParse()' to test the candidate data against our Zod schema.
       </section>
 
       <!-- ==========================================
-           SLIDE 13: Zod Validation Errors
+           SLIDE 9: Handling Validation Errors
            ========================================== -->
-      <section class="slide" id="slide-13">
+      <section class="slide" id="slide-9">
         <div class="slide-header">
           <div class="slide-title-group">
-            <span class="slide-category">Error Handling & Debugging</span>
-            <h2 class="slide-title">Zod Validation Errors</h2>
-            <p class="slide-subtitle">Deep dive into result.error.issues and user-friendly error formatting</p>
+            <span class="slide-category">Error Formatting</span>
+            <h2 class="slide-title">Handling Validation Errors</h2>
+            <p class="slide-subtitle">Inspecting result.error.issues to provide actionable feedback</p>
           </div>
-          <span class="slide-tag">ISSUES ARRAY</span>
+          <span class="slide-tag">ZOD ISSUES</span>
         </div>
 
         <div class="slide-body">
           <div class="grid-2col">
             <div class="card">
               <div class="card-title"><span class="icon">🔍</span> Anatomy of a Zod Issue</div>
-              <p class="card-desc">When validation fails, Zod generates a rich array of detailed issue objects:</p>
+              <p class="card-desc">When validation fails, Zod produces an array of descriptive issue objects:</p>
               
               <div class="code-panel">
-                <div class="code-header">
-                  <span class="code-file">zod-issues-sample.json</span>
-                  <button class="copy-btn">Copy</button>
-                </div>
+                <div class="code-header"><span class="code-file">issuesSample.json</span></div>
                 <pre><code>[
   {
-    <span class="prop">"code"</span>: <span class="str">"too_small"</span>,
-    <span class="prop">"minimum"</span>: <span class="num">2</span>,
-    <span class="prop">"type"</span>: <span class="str">"string"</span>,
-    <span class="prop">"message"</span>: <span class="str">"String must contain at least 2 character(s)"</span>,
-    <span class="prop">"path"</span>: [<span class="str">"name"</span>]
-  },
-  {
-    <span class="prop">"code"</span>: <span class="str">"invalid_string"</span>,
-    <span class="prop">"validation"</span>: <span class="str">"email"</span>,
-    <span class="prop">"message"</span>: <span class="str">"Invalid email address"</span>,
-    <span class="prop">"path"</span>: [<span class="str">"email"</span>]
+    <span class="prop">"code"</span>: <span class="str">"invalid_type"</span>,
+    <span class="prop">"expected"</span>: <span class="str">"number"</span>,
+    <span class="prop">"received"</span>: <span class="str">"string"</span>,
+    <span class="prop">"path"</span>: [<span class="str">"age"</span>],
+    <span class="prop">"message"</span>: <span class="str">"Expected number, received string"</span>
   }
 ]</code></pre>
               </div>
             </div>
 
             <div class="card card-accent">
-              <div class="card-title"><span class="icon">🛠️</span> Extracting User-Friendly Errors</div>
-              <p class="card-desc">How to map raw issues into clear field-specific validation responses:</p>
+              <div class="card-title"><span class="icon">🛠️</span> User-Friendly Error Formatting</div>
+              <p class="card-desc">Transform raw issues into a clean dictionary for REST responses or retry prompts:</p>
               
               <div class="code-panel">
-                <div class="code-header">
-                  <span class="code-file">formatErrors.js</span>
-                  <button class="copy-btn">Copy</button>
-                </div>
+                <div class="code-header"><span class="code-file">formatIssues.js</span><button class="copy-btn">Copy</button></div>
                 <pre><code><span class="kw">function</span> <span class="fn">formatZodErrors</span>(<span class="vr">error</span>) {
   <span class="kw">const</span> <span class="vr">formatted</span> = {};
   <span class="vr">error</span>.<span class="prop">issues</span>.<span class="fn">forEach</span>(<span class="vr">issue</span> => {
-    <span class="kw">const</span> <span class="vr">field</span> = <span class="vr">issue</span>.<span class="prop">path</span>[<span class="num">0</span>];
+    <span class="kw">const</span> <span class="vr">field</span> = <span class="vr">issue</span>.<span class="prop">path</span>.<span class="fn">join</span>(<span class="str">"."</span>);
     <span class="vr">formatted</span>[<span class="vr">field</span>] = <span class="vr">issue</span>.<span class="prop">message</span>;
   });
   <span class="kw">return</span> <span class="vr">formatted</span>;
 }
 
-<span class="cm">// Resulting clean API payload:</span>
-<span class="cm">// { name: "Must be 2+ chars", email: "Invalid email" }</span></code></pre>
+<span class="cm">// Returns: { age: "Expected number, received string" }</span></code></pre>
               </div>
 
-              <div class="card card-purple" style="padding: 10px 14px;">
-                <strong style="color: var(--accent-purple); font-size: 0.82rem;">Why This Matters for GenAI:</strong>
-                <span style="font-size: 0.78rem; color: var(--text-main);">If an LLM hallucinates an invalid field or format, you can feed these exact issue messages back into a retry prompt: <em>"Your previous output failed validation: email was invalid. Please correct it."</em></span>
+              <div class="card card-green" style="padding: 10px 14px; margin-top: 6px;">
+                <strong style="color: var(--accent-green); font-size: 0.82rem;">GenAI Self-Correction Loop:</strong>
+                <span style="font-size: 0.78rem; color: var(--text-main);">If an LLM hallucinates an invalid field, pass these exact error messages into a follow-up prompt so the model can auto-correct itself!</span>
               </div>
             </div>
           </div>
@@ -1181,85 +630,69 @@ Click 'Execute safeParse()' to test the candidate data against our Zod schema.
       </section>
 
       <!-- ==========================================
-           SLIDE 14: Practical: Zod Validation in Express API
+           SLIDE 10: Practical: Validating AI Structured Output
            ========================================== -->
-      <section class="slide" id="slide-14">
+      <section class="slide" id="slide-10">
         <div class="slide-header">
           <div class="slide-title-group">
-            <span class="slide-category">Backend API Integration</span>
-            <h2 class="slide-title">Practical: Zod Validation in Express API</h2>
-            <p class="slide-subtitle">Building an enterprise POST /students endpoint with HTTP 400 & 201 handlers</p>
+            <span class="slide-category">Pipeline Synthesis</span>
+            <h2 class="slide-title">Practical: Validating AI Structured Output</h2>
+            <p class="slide-subtitle">Combining Groq completions, JSON.parse, and Zod safeParse in a resilient script</p>
           </div>
-          <span class="slide-tag">EXPRESS ROUTE</span>
+          <span class="slide-tag">AI VALIDATE</span>
         </div>
 
         <div class="slide-body">
           <div class="grid-60-40">
             <div class="code-panel">
-              <div class="code-header">
-                <span class="code-file">server.js</span>
-                <button class="copy-btn">Copy</button>
-              </div>
-              <pre><code><span class="kw">const</span> <span class="vr">express</span> = <span class="kw">require</span>(<span class="str">"express"</span>);
-<span class="kw">const</span> { <span class="vr">z</span> } = <span class="kw">require</span>(<span class="str">"zod"</span>);
-
-<span class="kw">const</span> <span class="vr">app</span> = <span class="fn">express</span>();
-<span class="vr">app</span>.<span class="fn">use</span>(<span class="vr">express</span>.<span class="fn">json</span>());
-
-<span class="kw">const</span> <span class="vr">studentSchema</span> = <span class="vr">z</span>.<span class="fn">object</span>({
-  <span class="prop">name</span>: <span class="vr">z</span>.<span class="fn">string</span>().<span class="fn">min</span>(<span class="num">2</span>),
-  <span class="prop">age</span>: <span class="vr">z</span>.<span class="fn">number</span>().<span class="fn">int</span>().<span class="fn">min</span>(<span class="num">16</span>),
-  <span class="prop">email</span>: <span class="vr">z</span>.<span class="fn">string</span>().<span class="fn">email</span>(),
-  <span class="prop">course</span>: <span class="vr">z</span>.<span class="fn">string</span>()
+              <div class="code-header"><span class="code-file">aiValidate.js</span><button class="copy-btn">Copy</button></div>
+              <pre><code><span class="kw">const</span> <span class="vr">response</span> = <span class="kw">await</span> <span class="vr">groq</span>.chat.completions.<span class="fn">create</span>({
+  <span class="prop">model</span>: <span class="str">"llama-3.3-70b-versatile"</span>,
+  <span class="prop">messages</span>: [
+    { <span class="prop">role</span>: <span class="str">"system"</span>, <span class="prop">content</span>: <span class="str">"Extract info and return valid JSON with: name, age, email, course."</span> },
+    { <span class="prop">role</span>: <span class="str">"user"</span>, <span class="prop">content</span>: <span class="str">"Rahul is 22 years old. Email: rahul@gmail.com. Learning MERN Stack."</span> }
+  ],
+  <span class="prop">temperature</span>: <span class="num">0.2</span>
 });
 
-<span class="vr">app</span>.<span class="fn">post</span>(<span class="str">"/students"</span>, (<span class="vr">req</span>, <span class="vr">res</span>) => {
-  <span class="kw">const</span> <span class="vr">result</span> = <span class="vr">studentSchema</span>.<span class="fn">safeParse</span>(<span class="vr">req</span>.<span class="prop">body</span>);
+<span class="kw">const</span> <span class="vr">aiText</span> = <span class="vr">response</span>.choices[<span class="num">0</span>].message.content;
 
-  <span class="kw">if</span> (!<span class="vr">result</span>.<span class="prop">success</span>) {
-    <span class="kw">return</span> <span class="vr">res</span>.<span class="fn">status</span>(<span class="num">400</span>).<span class="fn">json</span>({
-      <span class="prop">success</span>: <span class="bool">false</span>,
-      <span class="prop">errors</span>: <span class="vr">result</span>.<span class="prop">error</span>.<span class="prop">issues</span>
-    });
+<span class="kw">try</span> {
+  <span class="cm">// Step 1: Syntax Validation</span>
+  <span class="kw">const</span> <span class="vr">parsed</span> = JSON.<span class="fn">parse</span>(<span class="vr">aiText</span>);
+
+  <span class="cm">// Step 2: Schema & Type Validation</span>
+  <span class="kw">const</span> <span class="vr">validation</span> = <span class="vr">studentSchema</span>.<span class="fn">safeParse</span>(<span class="vr">parsed</span>);
+  <span class="kw">if</span> (!<span class="vr">validation</span>.<span class="prop">success</span>) {
+    console.<span class="fn">log</span>(<span class="str">"AI Data Schema Errors:"</span>, <span class="vr">validation</span>.<span class="prop">error</span>.<span class="prop">issues</span>);
+  } <span class="kw">else</span> {
+    console.<span class="fn">log</span>(<span class="str">"Safely Validated Student:"</span>, <span class="vr">validation</span>.<span class="prop">data</span>);
   }
-
-  <span class="kw">const</span> <span class="vr">student</span> = <span class="vr">result</span>.<span class="prop">data</span>;
-  <span class="vr">res</span>.<span class="fn">status</span>(<span class="num">201</span>).<span class="fn">json</span>({
-    <span class="prop">success</span>: <span class="bool">true</span>,
-    <span class="prop">message</span>: <span class="str">"Student data is valid"</span>,
-    <span class="prop">data</span>: <span class="vr">student</span>
-  });
-});
-
-<span class="vr">app</span>.<span class="fn">listen</span>(<span class="num">3000</span>, () => console.<span class="fn">log</span>(<span class="str">"Server on port 3000"</span>));</code></pre>
+} <span class="kw">catch</span> (<span class="vr">syntaxErr</span>) {
+  console.<span class="fn">log</span>(<span class="str">"JSON Syntax Error:"</span>, <span class="vr">syntaxErr</span>.<span class="prop">message</span>);
+}</code></pre>
             </div>
 
-            <div class="sandbox-card">
-              <div class="sandbox-header">
-                <div class="sandbox-title"><span class="icon">🚀</span> Postman / API Client Simulator</div>
-                <span class="sandbox-badge">POST /students</span>
-              </div>
-              <p style="font-size: 0.8rem; color: var(--text-muted);">Simulate an incoming HTTP request from frontend or Postman:</p>
-              
-              <div style="display: flex; gap: 8px;">
-                <button id="s14BtnSendValid" class="btn-sandbox" style="flex: 1; font-size: 0.8rem;">Send Valid Payload</button>
-                <button id="s14BtnSendInvalid" class="btn-sandbox btn-sandbox-secondary" style="flex: 1; font-size: 0.8rem;">Send Invalid Payload</button>
-              </div>
-
+            <div class="card card-accent" style="justify-content: space-between;">
               <div>
-                <label class="sandbox-label">HTTP Request Body:</label>
-                <div id="s14ReqBody" class="output-box" style="margin: 0; min-height: 55px; font-size: 0.76rem;">{ "name": "Rahul", "age": 22, "email": "rahul@gmail.com", "course": "MERN Stack" }</div>
-              </div>
-
-              <div>
-                <div style="display: flex; justify-content: space-between; align-items: center;">
-                  <label class="sandbox-label">HTTP Response:</label>
-                  <span id="s14ResStatus" style="font-family: var(--font-mono); font-size: 0.75rem; font-weight: 700; color: var(--accent-green);">HTTP/1.1 201 Created</span>
+                <div class="card-title"><span class="icon">🛡️</span> The Two-Tier Shield</div>
+                <div class="card card-cyan" style="padding: 10px 12px; margin-top: 6px;">
+                  <strong style="color: var(--accent-cyan); font-size: 0.82rem;">Tier 1: try / catch (JSON.parse)</strong>
+                  <p style="font-size: 0.75rem; color: var(--text-main); margin-top: 2px;">Protects against malformed text, backticks, trailing commas, or markdown formatting.</p>
                 </div>
-                <div id="s14ResBody" class="sandbox-result" style="font-size: 0.76rem; min-height: 80px;">{
-  "success": true,
-  "message": "Student data is valid",
-  "data": { "name": "Rahul", "age": 22, "email": "rahul@gmail.com", "course": "MERN Stack" }
+                <div class="card card-green" style="padding: 10px 12px; margin-top: 8px;">
+                  <strong style="color: var(--accent-green); font-size: 0.82rem;">Tier 2: safeParse(studentSchema)</strong>
+                  <p style="font-size: 0.75rem; color: var(--text-main); margin-top: 2px;">Protects against missing keys, wrong data types, or out-of-range ages.</p>
+                </div>
+              </div>
+
+              <div class="output-box">
+                <div class="output-label">Execution Output:</div>
+                <div class="output-content">Safely Validated Student: {
+  name: 'Rahul',
+  age: 22,
+  email: 'rahul@gmail.com',
+  course: 'MERN Stack'
 }</div>
               </div>
             </div>
@@ -1268,232 +701,56 @@ Click 'Execute safeParse()' to test the candidate data against our Zod schema.
       </section>
 
       <!-- ==========================================
-           SLIDE 15: Zod and Type Safety
+           SLIDE 11: From Structured Output to Function Calling
            ========================================== -->
-      <section class="slide" id="slide-15">
+      <section class="slide" id="slide-11">
         <div class="slide-header">
           <div class="slide-title-group">
-            <span class="slide-category">Language Semantics</span>
-            <h2 class="slide-title">Zod and Type Safety</h2>
-            <p class="slide-subtitle">Runtime validation vs compile-time type checking in JavaScript & TypeScript</p>
+            <span class="slide-category">Part 3: Function Calling</span>
+            <h2 class="slide-title">From Structured Output to Function Calling</h2>
+            <p class="slide-subtitle">Moving from generating passive data to requesting backend actions</p>
           </div>
-          <span class="slide-tag">TYPE SAFETY</span>
+          <span class="slide-tag">AGENTIC SHIFT</span>
         </div>
 
         <div class="slide-body">
           <div class="grid-2col">
             <div class="card">
-              <div class="card-title"><span class="icon">🛡️</span> What Is Type Safety?</div>
-              <p class="card-desc">Type safety means ensuring that values are strictly accessed according to their defined capabilities, preventing disastrous runtime errors.</p>
-              
-              <div class="code-panel">
-                <div class="code-header"><span class="code-file">runtime-type-error.js</span></div>
-                <pre><code><span class="kw">const</span> <span class="vr">age</span> = <span class="num">22</span>;
+              <div class="card-title"><span class="icon">⚡</span> The Next Evolutionary Step</div>
+              <p class="card-desc">
+                In Part 1, the LLM returned structured data based on what was in the prompt. But what if the data lives in a <strong>live database</strong> or requires an <strong>external API</strong>?
+              </p>
+              <p class="card-desc" style="margin-top: 4px;">
+                <strong>Function Calling (Tool Calling)</strong> allows the model to request that our Node.js server execute a real function (e.g. <code>get_attendance(101)</code>) and wait for the result!
+              </p>
 
-<span class="cm">// TypeError: age.toUpperCase is not a function!</span>
-console.<span class="fn">log</span>(<span class="vr">age</span>.<span class="fn">toUpperCase</span>());</code></pre>
-              </div>
-
-              <div class="card card-rose" style="padding: 10px 14px;">
-                <strong style="color: var(--accent-rose); font-size: 0.85rem;">JavaScript's Dynamic Vulnerability:</strong>
-                <p style="font-size: 0.82rem; color: var(--text-main); margin-top: 2px;">
-                  Plain JavaScript is dynamically typed. It has zero compile-time checks. External API inputs or AI responses can easily inject numbers where strings were expected.
+              <div class="card card-rose" style="padding: 10px 14px; margin-top: 8px;">
+                <strong style="color: var(--accent-rose); font-size: 0.82rem;">⚠️ Critical Distinction:</strong>
+                <p style="font-size: 0.76rem; color: var(--text-main); margin-top: 2px;">
+                  The LLM does NOT execute code. It emits a tool request. Your Node.js backend maintains 100% control over execution and database permissions!
                 </p>
               </div>
-            </div>
-
-            <div class="card card-accent">
-              <div class="card-title"><span class="icon">⚖️</span> Zod vs TypeScript Type Checking</div>
-              <div class="table-container">
-                <table class="styled-table">
-                  <thead>
-                    <tr>
-                      <th>Dimension</th>
-                      <th>Zod</th>
-                      <th>TypeScript</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td><strong>When Active?</strong></td>
-                      <td><strong>Runtime</strong> (When Node.js runs)</td>
-                      <td><strong>Compile Time</strong> (In VS Code / build)</td>
-                    </tr>
-                    <tr>
-                      <td><strong>External Data</strong></td>
-                      <td>Validates external APIs, DBs & AI</td>
-                      <td>Cannot validate external data alone</td>
-                    </tr>
-                    <tr>
-                      <td><strong>Build Artifact</strong></td>
-                      <td>Remains in production JS bundle</td>
-                      <td>Completely stripped during compile</td>
-                    </tr>
-                    <tr>
-                      <td><strong>Primary Role</strong></td>
-                      <td>Boundary Defense & Data Sanitization</td>
-                      <td>Developer Productivity & Refactoring</td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-
-              <div class="card card-green" style="margin-top: 10px; padding: 12px 14px;">
-                <strong style="color: var(--accent-green); font-size: 0.85rem;">💡 The Perfect Union:</strong>
-                <p style="font-size: 0.82rem; color: var(--text-main); margin-top: 2px;">
-                  Modern Node.js backends use <strong>both</strong>: TypeScript checks internal code logic, while Zod guards the perimeter where external AI and user data enters the system.
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- ==========================================
-           SLIDE 16: Zod with TypeScript: Infer Types
-           ========================================== -->
-      <section class="slide" id="slide-16">
-        <div class="slide-header">
-          <div class="slide-title-group">
-            <span class="slide-category">TypeScript Synergy</span>
-            <h2 class="slide-title">Zod with TypeScript: Infer Types</h2>
-            <p class="slide-subtitle">Eliminating code duplication: single source of truth with z.infer</p>
-          </div>
-          <span class="slide-tag">Z.INFER</span>
-        </div>
-
-        <div class="slide-body">
-          <div class="grid-2col">
-            <div class="card">
-              <div class="card-title"><span class="icon">🪄</span> The Magic of z.infer&lt;T&gt;</div>
-              <p class="card-desc">Instead of manually writing a TypeScript interface AND a separate Zod schema, derive the type directly:</p>
-              
-              <div class="code-panel">
-                <div class="code-header">
-                  <span class="code-file">student.ts</span>
-                  <button class="copy-btn">Copy</button>
-                </div>
-                <pre><code><span class="kw">import</span> { <span class="vr">z</span> } <span class="kw">from</span> <span class="str">"zod"</span>;
-
-<span class="cm">// 1. Single Source of Truth</span>
-<span class="kw">export const</span> <span class="vr">studentSchema</span> = <span class="vr">z</span>.<span class="fn">object</span>({
-  <span class="prop">name</span>: <span class="vr">z</span>.<span class="fn">string</span>(),
-  <span class="prop">age</span>: <span class="vr">z</span>.<span class="fn">number</span>(),
-  <span class="prop">email</span>: <span class="vr">z</span>.<span class="fn">string</span>().<span class="fn">email</span>()
-});
-
-<span class="cm">// 2. Infer TypeScript Type automatically</span>
-<span class="kw">export type</span> <span class="vr">Student</span> = <span class="vr">z</span>.<span class="fn">infer</span>&lt;<span class="kw">typeof</span> <span class="vr">studentSchema</span>&gt;;</code></pre>
-              </div>
-
-              <div class="output-box">
-                <div class="output-label">Equivalent Generated TypeScript Interface:</div>
-                <div class="output-content">type Student = {
-  name: string;
-  age: number;
-  email: string;
-};</div>
-              </div>
-            </div>
-
-            <div class="card card-accent">
-              <div class="card-title"><span class="icon">✨</span> Why This Transforms Development</div>
-              <ul class="feature-list" style="gap: 12px; margin-top: 6px;">
-                <li>
-                  <span class="bullet-check">✓</span>
-                  <div><strong>DRY (Don't Repeat Yourself):</strong> Modify the schema in one place; TypeScript types, intellisense, and validation rules update instantly.</div>
-                </li>
-                <li>
-                  <span class="bullet-check">✓</span>
-                  <div><strong>Full Editor Autocomplete:</strong> When you access <code>result.data.name</code>, VS Code offers full autocomplete and type hinting.</div>
-                </li>
-                <li>
-                  <span class="bullet-check">✓</span>
-                  <div><strong>Refactoring Safety:</strong> Renaming a property in the schema immediately flags all downstream TypeScript compile errors.</div>
-                </li>
-              </ul>
-
-              <div class="card card-amber" style="margin-top: 14px; padding: 12px 16px;">
-                <strong style="color: var(--accent-amber); font-size: 0.85rem;">⚠️ CRITICAL DISTINCTION</strong>
-                <p style="font-size: 0.82rem; color: var(--text-main); margin-top: 4px;">
-                  <code>z.infer</code> is a <strong>compile-time</strong> feature. It produces zero JavaScript code in your final build. It does NOT validate data at runtime. You still must call <code>parse()</code> or <code>safeParse()</code>!
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- ==========================================
-           SLIDE 17: Zod Advanced Features: Defaults, Optional & Transform
-           ========================================== -->
-      <section class="slide" id="slide-17">
-        <div class="slide-header">
-          <div class="slide-title-group">
-            <span class="slide-category">Advanced Schema Features</span>
-            <h2 class="slide-title">Zod Advanced Features: Defaults, Optional & Transform</h2>
-            <p class="slide-subtitle">Gracefully handling missing values, nulls, and mutating messy inputs</p>
-          </div>
-          <span class="slide-tag">TRANSFORM & DEFAULTS</span>
-        </div>
-
-        <div class="slide-body">
-          <div class="grid-2col">
-            <div class="card">
-              <div class="card-title"><span class="icon">🎛️</span> Four Essential Modifiers</div>
-              <ul class="feature-list" style="gap: 12px;">
-                <li>
-                  <span class="bullet-dot"></span>
-                  <div>
-                    <strong>1. .optional()</strong> — Allows field to be <code>undefined</code> or omitted.
-                    <div class="code-panel" style="margin-top: 4px;"><pre><code><span class="prop">phone</span>: <span class="vr">z</span>.<span class="fn">string</span>().<span class="fn">optional</span>()</code></pre></div>
-                  </div>
-                </li>
-                <li>
-                  <span class="bullet-dot"></span>
-                  <div>
-                    <strong>2. .nullable()</strong> — Explicitly allows value to be <code>null</code>.
-                    <div class="code-panel" style="margin-top: 4px;"><pre><code><span class="prop">middleName</span>: <span class="vr">z</span>.<span class="fn">string</span>().<span class="fn">nullable</span>()</code></pre></div>
-                  </div>
-                </li>
-                <li>
-                  <span class="bullet-dot"></span>
-                  <div>
-                    <strong>3. .default(val)</strong> — Supplies fallback value if field is undefined.
-                    <div class="code-panel" style="margin-top: 4px;"><pre><code><span class="prop">course</span>: <span class="vr">z</span>.<span class="fn">string</span>().<span class="fn">default</span>(<span class="str">"MERN Stack"</span>)</code></pre></div>
-                  </div>
-                </li>
-                <li>
-                  <span class="bullet-dot"></span>
-                  <div>
-                    <strong>4. .transform(fn)</strong> — Cleanses / mutates data during parsing.
-                    <div class="code-panel" style="margin-top: 4px;"><pre><code><span class="prop">name</span>: <span class="vr">z</span>.<span class="fn">string</span>().<span class="fn">transform</span>(<span class="vr">v</span> => <span class="vr">v</span>.<span class="fn">trim</span>().<span class="fn">toUpperCase</span>())</code></pre></div>
-                  </div>
-                </li>
-              </ul>
             </div>
 
             <div class="sandbox-card">
               <div class="sandbox-header">
-                <div class="sandbox-title"><span class="icon">🧪</span> Live Transformation Playground</div>
-                <span class="sandbox-badge">Interactive</span>
-              </div>
-              <p style="font-size: 0.82rem; color: var(--text-muted);">Test how Zod transforms untidy user or AI inputs:</p>
-
-              <div>
-                <label class="sandbox-label">Raw Messy String Input:</label>
-                <input id="s17InputText" type="text" value="   rahul sharma   " class="slide-select" style="width: 100%;">
+                <div class="sandbox-title"><span class="icon">🧪</span> Workflow Comparator</div>
+                <div style="display: flex; gap: 6px;">
+                  <button id="s11BtnMath" class="btn-sandbox btn-sandbox-secondary" style="font-size: 0.72rem; padding: 4px 8px;">No Tool (Math)</button>
+                  <button id="s11BtnStudent" class="btn-sandbox" style="font-size: 0.72rem; padding: 4px 8px;">With Tool (Attendance)</button>
+                </div>
               </div>
 
-              <button id="s17TransformBtn" class="btn-sandbox" style="margin-top: 4px;">Run z.string().transform() ➔</button>
-
-              <div id="s17Output" class="sandbox-result" style="font-size: 0.78rem; min-height: 85px;">
-Click 'Run transform()' to see whitespace trimming and casing transformation.
-              </div>
-
-              <div class="card card-purple" style="margin-top: 8px; padding: 10px 14px;">
-                <strong style="color: var(--accent-purple); font-size: 0.82rem;">Key Difference:</strong>
-                <span style="font-size: 0.76rem; color: var(--text-main);"><code>optional()</code> accepts <code>undefined</code>. <code>nullable()</code> accepts <code>null</code>. If an LLM returns <code>"phone": null</code>, an <code>optional()</code> schema will fail unless chained as <code>.nullish()</code> or <code>.nullable().optional()</code>!</span>
+              <div id="s11Display" style="background: #F8FAFC; border: 1px solid var(--border-subtle); border-radius: 8px; padding: 12px; min-height: 120px;">
+                <div class="flow-steps">
+                  <div class="flow-node">User: "Attendance of 101?"</div>
+                  <div class="flow-arrow">➔</div>
+                  <div class="flow-node primary">LLM requests get_attendance(101)</div>
+                  <div class="flow-arrow">➔</div>
+                  <div class="flow-node" style="background:#FEF3C7; border-color:#F59E0B;">Node.js queries DB</div>
+                  <div class="flow-arrow">➔</div>
+                  <div class="flow-node success">LLM: "Arun has 85% attendance."</div>
+                </div>
               </div>
             </div>
           </div>
@@ -1501,100 +758,552 @@ Click 'Run transform()' to see whitespace trimming and casing transformation.
       </section>
 
       <!-- ==========================================
-           SLIDE 18: Structured Output + JSON Schema + Zod in AI Applications
+           SLIDE 12: How Function Calling Works (The 5 Steps)
            ========================================== -->
-      <section class="slide" id="slide-18">
+      <section class="slide" id="slide-12">
         <div class="slide-header">
           <div class="slide-title-group">
-            <span class="slide-category">System Architecture</span>
-            <h2 class="slide-title">Structured Output + JSON Schema + Zod in AI Applications</h2>
-            <p class="slide-subtitle">The end-to-end production pipeline connecting prompt engineering, LLMs, and validation</p>
+            <span class="slide-category">Protocol Lifecycle</span>
+            <h2 class="slide-title">How Function Calling Works (The 5 Steps)</h2>
+            <p class="slide-subtitle">The complete round-trip handshake between User, Node.js, and Groq</p>
           </div>
-          <span class="slide-tag">ARCHITECTURE</span>
+          <span class="slide-tag">5 PHASES</span>
         </div>
 
         <div class="slide-body">
           <div class="diagram-container">
-            <div class="diagram-title"><span class="icon">🗺️</span> Complete Enterprise Data Pipeline Flowchart</div>
+            <div class="diagram-title"><span class="icon">🗺️</span> Complete Orchestration Flow</div>
             <div class="flow-steps">
-              <div class="flow-node">
-                <span style="font-size: 0.72rem; color: var(--text-muted);">Step 1</span><br>
-                <strong>User Input</strong>
-              </div>
+              <div class="flow-node">1. User Query</div>
               <div class="flow-arrow">➔</div>
-              <div class="flow-node">
-                <span style="font-size: 0.72rem; color: var(--text-muted);">Step 2</span><br>
-                <strong>Node.js API</strong>
-              </div>
+              <div class="flow-node primary">2. Pass Tool Schemas</div>
               <div class="flow-arrow">➔</div>
-              <div class="flow-node primary">
-                <span style="font-size: 0.72rem; color: var(--primary-accent);">Step 3</span><br>
-                <strong>System Prompt</strong>
-              </div>
+              <div class="flow-node primary">3. LLM Picks Tool</div>
               <div class="flow-arrow">➔</div>
-              <div class="flow-node primary">
-                <span style="font-size: 0.72rem; color: var(--primary-accent);">Step 4</span><br>
-                <strong>Groq LLM API</strong>
-              </div>
+              <div class="flow-node" style="background:#FEF3C7; border-color:#F59E0B;">4. Node.js Runs Func</div>
               <div class="flow-arrow">➔</div>
-              <div class="flow-node">
-                <span style="font-size: 0.72rem; color: var(--text-muted);">Step 5</span><br>
-                <strong>JSON.parse()</strong>
-              </div>
-              <div class="flow-arrow">➔</div>
-              <div class="flow-node success">
-                <span style="font-size: 0.72rem; color: var(--accent-green);">Step 6</span><br>
-                <strong>Zod safeParse()</strong>
-              </div>
-              <div class="flow-arrow">➔</div>
-              <div class="flow-node success" style="background: #D1FAE5;">
-                <span style="font-size: 0.72rem; color: var(--accent-green);">Valid?</span><br>
-                <strong>DB / Response</strong>
-              </div>
+              <div class="flow-node success">5. Final Synthesis</div>
             </div>
           </div>
 
-          <div class="grid-2col" style="margin-top: 6px;">
+          <div class="grid-2col" style="margin-top: 8px;">
+            <div class="card card-accent">
+              <div class="card-title"><span class="icon">📋</span> Step-by-Step Breakdown</div>
+              <ol style="margin-left: 20px; font-size: 0.86rem; display: flex; flex-direction: column; gap: 6px; color: var(--text-main);">
+                <li><strong>User Query:</strong> Client sends <em>"What is the attendance of student 101?"</em>.</li>
+                <li><strong>Tool Schemas:</strong> Node.js sends prompt + available tool JSON schemas to Groq.</li>
+                <li><strong>Model Decision:</strong> Model evaluates intent, pauses text generation, and returns tool call request.</li>
+                <li><strong>Node.js Execution:</strong> Server validates arguments with Zod and runs local JavaScript query.</li>
+                <li><strong>Final Answer:</strong> Server sends tool result back; model synthesizes friendly natural language reply.</li>
+              </ol>
+            </div>
+
+            <div class="card card-cyan" style="justify-content: center;">
+              <div class="card-title" style="color: var(--accent-cyan);"><span class="icon">⚖️</span> Separation of Concerns</div>
+              <div class="table-container" style="margin-top: 4px;">
+                <table class="styled-table" style="font-size: 0.82rem;">
+                  <thead><tr><th>Responsibility</th><th>Owner</th></tr></thead>
+                  <tbody>
+                    <tr><td>Deciding <em>when</em> a tool is needed</td><td><strong>LLM</strong></td></tr>
+                    <tr><td>Supplying argument values</td><td><strong>LLM</strong></td></tr>
+                    <tr><td>Validating arguments & executing code</td><td><strong>Node.js (Zod)</strong></td></tr>
+                    <tr><td>Synthesizing final conversational reply</td><td><strong>LLM</strong></td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==========================================
+           SLIDE 13: Defining Tool Schemas for Groq
+           ========================================== -->
+      <section class="slide" id="slide-13">
+        <div class="slide-header">
+          <div class="slide-title-group">
+            <span class="slide-category">Tool Definitions</span>
+            <h2 class="slide-title">Defining Tool Schemas for Groq</h2>
+            <p class="slide-subtitle">Using JSON Schema to declare available functions in the Groq Chat Completions API</p>
+          </div>
+          <span class="slide-tag">TOOL DEFINITIONS</span>
+        </div>
+
+        <div class="slide-body">
+          <div class="grid-60-40">
+            <div class="code-panel">
+              <div class="code-header"><span class="code-file">tools.js</span><button class="copy-btn">Copy</button></div>
+              <pre><code><span class="kw">const</span> <span class="vr">tools</span> = [
+  {
+    <span class="prop">type</span>: <span class="str">"function"</span>,
+    <span class="prop">function</span>: {
+      <span class="prop">name</span>: <span class="str">"get_student"</span>,
+      <span class="prop">description</span>: <span class="str">"Get student details using unique student ID"</span>,
+      <span class="prop">parameters</span>: {
+        <span class="prop">type</span>: <span class="str">"object"</span>,
+        <span class="prop">properties</span>: {
+          <span class="prop">studentId</span>: { <span class="prop">type</span>: <span class="str">"integer"</span>, <span class="prop">description</span>: <span class="str">"Unique student ID"</span> }
+        },
+        <span class="prop">required</span>: [<span class="str">"studentId"</span>]
+      }
+    }
+  },
+  {
+    <span class="prop">type</span>: <span class="str">"function"</span>,
+    <span class="prop">function</span>: {
+      <span class="prop">name</span>: <span class="str">"get_attendance"</span>,
+      <span class="prop">description</span>: <span class="str">"Get attendance percentage using unique student ID"</span>,
+      <span class="prop">parameters</span>: {
+        <span class="prop">type</span>: <span class="str">"object"</span>,
+        <span class="prop">properties</span>: {
+          <span class="prop">studentId</span>: { <span class="prop">type</span>: <span class="str">"integer"</span>, <span class="prop">description</span>: <span class="str">"Unique student ID"</span> }
+        },
+        <span class="prop">required</span>: [<span class="str">"studentId"</span>]
+      }
+    }
+  }
+];</code></pre>
+            </div>
+
+            <div class="card card-accent" style="justify-content: space-between;">
+              <div>
+                <div class="card-title"><span class="icon">🔍</span> Schema Anatomy</div>
+                <ul class="feature-list" style="margin-top: 6px;">
+                  <li><strong>name:</strong> Function identifier returned in tool call.</li>
+                  <li><strong>description:</strong> Essential prompt instruction! Guides the model on <em>when</em> to call this tool.</li>
+                  <li><strong>parameters:</strong> Standard JSON Schema declaring input object shape.</li>
+                </ul>
+              </div>
+
+              <div class="card card-purple" style="padding: 10px 14px;">
+                <strong style="color: var(--accent-purple); font-size: 0.8rem;">Prompting via Descriptions:</strong>
+                <span style="font-size: 0.76rem; color: var(--text-main);">If the model is calling the wrong tool, improve the <code>description</code> text to clarify its specific use case.</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==========================================
+           SLIDE 14: Tool Selection & tool_choice
+           ========================================== -->
+      <section class="slide" id="slide-14">
+        <div class="slide-header">
+          <div class="slide-title-group">
+            <span class="slide-category">Intent Resolution</span>
+            <h2 class="slide-title">Tool Selection & tool_choice</h2>
+            <p class="slide-subtitle">Controlling how models decide to invoke tools or generate text</p>
+          </div>
+          <span class="slide-tag">TOOL_CHOICE</span>
+        </div>
+
+        <div class="slide-body">
+          <div class="grid-2col">
+            <div class="card">
+              <div class="card-title"><span class="icon">⚙️</span> tool_choice Modes in Groq</div>
+              <div class="table-container">
+                <table class="styled-table">
+                  <thead><tr><th>Setting</th><th>Model Behavior</th></tr></thead>
+                  <tbody>
+                    <tr><td><code>"auto"</code></td><td><strong>Default:</strong> Model decides whether to call tools or respond with text.</td></tr>
+                    <tr><td><code>"required"</code></td><td>Forces model to select at least one tool call before responding.</td></tr>
+                    <tr><td><code>"none"</code></td><td>Disables tools completely; forces immediate natural language generation.</td></tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <div class="card card-cyan" style="padding: 10px 14px; margin-top: 10px;">
+                <strong style="color: var(--accent-cyan); font-size: 0.82rem;">Intent Mapping:</strong>
+                <div style="font-size: 0.78rem; color: var(--text-main); margin-top: 2px;">
+                  • "Who is 101?" ➔ <code>get_student</code><br>
+                  • "Check 101 attendance" ➔ <code>get_attendance</code><br>
+                  • "What is Node.js?" ➔ <em>No tool required</em>
+                </div>
+              </div>
+            </div>
+
+            <div class="sandbox-card">
+              <div class="sandbox-header">
+                <div class="sandbox-title"><span class="icon">🧪</span> Tool Selection Sandbox</div>
+                <span class="sandbox-badge">Interactive</span>
+              </div>
+
+              <div style="display: flex; gap: 6px; flex-wrap: wrap;">
+                <button class="btn-sandbox btn-sandbox-secondary s14-preset" data-q="Who is student 101?" style="font-size: 0.72rem; padding: 4px 8px;">Who is 101?</button>
+                <button class="btn-sandbox btn-sandbox-secondary s14-preset" data-q="What is the attendance of student 102?" style="font-size: 0.72rem; padding: 4px 8px;">Attendance 102</button>
+                <button class="btn-sandbox btn-sandbox-secondary s14-preset" data-q="What is Express.js?" style="font-size: 0.72rem; padding: 4px 8px;">General Question</button>
+              </div>
+
+              <input id="s14Input" type="text" value="Who is student 101?" class="slide-select" style="width: 100%;">
+
+              <select id="s14ChoiceMode" class="slide-select" style="width: 100%;">
+                <option value="auto">tool_choice: "auto"</option>
+                <option value="required">tool_choice: "required"</option>
+                <option value="none">tool_choice: "none"</option>
+              </select>
+
+              <button id="s14BtnSelect" class="btn-sandbox">Simulate Selection ➔</button>
+
+              <div id="s14Output" class="sandbox-result" style="font-size: 0.76rem;">
+Click 'Simulate Selection' to analyze tool choice reasoning.
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==========================================
+           SLIDE 15: Inspecting the Tool Call Response
+           ========================================== -->
+      <section class="slide" id="slide-15">
+        <div class="slide-header">
+          <div class="slide-title-group">
+            <span class="slide-category">Response Parsing</span>
+            <h2 class="slide-title">Inspecting the Tool Call Response</h2>
+            <p class="slide-subtitle">Accessing tool_calls from Groq Chat Completion choices</p>
+          </div>
+          <span class="slide-tag">PAYLOAD STRUCTURE</span>
+        </div>
+
+        <div class="slide-body">
+          <div class="grid-2col">
+            <div class="code-panel">
+              <div class="code-header"><span class="code-file">assistantMessage.json</span></div>
+              <pre><code>{
+  <span class="prop">"role"</span>: <span class="str">"assistant"</span>,
+  <span class="prop">"content"</span>: <span class="bool">null</span>,
+  <span class="prop">"tool_calls"</span>: [
+    {
+      <span class="prop">"id"</span>: <span class="str">"call_abc123"</span>,
+      <span class="prop">"type"</span>: <span class="str">"function"</span>,
+      <span class="prop">"function"</span>: {
+        <span class="prop">"name"</span>: <span class="str">"get_student"</span>,
+        <span class="prop">"arguments"</span>: <span class="str">"{\"studentId\":101}"</span>
+      }
+    }
+  ]
+}</code></pre>
+            </div>
+
+            <div class="card card-accent" style="justify-content: space-between;">
+              <div>
+                <div class="card-title"><span class="icon">🔍</span> Inspection Logic in Node.js</div>
+                <div class="code-panel">
+                  <div class="code-header"><span class="code-file">checkTools.js</span><button class="copy-btn">Copy</button></div>
+                  <pre><code><span class="kw">const</span> <span class="vr">assistantMessage</span> = <span class="vr">response</span>.choices[<span class="num">0</span>].message;
+
+<span class="cm">// If no tools were called, return content directly</span>
+<span class="kw">if</span> (!<span class="vr">assistantMessage</span>.<span class="prop">tool_calls</span>?.<span class="prop">length</span>) {
+  <span class="kw">return</span> <span class="vr">assistantMessage</span>.<span class="prop">content</span>;
+}
+
+<span class="cm">// Otherwise, iterate requested tool calls</span>
+<span class="kw">for</span> (<span class="kw">const</span> <span class="vr">toolCall</span> <span class="kw">of</span> <span class="vr">assistantMessage</span>.<span class="prop">tool_calls</span>) {
+  console.<span class="fn">log</span>(<span class="str">"Tool Name:"</span>, <span class="vr">toolCall</span>.<span class="prop">function</span>.<span class="prop">name</span>);
+  console.<span class="fn">log</span>(<span class="str">"Raw Args:"</span>, <span class="vr">toolCall</span>.<span class="prop">function</span>.<span class="prop">arguments</span>);
+}</code></pre>
+                </div>
+              </div>
+
+              <div class="card card-amber" style="padding: 10px 14px;">
+                <span style="font-size: 0.78rem; color: var(--text-main);">Notice <code>toolCall.function.arguments</code> is stringified JSON. We must deserialize it and validate with Zod!</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==========================================
+           SLIDE 16: Validating Tool Arguments with Zod
+           ========================================== -->
+      <section class="slide" id="slide-16">
+        <div class="slide-header">
+          <div class="slide-title-group">
+            <span class="slide-category">Argument Guardrails</span>
+            <h2 class="slide-title">Validating Tool Arguments with Zod</h2>
+            <p class="slide-subtitle">Preventing database crashes caused by invalid or hallucinated model arguments</p>
+          </div>
+          <span class="slide-tag">ARGUMENT SAFETY</span>
+        </div>
+
+        <div class="slide-body">
+          <div class="grid-2col">
+            <div class="card">
+              <div class="card-title"><span class="icon">🛡️</span> The Argument Validation Pattern</div>
+              <p class="card-desc">Map each tool to its strict Zod argument validator:</p>
+              
+              <div class="code-panel">
+                <div class="code-header"><span class="code-file">argumentValidators.js</span><button class="copy-btn">Copy</button></div>
+                <pre><code><span class="kw">const</span> <span class="vr">argumentSchemas</span> = {
+  <span class="prop">get_student</span>: <span class="vr">z</span>.<span class="fn">object</span>({
+    <span class="prop">studentId</span>: <span class="vr">z</span>.<span class="fn">number</span>().<span class="fn">int</span>().<span class="fn">positive</span>()
+  }),
+  <span class="prop">get_attendance</span>: <span class="vr">z</span>.<span class="fn">object</span>({
+    <span class="prop">studentId</span>: <span class="vr">z</span>.<span class="fn">number</span>().<span class="fn">int</span>().<span class="fn">positive</span>()
+  })
+};
+
+<span class="cm">// Step 1: Parse string to JS object</span>
+<span class="kw">const</span> <span class="vr">rawArgs</span> = JSON.<span class="fn">parse</span>(<span class="vr">toolCall</span>.<span class="prop">function</span>.<span class="prop">arguments</span>);
+
+<span class="cm">// Step 2: Validate against Zod schema</span>
+<span class="kw">const</span> <span class="vr">validated</span> = <span class="vr">argumentSchemas</span>[<span class="vr">toolName</span>].<span class="fn">safeParse</span>(<span class="vr">rawArgs</span>);
+<span class="kw">if</span> (!<span class="vr">validated</span>.<span class="prop">success</span>) {
+  <span class="kw">throw new</span> <span class="fn">Error</span>(<span class="str">"Invalid tool arguments"</span>);
+}</code></pre>
+              </div>
+            </div>
+
+            <div class="sandbox-card">
+              <div class="sandbox-header">
+                <div class="sandbox-title"><span class="icon">🧪</span> Argument Validator Simulator</div>
+                <span class="sandbox-badge">Interactive</span>
+              </div>
+              <p style="font-size: 0.78rem; color: var(--text-muted);">Test different candidate argument payloads:</p>
+
+              <input id="s16RawArgs" type="text" value='{"studentId": 101}' class="slide-select" style="width: 100%;">
+
+              <button id="s16BtnValidate" class="btn-sandbox">Validate Arguments ➔</button>
+
+              <div id="s16Result" class="sandbox-result card-green" style="font-size: 0.78rem;">
+Click 'Validate Arguments' to test against z.number().int().positive().
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==========================================
+           SLIDE 17: Tool Execution via Tool Registry Map
+           ========================================== -->
+      <section class="slide" id="slide-17">
+        <div class="slide-header">
+          <div class="slide-title-group">
+            <span class="slide-category">Secure Invocation</span>
+            <h2 class="slide-title">Tool Execution via Tool Registry Map</h2>
+            <p class="slide-subtitle">Dispatching functions through an explicit lookup table without dangerous eval()</p>
+          </div>
+          <span class="slide-tag">REGISTRY MAP</span>
+        </div>
+
+        <div class="slide-body">
+          <div class="grid-60-40">
+            <div class="code-panel">
+              <div class="code-header"><span class="code-file">toolRegistry.js</span><button class="copy-btn">Copy</button></div>
+              <pre><code><span class="cm">// 1. Ordinary JavaScript Functions</span>
+<span class="kw">function</span> <span class="fn">getStudent</span>(<span class="vr">studentId</span>) {
+  <span class="kw">return</span> <span class="vr">students</span>.<span class="fn">find</span>(<span class="vr">s</span> => <span class="vr">s</span>.<span class="prop">id</span> === <span class="vr">studentId</span>) || <span class="bool">null</span>;
+}
+
+<span class="kw">function</span> <span class="fn">getAttendance</span>(<span class="vr">studentId</span>) {
+  <span class="kw">const</span> <span class="vr">student</span> = <span class="fn">getStudent</span>(<span class="vr">studentId</span>);
+  <span class="kw">if</span> (!<span class="vr">student</span>) <span class="kw">return</span> { <span class="prop">error</span>: <span class="str">"Student not found"</span> };
+  <span class="kw">return</span> { <span class="prop">studentId</span>, <span class="prop">name</span>: <span class="vr">student</span>.<span class="prop">name</span>, <span class="prop">attendance</span>: <span class="vr">student</span>.<span class="prop">attendance</span> };
+}
+
+<span class="cm">// 2. Explicit Registry Map (Security Perimeter)</span>
+<span class="kw">const</span> <span class="vr">availableTools</span> = {
+  <span class="prop">get_student</span>: <span class="vr">getStudent</span>,
+  <span class="prop">get_attendance</span>: <span class="vr">getAttendance</span>
+};
+
+<span class="cm">// 3. Safe Lookup and Execution</span>
+<span class="kw">const</span> <span class="vr">toolFn</span> = <span class="vr">availableTools</span>[<span class="vr">toolCall</span>.<span class="prop">function</span>.<span class="prop">name</span>];
+<span class="kw">if</span> (!<span class="vr">toolFn</span>) <span class="kw">throw new</span> <span class="fn">Error</span>(<span class="str">"Unknown tool"</span>);
+
+<span class="kw">const</span> <span class="vr">result</span> = <span class="vr">toolFn</span>(<span class="vr">validated</span>.<span class="prop">data</span>.<span class="prop">studentId</span>);</code></pre>
+            </div>
+
+            <div class="card card-accent" style="justify-content: space-between;">
+              <div>
+                <div class="card-title"><span class="icon">🔒</span> Security Architecture Rule</div>
+                <p class="card-desc" style="font-size: 0.88rem; margin-top: 4px;">
+                  Never use <code>eval()</code> or execute arbitrary dynamic function names sent by the model.
+                </p>
+                <p class="card-desc" style="font-size: 0.82rem; color: var(--text-muted); margin-top: 6px;">
+                  The <strong>tool registry dictionary</strong> guarantees that only explicitly whitelisted functions in your application can ever be invoked.
+                </p>
+              </div>
+
+              <div class="card card-green" style="padding: 10px 14px;">
+                <strong style="color: var(--accent-green); font-size: 0.8rem;">Database Independence:</strong>
+                <span style="font-size: 0.76rem; color: var(--text-main);">Notice how <code>getStudent</code> can query in-memory arrays today, and be swapped with <code>db.students.findOne()</code> tomorrow without altering the AI orchestration!</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==========================================
+           SLIDE 18: Sending Tool Results Back to the LLM
+           ========================================== -->
+      <section class="slide" id="slide-18">
+        <div class="slide-header">
+          <div class="slide-title-group">
+            <span class="slide-category">Conversation State</span>
+            <h2 class="slide-title">Sending Tool Results Back to the LLM</h2>
+            <p class="slide-subtitle">Constructing role: "tool" messages to complete the handshake</p>
+          </div>
+          <span class="slide-tag">TOOL RESULTS</span>
+        </div>
+
+        <div class="slide-body">
+          <div class="grid-2col">
+            <div class="card">
+              <div class="card-title"><span class="icon">🔁</span> Constructing the Second Request</div>
+              <p class="card-desc">Append both the assistant tool call and your tool response to the conversation:</p>
+              
+              <div class="code-panel">
+                <div class="code-header"><span class="code-file">completeTurn.js</span><button class="copy-btn">Copy</button></div>
+                <pre><code><span class="cm">// 1. Push model's tool-call request</span>
+<span class="vr">messages</span>.<span class="fn">push</span>(<span class="vr">assistantMessage</span>);
+
+<span class="cm">// 2. Push tool result with matching ID</span>
+<span class="vr">messages</span>.<span class="fn">push</span>({
+  <span class="prop">role</span>: <span class="str">"tool"</span>,
+  <span class="prop">tool_call_id</span>: <span class="vr">toolCall</span>.<span class="prop">id</span>,
+  <span class="prop">name</span>: <span class="vr">toolCall</span>.<span class="prop">function</span>.<span class="prop">name</span>,
+  <span class="prop">content</span>: JSON.<span class="fn">stringify</span>(<span class="vr">result</span>)
+});
+
+<span class="cm">// 3. Request final synthesized response</span>
+<span class="kw">const</span> <span class="vr">final</span> = <span class="kw">await</span> <span class="vr">groq</span>.chat.completions.<span class="fn">create</span>({
+  <span class="prop">model</span>: <span class="vr">MODEL</span>,
+  <span class="prop">messages</span>: <span class="vr">messages</span>,
+  <span class="prop">tools</span>: <span class="vr">tools</span>,
+  <span class="prop">tool_choice</span>: <span class="str">"none"</span>
+});</code></pre>
+              </div>
+            </div>
+
+            <div class="card card-accent" style="justify-content: space-between;">
+              <div>
+                <div class="card-title"><span class="icon">🔑</span> Why tool_call_id Matters</div>
+                <p class="card-desc">The <code>tool_call_id</code> binds the output to the specific tool invocation. This allows models to handle multiple parallel tool requests safely.</p>
+                
+                <div class="output-box" style="margin-top: 10px;">
+                  <div class="output-label">Final Synthesized Reply:</div>
+                  <div class="output-content" style="color: #34D399;">"Student 101 is Arun. He is currently enrolled in the MERN Stack course."</div>
+                </div>
+              </div>
+
+              <div class="card card-purple" style="padding: 10px 14px;">
+                <span style="font-size: 0.78rem; color: var(--text-main);"><strong>tool_choice: "none"</strong> instructs the model to finish the conversation with natural language and avoid recursive tool loops.</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==========================================
+           SLIDE 19: Error Handling in Tool Calling
+           ========================================== -->
+      <section class="slide" id="slide-19">
+        <div class="slide-header">
+          <div class="slide-title-group">
+            <span class="slide-category">Defensive Coding</span>
+            <h2 class="slide-title">Error Handling in Tool Calling</h2>
+            <p class="slide-subtitle">Gracefully catching unknown tools, bad arguments, and record misses</p>
+          </div>
+          <span class="slide-tag">RESILIENCE</span>
+        </div>
+
+        <div class="slide-body">
+          <div class="grid-60-40">
+            <div class="code-panel">
+              <div class="code-header"><span class="code-file">safeExecuteTool.js</span><button class="copy-btn">Copy</button></div>
+              <pre><code><span class="kw">function</span> <span class="fn">executeTool</span>(<span class="vr">toolCall</span>) {
+  <span class="kw">const</span> <span class="vr">toolName</span> = <span class="vr">toolCall</span>.<span class="prop">function</span>.<span class="prop">name</span>;
+  <span class="kw">try</span> {
+    <span class="kw">const</span> <span class="vr">tool</span> = <span class="vr">availableTools</span>[<span class="vr">toolName</span>];
+    <span class="kw">const</span> <span class="vr">schema</span> = <span class="vr">argumentSchemas</span>[<span class="vr">toolName</span>];
+    <span class="kw">if</span> (!<span class="vr">tool</span> || !<span class="vr">schema</span>) <span class="kw">throw new</span> <span class="fn">Error</span>(<span class="str">"Unknown tool"</span>);
+
+    <span class="kw">const</span> <span class="vr">args</span> = JSON.<span class="fn">parse</span>(<span class="vr">toolCall</span>.<span class="prop">function</span>.<span class="prop">arguments</span>);
+    <span class="kw">const</span> <span class="vr">validated</span> = <span class="vr">schema</span>.<span class="fn">safeParse</span>(<span class="vr">args</span>);
+    <span class="kw">if</span> (!<span class="vr">validated</span>.<span class="prop">success</span>) <span class="kw">throw new</span> <span class="fn">Error</span>(<span class="str">"Invalid tool arguments"</span>);
+
+    <span class="kw">return</span> <span class="fn">tool</span>(<span class="vr">validated</span>.<span class="prop">data</span>.<span class="prop">studentId</span>);
+  } <span class="kw">catch</span> (<span class="vr">error</span>) {
+    <span class="cm">// Return error payload instead of crashing server!</span>
+    <span class="kw">return</span> { <span class="prop">error</span>: <span class="bool">true</span>, <span class="prop">message</span>: <span class="vr">error</span>.<span class="prop">message</span> };
+  }
+}</code></pre>
+            </div>
+
+            <div class="card card-accent" style="justify-content: space-between;">
+              <div>
+                <div class="card-title"><span class="icon">⚠️</span> Failure Modes Caught</div>
+                <ul class="feature-list" style="margin-top: 6px;">
+                  <li><span class="bullet-cross">✗</span> <strong>Unknown Tool:</strong> Hallucinated tool name safely rejected.</li>
+                  <li><span class="bullet-cross">✗</span> <strong>Bad JSON:</strong> Malformed arguments handled gracefully.</li>
+                  <li><span class="bullet-cross">✗</span> <strong>Invalid Types:</strong> Negative or string IDs blocked by Zod.</li>
+                  <li><span class="bullet-cross">✗</span> <strong>Record Not Found:</strong> Missing student returns <code>null</code>.</li>
+                </ul>
+              </div>
+
+              <div class="card card-green" style="padding: 10px 14px;">
+                <span style="font-size: 0.78rem; color: var(--text-main);">When an error object is returned as tool output, the LLM will politely inform the user: <em>"I could not find student 999 in our records."</em></span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==========================================
+           SLIDE 20: The Complete Combined Architecture
+           ========================================== -->
+      <section class="slide" id="slide-20">
+        <div class="slide-header">
+          <div class="slide-title-group">
+            <span class="slide-category">System Architecture</span>
+            <h2 class="slide-title">The Complete Combined Architecture</h2>
+            <p class="slide-subtitle">Uniting Structured Output, JSON Schema, Zod Validation, and Tool Calling</p>
+          </div>
+          <span class="slide-tag">BIG PICTURE</span>
+        </div>
+
+        <div class="slide-body">
+          <div class="diagram-container">
+            <div class="diagram-title"><span class="icon">🗺️</span> End-to-End Node.js GenAI Architecture</div>
+            <div class="flow-steps">
+              <div class="flow-node">User Request</div>
+              <div class="flow-arrow">➔</div>
+              <div class="flow-node">Express API</div>
+              <div class="flow-arrow">➔</div>
+              <div class="flow-node primary">Groq SDK + Tools</div>
+              <div class="flow-arrow">➔</div>
+              <div class="flow-node primary">Tool Call / JSON</div>
+              <div class="flow-arrow">➔</div>
+              <div class="flow-node success">Zod safeParse()</div>
+              <div class="flow-arrow">➔</div>
+              <div class="flow-node" style="background:#FEF3C7; border-color:#F59E0B;">Node.js Functions</div>
+              <div class="flow-arrow">➔</div>
+              <div class="flow-node success">Final Output</div>
+            </div>
+          </div>
+
+          <div class="grid-2col" style="margin-top: 8px;">
             <div class="table-container">
-              <table class="styled-table">
-                <thead>
-                  <tr>
-                    <th>Component</th>
-                    <th>Exact Responsibility in Architecture</th>
-                  </tr>
-                </thead>
+              <table class="styled-table" style="font-size: 0.8rem;">
+                <thead><tr><th>Component</th><th>Definitive Responsibility</th></tr></thead>
                 <tbody>
-                  <tr>
-                    <td><strong>System Prompt</strong></td>
-                    <td>Instructs the model to output JSON and declares required fields</td>
-                  </tr>
-                  <tr>
-                    <td><strong>JSON Format</strong></td>
-                    <td>Lightweight, language-agnostic text serialization across network</td>
-                  </tr>
-                  <tr>
-                    <td><strong>JSON Schema</strong></td>
-                    <td>Formal specification describing the expected payload shape</td>
-                  </tr>
-                  <tr>
-                    <td><strong>JSON.parse()</strong></td>
-                    <td>Parses raw text into in-memory JavaScript objects (Syntax check)</td>
-                  </tr>
-                  <tr>
-                    <td><strong>Zod safeParse()</strong></td>
-                    <td>Validates types, enums, boundaries, and handles errors gracefully</td>
-                  </tr>
+                  <tr><td><strong>Prompt Instructions</strong></td><td>Guides tone, persona, and structured output expectations</td></tr>
+                  <tr><td><strong>JSON Schema</strong></td><td>Declares formal parameter contract to the model</td></tr>
+                  <tr><td><strong>Zod Validator</strong></td><td>Protects application runtime from bad data</td></tr>
+                  <tr><td><strong>Tool Registry</strong></td><td>Whitelists and invokes permitted backend functions</td></tr>
+                  <tr><td><strong>Express API</strong></td><td>Exposes secure HTTP endpoints to clients</td></tr>
                 </tbody>
               </table>
             </div>
 
             <div class="card card-accent" style="justify-content: center;">
-              <div class="card-title"><span class="icon">🏆</span> The Core Engineering Principle</div>
+              <div class="card-title"><span class="icon">🏆</span> The Core Engineering Philosophy</div>
               <p class="card-desc" style="font-size: 0.95rem;">
-                <em>"Prompts guide intent; code guarantees contracts."</em>
+                <em>"The LLM reasons; your Node.js application enforces contracts and performs actions."</em>
               </p>
-              <p style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.6;">
-                Never assume an AI model will always return valid JSON just because you asked politely in the prompt. By combining <strong>low temperature (0.2)</strong>, <strong>explicit schema instructions</strong>, and <strong>server-side Zod validation</strong>, your Node.js backend achieves 100% resilience against hallucinated or malformed data.
+              <p style="font-size: 0.82rem; color: var(--text-muted); line-height: 1.5; margin-top: 4px;">
+                By combining structured JSON contracts, Zod runtime validation, and tool-calling execution registries, your Node.js application achieves production-grade predictability, type safety, and security.
               </p>
             </div>
           </div>
@@ -1602,111 +1311,22 @@ Click 'Run transform()' to see whitespace trimming and casing transformation.
       </section>
 
       <!-- ==========================================
-           SLIDE 19: Practical: Validate AI-Generated Data Using Groq and Zod
+           SLIDE 21: Capstone Project: Setup & Schemas (Part 1)
            ========================================== -->
-      <section class="slide" id="slide-19">
-        <div class="slide-header">
-          <div class="slide-title-group">
-            <span class="slide-category">Full Pipeline Script</span>
-            <h2 class="slide-title">Practical: Validate AI-Generated Data Using Groq and Zod</h2>
-            <p class="slide-subtitle">Combining Groq SDK completion, JSON.parse, and Zod safeParse in one script</p>
-          </div>
-          <span class="slide-tag">END-TO-END DEMO</span>
-        </div>
-
-        <div class="slide-body">
-          <div class="grid-60-40">
-            <div class="code-panel">
-              <div class="code-header">
-                <span class="code-file">ai-validate-demo.js</span>
-                <button class="copy-btn">Copy</button>
-              </div>
-              <pre><code><span class="kw">require</span>(<span class="str">"dotenv"</span>).<span class="fn">config</span>();
-<span class="kw">const</span> <span class="vr">Groq</span> = <span class="kw">require</span>(<span class="str">"groq-sdk"</span>);
-<span class="kw">const</span> { <span class="vr">z</span> } = <span class="kw">require</span>(<span class="str">"zod"</span>);
-
-<span class="kw">const</span> <span class="vr">groq</span> = <span class="kw">new</span> <span class="vr">Groq</span>({ <span class="prop">apiKey</span>: process.env.<span class="vr">GROQ_API_KEY</span> });
-
-<span class="kw">const</span> <span class="vr">studentSchema</span> = <span class="vr">z</span>.<span class="fn">object</span>({
-  <span class="prop">name</span>: <span class="vr">z</span>.<span class="fn">string</span>().<span class="fn">min</span>(<span class="num">2</span>),
-  <span class="prop">age</span>: <span class="vr">z</span>.<span class="fn">number</span>().<span class="fn">int</span>().<span class="fn">min</span>(<span class="num">16</span>).<span class="fn">max</span>(<span class="num">60</span>),
-  <span class="prop">email</span>: <span class="vr">z</span>.<span class="fn">string</span>().<span class="fn">email</span>(),
-  <span class="prop">course</span>: <span class="vr">z</span>.<span class="fn">string</span>(),
-  <span class="prop">skills</span>: <span class="vr">z</span>.<span class="fn">array</span>(<span class="vr">z</span>.<span class="fn">string</span>())
-});
-
-<span class="kw">async function</span> <span class="fn">runExtraction</span>() {
-  <span class="kw">const</span> <span class="vr">response</span> = <span class="kw">await</span> <span class="vr">groq</span>.chat.completions.<span class="fn">create</span>({
-    <span class="prop">model</span>: process.env.<span class="vr">GROQ_MODEL</span> || <span class="str">"llama-3.3-70b-versatile"</span>,
-    <span class="prop">messages</span>: [
-      { <span class="prop">role</span>: <span class="str">"system"</span>, <span class="prop">content</span>: <span class="str">"Extract info and return valid JSON with: name, age, email, course, skills."</span> },
-      { <span class="prop">role</span>: <span class="str">"user"</span>, <span class="prop">content</span>: <span class="str">"Rahul is 22 years old. Email: rahul@gmail.com. Learning MERN Stack. Knows JS, React."</span> }
-    ],
-    <span class="prop">temperature</span>: <span class="num">0.2</span>
-  });
-
-  <span class="kw">const</span> <span class="vr">aiText</span> = <span class="vr">response</span>.choices[<span class="num">0</span>].message.content;
-
-  <span class="kw">try</span> {
-    <span class="kw">const</span> <span class="vr">parsed</span> = JSON.<span class="fn">parse</span>(<span class="vr">aiText</span>);
-    <span class="kw">const</span> <span class="vr">validation</span> = <span class="vr">studentSchema</span>.<span class="fn">safeParse</span>(<span class="vr">parsed</span>);
-
-    <span class="kw">if</span> (!<span class="vr">validation</span>.<span class="prop">success</span>) {
-      console.<span class="fn">log</span>(<span class="str">"Schema Validation Issues:"</span>, <span class="vr">validation</span>.<span class="prop">error</span>.<span class="prop">issues</span>);
-    } <span class="kw">else</span> {
-      console.<span class="fn">log</span>(<span class="str">"Validated Student:"</span>, <span class="vr">validation</span>.<span class="prop">data</span>);
-    }
-  } <span class="kw">catch</span> (<span class="vr">err</span>) {
-    console.<span class="fn">log</span>(<span class="str">"JSON Parse Error:"</span>, <span class="vr">err</span>.<span class="prop">message</span>);
-  }
-}
-<span class="fn">runExtraction</span>();</code></pre>
-            </div>
-
-            <div class="card card-accent" style="justify-content: space-between;">
-              <div>
-                <div class="card-title"><span class="icon">🛡️</span> The Two-Tier Shield</div>
-                <div class="card card-cyan" style="padding: 10px 14px; margin-top: 8px;">
-                  <strong style="color: var(--accent-cyan); font-size: 0.85rem;">Shield Tier 1: try / catch(JSON.parse)</strong>
-                  <p style="font-size: 0.78rem; color: var(--text-main); margin-top: 2px;">Protects against malformed text, backticks, trailing commas, or network dropouts.</p>
-                </div>
-                <div class="card card-green" style="padding: 10px 14px; margin-top: 8px;">
-                  <strong style="color: var(--accent-green); font-size: 0.85rem;">Shield Tier 2: safeParse(studentSchema)</strong>
-                  <p style="font-size: 0.78rem; color: var(--text-main); margin-top: 2px;">Protects against missing properties, wrong data types, out-of-range ages, or invalid emails.</p>
-                </div>
-              </div>
-
-              <div class="card card-amber" style="padding: 10px 14px;">
-                <strong style="color: var(--accent-amber); font-size: 0.8rem;">⚠️ Vital Reminder:</strong>
-                <p style="font-size: 0.75rem; color: var(--text-main); margin-top: 2px;">
-                  Zod validates <em>structure and rules</em>, not factual truth. It guarantees <code>age</code> is a valid number, but cannot verify whether Rahul is genuinely 22 in real life!
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- ==========================================
-           SLIDE 20: Final Practical Project: AI Student Information Extractor
-           ========================================== -->
-      <section class="slide" id="slide-20">
+      <section class="slide" id="slide-21">
         <div class="slide-header">
           <div class="slide-title-group">
             <span class="slide-category">Production Capstone</span>
-            <h2 class="slide-title">Final Practical Project: AI Student Information Extractor</h2>
-            <p class="slide-subtitle">A production-ready Express API with Groq SDK, Zod, and full HTTP status codes</p>
+            <h2 class="slide-title">Capstone Project: Setup & Schemas (Part 1)</h2>
+            <p class="slide-subtitle">Dependencies, in-memory student database, JavaScript functions, and tool schemas</p>
           </div>
-          <span class="slide-tag">CAPSTONE PROJECT</span>
+          <span class="slide-tag">CAPSTONE PART 1</span>
         </div>
 
         <div class="slide-body">
           <div class="grid-60-40">
             <div class="code-panel">
-              <div class="code-header">
-                <span class="code-file">ai-student-extractor/server.js</span>
-                <button class="copy-btn">Copy</button>
-              </div>
+              <div class="code-header"><span class="code-file">ai-student-assistant/server.js (Part 1)</span><button class="copy-btn">Copy</button></div>
               <pre><code><span class="kw">require</span>(<span class="str">"dotenv"</span>).<span class="fn">config</span>();
 <span class="kw">const</span> <span class="vr">express</span> = <span class="kw">require</span>(<span class="str">"express"</span>);
 <span class="kw">const</span> <span class="vr">Groq</span> = <span class="kw">require</span>(<span class="str">"groq-sdk"</span>);
@@ -1716,84 +1336,229 @@ Click 'Run transform()' to see whitespace trimming and casing transformation.
 <span class="vr">app</span>.<span class="fn">use</span>(<span class="vr">express</span>.<span class="fn">json</span>());
 
 <span class="kw">const</span> <span class="vr">groq</span> = <span class="kw">new</span> <span class="vr">Groq</span>({ <span class="prop">apiKey</span>: process.env.<span class="vr">GROQ_API_KEY</span> });
-<span class="kw">const</span> <span class="vr">MODEL</span> = process.env.<span class="vr">GROQ_MODEL</span> || <span class="str">"llama-3.3-70b-versatile"</span>;
+<span class="kw">const</span> <span class="vr">MODEL</span> = <span class="str">"openai/gpt-oss-120b"</span>;
 
-<span class="kw">const</span> <span class="vr">studentSchema</span> = <span class="vr">z</span>.<span class="fn">object</span>({
-  <span class="prop">name</span>: <span class="vr">z</span>.<span class="fn">string</span>().<span class="fn">min</span>(<span class="num">2</span>),
-  <span class="prop">age</span>: <span class="vr">z</span>.<span class="fn">number</span>().<span class="fn">int</span>().<span class="fn">min</span>(<span class="num">16</span>).<span class="fn">max</span>(<span class="num">60</span>),
-  <span class="prop">email</span>: <span class="vr">z</span>.<span class="fn">string</span>().<span class="fn">email</span>(),
-  <span class="prop">course</span>: <span class="vr">z</span>.<span class="fn">string</span>(),
-  <span class="prop">skills</span>: <span class="vr">z</span>.<span class="fn">array</span>(<span class="vr">z</span>.<span class="fn">string</span>())
-});
+<span class="cm">// In-memory student records</span>
+<span class="kw">const</span> <span class="vr">students</span> = [
+  { <span class="prop">id</span>: <span class="num">101</span>, <span class="prop">name</span>: <span class="str">"Arun"</span>, <span class="prop">course</span>: <span class="str">"MERN Stack"</span>, <span class="prop">attendance</span>: <span class="num">85</span> },
+  { <span class="prop">id</span>: <span class="num">102</span>, <span class="prop">name</span>: <span class="str">"Rahul"</span>, <span class="prop">course</span>: <span class="str">"Python"</span>, <span class="prop">attendance</span>: <span class="num">72</span> }
+];
 
-<span class="vr">app</span>.<span class="fn">post</span>(<span class="str">"/extract-student"</span>, <span class="kw">async</span> (<span class="vr">req</span>, <span class="vr">res</span>) => {
-  <span class="kw">try</span> {
-    <span class="kw">const</span> { <span class="prop">message</span> } = <span class="vr">req</span>.<span class="prop">body</span>;
-    <span class="kw">if</span> (<span class="kw">typeof</span> <span class="vr">message</span> !== <span class="str">"string"</span> || !<span class="vr">message</span>.<span class="fn">trim</span>()) {
-      <span class="kw">return</span> <span class="vr">res</span>.<span class="fn">status</span>(<span class="num">400</span>).<span class="fn">json</span>({ <span class="prop">success</span>: <span class="bool">false</span>, <span class="prop">message</span>: <span class="str">"Student information message is required"</span> });
+<span class="cm">// Backend Functions</span>
+<span class="kw">function</span> <span class="fn">getStudent</span>(<span class="vr">studentId</span>) {
+  <span class="kw">return</span> <span class="vr">students</span>.<span class="fn">find</span>(<span class="vr">s</span> => <span class="vr">s</span>.<span class="prop">id</span> === <span class="vr">studentId</span>) || <span class="bool">null</span>;
+}
+
+<span class="kw">function</span> <span class="fn">getAttendance</span>(<span class="vr">studentId</span>) {
+  <span class="kw">const</span> <span class="vr">s</span> = <span class="fn">getStudent</span>(<span class="vr">studentId</span>);
+  <span class="kw">if</span> (!<span class="vr">s</span>) <span class="kw">return</span> { <span class="prop">error</span>: <span class="str">"Student not found"</span> };
+  <span class="kw">return</span> { <span class="prop">studentId</span>, <span class="prop">name</span>: <span class="vr">s</span>.<span class="prop">name</span>, <span class="prop">attendance</span>: <span class="vr">s</span>.<span class="prop">attendance</span> };
+}
+
+<span class="cm">// Tool Schemas & Zod Validators</span>
+<span class="kw">const</span> <span class="vr">tools</span> = [
+  {
+    <span class="prop">type</span>: <span class="str">"function"</span>,
+    <span class="prop">function</span>: {
+      <span class="prop">name</span>: <span class="str">"get_student"</span>,
+      <span class="prop">description</span>: <span class="str">"Get student details using unique student ID"</span>,
+      <span class="prop">parameters</span>: {
+        <span class="prop">type</span>: <span class="str">"object"</span>,
+        <span class="prop">properties</span>: { <span class="prop">studentId</span>: { <span class="prop">type</span>: <span class="str">"integer"</span> } },
+        <span class="prop">required</span>: [<span class="str">"studentId"</span>]
+      }
     }
-
-    <span class="kw">const</span> <span class="vr">response</span> = <span class="kw">await</span> <span class="vr">groq</span>.chat.completions.<span class="fn">create</span>({
-      <span class="prop">model</span>: <span class="vr">MODEL</span>,
-      <span class="prop">messages</span>: [
-        { <span class="prop">role</span>: <span class="str">"system"</span>, <span class="prop">content</span>: <span class="str">"You are a student info extractor. Return ONLY valid JSON with name, age, email, course, skills. Do not invent missing facts."</span> },
-        { <span class="prop">role</span>: <span class="str">"user"</span>, <span class="prop">content</span>: <span class="vr">message</span> }
-      ],
-      <span class="prop">temperature</span>: <span class="num">0.2</span>,
-      <span class="prop">max_completion_tokens</span>: <span class="num">300</span>
-    });
-
-    <span class="kw">const</span> <span class="vr">aiText</span> = <span class="vr">response</span>.choices[<span class="num">0</span>].message.content;
-    <span class="kw">let</span> <span class="vr">parsedData</span>;
-
-    <span class="kw">try</span> {
-      <span class="vr">parsedData</span> = JSON.<span class="fn">parse</span>(<span class="vr">aiText</span>);
-    } <span class="kw">catch</span> (<span class="vr">parseErr</span>) {
-      <span class="kw">return</span> <span class="vr">res</span>.<span class="fn">status</span>(<span class="num">502</span>).<span class="fn">json</span>({ <span class="prop">success</span>: <span class="bool">false</span>, <span class="prop">message</span>: <span class="str">"AI returned invalid JSON syntax"</span> });
+  },
+  {
+    <span class="prop">type</span>: <span class="str">"function"</span>,
+    <span class="prop">function</span>: {
+      <span class="prop">name</span>: <span class="str">"get_attendance"</span>,
+      <span class="prop">description</span>: <span class="str">"Get attendance percentage using student ID"</span>,
+      <span class="prop">parameters</span>: {
+        <span class="prop">type</span>: <span class="str">"object"</span>,
+        <span class="prop">properties</span>: { <span class="prop">studentId</span>: { <span class="prop">type</span>: <span class="str">"integer"</span> } },
+        <span class="prop">required</span>: [<span class="str">"studentId"</span>]
+      }
     }
-
-    <span class="kw">const</span> <span class="vr">validation</span> = <span class="vr">studentSchema</span>.<span class="fn">safeParse</span>(<span class="vr">parsedData</span>);
-    <span class="kw">if</span> (!<span class="vr">validation</span>.<span class="prop">success</span>) {
-      <span class="kw">return</span> <span class="vr">res</span>.<span class="fn">status</span>(<span class="num">422</span>).<span class="fn">json</span>({ <span class="prop">success</span>: <span class="bool">false</span>, <span class="prop">message</span>: <span class="str">"AI data schema validation failed"</span>, <span class="prop">errors</span>: <span class="vr">validation</span>.<span class="prop">error</span>.<span class="prop">issues</span> });
-    }
-
-    <span class="vr">res</span>.<span class="fn">status</span>(<span class="num">200</span>).<span class="fn">json</span>({ <span class="prop">success</span>: <span class="bool">true</span>, <span class="prop">message</span>: <span class="str">"Student information extracted successfully"</span>, <span class="prop">data</span>: <span class="vr">validation</span>.<span class="prop">data</span> });
-  } <span class="kw">catch</span> (<span class="vr">err</span>) {
-    <span class="vr">res</span>.<span class="fn">status</span>(<span class="num">502</span>).<span class="fn">json</span>({ <span class="prop">success</span>: <span class="bool">false</span>, <span class="prop">message</span>: <span class="str">"Unable to process AI request"</span> });
   }
+];
+
+<span class="kw">const</span> <span class="vr">argumentSchemas</span> = {
+  <span class="prop">get_student</span>: <span class="vr">z</span>.<span class="fn">object</span>({ <span class="prop">studentId</span>: <span class="vr">z</span>.<span class="fn">number</span>().<span class="fn">int</span>().<span class="fn">positive</span>() }),
+  <span class="prop">get_attendance</span>: <span class="vr">z</span>.<span class="fn">object</span>({ <span class="prop">studentId</span>: <span class="vr">z</span>.<span class="fn">number</span>().<span class="fn">int</span>().<span class="fn">positive</span>() })
+};
+
+<span class="kw">const</span> <span class="vr">availableTools</span> = {
+  <span class="prop">get_student</span>: <span class="vr">getStudent</span>,
+  <span class="prop">get_attendance</span>: <span class="vr">getAttendance</span>
+};</code></pre>
+            </div>
+
+            <div class="card card-accent" style="justify-content: space-between;">
+              <div>
+                <div class="card-title"><span class="icon">📦</span> Project Setup</div>
+                <div class="code-panel">
+                  <div class="code-header"><span class="code-file">terminal</span></div>
+                  <pre style="font-size: 0.78rem;"><code>npm init -y
+npm install express groq-sdk dotenv zod</code></pre>
+                </div>
+                <div class="code-panel" style="margin-top: 6px;">
+                  <div class="code-header"><span class="code-file">.env</span></div>
+                  <pre style="font-size: 0.78rem;"><code>PORT=3000
+GROQ_API_KEY=your_key_here</code></pre>
+                </div>
+              </div>
+
+              <div class="card card-green" style="padding: 10px 14px;">
+                <span style="font-size: 0.76rem; color: var(--text-main);">Notice how <code>availableTools</code> maps string names to real functions, while <code>argumentSchemas</code> matches each with a Zod guard!</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==========================================
+           SLIDE 22: Capstone Project: Execution & API (Part 2)
+           ========================================== -->
+      <section class="slide" id="slide-22">
+        <div class="slide-header">
+          <div class="slide-title-group">
+            <span class="slide-category">Production Capstone</span>
+            <h2 class="slide-title">Capstone Project: Execution & API (Part 2)</h2>
+            <p class="slide-subtitle">The complete executeTool, runAssistant, and POST /chat Express endpoint</p>
+          </div>
+          <span class="slide-tag">CAPSTONE PART 2</span>
+        </div>
+
+        <div class="slide-body">
+          <div class="grid-60-40">
+            <div class="code-panel">
+              <div class="code-header"><span class="code-file">ai-student-assistant/server.js (Part 2)</span><button class="copy-btn">Copy</button></div>
+              <pre><code><span class="kw">function</span> <span class="fn">executeTool</span>(<span class="vr">toolCall</span>) {
+  <span class="kw">const</span> <span class="vr">toolName</span> = <span class="vr">toolCall</span>.<span class="prop">function</span>.<span class="prop">name</span>;
+  <span class="kw">try</span> {
+    <span class="kw">const</span> <span class="vr">tool</span> = <span class="vr">availableTools</span>[<span class="vr">toolName</span>];
+    <span class="kw">const</span> <span class="vr">schema</span> = <span class="vr">argumentSchemas</span>[<span class="vr">toolName</span>];
+    <span class="kw">if</span> (!<span class="vr">tool</span> || !<span class="vr">schema</span>) <span class="kw">throw new</span> <span class="fn">Error</span>(<span class="str">"Unknown tool"</span>);
+
+    <span class="kw">const</span> <span class="vr">args</span> = JSON.<span class="fn">parse</span>(<span class="vr">toolCall</span>.<span class="prop">function</span>.<span class="prop">arguments</span>);
+    <span class="kw">const</span> <span class="vr">validated</span> = <span class="vr">schema</span>.<span class="fn">safeParse</span>(<span class="vr">args</span>);
+    <span class="kw">if</span> (!<span class="vr">validated</span>.<span class="prop">success</span>) <span class="kw">throw new</span> <span class="fn">Error</span>(<span class="str">"Invalid tool arguments"</span>);
+
+    <span class="kw">return</span> <span class="fn">tool</span>(<span class="vr">validated</span>.<span class="prop">data</span>.<span class="prop">studentId</span>);
+  } <span class="kw">catch</span> (<span class="vr">error</span>) {
+    <span class="kw">return</span> { <span class="prop">error</span>: <span class="bool">true</span>, <span class="prop">message</span>: <span class="vr">error</span>.<span class="prop">message</span> };
+  }
+}
+
+<span class="kw">async function</span> <span class="fn">runAssistant</span>(<span class="vr">question</span>) {
+  <span class="kw">const</span> <span class="vr">messages</span> = [
+    { <span class="prop">role</span>: <span class="str">"system"</span>, <span class="prop">content</span>: <span class="str">"You are an AI Student Assistant. Use tools to answer questions. Do not invent facts."</span> },
+    { <span class="prop">role</span>: <span class="str">"user"</span>, <span class="prop">content</span>: <span class="vr">question</span> }
+  ];
+
+  <span class="kw">const</span> <span class="vr">res1</span> = <span class="kw">await</span> <span class="vr">groq</span>.chat.completions.<span class="fn">create</span>({
+    <span class="prop">model</span>: <span class="vr">MODEL</span>, <span class="prop">messages</span>, <span class="prop">tools</span>, <span class="prop">tool_choice</span>: <span class="str">"auto"</span>
+  });
+
+  <span class="kw">const</span> <span class="vr">msg</span> = <span class="vr">res1</span>.choices[<span class="num">0</span>].message;
+  <span class="kw">if</span> (!<span class="vr">msg</span>.<span class="prop">tool_calls</span>?.<span class="prop">length</span>) <span class="kw">return</span> <span class="vr">msg</span>.<span class="prop">content</span>;
+
+  <span class="vr">messages</span>.<span class="fn">push</span>(<span class="vr">msg</span>);
+  <span class="kw">for</span> (<span class="kw">const</span> <span class="vr">toolCall</span> <span class="kw">of</span> <span class="vr">msg</span>.<span class="prop">tool_calls</span>) {
+    <span class="kw">const</span> <span class="vr">result</span> = <span class="fn">executeTool</span>(<span class="vr">toolCall</span>);
+    <span class="vr">messages</span>.<span class="fn">push</span>({
+      <span class="prop">role</span>: <span class="str">"tool"</span>, <span class="prop">tool_call_id</span>: <span class="vr">toolCall</span>.<span class="prop">id</span>,
+      <span class="prop">name</span>: <span class="vr">toolCall</span>.<span class="prop">function</span>.<span class="prop">name</span>, <span class="prop">content</span>: JSON.<span class="fn">stringify</span>(<span class="vr">result</span>)
+    });
+  }
+
+  <span class="kw">const</span> <span class="vr">finalRes</span> = <span class="kw">await</span> <span class="vr">groq</span>.chat.completions.<span class="fn">create</span>({
+    <span class="prop">model</span>: <span class="vr">MODEL</span>, <span class="prop">messages</span>, <span class="prop">tools</span>, <span class="prop">tool_choice</span>: <span class="str">"none"</span>
+  });
+  <span class="kw">return</span> <span class="vr">finalRes</span>.choices[<span class="num">0</span>].message.content;
+}
+
+<span class="vr">app</span>.<span class="fn">post</span>(<span class="str">"/chat"</span>, <span class="kw">async</span> (<span class="vr">req</span>, <span class="vr">res</span>) => {
+  <span class="kw">const</span> { <span class="prop">question</span> } = <span class="vr">req</span>.<span class="prop">body</span>;
+  <span class="kw">if</span> (!<span class="vr">question</span>) <span class="kw">return</span> <span class="vr">res</span>.<span class="fn">status</span>(<span class="num">400</span>).<span class="fn">json</span>({ <span class="prop">error</span>: <span class="str">"Question required"</span> });
+  <span class="kw">const</span> <span class="vr">answer</span> = <span class="kw">await</span> <span class="fn">runAssistant</span>(<span class="vr">question</span>);
+  <span class="vr">res</span>.<span class="fn">json</span>({ <span class="prop">success</span>: <span class="bool">true</span>, <span class="prop">answer</span> });
 });
 
-<span class="kw">const</span> <span class="vr">PORT</span> = process.env.<span class="vr">PORT</span> || <span class="num">3000</span>;
-<span class="vr">app</span>.<span class="fn">listen</span>(<span class="vr">PORT</span>, () => console.<span class="fn">log</span>(<span class="str">`Server running on port ${PORT}`</span>));</code></pre>
+<span class="vr">app</span>.<span class="fn">listen</span>(<span class="num">3000</span>, () => console.<span class="fn">log</span>(<span class="str">"Assistant on port 3000"</span>));</code></pre>
+            </div>
+
+            <div class="card card-accent" style="justify-content: space-between;">
+              <div>
+                <div class="card-title"><span class="icon">🚀</span> Postman / cURL Test</div>
+                <div class="code-panel">
+                  <div class="code-header"><span class="code-file">bash</span></div>
+                  <pre style="font-size: 0.74rem;"><code>curl -X POST http://localhost:3000/chat \
+  -H "Content-Type: application/json" \
+  -d '{"question": "Who is student 101?"}'</code></pre>
+                </div>
+                <div class="output-box" style="margin-top: 6px;">
+                  <div class="output-label">Expected JSON:</div>
+                  <div class="output-content" style="font-size: 0.76rem;">{
+  "success": true,
+  "answer": "Student 101 is Arun, enrolled in MERN Stack."
+}</div>
+                </div>
+              </div>
+
+              <div class="card card-green" style="padding: 10px 14px;">
+                <span style="font-size: 0.78rem; color: var(--text-main);">Try asking: <em>"What is Rahul's attendance?"</em> ➔ Model will automatically select <code>get_attendance(102)</code> and answer <code>72%</code>!</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==========================================
+           SLIDE 23: Key Takeaways & Production Checklist
+           ========================================== -->
+      <section class="slide" id="slide-23">
+        <div class="slide-header">
+          <div class="slide-title-group">
+            <span class="slide-category">Course Conclusion</span>
+            <h2 class="slide-title">Key Takeaways & Production Checklist</h2>
+            <p class="slide-subtitle">Mastery summary and interactive live assistant simulator</p>
+          </div>
+          <span class="slide-tag">FINAL SLIDE 23</span>
+        </div>
+
+        <div class="slide-body">
+          <div class="grid-2col">
+            <div class="card card-accent">
+              <div class="card-title"><span class="icon">🎓</span> 5 Core Production Takeaways</div>
+              <ul class="feature-list" style="gap: 10px; margin-top: 4px;">
+                <li><span class="bullet-check">✓</span> <div><strong>Structured Output:</strong> Convert unpredictable text into typed JSON data using explicit system prompts.</div></li>
+                <li><span class="bullet-check">✓</span> <div><strong>JSON Schema:</strong> The universal standard to declare expected parameters to language models.</div></li>
+                <li><span class="bullet-check">✓</span> <div><strong>Zod Validation:</strong> Protect your backend perimeter with <code>safeParse()</code>; never trust raw AI output.</div></li>
+                <li><span class="bullet-check">✓</span> <div><strong>Function Calling:</strong> Turns LLMs from passive chatbots into agentic problem-solvers that request backend capabilities.</div></li>
+                <li><span class="bullet-check">✓</span> <div><strong>Security Control:</strong> The LLM decides what is needed; your Node.js application decides what executes.</div></li>
+              </ul>
             </div>
 
             <div class="sandbox-card">
               <div class="sandbox-header">
-                <div class="sandbox-title"><span class="icon">🧪</span> Live AI Extractor Simulator</div>
-                <span class="sandbox-badge">POST /extract-student</span>
-              </div>
-              <p style="font-size: 0.78rem; color: var(--text-muted);">Enter natural language student text or pick a sample:</p>
-
-              <div style="display: flex; gap: 6px;">
-                <button class="btn-sandbox btn-sandbox-secondary s20-sample-btn" data-sample="sample1" style="font-size: 0.72rem; padding: 4px 8px;">Rahul</button>
-                <button class="btn-sandbox btn-sandbox-secondary s20-sample-btn" data-sample="sample2" style="font-size: 0.72rem; padding: 4px 8px;">Priya</button>
-                <button class="btn-sandbox btn-sandbox-secondary s20-sample-btn" data-sample="sample3" style="font-size: 0.72rem; padding: 4px 8px;">Aman</button>
+                <div class="sandbox-title"><span class="icon">🧪</span> Live AI Student Assistant Simulator</div>
+                <span class="sandbox-badge">POST /chat</span>
               </div>
 
-              <textarea id="s20InputText" class="sandbox-textarea" style="height: 65px; font-size: 0.8rem;">Rahul is 22 years old. His email is rahul@gmail.com. He is learning MERN Stack and knows JavaScript and React.</textarea>
-
-              <div style="display: flex; justify-content: space-between; align-items: center;">
-                <button id="s20RunBtn" class="btn-sandbox" style="font-size: 0.82rem; padding: 6px 14px;">Extract & Validate ➔</button>
-                <span id="s20Status" style="font-family: var(--font-mono); font-size: 0.75rem; font-weight: 700; color: var(--primary-accent);">Ready</span>
+              <div style="display: flex; gap: 6px; flex-wrap: wrap;">
+                <button class="btn-sandbox btn-sandbox-secondary s23-preset" data-q="Who is student 101?" style="font-size: 0.72rem; padding: 4px 8px;">Who is 101?</button>
+                <button class="btn-sandbox btn-sandbox-secondary s23-preset" data-q="What is the attendance of student 102?" style="font-size: 0.72rem; padding: 4px 8px;">Attendance 102</button>
+                <button class="btn-sandbox btn-sandbox-secondary s23-preset" data-q="What course is student 101 enrolled in?" style="font-size: 0.72rem; padding: 4px 8px;">Course of 101</button>
               </div>
 
-              <div id="s20Output" class="sandbox-result" style="font-size: 0.76rem; min-height: 120px; max-height: 160px;">
-Click 'Extract & Validate' to watch Groq LLM extraction + Zod schema validation in action.
-              </div>
+              <input id="s23Input" type="text" value="Who is student 101?" class="slide-select" style="width: 100%;">
 
-              <div class="card card-green" style="padding: 8px 12px; margin-top: 4px;">
-                <strong style="color: var(--accent-green); font-size: 0.8rem;">🎉 Day 7 Learning Outcome Achieved:</strong>
-                <span style="font-size: 0.75rem; color: var(--text-main);">You can now convert any unstructured AI text into predictable, validated JSON for any Node.js backend!</span>
+              <button id="s23SendBtn" class="btn-sandbox">Send to AI Assistant ➔</button>
+
+              <div id="s23ChatLog" class="sandbox-result" style="font-size: 0.76rem; min-height: 120px;">
+Click 'Send to AI Assistant' to watch tool selection, Node.js Zod validation, and final answer synthesis!
               </div>
             </div>
           </div>
@@ -1802,7 +1567,7 @@ Click 'Extract & Validate' to watch Groq LLM extraction + Zod schema validation 
 
     </main>
 
-    <!-- Bottom Presentation Control Bar -->
+    <!-- Bottom Controls -->
     <nav class="pres-controls">
       <button class="control-btn" id="prevBtn" title="Previous Slide (← / PageUp)">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
@@ -1821,53 +1586,31 @@ Click 'Extract & Validate' to watch Groq LLM extraction + Zod schema validation 
       </div>
     </nav>
 
-    <!-- Table of Contents Sidebar / Drawer -->
+    <!-- TOC Drawer -->
     <div class="toc-overlay" id="tocOverlay">
       <div class="toc-drawer">
         <div class="toc-header">
-          <div class="toc-title">Table of Contents</div>
-          <button class="toc-close" id="tocClose" title="Close TOC (Esc)">✕</button>
+          <div class="toc-title">Table of Contents (23 Slides)</div>
+          <button class="toc-close" id="tocClose" title="Close (Esc)">✕</button>
         </div>
         <ul class="toc-list" id="tocList"></ul>
       </div>
     </div>
 
-    <!-- Help & Keyboard Shortcuts Modal -->
+    <!-- Help Modal -->
     <div class="modal-overlay" id="helpModal">
       <div class="modal-card">
         <div class="modal-header">
-          <div class="modal-title">Keyboard Navigation & Shortcuts</div>
+          <div class="modal-title">Keyboard Navigation</div>
           <button class="toc-close" id="helpClose" title="Close (Esc)">✕</button>
         </div>
         <div class="modal-body">
-          <div class="shortcut-row">
-            <span>Next Slide</span>
-            <div style="display:flex; gap:4px;"><span class="shortcut-key">→</span> <span class="shortcut-key">Space</span> <span class="shortcut-key">PageDown</span></div>
-          </div>
-          <div class="shortcut-row">
-            <span>Previous Slide</span>
-            <div style="display:flex; gap:4px;"><span class="shortcut-key">←</span> <span class="shortcut-key">PageUp</span></div>
-          </div>
-          <div class="shortcut-row">
-            <span>First / Last Slide</span>
-            <div style="display:flex; gap:4px;"><span class="shortcut-key">Home</span> / <span class="shortcut-key">End</span></div>
-          </div>
-          <div class="shortcut-row">
-            <span>Toggle Fullscreen</span>
-            <span class="shortcut-key">F</span>
-          </div>
-          <div class="shortcut-row">
-            <span>Table of Contents</span>
-            <span class="shortcut-key">T</span>
-          </div>
-          <div class="shortcut-row">
-            <span>Close Modal / Sidebar</span>
-            <span class="shortcut-key">Esc</span>
-          </div>
-          <div class="shortcut-row">
-            <span>Help Shortcuts</span>
-            <span class="shortcut-key">?</span>
-          </div>
+          <div class="shortcut-row"><span>Next Slide</span><div><span class="shortcut-key">→</span> <span class="shortcut-key">Space</span></div></div>
+          <div class="shortcut-row"><span>Previous Slide</span><div><span class="shortcut-key">←</span> <span class="shortcut-key">PageUp</span></div></div>
+          <div class="shortcut-row"><span>First / Last Slide</span><div><span class="shortcut-key">Home</span> / <span class="shortcut-key">End</span></div></div>
+          <div class="shortcut-row"><span>Toggle Fullscreen</span><span class="shortcut-key">F</span></div>
+          <div class="shortcut-row"><span>Table of Contents</span><span class="shortcut-key">T</span></div>
+          <div class="shortcut-row"><span>Close Overlays</span><span class="shortcut-key">Esc</span></div>
         </div>
       </div>
     </div>

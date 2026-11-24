@@ -1,11 +1,11 @@
 /**
- * Node.js GenAI – Day 7: Structured Output, JSON Schema & Zod Validation
- * Interactive Presentation Engine & Sandbox Controller
+ * Node.js GenAI – Day 7: Structured Output, Zod Validation & Function Calling
+ * Interactive Presentation Engine & Sandboxes Controller
  */
 
 document.addEventListener('DOMContentLoaded', () => {
   // --- Presentation State ---
-  const totalSlides = 20;
+  const totalSlides = 23;
   let currentSlide = 1;
 
   // DOM Elements
@@ -25,31 +25,34 @@ document.addEventListener('DOMContentLoaded', () => {
   const helpModal = document.getElementById('helpModal');
   const toastNotice = document.getElementById('toastNotice');
 
-  // Slide Metadata for TOC
+  // Slide Metadata for Table of Contents
   const slideTitles = [
-    "Title: Structured Output & Data Validation",
-    "Why Do We Need Structured Output?",
-    "What Is JSON?",
-    "JSON vs JavaScript Object",
-    "JSON Output from an LLM",
-    "Node.js Practical: Generate JSON Using Groq",
+    "Title: Structured Output, Zod & Function Calling",
+    "The Problem with Unstructured LLM Text",
+    "JSON & Serialization in Node.js",
+    "Generating JSON from an LLM",
     "What Is JSON Schema?",
-    "Practical: Understand JSON Schema Validation",
-    "What Is Zod?",
-    "Zod Schema: Define Student Data",
-    "Zod Parsing: What Is Parse?",
-    "Zod SafeParse: Validate Without Throwing",
-    "Zod Validation Errors",
-    "Practical: Zod Validation in Express API",
-    "Zod and Type Safety",
-    "Zod with TypeScript: Infer Types",
-    "Zod Advanced Features: Defaults, Optional & Transform",
-    "Structured Output + JSON Schema + Zod in AI Applications",
-    "Practical: Validate AI-Generated Data Using Groq & Zod",
-    "Final Practical Project: AI Student Extractor"
+    "What Is Zod & Why Do We Need It?",
+    "Defining Rich Zod Schemas",
+    "Zod parse() vs safeParse()",
+    "Handling Validation Errors",
+    "Practical: Validating AI Structured Output",
+    "From Structured Output to Function Calling",
+    "How Function Calling Works (The 5 Steps)",
+    "Defining Tool Schemas for Groq",
+    "Tool Selection & tool_choice",
+    "Inspecting the Tool Call Response",
+    "Validating Tool Arguments with Zod",
+    "Tool Execution via Tool Registry Map",
+    "Sending Tool Results Back to the LLM",
+    "Error Handling in Tool Calling",
+    "The Complete Combined Architecture",
+    "Capstone Project: Setup & Schemas (Part 1)",
+    "Capstone Project: Execution & API (Part 2)",
+    "Key Takeaways & Production Checklist"
   ];
 
-  // Initialize Dropdown & TOC
+  // Initialize Navigation & TOC
   function initNavigation() {
     if (slideSelect) {
       slideSelect.innerHTML = '';
@@ -114,7 +117,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  // Update UI Elements
+  // Update View & Controls
   function updateSlideView() {
     slides.forEach((s, idx) => {
       const slideIndex = idx + 1;
@@ -166,7 +169,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  // TOC Drawer handlers
   function openTOC() {
     if (tocOverlay) tocOverlay.classList.add('active');
   }
@@ -175,7 +177,6 @@ document.addEventListener('DOMContentLoaded', () => {
     if (tocOverlay) tocOverlay.classList.remove('active');
   }
 
-  // Help Modal handlers
   function openHelp() {
     if (helpModal) helpModal.classList.add('active');
   }
@@ -184,7 +185,6 @@ document.addEventListener('DOMContentLoaded', () => {
     if (helpModal) helpModal.classList.remove('active');
   }
 
-  // Toast Notice
   function showToast(message) {
     if (!toastNotice) return;
     toastNotice.textContent = message;
@@ -194,7 +194,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }, 2200);
   }
 
-  // Setup Event Listeners for Presentation Controls
+  // Event Listeners for Controls
   if (prevBtn) prevBtn.addEventListener('click', prevSlide);
   if (nextBtn) nextBtn.addEventListener('click', nextSlide);
   if (fullscreenBtn) fullscreenBtn.addEventListener('click', toggleFullscreen);
@@ -221,7 +221,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Global Keyboard Shortcuts
+  // Keyboard Navigation
   window.addEventListener('keydown', (e) => {
     const activeEl = document.activeElement;
     const isEditing = activeEl && (
@@ -231,14 +231,13 @@ document.addEventListener('DOMContentLoaded', () => {
       activeEl.tagName === 'SELECT'
     );
 
-    // Escape closes overlays regardless of edit state
     if (e.key === 'Escape') {
       closeTOC();
       closeHelp();
       return;
     }
 
-    if (isEditing) return; // Do not hijack while typing in sandboxes
+    if (isEditing) return;
 
     switch (e.key) {
       case 'ArrowRight':
@@ -268,24 +267,18 @@ document.addEventListener('DOMContentLoaded', () => {
       case 't':
       case 'T':
         e.preventDefault();
-        if (tocOverlay && tocOverlay.classList.contains('active')) {
-          closeTOC();
-        } else {
-          openTOC();
-        }
+        if (tocOverlay && tocOverlay.classList.contains('active')) closeTOC();
+        else openTOC();
         break;
       case '?':
         e.preventDefault();
-        if (helpModal && helpModal.classList.contains('active')) {
-          closeHelp();
-        } else {
-          openHelp();
-        }
+        if (helpModal && helpModal.classList.contains('active')) closeHelp();
+        else openHelp();
         break;
     }
   });
 
-  // Touch Swipe Support
+  // Touch Swipe
   let touchStartX = 0;
   let touchEndX = 0;
 
@@ -302,7 +295,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }, { passive: true });
 
-  // Code Copy Buttons
+  // Copy Code Buttons
   document.querySelectorAll('.copy-btn').forEach(btn => {
     btn.addEventListener('click', async () => {
       const codePanel = btn.closest('.code-panel');
@@ -324,7 +317,6 @@ document.addEventListener('DOMContentLoaded', () => {
           btn.style.color = '';
         }, 2000);
       } catch (err) {
-        // Fallback for older environments
         const textArea = document.createElement('textarea');
         textArea.value = codeText;
         document.body.appendChild(textArea);
@@ -337,433 +329,317 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   // ==========================================================================
-  // Interactive Sandboxes for Day 7 Topics
+  // Interactive Sandboxes for Combined Day 7
   // ==========================================================================
 
-  // --- Sandbox 1: Slide 2 Format Comparator ---
-  const formatTabBtns = document.querySelectorAll('.format-tab-btn');
-  const formatDisplayBox = document.getElementById('formatDisplayBox');
-  const formatAccessBox = document.getElementById('formatAccessBox');
+  // In-Memory Database
+  const studentsDB = [
+    { id: 101, name: "Arun", course: "MERN Stack", attendance: 85 },
+    { id: 102, name: "Rahul", course: "Python", attendance: 72 }
+  ];
 
-  const formatSamples = {
+  function dbGetStudent(id) {
+    return studentsDB.find(s => s.id === id) || null;
+  }
+
+  function dbGetAttendance(id) {
+    const s = dbGetStudent(id);
+    if (!s) return { error: "Student not found" };
+    return { studentId: id, name: s.name, attendance: s.attendance };
+  }
+
+  // --- Sandbox 1: Slide 2 Format Comparator ---
+  const s2Btns = document.querySelectorAll('.s2-format-btn');
+  const s2Display = document.getElementById('s2Display');
+  const s2Eval = document.getElementById('s2Eval');
+
+  const s2Formats = {
     paragraph: {
-      text: "The student's name is Rahul. He is 22 years old and learning MERN Stack. His email address is rahul@gmail.com.",
-      access: "❌ student.name => undefined\n❌ student.age => undefined\nRequires complex and brittle regex to parse!",
-      status: "Unstructured Freeform Text (Fragile)"
+      text: "The student's name is Rahul. He is 22 years old and learning MERN Stack. His email is rahul@gmail.com.",
+      eval: "❌ student.name => undefined\n❌ student.age => undefined\nResult is unstructured prose. Requires fragile regex to parse."
     },
     csv: {
       text: "Rahul, 22, MERN Stack, rahul@gmail.com",
-      access: "⚠️ parts[0] => 'Rahul', parts[1] => '22'\nBreaks if user enters a comma in address or skills!",
-      status: "Comma Delimited (Ambiguous & Brittle)"
-    },
-    bullets: {
-      text: "Name: Rahul\nAge: 22\nCourse: MERN Stack\nEmail: rahul@gmail.com",
-      access: "⚠️ Line split required. Breaks if LLM outputs 'Student Name' instead of 'Name'.",
-      status: "Key-Value Text (Non-Standard)"
+      eval: "⚠️ parts[0] => 'Rahul', parts[1] => '22'\nBreaks if user input contains commas or missing optional fields."
     },
     json: {
       text: '{\n  "name": "Rahul",\n  "age": 22,\n  "course": "MERN Stack",\n  "email": "rahul@gmail.com"\n}',
-      access: "✅ student.name  => 'Rahul'\n✅ student.age   => 22\n✅ student.email => 'rahul@gmail.com'\nClean, typed, and directly queryable!",
-      status: "Structured JSON (Production Standard)"
+      eval: "✅ student.name  => 'Rahul'\n✅ student.age   => 22\n✅ student.email => 'rahul@gmail.com'\nClean, typed, predictable, and directly usable by Node.js!"
     }
   };
 
-  formatTabBtns.forEach(btn => {
+  s2Btns.forEach(btn => {
     btn.addEventListener('click', () => {
-      formatTabBtns.forEach(b => b.classList.remove('active'));
+      s2Btns.forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
-      const format = btn.dataset.format;
-      const sample = formatSamples[format];
-      if (sample && formatDisplayBox && formatAccessBox) {
-        formatDisplayBox.textContent = sample.text;
-        formatAccessBox.textContent = `${sample.status}\n\nProperty Access Test:\n${sample.access}`;
+      const target = s2Formats[btn.dataset.format];
+      if (target && s2Display && s2Eval) {
+        s2Display.textContent = target.text;
+        s2Eval.textContent = target.eval;
       }
     });
   });
 
-  // --- Sandbox 2: Slide 3 JSON Rules Inspector ---
-  const jsonTestInput = document.getElementById('jsonTestInput');
-  const jsonTestBtn = document.getElementById('jsonTestBtn');
-  const jsonRuleResult = document.getElementById('jsonRuleResult');
-  const jsonPresetSelect = document.getElementById('jsonPresetSelect');
+  // --- Sandbox 2: Slide 3 JSON Rules Tester ---
+  const s3Input = document.getElementById('s3Input');
+  const s3BtnValidate = document.getElementById('s3BtnValidate');
+  const s3Result = document.getElementById('s3Result');
+  const s3PresetSelect = document.getElementById('s3PresetSelect');
 
-  const jsonPresets = {
-    valid: '{\n  "name": "Rahul",\n  "age": 22,\n  "isStudent": true,\n  "skills": ["JavaScript", "React", "Node.js"]\n}',
-    singleQuote: "{\n  'name': 'Rahul',\n  'age': 22\n}",
+  const s3Presets = {
+    valid: '{\n  "name": "Rahul",\n  "age": 22,\n  "course": "MERN Stack"\n}',
+    singleQuotes: "{\n  'name': 'Rahul',\n  'age': 22\n}",
     trailingComma: '{\n  "name": "Rahul",\n  "age": 22,\n}',
-    unquotedKey: '{\n  name: "Rahul",\n  age: 22\n}',
-    commentIncluded: '{\n  // Student info\n  "name": "Rahul",\n  "age": 22\n}'
+    comments: '{\n  // Student data\n  "name": "Rahul",\n  "age": 22\n}'
   };
 
-  if (jsonPresetSelect && jsonTestInput) {
-    jsonPresetSelect.addEventListener('change', () => {
-      const val = jsonPresetSelect.value;
-      if (jsonPresets[val]) {
-        jsonTestInput.value = jsonPresets[val];
-        testJsonSyntax();
+  if (s3PresetSelect && s3Input) {
+    s3PresetSelect.addEventListener('change', () => {
+      const val = s3PresetSelect.value;
+      if (s3Presets[val]) {
+        s3Input.value = s3Presets[val];
+        testJsonS3();
       }
     });
   }
 
-  function testJsonSyntax() {
-    if (!jsonTestInput || !jsonRuleResult) return;
-    const raw = jsonTestInput.value.trim();
-
+  function testJsonS3() {
+    if (!s3Input || !s3Result) return;
+    const raw = s3Input.value.trim();
     try {
       const parsed = JSON.parse(raw);
-      jsonRuleResult.className = 'sandbox-result card-green';
-      jsonRuleResult.textContent = `✅ VALID JSON!\n\nParsed Type: ${typeof parsed}\nKey Count: ${Object.keys(parsed).length}\n\nFormatted Output:\n${JSON.stringify(parsed, null, 2)}`;
+      s3Result.className = 'sandbox-result card-green';
+      s3Result.textContent = `✅ VALID JSON!\nType: ${typeof parsed}\nKey Count: ${Object.keys(parsed).length}\n\nFormatted:\n${JSON.stringify(parsed, null, 2)}`;
     } catch (err) {
-      jsonRuleResult.className = 'sandbox-result card-rose';
+      s3Result.className = 'sandbox-result card-rose';
       let hint = "";
-      if (raw.includes("'")) hint += "• Hint: JSON strings and keys must use DOUBLE QUOTES (\"), not single quotes.\n";
+      if (raw.includes("'")) hint += "• Hint: JSON strings and keys MUST use double quotes (\").\n";
       if (/,\s*[}\]]/.test(raw)) hint += "• Hint: Trailing commas are strictly prohibited in JSON.\n";
-      if (/\/\/|\/\*/.test(raw)) hint += "• Hint: JSON does not support comments (// or /* */).\n";
-      if (/[{,]\s*[a-zA-Z0-9_]+\s*:/.test(raw)) hint += "• Hint: All object property keys must be wrapped in double quotes.\n";
-
-      jsonRuleResult.textContent = `❌ SYNTAX ERROR:\n${err.message}\n\nRule Checks:\n${hint || "• Ensure braces and brackets match properly."}`;
+      if (/\/\/|\/\*/.test(raw)) hint += "• Hint: JSON does not permit comments.\n";
+      s3Result.textContent = `❌ SyntaxError in JSON.parse():\n${err.message}\n\n${hint}`;
     }
   }
 
-  if (jsonTestBtn) jsonTestBtn.addEventListener('click', testJsonSyntax);
+  if (s3BtnValidate) s3BtnValidate.addEventListener('click', testJsonS3);
 
-  // --- Sandbox 3: Slide 4 JSON.stringify vs JSON.parse ---
-  const s4ObjName = document.getElementById('s4ObjName');
-  const s4ObjAge = document.getElementById('s4ObjAge');
-  const s4ObjCourse = document.getElementById('s4ObjCourse');
-  const s4BtnStringify = document.getElementById('s4BtnStringify');
-  const s4BtnParse = document.getElementById('s4BtnParse');
-  const s4JsonText = document.getElementById('s4JsonText');
-  const s4ConsoleLog = document.getElementById('s4ConsoleLog');
+  // --- Sandbox 3: Slide 8 parse() vs safeParse() ---
+  const s8InputName = document.getElementById('s8InputName');
+  const s8InputAge = document.getElementById('s8InputAge');
+  const s8BtnParse = document.getElementById('s8BtnParse');
+  const s8BtnSafe = document.getElementById('s8BtnSafe');
+  const s8Result = document.getElementById('s8Result');
 
-  if (s4BtnStringify && s4JsonText) {
-    s4BtnStringify.addEventListener('click', () => {
-      const jsObj = {
-        name: s4ObjName ? s4ObjName.value : "Rahul",
-        age: s4ObjAge ? parseInt(s4ObjAge.value, 10) : 22,
-        course: s4ObjCourse ? s4ObjCourse.value : "MERN Stack"
-      };
+  if (s8BtnParse && s8Result) {
+    s8BtnParse.addEventListener('click', () => {
+      const name = s8InputName ? s8InputName.value : "";
+      const rawAge = s8InputAge ? s8InputAge.value : "";
+      const age = isNaN(Number(rawAge)) || rawAge.trim() === "" ? rawAge : Number(rawAge);
 
-      const jsonStr = JSON.stringify(jsObj, null, 2);
-      s4JsonText.value = jsonStr;
-      if (s4ConsoleLog) {
-        s4ConsoleLog.textContent = `// Result of JSON.stringify(jsObj, null, 2):\nType: ${typeof jsonStr} (Plain Text String)\nLength: ${jsonStr.length} characters`;
-      }
-    });
-  }
-
-  if (s4BtnParse && s4JsonText && s4ConsoleLog) {
-    s4BtnParse.addEventListener('click', () => {
-      try {
-        const parsed = JSON.parse(s4JsonText.value);
-        s4ConsoleLog.textContent = `// Result of JSON.parse(studentJSON):\nType: ${typeof parsed} (In-Memory JavaScript Object)\nstudent.name = "${parsed.name}"\nstudent.age = ${parsed.age}\nstudent.course = "${parsed.course}"`;
-      } catch (err) {
-        s4ConsoleLog.textContent = `❌ SyntaxError in JSON.parse():\n${err.message}`;
-      }
-    });
-  }
-
-  // --- Sandbox 4: Slide 8 JSON Schema Validator ---
-  const s8PresetBtns = document.querySelectorAll('.s8-preset-btn');
-  const s8PayloadView = document.getElementById('s8PayloadView');
-  const s8ValidationResult = document.getElementById('s8ValidationResult');
-
-  const s8Presets = {
-    valid: {
-      data: {
-        name: "Rahul",
-        age: 22,
-        course: "MERN Stack",
-        email: "rahul@gmail.com"
-      },
-      status: "PASS",
-      msg: "✅ VALID DATA: Conforms perfectly to JSON Schema.\n• name: string (Passed)\n• age: integer (Passed)\n• course: string (Passed)\n• email: valid format (Passed)\n• additionalProperties: false (Passed)"
-    },
-    wrongTypes: {
-      data: {
-        name: "Rahul",
-        age: "twenty-two",
-        course: "MERN Stack",
-        email: "wrong-email"
-      },
-      status: "FAIL",
-      msg: "❌ SCHEMA VIOLATION (Type & Format Mismatch):\n1. Field 'age': Expected integer, received string ('twenty-two')\n2. Field 'email': String does not match format 'email' ('wrong-email')"
-    },
-    missingFields: {
-      data: {
-        name: "Rahul",
-        age: 22
-      },
-      status: "FAIL",
-      msg: "❌ SCHEMA VIOLATION (Missing Required Properties):\n1. Missing required field: 'course'\n2. Missing required field: 'email'\nSchema requires all 4 fields to be defined!"
-    }
-  };
-
-  s8PresetBtns.forEach(btn => {
-    btn.addEventListener('click', () => {
-      s8PresetBtns.forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-      const type = btn.dataset.preset;
-      const target = s8Presets[type];
-      if (target && s8PayloadView && s8ValidationResult) {
-        s8PayloadView.textContent = JSON.stringify(target.data, null, 2);
-        s8ValidationResult.className = `sandbox-result ${target.status === 'PASS' ? 'card-green' : 'card-rose'}`;
-        s8ValidationResult.textContent = target.msg;
-      }
-    });
-  });
-
-  // --- Sandbox 5: Slide 12 safeParse Evaluator ---
-  const s12InputName = document.getElementById('s12InputName');
-  const s12InputAge = document.getElementById('s12InputAge');
-  const s12InputEmail = document.getElementById('s12InputEmail');
-  const s12InputCourse = document.getElementById('s12InputCourse');
-  const s12RunBtn = document.getElementById('s12RunBtn');
-  const s12Output = document.getElementById('s12Output');
-
-  // Client-side lightweight Zod mock for interactive presentation
-  function mockZodSafeParse(data) {
-    const issues = [];
-
-    // name check
-    if (typeof data.name !== 'string' || data.name.trim().length < 2) {
-      issues.push({
-        code: "too_small",
-        minimum: 2,
-        type: "string",
-        inclusive: true,
-        message: "String must contain at least 2 character(s)",
-        path: ["name"]
-      });
-    }
-
-    // age check
-    if (typeof data.age !== 'number' || isNaN(data.age)) {
-      issues.push({
-        code: "invalid_type",
-        expected: "number",
-        received: typeof data.age === 'string' ? 'string' : 'nan',
-        path: ["age"],
-        message: "Expected number, received " + (typeof data.age)
-      });
-    } else {
-      if (!Number.isInteger(data.age)) {
-        issues.push({
-          code: "invalid_type",
-          expected: "integer",
-          received: "float",
-          path: ["age"],
-          message: "Expected integer, received float"
-        });
-      } else if (data.age < 16 || data.age > 60) {
-        issues.push({
-          code: "too_small_or_big",
-          path: ["age"],
-          message: "Age must be between 16 and 60"
-        });
-      }
-    }
-
-    // email check
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (typeof data.email !== 'string' || !emailRegex.test(data.email)) {
-      issues.push({
-        validation: "email",
-        code: "invalid_string",
-        message: "Invalid email address",
-        path: ["email"]
-      });
-    }
-
-    // course check
-    const allowed = ["MERN Stack", "Python", "Data Science"];
-    if (!allowed.includes(data.course)) {
-      issues.push({
-        code: "invalid_enum_value",
-        options: allowed,
-        path: ["course"],
-        message: `Invalid enum value. Expected 'MERN Stack' | 'Python' | 'Data Science', received '${data.course}'`
-      });
-    }
-
-    if (issues.length > 0) {
-      return {
-        success: false,
-        error: { issues }
-      };
-    }
-
-    return {
-      success: true,
-      data: {
-        name: data.name,
-        age: data.age,
-        email: data.email,
-        course: data.course
-      }
-    };
-  }
-
-  if (s12RunBtn && s12Output) {
-    s12RunBtn.addEventListener('click', () => {
-      const rawAge = s12InputAge ? s12InputAge.value : "";
-      const parsedAge = isNaN(Number(rawAge)) || rawAge.trim() === "" ? rawAge : Number(rawAge);
-
-      const candidate = {
-        name: s12InputName ? s12InputName.value : "",
-        age: parsedAge,
-        email: s12InputEmail ? s12InputEmail.value : "",
-        course: s12InputCourse ? s12InputCourse.value : ""
-      };
-
-      const result = mockZodSafeParse(candidate);
-
-      if (result.success) {
-        s12Output.className = 'sandbox-result card-green';
-        s12Output.textContent = `// Result: safeParse() SUCCESS!\n{\n  "success": true,\n  "data": ${JSON.stringify(result.data, null, 2)}\n}\n\nNo exceptions thrown! result.data is safe for DB insert.`;
+      if (typeof age !== 'number' || typeof name !== 'string' || name.length < 2) {
+        s8Result.className = 'sandbox-result card-rose';
+        s8Result.textContent = `💥 ZodError thrown! Uncaught exception would crash your Node.js process unless caught in try/catch:\n\nZodError: [\n  { "path": ["age"], "message": "Expected number, received ${typeof age}" }\n]`;
       } else {
-        s12Output.className = 'sandbox-result card-rose';
-        s12Output.textContent = `// Result: safeParse() FAILED (No exception thrown!)\n{\n  "success": false,\n  "error": {\n    "issues": ${JSON.stringify(result.error.issues, null, 2)}\n  }\n}\n\nInspect result.error.issues to provide HTTP 400/422 responses.`;
+        s8Result.className = 'sandbox-result card-green';
+        s8Result.textContent = `✅ studentSchema.parse() succeeded!\nReturns validated object:\n${JSON.stringify({ name, age }, null, 2)}`;
       }
     });
   }
 
-  // --- Sandbox 6: Slide 14 Express API Simulator ---
-  const s14BtnSendValid = document.getElementById('s14BtnSendValid');
-  const s14BtnSendInvalid = document.getElementById('s14BtnSendInvalid');
-  const s14ReqBody = document.getElementById('s14ReqBody');
-  const s14ResStatus = document.getElementById('s14ResStatus');
-  const s14ResBody = document.getElementById('s14ResBody');
+  if (s8BtnSafe && s8Result) {
+    s8BtnSafe.addEventListener('click', () => {
+      const name = s8InputName ? s8InputName.value : "";
+      const rawAge = s8InputAge ? s8InputAge.value : "";
+      const age = isNaN(Number(rawAge)) || rawAge.trim() === "" ? rawAge : Number(rawAge);
 
-  if (s14BtnSendValid && s14ReqBody && s14ResStatus && s14ResBody) {
-    s14BtnSendValid.addEventListener('click', () => {
-      const payload = {
-        name: "Rahul",
-        age: 22,
-        email: "rahul@gmail.com",
-        course: "MERN Stack"
-      };
-      s14ReqBody.textContent = JSON.stringify(payload, null, 2);
-      s14ResStatus.textContent = "HTTP/1.1 201 Created";
-      s14ResStatus.style.color = "var(--accent-green)";
-      s14ResBody.textContent = JSON.stringify({
-        success: true,
-        message: "Student data is valid",
-        data: payload
-      }, null, 2);
+      if (typeof age !== 'number' || typeof name !== 'string' || name.length < 2) {
+        s8Result.className = 'sandbox-result card-amber';
+        s8Result.textContent = `🛡️ safeParse() handled gracefully (NO exception thrown!):\n{\n  "success": false,\n  "error": {\n    "issues": [\n      { "path": ["age"], "message": "Expected number, received ${typeof age}" }\n    ]\n  }\n}\n\nCan directly return HTTP 400 with result.error.issues!`;
+      } else {
+        s8Result.className = 'sandbox-result card-green';
+        s8Result.textContent = `✅ safeParse() succeeded!\n{\n  "success": true,\n  "data": ${JSON.stringify({ name, age }, null, 2)}\n}`;
+      }
     });
   }
 
-  if (s14BtnSendInvalid && s14ReqBody && s14ResStatus && s14ResBody) {
-    s14BtnSendInvalid.addEventListener('click', () => {
-      const payload = {
-        name: "R",
-        age: "twenty",
-        email: "invalid-email",
-        course: "MERN Stack"
-      };
-      s14ReqBody.textContent = JSON.stringify(payload, null, 2);
-      s14ResStatus.textContent = "HTTP/1.1 400 Bad Request";
-      s14ResStatus.style.color = "var(--accent-rose)";
-      s14ResBody.textContent = JSON.stringify({
-        success: false,
-        errors: [
-          { path: ["name"], message: "String must contain at least 2 characters" },
-          { path: ["age"], message: "Expected number, received string" },
-          { path: ["email"], message: "Invalid email address" }
-        ]
-      }, null, 2);
+  // --- Sandbox 4: Slide 11 Normal LLM vs Function Calling ---
+  const s11BtnMath = document.getElementById('s11BtnMath');
+  const s11BtnStudent = document.getElementById('s11BtnStudent');
+  const s11Display = document.getElementById('s11Display');
+
+  if (s11BtnMath && s11BtnStudent && s11Display) {
+    s11BtnMath.addEventListener('click', () => {
+      s11BtnMath.classList.add('active');
+      s11BtnStudent.classList.remove('active');
+      s11Display.innerHTML = `
+        <div class="flow-steps">
+          <div class="flow-node">User: "What is 25 × 4?"</div>
+          <div class="flow-arrow">➔</div>
+          <div class="flow-node primary">Groq LLM</div>
+          <div class="flow-arrow">➔</div>
+          <div class="flow-node success">"The answer is 100."</div>
+        </div>
+        <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 6px;">
+          • The model generates text directly from internal training weights. No backend code executed.
+        </p>
+      `;
+    });
+
+    s11BtnStudent.addEventListener('click', () => {
+      s11BtnStudent.classList.add('active');
+      s11BtnMath.classList.remove('active');
+      s11Display.innerHTML = `
+        <div class="flow-steps">
+          <div class="flow-node">User: "Attendance of 101?"</div>
+          <div class="flow-arrow">➔</div>
+          <div class="flow-node primary">LLM requests get_attendance(101)</div>
+          <div class="flow-arrow">➔</div>
+          <div class="flow-node" style="background:#FEF3C7; border-color:#F59E0B;">Node.js queries DB</div>
+          <div class="flow-arrow">➔</div>
+          <div class="flow-node success">Returns { attendance: 85 }</div>
+          <div class="flow-arrow">➔</div>
+          <div class="flow-node primary">LLM: "Arun has 85% attendance."</div>
+        </div>
+        <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 6px;">
+          • The LLM <strong>did not guess</strong>. It requested your Node.js function, which queried the live database!
+        </p>
+      `;
     });
   }
 
-  // --- Sandbox 7: Slide 17 Zod Advanced Transform Tester ---
-  const s17InputText = document.getElementById('s17InputText');
-  const s17TransformBtn = document.getElementById('s17TransformBtn');
-  const s17Output = document.getElementById('s17Output');
+  // --- Sandbox 5: Slide 14 Tool Selection Simulator ---
+  const s14Input = document.getElementById('s14Input');
+  const s14BtnSelect = document.getElementById('s14BtnSelect');
+  const s14ChoiceMode = document.getElementById('s14ChoiceMode');
+  const s14Output = document.getElementById('s14Output');
+  const s14Presets = document.querySelectorAll('.s14-preset');
 
-  if (s17TransformBtn && s17InputText && s17Output) {
-    s17TransformBtn.addEventListener('click', () => {
-      const raw = s17InputText.value;
-      const transformed = raw.trim().toUpperCase();
-      s17Output.textContent = `Input: "${raw}" (length: ${raw.length})\n\nz.string().transform(v => v.trim().toUpperCase()).parse(input)\n\nOutput: "${transformed}" (length: ${transformed.length})`;
-    });
-  }
-
-  // --- Sandbox 8: Slide 20 AI Student Extractor Final Project Simulator ---
-  const s20InputText = document.getElementById('s20InputText');
-  const s20RunBtn = document.getElementById('s20RunBtn');
-  const s20Status = document.getElementById('s20Status');
-  const s20Output = document.getElementById('s20Output');
-  const s20SampleBtns = document.querySelectorAll('.s20-sample-btn');
-
-  const s20Samples = {
-    sample1: "Rahul is 22 years old. His email is rahul@gmail.com. He is learning MERN Stack and knows JavaScript and React.",
-    sample2: "Priya Sharma (age 24, email: priya.dev@gmail.com) wants to enroll in Python for Machine Learning. She is skilled in Python, NumPy and Pandas.",
-    sample3: "Aman Gupta, aman@gupta.io, 20. Learning Data Science. Knows SQL and Python."
-  };
-
-  s20SampleBtns.forEach(btn => {
+  s14Presets.forEach(btn => {
     btn.addEventListener('click', () => {
-      const sampleKey = btn.dataset.sample;
-      if (s20Samples[sampleKey] && s20InputText) {
-        s20InputText.value = s20Samples[sampleKey];
-      }
+      if (s14Input) s14Input.value = btn.dataset.q;
     });
   });
 
-  if (s20RunBtn && s20InputText && s20Status && s20Output) {
-    s20RunBtn.addEventListener('click', () => {
-      const message = s20InputText.value.trim();
-      if (!message) {
-        s20Status.textContent = "HTTP 400 Bad Request";
-        s20Status.style.color = "var(--accent-amber)";
-        s20Output.textContent = JSON.stringify({
-          success: false,
-          message: "Student information message is required."
-        }, null, 2);
+  if (s14BtnSelect && s14Input && s14Output) {
+    s14BtnSelect.addEventListener('click', () => {
+      const q = s14Input.value.toLowerCase();
+      const mode = s14ChoiceMode ? s14ChoiceMode.value : "auto";
+      let tool = "none";
+      let args = {};
+
+      if (mode === "none") {
+        s14Output.textContent = `Decision: tool_choice is 'none'. Model forces direct natural language generation without invoking tools.`;
         return;
       }
 
-      s20Status.textContent = "Processing: Sending to Groq API (temperature: 0.2)...";
-      s20Status.style.color = "var(--primary-accent)";
-      s20Output.textContent = "// 1. Constructing System Prompt with strict JSON schema...\n// 2. Dispatching request to Groq LLM (llama-3.3-70b-versatile)...";
+      if (/attendance/i.test(q)) {
+        tool = "get_attendance";
+        const m = q.match(/\b(10[12])\b/);
+        args = { studentId: m ? parseInt(m[1], 10) : 101 };
+      } else if (/who is|student|details|course/i.test(q)) {
+        tool = "get_student";
+        const m = q.match(/\b(10[12])\b/);
+        args = { studentId: m ? parseInt(m[1], 10) : 101 };
+      } else {
+        if (mode === "required") {
+          tool = "get_student";
+          args = { studentId: 101 };
+        }
+      }
+
+      s14Output.textContent = `Model Decision Analysis:\n• tool_choice mode: "${mode}"\n• Selected Tool: "${tool}"\n• Inferred Arguments: ${JSON.stringify(args)}\n• Matched Description: ${tool !== 'none' ? 'Matches requested database entity lookup' : 'General conversational query; no tool needed'}`;
+    });
+  }
+
+  // --- Sandbox 6: Slide 16 Zod Tool Argument Validator ---
+  const s16RawArgs = document.getElementById('s16RawArgs');
+  const s16BtnValidate = document.getElementById('s16BtnValidate');
+  const s16Result = document.getElementById('s16Result');
+
+  if (s16BtnValidate && s16RawArgs && s16Result) {
+    s16BtnValidate.addEventListener('click', () => {
+      const raw = s16RawArgs.value.trim();
+      let parsed;
+      try {
+        parsed = JSON.parse(raw);
+      } catch (err) {
+        s16Result.className = 'sandbox-result card-rose';
+        s16Result.textContent = `❌ JSON.parse() failed:\n${err.message}`;
+        return;
+      }
+
+      // Check z.object({ studentId: z.number().int().positive() })
+      if (typeof parsed.studentId !== 'number' || isNaN(parsed.studentId) || !Number.isInteger(parsed.studentId) || parsed.studentId <= 0) {
+        s16Result.className = 'sandbox-result card-rose';
+        s16Result.textContent = `❌ Zod Validation Failed:\n{\n  "success": false,\n  "error": "studentId must be a positive integer"\n}\n\nBlocked before running database function!`;
+      } else {
+        s16Result.className = 'sandbox-result card-green';
+        s16Result.textContent = `✅ Zod Validation Passed!\n{\n  "success": true,\n  "data": {\n    "studentId": ${parsed.studentId}\n  }\n}\n\nSafe to execute: availableTools.get_student(${parsed.studentId})`;
+      }
+    });
+  }
+
+  // --- Sandbox 7: Slide 23 AI Student Assistant Interactive Chat ---
+  const s23Input = document.getElementById('s23Input');
+  const s23SendBtn = document.getElementById('s23SendBtn');
+  const s23Presets = document.querySelectorAll('.s23-preset');
+  const s23ChatLog = document.getElementById('s23ChatLog');
+
+  s23Presets.forEach(btn => {
+    btn.addEventListener('click', () => {
+      if (s23Input) s23Input.value = btn.dataset.q;
+    });
+  });
+
+  if (s23SendBtn && s23Input && s23ChatLog) {
+    s23SendBtn.addEventListener('click', () => {
+      const query = s23Input.value.trim();
+      if (!query) return;
+
+      s23ChatLog.innerHTML = `<div style="color: #60A5FA;">[1/4] Sending query to Groq LLM with tool schemas...</div>`;
 
       setTimeout(() => {
-        // Extract heuristic data from text
-        const nameMatch = message.match(/([A-Z][a-z]+(?:\s+[A-Z][a-z]+)?)/);
-        const ageMatch = message.match(/\b(1[6-9]|[2-5][0-9]|60)\b/);
-        const emailMatch = message.match(/[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/);
-        
-        let course = "MERN Stack";
-        if (/python/i.test(message)) course = "Python";
-        else if (/data science/i.test(message)) course = "Data Science";
+        let toolNeeded = null;
+        let inferredId = 101;
+        if (/102/.test(query)) inferredId = 102;
 
-        const skills = [];
-        if (/javascript/i.test(message)) skills.push("JavaScript");
-        if (/react/i.test(message)) skills.push("React");
-        if (/node/i.test(message)) skills.push("Node.js");
-        if (/python/i.test(message)) skills.push("Python");
-        if (/sql/i.test(message)) skills.push("SQL");
-        if (/numpy/i.test(message)) skills.push("NumPy");
-        if (/pandas/i.test(message)) skills.push("Pandas");
-        if (skills.length === 0) skills.push("Web Development");
+        if (/attendance/i.test(query)) {
+          toolNeeded = { name: "get_attendance", args: { studentId: inferredId } };
+        } else if (/who is|student|course|mern|python/i.test(query)) {
+          toolNeeded = { name: "get_student", args: { studentId: inferredId } };
+        }
 
-        const simulatedAIResponse = {
-          name: nameMatch ? nameMatch[1] : "Student",
-          age: ageMatch ? parseInt(ageMatch[1], 10) : 21,
-          email: emailMatch ? emailMatch[0] : "student@example.com",
-          course: course,
-          skills: skills
-        };
+        if (!toolNeeded) {
+          s23ChatLog.innerHTML = `
+            <div style="color: #94A3B8;">[1/2] Model evaluated question. No tool needed.</div>
+            <div style="color: #34D399; margin-top: 6px;"><strong>Assistant:</strong> Hello! I am the AI Student Assistant. You can ask me to look up details or attendance records for student 101 or 102!</div>
+          `;
+          return;
+        }
 
-        s20Status.textContent = "HTTP 200 OK (Validated with Zod)";
-        s20Status.style.color = "var(--accent-green)";
-        s20Output.textContent = JSON.stringify({
-          success: true,
-          message: "Student information extracted successfully",
-          data: simulatedAIResponse
-        }, null, 2);
-      }, 700);
+        let toolData = null;
+        if (toolNeeded.name === "get_student") {
+          toolData = dbGetStudent(toolNeeded.args.studentId);
+        } else {
+          toolData = dbGetAttendance(toolNeeded.args.studentId);
+        }
+
+        let finalAnswer = "";
+        if (toolNeeded.name === "get_student") {
+          finalAnswer = `Student ${toolData.id} is ${toolData.name}. They are enrolled in the ${toolData.course} course.`;
+        } else {
+          finalAnswer = `${toolData.name}'s attendance is ${toolData.attendance}%. ${toolData.attendance >= 75 ? 'Their attendance meets the minimum 75% requirement.' : 'Their attendance is below 75%.'}`;
+        }
+
+        s23ChatLog.innerHTML = `
+          <div style="color: #38BDF8;">[1/4] <strong>Groq LLM Request:</strong> tool_calls: [{ name: "${toolNeeded.name}", args: '${JSON.stringify(toolNeeded.args)}' }]</div>
+          <div style="color: #FBBF24; margin-top: 4px;">[2/4] <strong>Node.js Validation:</strong> Zod safeParse passed! Running ${toolNeeded.name}(${toolNeeded.args.studentId})...</div>
+          <div style="color: #A78BFA; margin-top: 4px;">[3/4] <strong>Tool Result:</strong> ${JSON.stringify(toolData)} returned with role: "tool"</div>
+          <div style="color: #34D399; margin-top: 8px; padding-top: 8px; border-top: 1px solid #334155;">
+            <strong>[4/4] Final Synthesized Answer:</strong><br>
+            "${finalAnswer}"
+          </div>
+        `;
+      }, 500);
     });
   }
 
