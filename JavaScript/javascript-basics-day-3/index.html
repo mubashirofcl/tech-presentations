@@ -1,0 +1,1624 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JavaScript Fundamentals – Day 3: DOM, Events, Asynchronous JS &amp; ES Modules</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="app-container">
+
+    <!-- Top Presentation Header -->
+    <header class="pres-header">
+      <div class="brand-section">
+        <span class="brand-badge">JavaScript Day 3</span>
+        <div class="pres-title">
+          JavaScript Fundamentals <span>&bull; DOM, Events, Async JS &amp; Modules</span>
+        </div>
+      </div>
+      <div class="header-center">
+        <div class="slide-counter-badge" id="slideCounter">1 / 25</div>
+      </div>
+      <div class="header-actions">
+        <button class="btn-header" id="fullscreenBtn" title="Toggle Fullscreen (F)">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path></svg>
+          Full
+        </button>
+        <button class="btn-header" id="tocBtn" title="Table of Contents (T)">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+          Index
+        </button>
+        <button class="btn-header" id="helpBtn" title="Keyboard Shortcuts (?)">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+          Help
+        </button>
+      </div>
+    </header>
+
+    <!-- Progress Bar -->
+    <div class="pres-progress-container">
+      <div class="pres-progress-bar" id="progressBar" style="width: 4.0%;"></div>
+    </div>
+
+    <!-- Main Slide Viewport -->
+    <main class="slide-viewport">
+
+      <section class="slide active" id="slide-1">
+        <div class="slide-header">
+          <div class="slide-title-group">
+            <span class="slide-category"><span class="badge-section">Section 1</span> DOM Manipulation</span>
+            <h2 class="slide-title">JavaScript Fundamentals &ndash; Day 3</h2>
+            <p class="slide-subtitle">DOM Manipulation, Event Handling, Asynchronous JavaScript &amp; ES Modules</p>
+          </div>
+          <span class="slide-tag">DAY 3 &bull; WEB &amp; ASYNC JS</span>
+        </div>
+
+        <div class="slide-body">
+          <div class="grid-60-40">
+            <div class="card card-accent">
+              <div class="card-title"><span class="icon">🎯</span> What Will We Master Today?</div>
+              <p class="card-desc">
+                Today, we bridge foundational JavaScript with modern web development. You will learn how JavaScript interacts with browser HTML, reacts to user events, communicates asynchronously with remote APIs, and organizes into scalable ES modules.
+              </p>
+              <div class="grid-2col" style="gap: 10px; margin-top: 6px;">
+                <div class="card" style="padding: 10px; background: #F8FAFC;">
+                  <strong style="color: var(--primary-deep); font-size: 0.82rem;">1. DOM Manipulation</strong>
+                  <span style="font-size: 0.74rem; color: var(--text-body);">Selecting, modifying, creating, and removing HTML elements dynamically.</span>
+                </div>
+                <div class="card" style="padding: 10px; background: #F8FAFC;">
+                  <strong style="color: var(--primary-deep); font-size: 0.82rem;">2. Event Handling</strong>
+                  <span style="font-size: 0.74rem; color: var(--text-body);">Listening for clicks, form submits, event objects, and preventDefault().</span>
+                </div>
+                <div class="card" style="padding: 10px; background: #F8FAFC;">
+                  <strong style="color: var(--primary-deep); font-size: 0.82rem;">3. Asynchronous JS</strong>
+                  <span style="font-size: 0.74rem; color: var(--text-body);">Callbacks, escaping callback hell, Promises, and modern async/await syntax.</span>
+                </div>
+                <div class="card" style="padding: 10px; background: #F8FAFC;">
+                  <strong style="color: var(--primary-deep); font-size: 0.82rem;">4. Fetch, JSON &amp; Modules</strong>
+                  <span style="font-size: 0.74rem; color: var(--text-body);">Consuming REST APIs, JSON parsing, ES6 import/export, and User Explorer app.</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-title"><span class="icon">🚀</span> Preparation for React &amp; GenAI</div>
+              <ul class="bullet-list" style="font-size: 0.78rem;">
+                <li><span class="icon">✓</span> <strong>DOM &amp; Events:</strong> Direct foundation for React JSX and synthetic event handlers (<code>onClick</code>, <code>onChange</code>).</li>
+                <li><span class="icon">✓</span> <strong>Async/Await:</strong> Essential requirement for querying LLM APIs (Groq, OpenAI) and backend microservices.</li>
+                <li><span class="icon">✓</span> <strong>Fetch &amp; JSON:</strong> Universal client-server data exchange format across modern fullstack applications.</li>
+                <li><span class="icon">✓</span> <strong>ES Modules:</strong> Architectural standard for React components and modern Node.js packages.</li>
+              </ul>
+              <div class="alert-box alert-info" style="margin-top: 8px;">
+                <div class="alert-title">Today's Milestone</div>
+                <div class="alert-text">Build a live modular User Explorer application with real API calls, loading states, and error handling.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+
+      <section class="slide" id="slide-2">
+        <div class="slide-header">
+          <div class="slide-title-group">
+            <span class="slide-category"><span class="badge-section">Section 1</span> DOM Manipulation</span>
+            <h2 class="slide-title">What is the DOM?</h2>
+            <p class="slide-subtitle">Document Object Model: The structured tree representation of HTML in browser memory</p>
+          </div>
+          <span class="slide-tag">DOM ARCHITECTURE</span>
+        </div>
+
+        <div class="slide-body">
+          <div class="grid-2col">
+            <div class="card">
+              <div class="card-title"><span class="icon">🌳</span> The Browser's Object Tree</div>
+              <p class="card-desc">
+                When a web browser loads an HTML file, it parses the markup and constructs a structured object tree called the <strong>Document Object Model (DOM)</strong>.
+              </p>
+              <p class="card-desc">
+                Through the DOM, JavaScript gains programmatic access to:
+              </p>
+              <ul class="bullet-list" style="font-size: 0.78rem;">
+                <li><span class="icon">•</span> Access and inspect HTML tags, text, and attributes.</li>
+                <li><span class="icon">•</span> Update content and typography dynamically.</li>
+                <li><span class="icon">•</span> Modify CSS styles and toggle animation classes.</li>
+                <li><span class="icon">•</span> Create brand new elements or remove existing nodes.</li>
+                <li><span class="icon">•</span> Listen and react to user clicks, keyboard inputs, and scrolls.</li>
+              </ul>
+            </div>
+
+            <div class="card card-accent">
+              <div class="card-title"><span class="icon">📊</span> Visual DOM Hierarchy</div>
+              <div class="diagram-container">
+                <div class="dom-tree">
+                  <div class="dom-node" style="background: var(--primary-deep); color: #FFF;">document</div>
+                  <div class="flow-arrow">↓</div>
+                  <div class="dom-node" style="background: #EFF6FF; border-color: var(--primary-blue);">html</div>
+                  <div class="flow-arrow">↓</div>
+                  <div class="dom-branch">
+                    <div style="display:flex; flex-direction:column; align-items:center;">
+                      <div class="dom-node" style="font-size: 0.70rem;">head</div>
+                      <span style="font-size: 0.65rem; color: var(--text-muted); margin-top:2px;">title, meta</span>
+                    </div>
+                    <div style="display:flex; flex-direction:column; align-items:center;">
+                      <div class="dom-node" style="border-color: #059669; font-size: 0.70rem;">body</div>
+                      <div style="display:flex; gap:6px; margin-top:4px;">
+                        <span class="badge badge-concept">&lt;h1&gt;</span>
+                        <span class="badge badge-concept">&lt;p&gt;</span>
+                        <span class="badge badge-concept">&lt;button&gt;</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="alert-box alert-success" style="margin-top: 8px;">
+                <div class="alert-title">Core Principle</div>
+                <div class="alert-text">The DOM bridges static HTML text with interactive JavaScript code.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+
+      <section class="slide" id="slide-3">
+        <div class="slide-header">
+          <div class="slide-title-group">
+            <span class="slide-category"><span class="badge-section">Section 1</span> DOM Manipulation</span>
+            <h2 class="slide-title">Selecting HTML Elements</h2>
+            <p class="slide-subtitle">Targeting nodes with getElementById, querySelector, and querySelectorAll</p>
+          </div>
+          <span class="slide-tag">DOM SELECTION</span>
+        </div>
+
+        <div class="slide-body">
+          <div class="grid-60-40">
+            <div class="card">
+              <div class="card-title"><span class="icon">🔍</span> Selection Methods in Practice</div>
+              <div class="code-panel">
+                <div class="code-header"><span class="code-file">selectors.js</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+                <pre><code><span class="cm">// HTML: &lt;h1 id="title"&gt;Welcome&lt;/h1&gt;</span>
+<span class="cm">//       &lt;p class="message"&gt;Hello Students&lt;/p&gt;</span>
+<span class="cm">//       &lt;button&gt;Click Me&lt;/button&gt;</span>
+
+<span class="cm">// 1. Select by unique ID</span>
+<span class="kw">const</span> <span class="vr">title</span> = <span class="vr">document</span>.<span class="fn">getElementById</span>(<span class="str">"title"</span>);
+
+<span class="cm">// 2. Select first matching element using CSS selector (# for ID, . for class)</span>
+<span class="kw">const</span> <span class="vr">mainTitle</span> = <span class="vr">document</span>.<span class="fn">querySelector</span>(<span class="str">"#title"</span>);
+<span class="kw">const</span> <span class="vr">firstMsg</span>  = <span class="vr">document</span>.<span class="fn">querySelector</span>(<span class="str">".message"</span>);
+
+<span class="cm">// 3. Select ALL matching elements (returns NodeList collection)</span>
+<span class="kw">const</span> <span class="vr">allButtons</span> = <span class="vr">document</span>.<span class="fn">querySelectorAll</span>(<span class="str">"button"</span>);
+
+<span class="vr">console</span>.<span class="fn">log</span>(<span class="str">`Found ${allButtons.length} buttons on page`</span>);</code></pre>
+              </div>
+            </div>
+
+            <div class="card card-accent">
+              <div class="card-title"><span class="icon">📋</span> Selection Rules Summary</div>
+              <table class="compare-table" style="font-size: 0.72rem;">
+                <thead>
+                  <tr>
+                    <th>Method</th>
+                    <th>Returns</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><code>getElementById()</code></td>
+                    <td>Single element or <code>null</code></td>
+                  </tr>
+                  <tr>
+                    <td><code>querySelector()</code></td>
+                    <td><strong>First</strong> matching element</td>
+                  </tr>
+                  <tr>
+                    <td><code>querySelectorAll()</code></td>
+                    <td><strong>NodeList</strong> of all matches</td>
+                  </tr>
+                </tbody>
+              </table>
+
+              <div class="alert-box alert-info" style="margin-top: 8px;">
+                <div class="alert-title">CSS Selector Syntax</div>
+                <div class="alert-text">
+                  <code>#idName</code> selects by ID.<br>
+                  <code>.className</code> selects by class.<br>
+                  <code>tagName</code> selects by HTML tag name.
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+
+      <section class="slide" id="slide-4">
+        <div class="slide-header">
+          <div class="slide-title-group">
+            <span class="slide-category"><span class="badge-section">Section 1</span> DOM Manipulation</span>
+            <h2 class="slide-title">Modifying HTML Content: textContent vs innerHTML</h2>
+            <p class="slide-subtitle">Safely updating text strings versus rendering HTML markup</p>
+          </div>
+          <span class="slide-tag">CONTENT UPDATES</span>
+        </div>
+
+        <div class="slide-body">
+          <div class="grid-2col">
+            <div class="card card-accent">
+              <div class="card-title"><span class="icon">📝</span> textContent: Safe Plain Text</div>
+              <p class="card-desc">Inserts raw text. Does NOT parse HTML tags. Completely safe against injection.</p>
+              <div class="code-panel">
+                <div class="code-header"><span class="code-file">textContent.js</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+                <pre><code><span class="kw">const</span> <span class="vr">heading</span> = <span class="vr">document</span>.<span class="fn">getElementById</span>(<span class="str">"title"</span>);
+
+<span class="cm">// Replaces old content with clean text</span>
+<span class="vr">heading</span>.<span class="prop">textContent</span> = <span class="str">"JavaScript DOM Manipulation"</span>;
+
+<span class="cm">// Inserting tags displays literally as text:</span>
+<span class="vr">heading</span>.<span class="prop">textContent</span> = <span class="str">"&lt;b&gt;Bold Text&lt;/b&gt;"</span>;
+<span class="cm">// Browser displays: &lt;b&gt;Bold Text&lt;/b&gt; (Not bolded!)</span></code></pre>
+              </div>
+              <span class="badge badge-success" style="margin-top: 6px;">Recommended for User-Provided Data</span>
+            </div>
+
+            <div class="card">
+              <div class="card-title"><span class="icon">⚠️</span> innerHTML: Parses HTML Tags</div>
+              <p class="card-desc">Parses and interprets HTML markup directly into new DOM nodes.</p>
+              <div class="code-panel">
+                <div class="code-header"><span class="code-file">innerHTML.js</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+                <pre><code><span class="kw">const</span> <span class="vr">msg</span> = <span class="vr">document</span>.<span class="fn">getElementById</span>(<span class="str">"message"</span>);
+
+<span class="cm">// Parses &lt;strong&gt; and renders bold text</span>
+<span class="vr">msg</span>.<span class="prop">innerHTML</span> = <span class="str">"&lt;strong&gt;Welcome Students!&lt;/strong&gt;"</span>;</code></pre>
+              </div>
+              <div class="alert-box alert-danger" style="margin-top: 6px;">
+                <div class="alert-title">Security Alert (XSS)</div>
+                <div class="alert-text">Never insert untrusted user input with <code>innerHTML</code>! Attackers can inject malicious <code>&lt;script&gt;</code> or <code>&lt;img onerror="..."&gt;</code> tags. Use <code>textContent</code>!</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+
+      <section class="slide" id="slide-5">
+        <div class="slide-header">
+          <div class="slide-title-group">
+            <span class="slide-category"><span class="badge-section">Section 1</span> DOM Manipulation</span>
+            <h2 class="slide-title">Modifying CSS Using JavaScript</h2>
+            <p class="slide-subtitle">Direct inline style changes versus clean classList toggling</p>
+          </div>
+          <span class="slide-tag">STYLE MANIPULATION</span>
+        </div>
+
+        <div class="slide-body">
+          <div class="grid-2col">
+            <div class="card">
+              <div class="card-title"><span class="icon">🎨</span> Approach 1: Inline Style Property</div>
+              <p class="card-desc">Modifies the element's <code>style</code> attribute directly in camelCase syntax.</p>
+              <div class="code-panel">
+                <div class="code-header"><span class="code-file">inlineStyle.js</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+                <pre><code><span class="kw">const</span> <span class="vr">title</span> = <span class="vr">document</span>.<span class="fn">getElementById</span>(<span class="str">"title"</span>);
+
+<span class="vr">title</span>.<span class="prop">style</span>.<span class="prop">color</span> = <span class="str">"#2563EB"</span>;
+<span class="vr">title</span>.<span class="prop">style</span>.<span class="prop">fontSize</span> = <span class="str">"32px"</span>;            <span class="cm">// font-size</span>
+<span class="vr">title</span>.<span class="prop">style</span>.<span class="prop">backgroundColor</span> = <span class="str">"#EFF6FF"</span>; <span class="cm">// background-color</span></code></pre>
+              </div>
+              <span class="badge badge-warning" style="margin-top: 6px;">Overrides CSS stylesheets (Inline priority)</span>
+            </div>
+
+            <div class="card card-accent">
+              <div class="card-title"><span class="icon">✨</span> Approach 2: classList (Best Practice)</div>
+              <p class="card-desc">Separates presentation from logic by toggling pre-defined CSS classes.</p>
+              <div class="code-panel">
+                <div class="code-header"><span class="code-file">classList.js</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+                <pre><code><span class="cm">// Add, remove, or toggle CSS classes</span>
+<span class="vr">title</span>.<span class="prop">classList</span>.<span class="fn">add</span>(<span class="str">"highlight"</span>);
+
+<span class="vr">title</span>.<span class="prop">classList</span>.<span class="fn">remove</span>(<span class="str">"hidden"</span>);
+
+<span class="cm">// Toggles on if absent, off if present:</span>
+<span class="vr">title</span>.<span class="prop">classList</span>.<span class="fn">toggle</span>(<span class="str">"dark-mode"</span>);
+
+<span class="cm">// Check if class exists:</span>
+<span class="kw">if</span> (<span class="vr">title</span>.<span class="prop">classList</span>.<span class="fn">contains</span>(<span class="str">"active"</span>)) {
+  <span class="vr">console</span>.<span class="fn">log</span>(<span class="str">"Element is active!"</span>);
+}</code></pre>
+              </div>
+              <span class="badge badge-best-practice" style="margin-top: 6px;">Industry Standard Practice</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+
+      <section class="slide" id="slide-6">
+        <div class="slide-header">
+          <div class="slide-title-group">
+            <span class="slide-category"><span class="badge-section">Section 1</span> DOM Manipulation</span>
+            <h2 class="slide-title">Creating HTML Elements Dynamically</h2>
+            <p class="slide-subtitle">Constructing new elements in memory and appending them to the DOM tree</p>
+          </div>
+          <span class="slide-tag">ELEMENT CREATION</span>
+        </div>
+
+        <div class="slide-body">
+          <div class="grid-60-40">
+            <div class="card">
+              <div class="card-title"><span class="icon">🔨</span> The 3-Step Creation Lifecycle</div>
+              <div class="code-panel">
+                <div class="code-header"><span class="code-file">createElement.js</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+                <pre><code><span class="kw">const</span> <span class="vr">container</span> = <span class="vr">document</span>.<span class="fn">getElementById</span>(<span class="str">"container"</span>);
+
+<span class="cm">// Step 1: Create element in memory</span>
+<span class="kw">const</span> <span class="vr">card</span> = <span class="vr">document</span>.<span class="fn">createElement</span>(<span class="str">"div"</span>);
+<span class="vr">card</span>.<span class="prop">classList</span>.<span class="fn">add</span>(<span class="str">"card"</span>);
+
+<span class="cm">// Step 2: Populate content and attributes</span>
+<span class="kw">const</span> <span class="vr">heading</span> = <span class="vr">document</span>.<span class="fn">createElement</span>(<span class="str">"h3"</span>);
+<span class="vr">heading</span>.<span class="prop">textContent</span> = <span class="str">"Learn JavaScript"</span>;
+
+<span class="cm">// Step 3: Insert into the live DOM tree</span>
+<span class="vr">card</span>.<span class="fn">appendChild</span>(<span class="vr">heading</span>);
+<span class="vr">container</span>.<span class="fn">appendChild</span>(<span class="vr">card</span>);</code></pre>
+              </div>
+            </div>
+
+            <div class="card card-accent">
+              <div class="card-title"><span class="icon">💡</span> Vital Rule of Creation</div>
+              <p class="card-desc">
+                <code>document.createElement()</code> creates the element in browser RAM. It will <strong>never become visible</strong> until you explicitly mount it using:
+              </p>
+              <ul class="bullet-list" style="font-size: 0.74rem;">
+                <li><code>parent.appendChild(child)</code></li>
+                <li><code>parent.append(child1, child2)</code></li>
+                <li><code>parent.prepend(child)</code></li>
+              </ul>
+              <div class="alert-box alert-info" style="margin-top: 8px;">
+                <div class="alert-title">Performance Tip</div>
+                <div class="alert-text">Configure styles and inner text <em>before</em> appending to the live DOM to prevent redundant page reflows.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+
+      <section class="slide" id="slide-7">
+        <div class="slide-header">
+          <div class="slide-title-group">
+            <span class="slide-category"><span class="badge-section">Section 1</span> DOM Manipulation</span>
+            <h2 class="slide-title">Removing HTML Elements</h2>
+            <p class="slide-subtitle">Detaching nodes from the page with remove, removeChild, and replaceChildren</p>
+          </div>
+          <span class="slide-tag">ELEMENT REMOVAL</span>
+        </div>
+
+        <div class="slide-body">
+          <div class="grid-2col">
+            <div class="card card-accent">
+              <div class="card-title"><span class="icon">🗑️</span> Modern Removal Methods</div>
+              <div class="code-panel">
+                <div class="code-header"><span class="code-file">removeElements.js</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+                <pre><code><span class="kw">const</span> <span class="vr">banner</span> = <span class="vr">document</span>.<span class="fn">getElementById</span>(<span class="str">"announcement"</span>);
+
+<span class="cm">// 1. Direct removal (Modern Standard)</span>
+<span class="vr">banner</span>.<span class="fn">remove</span>();
+
+<span class="cm">// 2. Remove child from parent (Traditional)</span>
+<span class="kw">const</span> <span class="vr">list</span> = <span class="vr">document</span>.<span class="fn">getElementById</span>(<span class="str">"todoList"</span>);
+<span class="vr">list</span>.<span class="fn">removeChild</span>(<span class="vr">list</span>.<span class="prop">firstElementChild</span>);
+
+<span class="cm">// 3. Clear all children at once!</span>
+<span class="vr">list</span>.<span class="fn">replaceChildren</span>(); <span class="cm">// Fast & clean innerHTML = ""</span></code></pre>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-title"><span class="icon">📋</span> Methods Comparison</div>
+              <table class="compare-table" style="font-size: 0.74rem;">
+                <thead>
+                  <tr>
+                    <th>Method</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><code>node.remove()</code></td>
+                    <td>Removes itself directly from parent</td>
+                  </tr>
+                  <tr>
+                    <td><code>parent.removeChild(node)</code></td>
+                    <td>Removes specific child from parent</td>
+                  </tr>
+                  <tr>
+                    <td><code>parent.replaceChildren()</code></td>
+                    <td>Empties all children instantly</td>
+                  </tr>
+                  <tr>
+                    <td><code>parent.appendChild(node)</code></td>
+                    <td>Appends child to the end</td>
+                  </tr>
+                </tbody>
+              </table>
+              <div class="alert-box alert-success" style="margin-top: 8px;">
+                <div class="alert-title">Clean Reset Tip</div>
+                <div class="alert-text">Prefer <code>container.replaceChildren()</code> over <code>container.innerHTML = ""</code> when re-rendering lists.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+
+      <section class="slide" id="slide-8">
+        <div class="slide-header">
+          <div class="slide-title-group">
+            <span class="slide-category"><span class="badge-section">Section 2</span> Event Handling</span>
+            <h2 class="slide-title">What are Browser Events?</h2>
+            <p class="slide-subtitle">Capturing interactions: mouse clicks, keystrokes, form submissions, and scrolls</p>
+          </div>
+          <span class="slide-tag">EVENTS OVERVIEW</span>
+        </div>
+
+        <div class="slide-body">
+          <div class="grid-60-40">
+            <div class="card">
+              <div class="card-title"><span class="icon">⚡</span> Event Flow in Web Applications</div>
+              <p class="card-desc">
+                An <strong>event</strong> is a signal that something occurred in the browser window (a user action or a system state change). JavaScript registers listeners to execute callbacks when specific events fire.
+              </p>
+              <div class="diagram-container" style="gap: 6px; padding: 10px;">
+                <div class="flow-step">👤 User Interaction (Click / Type)</div>
+                <div class="flow-arrow">↓</div>
+                <div class="flow-step event">⚡ Browser Dispatches Event Object</div>
+                <div class="flow-arrow">↓</div>
+                <div class="flow-step accent">🎧 Event Listener Triggers Handler Function</div>
+                <div class="flow-arrow">↓</div>
+                <div class="flow-step success">🖥️ JavaScript Updates the DOM Dynamically</div>
+              </div>
+            </div>
+
+            <div class="card card-accent">
+              <div class="card-title"><span class="icon">📑</span> Common Web Events</div>
+              <table class="compare-table" style="font-size: 0.72rem;">
+                <thead>
+                  <tr>
+                    <th>Event</th>
+                    <th>Fired When...</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><code>click</code></td>
+                    <td>Element is clicked</td>
+                  </tr>
+                  <tr>
+                    <td><code>input</code></td>
+                    <td>Input value changes live</td>
+                  </tr>
+                  <tr>
+                    <td><code>change</code></td>
+                    <td>Input loses focus after change</td>
+                  </tr>
+                  <tr>
+                    <td><code>submit</code></td>
+                    <td>Form is submitted</td>
+                  </tr>
+                  <tr>
+                    <td><code>keydown</code></td>
+                    <td>Keyboard key is pressed</td>
+                  </tr>
+                  <tr>
+                    <td><code>mouseover</code></td>
+                    <td>Mouse cursor hovers element</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </section>
+
+
+      <section class="slide" id="slide-9">
+        <div class="slide-header">
+          <div class="slide-title-group">
+            <span class="slide-category"><span class="badge-section">Section 2</span> Event Handling</span>
+            <h2 class="slide-title">Event Listeners and Event Handling</h2>
+            <p class="slide-subtitle">Attaching reactive callbacks with addEventListener for clicks and live typing</p>
+          </div>
+          <span class="slide-tag">EVENT LISTENERS</span>
+        </div>
+
+        <div class="slide-body">
+          <div class="grid-2col">
+            <div class="card">
+              <div class="card-title"><span class="icon">🖱️</span> Example 1: Button Click Listener</div>
+              <div class="code-panel">
+                <div class="code-header"><span class="code-file">clickEvent.js</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+                <pre><code><span class="kw">const</span> <span class="vr">button</span> = <span class="vr">document</span>.<span class="fn">getElementById</span>(<span class="str">"btnSubmit"</span>);
+
+<span class="cm">// Syntax: element.addEventListener("event", callbackFn)</span>
+<span class="vr">button</span>.<span class="fn">addEventListener</span>(<span class="str">"click</span>", () => {
+  <span class="vr">console</span>.<span class="fn">log</span>(<span class="str">"Button was clicked!"</span>);
+});</code></pre>
+              </div>
+              <div class="alert-box alert-info" style="margin-top: 6px;">
+                <div class="alert-title">Multiple Listeners</div>
+                <div class="alert-text">You can attach multiple independent listeners to the same element without overwriting each other.</div>
+              </div>
+            </div>
+
+            <div class="card card-accent">
+              <div class="card-title"><span class="icon">⌨️</span> Example 2: Live Input Watcher</div>
+              <div class="code-panel">
+                <div class="code-header"><span class="code-file">inputEvent.js</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+                <pre><code><span class="kw">const</span> <span class="vr">usernameInput</span> = <span class="vr">document</span>.<span class="fn">getElementById</span>(<span class="str">"username"</span>);
+<span class="kw">const</span> <span class="vr">liveGreeting</span> = <span class="vr">document</span>.<span class="fn">getElementById</span>(<span class="str">"greeting"</span>);
+
+<span class="cm">// Fires on every keystroke:</span>
+<span class="vr">usernameInput</span>.<span class="fn">addEventListener</span>(<span class="str">"input"</span>, () => {
+  <span class="vr">liveGreeting</span>.<span class="prop">textContent</span> = <span class="str">`Hello, ${usernameInput.value}`</span>;
+});</code></pre>
+              </div>
+              <div class="alert-box alert-success" style="margin-top: 6px;">
+                <div class="alert-title">React Preview</div>
+                <div class="alert-text">This exact pattern prepares you for controlled inputs in React (<code>onChange={(e) => setValue(e.target.value)}</code>).</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+
+      <section class="slide" id="slide-10">
+        <div class="slide-header">
+          <div class="slide-title-group">
+            <span class="slide-category"><span class="badge-section">Section 2</span> Event Handling</span>
+            <h2 class="slide-title">Event Object &amp; Form Handling: preventDefault()</h2>
+            <p class="slide-subtitle">Intercepting browser defaults and inspecting event properties</p>
+          </div>
+          <span class="slide-tag">FORM HANDLING</span>
+        </div>
+
+        <div class="slide-body">
+          <div class="grid-60-40">
+            <div class="card">
+              <div class="card-title"><span class="icon">📋</span> Form Submission Handling</div>
+              <div class="code-panel">
+                <div class="code-header"><span class="code-file">formHandler.js</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+                <pre><code><span class="kw">const</span> <span class="vr">studentForm</span> = <span class="vr">document</span>.<span class="fn">getElementById</span>(<span class="str">"studentForm"</span>);
+<span class="kw">const</span> <span class="vr">nameInput</span>   = <span class="vr">document</span>.<span class="fn">getElementById</span>(<span class="str">"studentName"</span>);
+
+<span class="vr">studentForm</span>.<span class="fn">addEventListener</span>(<span class="str">"submit"</span>, (<span class="vr">event</span>) => {
+  <span class="cm">// 1. CRITICAL: Stop browser from refreshing the page!</span>
+  <span class="vr">event</span>.<span class="fn">preventDefault</span>();
+
+  <span class="cm">// 2. Read input value cleanly</span>
+  <span class="kw">const</span> <span class="vr">name</span> = <span class="vr">nameInput</span>.<span class="prop">value</span>.<span class="fn">trim</span>();
+
+  <span class="vr">console</span>.<span class="fn">log</span>(<span class="str">`Submitted Name: ${name}`</span>);
+  <span class="vr">console</span>.<span class="fn">log</span>(<span class="str">"Target Element:"</span>, <span class="vr">event</span>.<span class="prop">target</span>);
+});</code></pre>
+              </div>
+            </div>
+
+            <div class="card card-accent">
+              <div class="card-title"><span class="icon">🛑</span> Why preventDefault() is Mandatory</div>
+              <p class="card-desc">
+                By default, when an HTML form submits, the browser attempts an HTTP POST request and <strong>reloads the entire webpage</strong>, wiping out all JavaScript state!
+              </p>
+              <div class="alert-box alert-warning">
+                <div class="alert-title">Single Page Apps (SPA)</div>
+                <div class="alert-text"><code>event.preventDefault()</code> stops the page reload so our JavaScript can validate inputs and call APIs asynchronously without page refreshes.</div>
+              </div>
+              <ul class="bullet-list" style="font-size: 0.74rem; margin-top: 6px;">
+                <li><code>event.target</code>: The element triggering the event.</li>
+                <li><code>event.type</code>: Event name (e.g. <code>"submit"</code>).</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+
+      <section class="slide" id="slide-11">
+        <div class="slide-header">
+          <div class="slide-title-group">
+            <span class="slide-category"><span class="badge-section">Section 2</span> Practical Project 1</span>
+            <h2 class="slide-title">Practical: Interactive Student Profile</h2>
+            <p class="slide-subtitle">Live working application: DOM selection, input extraction, event listener, and dynamic rendering</p>
+          </div>
+          <span class="slide-tag">PRACTICAL PROJECT 1</span>
+        </div>
+
+        <div class="slide-body">
+          <div class="grid-60-40">
+            <div class="card">
+              <div class="card-title"><span class="icon">💻</span> Complete Implementation</div>
+              <div class="code-panel" style="max-height: 330px;">
+                <div class="code-header"><span class="code-file">studentProfile.js</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+                <pre><code><span class="kw">const</span> <span class="vr">input</span>  = <span class="vr">document</span>.<span class="fn">getElementById</span>(<span class="str">"nameInput"</span>);
+<span class="kw">const</span> <span class="vr">button</span> = <span class="vr">document</span>.<span class="fn">getElementById</span>(<span class="str">"showButton"</span>);
+<span class="kw">const</span> <span class="vr">result</span> = <span class="vr">document</span>.<span class="fn">getElementById</span>(<span class="str">"result"</span>);
+
+<span class="vr">button</span>.<span class="fn">addEventListener</span>(<span class="str">"click"</span>, () => {
+  <span class="kw">const</span> <span class="vr">name</span> = <span class="vr">input</span>.<span class="prop">value</span>.<span class="fn">trim</span>();
+
+  <span class="cm">// Validate non-empty input</span>
+  <span class="kw">if</span> (<span class="vr">name</span> === <span class="str">""</span>) {
+    <span class="vr">result</span>.<span class="prop">textContent</span> = <span class="str">"Please enter your name"</span>;
+    <span class="vr">result</span>.<span class="prop">style</span>.<span class="prop">color</span> = <span class="str">"#DC2626"</span>;
+    <span class="kw">return</span>;
+  }
+
+  <span class="cm">// Render welcome greeting & reset input</span>
+  <span class="vr">result</span>.<span class="prop">textContent</span> = <span class="str">`Welcome, ${name}!`</span>;
+  <span class="vr">result</span>.<span class="prop">style</span>.<span class="prop">color</span> = <span class="str">"#059669"</span>;
+  <span class="vr">input</span>.<span class="prop">value</span> = <span class="str">""</span>;
+});</code></pre>
+              </div>
+            </div>
+
+            <div class="card card-accent" style="display:flex; flex-direction:column;">
+              <div class="card-title"><span class="icon">⚡</span> Live Sandbox Application</div>
+              <p class="card-desc" style="font-size: 0.76rem;">Test this code live in the browser right now:</p>
+              
+              <div style="background: #FFFFFF; border: 1px solid var(--border-subtle); border-radius: 8px; padding: 14px; display: flex; flex-direction: column; gap: 8px;">
+                <label style="font-size: 0.76rem; font-weight: 700; color: var(--text-heading);">Student Name:</label>
+                <div style="display:flex; gap:8px;">
+                  <input type="text" id="demoStudentInput" class="form-input" placeholder="e.g. Arun Kumar" style="padding: 7px 10px; font-size: 0.80rem;">
+                  <button class="btn btn-primary btn-sm" id="btnDemoStudent">Show Profile</button>
+                </div>
+                <div id="demoStudentResult" style="min-height: 28px; font-size: 0.85rem; font-weight: 700; color: var(--primary-deep); margin-top: 4px; display: flex; align-items: center;">
+                  Enter a name above and click 'Show Profile'
+                </div>
+              </div>
+
+              <div class="alert-box alert-success" style="margin-top: 10px;">
+                <div class="alert-title">Core Concepts Combined</div>
+                <div class="alert-text">DOM Selection &bull; Event Listener &bull; Input Validation &bull; Template Literals &bull; Reactive Styling</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+
+      <section class="slide" id="slide-12">
+        <div class="slide-header">
+          <div class="slide-title-group">
+            <span class="slide-category"><span class="badge-section">Section 3</span> Asynchronous JavaScript</span>
+            <h2 class="slide-title">Synchronous vs Asynchronous JavaScript</h2>
+            <p class="slide-subtitle">Understanding single-threaded non-blocking execution and the event timeline</p>
+          </div>
+          <span class="slide-tag">SYNC VS ASYNC</span>
+        </div>
+
+        <div class="slide-body">
+          <div class="grid-2col">
+            <div class="card">
+              <div class="card-title"><span class="icon">🛑</span> Synchronous (Blocking)</div>
+              <p class="card-desc">Code executes sequentially line by line. Each line must wait for previous line to finish.</p>
+              <div class="code-panel">
+                <div class="code-header"><span class="code-file">sync.js</span></div>
+                <pre><code><span class="vr">console</span>.<span class="fn">log</span>(<span class="str">"First"</span>);
+<span class="vr">console</span>.<span class="fn">log</span>(<span class="str">"Second"</span>);
+<span class="vr">console</span>.<span class="fn">log</span>(<span class="str">"Third"</span>);
+
+<span class="cm">// Output:</span>
+<span class="cm">// First</span>
+<span class="cm">// Second</span>
+<span class="cm">// Third</span></code></pre>
+              </div>
+            </div>
+
+            <div class="card card-accent">
+              <div class="card-title"><span class="icon">⚡</span> Asynchronous (Non-Blocking)</div>
+              <p class="card-desc">Long-running operations (APIs, timers) run in background while main execution continues uninterrupted.</p>
+              <div class="code-panel">
+                <div class="code-header"><span class="code-file">async.js</span></div>
+                <pre><code><span class="vr">console</span>.<span class="fn">log</span>(<span class="str">"Start"</span>);
+
+<span class="fn">setTimeout</span>(() => {
+  <span class="vr">console</span>.<span class="fn">log</span>(<span class="str">"Inside Timeout (2s later)"</span>);
+}, <span class="num">2000</span>);
+
+<span class="vr">console</span>.<span class="fn">log</span>(<span class="str">"End"</span>);
+
+<span class="cm">// Output Order:</span>
+<span class="cm">// 1. Start &rarr; 2. End &rarr; 3. Inside Timeout</span></code></pre>
+              </div>
+            </div>
+          </div>
+
+          <div class="card" style="margin-top: 4px;">
+            <div class="card-title"><span class="icon">⏱️</span> Non-Blocking Execution Timeline</div>
+            <div class="timeline-container">
+              <div class="timeline-row">
+                <span class="timeline-label">Main Thread</span>
+                <div class="timeline-bar timeline-sync">console.log("Start") &rarr; Schedules Timer &rarr; console.log("End") (Page stays responsive!)</div>
+              </div>
+              <div class="timeline-row">
+                <span class="timeline-label">Browser Timer</span>
+                <div class="timeline-bar timeline-async-wait">Waiting 2000ms in background...</div>
+                <div class="timeline-bar timeline-async-run" style="flex:0 0 160px;">Timer Callback Runs</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+
+      <section class="slide" id="slide-13">
+        <div class="slide-header">
+          <div class="slide-title-group">
+            <span class="slide-category"><span class="badge-section">Section 3</span> Asynchronous JavaScript</span>
+            <h2 class="slide-title">What are Callbacks?</h2>
+            <p class="slide-subtitle">Functions passed as arguments to other functions to be invoked at a later time</p>
+          </div>
+          <span class="slide-tag">CALLBACKS</span>
+        </div>
+
+        <div class="slide-body">
+          <div class="grid-2col">
+            <div class="card">
+              <div class="card-title"><span class="icon">📦</span> Synchronous Callback Example</div>
+              <p class="card-desc">Passed into another function and executed immediately:</p>
+              <div class="code-panel">
+                <div class="code-header"><span class="code-file">syncCallback.js</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+                <pre><code><span class="kw">function</span> <span class="fn">greet</span>(<span class="vr">name</span>, <span class="vr">callback</span>) {
+  <span class="vr">console</span>.<span class="fn">log</span>(<span class="str">"Hello "</span> + <span class="vr">name</span>);
+  <span class="fn">callback</span>(); <span class="cm">// Invokes passed function</span>
+}
+
+<span class="kw">function</span> <span class="fn">sayWelcome</span>() {
+  <span class="vr">console</span>.<span class="fn">log</span>(<span class="str">"Welcome to JavaScript!"</span>);
+}
+
+<span class="fn">greet</span>(<span class="str">"Ali"</span>, <span class="vr">sayWelcome</span>);
+<span class="cm">// Output:</span>
+<span class="cm">// Hello Ali</span>
+<span class="cm">// Welcome to JavaScript!</span></code></pre>
+              </div>
+            </div>
+
+            <div class="card card-accent">
+              <div class="card-title"><span class="icon">⏱️</span> Asynchronous Callback with Timers</div>
+              <p class="card-desc">Executed after an asynchronous background event completes:</p>
+              <div class="code-panel">
+                <div class="code-header"><span class="code-file">asyncCallback.js</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+                <pre><code><span class="vr">console</span>.<span class="fn">log</span>(<span class="str">"Start"</span>);
+
+<span class="fn">setTimeout</span>(() => {
+  <span class="vr">console</span>.<span class="fn">log</span>(<span class="str">"Task completed"</span>);
+}, <span class="num">2000</span>);
+
+<span class="vr">console</span>.<span class="fn">log</span>(<span class="str">"End"</span>);</code></pre>
+              </div>
+              <div class="alert-box alert-info" style="margin-top: 6px;">
+                <div class="alert-title">Important Distinction</div>
+                <div class="alert-text">A callback is simply a function passed to another function. Not every callback is asynchronous (e.g. <code>array.map()</code> is synchronous).</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+
+      <section class="slide" id="slide-14">
+        <div class="slide-header">
+          <div class="slide-title-group">
+            <span class="slide-category"><span class="badge-section">Section 3</span> Asynchronous JavaScript</span>
+            <h2 class="slide-title">The "Callback Hell" Problem</h2>
+            <p class="slide-subtitle">The Pyramid of Doom: Deeply nested callbacks for sequential dependent tasks</p>
+          </div>
+          <span class="slide-tag">CALLBACK HELL</span>
+        </div>
+
+        <div class="slide-body">
+          <div class="grid-60-40">
+            <div class="card">
+              <div class="card-title"><span class="icon">🌋</span> The Pyramid of Doom</div>
+              <div class="code-panel">
+                <div class="code-header"><span class="code-file">callbackHell.js</span></div>
+                <pre><code><span class="fn">getUser</span>(<span class="num">101</span>, <span class="kw">function</span>(<span class="vr">user</span>) {
+  <span class="fn">getOrders</span>(<span class="vr">user</span>.<span class="prop">id</span>, <span class="kw">function</span>(<span class="vr">orders</span>) {
+    <span class="fn">getPayment</span>(<span class="vr">orders</span>[<span class="num">0</span>].<span class="prop">id</span>, <span class="kw">function</span>(<span class="vr">payment</span>) {
+      <span class="fn">sendReceipt</span>(<span class="vr">payment</span>.<span class="prop">id</span>, <span class="kw">function</span>(<span class="vr">receipt</span>) {
+        <span class="vr">console</span>.<span class="fn">log</span>(<span class="str">"Receipt sent:"</span>, <span class="vr">receipt</span>);
+      });
+    });
+  });
+});</code></pre>
+              </div>
+            </div>
+
+            <div class="card card-accent">
+              <div class="card-title"><span class="icon">⚠️</span> Why Is This Problematic?</div>
+              <ul class="bullet-list" style="font-size: 0.78rem;">
+                <li><span class="icon">•</span> <strong>Unreadable:</strong> Growing indentation moves code horizontally off-screen.</li>
+                <li><span class="icon">•</span> <strong>Error Handling Nightmare:</strong> Each level requires separate error handling logic.</li>
+                <li><span class="icon">•</span> <strong>Fragile &amp; Tight Coupling:</strong> Modifying step 2 breaks steps 3 and 4.</li>
+              </ul>
+              <div class="alert-box alert-success" style="margin-top: 10px;">
+                <div class="alert-title">The Modern Solution</div>
+                <div class="alert-text">JavaScript introduced <strong>Promises</strong> (ES6) and <strong>async/await</strong> (ES2017) to flatten this structure into clean, readable code!</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+
+      <section class="slide" id="slide-15">
+        <div class="slide-header">
+          <div class="slide-title-group">
+            <span class="slide-category"><span class="badge-section">Section 3</span> Asynchronous JavaScript</span>
+            <h2 class="slide-title">What is a Promise?</h2>
+            <p class="slide-subtitle">A placeholder object representing the eventual completion or failure of an async operation</p>
+          </div>
+          <span class="slide-tag">PROMISES</span>
+        </div>
+
+        <div class="slide-body">
+          <div class="promise-states" style="margin-bottom: 6px;">
+            <div class="state-card pending">
+              <span class="badge badge-warning">State 1: Pending</span>
+              <p style="font-size: 0.74rem; color: var(--text-body); margin:0;">Initial state. Operation is currently running in the background.</p>
+            </div>
+            <div style="display:flex; gap:8px;">
+              <div class="state-card fulfilled" style="flex:1;">
+                <span class="badge badge-success">State 2: Fulfilled</span>
+                <p style="font-size: 0.70rem; color: var(--text-body); margin:0;">Completed successfully. Handled via <code>.then()</code>.</p>
+              </div>
+              <div class="state-card rejected" style="flex:1;">
+                <span class="badge badge-danger">State 3: Rejected</span>
+                <p style="font-size: 0.70rem; color: var(--text-body); margin:0;">Operation failed. Handled via <code>.catch()</code>.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="grid-2col">
+            <div class="card">
+              <div class="card-title"><span class="icon">🔨</span> Creating a Promise</div>
+              <div class="code-panel">
+                <div class="code-header"><span class="code-file">createPromise.js</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+                <pre><code><span class="kw">const</span> <span class="vr">myPromise</span> = <span class="kw">new</span> <span class="fn">Promise</span>((<span class="vr">resolve</span>, <span class="vr">reject</span>) => {
+  <span class="kw">const</span> <span class="vr">success</span> = <span class="bool">true</span>;
+  <span class="kw">if</span> (<span class="vr">success</span>) {
+    <span class="fn">resolve</span>(<span class="str">"Task completed successfully!"</span>);
+  } <span class="kw">else</span> {
+    <span class="fn">reject</span>(<span class="str">"Task failed with error."</span>);
+  }
+});</code></pre>
+              </div>
+            </div>
+
+            <div class="card card-accent">
+              <div class="card-title"><span class="icon">🎧</span> Consuming a Promise</div>
+              <div class="code-panel">
+                <div class="code-header"><span class="code-file">consumePromise.js</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+                <pre><code><span class="vr">myPromise</span>
+  .<span class="fn">then</span>((<span class="vr">result</span>) => {
+    <span class="vr">console</span>.<span class="fn">log</span>(<span class="str">"Success:"</span>, <span class="vr">result</span>);
+  })
+  .<span class="fn">catch</span>((<span class="vr">error</span>) => {
+    <span class="vr">console</span>.<span class="fn">log</span>(<span class="str">"Error:"</span>, <span class="vr">error</span>);
+  })
+  .<span class="fn">finally</span>(() => {
+    <span class="vr">console</span>.<span class="fn">log</span>(<span class="str">"Execution settled (Done)"</span>);
+  });</code></pre>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+
+      <section class="slide" id="slide-16">
+        <div class="slide-header">
+          <div class="slide-title-group">
+            <span class="slide-category"><span class="badge-section">Section 3</span> Asynchronous JavaScript</span>
+            <h2 class="slide-title">Promise Chaining</h2>
+            <p class="slide-subtitle">Sequencing multiple asynchronous operations cleanly without callback nesting</p>
+          </div>
+          <span class="slide-tag">PROMISE CHAINING</span>
+        </div>
+
+        <div class="slide-body">
+          <div class="grid-60-40">
+            <div class="card">
+              <div class="card-title"><span class="icon">🔗</span> Linear Chaining Flow</div>
+              <div class="code-panel">
+                <div class="code-header"><span class="code-file">chaining.js</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+                <pre><code><span class="kw">function</span> <span class="fn">getNumber</span>() {
+  <span class="kw">return</span> <span class="kw">new</span> <span class="fn">Promise</span>((<span class="vr">resolve</span>) => {
+    <span class="fn">setTimeout</span>(() => <span class="fn">resolve</span>(<span class="num">10</span>), <span class="num">1000</span>);
+  });
+}
+
+<span class="fn">getNumber</span>()
+  .<span class="fn">then</span>((<span class="vr">number</span>) => {
+    <span class="vr">console</span>.<span class="fn">log</span>(<span class="str">"Step 1:"</span>, <span class="vr">number</span>); <span class="cm">// 10</span>
+    <span class="kw">return</span> <span class="vr">number</span> * <span class="num">2</span>;              <span class="cm">// Passes 20 to next .then()</span>
+  })
+  .<span class="fn">then</span>((<span class="vr">doubled</span>) => {
+    <span class="vr">console</span>.<span class="fn">log</span>(<span class="str">"Step 2:"</span>, <span class="vr">doubled</span>); <span class="cm">// 20</span>
+    <span class="kw">return</span> <span class="vr">doubled</span> + <span class="num">5</span>;              <span class="cm">// Passes 25</span>
+  })
+  .<span class="fn">then</span>((<span class="vr">final</span>) => {
+    <span class="vr">console</span>.<span class="fn">log</span>(<span class="str">"Step 3:"</span>, <span class="vr">final</span>);   <span class="cm">// 25</span>
+  })
+  .<span class="fn">catch</span>((<span class="vr">err</span>) => {
+    <span class="vr">console</span>.<span class="fn">error</span>(<span class="str">"Chain error:"</span>, <span class="vr">err</span>);
+  });</code></pre>
+              </div>
+            </div>
+
+            <div class="card card-accent">
+              <div class="card-title"><span class="icon">💡</span> How Chaining Works</div>
+              <ul class="bullet-list" style="font-size: 0.78rem;">
+                <li><span class="icon">1.</span> Each <code>.then()</code> receives the value returned by the preceding <code>.then()</code>.</li>
+                <li><span class="icon">2.</span> If a <code>.then()</code> returns a new Promise, subsequent handlers wait for it to resolve.</li>
+                <li><span class="icon">3.</span> A single <code>.catch()</code> at the end intercepts errors thrown anywhere along the pipeline.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+
+      <section class="slide" id="slide-17">
+        <div class="slide-header">
+          <div class="slide-title-group">
+            <span class="slide-category"><span class="badge-section">Section 3</span> Asynchronous JavaScript</span>
+            <h2 class="slide-title">What is async/await?</h2>
+            <p class="slide-subtitle">Modern syntax making asynchronous Promise consumption read like synchronous code</p>
+          </div>
+          <span class="slide-tag">ASYNC / AWAIT</span>
+        </div>
+
+        <div class="slide-body">
+          <div class="grid-2col">
+            <div class="card">
+              <div class="card-title"><span class="icon">📜</span> Traditional Promise Approach</div>
+              <div class="code-panel">
+                <div class="code-header"><span class="code-file">promiseStyle.js</span></div>
+                <pre><code><span class="kw">function</span> <span class="fn">getData</span>() {
+  <span class="kw">return new</span> <span class="fn">Promise</span>((<span class="vr">resolve</span>) => {
+    <span class="fn">setTimeout</span>(() => <span class="fn">resolve</span>(<span class="str">"Data received"</span>), <span class="num">1500</span>);
+  });
+}
+
+<span class="kw">function</span> <span class="fn">displayData</span>() {
+  <span class="fn">getData</span>().<span class="fn">then</span>((<span class="vr">result</span>) => {
+    <span class="vr">console</span>.<span class="fn">log</span>(<span class="vr">result</span>);
+  });
+}</code></pre>
+              </div>
+            </div>
+
+            <div class="card card-accent">
+              <div class="card-title"><span class="icon">✨</span> Modern async/await Approach</div>
+              <div class="code-panel">
+                <div class="code-header"><span class="code-file">asyncAwaitStyle.js</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+                <pre><code><span class="cm">// 'async' marks function to return a Promise</span>
+<span class="kw">async function</span> <span class="fn">displayData</span>() {
+  <span class="cm">// 'await' pauses function until Promise settles</span>
+  <span class="kw">const</span> <span class="vr">result</span> = <span class="kw">await</span> <span class="fn">getData</span>();
+  <span class="vr">console</span>.<span class="fn">log</span>(<span class="vr">result</span>); <span class="cm">// "Data received"</span>
+}
+
+<span class="fn">displayData</span>();</code></pre>
+              </div>
+              <div class="alert-box alert-success" style="margin-top: 6px;">
+                <div class="alert-title">4 Golden Rules of async/await</div>
+                <div class="alert-text">
+                  1. <code>async</code> functions always return a Promise.<br>
+                  2. <code>await</code> can only be used inside <code>async</code> functions.<br>
+                  3. <code>await</code> pauses <em>only</em> the surrounding async function, never the browser.<br>
+                  4. The resolved value is assigned directly to the variable!
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+
+      <section class="slide" id="slide-18">
+        <div class="slide-header">
+          <div class="slide-title-group">
+            <span class="slide-category"><span class="badge-section">Section 3</span> Asynchronous JavaScript</span>
+            <h2 class="slide-title">Callbacks vs Promises vs Async/Await</h2>
+            <p class="slide-subtitle">Three generations of asynchronous JavaScript compared side-by-side</p>
+          </div>
+          <span class="slide-tag">ASYNC COMPARISON</span>
+        </div>
+
+        <div class="slide-body">
+          <table class="compare-table" style="margin-bottom: 8px;">
+            <thead>
+              <tr>
+                <th>Feature</th>
+                <th>Callback</th>
+                <th>Promise</th>
+                <th>Async/Await</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Structure</strong></td>
+                <td>Function passed to another function</td>
+                <td>Promise object with <code>.then()</code></td>
+                <td>Keyword syntax wrapping Promises</td>
+              </tr>
+              <tr>
+                <td><strong>Readability</strong></td>
+                <td>Prone to nesting (Callback Hell)</td>
+                <td>Linear chainable flow</td>
+                <td>Reads like synchronous code (Best)</td>
+              </tr>
+              <tr>
+                <td><strong>Error Handling</strong></td>
+                <td>Manual error-first parameter check</td>
+                <td><code>.catch()</code> handler</td>
+                <td>Standard <code>try/catch</code> blocks</td>
+              </tr>
+              <tr>
+                <td><strong>Modern Standard</strong></td>
+                <td>Legacy APIs &amp; simple events</td>
+                <td>Core underlying async primitive</td>
+                <td>Universal standard for modern apps</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <div class="grid-3col">
+            <div class="card" style="padding: 10px;">
+              <strong style="font-size: 0.78rem; color: var(--text-heading);">1. Callback Style</strong>
+              <pre style="background: #0F172A; color: #FFF; padding: 6px; border-radius: 4px; font-size: 0.68rem; margin-top: 4px;"><code>setTimeout(() => {
+  console.log("Done");
+}, 1000);</code></pre>
+            </div>
+
+            <div class="card" style="padding: 10px;">
+              <strong style="font-size: 0.78rem; color: var(--primary-blue);">2. Promise Style</strong>
+              <pre style="background: #0F172A; color: #FFF; padding: 6px; border-radius: 4px; font-size: 0.68rem; margin-top: 4px;"><code>task().then((res) => {
+  console.log(res);
+});</code></pre>
+            </div>
+
+            <div class="card card-accent" style="padding: 10px;">
+              <strong style="font-size: 0.78rem; color: #059669;">3. Async/Await Style</strong>
+              <pre style="background: #0F172A; color: #FFF; padding: 6px; border-radius: 4px; font-size: 0.68rem; margin-top: 4px;"><code>const res = await task();
+console.log(res);</code></pre>
+            </div>
+          </div>
+        </div>
+      </section>
+
+
+      <section class="slide" id="slide-19">
+        <div class="slide-header">
+          <div class="slide-title-group">
+            <span class="slide-category"><span class="badge-section">Section 4</span> Fetch &amp; JSON</span>
+            <h2 class="slide-title">What is the Fetch API?</h2>
+            <p class="slide-subtitle">Native browser interface for issuing HTTP network requests and streaming responses</p>
+          </div>
+          <span class="slide-tag">FETCH API</span>
+        </div>
+
+        <div class="slide-body">
+          <div class="grid-60-40">
+            <div class="card">
+              <div class="card-title"><span class="icon">🌐</span> Basic fetch() Request</div>
+              <div class="code-panel">
+                <div class="code-header"><span class="code-file">fetchBasic.js</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+                <pre><code><span class="fn">fetch</span>(<span class="str">"https://jsonplaceholder.typicode.com/users"</span>)
+  .<span class="fn">then</span>((<span class="vr">response</span>) => {
+    <span class="cm">// Check if HTTP status is 200-299</span>
+    <span class="kw">if</span> (!<span class="vr">response</span>.<span class="prop">ok</span>) {
+      <span class="kw">throw new</span> <span class="fn">Error</span>(<span class="str">`HTTP error: ${response.status}`</span>);
+    }
+    <span class="kw">return</span> <span class="vr">response</span>.<span class="fn">json</span>(); <span class="cm">// Parse JSON asynchronously</span>
+  })
+  .<span class="fn">then</span>((<span class="vr">users</span>) => {
+    <span class="vr">console</span>.<span class="fn">log</span>(<span class="str">"Users received:"</span>, <span class="vr">users</span>);
+  })
+  .<span class="fn">catch</span>((<span class="vr">error</span>) => {
+    <span class="vr">console</span>.<span class="fn">error</span>(<span class="str">"Network failure:"</span>, <span class="vr">error</span>.<span class="prop">message</span>);
+  });</code></pre>
+              </div>
+            </div>
+
+            <div class="card card-accent">
+              <div class="card-title"><span class="icon">⚠️</span> The response.ok Trap</div>
+              <p class="card-desc">
+                <code>fetch()</code> returns a Promise. However:
+              </p>
+              <div class="alert-box alert-warning">
+                <div class="alert-title">Crucial Architecture Rule</div>
+                <div class="alert-text"><code>fetch()</code> does <strong>NOT</strong> reject on HTTP 404 or 500 errors! It only rejects on real network failures (offline, DNS failure).</div>
+              </div>
+              <p class="card-desc" style="font-size: 0.74rem; margin-top: 6px;">
+                You <strong>must check <code>response.ok</code></strong> before calling <code>response.json()</code>!
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+
+      <section class="slide" id="slide-20">
+        <div class="slide-header">
+          <div class="slide-title-group">
+            <span class="slide-category"><span class="badge-section">Section 4</span> Fetch &amp; JSON</span>
+            <h2 class="slide-title">What is JSON? JSON.stringify() vs JSON.parse()</h2>
+            <p class="slide-subtitle">JavaScript Object Notation: The text-based format for exchanging data across the web</p>
+          </div>
+          <span class="slide-tag">JSON FORMAT</span>
+        </div>
+
+        <div class="slide-body">
+          <div class="grid-2col">
+            <div class="card">
+              <div class="card-title"><span class="icon">📤</span> JSON.stringify(): Object &rarr; String</div>
+              <p class="card-desc">Serializes a JavaScript object into a JSON string to transmit over the network.</p>
+              <div class="code-panel">
+                <div class="code-header"><span class="code-file">stringify.js</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+                <pre><code><span class="kw">const</span> <span class="vr">student</span> = { <span class="prop">name</span>: <span class="str">"Ali"</span>, <span class="prop">age</span>: <span class="num">22</span>, <span class="prop">active</span>: <span class="bool">true</span> };
+
+<span class="kw">const</span> <span class="vr">jsonString</span> = JSON.<span class="fn">stringify</span>(<span class="vr">student</span>);
+
+<span class="vr">console</span>.<span class="fn">log</span>(<span class="kw">typeof</span> <span class="vr">jsonString</span>); <span class="cm">// "string"</span>
+<span class="vr">console</span>.<span class="fn">log</span>(<span class="vr">jsonString</span>);
+<span class="cm">// '{"name":"Ali","age":22,"active":true}'</span></code></pre>
+              </div>
+            </div>
+
+            <div class="card card-accent">
+              <div class="card-title"><span class="icon">📥</span> JSON.parse(): String &rarr; Object</div>
+              <p class="card-desc">Deserializes an incoming JSON string back into a live JavaScript object.</p>
+              <div class="code-panel">
+                <div class="code-header"><span class="code-file">parse.js</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+                <pre><code><span class="kw">const</span> <span class="vr">rawJson</span> = <span class="str">'{"name":"Ali","age":22,"active":true}'</span>;
+
+<span class="kw">const</span> <span class="vr">parsed</span> = JSON.<span class="fn">parse</span>(<span class="vr">rawJson</span>);
+
+<span class="vr">console</span>.<span class="fn">log</span>(<span class="kw">typeof</span> <span class="vr">parsed</span>); <span class="cm">// "object"</span>
+<span class="vr">console</span>.<span class="fn">log</span>(<span class="vr">parsed</span>.<span class="prop">name</span>);   <span class="cm">// "Ali"</span></code></pre>
+              </div>
+              <div class="alert-box alert-info" style="margin-top: 6px;">
+                <div class="alert-title">Universal Format</div>
+                <div class="alert-text">REST APIs, database records, and AI LLM response bodies all communicate via JSON.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+
+      <section class="slide" id="slide-21">
+        <div class="slide-header">
+          <div class="slide-title-group">
+            <span class="slide-category"><span class="badge-section">Section 4</span> Fetch &amp; JSON</span>
+            <h2 class="slide-title">Handling API Requests Using Async/Await</h2>
+            <p class="slide-subtitle">Combining fetch, status verification, and JSON parsing in clean sequential code</p>
+          </div>
+          <span class="slide-tag">FETCH WITH ASYNC</span>
+        </div>
+
+        <div class="slide-body">
+          <div class="grid-60-40">
+            <div class="card">
+              <div class="card-title"><span class="icon">🚀</span> Modern API Request Pattern</div>
+              <div class="code-panel">
+                <div class="code-header"><span class="code-file">getUsers.js</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+                <pre><code><span class="kw">async function</span> <span class="fn">getUsers</span>() {
+  <span class="cm">// 1. Await network fetch response</span>
+  <span class="kw">const</span> <span class="vr">response</span> = <span class="kw">await</span> <span class="fn">fetch</span>(
+    <span class="str">"https://jsonplaceholder.typicode.com/users"</span>
+  );
+
+  <span class="cm">// 2. Verify response status</span>
+  <span class="kw">if</span> (!<span class="vr">response</span>.<span class="prop">ok</span>) {
+    <span class="kw">throw new</span> <span class="fn">Error</span>(<span class="str">`HTTP Error: ${response.status}`</span>);
+  }
+
+  <span class="cm">// 3. Await asynchronous JSON parsing</span>
+  <span class="kw">const</span> <span class="vr">users</span> = <span class="kw">await</span> <span class="vr">response</span>.<span class="fn">json</span>();
+
+  <span class="vr">console</span>.<span class="fn">log</span>(<span class="str">`Loaded ${users.length} users successfully!`</span>);
+  <span class="kw">return</span> <span class="vr">users</span>;
+}
+
+<span class="fn">getUsers</span>();</code></pre>
+              </div>
+            </div>
+
+            <div class="card card-accent">
+              <div class="card-title"><span class="icon">🔍</span> Execution Steps Breakdown</div>
+              <div class="step-list" style="margin-top: 4px;">
+                <div class="step-item">
+                  <div class="step-num">1</div>
+                  <div class="step-content"><code>await fetch(...)</code> sends HTTP request and pauses until server headers return.</div>
+                </div>
+                <div class="step-item">
+                  <div class="step-num">2</div>
+                  <div class="step-content"><code>if (!response.ok)</code> guards against 404/500 errors before attempting parsing.</div>
+                </div>
+                <div class="step-item">
+                  <div class="step-num">3</div>
+                  <div class="step-content"><code>await response.json()</code> reads body stream and converts to JavaScript objects.</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+
+      <section class="slide" id="slide-22">
+        <div class="slide-header">
+          <div class="slide-title-group">
+            <span class="slide-category"><span class="badge-section">Section 4</span> Fetch &amp; JSON</span>
+            <h2 class="slide-title">Error Handling Using try/catch/finally</h2>
+            <p class="slide-subtitle">Gracefully managing network dropouts, HTTP rejections, and UI loading cleanup</p>
+          </div>
+          <span class="slide-tag">ERROR HANDLING</span>
+        </div>
+
+        <div class="slide-body">
+          <div class="grid-60-40">
+            <div class="card">
+              <div class="card-title"><span class="icon">🛡️</span> Robust Production try/catch/finally</div>
+              <div class="code-panel">
+                <div class="code-header"><span class="code-file">safeFetch.js</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+                <pre><code><span class="kw">async function</span> <span class="fn">loadData</span>() {
+  <span class="kw">try</span> {
+    <span class="vr">showSpinner</span>(<span class="bool">true</span>); <span class="cm">// Start loading</span>
+
+    <span class="kw">const</span> <span class="vr">res</span> = <span class="kw">await</span> <span class="fn">fetch</span>(<span class="str">"https://api.example.com/data"</span>);
+    <span class="kw">if</span> (!<span class="vr">res</span>.<span class="prop">ok</span>) <span class="kw">throw new</span> <span class="fn">Error</span>(<span class="str">"Server returned failure"</span>);
+
+    <span class="kw">const</span> <span class="vr">data</span> = <span class="kw">await</span> <span class="vr">res</span>.<span class="fn">json</span>();
+    <span class="fn">renderData</span>(<span class="vr">data</span>);
+
+  } <span class="kw">catch</span> (<span class="vr">error</span>) {
+    <span class="cm">// Catches network failure or thrown error</span>
+    <span class="vr">console</span>.<span class="fn">error</span>(<span class="str">"Error caught:"</span>, <span class="vr">error</span>.<span class="prop">message</span>);
+    <span class="fn">showErrorMessage</span>(<span class="vr">error</span>.<span class="prop">message</span>);
+
+  } <span class="kw">finally</span> {
+    <span class="cm">// ALWAYS runs: success or failure!</span>
+    <span class="vr">showSpinner</span>(<span class="bool">false</span>); <span class="cm">// Stop loading</span>
+  }
+}</code></pre>
+              </div>
+            </div>
+
+            <div class="card card-accent">
+              <div class="card-title"><span class="icon">💡</span> The Role of finally</div>
+              <p class="card-desc">
+                The <code>finally</code> block is guaranteed to execute whether the <code>try</code> succeeded or the <code>catch</code> was triggered.
+              </p>
+              <div class="alert-box alert-success">
+                <div class="alert-title">Essential UI Cleanup</div>
+                <div class="alert-text">Use <code>finally</code> to re-enable disabled submit buttons, hide progress spinners, and clear timeout timers.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+
+      <section class="slide" id="slide-23">
+        <div class="slide-header">
+          <div class="slide-title-group">
+            <span class="slide-category"><span class="badge-section">Section 5</span> ES Modules</span>
+            <h2 class="slide-title">What are ES Modules?</h2>
+            <p class="slide-subtitle">Splitting applications across multiple files using native browser import and export</p>
+          </div>
+          <span class="slide-tag">ES MODULES</span>
+        </div>
+
+        <div class="slide-body">
+          <div class="grid-60-40">
+            <div class="card">
+              <div class="card-title"><span class="icon">📁</span> Modular Architecture Structure</div>
+              <div class="grid-2col" style="gap: 8px;">
+                <div class="code-panel">
+                  <div class="code-header"><span class="code-file">js/math.js (Module)</span></div>
+                  <pre><code><span class="cm">// Export function</span>
+<span class="kw">export function</span> <span class="fn">add</span>(<span class="vr">a</span>, <span class="vr">b</span>) {
+  <span class="kw">return</span> <span class="vr">a</span> + <span class="vr">b</span>;
+}</code></pre>
+                </div>
+
+                <div class="code-panel">
+                  <div class="code-header"><span class="code-file">js/main.js (Entry)</span></div>
+                  <pre><code><span class="cm">// Import function</span>
+<span class="kw">import</span> { <span class="fn">add</span> } <span class="kw">from</span> <span class="str">"./math.js"</span>;
+
+<span class="vr">console</span>.<span class="fn">log</span>(<span class="fn">add</span>(<span class="num">10</span>, <span class="num">20</span>)); <span class="cm">// 30</span></code></pre>
+                </div>
+              </div>
+
+              <div class="code-panel" style="margin-top: 8px;">
+                <div class="code-header"><span class="code-file">index.html (HTML Script Tag)</span></div>
+                <pre><code><span class="cm">&lt;!-- Must include type="module" to enable import/export in browser! --&gt;</span>
+&lt;<span class="kw">script</span> <span class="prop">type</span>=<span class="str">"module"</span> <span class="prop">src</span>=<span class="str">"./js/main.js"</span>&gt;&lt;/<span class="kw">script</span>&gt;</code></pre>
+              </div>
+            </div>
+
+            <div class="card card-accent">
+              <div class="card-title"><span class="icon">🌟</span> Why Modularize Code?</div>
+              <ul class="bullet-list" style="font-size: 0.76rem;">
+                <li><span class="icon">✓</span> <strong>Separation of Concerns:</strong> API logic, UI rendering, and event controllers stay separated.</li>
+                <li><span class="icon">✓</span> <strong>Reusability:</strong> Functions can be imported into multiple pages and modules.</li>
+                <li><span class="icon">✓</span> <strong>No Global Scope Pollution:</strong> Variables defined inside a module do not leak into the global <code>window</code> scope.</li>
+              </ul>
+              <div class="alert-box alert-info" style="margin-top: 6px;">
+                <div class="alert-title">React Alignment</div>
+                <div class="alert-text">Modern frameworks like React and Vite rely 100% on ES module exports and imports.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+
+      <section class="slide" id="slide-24">
+        <div class="slide-header">
+          <div class="slide-title-group">
+            <span class="slide-category"><span class="badge-section">Section 5</span> ES Modules</span>
+            <h2 class="slide-title">Named Export vs Default Export</h2>
+            <p class="slide-subtitle">Understanding export patterns, import syntax differences, and local server requirements</p>
+          </div>
+          <span class="slide-tag">EXPORTS &amp; IMPORTS</span>
+        </div>
+
+        <div class="slide-body">
+          <div class="grid-2col">
+            <div class="card">
+              <div class="card-title"><span class="icon">🏷️</span> 1. Named Exports: Multiple per file</div>
+              <div class="code-panel">
+                <div class="code-header"><span class="code-file">mathUtils.js &amp; main.js</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+                <pre><code><span class="cm">// Exporting multiple named entities:</span>
+<span class="kw">export function</span> <span class="fn">add</span>(<span class="vr">a</span>, <span class="vr">b</span>) { <span class="kw">return</span> <span class="vr">a</span> + <span class="vr">b</span>; }
+<span class="kw">export function</span> <span class="fn">subtract</span>(<span class="vr">a</span>, <span class="vr">b</span>) { <span class="kw">return</span> <span class="vr">a</span> - <span class="vr">b</span>; }
+
+<span class="cm">// Importing with curly braces matching exact names:</span>
+<span class="kw">import</span> { <span class="fn">add</span>, <span class="fn">subtract</span> } <span class="kw">from</span> <span class="str">"./mathUtils.js"</span>;</code></pre>
+              </div>
+            </div>
+
+            <div class="card card-accent">
+              <div class="card-title"><span class="icon">📦</span> 2. Default Export: One primary entity</div>
+              <div class="code-panel">
+                <div class="code-header"><span class="code-file">greeting.js &amp; main.js</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+                <pre><code><span class="cm">// Exactly one default export per module:</span>
+<span class="kw">export default function</span> <span class="fn">greet</span>(<span class="vr">name</span>) {
+  <span class="kw">return</span> <span class="str">`Hello ${name}`</span>;
+}
+
+<span class="cm">// Imported WITHOUT curly braces (custom alias allowed):</span>
+<span class="kw">import</span> <span class="fn">greet</span> <span class="kw">from</span> <span class="str">"./greeting.js"</span>;</code></pre>
+              </div>
+            </div>
+          </div>
+
+          <div class="alert-box alert-warning" style="margin-top: 6px;">
+            <div class="alert-title">Browser Module Rule (CORS Security)</div>
+            <div class="alert-text">Browser ES Modules cannot be loaded directly through the <code>file:///</code> protocol due to browser security restrictions. Always test modular apps using a local development server (such as VS Code Live Server, Vite, or <code>npx serve</code>).</div>
+          </div>
+        </div>
+      </section>
+
+
+      <section class="slide" id="slide-25">
+        <div class="slide-header">
+          <div class="slide-title-group">
+            <span class="slide-category"><span class="badge-section">Section 6</span> Practical Project</span>
+            <h2 class="slide-title">Practical Project: User Explorer Application</h2>
+            <p class="slide-subtitle">Modular architecture combining DOM manipulation, Fetch API, async/await, and ES modules</p>
+          </div>
+          <span class="slide-tag">CAPSTONE PROJECT</span>
+        </div>
+
+        <div class="slide-body">
+          <div class="grid-60-40">
+            <!-- Left Side: Tabbed Code Viewer for the Modules -->
+            <div class="card" style="padding: 10px;">
+              <div class="tab-container">
+                <div class="tab-headers">
+                  <button class="tab-btn active" data-tab="tab-api">js/api.js</button>
+                  <button class="tab-btn" data-tab="tab-ui">js/ui.js</button>
+                  <button class="tab-btn" data-tab="tab-main">js/main.js</button>
+                  <button class="tab-btn" data-tab="tab-html">index.html</button>
+                </div>
+
+                <!-- Tab 1: api.js -->
+                <div class="tab-content active" id="tab-api">
+                  <div class="code-panel" style="width:100%; border-radius: 0 0 8px 8px; max-height: 300px;">
+                    <pre><code><span class="cm">// js/api.js - Network Service Module</span>
+<span class="kw">export async function</span> <span class="fn">fetchUsers</span>() {
+  <span class="kw">const</span> <span class="vr">response</span> = <span class="kw">await</span> <span class="fn">fetch</span>(
+    <span class="str">"https://jsonplaceholder.typicode.com/users"</span>
+  );
+  <span class="kw">if</span> (!<span class="vr">response</span>.<span class="prop">ok</span>) {
+    <span class="kw">throw new</span> <span class="fn">Error</span>(<span class="str">"Unable to fetch user records"</span>);
+  }
+  <span class="kw">const</span> <span class="vr">users</span> = <span class="kw">await</span> <span class="vr">response</span>.<span class="fn">json</span>();
+  <span class="kw">return</span> <span class="vr">users</span>;
+}</code></pre>
+                  </div>
+                </div>
+
+                <!-- Tab 2: ui.js -->
+                <div class="tab-content" id="tab-ui">
+                  <div class="code-panel" style="width:100%; border-radius: 0 0 8px 8px; max-height: 300px;">
+                    <pre><code><span class="cm">// js/ui.js - DOM Rendering Module</span>
+<span class="kw">export function</span> <span class="fn">renderUsers</span>(<span class="vr">users</span>) {
+  <span class="kw">const</span> <span class="vr">container</span> = <span class="vr">document</span>.<span class="fn">getElementById</span>(<span class="str">"userContainer"</span>);
+  <span class="vr">container</span>.<span class="fn">replaceChildren</span>();
+
+  <span class="vr">users</span>.<span class="fn">forEach</span>((<span class="vr">user</span>) => {
+    <span class="kw">const</span> <span class="vr">card</span> = <span class="vr">document</span>.<span class="fn">createElement</span>(<span class="str">"div"</span>);
+    <span class="vr">card</span>.<span class="prop">className</span> = <span class="str">"user-card"</span>;
+
+    <span class="kw">const</span> <span class="vr">name</span> = <span class="vr">document</span>.<span class="fn">createElement</span>(<span class="str">"h3"</span>);
+    <span class="vr">name</span>.<span class="prop">textContent</span> = <span class="vr">user</span>.<span class="prop">name</span>;
+
+    <span class="kw">const</span> <span class="vr">email</span> = <span class="vr">document</span>.<span class="fn">createElement</span>(<span class="str">"p"</span>);
+    <span class="vr">email</span>.<span class="prop">textContent</span> = <span class="vr">user</span>.<span class="prop">email</span>;
+
+    <span class="vr">card</span>.<span class="fn">append</span>(<span class="vr">name</span>, <span class="vr">email</span>);
+    <span class="vr">container</span>.<span class="fn">appendChild</span>(<span class="vr">card</span>);
+  });
+}
+
+<span class="kw">export function</span> <span class="fn">showStatus</span>(<span class="vr">msg</span>) {
+  <span class="vr">document</span>.<span class="fn">getElementById</span>(<span class="str">"status"</span>).<span class="prop">textContent</span> = <span class="vr">msg</span>;
+}</code></pre>
+                  </div>
+                </div>
+
+                <!-- Tab 3: main.js -->
+                <div class="tab-content" id="tab-main">
+                  <div class="code-panel" style="width:100%; border-radius: 0 0 8px 8px; max-height: 300px;">
+                    <pre><code><span class="cm">// js/main.js - Application Controller</span>
+<span class="kw">import</span> { <span class="fn">fetchUsers</span> } <span class="kw">from</span> <span class="str">"./api.js"</span>;
+<span class="kw">import</span> { <span class="fn">renderUsers</span>, <span class="fn">showStatus</span> } <span class="kw">from</span> <span class="str">"./ui.js"</span>;
+
+<span class="kw">const</span> <span class="vr">button</span> = <span class="vr">document</span>.<span class="fn">getElementById</span>(<span class="str">"loadButton"</span>);
+
+<span class="vr">button</span>.<span class="fn">addEventListener</span>(<span class="str">"click"</span>, <span class="kw">async</span> () => {
+  <span class="kw">try</span> {
+    <span class="fn">showStatus</span>(<span class="str">"Loading users..."</span>);
+    <span class="vr">button</span>.<span class="prop">disabled</span> = <span class="bool">true</span>;
+
+    <span class="kw">const</span> <span class="vr">users</span> = <span class="kw">await</span> <span class="fn">fetchUsers</span>();
+    <span class="fn">renderUsers</span>(<span class="vr">users</span>);
+    <span class="fn">showStatus</span>(<span class="str">`${users.length} users loaded successfully!`</span>);
+  } <span class="kw">catch</span> (<span class="vr">err</span>) {
+    <span class="fn">showStatus</span>(<span class="vr">err</span>.<span class="prop">message</span>);
+  } <span class="kw">finally</span> {
+    <span class="vr">button</span>.<span class="prop">disabled</span> = <span class="bool">false</span>;
+  }
+});</code></pre>
+                  </div>
+                </div>
+
+                <!-- Tab 4: index.html -->
+                <div class="tab-content" id="tab-html">
+                  <div class="code-panel" style="width:100%; border-radius: 0 0 8px 8px; max-height: 300px;">
+                    <pre><code><span class="cm">&lt;!-- index.html --&gt;</span>
+&lt;<span class="kw">main</span> <span class="prop">class</span>=<span class="str">"container"</span>&gt;
+  &lt;<span class="kw">h1</span>&gt;User Explorer&lt;/<span class="kw">h1</span>&gt;
+  &lt;<span class="kw">button</span> <span class="prop">id</span>=<span class="str">"loadButton"</span>&gt;Load Users&lt;/<span class="kw">button</span>&gt;
+  &lt;<span class="kw">p</span> <span class="prop">id</span>=<span class="str">"status"</span>&gt;&lt;/<span class="kw">p</span>&gt;
+  &lt;<span class="kw">div</span> <span class="prop">id</span>=<span class="str">"userContainer"</span> <span class="prop">class</span>=<span class="str">"users"</span>&gt;&lt;/<span class="kw">div</span>&gt;
+&lt;/<span class="kw">main</span>&gt;
+&lt;<span class="kw">script</span> <span class="prop">type</span>=<span class="str">"module"</span> <span class="prop">src</span>=<span class="str">"./js/main.js"</span>&gt;&lt;/<span class="kw">script</span>&gt;</code></pre>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Right Side: Live Interactive User Explorer Sandbox -->
+            <div class="card card-accent" style="display:flex; flex-direction:column;">
+              <div class="card-title" style="justify-content:space-between;">
+                <span><span class="icon">⚡</span> Live User Explorer Demo</span>
+                <span class="badge badge-success" id="demoLiveStatus">Idle</span>
+              </div>
+              <p class="card-desc" style="font-size: 0.74rem;">Click below to trigger live async fetch and render dynamic cards:</p>
+              
+              <div style="display:flex; gap:8px; margin: 2px 0 6px 0;">
+                <button class="btn btn-primary btn-sm" id="btnLiveLoadUsers">Load Users</button>
+                <button class="btn btn-secondary btn-sm" id="btnLiveClearUsers">Clear</button>
+              </div>
+
+              <div id="liveStatusText" style="font-size: 0.74rem; font-weight: 600; color: var(--primary-blue); min-height: 20px;">
+                Ready to fetch user data
+              </div>
+
+              <div id="liveUserContainer" class="user-explorer-grid" style="flex:1;">
+                <div class="user-card" style="opacity:0.6;">
+                  <span class="user-card-name">Sample User</span>
+                  <span class="user-card-email">user@example.com</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- Bottom Controls -->
+    <nav class="pres-controls">
+      <button class="control-btn" id="prevBtn" title="Previous Slide (← / PageUp)">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+      </button>
+
+      <div class="slide-select-container">
+        <select class="slide-select" id="slideSelect" title="Jump to Slide"></select>
+      </div>
+
+      <button class="control-btn" id="nextBtn" title="Next Slide (→ / PageDown / Space)">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+      </button>
+
+      <div class="shortcuts-pill">
+        <kbd>←</kbd> / <kbd>→</kbd>
+      </div>
+    </nav>
+
+    <!-- Table of Contents Drawer -->
+    <div class="toc-overlay" id="tocOverlay">
+      <div class="toc-drawer">
+        <div class="toc-header">
+          <div class="toc-title">Table of Contents (25 Slides)</div>
+          <button class="toc-close" id="tocClose" title="Close (Esc)">✕</button>
+        </div>
+        <ul class="toc-list" id="tocList"></ul>
+      </div>
+    </div>
+
+    <!-- Help Modal -->
+    <div class="modal-overlay" id="helpModal">
+      <div class="modal-card">
+        <div class="modal-header">
+          <div class="modal-title">Keyboard Navigation</div>
+          <button class="toc-close" id="helpClose" title="Close (Esc)">✕</button>
+        </div>
+        <div class="modal-body">
+          <div class="shortcut-row"><span>Next Slide</span><div><span class="shortcut-key">→</span> <span class="shortcut-key">Space</span></div></div>
+          <div class="shortcut-row"><span>Previous Slide</span><div><span class="shortcut-key">←</span> <span class="shortcut-key">PageUp</span></div></div>
+          <div class="shortcut-row"><span>First / Last Slide</span><div><span class="shortcut-key">Home</span> / <span class="shortcut-key">End</span></div></div>
+          <div class="shortcut-row"><span>Toggle Fullscreen</span><span class="shortcut-key">F</span></div>
+          <div class="shortcut-row"><span>Table of Contents</span><span class="shortcut-key">T</span></div>
+          <div class="shortcut-row"><span>Close Overlays</span><span class="shortcut-key">Esc</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div class="toast-notice" id="toastNotice">Notification</div>
+
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>

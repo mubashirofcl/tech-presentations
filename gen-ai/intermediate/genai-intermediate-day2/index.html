@@ -1,0 +1,1813 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Intermediate AI/LLM – Day 2: Agent Workflows, RAG Fundamentals &amp; Document Processing</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="app-container">
+
+    <!-- Top Presentation Header -->
+    <header class="pres-header">
+      <div class="brand-section">
+        <span class="brand-badge">Intermediate AI &bull; Day 2</span>
+        <div class="pres-title">
+          Intermediate AI/LLM <span>&bull; Workflows, RAG &amp; Document Processing</span>
+        </div>
+      </div>
+      <div class="header-center">
+        <div class="slide-counter-badge" id="slideCounter">1 / 28</div>
+      </div>
+      <div class="header-actions">
+        <button class="btn-header" id="fullscreenBtn" title="Toggle Fullscreen (F)">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path></svg>
+          Full
+        </button>
+        <button class="btn-header" id="tocBtn" title="Table of Contents (T)">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+          Index
+        </button>
+        <button class="btn-header" id="helpBtn" title="Keyboard Shortcuts (?)">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+          Help
+        </button>
+      </div>
+    </header>
+
+    <!-- Progress Bar -->
+    <div class="pres-progress-container">
+      <div class="pres-progress-bar" id="progressBar" style="width: 3.57%;"></div>
+    </div>
+
+    <!-- Main Slide Viewport -->
+    <main class="slide-viewport">
+
+      <section class="slide active" id="slide-1">
+        <div class="slide-header">
+          <div class="slide-title-group">
+            <span class="slide-category"><span class="badge-section">Section 1</span> Agent Workflows</span>
+            <h2 class="slide-title">Introduction to Agent Workflows</h2>
+            <p class="slide-subtitle">Intermediate AI/LLM &ndash; Day 2: Dividing Complex Goals into Reliable Multi-Step Systems</p>
+          </div>
+          <span class="slide-tag">DAY 2 &bull; WORKFLOWS</span>
+        </div>
+        <div class="slide-body">
+          <div class="grid-60-40">
+            <div class="card card-accent">
+              <div class="card-title"><span class="icon">🧭</span> What are Agent Workflows?</div>
+              <p class="card-desc">
+                An <strong>Agent Workflow</strong> is an architectural pattern that divides a complex objective into distinct, coordinated steps executed by specialized prompts, functions, or agents. Rather than relying on a single unpredictable LLM prompt to solve everything, workflows bring software engineering discipline to AI systems.
+              </p>
+              <div class="grid-2col" style="gap: 10px; margin-top: 6px;">
+                <div class="card" style="padding: 10px; background: #F8FAFC;">
+                  <strong style="color: var(--primary-deep); font-size: 0.82rem;">1. Sequential Flow</strong>
+                  <span style="font-size: 0.74rem; color: var(--text-body);">Pipeline where output of step A becomes input to step B. Predictable and strictly ordered.</span>
+                </div>
+                <div class="card" style="padding: 10px; background: #F8FAFC;">
+                  <strong style="color: var(--primary-deep); font-size: 0.82rem;">2. Parallel Flow</strong>
+                  <span style="font-size: 0.74rem; color: var(--text-body);">Concurrent execution of independent tasks using Promise.all() to slash total response latency.</span>
+                </div>
+                <div class="card" style="padding: 10px; background: #F8FAFC;">
+                  <strong style="color: var(--primary-deep); font-size: 0.82rem;">3. Router Pattern</strong>
+                  <span style="font-size: 0.74rem; color: var(--text-body);">Classification gate directing user queries to the optimal specialized prompt or domain handler.</span>
+                </div>
+                <div class="card" style="padding: 10px; background: #F8FAFC;">
+                  <strong style="color: var(--primary-deep); font-size: 0.82rem;">4. Human-in-the-Loop</strong>
+                  <span style="font-size: 0.74rem; color: var(--text-body);">Mandatory approval checkpoints for financial, irreversible, or sensitive actions before execution.</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-title"><span class="icon">🏢</span> Real-World Example: Enterprise Leave Agent</div>
+              <p class="card-desc">
+                Consider an employee asking: <em>"Please check my leave balance and submit 3 days of leave starting next Monday."</em>
+              </p>
+              <div class="step-list" style="margin-top: 4px;">
+                <div class="step-item">
+                  <span class="step-num">1</span>
+                  <div class="step-content"><strong>Extract Parameters:</strong> Parse dates, count, and reason.</div>
+                </div>
+                <div class="step-item">
+                  <span class="step-num">2</span>
+                  <div class="step-content"><strong>Database Check:</strong> Query HR database for remaining PTO balance.</div>
+                </div>
+                <div class="step-item">
+                  <span class="step-num">3</span>
+                  <div class="step-content"><strong>Calendar Validation:</strong> Confirm dates don't clash with team blackout periods.</div>
+                </div>
+                <div class="step-item">
+                  <span class="step-num">4</span>
+                  <div class="step-content"><strong>Manager Gate:</strong> If &gt; 2 days, route to manager for approval.</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="slide" id="slide-2">
+        <div class="slide-header">
+          <div class="slide-title-group">
+            <span class="slide-category"><span class="badge-section">Section 1</span> Agent Workflows</span>
+            <h2 class="slide-title">Why Do We Need Agent Workflows?</h2>
+            <p class="slide-subtitle">The Limits of Single Prompts vs The Power of Structured Multi-Step Pipelines</p>
+          </div>
+          <span class="slide-tag">WORKFLOW ADVANTAGES</span>
+        </div>
+        <div class="slide-body">
+          <div class="grid-2col">
+            <div class="card card-accent">
+              <div class="card-title"><span class="icon">⚠️</span> The Failure of "Do Everything" Single Prompts</div>
+              <p class="card-desc">
+                Asking an LLM in one monolithic prompt to: <em>"Read this 20-page document, verify 5 accounting constraints, calculate taxes, update database records, and draft an executive email"</em> inevitably leads to critical failures:
+              </p>
+              <ul class="bullet-list" style="margin-top: 6px;">
+                <li><span class="icon">✗</span> <strong>Attention Degradation:</strong> LLMs skip subtle business constraints buried in complex prompts.</li>
+                <li><span class="icon">✗</span> <strong>Zero Deterministic Guarantees:</strong> Mathematical calculations and DB operations can hallucinate.</li>
+                <li><span class="icon">✗</span> <strong>Impossible Debugging:</strong> When a single mega-prompt produces a bad result, you cannot isolate which step failed.</li>
+                <li><span class="icon">✗</span> <strong>All-or-Nothing Latency:</strong> If one sub-task fails, the entire prompt must be completely re-run.</li>
+              </ul>
+            </div>
+
+            <div class="card">
+              <div class="card-title"><span class="icon">🛡️</span> The 4 Pillars of Structured Workflows</div>
+              <div class="step-list" style="margin-top: 4px;">
+                <div class="step-item">
+                  <span class="step-num">1</span>
+                  <div class="step-content">
+                    <strong>Validation &amp; Error Boundaries:</strong> Each step validates its own inputs and outputs before triggering subsequent actions.
+                  </div>
+                </div>
+                <div class="step-item">
+                  <span class="step-num">2</span>
+                  <div class="step-content">
+                    <strong>Deterministic Logic Injection:</strong> Mix LLM reasoning for unstructured text with rigid Node.js code for math, permissions, and SQL.
+                  </div>
+                </div>
+                <div class="step-item">
+                  <span class="step-num">3</span>
+                  <div class="step-content">
+                    <strong>Auditability &amp; Observability:</strong> Log the exact output, token cost, and execution duration of every individual step.
+                  </div>
+                </div>
+                <div class="step-item">
+                  <span class="step-num">4</span>
+                  <div class="step-content">
+                    <strong>Modular Iteration:</strong> Optimize or swap a prompt or model for Step 2 without breaking Steps 1, 3, or 4.
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="alert-box alert-info">
+            <span class="icon">💡</span>
+            <span><strong>Engineering Principle:</strong> In production AI, <em>architecture beats prompt engineering</em>. Breaking a 1-step prompt into a 3-step workflow routinely boosts reliability from 70% to &gt; 98%.</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="slide" id="slide-3">
+        <div class="slide-header">
+          <div class="slide-title-group">
+            <span class="slide-category"><span class="badge-section">Section 1</span> Agent Workflows</span>
+            <h2 class="slide-title">Sequential Workflow (A &rarr; B &rarr; C)</h2>
+            <p class="slide-subtitle">Chaining Linear Operations Where Output N Feeds Directly Into Step N+1</p>
+          </div>
+          <span class="slide-tag">SEQUENTIAL PATTERN</span>
+        </div>
+        <div class="slide-body">
+          <div class="card card-accent">
+            <div class="card-title"><span class="icon">🔗</span> Architecture: Linear Chain of Responsibility</div>
+            <p class="card-desc">
+              In a <strong>Sequential Workflow</strong>, tasks execute strictly one after another. Step B cannot start until Step A completes and passes its verified structured output.
+            </p>
+            <div class="wf-pipeline" style="margin-top: 10px;">
+              <div class="wf-step">
+                <span class="wf-step-badge">Step 1</span>
+                <span class="wf-step-title">Understand Request</span>
+                <span class="wf-step-desc">LLM parses natural language into JSON dates &amp; count</span>
+              </div>
+              <div class="wf-arrow">&rarr;</div>
+              <div class="wf-step">
+                <span class="wf-step-badge">Step 2</span>
+                <span class="wf-step-title">Check HR Database</span>
+                <span class="wf-step-desc">Node.js checks employee leave balance &gt; requested</span>
+              </div>
+              <div class="wf-arrow">&rarr;</div>
+              <div class="wf-step">
+                <span class="wf-step-badge">Step 3</span>
+                <span class="wf-step-title">Validate Calendar</span>
+                <span class="wf-step-desc">Checks company holidays and project deadlines</span>
+              </div>
+              <div class="wf-arrow">&rarr;</div>
+              <div class="wf-step">
+                <span class="wf-step-badge">Step 4</span>
+                <span class="wf-step-title">Submit &amp; Notify</span>
+                <span class="wf-step-desc">Inserts record into HRIS &amp; emails supervisor</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="grid-2col">
+            <div class="card">
+              <div class="card-title"><span class="icon">✅</span> Best Suited For</div>
+              <ul class="bullet-list">
+                <li><span class="icon">&bull;</span> Multi-step form processing (Extract &rarr; Validate &rarr; Save).</li>
+                <li><span class="icon">&bull;</span> Code generation pipelines (Draft &rarr; Lint &rarr; Test &rarr; Commit).</li>
+                <li><span class="icon">&bull;</span> Summarization pipelines (Transcript &rarr; Outline &rarr; Executive Summary).</li>
+              </ul>
+            </div>
+            <div class="card">
+              <div class="card-title"><span class="icon">⚠️</span> Key Consideration: Cascade Latency</div>
+              <p class="card-desc">
+                Because steps are synchronous, the total execution time is the cumulative sum:
+              </p>
+              <div style="font-family: var(--font-mono); font-size: 0.76rem; background: var(--bg-card-subtle); padding: 8px; border-radius: 6px; border: 1px solid var(--border-subtle); margin-top: 4px;">
+                Total Time = Time(A) + Time(B) + Time(C) + Time(D)
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="slide" id="slide-4">
+        <div class="slide-header">
+          <div class="slide-title-group">
+            <span class="slide-category"><span class="badge-section">Section 1</span> Agent Workflows</span>
+            <h2 class="slide-title">Practical: Sequential Workflow in Node.js</h2>
+            <p class="slide-subtitle">Executing Chained Async Steps with Error Boundaries in CommonJS</p>
+          </div>
+          <span class="slide-tag">PRACTICAL &bull; NODE.JS</span>
+        </div>
+        <div class="slide-body">
+          <div class="grid-60-40">
+            <div class="code-panel">
+  <div class="code-header">
+    <div class="code-lang-group">
+      <div class="code-dots"><span class="code-dot dot-red"></span><span class="code-dot dot-yellow"></span><span class="code-dot dot-green"></span></div>
+      <span class="code-filename">sequentialWorkflow.js</span>
+    </div>
+    <button class="btn-copy" onclick="copyCode(this)">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+      Copy
+    </button>
+  </div>
+  <pre class="code-content"><code><span class="comment">// sequentialLeaveWorkflow.js - CommonJS Implementation</span>
+<span class="kw">const</span> { parseLeaveWithLLM } = <span class="fn">require</span>(<span class="str">'./llmParser'</span>);
+<span class="kw">const</span> { getEmployeeBalance, saveLeaveRecord } = <span class="fn">require</span>(<span class="str">'./db'</span>);
+
+<span class="kw">async function</span> <span class="fn">processLeaveWorkflow</span>(<span class="var">employeeId</span>, <span class="var">userPrompt</span>) {
+  <span class="kw">try</span> {
+    <span class="comment">// Step 1: LLM extracts structured intent</span>
+    <span class="kw">const</span> <span class="var">request</span> = <span class="kw">await</span> <span class="fn">parseLeaveWithLLM</span>(<span class="var">userPrompt</span>);
+    <span class="obj">console</span>.<span class="fn">log</span>(<span class="str">`[Step 1] Parsed: ${request.days} days starting ${request.startDate}`</span>);
+
+    <span class="comment">// Step 2: Deterministic Database Check</span>
+    <span class="kw">const</span> <span class="var">balance</span> = <span class="kw">await</span> <span class="fn">getEmployeeBalance</span>(<span class="var">employeeId</span>);
+    <span class="kw">if</span> (<span class="var">balance</span> &lt; <span class="var">request</span>.<span class="obj">days</span>) {
+      <span class="kw">return</span> { <span class="obj">success</span>: <span class="kw">false</span>, <span class="obj">error</span>: <span class="str">`Insufficient balance: ${balance} days remaining.`</span> };
+    }
+    <span class="obj">console</span>.<span class="fn">log</span>(<span class="str">`[Step 2] Balance verified: ${balance} days available.`</span>);
+
+    <span class="comment">// Step 3: Date Validation</span>
+    <span class="kw">if</span> (<span class="kw">new</span> <span class="fn">Date</span>(<span class="var">request</span>.<span class="obj">startDate</span>) &lt; <span class="kw">new</span> <span class="fn">Date</span>()) {
+      <span class="kw">return</span> { <span class="obj">success</span>: <span class="kw">false</span>, <span class="obj">error</span>: <span class="str">'Start date cannot be in the past.'</span> };
+    }
+
+    <span class="comment">// Step 4: Final Database Record Insertion</span>
+    <span class="kw">const</span> <span class="var">record</span> = <span class="kw">await</span> <span class="fn">saveLeaveRecord</span>({ <span class="var">employeeId</span>, ...<span class="var">request</span> });
+    <span class="kw">return</span> { <span class="obj">success</span>: <span class="kw">true</span>, <span class="obj">leaveId</span>: <span class="var">record</span>.<span class="obj">id</span>, <span class="obj">message</span>: <span class="str">'Leave submitted successfully!'</span> };
+  } <span class="kw">catch</span> (<span class="var">err</span>) {
+    <span class="kw">return</span> { <span class="obj">success</span>: <span class="kw">false</span>, <span class="obj">error</span>: <span class="var">err</span>.<span class="obj">message</span> };
+  }
+}
+
+<span class="var">module</span>.<span class="obj">exports</span> = { <span class="fn">processLeaveWorkflow</span> };</code></pre>
+</div>
+
+            <div class="card">
+              <div class="card-title"><span class="icon">🔍</span> Code Walkthrough &amp; Best Practices</div>
+              <ul class="bullet-list" style="font-size: 0.77rem;">
+                <li><span class="icon">1.</span> <strong>Early Exit Guard:</strong> If Step 2 fails (insufficient balance), we exit immediately without wasting time or tokens on Steps 3 and 4.</li>
+                <li><span class="icon">2.</span> <strong>Mixing LLM with Code:</strong> We use the LLM only for Step 1 (unstructured string parsing), and use strict JavaScript for Steps 2 and 3. Never let the LLM do math or permission checks!</li>
+                <li><span class="icon">3.</span> <strong>Standardized Output:</strong> Every return statement conforms to <code>{ success: boolean, ... }</code>, allowing caller functions to handle responses reliably.</li>
+              </ul>
+              <div class="alert-box alert-success" style="margin-top: 6px;">
+                <span class="icon">✓</span>
+                <span><strong>Result:</strong> Fully deterministic execution with clear audit checkpoints.</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="slide" id="slide-5">
+        <div class="slide-header">
+          <div class="slide-title-group">
+            <span class="slide-category"><span class="badge-section">Section 1</span> Agent Workflows</span>
+            <h2 class="slide-title">Parallel Workflow</h2>
+            <p class="slide-subtitle">Fan-Out &amp; Fan-In Architecture: Concurrently Executing Independent Tasks</p>
+          </div>
+          <span class="slide-tag">PARALLEL PATTERN</span>
+        </div>
+        <div class="slide-body">
+          <div class="grid-2col">
+            <div class="card card-accent">
+              <div class="card-title"><span class="icon">⚡</span> The Need for Speed: Concurrency</div>
+              <p class="card-desc">
+                Often, a system needs multiple independent analyses of the same document or input. Running them sequentially wastes precious seconds. In a <strong>Parallel Workflow</strong>, we "fan out" requests across multiple workers simultaneously, and "fan in" when all finish.
+              </p>
+              <div class="parallel-diagram" style="margin-top: 10px;">
+                <div style="font-size: 0.72rem; font-weight: 700; color: var(--primary-deep); text-align: center;">Incoming Support Ticket</div>
+                <div class="wf-arrow" style="text-align: center;">&darr; [Fan-Out via Promise.all()]</div>
+                <div class="parallel-branches">
+                  <div class="parallel-branch">
+                    <strong style="color: var(--primary-blue); font-size: 0.78rem;">Worker 1</strong>
+                    <div style="font-size: 0.72rem; color: var(--text-body);">Sentiment Analysis (Positive, Neutral, Angry)</div>
+                  </div>
+                  <div class="parallel-branch">
+                    <strong style="color: var(--accent-purple); font-size: 0.78rem;">Worker 2</strong>
+                    <div style="font-size: 0.72rem; color: var(--text-body);">Topic Extraction (Billing, Bug, Inquiry)</div>
+                  </div>
+                  <div class="parallel-branch">
+                    <strong style="color: var(--accent-green); font-size: 0.78rem;">Worker 3</strong>
+                    <div style="font-size: 0.72rem; color: var(--text-body);">Urgency Scoring (Low, Medium, Critical)</div>
+                  </div>
+                </div>
+                <div class="wf-arrow" style="text-align: center;">&darr; [Fan-In Aggregation]</div>
+                <div style="background: #FFFFFF; border: 1px solid #CBD5E1; border-radius: 6px; padding: 6px 10px; font-size: 0.72rem; text-align: center;">
+                  Aggregated Structured Ticket Object Ready for Dispatch
+                </div>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-title"><span class="icon">⏱️</span> Latency Comparison</div>
+              <div class="step-list">
+                <div class="step-item">
+                  <span class="step-num" style="background: var(--accent-amber);">S</span>
+                  <div class="step-content">
+                    <strong>Sequential Latency:</strong> 1.2s + 1.1s + 1.3s = <strong>3.6 seconds</strong>. User waits noticeably.
+                  </div>
+                </div>
+                <div class="step-item">
+                  <span class="step-num" style="background: var(--accent-green);">P</span>
+                  <div class="step-content">
+                    <strong>Parallel Latency:</strong> max(1.2s, 1.1s, 1.3s) = <strong>~1.3 seconds</strong> (&gt; 60% faster!).
+                  </div>
+                </div>
+              </div>
+
+              <div class="alert-box alert-warning" style="margin-top: 10px;">
+                <span class="icon">⚠️</span>
+                <span><strong>API Rate Limits:</strong> Parallel requests hit the LLM provider concurrently. Ensure your API tier supports the required Requests Per Minute (RPM).</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="slide" id="slide-6">
+        <div class="slide-header">
+          <div class="slide-title-group">
+            <span class="slide-category"><span class="badge-section">Section 1</span> Agent Workflows</span>
+            <h2 class="slide-title">Practical: Promise.all() in Node.js</h2>
+            <p class="slide-subtitle">Executing Concurrent AI Workers with Structured Aggregation</p>
+          </div>
+          <span class="slide-tag">PRACTICAL &bull; PROMISE.ALL</span>
+        </div>
+        <div class="slide-body">
+          <div class="grid-60-40">
+            <div class="code-panel">
+  <div class="code-header">
+    <div class="code-lang-group">
+      <div class="code-dots"><span class="code-dot dot-red"></span><span class="code-dot dot-yellow"></span><span class="code-dot dot-green"></span></div>
+      <span class="code-filename">parallelWorkflow.js</span>
+    </div>
+    <button class="btn-copy" onclick="copyCode(this)">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+      Copy
+    </button>
+  </div>
+  <pre class="code-content"><code><span class="comment">// parallelTicketAnalysis.js - CommonJS Implementation</span>
+<span class="kw">const</span> { analyzeSentiment, extractTopic, scoreUrgency } = <span class="fn">require</span>(<span class="str">'./analyzers'</span>);
+
+<span class="kw">async function</span> <span class="fn">processSupportTicketInParallel</span>(<span class="var">ticketText</span>) {
+  <span class="kw">const</span> <span class="var">startTime</span> = <span class="fn">Date</span>.<span class="fn">now</span>();
+
+  <span class="comment">// Launch all 3 independent LLM tasks simultaneously</span>
+  <span class="kw">const</span> [<span class="var">sentiment</span>, <span class="var">topic</span>, <span class="var">urgency</span>] = <span class="kw">await</span> <span class="fn">Promise</span>.<span class="fn">all</span>([
+    <span class="fn">analyzeSentiment</span>(<span class="var">ticketText</span>),
+    <span class="fn">extractTopic</span>(<span class="var">ticketText</span>),
+    <span class="fn">scoreUrgency</span>(<span class="var">ticketText</span>)
+  ]);
+
+  <span class="kw">const</span> <span class="var">duration</span> = <span class="fn">Date</span>.<span class="fn">now</span>() - <span class="var">startTime</span>;
+  <span class="obj">console</span>.<span class="fn">log</span>(<span class="str">`All parallel analyses completed in ${duration}ms`</span>);
+
+  <span class="kw">return</span> {
+    <span class="obj">processedAt</span>: <span class="kw">new</span> <span class="fn">Date</span>().<span class="fn">toISOString</span>(),
+    <span class="obj">sentiment</span>,   <span class="comment">// e.g. "FRUSTRATED"</span>
+    <span class="obj">topic</span>,       <span class="comment">// e.g. "BILLING_DISPUTE"</span>
+    <span class="obj">urgency</span>,     <span class="comment">// e.g. "HIGH"</span>
+    <span class="obj">executionTimeMs</span>: <span class="var">duration</span>
+  };
+}
+
+<span class="var">module</span>.<span class="obj">exports</span> = { <span class="fn">processSupportTicketInParallel</span> };</code></pre>
+</div>
+
+            <div class="card">
+              <div class="card-title"><span class="icon">💡</span> Implementation Details</div>
+              <ul class="bullet-list" style="font-size: 0.77rem;">
+                <li><span class="icon">&bull;</span> <strong>Array Destructuring:</strong> <code>const [sentiment, topic, urgency] = await Promise.all([...])</code> matches the exact index order of the promises passed in.</li>
+                <li><span class="icon">&bull;</span> <strong>Fail-Fast Behavior:</strong> Standard <code>Promise.all()</code> rejects immediately if any promise throws. If partial success is acceptable, use <code>Promise.allSettled()</code> instead.</li>
+                <li><span class="icon">&bull;</span> <strong>Benchmarking:</strong> Measuring <code>duration</code> helps verify the latency speedup during automated test suites.</li>
+              </ul>
+              <div class="alert-box alert-info" style="margin-top: 8px;">
+                <span class="icon">📌</span>
+                <span><strong>Key Rule:</strong> Only parallelize tasks that have <em>zero dependencies</em> on each other. If Task B requires Task A's result, use sequential chaining.</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="slide" id="slide-7">
+        <div class="slide-header">
+          <div class="slide-title-group">
+            <span class="slide-category"><span class="badge-section">Section 1</span> Agent Workflows</span>
+            <h2 class="slide-title">Sequential vs Parallel Workflow</h2>
+            <p class="slide-subtitle">Architectural Trade-offs &amp; Selection Criteria</p>
+          </div>
+          <span class="slide-tag">WORKFLOW COMPARISON</span>
+        </div>
+        <div class="slide-body">
+          <div class="card" style="padding: 10px;">
+            <table class="rag-comparison-table">
+              <thead>
+                <tr>
+                  <th>Dimension</th>
+                  <th>Sequential Workflow (Chained)</th>
+                  <th>Parallel Workflow (Concurrent)</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Data Dependency</strong></td>
+                  <td>Strict: Step N depends directly on Step N-1</td>
+                  <td>None: All tasks run independently on the original input</td>
+                </tr>
+                <tr>
+                  <td><strong>Execution Latency</strong></td>
+                  <td>Cumulative sum: Time(A) + Time(B) + Time(C)</td>
+                  <td>Bottleneck bounded: max(Time(A), Time(B), Time(C))</td>
+                </tr>
+                <tr>
+                  <td><strong>Error Blast Radius</strong></td>
+                  <td>Early termination stops subsequent steps immediately</td>
+                  <td>One failure does not delay others (with allSettled)</td>
+                </tr>
+                <tr>
+                  <td><strong>API Rate Limit Impact</strong></td>
+                  <td>Low: Requests are spaced out in time</td>
+                  <td>High: Sudden spike in concurrent API tokens/connections</td>
+                </tr>
+                <tr>
+                  <td><strong>Ideal Use Cases</strong></td>
+                  <td>Multi-stage calculations, order checkout, database updates</td>
+                  <td>Multi-angle analysis, document translation to 5 languages, fact-checking</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="grid-2col">
+            <div class="card card-accent">
+              <strong style="color: var(--primary-deep); font-size: 0.82rem;">When to Choose Sequential</strong>
+              <p class="card-desc">When correctness and validation must precede action. E.g., Do not call the credit card charge API until the inventory check confirms the item is in stock.</p>
+            </div>
+            <div class="card card-accent">
+              <strong style="color: var(--primary-deep); font-size: 0.82rem;">When to Choose Parallel</strong>
+              <p class="card-desc">When synthesizing diverse perspectives or performing multi-category tagging where speed is top priority and tasks do not modify shared state.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="slide" id="slide-8">
+        <div class="slide-header">
+          <div class="slide-title-group">
+            <span class="slide-category"><span class="badge-section">Section 1</span> Agent Workflows</span>
+            <h2 class="slide-title">Router Pattern</h2>
+            <p class="slide-subtitle">Dynamic Request Dispatching to Specialized Handlers and Focused Prompts</p>
+          </div>
+          <span class="slide-tag">ROUTER PATTERN</span>
+        </div>
+        <div class="slide-body">
+          <div class="grid-2col">
+            <div class="card card-accent">
+              <div class="card-title"><span class="icon">🔀</span> What is the Router Pattern?</div>
+              <p class="card-desc">
+                Instead of burdening one giant system prompt with hundreds of rules for every possible topic, the <strong>Router Pattern</strong> acts as an intelligent dispatcher:
+              </p>
+              <div class="step-list" style="margin-top: 6px;">
+                <div class="step-item">
+                  <span class="step-num">1</span>
+                  <div class="step-content"><strong>Classify:</strong> A lightweight classifier inspects user intent.</div>
+                </div>
+                <div class="step-item">
+                  <span class="step-num">2</span>
+                  <div class="step-content"><strong>Dispatch:</strong> The router sends the query to a specialized agent.</div>
+                </div>
+                <div class="step-item">
+                  <span class="step-num">3</span>
+                  <div class="step-content"><strong>Execute:</strong> The chosen agent responds with tailored domain tools.</div>
+                </div>
+              </div>
+              <div class="alert-box alert-success" style="margin-top: 10px;">
+                <span class="icon">✨</span>
+                <span><strong>Token Savings:</strong> Specialized agents use 150-word prompts instead of a 3,000-word monolith. Faster, cheaper, and far more accurate!</span>
+              </div>
+            </div>
+
+            <div class="router-tree">
+              <div style="font-size: 0.80rem; font-weight: 700; color: var(--primary-deep); text-align: center;">Incoming User Request</div>
+              <div class="wf-arrow" style="text-align: center;">&darr; [Router Classification Gate]</div>
+              <div class="router-routes">
+                <div class="route-card route-billing">
+                  <strong style="color: #059669; font-size: 0.78rem;">Billing Route</strong>
+                  <div style="font-size: 0.70rem; color: var(--text-body); margin-top: 2px;">Invoices, refunds, Stripe IDs, credit limits.</div>
+                </div>
+                <div class="route-card route-tech">
+                  <strong style="color: #7C3AED; font-size: 0.78rem;">Technical Route</strong>
+                  <div style="font-size: 0.70rem; color: var(--text-body); margin-top: 2px;">API logs, 500 errors, SDK docs, code fixes.</div>
+                </div>
+                <div class="route-card route-general">
+                  <strong style="color: #D97706; font-size: 0.78rem;">General Route</strong>
+                  <div style="font-size: 0.70rem; color: var(--text-body); margin-top: 2px;">Office hours, FAQs, pricing plans, contact info.</div>
+                </div>
+              </div>
+              <div class="alert-box alert-info" style="margin-top: 6px;">
+                <span class="icon">⚙️</span>
+                <span><strong>Implementation:</strong> Can be built with fast keyword heuristics or a high-speed small LLM (e.g. Llama-3-8B).</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="slide" id="slide-9">
+        <div class="slide-header">
+          <div class="slide-title-group">
+            <span class="slide-category"><span class="badge-section">Section 1</span> Agent Workflows</span>
+            <h2 class="slide-title">Practical: Build a Simple Router in Node.js</h2>
+            <p class="slide-subtitle">Rule-Based &amp; Semantic Classification with Interactive Live Test Bench</p>
+          </div>
+          <span class="slide-tag">PRACTICAL &bull; ROUTER SIMULATOR</span>
+        </div>
+        <div class="slide-body">
+          <div class="grid-2col">
+            <div class="card">
+              <div class="card-title"><span class="icon">💻</span> CommonJS Dispatch Architecture</div>
+              <div style="font-family: var(--font-mono); font-size: 0.70rem; background: var(--code-bg); color: var(--code-text); padding: 10px; border-radius: 6px; line-height: 1.45; overflow-x: auto;">
+<span class="kw">const</span> <span class="var">routes</span> = {
+  <span class="obj">billing</span>: <span class="fn">handleBilling</span>,
+  <span class="obj">technical</span>: <span class="fn">handleTechnical</span>,
+  <span class="obj">general</span>: <span class="fn">handleGeneral</span>
+};
+
+<span class="kw">function</span> <span class="fn">classifyIntent</span>(<span class="var">text</span>) {
+  <span class="kw">const</span> <span class="var">lower</span> = <span class="var">text</span>.<span class="fn">toLowerCase</span>();
+  <span class="kw">if</span> (<span class="var">/refund|invoice|charge|bill|stripe/i</span>.<span class="fn">test</span>(<span class="var">lower</span>)) <span class="kw">return</span> <span class="str">'billing'</span>;
+  <span class="kw">if</span> (<span class="var">/error|bug|code|500|api|database|fail/i</span>.<span class="fn">test</span>(<span class="var">lower</span>)) <span class="kw">return</span> <span class="str">'technical'</span>;
+  <span class="kw">return</span> <span class="str">'general'</span>;
+}
+
+<span class="kw">async function</span> <span class="fn">routeRequest</span>(<span class="var">userQuery</span>) {
+  <span class="kw">const</span> <span class="var">route</span> = <span class="fn">classifyIntent</span>(<span class="var">userQuery</span>);
+  <span class="kw">return await</span> <span class="var">routes</span>[<span class="var">route</span>](<span class="var">userQuery</span>);
+}
+              </div>
+            </div>
+
+            <div class="simulator-box">
+              <div class="card-title"><span class="icon">🧪</span> Live Interactive Router Test Bench</div>
+              <p class="card-desc" style="font-size: 0.74rem;">Test how queries are automatically classified and routed to the correct agent:</p>
+              
+              <div class="sim-input-row">
+                <input type="text" id="simRouterInput" class="sim-input" placeholder="Type query e.g. I need a refund for invoice #901..." value="I was charged twice on my invoice, please refund.">
+                <button class="sim-btn" id="btnRunRouter">Route Query</button>
+              </div>
+
+              <div style="display: flex; gap: 6px; flex-wrap: wrap;">
+                <button class="btn-header" style="font-size: 0.68rem; padding: 3px 8px;" onclick="setRouterSample('I was charged twice on my invoice, please refund.')">Sample: Billing</button>
+                <button class="btn-header" style="font-size: 0.68rem; padding: 3px 8px;" onclick="setRouterSample('PostgreSQL connection dropped with code 500 error in API.')">Sample: Tech Bug</button>
+                <button class="btn-header" style="font-size: 0.68rem; padding: 3px 8px;" onclick="setRouterSample('What are your customer support working hours on weekends?')">Sample: General</button>
+              </div>
+
+              <div class="sim-output-box" id="simRouterOutput">
+                <span style="color: var(--text-muted);">Click "Route Query" to view real-time classification and dispatched handler output...</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="slide" id="slide-10">
+        <div class="slide-header">
+          <div class="slide-title-group">
+            <span class="slide-category"><span class="badge-section">Section 1</span> Agent Workflows</span>
+            <h2 class="slide-title">Human-in-the-Loop (HITL)</h2>
+            <p class="slide-subtitle">Safeguarding High-Stakes Actions with Supervised Approval Gates</p>
+          </div>
+          <span class="slide-tag">HITL SAFETY PATTERN</span>
+        </div>
+        <div class="slide-body">
+          <div class="grid-2col">
+            <div class="card card-accent">
+              <div class="card-title"><span class="icon">🛑</span> Why AI Needs Supervised Guardrails</div>
+              <p class="card-desc">
+                While AI agents excel at drafting text, summarizing data, and retrieving information, <strong>irreversible real-world actions</strong> must never occur without human oversight:
+              </p>
+              <ul class="bullet-list" style="margin-top: 6px;">
+                <li><span class="icon">🚫</span> <strong>Financial Disbursements:</strong> Issuing refunds &gt; $500 or corporate wire transfers.</li>
+                <li><span class="icon">🚫</span> <strong>Data Deletion / DB Mutations:</strong> Dropping tables, wiping user accounts, or bulk edits.</li>
+                <li><span class="icon">🚫</span> <strong>Legal &amp; Medical Decisions:</strong> Executing legally binding contracts or patient prescriptions.</li>
+              </ul>
+              <div class="alert-box alert-warning" style="margin-top: 8px;">
+                <span class="icon">⚠️</span>
+                <span><strong>The 80/20 Rule of HITL:</strong> Automate the 80% repetitive, low-risk requests; route the 20% high-risk, ambiguous exceptions to human managers.</span>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-title"><span class="icon">🚦</span> Approval Threshold Architecture</div>
+              <div class="hitl-gate" style="margin-top: 6px;">
+                <span class="hitl-badge-gate">Rule Gate: Expense &gt; $500</span>
+                <span style="font-size: 0.74rem; color: #78350F;">Triggers suspension of execution and flags human supervisor.</span>
+              </div>
+              <div class="step-list" style="margin-top: 10px;">
+                <div class="step-item">
+                  <span class="step-num">1</span>
+                  <div class="step-content"><strong>Drafting:</strong> Agent prepares the action payload and validates fields.</div>
+                </div>
+                <div class="step-item">
+                  <span class="step-num">2</span>
+                  <div class="step-content"><strong>State Persist:</strong> Saves status as <code>PENDING_HUMAN_APPROVAL</code> in DB.</div>
+                </div>
+                <div class="step-item">
+                  <span class="step-num">3</span>
+                  <div class="step-content"><strong>Notification:</strong> Sends Slack message or email with Approve/Reject links.</div>
+                </div>
+                <div class="step-item">
+                  <span class="step-num">4</span>
+                  <div class="step-content"><strong>Resume:</strong> Once approved, the workflow resumes execution.</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="slide" id="slide-11">
+        <div class="slide-header">
+          <div class="slide-title-group">
+            <span class="slide-category"><span class="badge-section">Section 1</span> Agent Workflows</span>
+            <h2 class="slide-title">Practical: Human Approval Using Express</h2>
+            <p class="slide-subtitle">State Transitions, REST Endpoints &amp; Live Approval Simulator</p>
+          </div>
+          <span class="slide-tag">PRACTICAL &bull; HITL SIMULATOR</span>
+        </div>
+        <div class="slide-body">
+          <div class="grid-2col">
+            <div class="card">
+              <div class="card-title"><span class="icon">🌐</span> Express.js Route Design (CommonJS)</div>
+              <div style="font-family: var(--font-mono); font-size: 0.69rem; background: var(--code-bg); color: var(--code-text); padding: 10px; border-radius: 6px; line-height: 1.45; overflow-x: auto;">
+<span class="kw">const</span> <span class="var">express</span> = <span class="fn">require</span>(<span class="str">'express'</span>);
+<span class="kw">const</span> <span class="var">app</span> = <span class="fn">express</span>();
+<span class="kw">const</span> <span class="var">expenses</span> = <span class="kw">new</span> <span class="fn">Map</span>();
+
+<span class="comment">// Submit expense - Auto approve &lt;= $500, else HITL</span>
+<span class="var">app</span>.<span class="fn">post</span>(<span class="str">'/expense'</span>, (<span class="var">req</span>, <span class="var">res</span>) =&gt; {
+  <span class="kw">const</span> { <span class="var">item</span>, <span class="var">amount</span> } = <span class="var">req</span>.<span class="obj">body</span>;
+  <span class="kw">const</span> <span class="var">id</span> = <span class="str">'exp_'</span> + <span class="fn">Date</span>.<span class="fn">now</span>();
+  <span class="kw">const</span> <span class="var">status</span> = <span class="var">amount</span> &gt; <span class="num">500</span> ? <span class="str">'PENDING_APPROVAL'</span> : <span class="str">'AUTO_APPROVED'</span>;
+  <span class="var">expenses</span>.<span class="fn">set</span>(<span class="var">id</span>, { <span class="var">id</span>, <span class="var">item</span>, <span class="var">amount</span>, <span class="var">status</span> });
+  <span class="var">res</span>.<span class="fn">json</span>({ <span class="var">id</span>, <span class="var">status</span> });
+});
+
+<span class="comment">// Manager Approval Endpoint</span>
+<span class="var">app</span>.<span class="fn">post</span>(<span class="str">'/expense/:id/approve'</span>, (<span class="var">req</span>, <span class="var">res</span>) =&gt; {
+  <span class="kw">const</span> <span class="var">exp</span> = <span class="var">expenses</span>.<span class="fn">get</span>(<span class="var">req</span>.<span class="obj">params</span>.<span class="obj">id</span>);
+  <span class="var">exp</span>.<span class="obj">status</span> = <span class="str">'APPROVED_BY_MANAGER'</span>;
+  <span class="var">res</span>.<span class="fn">json</span>({ <span class="obj">success</span>: <span class="kw">true</span>, <span class="var">exp</span> });
+});
+              </div>
+            </div>
+
+            <div class="simulator-box">
+              <div class="card-title"><span class="icon">🧪</span> Live Human-in-the-Loop Simulator</div>
+              <p class="card-desc" style="font-size: 0.74rem;">Submit an expense to test the &gt; $500 approval gate:</p>
+
+              <div class="sim-input-row">
+                <input type="text" id="simExpenseItem" class="sim-input" placeholder="Expense description..." value="Cloud GPU Server Cluster">
+                <input type="number" id="simExpenseAmount" class="sim-input" style="max-width: 110px;" placeholder="Amount ($)" value="750">
+                <button class="sim-btn" id="btnSubmitExpense">Submit</button>
+              </div>
+
+              <div style="display: flex; gap: 6px;">
+                <button class="btn-header" style="font-size: 0.68rem; padding: 3px 8px;" onclick="setExpenseSample('Office Printer Paper', 85)">Sample: $85 (Auto)</button>
+                <button class="btn-header" style="font-size: 0.68rem; padding: 3px 8px;" onclick="setExpenseSample('Enterprise LLM API Credits', 1200)">Sample: $1,200 (HITL)</button>
+              </div>
+
+              <div class="sim-output-box" id="simExpenseOutput">
+                <span style="color: var(--text-muted);">Submit an expense to see threshold routing in action...</span>
+              </div>
+
+              <div id="simManagerActions" style="display: none; gap: 8px; align-items: center; background: #FFFBEB; padding: 8px; border-radius: 6px; border: 1px solid #FDE68A;">
+                <span style="font-size: 0.72rem; font-weight: 700; color: #92400E;">Manager Gate:</span>
+                <button class="sim-btn sim-btn-success" style="padding: 4px 10px; font-size: 0.72rem;" id="btnApproveExpense">Approve Request</button>
+                <button class="sim-btn sim-btn-danger" style="padding: 4px 10px; font-size: 0.72rem;" id="btnRejectExpense">Reject Request</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="slide" id="slide-12">
+        <div class="slide-header">
+          <div class="slide-title-group">
+            <span class="slide-category"><span class="badge-section">Section 1</span> Agent Workflows</span>
+            <h2 class="slide-title">Agent Workflow Recap</h2>
+            <p class="slide-subtitle">Composing Patterns into Production Enterprise Architecture</p>
+          </div>
+          <span class="slide-tag">WORKFLOW SYNTHESIS</span>
+        </div>
+        <div class="slide-body">
+          <div class="card card-accent">
+            <div class="card-title"><span class="icon">🏗️</span> The Master Enterprise Pattern</div>
+            <p class="card-desc">
+              Real-world systems don't pick just one pattern; they seamlessly compose all four:
+            </p>
+            <div class="wf-pipeline" style="margin-top: 10px;">
+              <div class="wf-step">
+                <span class="wf-step-badge">1. Router</span>
+                <span class="wf-step-title">Classify Intent</span>
+                <span class="wf-step-desc">Directs user query to the correct domain pipeline</span>
+              </div>
+              <div class="wf-arrow">&rarr;</div>
+              <div class="wf-step">
+                <span class="wf-step-badge">2. Parallel</span>
+                <span class="wf-step-title">Enrichment</span>
+                <span class="wf-step-desc">Runs sentiment, policy checks, &amp; data retrieval concurrently</span>
+              </div>
+              <div class="wf-arrow">&rarr;</div>
+              <div class="wf-step">
+                <span class="wf-step-badge">3. Sequential</span>
+                <span class="wf-step-title">Execution Chain</span>
+                <span class="wf-step-desc">Validates data &rarr; applies calculations &rarr; prepares action</span>
+              </div>
+              <div class="wf-arrow">&rarr;</div>
+              <div class="wf-step">
+                <span class="wf-step-badge">4. HITL</span>
+                <span class="wf-step-title">Human Gate</span>
+                <span class="wf-step-desc">Checks risk thresholds before commiting changes</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="grid-3col">
+            <div class="card">
+              <strong style="color: var(--primary-deep); font-size: 0.80rem;">Rule 1: Idempotency</strong>
+              <span style="font-size: 0.74rem; color: var(--text-body);">Ensure repeating a workflow step due to network timeout does not double-charge or duplicate records.</span>
+            </div>
+            <div class="card">
+              <strong style="color: var(--primary-deep); font-size: 0.80rem;">Rule 2: Step Timeouts</strong>
+              <span style="font-size: 0.74rem; color: var(--text-body);">Wrap every external LLM call in a 10-second timeout to prevent runaway hanging promises.</span>
+            </div>
+            <div class="card">
+              <strong style="color: var(--primary-deep); font-size: 0.80rem;">Rule 3: Structured Logging</strong>
+              <span style="font-size: 0.74rem; color: var(--text-body);">Log step inputs, model outputs, token usage, and latency for clear production observability.</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="slide" id="slide-13">
+        <div class="slide-header">
+          <div class="slide-title-group">
+            <span class="slide-category"><span class="badge-section">Section 2</span> RAG Fundamentals</span>
+            <h2 class="slide-title">What is RAG?</h2>
+            <p class="slide-subtitle">Retrieval-Augmented Generation: Bridging Static LLMs with Private Enterprise Knowledge</p>
+          </div>
+          <span class="slide-tag">RAG DEFINITION</span>
+        </div>
+        <div class="slide-body">
+          <div class="grid-2col">
+            <div class="card card-accent">
+              <div class="card-title"><span class="icon">📖</span> What Does RAG Mean?</div>
+              <p class="card-desc">
+                <strong>RAG (Retrieval-Augmented Generation)</strong> is an architectural pattern that searches external knowledge sources (PDFs, docs, databases) for relevant information and injects that information directly into the LLM's prompt before generation.
+              </p>
+              <div class="step-list" style="margin-top: 6px;">
+                <div class="step-item">
+                  <span class="step-num" style="background: var(--primary-blue);">R</span>
+                  <div class="step-content"><strong>Retrieval:</strong> Search your company's documents to find the most relevant paragraphs.</div>
+                </div>
+                <div class="step-item">
+                  <span class="step-num" style="background: var(--accent-purple);">A</span>
+                  <div class="step-content"><strong>Augmentation:</strong> Combine the retrieved text + user question into an enriched prompt.</div>
+                </div>
+                <div class="step-item">
+                  <span class="step-num" style="background: var(--accent-green);">G</span>
+                  <div class="step-content"><strong>Generation:</strong> The LLM synthesizes a fluent, factually grounded answer based on that context.</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-title"><span class="icon">🧠</span> Parametric vs Non-Parametric Memory</div>
+              <div class="step-list">
+                <div class="step-item">
+                  <span class="step-num" style="background: var(--text-muted);">1</span>
+                  <div class="step-content">
+                    <strong>Parametric Knowledge (Inside LLM Weights):</strong> Information learned during training. Static, frozen in time, and completely unaware of your company's private documents.
+                  </div>
+                </div>
+                <div class="step-item">
+                  <span class="step-num" style="background: var(--primary-blue);">2</span>
+                  <div class="step-content">
+                    <strong>Non-Parametric Knowledge (Outside in Storage):</strong> Your live PDFs, Word docs, Notion pages, and databases. Updated continuously without retraining.
+                  </div>
+                </div>
+              </div>
+              <div class="alert-box alert-info" style="margin-top: 10px;">
+                <span class="icon">💡</span>
+                <span><strong>Analogy:</strong> Parametric memory is taking an exam from memory; RAG is taking an <em>open-book exam</em> with the exact relevant textbook pages open in front of you.</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="slide" id="slide-14">
+        <div class="slide-header">
+          <div class="slide-title-group">
+            <span class="slide-category"><span class="badge-section">Section 2</span> RAG Fundamentals</span>
+            <h2 class="slide-title">Why Do We Need RAG?</h2>
+            <p class="slide-subtitle">Solving the 4 Critical Limitations of Pre-Trained Foundation Models</p>
+          </div>
+          <span class="slide-tag">RAG MOTIVATION</span>
+        </div>
+        <div class="slide-body">
+          <div class="grid-2col">
+            <div class="card card-accent">
+              <div class="card-title"><span class="icon">1️⃣</span> Knowledge Cutoff Dates</div>
+              <p class="card-desc">
+                LLMs stop learning on the day training finishes. A model trained in 2024 knows nothing about today's events, recent product releases, or policy changes updated this morning. RAG supplies real-time freshness instantly.
+              </p>
+            </div>
+            <div class="card card-accent">
+              <div class="card-title"><span class="icon">2️⃣</span> Private Proprietary Data</div>
+              <p class="card-desc">
+                Public foundation models (GPT, Claude, Llama) have never seen your company's employee handbook, client contracts, private GitHub repos, or internal Jira boards. RAG connects LLMs to your private data securely.
+              </p>
+            </div>
+            <div class="card card-accent">
+              <div class="card-title"><span class="icon">3️⃣</span> Verifiable Citations</div>
+              <p class="card-desc">
+                In business and healthcare, "trust me" doesn't work. RAG models can quote the exact document name, page number, and clause where an answer originated, allowing human users to instantly audit answers.
+              </p>
+            </div>
+            <div class="card card-accent">
+              <div class="card-title"><span class="icon">4️⃣</span> Zero Retraining Cost</div>
+              <p class="card-desc">
+                When company policies change tomorrow, you don't spend $50,000 retraining an LLM. You simply upload the new PDF, replace the text chunk in storage, and the system immediately reflects the new policy.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="slide" id="slide-15">
+        <div class="slide-header">
+          <div class="slide-title-group">
+            <span class="slide-category"><span class="badge-section">Section 2</span> RAG Fundamentals</span>
+            <h2 class="slide-title">What is Hallucination?</h2>
+            <p class="slide-subtitle">Understanding Why LLMs Invent Facts &amp; How Context Grounding Prevents It</p>
+          </div>
+          <span class="slide-tag">HALLUCINATION PREVENTION</span>
+        </div>
+        <div class="slide-body">
+          <div class="grid-2col">
+            <div class="card card-accent">
+              <div class="card-title"><span class="icon">🎭</span> Why Do LLMs Hallucinate?</div>
+              <p class="card-desc">
+                An LLM is not a search engine or truth database; it is a <strong>probabilistic next-token predictor</strong>. It calculates: <em>"Given this sequence of words, what is the most statistically plausible next word?"</em>
+              </p>
+              <ul class="bullet-list" style="margin-top: 6px;">
+                <li><span class="icon">&bull;</span> If the model lacks specific facts, it generates convincing, articulate fiction.</li>
+                <li><span class="icon">&bull;</span> It sounds authoritative, confident, and professional&mdash;yet is completely false!</li>
+                <li><span class="icon">&bull;</span> In medicine, finance, and legal workflows, hallucinations cause severe liability.</li>
+              </ul>
+            </div>
+
+            <div class="card">
+              <div class="card-title"><span class="icon">🛡️</span> How RAG Eliminates Hallucinations</div>
+              <p class="card-desc">
+                RAG changes the task from <em>creative writing from memory</em> to <em>reading comprehension</em>. We bind the LLM with strict grounding instructions:
+              </p>
+              <div style="font-family: var(--font-mono); font-size: 0.72rem; background: var(--bg-card-subtle); padding: 10px; border-radius: 6px; border-left: 3px solid var(--accent-rose); line-height: 1.45; margin-top: 6px;">
+                "You are an assistant. Answer the question ONLY using the facts in &lt;context&gt; below.<br>
+                If the answer cannot be found in the context, respond strictly with:<br>
+                'I do not have sufficient information in the provided documents to answer.'"
+              </div>
+              <div class="alert-box alert-success" style="margin-top: 8px;">
+                <span class="icon">✓</span>
+                <span><strong>The Grounding Guarantee:</strong> Grounded prompts force the model to anchor every claim in retrieved evidence.</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="slide" id="slide-16">
+        <div class="slide-header">
+          <div class="slide-title-group">
+            <span class="slide-category"><span class="badge-section">Section 2</span> RAG Fundamentals</span>
+            <h2 class="slide-title">RAG Architecture: Retrieval, Augmentation, Generation</h2>
+            <p class="slide-subtitle">The 3-Stage Pipeline Connecting User Inquiries to Grounded Responses</p>
+          </div>
+          <span class="slide-tag">RAG ARCHITECTURE</span>
+        </div>
+        <div class="slide-body">
+          <div class="rag-3stage">
+            <div class="rag-stage-card stage-1">
+              <span class="badge badge-concept">Stage 1</span>
+              <strong style="color: var(--primary-deep); font-size: 0.88rem;">1. Retrieval</strong>
+              <p class="card-desc">
+                The user's query is used to search the document database. The system retrieves the top-k most relevant text chunks containing pertinent facts.
+              </p>
+              <div style="background: #F8FAFC; border: 1px solid #E2E8F0; padding: 6px; border-radius: 6px; font-size: 0.70rem; color: var(--text-body); margin-top: auto;">
+                <strong>Output:</strong> Top 3 text passages matching user query keywords or semantic meaning.
+              </div>
+            </div>
+
+            <div class="rag-stage-card stage-2">
+              <span class="badge badge-tool">Stage 2</span>
+              <strong style="color: var(--accent-purple); font-size: 0.88rem;">2. Augmentation</strong>
+              <p class="card-desc">
+                The application constructs an augmented prompt by stitching together system instructions, the retrieved document snippets, and the user's question.
+              </p>
+              <div style="background: #F8FAFC; border: 1px solid #E2E8F0; padding: 6px; border-radius: 6px; font-size: 0.70rem; color: var(--text-body); margin-top: auto;">
+                <strong>Output:</strong> <code>Prompt = Instructions + Context(Chunks) + Question</code>
+              </div>
+            </div>
+
+            <div class="rag-stage-card stage-3">
+              <span class="badge badge-agent">Stage 3</span>
+              <strong style="color: var(--accent-green); font-size: 0.88rem;">3. Generation</strong>
+              <p class="card-desc">
+                The augmented prompt is passed to the LLM (e.g. Groq / Llama). The model synthesizes the answer strictly based on the provided context with citations.
+              </p>
+              <div style="background: #F8FAFC; border: 1px solid #E2E8F0; padding: 6px; border-radius: 6px; font-size: 0.70rem; color: var(--text-body); margin-top: auto;">
+                <strong>Output:</strong> Accurate, verifiable answer citing Section 4.2 of the Employee Handbook.
+              </div>
+            </div>
+          </div>
+
+          <div class="alert-box alert-info">
+            <span class="icon">ℹ️</span>
+            <span><strong>Downstream Components:</strong> Later in this course, we will explore Vector Databases and Embeddings for semantic retrieval. Today, we master the indispensable prerequisite: <strong>Document Processing and Chunking</strong>.</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="slide" id="slide-17">
+        <div class="slide-header">
+          <div class="slide-title-group">
+            <span class="slide-category"><span class="badge-section">Section 2</span> RAG Fundamentals</span>
+            <h2 class="slide-title">How Does RAG Work? (Employee Policy Walkthrough)</h2>
+            <p class="slide-subtitle">Concrete End-to-End Walkthrough of an Enterprise Leave Question</p>
+          </div>
+          <span class="slide-tag">PRACTICAL SCENARIO</span>
+        </div>
+        <div class="slide-body">
+          <div class="grid-2col">
+            <div class="card card-accent">
+              <div class="card-title"><span class="icon">👤</span> The Employee Inquires</div>
+              <div style="background: #EFF6FF; border: 1px solid #BFDBFE; padding: 10px; border-radius: 8px; font-style: italic; font-size: 0.80rem; color: #1E3A8A;">
+                "Can I carry forward 10 days of unused annual leave into next year?"
+              </div>
+
+              <div class="step-list" style="margin-top: 10px;">
+                <div class="step-item">
+                  <span class="step-num">1</span>
+                  <div class="step-content">
+                    <strong>Search Index:</strong> The system matches keywords <em>"carry forward"</em> and <em>"annual leave"</em> against <code>Company_Policy_2025.pdf</code>.
+                  </div>
+                </div>
+                <div class="step-item">
+                  <span class="step-num">2</span>
+                  <div class="step-content">
+                    <strong>Retrieved Chunk:</strong> <em>"Section 4.2: Employees may carry forward a maximum of 5 unused annual leave days into the following calendar year. Unused days beyond 5 will lapse on Dec 31."</em>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-title"><span class="icon">🤖</span> Augmented Prompt &amp; Grounded Output</div>
+              <div style="font-family: var(--font-mono); font-size: 0.69rem; background: var(--code-bg); color: var(--code-text); padding: 8px; border-radius: 6px; line-height: 1.4;">
+<span class="str">CONTEXT:</span>
+From Company_Policy_2025.pdf (Page 14, Section 4.2):
+"Employees may carry forward a maximum of 5 unused annual leave days..."
+
+<span class="str">QUESTION:</span> Can I carry forward 10 days of unused annual leave?
+
+<span class="kw">ANSWER STRICTLY USING CONTEXT:</span>
+              </div>
+
+              <div style="background: #ECFDF5; border: 1px solid #A7F3D0; padding: 8px 10px; border-radius: 6px; margin-top: 8px; font-size: 0.75rem; color: #064E3B;">
+                <strong>Generated Answer:</strong> "No. According to Section 4.2 (Page 14) of the Company Policy Handbook, you can carry forward a maximum of <strong>5 days</strong> of unused annual leave into the next calendar year. The remaining 5 days will lapse."
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="slide" id="slide-18">
+        <div class="slide-header">
+          <div class="slide-title-group">
+            <span class="slide-category"><span class="badge-section">Section 2</span> RAG Fundamentals</span>
+            <h2 class="slide-title">RAG Architecture: Document Processing vs Question Answering</h2>
+            <p class="slide-subtitle">The Crucial Distinction Between Ingestion Pipeline &amp; Query Pipeline</p>
+          </div>
+          <span class="slide-tag">DUAL-LIFECYCLE ARCHITECTURE</span>
+        </div>
+        <div class="slide-body">
+          <div class="grid-2col">
+            <div class="card" style="border-top: 4px solid var(--primary-blue);">
+              <div class="card-title"><span class="icon">📥</span> 1. Ingestion Pipeline (Offline / Background)</div>
+              <p class="card-desc">
+                Runs ahead of time when documents are uploaded. Prepares raw files for fast search:
+              </p>
+              <div class="step-list" style="margin-top: 6px;">
+                <div class="step-item">
+                  <span class="step-num">1</span>
+                  <div class="step-content"><strong>Load:</strong> Extract raw text from PDF, DOCX, TXT, or CSV.</div>
+                </div>
+                <div class="step-item">
+                  <span class="step-num">2</span>
+                  <div class="step-content"><strong>Clean:</strong> Strip control characters, fix whitespace, normalize.</div>
+                </div>
+                <div class="step-item">
+                  <span class="step-num">3</span>
+                  <div class="step-content"><strong>Chunk:</strong> Divide into 300-800 character pieces with overlap.</div>
+                </div>
+                <div class="step-item">
+                  <span class="step-num">4</span>
+                  <div class="step-content"><strong>Tag:</strong> Attach metadata (docId, source, page, timestamp).</div>
+                </div>
+                <div class="step-item">
+                  <span class="step-num">5</span>
+                  <div class="step-content"><strong>Index:</strong> Save into search index or vector store for lookup.</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="card" style="border-top: 4px solid var(--accent-green);">
+              <div class="card-title"><span class="icon">💬</span> 2. Query Pipeline (Online / Live User Interaction)</div>
+              <p class="card-desc">
+                Runs synchronously in real-time when a user asks a question in the app:
+              </p>
+              <div class="step-list" style="margin-top: 6px;">
+                <div class="step-item">
+                  <span class="step-num" style="background: var(--accent-green);">A</span>
+                  <div class="step-content"><strong>Receive Query:</strong> User submits question in UI.</div>
+                </div>
+                <div class="step-item">
+                  <span class="step-num" style="background: var(--accent-green);">B</span>
+                  <div class="step-content"><strong>Match Chunks:</strong> Query searches the pre-computed document chunks.</div>
+                </div>
+                <div class="step-item">
+                  <span class="step-num" style="background: var(--accent-green);">C</span>
+                  <div class="step-content"><strong>Augment Prompt:</strong> Inject top chunks into LLM prompt.</div>
+                </div>
+                <div class="step-item">
+                  <span class="step-num" style="background: var(--accent-green);">D</span>
+                  <div class="step-content"><strong>Generate:</strong> LLM produces final grounded answer with citations.</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="alert-box alert-info">
+            <span class="icon">🎯</span>
+            <span><strong>Today's Focus:</strong> You cannot have high-accuracy Question Answering without a high-quality <strong>Ingestion &amp; Document Processing Pipeline</strong>!</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="slide" id="slide-19">
+        <div class="slide-header">
+          <div class="slide-title-group">
+            <span class="slide-category"><span class="badge-section">Section 2</span> RAG Fundamentals</span>
+            <h2 class="slide-title">RAG vs Fine-Tuning</h2>
+            <p class="slide-subtitle">When to Retrieve Knowledge vs When to Retrain Model Weights</p>
+          </div>
+          <span class="slide-tag">STRATEGIC DECISION</span>
+        </div>
+        <div class="slide-body">
+          <div class="card" style="padding: 10px;">
+            <table class="rag-comparison-table">
+              <thead>
+                <tr>
+                  <th>Criteria</th>
+                  <th>RAG (Retrieval-Augmented Generation)</th>
+                  <th>Fine-Tuning (Model Retraining)</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Primary Purpose</strong></td>
+                  <td>Injecting dynamic, external factual knowledge</td>
+                  <td>Teaching style, tone, specialized syntax, or format</td>
+                </tr>
+                <tr>
+                  <td><strong>Data Freshness</strong></td>
+                  <td>Immediate: Update a file and it's live instantly</td>
+                  <td>Static: Requires a new retraining cycle to update data</td>
+                </tr>
+                <tr>
+                  <td><strong>Implementation Cost</strong></td>
+                  <td>Very Low: Standard Node.js code &amp; existing APIs</td>
+                  <td>High: Dedicated GPU compute &amp; labeled datasets</td>
+                </tr>
+                <tr>
+                  <td><strong>Hallucination Risk</strong></td>
+                  <td>Extremely Low: Bound strictly to retrieved citations</td>
+                  <td>Moderate to High: Weights can still generate false facts</td>
+                </tr>
+                <tr>
+                  <td><strong>Source Citations</strong></td>
+                  <td>Native: Cites exact document, page, and chunk</td>
+                  <td>Opaque: Cannot explain which training example fired</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="grid-2col">
+            <div class="card card-accent">
+              <strong style="color: var(--primary-deep); font-size: 0.82rem;">The Industry Golden Rule</strong>
+              <p class="card-desc">
+                <em>"Use RAG to teach the model new facts and knowledge.<br>
+                Use Fine-Tuning to teach the model a new behavior, dialect, or strict syntax."</em>
+              </p>
+            </div>
+            <div class="card card-accent">
+              <strong style="color: var(--primary-deep); font-size: 0.82rem;">Hybrid Systems</strong>
+              <p class="card-desc">
+                High-end enterprise systems frequently combine both: A fine-tuned model trained to output strict medical JSON, paired with RAG to retrieve the latest clinical trial literature.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="slide" id="slide-20">
+        <div class="slide-header">
+          <div class="slide-title-group">
+            <span class="slide-category"><span class="badge-section">Section 3</span> Document Processing for RAG</span>
+            <h2 class="slide-title">What is Document Processing?</h2>
+            <p class="slide-subtitle">The Crucial Pre-Processing Pipeline Converting Raw Files into LLM-Ready Knowledge</p>
+          </div>
+          <span class="slide-tag">INGESTION FOUNDATION</span>
+        </div>
+        <div class="slide-body">
+          <div class="grid-2col">
+            <div class="card card-accent">
+              <div class="card-title"><span class="icon">📄</span> Why Can't We Just Upload Raw PDFs to LLMs?</div>
+              <p class="card-desc">
+                A common beginner mistake is trying to dump a 150-page PDF directly into an LLM prompt. This causes severe production failures:
+              </p>
+              <ul class="bullet-list" style="margin-top: 6px;">
+                <li><span class="icon">💰</span> <strong>Skyrocketing Costs:</strong> Passing 100k tokens per prompt costs dollars per question!</li>
+                <li><span class="icon">⏳</span> <strong>Unacceptable Latency:</strong> Multi-second delays while the model ingests massive token streams.</li>
+                <li><span class="icon">🔍</span> <strong>"Lost in the Middle":</strong> Research proves LLMs struggle to recall facts buried deep in 100k+ token prompts.</li>
+                <li><span class="icon">🧩</span> <strong>Raw File Artifacts:</strong> PDFs are binary layout streams containing font tables, page footers, and strange encoding artifacts.</li>
+              </ul>
+            </div>
+
+            <div class="card">
+              <div class="card-title"><span class="icon">⚙️</span> The 5 Stages of Document Processing</div>
+              <div class="step-list" style="margin-top: 6px;">
+                <div class="step-item">
+                  <span class="step-num">1</span>
+                  <div class="step-content"><strong>Extraction:</strong> Parse raw text out of PDF, Word (DOCX), CSV, and TXT files.</div>
+                </div>
+                <div class="step-item">
+                  <span class="step-num">2</span>
+                  <div class="step-content"><strong>Cleaning:</strong> Remove control characters, normalize whitespace, clean page headers.</div>
+                </div>
+                <div class="step-item">
+                  <span class="step-num">3</span>
+                  <div class="step-content"><strong>Splitting / Chunking:</strong> Divide text into semantic windows with overlap.</div>
+                </div>
+                <div class="step-item">
+                  <span class="step-num">4</span>
+                  <div class="step-content"><strong>Metadata Attachment:</strong> Tag with source file, department, date, and page.</div>
+                </div>
+                <div class="step-item">
+                  <span class="step-num">5</span>
+                  <div class="step-content"><strong>Storage:</strong> Export structured JSON ready for vector indexing.</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="slide" id="slide-21">
+        <div class="slide-header">
+          <div class="slide-title-group">
+            <span class="slide-category"><span class="badge-section">Section 3</span> Document Processing for RAG</span>
+            <h2 class="slide-title">Node.js Document Processing Libraries</h2>
+            <p class="slide-subtitle">CommonJS Libraries for Extracting Clean Text from Diverse File Types</p>
+          </div>
+          <span class="slide-tag">NPM ECOSYSTEM</span>
+        </div>
+        <div class="slide-body">
+          <div class="grid-2col">
+            <div class="card">
+              <div class="card-title"><span class="icon">📦</span> Essential Production NPM Packages</div>
+              <div class="step-list" style="margin-top: 6px;">
+                <div class="step-item">
+                  <span class="step-num" style="background: var(--accent-rose);">PDF</span>
+                  <div class="step-content">
+                    <strong>pdf-parse (v1.1.1):</strong> Ultra-fast, lightweight PDF text extractor that parses buffers into raw string text.
+                  </div>
+                </div>
+                <div class="step-item">
+                  <span class="step-num" style="background: var(--primary-blue);">DOC</span>
+                  <div class="step-content">
+                    <strong>mammoth:</strong> Converts Microsoft Word <code>.docx</code> documents directly into clean, unformatted plain text.
+                  </div>
+                </div>
+                <div class="step-item">
+                  <span class="step-num" style="background: var(--accent-green);">CSV</span>
+                  <div class="step-content">
+                    <strong>csv-parse/sync:</strong> Synchronously parses tabular CSV data into structured JavaScript arrays and objects.
+                  </div>
+                </div>
+                <div class="step-item">
+                  <span class="step-num" style="background: var(--text-muted);">TXT</span>
+                  <div class="step-content">
+                    <strong>fs (Native Node.js):</strong> Built-in <code>fs.readFileSync()</code> for plain text, Markdown, and JSON files.
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="card card-accent">
+              <div class="card-title"><span class="icon">🚀</span> Installation &amp; Setup</div>
+              <p class="card-desc">Install all four dependencies in your Node.js project terminal:</p>
+              <div style="font-family: var(--font-mono); font-size: 0.76rem; background: var(--code-bg); color: var(--code-text); padding: 10px; border-radius: 6px; margin-top: 4px;">
+                npm install pdf-parse mammoth csv-parse
+              </div>
+              <p class="card-desc" style="margin-top: 8px;">Verify your <code>package.json</code> contains CommonJS support:</p>
+              <div style="font-family: var(--font-mono); font-size: 0.72rem; background: var(--bg-card-subtle); border: 1px solid var(--border-subtle); padding: 8px; border-radius: 6px; margin-top: 4px;">
+                {<br>
+                &nbsp;&nbsp;"name": "rag-doc-processor",<br>
+                &nbsp;&nbsp;"dependencies": {<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;"csv-parse": "^5.5.0",<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;"mammoth": "^1.6.0",<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;"pdf-parse": "1.1.1"<br>
+                &nbsp;&nbsp;}<br>
+                }
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="slide" id="slide-22">
+        <div class="slide-header">
+          <div class="slide-title-group">
+            <span class="slide-category"><span class="badge-section">Section 3</span> Document Processing for RAG</span>
+            <h2 class="slide-title">Practical: Load PDF, TXT, DOCX and CSV</h2>
+            <p class="slide-subtitle">Building a Unified Document Loader Function in Node.js</p>
+          </div>
+          <span class="slide-tag">PRACTICAL &bull; DOC LOADER</span>
+        </div>
+        <div class="slide-body">
+          <div class="grid-60-40">
+            <div class="code-panel">
+  <div class="code-header">
+    <div class="code-lang-group">
+      <div class="code-dots"><span class="code-dot dot-red"></span><span class="code-dot dot-yellow"></span><span class="code-dot dot-green"></span></div>
+      <span class="code-filename">documentLoader.js</span>
+    </div>
+    <button class="btn-copy" onclick="copyCode(this)">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+      Copy
+    </button>
+  </div>
+  <pre class="code-content"><code><span class="comment">// documentLoader.js - Unified File Ingestion</span>
+<span class="kw">const</span> <span class="var">fs</span> = <span class="fn">require</span>(<span class="str">'fs'</span>);
+<span class="kw">const</span> <span class="var">path</span> = <span class="fn">require</span>(<span class="str">'path'</span>);
+<span class="kw">const</span> <span class="var">pdfParse</span> = <span class="fn">require</span>(<span class="str">'pdf-parse'</span>);
+<span class="kw">const</span> <span class="var">mammoth</span> = <span class="fn">require</span>(<span class="str">'mammoth'</span>);
+<span class="kw">const</span> { <span class="var">parse</span> } = <span class="fn">require</span>(<span class="str">'csv-parse/sync'</span>);
+
+<span class="kw">async function</span> <span class="fn">loadDocument</span>(<span class="var">filePath</span>) {
+  <span class="kw">const</span> <span class="var">ext</span> = <span class="var">path</span>.<span class="fn">extname</span>(<span class="var">filePath</span>).<span class="fn">toLowerCase</span>();
+  <span class="kw">const</span> <span class="var">buffer</span> = <span class="var">fs</span>.<span class="fn">readFileSync</span>(<span class="var">filePath</span>);
+
+  <span class="kw">switch</span> (<span class="var">ext</span>) {
+    <span class="kw">case</span> <span class="str">'.txt'</span>:
+    <span class="kw">case</span> <span class="str">'.md'</span>:
+      <span class="kw">return</span> <span class="var">buffer</span>.<span class="fn">toString</span>(<span class="str">'utf-8'</span>);
+
+    <span class="kw">case</span> <span class="str">'.pdf'</span>: {
+      <span class="kw">const</span> <span class="var">data</span> = <span class="kw">await</span> <span class="fn">pdfParse</span>(<span class="var">buffer</span>);
+      <span class="kw">return</span> <span class="var">data</span>.<span class="obj">text</span>;
+    }
+
+    <span class="kw">case</span> <span class="str">'.docx'</span>: {
+      <span class="kw">const</span> <span class="var">result</span> = <span class="kw">await</span> <span class="var">mammoth</span>.<span class="fn">extractRawText</span>({ <span class="obj">buffer</span> });
+      <span class="kw">return</span> <span class="var">result</span>.<span class="obj">value</span>;
+    }
+
+    <span class="kw">case</span> <span class="str">'.csv'</span>: {
+      <span class="kw">const</span> <span class="var">records</span> = <span class="fn">parse</span>(<span class="var">buffer</span>, { <span class="obj">columns</span>: <span class="kw">true</span>, <span class="obj">skip_empty_lines</span>: <span class="kw">true</span> });
+      <span class="comment">// Convert rows into readable text representations</span>
+      <span class="kw">return</span> <span class="var">records</span>.<span class="fn">map</span>(<span class="var">r</span> =&gt; <span class="fn">JSON</span>.<span class="fn">stringify</span>(<span class="var">r</span>)).<span class="fn">join</span>(<span class="str">'\n'</span>);
+    }
+
+    <span class="kw">default</span>:
+      <span class="kw">throw new</span> <span class="fn">Error</span>(<span class="str">`Unsupported file type: ${ext}`</span>);
+  }
+}
+
+<span class="var">module</span>.<span class="obj">exports</span> = { <span class="fn">loadDocument</span> };</code></pre>
+</div>
+
+            <div class="card">
+              <div class="card-title"><span class="icon">🔍</span> Architectural Highlights</div>
+              <ul class="bullet-list" style="font-size: 0.77rem;">
+                <li><span class="icon">1.</span> <strong>Single Entry Point:</strong> The rest of your application never needs to know whether the source was a Word document or a PDF. It simply calls <code>loadDocument(path)</code> and receives clean UTF-8 text.</li>
+                <li><span class="icon">2.</span> <strong>Buffer-Based:</strong> Loading via <code>fs.readFileSync(filePath)</code> works identically for both disk paths and multipart HTTP uploads.</li>
+                <li><span class="icon">3.</span> <strong>CSV Serialization:</strong> Tabular data is transformed into key-value JSON lines so LLMs can understand row column context during retrieval.</li>
+              </ul>
+              <div class="alert-box alert-success" style="margin-top: 8px;">
+                <span class="icon">✓</span>
+                <span><strong>Robustness:</strong> Throws clear descriptive errors for unsupported formats.</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="slide" id="slide-23">
+        <div class="slide-header">
+          <div class="slide-title-group">
+            <span class="slide-category"><span class="badge-section">Section 3</span> Document Processing for RAG</span>
+            <h2 class="slide-title">Document Cleaning</h2>
+            <p class="slide-subtitle">Purging Noise, Artifacts, and Irregularities from Extracted Text</p>
+          </div>
+          <span class="slide-tag">TEXT SANITIZATION</span>
+        </div>
+        <div class="slide-body">
+          <div class="grid-60-40">
+            <div class="code-panel">
+  <div class="code-header">
+    <div class="code-lang-group">
+      <div class="code-dots"><span class="code-dot dot-red"></span><span class="code-dot dot-yellow"></span><span class="code-dot dot-green"></span></div>
+      <span class="code-filename">documentCleaner.js</span>
+    </div>
+    <button class="btn-copy" onclick="copyCode(this)">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+      Copy
+    </button>
+  </div>
+  <pre class="code-content"><code><span class="comment">// documentCleaner.js - Text Normalization</span>
+<span class="kw">function</span> <span class="fn">cleanText</span>(<span class="var">rawText</span>) {
+  <span class="kw">if</span> (!<span class="var">rawText</span>) <span class="kw">return</span> <span class="str">''</span>;
+
+  <span class="kw">return</span> <span class="var">rawText</span>
+    <span class="comment">// 1. Strip non-printable control characters (except \n and \t)</span>
+    .<span class="fn">replace</span>(<span class="var">/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/g</span>, <span class="str">''</span>)
+    <span class="comment">// 2. Standardize carriage returns to standard newlines</span>
+    .<span class="fn">replace</span>(<span class="var">/\r\n|\r/g</span>, <span class="str">'\n'</span>)
+    <span class="comment">// 3. Collapse multiple blank lines into at most 2 newlines</span>
+    .<span class="fn">replace</span>(<span class="var">/\n{3,}/g</span>, <span class="str">'\n\n'</span>)
+    <span class="comment">// 4. Replace irregular tabs and multi-spaces with single space</span>
+    .<span class="fn">replace</span>(<span class="var">/[ \t]{2,}/g</span>, <span class="str">' '</span>)
+    <span class="comment">// 5. Trim leading and trailing whitespace</span>
+    .<span class="fn">trim</span>();
+}
+
+<span class="var">module</span>.<span class="obj">exports</span> = { <span class="fn">cleanText</span> };</code></pre>
+</div>
+
+            <div class="card">
+              <div class="card-title"><span class="icon">🧹</span> Why Cleaning is Non-Negotiable</div>
+              <p class="card-desc">
+                Raw text extracted from PDFs often contains garbage characters, null bytes, and 50 consecutive newlines.
+              </p>
+              <div style="background: #FEF2F2; border: 1px solid #FECACA; padding: 6px 10px; border-radius: 6px; font-family: var(--font-mono); font-size: 0.70rem; color: #991B1B; margin-top: 4px;">
+                <strong>Before (Raw PDF Text):</strong><br>
+                "Employee&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Leave\x00Policy\r\n\r\n\r\n\r\nSection&nbsp;&nbsp;4.2"
+              </div>
+              <div style="background: #ECFDF5; border: 1px solid #A7F3D0; padding: 6px 10px; border-radius: 6px; font-family: var(--font-mono); font-size: 0.70rem; color: #064E3B; margin-top: 6px;">
+                <strong>After (Clean Text):</strong><br>
+                "Employee Leave Policy\n\nSection 4.2"
+              </div>
+              <div class="alert-box alert-info" style="margin-top: 8px;">
+                <span class="icon">💎</span>
+                <span><strong>Token Savings:</strong> Cleaning eliminates up to 25% of wasted whitespace tokens before chunking!</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="slide" id="slide-24">
+        <div class="slide-header">
+          <div class="slide-title-group">
+            <span class="slide-category"><span class="badge-section">Section 3</span> Document Processing for RAG</span>
+            <h2 class="slide-title">Text Splitting / Chunking</h2>
+            <p class="slide-subtitle">Why Splitting Long Documents into Manageable Units is Mandatory</p>
+          </div>
+          <span class="slide-tag">CHUNKING THEORY</span>
+        </div>
+        <div class="slide-body">
+          <div class="grid-2col">
+            <div class="card card-accent">
+              <div class="card-title"><span class="icon">✂️</span> What is Text Chunking?</div>
+              <p class="card-desc">
+                <strong>Text Chunking</strong> is the process of breaking a continuous text document into smaller, coherent, standalone text segments called <em>chunks</em>.
+              </p>
+              <div class="step-list" style="margin-top: 6px;">
+                <div class="step-item">
+                  <span class="step-num">1</span>
+                  <div class="step-content"><strong>Laser-Focused Search:</strong> Instead of searching an entire 50-page manual, the search engine matches the single 300-character paragraph that answers the question.</div>
+                </div>
+                <div class="step-item">
+                  <span class="step-num">2</span>
+                  <div class="step-content"><strong>Prompt Budget Fit:</strong> Chunks fit cleanly within the prompt alongside system instructions, history, and the user's question.</div>
+                </div>
+                <div class="step-item">
+                  <span class="step-num">3</span>
+                  <div class="step-content"><strong>Prevents Semantic Dilution:</strong> An embedding of an entire book averages out and matches nothing well; an embedding of one paragraph is razor sharp.</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-title"><span class="icon">⚖️</span> The Granularity Trade-Off</div>
+              <div class="step-list">
+                <div class="step-item">
+                  <span class="step-num" style="background: var(--accent-amber);">Too Small</span>
+                  <div class="step-content">
+                    <strong>Chunks &lt; 100 characters:</strong> Loses context. The chunk might say <em>"it was approved on Tuesday"</em> without indicating what "it" refers to!
+                  </div>
+                </div>
+                <div class="step-item">
+                  <span class="step-num" style="background: var(--accent-rose);">Too Large</span>
+                  <div class="step-content">
+                    <strong>Chunks &gt; 2,000 characters:</strong> Dilutes key details and fills up context limits with irrelevant filler text.
+                  </div>
+                </div>
+                <div class="step-item">
+                  <span class="step-num" style="background: var(--accent-green);">Optimal</span>
+                  <div class="step-content">
+                    <strong>Sweet Spot: 300 &ndash; 800 characters</strong> (roughly 75 &ndash; 200 words). Highly focused and semantically coherent.
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="slide" id="slide-25">
+        <div class="slide-header">
+          <div class="slide-title-group">
+            <span class="slide-category"><span class="badge-section">Section 3</span> Document Processing for RAG</span>
+            <h2 class="slide-title">Chunk Size and Chunk Overlap</h2>
+            <p class="slide-subtitle">Preserving Semantic Continuity Across Split Boundaries</p>
+          </div>
+          <span class="slide-tag">OVERLAP MECHANISM</span>
+        </div>
+        <div class="slide-body">
+          <div class="card card-accent">
+            <div class="card-title"><span class="icon">🔄</span> The Critical Problem of Hard Boundaries</div>
+            <p class="card-desc">
+              If you split text strictly every 500 characters, sentences get sliced in half! A vital rule like: <em>"The server password can be reset by..."</em> might get cut so that the actual procedure ends up in the next chunk, making both chunks useless.
+            </p>
+            <div style="background: #FFFFFF; border: 1px solid #BFDBFE; border-radius: 8px; padding: 12px; margin-top: 8px;">
+              <div style="font-size: 0.76rem; font-weight: 700; color: var(--primary-deep); margin-bottom: 6px;">Sliding Window with Overlap Visualizer:</div>
+              <div style="display: flex; flex-direction: column; gap: 8px; font-family: var(--font-mono); font-size: 0.72rem;">
+                <div style="background: #EFF6FF; border: 1px solid #93C5FD; padding: 6px 10px; border-radius: 4px;">
+                  <strong>Chunk 1:</strong> [Chars 0 &rarr; 400] "...medical insurance covers 100% of dental procedures <span style="background: #FEF08A; color: #854D0E; padding: 1px 4px; border-radius: 2px;">subject to annual deductible</span>"
+                </div>
+                <div style="background: #F5F3FF; border: 1px solid #DDD6FE; padding: 6px 10px; border-radius: 4px;">
+                  <strong>Chunk 2:</strong> [Chars 350 &rarr; 750] "<span style="background: #FEF08A; color: #854D0E; padding: 1px 4px; border-radius: 2px;">subject to annual deductible</span> of $250 per dependent when enrolled prior to..."
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="grid-2col">
+            <div class="card">
+              <div class="card-title"><span class="icon">📐</span> Recommended Ratios</div>
+              <p class="card-desc">
+                Standard industry practice recommends an overlap of <strong>10% to 20%</strong> of the chunk size.
+              </p>
+              <ul class="bullet-list" style="margin-top: 4px; font-size: 0.77rem;">
+                <li><span class="icon">&bull;</span> Chunk Size: 500 chars &rarr; Overlap: 50-75 chars.</li>
+                <li><span class="icon">&bull;</span> Chunk Size: 1000 chars &rarr; Overlap: 100-150 chars.</li>
+              </ul>
+            </div>
+            <div class="card">
+              <div class="card-title"><span class="icon">💡</span> The Step Size Formula</div>
+              <p class="card-desc">
+                In a sliding window algorithm, the window advances by:
+              </p>
+              <div style="font-family: var(--font-mono); font-size: 0.78rem; background: var(--bg-card-subtle); padding: 8px; border-radius: 6px; border: 1px solid var(--border-subtle); margin-top: 4px;">
+                step = chunkSize - overlap
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="slide" id="slide-26">
+        <div class="slide-header">
+          <div class="slide-title-group">
+            <span class="slide-category"><span class="badge-section">Section 3</span> Document Processing for RAG</span>
+            <h2 class="slide-title">Practical: Build a Text Chunking Function</h2>
+            <p class="slide-subtitle">CommonJS Sliding-Window Splitter with Live Interactive Overlap Visualizer</p>
+          </div>
+          <span class="slide-tag">PRACTICAL &bull; CHUNK VISUALIZER</span>
+        </div>
+        <div class="slide-body">
+          <div class="grid-2col">
+            <div class="card">
+              <div class="card-title"><span class="icon">💻</span> Sliding Window Implementation</div>
+              <div style="font-family: var(--font-mono); font-size: 0.69rem; background: var(--code-bg); color: var(--code-text); padding: 10px; border-radius: 6px; line-height: 1.45; overflow-x: auto;">
+<span class="kw">function</span> <span class="fn">splitText</span>(<span class="var">text</span>, <span class="var">chunkSize</span> = <span class="num">300</span>, <span class="var">overlap</span> = <span class="num">50</span>) {
+  <span class="kw">if</span> (!<span class="var">text</span>) <span class="kw">return</span> [];
+  <span class="kw">const</span> <span class="var">chunks</span> = [];
+  <span class="kw">const</span> <span class="var">step</span> = <span class="var">chunkSize</span> - <span class="var">overlap</span>;
+  <span class="kw">let</span> <span class="var">start</span> = <span class="num">0</span>;
+
+  <span class="kw">while</span> (<span class="var">start</span> &lt; <span class="var">text</span>.<span class="obj">length</span>) {
+    <span class="kw">const</span> <span class="var">end</span> = <span class="fn">Math</span>.<span class="fn">min</span>(<span class="var">start</span> + <span class="var">chunkSize</span>, <span class="var">text</span>.<span class="obj">length</span>);
+    <span class="kw">const</span> <span class="var">chunk</span> = <span class="var">text</span>.<span class="fn">substring</span>(<span class="var">start</span>, <span class="var">end</span>).<span class="fn">trim</span>();
+    <span class="kw">if</span> (<span class="var">chunk</span>) <span class="var">chunks</span>.<span class="fn">push</span>(<span class="var">chunk</span>);
+
+    <span class="kw">if</span> (<span class="var">end</span> &gt;= <span class="var">text</span>.<span class="obj">length</span>) <span class="kw">break</span>;
+    <span class="var">start</span> += <span class="var">step</span>;
+  }
+  <span class="kw">return</span> <span class="var">chunks</span>;
+}
+
+<span class="var">module</span>.<span class="obj">exports</span> = { <span class="fn">splitText</span> };
+              </div>
+            </div>
+
+            <div class="simulator-box">
+              <div class="card-title"><span class="icon">🧪</span> Live Interactive Chunking Sandbox</div>
+              <textarea id="simChunkInputText" class="sim-input" style="height: 60px; font-size: 0.72rem; resize: none;" placeholder="Enter document text to chunk...">Retrieval-Augmented Generation (RAG) empowers Large Language Models by retrieving relevant documents from private corporate storage before generating answers. In document processing, text is divided into chunks with an intentional overlap to guarantee that crucial semantic facts are never severed at boundary borders.</textarea>
+
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+                <div>
+                  <div style="display: flex; justify-content: space-between; font-size: 0.70rem;">
+                    <span>Chunk Size:</span>
+                    <strong id="lblChunkSize">140</strong>
+                  </div>
+                  <input type="range" id="simSliderChunkSize" min="80" max="300" value="140" step="10" style="width: 100%;">
+                </div>
+                <div>
+                  <div style="display: flex; justify-content: space-between; font-size: 0.70rem;">
+                    <span>Overlap:</span>
+                    <strong id="lblChunkOverlap">30</strong>
+                  </div>
+                  <input type="range" id="simSliderChunkOverlap" min="10" max="80" value="30" step="5" style="width: 100%;">
+                </div>
+              </div>
+
+              <div style="display: flex; justify-content: space-between; align-items: center;">
+                <span id="simChunkMetrics" style="font-size: 0.70rem; color: var(--primary-deep); font-weight: 700;">Total Chunks: 0</span>
+                <button class="sim-btn" id="btnRunChunking" style="padding: 4px 10px; font-size: 0.72rem;">Generate Chunks</button>
+              </div>
+
+              <div id="simChunkResults" style="max-height: 110px; overflow-y: auto; display: flex; flex-direction: column; gap: 6px;">
+                <!-- Generated chunk cards inserted here -->
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="slide" id="slide-27">
+        <div class="slide-header">
+          <div class="slide-title-group">
+            <span class="slide-category"><span class="badge-section">Section 3</span> Document Processing for RAG</span>
+            <h2 class="slide-title">Metadata in RAG</h2>
+            <p class="slide-subtitle">Enriching Text Chunks with Structured Attributes for Filtered Enterprise Search</p>
+          </div>
+          <span class="slide-tag">CHUNK METADATA</span>
+        </div>
+        <div class="slide-body">
+          <div class="grid-2col">
+            <div class="card card-accent">
+              <div class="card-title"><span class="icon">🏷️</span> Why Raw Text is Not Enough</div>
+              <p class="card-desc">
+                If your database stores only plain text chunks, your retrieval system cannot answer questions with business context such as:
+              </p>
+              <ul class="bullet-list" style="margin-top: 6px;">
+                <li><span class="icon">?</span> <em>"What is the Engineering policy, not the Sales policy?"</em></li>
+                <li><span class="icon">?</span> <em>"Only search documents updated in 2025, ignore 2022 versions."</em></li>
+                <li><span class="icon">?</span> <em>"Give me the exact page number of this PDF for my legal audit."</em></li>
+              </ul>
+              <div class="alert-box alert-success" style="margin-top: 8px;">
+                <span class="icon">🛡️</span>
+                <span><strong>Role-Based Access Control (RBAC):</strong> Chunks tagged with <code>department: "Executive"</code> can be filtered out so regular staff cannot retrieve them!</span>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-title"><span class="icon">📋</span> Standard Chunk Object Schema</div>
+              <div style="font-family: var(--font-mono); font-size: 0.70rem; background: var(--code-bg); color: var(--code-text); padding: 10px; border-radius: 6px; line-height: 1.45;">
+{<br>
+&nbsp;&nbsp;<span class="obj">"chunkId"</span>: <span class="str">"doc_hr_chk_004"</span>,<br>
+&nbsp;&nbsp;<span class="obj">"docId"</span>: <span class="str">"hr-leave-handbook-2025"</span>,<br>
+&nbsp;&nbsp;<span class="obj">"source"</span>: <span class="str">"Employee_Leave_Policy.pdf"</span>,<br>
+&nbsp;&nbsp;<span class="obj">"chunkIndex"</span>: <span class="num">4</span>,<br>
+&nbsp;&nbsp;<span class="obj">"pageNumber"</span>: <span class="num">14</span>,<br>
+&nbsp;&nbsp;<span class="obj">"department"</span>: <span class="str">"Human Resources"</span>,<br>
+&nbsp;&nbsp;<span class="obj">"createdAt"</span>: <span class="str">"2025-01-15T09:30:00Z"</span>,<br>
+&nbsp;&nbsp;<span class="obj">"text"</span>: <span class="str">"Employees may carry forward a maximum of 5 days..."</span><br>
+}
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="slide" id="slide-28">
+        <div class="slide-header">
+          <div class="slide-title-group">
+            <span class="slide-category"><span class="badge-section">Section 3</span> Document Processing for RAG</span>
+            <h2 class="slide-title">Mini Project: RAG Document Processor Pipeline</h2>
+            <p class="slide-subtitle">End-to-End Node.js Ingestion Pipeline with Live Interactive Execution</p>
+          </div>
+          <span class="slide-tag">CAPSTONE &bull; LIVE PIPELINE</span>
+        </div>
+        <div class="slide-body">
+          <div class="grid-2col">
+            <div class="card">
+              <div class="card-title"><span class="icon">🚀</span> Complete Node.js Pipeline (CommonJS)</div>
+              <div style="font-family: var(--font-mono); font-size: 0.68rem; background: var(--code-bg); color: var(--code-text); padding: 10px; border-radius: 6px; line-height: 1.45; overflow-x: auto;">
+<span class="kw">async function</span> <span class="fn">processDocumentForRAG</span>(<span class="var">filePath</span>, <span class="var">metadata</span> = {}) {
+  <span class="comment">// 1. Load document</span>
+  <span class="kw">const</span> <span class="var">rawText</span> = <span class="kw">await</span> <span class="fn">loadDocument</span>(<span class="var">filePath</span>);
+  <span class="comment">// 2. Clean and sanitize</span>
+  <span class="kw">const</span> <span class="var">cleanedText</span> = <span class="fn">cleanText</span>(<span class="var">rawText</span>);
+  <span class="comment">// 3. Chunk with sliding overlap</span>
+  <span class="kw">const</span> <span class="var">textChunks</span> = <span class="fn">splitText</span>(<span class="var">cleanedText</span>, <span class="num">350</span>, <span class="num">50</span>);
+
+  <span class="comment">// 4. Enrich each chunk with structured metadata</span>
+  <span class="kw">const</span> <span class="var">docId</span> = <span class="var">path</span>.<span class="fn">basename</span>(<span class="var">filePath</span>, <span class="var">path</span>.<span class="fn">extname</span>(<span class="var">filePath</span>));
+  <span class="kw">return</span> <span class="var">textChunks</span>.<span class="fn">map</span>((<span class="var">chunk</span>, <span class="var">index</span>) =&gt; ({
+    <span class="obj">chunkId</span>: <span class="str">`${docId}_chk_${String(index).padStart(3, '0')}`</span>,
+    <span class="obj">docId</span>,
+    <span class="obj">source</span>: <span class="var">path</span>.<span class="fn">basename</span>(<span class="var">filePath</span>),
+    <span class="obj">chunkIndex</span>: <span class="var">index</span>,
+    <span class="obj">charCount</span>: <span class="var">chunk</span>.<span class="obj">length</span>,
+    <span class="obj">text</span>: <span class="var">chunk</span>,
+    ...<span class="var">metadata</span>,
+    <span class="obj">processedAt</span>: <span class="kw">new</span> <span class="fn">Date</span>().<span class="fn">toISOString</span>()
+  }));
+}
+              </div>
+            </div>
+
+            <div class="simulator-box">
+              <div class="card-title"><span class="icon">🧪</span> Live Document Pipeline Runner</div>
+              <p class="card-desc" style="font-size: 0.74rem;">Select a sample document and run the full ingestion pipeline:</p>
+
+              <div class="sim-input-row">
+                <select id="simDocSelect" class="sim-input" style="cursor: pointer;">
+                  <option value="hr">HR_Leave_Policy_2025.pdf (Human Resources)</option>
+                  <option value="support">Customer_Support_FAQ.csv (Customer Care)</option>
+                  <option value="tech">Cloud_Architecture_Spec.docx (Engineering)</option>
+                </select>
+                <button class="sim-btn" id="btnRunPipeline">Run Pipeline</button>
+              </div>
+
+              <!-- Pipeline Step Progress Indicator -->
+              <div id="simPipelineProgress" style="display: flex; gap: 4px; margin-top: 2px;">
+                <span class="badge" style="background: #E2E8F0; color: #64748B; font-size: 0.65rem;" id="stepLoad">1. Load</span>
+                <span class="badge" style="background: #E2E8F0; color: #64748B; font-size: 0.65rem;" id="stepClean">2. Clean</span>
+                <span class="badge" style="background: #E2E8F0; color: #64748B; font-size: 0.65rem;" id="stepChunk">3. Chunk</span>
+                <span class="badge" style="background: #E2E8F0; color: #64748B; font-size: 0.65rem;" id="stepTag">4. Tag Metadata</span>
+              </div>
+
+              <div class="sim-output-box" id="simPipelineOutput" style="height: 120px; overflow-y: auto;">
+                <span style="color: var(--text-muted);">Select document and click "Run Pipeline" to execute the live ingestion process...</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- Bottom Navigation Footer -->
+    <footer class="pres-footer">
+      <div class="footer-nav">
+        <button class="btn-nav" id="prevBtn" disabled>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"></polyline></svg>
+          Previous
+        </button>
+        <select class="slide-select" id="slideSelect" aria-label="Jump to Slide"></select>
+        <button class="btn-nav" id="nextBtn">
+          Next
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
+        </button>
+      </div>
+      <div style="font-size: 0.75rem; color: var(--text-muted); font-weight: 600;">
+        Use <span style="font-family: var(--font-mono); color: var(--primary-blue);">&larr; / &rarr;</span> keys to navigate
+      </div>
+    </footer>
+
+    <!-- Table of Contents Drawer Overlay -->
+    <div class="toc-overlay" id="tocOverlay"></div>
+    <div class="toc-drawer" id="tocDrawer">
+      <div class="toc-header">
+        <h3 class="toc-title">Table of Contents (28 Slides)</h3>
+        <button class="toc-close" id="tocClose">&times;</button>
+      </div>
+      <ul class="toc-list" id="tocList"></ul>
+    </div>
+
+    <!-- Keyboard Shortcuts Help Modal -->
+    <div class="modal-overlay" id="helpModal">
+      <div class="modal-card">
+        <div class="modal-header">
+          <h3 class="modal-title">Keyboard Shortcuts</h3>
+          <button class="toc-close" id="helpClose">&times;</button>
+        </div>
+        <div class="modal-body">
+          <div class="shortcut-row">
+            <span>Next Slide</span>
+            <span class="shortcut-key">&rarr; or Space</span>
+          </div>
+          <div class="shortcut-row">
+            <span>Previous Slide</span>
+            <span class="shortcut-key">&larr;</span>
+          </div>
+          <div class="shortcut-row">
+            <span>First Slide</span>
+            <span class="shortcut-key">Home</span>
+          </div>
+          <div class="shortcut-row">
+            <span>Last Slide</span>
+            <span class="shortcut-key">End</span>
+          </div>
+          <div class="shortcut-row">
+            <span>Toggle Fullscreen</span>
+            <span class="shortcut-key">F</span>
+          </div>
+          <div class="shortcut-row">
+            <span>Table of Contents</span>
+            <span class="shortcut-key">T</span>
+          </div>
+          <div class="shortcut-row">
+            <span>Help Shortcuts</span>
+            <span class="shortcut-key">?</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Toast Notice -->
+    <div class="toast-notice" id="toastNotice">Code copied to clipboard!</div>
+
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
