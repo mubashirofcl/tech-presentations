@@ -2,12 +2,12 @@
  * JavaScript Fundamentals – Day 2
  * Advanced Arrays, Objects, Higher-Order Methods & Modern ES6+
  * Presentation Engine & Interactive Sandboxes Controller
- * Total Slides: 26
+ * Total Slides: 22
  */
 
 document.addEventListener('DOMContentLoaded', () => {
   // --- Presentation State ---
-  const totalSlides = 26;
+  const totalSlides = 22;
   let currentSlide = 1;
 
   // DOM Elements
@@ -27,7 +27,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const helpModal = document.getElementById('helpModal');
   const toastNotice = document.getElementById('toastNotice');
 
-  // Exact 26 Slide Titles
+    // Exact 22 Slide Titles
   const slideTitles = [
     "Introduction to Day 2",
     "Reference vs Value in JavaScript",
@@ -41,15 +41,11 @@ document.addEventListener('DOMContentLoaded', () => {
     "Element Lookup: includes() & indexOf()",
     "Array Immutability: slice() vs splice()",
     "Sorting Mechanics: sort() & reverse()",
-    "Advanced Objects: Computed Property Names",
-    "Object Merging: Object.assign() vs Spread",
     "Object Immutability: Object.freeze() vs Object.seal()",
     "Destructuring: Arrays and Objects",
-    "Destructuring in Functions & React Props",
     "The Spread Operator (...) in Arrays & Objects",
     "The Rest Operator (...) in Parameters & Destructuring",
     "Optional Chaining (?.): Safe Property Access",
-    "Nullish Coalescing (??): Safe Default Values",
     "Project 1: To-Do List Architecture & State Model",
     "Project 1: Interactive To-Do List Application",
     "Project 2: User Data Transformation Pipeline",

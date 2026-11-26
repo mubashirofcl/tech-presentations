@@ -1,0 +1,1684 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Intermediate AI/LLM – Day 1: AI Agent Fundamentals, State, Memory &amp; Context</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="app-container">
+
+    <!-- Top Presentation Header -->
+    <header class="pres-header">
+      <div class="brand-section">
+        <span class="brand-badge">Intermediate AI &bull; Day 1</span>
+        <div class="pres-title">
+          Intermediate AI/LLM <span>&bull; Agent Fundamentals, State, Memory &amp; Context</span>
+        </div>
+      </div>
+      <div class="header-center">
+        <div class="slide-counter-badge" id="slideCounter">1 / 26</div>
+      </div>
+      <div class="header-actions">
+        <button class="btn-header" id="fullscreenBtn" title="Toggle Fullscreen (F)">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path></svg>
+          Full
+        </button>
+        <button class="btn-header" id="tocBtn" title="Table of Contents (T)">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+          Index
+        </button>
+        <button class="btn-header" id="helpBtn" title="Keyboard Shortcuts (?)">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+          Help
+        </button>
+      </div>
+    </header>
+
+    <!-- Progress Bar -->
+    <div class="pres-progress-container">
+      <div class="pres-progress-bar" id="progressBar" style="width: 3.84%;"></div>
+    </div>
+
+    <!-- Main Slide Viewport -->
+    <main class="slide-viewport">
+
+      <section class="slide active" id="slide-1">
+        <div class="slide-header">
+          <div class="slide-title-group">
+            <span class="slide-category"><span class="badge-section">Section 1</span> AI Agent Fundamentals</span>
+            <h2 class="slide-title">Introduction to AI Agents</h2>
+            <p class="slide-subtitle">Intermediate AI/LLM &ndash; Day 1: Architecture, Decision-Making, Tools &amp; Agent Loop</p>
+          </div>
+          <span class="slide-tag">DAY 1 &bull; AGENT CORE</span>
+        </div>
+
+        <div class="slide-body">
+          <div class="grid-60-40">
+            <div class="card card-accent">
+              <div class="card-title"><span class="icon">🎯</span> What Will We Learn Today?</div>
+              <p class="card-desc">
+                In previous lessons, you learned how to prompt an LLM and receive text or structured JSON. Today, we step beyond passive generation into <strong>autonomous AI agents</strong> that decide, use external tools, maintain state, and achieve concrete goals.
+              </p>
+              <div class="grid-2col" style="gap: 10px; margin-top: 6px;">
+                <div class="card" style="padding: 10px; background: #F8FAFC;">
+                  <strong style="color: var(--primary-deep); font-size: 0.82rem;">1. Agent Fundamentals</strong>
+                  <span style="font-size: 0.74rem; color: var(--text-body);">What is an agent? Chatbot vs Assistant vs Agent, architecture, instructions &amp; autonomous loops.</span>
+                </div>
+                <div class="card" style="padding: 10px; background: #F8FAFC;">
+                  <strong style="color: var(--primary-deep); font-size: 0.82rem;">2. State, Memory &amp; Context</strong>
+                  <span style="font-size: 0.74rem; color: var(--text-body);">Distinguishing State vs Memory vs Chat History vs RAG; context windows and compaction strategies.</span>
+                </div>
+                <div class="card" style="padding: 10px; background: #F8FAFC;">
+                  <strong style="color: var(--primary-deep); font-size: 0.82rem;">3. Tool-Using Agent</strong>
+                  <span style="font-size: 0.74rem; color: var(--text-body);">Building a Node.js + Groq agent using tool calling with calculator and student registry tools.</span>
+                </div>
+                <div class="card" style="padding: 10px; background: #F8FAFC;">
+                  <strong style="color: var(--primary-deep); font-size: 0.82rem;">4. Conversational Agent</strong>
+                  <span style="font-size: 0.74rem; color: var(--text-body);">Implementing session-based multi-turn memory in Node.js using Map and sliding window history.</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-title"><span class="icon">🚀</span> Today's Learning Objective</div>
+              <ul class="bullet-list" style="font-size: 0.78rem;">
+                <li><span class="icon">✓</span> Understand how an AI agent makes decisions and selects tools.</li>
+                <li><span class="icon">✓</span> Learn how Node.js executes tools and feeds results back to the LLM.</li>
+                <li><span class="icon">✓</span> Differentiate short-term session state from persistent memory.</li>
+                <li><span class="icon">✓</span> Implement production-ready agent loops with step limits.</li>
+              </ul>
+              <div class="alert-box alert-info" style="margin-top: 10px;">
+                <div class="alert-title">Core Philosophy</div>
+                <div class="alert-text">The LLM is the reasoning brain that decides what action is needed; your Node.js application is the body that securely executes that action.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+
+      <section class="slide" id="slide-2">
+        <div class="slide-header">
+          <div class="slide-title-group">
+            <span class="slide-category"><span class="badge-section">Section 1</span> AI Agent Fundamentals</span>
+            <h2 class="slide-title">What is an AI Agent?</h2>
+            <p class="slide-subtitle">Moving beyond static text generation to goal-oriented decision making and execution</p>
+          </div>
+          <span class="slide-tag">AGENT DEFINITION</span>
+        </div>
+
+        <div class="slide-body">
+          <div class="grid-2col">
+            <div class="card">
+              <div class="card-title"><span class="icon">💡</span> Passive LLM vs Autonomous Agent</div>
+              <p class="card-desc">
+                An <strong>AI Agent</strong> is a system that uses an AI model to understand a goal, make decisions, and perform actions in an environment to achieve that goal.
+              </p>
+              <div class="step-list" style="margin-top: 6px;">
+                <div class="step-item">
+                  <div class="step-num">1</div>
+                  <div class="step-content"><strong>Understand:</strong> Interprets the user's ultimate goal from natural language.</div>
+                </div>
+                <div class="step-item">
+                  <div class="step-num">2</div>
+                  <div class="step-content"><strong>Decide:</strong> Evaluates what steps and external capabilities are required.</div>
+                </div>
+                <div class="step-item">
+                  <div class="step-num">3</div>
+                  <div class="step-content"><strong>Select Tool:</strong> Chooses a tool and formats exact arguments.</div>
+                </div>
+                <div class="step-item">
+                  <div class="step-num">4</div>
+                  <div class="step-content"><strong>Execute &amp; Observe:</strong> The host application executes the tool and returns the outcome.</div>
+                </div>
+                <div class="step-item">
+                  <div class="step-num">5</div>
+                  <div class="step-content"><strong>Answer:</strong> Continues the loop until the final answer is ready.</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="card card-accent">
+              <div class="card-title"><span class="icon">🛒</span> Concrete Scenario Walkthrough</div>
+              <p class="card-desc"><strong>User Request:</strong> <em>"Find the total price of 3 products, each costing ₹500."</em></p>
+              
+              <div class="card" style="background: #FFFFFF; padding: 10px; border-left: 3px solid var(--primary-blue);">
+                <div style="font-size: 0.76rem; font-weight: 700; color: var(--text-heading); margin-bottom: 4px;">Agent Execution Trace:</div>
+                <ul class="bullet-list" style="font-size: 0.74rem;">
+                  <li><strong>Reasoning:</strong> Needs mathematical multiplication (500 × 3).</li>
+                  <li><strong>Tool Selected:</strong> <code>calculate({ a: 500, b: 3, operation: "multiply" })</code></li>
+                  <li><strong>Observation:</strong> Backend executes function, returns <code>1500</code>.</li>
+                  <li><strong>Reasoning:</strong> Calculation complete, no further tools required.</li>
+                  <li><strong>Final Answer:</strong> "The total price for 3 products at ₹500 each is ₹1500."</li>
+                </ul>
+              </div>
+
+              <div class="alert-box alert-success" style="margin-top: 8px;">
+                <div class="alert-title">Key Definition</div>
+                <div class="alert-text">An AI agent is <strong>not just an LLM</strong>. It is a system combining an AI model, system instructions, tools, context, and an execution loop.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+
+      <section class="slide" id="slide-3">
+        <div class="slide-header">
+          <div class="slide-title-group">
+            <span class="slide-category"><span class="badge-section">Section 1</span> AI Agent Fundamentals</span>
+            <h2 class="slide-title">Chatbot vs AI Assistant vs AI Agent</h2>
+            <p class="slide-subtitle">Comparing autonomy, tooling, state management, and multi-step capabilities</p>
+          </div>
+          <span class="slide-tag">COMPARISON MATRIX</span>
+        </div>
+
+        <div class="slide-body">
+          <table class="compare-table">
+            <thead>
+              <tr>
+                <th>Feature</th>
+                <th>Chatbot</th>
+                <th>AI Assistant</th>
+                <th>AI Agent</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Main Purpose</strong></td>
+                <td>Respond to messages</td>
+                <td>Help users with specific tasks</td>
+                <td>Achieve complex goals</td>
+              </tr>
+              <tr>
+                <td><strong>Conversation</strong></td>
+                <td>Yes (turn-by-turn)</td>
+                <td>Yes (contextual)</td>
+                <td>Yes (goal-driven)</td>
+              </tr>
+              <tr>
+                <td><strong>Understand Instructions</strong></td>
+                <td>Basic to pattern-matched</td>
+                <td>Yes (broad language)</td>
+                <td>Yes (deep reasoning)</td>
+              </tr>
+              <tr>
+                <td><strong>Use External Tools</strong></td>
+                <td>Rarely / Fixed triggers</td>
+                <td>Sometimes (single-step)</td>
+                <td>Commonly (multi-step selection)</td>
+              </tr>
+              <tr>
+                <td><strong>Make Decisions</strong></td>
+                <td>Usually limited / Rule-based</td>
+                <td>Some decision making</td>
+                <td>Yes (autonomous reasoning)</td>
+              </tr>
+              <tr>
+                <td><strong>Perform Multiple Steps</strong></td>
+                <td>Usually limited to 1 step</td>
+                <td>Sometimes</td>
+                <td>Can plan &amp; execute sequences</td>
+              </tr>
+              <tr>
+                <td><strong>Maintain State</strong></td>
+                <td>Basic / None</td>
+                <td>Session history</td>
+                <td>Full execution state &amp; memory</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <div class="grid-3col" style="margin-top: 8px;">
+            <div class="card" style="padding: 10px;">
+              <strong style="color: var(--text-heading); font-size: 0.80rem;">💬 Chatbot Response</strong>
+              <p style="font-size: 0.72rem; color: var(--text-muted); margin-top: 2px;">User: "What is the weather?"</p>
+              <div style="background: #F8FAFC; padding: 6px; border-radius: 4px; font-size: 0.72rem; margin-top: 4px;">
+                "I can help you with weather information. Please check your local forecast app."
+              </div>
+            </div>
+
+            <div class="card" style="padding: 10px;">
+              <strong style="color: var(--primary-blue); font-size: 0.80rem;">⚡ Assistant Response</strong>
+              <p style="font-size: 0.72rem; color: var(--text-muted); margin-top: 2px;">User: "What is the weather?"</p>
+              <div style="background: #EFF6FF; padding: 6px; border-radius: 4px; font-size: 0.72rem; margin-top: 4px;">
+                Calls weather API: "Currently 28°C and partly cloudy in Pune."
+              </div>
+            </div>
+
+            <div class="card card-accent" style="padding: 10px;">
+              <strong style="color: #059669; font-size: 0.80rem;">🤖 AI Agent Response</strong>
+              <p style="font-size: 0.72rem; color: var(--text-muted); margin-top: 2px;">User: "Check tomorrow's weather &amp; prepare a travel plan."</p>
+              <div style="background: #ECFDF5; padding: 6px; border-radius: 4px; font-size: 0.72rem; margin-top: 4px;">
+                Checks weather (rain predicted) -> decides outdoor trek unsafe -> plans museum visit -> schedules itinerary!
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+
+      <section class="slide" id="slide-4">
+        <div class="slide-header">
+          <div class="slide-title-group">
+            <span class="slide-category"><span class="badge-section">Section 1</span> AI Agent Fundamentals</span>
+            <h2 class="slide-title">AI Agent Architecture</h2>
+            <p class="slide-subtitle">The six core components that work together to create an autonomous system</p>
+          </div>
+          <span class="slide-tag">SYSTEM ARCHITECTURE</span>
+        </div>
+
+        <div class="slide-body">
+          <div class="grid-60-40">
+            <div class="card">
+              <div class="card-title"><span class="icon">🧩</span> The 6 Architectural Components</div>
+              <div class="grid-2col" style="gap: 8px;">
+                <div class="card" style="padding: 8px; background: #F8FAFC;">
+                  <strong style="font-size: 0.78rem; color: var(--primary-deep);">1. User Input (Goal)</strong>
+                  <p style="font-size: 0.72rem; color: var(--text-body); margin: 0;">The target instruction provided by the user.</p>
+                </div>
+                <div class="card" style="padding: 8px; background: #F8FAFC;">
+                  <strong style="font-size: 0.78rem; color: var(--primary-deep);">2. Agent Instructions</strong>
+                  <p style="font-size: 0.72rem; color: var(--text-body); margin: 0;">Rules, behavioral boundaries &amp; persona (system prompt).</p>
+                </div>
+                <div class="card" style="padding: 8px; background: #F8FAFC;">
+                  <strong style="font-size: 0.78rem; color: var(--primary-deep);">3. LLM / Reasoning Model</strong>
+                  <p style="font-size: 0.72rem; color: var(--text-body); margin: 0;">Analyzes situation and plans next action.</p>
+                </div>
+                <div class="card" style="padding: 8px; background: #F8FAFC;">
+                  <strong style="font-size: 0.78rem; color: var(--primary-deep);">4. Tools &amp; APIs</strong>
+                  <p style="font-size: 0.72rem; color: var(--text-body); margin: 0;">Calculators, databases, file systems &amp; web search.</p>
+                </div>
+                <div class="card" style="padding: 8px; background: #F8FAFC;">
+                  <strong style="font-size: 0.78rem; color: var(--primary-deep);">5. State &amp; Memory</strong>
+                  <p style="font-size: 0.72rem; color: var(--text-body); margin: 0;">Tracks ongoing task progress and past user facts.</p>
+                </div>
+                <div class="card" style="padding: 8px; background: #F8FAFC;">
+                  <strong style="font-size: 0.78rem; color: var(--primary-deep);">6. Execution Loop</strong>
+                  <p style="font-size: 0.72rem; color: var(--text-body); margin: 0;">The Node.js engine orchestrating decide -> act -> observe.</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="card card-accent">
+              <div class="card-title"><span class="icon">🔄</span> End-to-End Architectural Flow</div>
+              <div class="diagram-container" style="gap: 6px; padding: 8px;">
+                <div class="flow-step">👤 User Request</div>
+                <div class="flow-arrow">↓</div>
+                <div class="flow-step accent">📜 System Instructions + LLM Reasoning</div>
+                <div class="flow-arrow">↓</div>
+                <div class="flow-step tool">🛠️ Decision: Tool Selected &amp; Args Formatted</div>
+                <div class="flow-arrow">↓</div>
+                <div class="flow-step">⚡ Node.js Tool Execution &amp; Observation</div>
+                <div class="flow-arrow">↓</div>
+                <div class="flow-step accent">🧠 LLM Evaluates Tool Result</div>
+                <div class="flow-arrow">↓</div>
+                <div class="flow-step success">💬 Final Answer to User</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+
+      <section class="slide" id="slide-5">
+        <div class="slide-header">
+          <div class="slide-title-group">
+            <span class="slide-category"><span class="badge-section">Section 1</span> AI Agent Fundamentals</span>
+            <h2 class="slide-title">What is an Agent Loop?</h2>
+            <p class="slide-subtitle">The iterative cycle through which an agent makes decisions, executes tools, and completes goals</p>
+          </div>
+          <span class="slide-tag">EXECUTION LOOP</span>
+        </div>
+
+        <div class="slide-body">
+          <div class="agent-loop-box" style="margin-bottom: 8px;">
+            <div class="loop-node active">
+              <span class="node-title">1. Decide</span>
+              <span class="node-desc">LLM evaluates prompt &amp; decides whether a tool is required</span>
+            </div>
+            <div class="loop-node">
+              <span class="node-title">2. Tool Call</span>
+              <span class="node-desc">Model generates function name &amp; JSON arguments</span>
+            </div>
+            <div class="loop-node">
+              <span class="node-title">3. Execute</span>
+              <span class="node-desc">Node.js backend runs JavaScript function safely</span>
+            </div>
+            <div class="loop-node">
+              <span class="node-title">4. Observe</span>
+              <span class="node-desc">Tool output injected back into messages context</span>
+            </div>
+            <div class="loop-node active">
+              <span class="node-title">5. Evaluate</span>
+              <span class="node-desc">Task done? Return answer. More work? Loop again!</span>
+            </div>
+          </div>
+
+          <div class="grid-2col">
+            <div class="card">
+              <div class="card-title"><span class="icon">🔍</span> The 5 Essential Stages Explained</div>
+              <ul class="bullet-list" style="font-size: 0.78rem;">
+                <li><strong>1. Decide:</strong> The LLM reads instructions, history, and available tool schemas to formulate a plan.</li>
+                <li><strong>2. Tool Selection:</strong> If external data or calculations are needed, the LLM emits a structured tool call.</li>
+                <li><strong>3. Observation:</strong> Node.js parses arguments, calls the local function, and gathers the result.</li>
+                <li><strong>4. Decide Again:</strong> The LLM inspects the tool result: does it answer the prompt, or is another tool required?</li>
+                <li><strong>5. Final Answer:</strong> When no further tools are requested, the LLM responds in natural conversational text.</li>
+              </ul>
+            </div>
+
+            <div class="card card-accent">
+              <div class="card-title"><span class="icon">🧮</span> Concrete Calculation Walkthrough</div>
+              <p class="card-desc"><strong>Prompt:</strong> <em>"Calculate total price of 5 products costing ₹200 each."</em></p>
+              <div class="step-list" style="margin-top: 4px;">
+                <div class="step-item">
+                  <div class="step-num">A</div>
+                  <div class="step-content"><strong>Decide:</strong> Arithmetic needed -> Call <code>calculate(5, 200, "multiply")</code>.</div>
+                </div>
+                <div class="step-item">
+                  <div class="step-num">B</div>
+                  <div class="step-content"><strong>Observe:</strong> Node.js returns <code>1000</code>.</div>
+                </div>
+                <div class="step-item">
+                  <div class="step-num">C</div>
+                  <div class="step-content"><strong>Decide Again:</strong> Goal satisfied. No additional tools needed.</div>
+                </div>
+                <div class="step-item">
+                  <div class="step-num">D</div>
+                  <div class="step-content"><strong>Answer:</strong> "The total price of 5 products at ₹200 each is ₹1000."</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+
+      <section class="slide" id="slide-6">
+        <div class="slide-header">
+          <div class="slide-title-group">
+            <span class="slide-category"><span class="badge-section">Section 1</span> AI Agent Fundamentals</span>
+            <h2 class="slide-title">Decision Making and Tool Selection</h2>
+            <p class="slide-subtitle">How models inspect tool schemas, match user intents, and generate function arguments</p>
+          </div>
+          <span class="slide-tag">TOOL SELECTION</span>
+        </div>
+
+        <div class="slide-body">
+          <div class="grid-2col">
+            <div class="card">
+              <div class="card-title"><span class="icon">🧠</span> How Tool Selection Works</div>
+              <div class="step-list">
+                <div class="step-item">
+                  <div class="step-num">1</div>
+                  <div class="step-content"><strong>Application Provides Tools:</strong> Backend passes an array of JSON Schema tool definitions to Groq.</div>
+                </div>
+                <div class="step-item">
+                  <div class="step-num">2</div>
+                  <div class="step-content"><strong>Tool Metadata:</strong> Each tool has a clear <code>name</code> and <code>description</code> guiding the model on when to use it.</div>
+                </div>
+                <div class="step-item">
+                  <div class="step-num">3</div>
+                  <div class="step-content"><strong>Model Selects &amp; Emits:</strong> Model outputs a structured tool call with exact arguments.</div>
+                </div>
+                <div class="step-item">
+                  <div class="step-num">4</div>
+                  <div class="step-content"><strong>Backend Execution:</strong> Node.js validates and runs the matching local function.</div>
+                </div>
+              </div>
+              <div class="alert-box alert-warning" style="margin-top: 8px;">
+                <div class="alert-title">Crucial Separation of Responsibilities</div>
+                <div class="alert-text">The model <strong>chooses</strong> the tool and arguments; the Node.js application <strong>executes</strong> it. The LLM cannot execute code directly!</div>
+              </div>
+            </div>
+
+            <div class="card card-accent">
+              <div class="card-title"><span class="icon">📦</span> Tool Selection Decisions</div>
+              
+              <div class="code-panel" style="margin-bottom: 8px;">
+                <div class="code-header"><span class="code-file">Scenario 1: Math Query</span></div>
+                <pre><code><span class="cm">// User: "What is 100 + 200?"</span>
+{
+  <span class="prop">"name"</span>: <span class="str">"calculate"</span>,
+  <span class="prop">"arguments"</span>: { <span class="prop">"a"</span>: <span class="num">100</span>, <span class="prop">"b"</span>: <span class="num">200</span> }
+}</code></pre>
+              </div>
+
+              <div class="code-panel">
+                <div class="code-header"><span class="code-file">Scenario 2: Database Query</span></div>
+                <pre><code><span class="cm">// User: "Find student information for ID 101."</span>
+{
+  <span class="prop">"name"</span>: <span class="str">"get_student"</span>,
+  <span class="prop">"arguments"</span>: { <span class="prop">"studentId"</span>: <span class="num">101</span> }
+}</code></pre>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+
+      <section class="slide" id="slide-7">
+        <div class="slide-header">
+          <div class="slide-title-group">
+            <span class="slide-category"><span class="badge-section">Section 1</span> AI Agent Fundamentals</span>
+            <h2 class="slide-title">What is Autonomous Action?</h2>
+            <p class="slide-subtitle">Executing multi-step sequences independently while establishing necessary safety boundaries</p>
+          </div>
+          <span class="slide-tag">AUTONOMY &amp; SAFETY</span>
+        </div>
+
+        <div class="slide-body">
+          <div class="grid-2col">
+            <div class="card">
+              <div class="card-title"><span class="icon">🪜</span> Levels of Agent Autonomy</div>
+              <table class="compare-table">
+                <thead>
+                  <tr>
+                    <th>Level</th>
+                    <th>System Behavior</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><strong>Basic</strong></td>
+                    <td>Responds to direct user prompts with plain text.</td>
+                  </tr>
+                  <tr>
+                    <td><strong>Tool-Assisted</strong></td>
+                    <td>Uses a single tool when explicitly requested.</td>
+                  </tr>
+                  <tr>
+                    <td><strong>Multi-Step</strong></td>
+                    <td>Performs a sequence of actions toward a goal.</td>
+                  </tr>
+                  <tr>
+                    <td><strong>Autonomous</strong></td>
+                    <td>Plans, executes, evaluates, and self-corrects steps.</td>
+                  </tr>
+                </tbody>
+              </table>
+
+              <div class="alert-box alert-info" style="margin-top: 10px;">
+                <div class="alert-title">Multi-Step Example</div>
+                <div class="alert-text">User: <em>"Find total price of these products and tell me if our budget of ₹2000 is enough."</em><br>
+                1. Reads product prices &rarr; 2. Calculates sum &rarr; 3. Compares with budget &rarr; 4. Answers!</div>
+              </div>
+            </div>
+
+            <div class="card card-accent">
+              <div class="card-title"><span class="icon">🛡️</span> Critical Safety: Guardrails &amp; Human-in-the-Loop</div>
+              <p class="card-desc">
+                Autonomy does <strong>not</strong> mean unlimited permission. In production, agents must never execute irreversible actions without explicit confirmation.
+              </p>
+              
+              <div class="card" style="padding: 10px; background: #FFFFFF; border-left: 3px solid var(--accent-rose);">
+                <strong style="color: var(--accent-rose); font-size: 0.80rem;">⚠️ High-Risk Actions Requiring User Confirmation:</strong>
+                <ul class="bullet-list" style="font-size: 0.74rem; margin-top: 4px;">
+                  <li>Sending real emails or external messages.</li>
+                  <li>Processing payments or financial transactions.</li>
+                  <li>Deleting records from databases.</li>
+                  <li>Modifying user account passwords or permissions.</li>
+                </ul>
+              </div>
+
+              <div class="alert-box alert-warning" style="margin-top: 8px;">
+                <div class="alert-title">Engineering Principle</div>
+                <div class="alert-text">Read actions (calculating, querying) can be automated; write/delete actions must require authentication and user approval.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+
+      <section class="slide" id="slide-8">
+        <div class="slide-header">
+          <div class="slide-title-group">
+            <span class="slide-category"><span class="badge-section">Section 1</span> AI Agent Fundamentals</span>
+            <h2 class="slide-title">Agent Instructions (System Prompt)</h2>
+            <p class="slide-subtitle">Defining identity, capabilities, behavioral rules, and operational boundaries</p>
+          </div>
+          <span class="slide-tag">SYSTEM PROMPTING</span>
+        </div>
+
+        <div class="slide-body">
+          <div class="grid-60-40">
+            <div class="card">
+              <div class="card-title"><span class="icon">📜</span> Production System Instructions</div>
+              <div class="code-panel">
+                <div class="code-header"><span class="code-file">systemPrompt.js</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+                <pre><code><span class="kw">const</span> <span class="vr">systemInstruction</span> = <span class="str">`
+You are a helpful Student Assistant Agent.
+
+Your responsibilities:
+1. Help users find student information accurately.
+2. Use the 'get_student' tool when student details are needed.
+3. NEVER invent or hallucinate student information.
+4. Use the 'calculate' tool for mathematical calculations.
+5. If a tool fails or student is missing, explain clearly.
+6. Provide concise, friendly, and structured responses.
+`</span>;</code></pre>
+              </div>
+              <div class="alert-box alert-warning" style="margin-top: 8px;">
+                <div class="alert-title">Security Reminder</div>
+                <div class="alert-text">System instructions guide model behavior, but they are <strong>not a replacement</strong> for backend input validation, authorization, and sanitization!</div>
+              </div>
+            </div>
+
+            <div class="card card-accent">
+              <div class="card-title"><span class="icon">🎯</span> Why Instructions are Vital</div>
+              <ul class="bullet-list" style="font-size: 0.78rem;">
+                <li><span class="icon">✓</span> <strong>Role &amp; Identity:</strong> Establishes domain focus (Student Assistant vs Financial Advisor).</li>
+                <li><span class="icon">✓</span> <strong>Tool Usage Guidelines:</strong> Instructs model when to invoke tools rather than guessing.</li>
+                <li><span class="icon">✓</span> <strong>Anti-Hallucination Guardrail:</strong> Explicitly forbids inventing data when tools return null.</li>
+                <li><span class="icon">✓</span> <strong>API Role:</strong> Sent in the messages array as <code>{ role: "system", content: "..." }</code>.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+
+      <section class="slide" id="slide-9">
+        <div class="slide-header">
+          <div class="slide-title-group">
+            <span class="slide-category"><span class="badge-section">Section 2</span> State, Memory &amp; Context</span>
+            <h2 class="slide-title">What is Agent State?</h2>
+            <p class="slide-subtitle">Capturing the real-time execution snapshot while performing multi-step tasks</p>
+          </div>
+          <span class="slide-tag">AGENT STATE</span>
+        </div>
+
+        <div class="slide-body">
+          <div class="grid-2col">
+            <div class="card">
+              <div class="card-title"><span class="icon">📌</span> State: The Current Snapshot</div>
+              <p class="card-desc">
+                <strong>Agent state</strong> is the structured information that represents the agent's current situation, progress, and intermediate data while performing a task.
+              </p>
+              <div class="code-panel">
+                <div class="code-header"><span class="code-file">agentState.js</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+                <pre><code><span class="cm">// State initialized at start of task</span>
+<span class="kw">const</span> <span class="vr">agentState</span> = {
+  <span class="prop">goal</span>: <span class="str">"Find student 101 and calculate score"</span>,
+  <span class="prop">studentId</span>: <span class="num">101</span>,
+  <span class="prop">selectedTool</span>: <span class="str">"get_student"</span>,
+  <span class="prop">toolResult</span>: <span class="kw">null</span>,
+  <span class="prop">completed</span>: <span class="bool">false</span>
+};
+
+<span class="cm">// State updated after tool execution</span>
+<span class="vr">agentState</span>.<span class="prop">toolResult</span> = { <span class="prop">name</span>: <span class="str">"Ali"</span>, <span class="prop">marks</span>: <span class="num">85</span> };
+<span class="vr">agentState</span>.<span class="prop">completed</span> = <span class="bool">true</span>;</code></pre>
+              </div>
+            </div>
+
+            <div class="card card-accent">
+              <div class="card-title"><span class="icon">⚙️</span> Why Do Agents Need State?</div>
+              <div class="step-list" style="margin-top: 4px;">
+                <div class="step-item">
+                  <div class="step-num">1</div>
+                  <div class="step-content"><strong>Track Current Task:</strong> Remembers what the overarching goal is during intermediate steps.</div>
+                </div>
+                <div class="step-item">
+                  <div class="step-num">2</div>
+                  <div class="step-content"><strong>Store Intermediate Outputs:</strong> Holds API responses needed for subsequent steps.</div>
+                </div>
+                <div class="step-item">
+                  <div class="step-num">3</div>
+                  <div class="step-content"><strong>Prevent Duplicate Actions:</strong> Records which tools have already been executed.</div>
+                </div>
+                <div class="step-item">
+                  <div class="step-num">4</div>
+                  <div class="step-content"><strong>Check Completion:</strong> Evaluates if task goals are satisfied.</div>
+                </div>
+              </div>
+              <div class="alert-box alert-info" style="margin-top: 8px;">
+                <div class="alert-title">Core Insight</div>
+                <div class="alert-text"><strong>State</strong> describes what is happening <em>right now</em> in the active task execution.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+
+      <section class="slide" id="slide-10">
+        <div class="slide-header">
+          <div class="slide-title-group">
+            <span class="slide-category"><span class="badge-section">Section 2</span> State, Memory &amp; Context</span>
+            <h2 class="slide-title">State vs Memory vs Chat History vs RAG</h2>
+            <p class="slide-subtitle">Clear distinction between task execution, retained facts, conversation logs, and external retrieval</p>
+          </div>
+          <span class="slide-tag">THE 4 CONCEPTS</span>
+        </div>
+
+        <div class="slide-body">
+          <div class="matrix-grid">
+            <div class="matrix-item" style="border-top: 3px solid var(--primary-blue);">
+              <div class="matrix-header">
+                <span class="matrix-title">1. Agent State</span>
+                <span class="badge badge-concept">Current Task</span>
+              </div>
+              <p class="matrix-desc">Temporary information tracking the active execution step and intermediate tool data.</p>
+              <div class="matrix-example">State: Currently querying student 101 records.</div>
+            </div>
+
+            <div class="matrix-item" style="border-top: 3px solid #059669;">
+              <div class="matrix-header">
+                <span class="matrix-title">2. Memory</span>
+                <span class="badge badge-agent">Retained Facts</span>
+              </div>
+              <p class="matrix-desc">Useful facts or preferences remembered across turns or future sessions.</p>
+              <div class="matrix-example">Memory: User's name is Ali; prefers concise responses.</div>
+            </div>
+
+            <div class="matrix-item" style="border-top: 3px solid #D97706;">
+              <div class="matrix-header">
+                <span class="matrix-title">3. Chat History</span>
+                <span class="badge badge-warning">Message Log</span>
+              </div>
+              <p class="matrix-desc">Verbatim sequence of previous user and assistant messages in the session.</p>
+              <div class="matrix-example">History: [{ role: "user", content: "Hi" }, { role: "assistant", ... }]</div>
+            </div>
+
+            <div class="matrix-item" style="border-top: 3px solid #7C3AED;">
+              <div class="matrix-header">
+                <span class="matrix-title">4. RAG (Retrieval)</span>
+                <span class="badge badge-tool">External Knowledge</span>
+              </div>
+              <p class="matrix-desc">Retrieval-Augmented Generation: searching external documents/databases to augment prompt.</p>
+              <div class="matrix-example">RAG: Fetching course handbook PDF excerpt for syllabus details.</div>
+            </div>
+          </div>
+
+          <div class="alert-box alert-success" style="margin-top: 8px;">
+            <div class="alert-title">Crucial Distinction</div>
+            <div class="alert-text"><strong>RAG is a retrieval technique, not a memory type.</strong> An agent can use RAG to query external documentation, while using memory to remember who the user is.</div>
+          </div>
+        </div>
+      </section>
+
+
+      <section class="slide" id="slide-11">
+        <div class="slide-header">
+          <div class="slide-title-group">
+            <span class="slide-category"><span class="badge-section">Section 2</span> State, Memory &amp; Context</span>
+            <h2 class="slide-title">Short-Term Memory vs Long-Term Memory</h2>
+            <p class="slide-subtitle">Session-based in-memory caching vs durable cross-session persistent storage</p>
+          </div>
+          <span class="slide-tag">MEMORY HORIZONS</span>
+        </div>
+
+        <div class="slide-body">
+          <div class="grid-2col">
+            <div class="card">
+              <div class="card-title"><span class="icon">⏱️</span> Short-Term Memory</div>
+              <p class="card-desc">Information needed strictly during the current conversation session or active task.</p>
+              <ul class="bullet-list" style="font-size: 0.78rem;">
+                <li><span class="icon">•</span> Current user query and recent 5–10 messages.</li>
+                <li><span class="icon">•</span> Active task execution step and intermediate tool results.</li>
+                <li><span class="icon">•</span> Stored in: Server RAM (e.g., JavaScript <code>Map</code> or Redis session).</li>
+                <li><span class="icon">•</span> <strong>Lifecycle:</strong> Lost when conversation ends or server restarts.</li>
+              </ul>
+              <div class="alert-box alert-warning" style="margin-top: 8px;">
+                <div class="alert-title">Limitation</div>
+                <div class="alert-text">In-memory JavaScript Maps are ephemeral. Server crashes or deployments instantly wipe them out.</div>
+              </div>
+            </div>
+
+            <div class="card card-accent">
+              <div class="card-title"><span class="icon">💾</span> Long-Term Memory</div>
+              <p class="card-desc">Information retained across future conversations, days, or weeks.</p>
+              <ul class="bullet-list" style="font-size: 0.78rem;">
+                <li><span class="icon">•</span> User profile preferences (preferred language, role).</li>
+                <li><span class="icon">•</span> Historical interaction summaries and past completed tasks.</li>
+                <li><span class="icon">•</span> Stored in: Persistent database (PostgreSQL, MongoDB, Vector DB).</li>
+                <li><span class="icon">•</span> <strong>Lifecycle:</strong> Permanent until explicitly deleted.</li>
+              </ul>
+              <div class="alert-box alert-success" style="margin-top: 8px;">
+                <div class="alert-title">Implementation Rule</div>
+                <div class="alert-text">Long-term memory <strong>requires durable database storage</strong>. Never rely on Node.js process variables for long-term data.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+
+      <section class="slide" id="slide-12">
+        <div class="slide-header">
+          <div class="slide-title-group">
+            <span class="slide-category"><span class="badge-section">Section 2</span> State, Memory &amp; Context</span>
+            <h2 class="slide-title">What is Context?</h2>
+            <p class="slide-subtitle">The complete body of information assembled and delivered to the LLM for a given prompt</p>
+          </div>
+          <span class="slide-tag">CONTEXT ASSEMBLY</span>
+        </div>
+
+        <div class="slide-body">
+          <div class="grid-60-40">
+            <div class="card">
+              <div class="card-title"><span class="icon">📦</span> What Does Context Contain?</div>
+              <p class="card-desc">
+                An LLM has no memory between API calls. <strong>Context</strong> is everything you assemble and send into <code>messages</code> so the model can generate an accurate response.
+              </p>
+              <div class="grid-2col" style="gap: 8px; margin-top: 4px;">
+                <div class="card" style="padding: 8px; background: #F8FAFC;">
+                  <strong style="color: var(--primary-deep); font-size: 0.76rem;">System Prompt</strong>
+                  <span style="font-size: 0.70rem; color: var(--text-body);">Rules, persona &amp; constraints.</span>
+                </div>
+                <div class="card" style="padding: 8px; background: #F8FAFC;">
+                  <strong style="color: var(--primary-deep); font-size: 0.76rem;">Chat History</strong>
+                  <span style="font-size: 0.70rem; color: var(--text-body);">Recent user &amp; assistant turns.</span>
+                </div>
+                <div class="card" style="padding: 8px; background: #F8FAFC;">
+                  <strong style="color: var(--primary-deep); font-size: 0.76rem;">Tool Definitions &amp; Results</strong>
+                  <span style="font-size: 0.70rem; color: var(--text-body);">Available tools and executed outputs.</span>
+                </div>
+                <div class="card" style="padding: 8px; background: #F8FAFC;">
+                  <strong style="color: var(--primary-deep); font-size: 0.76rem;">Retrieved Facts (RAG)</strong>
+                  <span style="font-size: 0.70rem; color: var(--text-body);">External knowledge snippets.</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="card card-accent">
+              <div class="card-title"><span class="icon">⚖️</span> Without vs With Context</div>
+              <div class="card" style="background: #FFFFFF; padding: 8px; margin-bottom: 6px;">
+                <strong style="color: var(--accent-rose); font-size: 0.76rem;">Without Context:</strong>
+                <p style="font-size: 0.72rem; color: var(--text-muted); margin: 2px 0;">User: "What is my course?"</p>
+                <div style="font-size: 0.72rem; color: var(--text-heading); background: #FEF2F2; padding: 4px; border-radius: 4px;">
+                  Model: "I don't know your course. Please tell me what you are studying."
+                </div>
+              </div>
+
+              <div class="card" style="background: #FFFFFF; padding: 8px;">
+                <strong style="color: var(--accent-green); font-size: 0.76rem;">With Context (Injected State):</strong>
+                <p style="font-size: 0.72rem; color: var(--text-muted); margin: 2px 0;">Context: <code>{ name: "Ali", course: "MERN Stack" }</code></p>
+                <div style="font-size: 0.72rem; color: var(--text-heading); background: #ECFDF5; padding: 4px; border-radius: 4px;">
+                  Model: "You are enrolled in the MERN Stack course, Ali!"
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+
+      <section class="slide" id="slide-13">
+        <div class="slide-header">
+          <div class="slide-title-group">
+            <span class="slide-category"><span class="badge-section">Section 2</span> State, Memory &amp; Context</span>
+            <h2 class="slide-title">Context Window and Its Limits</h2>
+            <p class="slide-subtitle">Understanding token budgets, cost implications, and attention degradation</p>
+          </div>
+          <span class="slide-tag">TOKEN BUDGET</span>
+        </div>
+
+        <div class="slide-body">
+          <div class="grid-2col">
+            <div class="card">
+              <div class="card-title"><span class="icon">🪙</span> What is a Token?</div>
+              <p class="card-desc">
+                LLMs do not read words or characters directly; they process <strong>tokens</strong> (sub-word fragments).
+              </p>
+              <div class="card" style="background: #0F172A; color: #FFFFFF; padding: 10px; font-family: var(--font-mono); font-size: 0.76rem;">
+                <span style="color: #94A3B8;">Text:</span> "Hello, how are you?"<br>
+                <span style="color: #60A5FA;">Tokens:</span> ["Hello", ",", " how", " are", " you", "?"] (6 tokens)
+              </div>
+              <ul class="bullet-list" style="font-size: 0.76rem; margin-top: 8px;">
+                <li>~1000 tokens ≈ 750 English words.</li>
+                <li>Code and non-English scripts often require significantly more tokens per word.</li>
+              </ul>
+            </div>
+
+            <div class="card card-accent">
+              <div class="card-title"><span class="icon">⚠️</span> Why Context Limits Matter</div>
+              <ul class="bullet-list" style="font-size: 0.78rem;">
+                <li><strong>Token Overflow:</strong> Exceeding max model window results in hard API rejection errors.</li>
+                <li><strong>Rising Latency &amp; Cost:</strong> Processing 64k tokens costs exponentially more time and money than 2k tokens.</li>
+                <li><strong>"Lost in the Middle":</strong> Models pay highest attention to the start and end of context; middle facts can be missed.</li>
+                <li><strong>Output Space:</strong> The context window covers input tokens + generated output tokens combined.</li>
+              </ul>
+              <div class="alert-box alert-warning" style="margin-top: 8px;">
+                <div class="alert-title">Engineering Truth</div>
+                <div class="alert-text">A larger context window does <strong>not</strong> automatically mean better reasoning. Focused, clean context outperforms bloated dumps every time.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+
+      <section class="slide" id="slide-14">
+        <div class="slide-header">
+          <div class="slide-title-group">
+            <span class="slide-category"><span class="badge-section">Section 2</span> State, Memory &amp; Context</span>
+            <h2 class="slide-title">Context Management Techniques</h2>
+            <p class="slide-subtitle">Five proven strategies to keep prompts concise, relevant, and budget-efficient</p>
+          </div>
+          <span class="slide-tag">CONTEXT STRATEGIES</span>
+        </div>
+
+        <div class="slide-body">
+          <div class="grid-60-40">
+            <div class="card">
+              <div class="card-title"><span class="icon">🛠️</span> 5 Core Context Management Strategies</div>
+              <div class="step-list">
+                <div class="step-item">
+                  <div class="step-num">1</div>
+                  <div class="step-content"><strong>Sliding Window:</strong> Keep only the latest <em>N</em> messages (e.g. <code>history.slice(-10)</code>). Discard oldest turns.</div>
+                </div>
+                <div class="step-item">
+                  <div class="step-num">2</div>
+                  <div class="step-content"><strong>Summarization:</strong> Periodically condense older messages into a 2-sentence summary using a fast model.</div>
+                </div>
+                <div class="step-item">
+                  <div class="step-num">3</div>
+                  <div class="step-content"><strong>Semantic Retrieval (RAG):</strong> Only fetch documents and facts specifically relevant to current query.</div>
+                </div>
+                <div class="step-item">
+                  <div class="step-num">4</div>
+                  <div class="step-content"><strong>Tool Output Pruning:</strong> Truncate massive JSON outputs before feeding them back into context.</div>
+                </div>
+                <div class="step-item">
+                  <div class="step-num">5</div>
+                  <div class="step-content"><strong>Token Budget Caps:</strong> Monitor cumulative token counts before sending each API payload.</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="card card-accent">
+              <div class="card-title"><span class="icon">✨</span> Practical Compaction Example</div>
+              <div class="card" style="background: #0F172A; color: #FFFFFF; padding: 10px; font-family: var(--font-mono); font-size: 0.72rem; line-height: 1.4;">
+                <span style="color: #FBBF24;">// Instead of sending 100 raw messages:</span><br><br>
+                <span style="color: #4ADE80;">[System Summary]</span><br>
+                "User is Ali, studying MERN Stack. Prefers brief Node.js code examples."<br><br>
+                <span style="color: #60A5FA;">[Recent Turns - Last 4]</span><br>
+                User: "How do I add tools?"<br>
+                Agent: "Provide a tools array to Groq."<br>
+                User: "Can you give me an example?"
+              </div>
+              <span class="badge badge-success" style="margin-top: 6px;">Cuts token usage by up to 90%!</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+
+      <section class="slide" id="slide-15">
+        <div class="slide-header">
+          <div class="slide-title-group">
+            <span class="slide-category"><span class="badge-section">Section 3</span> Practical Implementation</span>
+            <h2 class="slide-title">Building a Tool-Using AI Agent</h2>
+            <p class="slide-subtitle">Project 1: Student Assistant Agent powered by Node.js, Express, and Groq SDK</p>
+          </div>
+          <span class="slide-tag">PROJECT 1 OVERVIEW</span>
+        </div>
+
+        <div class="slide-body">
+          <div class="grid-60-40">
+            <div class="card card-accent">
+              <div class="card-title"><span class="icon">🎯</span> Project Goals &amp; Tools</div>
+              <p class="card-desc">
+                We will construct an Express REST API endpoint <code>POST /api/agent</code>. The agent receives a student question, decides whether calculation or database lookup is needed, executes local functions, and returns a final answer.
+              </p>
+              <div class="grid-2col" style="gap: 8px; margin-top: 6px;">
+                <div class="card" style="padding: 10px; background: #FFFFFF;">
+                  <strong style="color: var(--primary-deep); font-size: 0.80rem;">Tool 1: calculate</strong>
+                  <p style="font-size: 0.72rem; color: var(--text-body); margin: 2px 0;">Adds two numbers together with runtime type validation.</p>
+                </div>
+                <div class="card" style="padding: 10px; background: #FFFFFF;">
+                  <strong style="color: var(--primary-deep); font-size: 0.80rem;">Tool 2: get_student</strong>
+                  <p style="font-size: 0.72rem; color: var(--text-body); margin: 2px 0;">Finds a student profile by ID from a sample records array.</p>
+                </div>
+              </div>
+              <ul class="bullet-list" style="font-size: 0.76rem; margin-top: 8px;">
+                <li><strong>Model:</strong> <code>openai/gpt-oss-120b</code> on Groq (ultra-low latency inference).</li>
+                <li><strong>Protocol:</strong> Groq Chat Completions with <code>tools</code> and <code>tool_choice: "auto"</code>.</li>
+              </ul>
+            </div>
+
+            <div class="card">
+              <div class="card-title"><span class="icon">🔄</span> Agent Loop Architecture</div>
+              <div class="diagram-container" style="gap: 5px; padding: 6px;">
+                <div class="flow-step">👤 Client Question</div>
+                <div class="flow-arrow">↓</div>
+                <div class="flow-step accent">⚡ Express POST /api/agent</div>
+                <div class="flow-arrow">↓</div>
+                <div class="flow-step">🧠 Groq LLM Decision</div>
+                <div class="flow-arrow">↓</div>
+                <div class="flow-step tool">🛠️ Node.js Tool Execution</div>
+                <div class="flow-arrow">↓</div>
+                <div class="flow-step success">💬 Groq Generates Final Response</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+
+      <section class="slide" id="slide-16">
+        <div class="slide-header">
+          <div class="slide-title-group">
+            <span class="slide-category"><span class="badge-section">Section 3</span> Practical Implementation</span>
+            <h2 class="slide-title">Project Setup &amp; Dependencies</h2>
+            <p class="slide-subtitle">Initializing our Node.js workspace, installing packages, and securing environment secrets</p>
+          </div>
+          <span class="slide-tag">PROJECT SETUP</span>
+        </div>
+
+        <div class="slide-body">
+          <div class="grid-2col">
+            <div class="card">
+              <div class="card-title"><span class="icon">💻</span> Terminal Commands</div>
+              <div class="code-panel" style="margin-bottom: 8px;">
+                <div class="code-header"><span class="code-file">Terminal</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+                <pre><code><span class="cm"># Step 1: Create and enter directory</span>
+mkdir student-agent
+cd student-agent
+
+<span class="cm"># Step 2: Initialize package.json</span>
+npm init -y
+
+<span class="cm"># Step 3: Install production packages</span>
+npm install express groq-sdk dotenv</code></pre>
+              </div>
+
+              <div class="code-panel">
+                <div class="code-header"><span class="code-file">Directory Tree</span></div>
+                <pre><code>student-agent/
+├── server.js          <span class="cm"># Express app & agent loop</span>
+├── .env               <span class="cm"># Secret Groq API key</span>
+├── .gitignore         <span class="cm"># Exclude node_modules & .env</span>
+└── package.json       <span class="cm"># Dependency manifests</span></code></pre>
+              </div>
+            </div>
+
+            <div class="card card-accent">
+              <div class="card-title"><span class="icon">🔐</span> Environment Configuration (.env)</div>
+              <p class="card-desc">Store sensitive credentials safely outside code:</p>
+              
+              <div class="code-panel" style="margin-bottom: 8px;">
+                <div class="code-header"><span class="code-file">.env</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+                <pre><code><span class="prop">GROQ_API_KEY</span>=gsk_your_actual_groq_api_key_here
+<span class="prop">PORT</span>=3000</code></pre>
+              </div>
+
+              <div class="code-panel">
+                <div class="code-header"><span class="code-file">.gitignore</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+                <pre><code>node_modules/
+.env</code></pre>
+              </div>
+
+              <div class="alert-box alert-danger" style="margin-top: 8px;">
+                <div class="alert-title">Security Mandate</div>
+                <div class="alert-text">Never hardcode API keys into source code or push <code>.env</code> to GitHub. Leaked keys are scraped by bots in seconds!</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+
+      <section class="slide" id="slide-17">
+        <div class="slide-header">
+          <div class="slide-title-group">
+            <span class="slide-category"><span class="badge-section">Section 3</span> Practical Implementation</span>
+            <h2 class="slide-title">Understanding Tools and Tool Schemas</h2>
+            <p class="slide-subtitle">Crafting JSON Schema contracts that explain parameters and constraints to the LLM</p>
+          </div>
+          <span class="slide-tag">TOOL SCHEMAS</span>
+        </div>
+
+        <div class="slide-body">
+          <div class="grid-60-40">
+            <div class="card">
+              <div class="card-title"><span class="icon">📋</span> Calculator Tool Schema Definition</div>
+              <div class="code-panel">
+                <div class="code-header"><span class="code-file">toolSchema.js</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+                <pre><code><span class="kw">const</span> <span class="vr">calculatorTool</span> = {
+  <span class="prop">type</span>: <span class="str">"function"</span>,
+  <span class="prop">function</span>: {
+    <span class="prop">name</span>: <span class="str">"calculate"</span>,
+    <span class="prop">description</span>: <span class="str">"Add two numbers together"</span>,
+    <span class="prop">parameters</span>: {
+      <span class="prop">type</span>: <span class="str">"object"</span>,
+      <span class="prop">properties</span>: {
+        <span class="prop">a</span>: { <span class="prop">type</span>: <span class="str">"number"</span>, <span class="prop">description</span>: <span class="str">"First number"</span> },
+        <span class="prop">b</span>: { <span class="prop">type</span>: <span class="str">"number"</span>, <span class="prop">description</span>: <span class="str">"Second number"</span> }
+      },
+      <span class="prop">required</span>: [<span class="str">"a"</span>, <span class="str">"b"</span>],
+      <span class="prop">additionalProperties</span>: <span class="bool">false</span>
+    }
+  }
+};</code></pre>
+              </div>
+            </div>
+
+            <div class="card card-accent">
+              <div class="card-title"><span class="icon">🔍</span> What the Schema Communicates</div>
+              <ul class="bullet-list" style="font-size: 0.78rem;">
+                <li><strong>name:</strong> Identifier used by the model to request this specific function.</li>
+                <li><strong>description:</strong> Tells the model <em>when</em> and <em>why</em> to choose this tool over others.</li>
+                <li><strong>properties:</strong> Defines required argument keys and their strict data types (number, string).</li>
+                <li><strong>required:</strong> Guarantees the LLM provides both <code>a</code> and <code>b</code>.</li>
+              </ul>
+              <div class="alert-box alert-info" style="margin-top: 8px;">
+                <div class="alert-title">Contract Notice</div>
+                <div class="alert-text">The schema is a contract. While modern models follow schemas accurately, your backend must still validate types before execution.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+
+      <section class="slide" id="slide-18">
+        <div class="slide-header">
+          <div class="slide-title-group">
+            <span class="slide-category"><span class="badge-section">Section 3</span> Practical Implementation</span>
+            <h2 class="slide-title">Implementing Tools &amp; The Tool Registry</h2>
+            <p class="slide-subtitle">Writing JavaScript functions and binding them securely through a lookup map</p>
+          </div>
+          <span class="slide-tag">TOOL REGISTRY</span>
+        </div>
+
+        <div class="slide-body">
+          <div class="grid-60-40">
+            <div class="card">
+              <div class="card-title"><span class="icon">⚙️</span> JavaScript Tool Implementations</div>
+              <div class="code-panel">
+                <div class="code-header"><span class="code-file">tools.js</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+                <pre><code><span class="cm">// Sample mock student database</span>
+<span class="kw">const</span> <span class="vr">students</span> = [
+  { <span class="prop">id</span>: <span class="num">101</span>, <span class="prop">name</span>: <span class="str">"Ali"</span>, <span class="prop">course</span>: <span class="str">"MERN Stack"</span> },
+  { <span class="prop">id</span>: <span class="num">102</span>, <span class="prop">name</span>: <span class="str">"Sara"</span>, <span class="prop">course</span>: <span class="str">"Python"</span> }
+];
+
+<span class="cm">// Tool 1: Math Calculator</span>
+<span class="kw">function</span> <span class="fn">calculate</span>(<span class="vr">a</span>, <span class="vr">b</span>) {
+  <span class="kw">if</span> (<span class="kw">typeof</span> <span class="vr">a</span> !== <span class="str">"number"</span> || <span class="kw">typeof</span> <span class="vr">b</span> !== <span class="str">"number"</span>) {
+    <span class="kw">throw new</span> Error(<span class="str">"Invalid numbers provided"</span>);
+  }
+  <span class="kw">return</span> <span class="vr">a</span> + <span class="vr">b</span>;
+}
+
+<span class="cm">// Tool 2: Database Finder</span>
+<span class="kw">function</span> <span class="fn">getStudent</span>(<span class="vr">studentId</span>) {
+  <span class="kw">const</span> <span class="vr">student</span> = <span class="vr">students</span>.<span class="fn">find</span>(<span class="vr">s</span> => <span class="vr">s</span>.<span class="prop">id</span> === <span class="vr">studentId</span>);
+  <span class="kw">return</span> <span class="vr">student</span> || { <span class="prop">error</span>: <span class="str">"Student not found"</span> };
+}
+
+<span class="cm">// Secure Tool Registry Map</span>
+<span class="kw">const</span> <span class="vr">toolFunctions</span> = {
+  <span class="prop">calculate</span>: ({ <span class="prop">a</span>, <span class="prop">b</span> }) => <span class="fn">calculate</span>(<span class="vr">a</span>, <span class="vr">b</span>),
+  <span class="prop">get_student</span>: ({ <span class="prop">studentId</span> }) => <span class="fn">getStudent</span>(<span class="vr">studentId</span>)
+};</code></pre>
+              </div>
+            </div>
+
+            <div class="card card-accent">
+              <div class="card-title"><span class="icon">🛡️</span> Security: The Registry Pattern</div>
+              <p class="card-desc">
+                Notice that tool names map directly into <code>toolFunctions[toolName]</code>.
+              </p>
+              <div class="alert-box alert-danger">
+                <div class="alert-title">Never Use eval()!</div>
+                <div class="alert-text">Never use <code>eval()</code> or execute arbitrary dynamic string function calls requested by an AI model. Only execute functions registered in your explicit whitelist dictionary.</div>
+              </div>
+              <ul class="bullet-list" style="font-size: 0.74rem; margin-top: 6px;">
+                <li><span class="icon">✓</span> Whitelisted function execution only.</li>
+                <li><span class="icon">✓</span> Protects against prompt injection attacks.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+
+      <section class="slide" id="slide-19">
+        <div class="slide-header">
+          <div class="slide-title-group">
+            <span class="slide-category"><span class="badge-section">Section 3</span> Practical Implementation</span>
+            <h2 class="slide-title">Sending Tools to the LLM (Groq API Request)</h2>
+            <p class="slide-subtitle">Configuring tool_choice, messages array, and interpreting model responses</p>
+          </div>
+          <span class="slide-tag">GROQ DISPATCH</span>
+        </div>
+
+        <div class="slide-body">
+          <div class="grid-60-40">
+            <div class="card">
+              <div class="card-title"><span class="icon">🚀</span> Dispatching the Groq API Request</div>
+              <div class="code-panel">
+                <div class="code-header"><span class="code-file">groqRequest.js</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+                <pre><code><span class="kw">const</span> <span class="vr">response</span> = <span class="kw">await</span> <span class="vr">groq</span>.<span class="prop">chat</span>.<span class="prop">completions</span>.<span class="fn">create</span>({
+  <span class="prop">model</span>: <span class="str">"openai/gpt-oss-120b"</span>,
+  <span class="prop">messages</span>: [
+    { <span class="prop">role</span>: <span class="str">"system"</span>, <span class="prop">content</span>: <span class="str">"You are a helpful student assistant."</span> },
+    { <span class="prop">role</span>: <span class="str">"user"</span>,   <span class="prop">content</span>: <span class="str">"Add 100 and 200."</span> }
+  ],
+  <span class="prop">tools</span>: [<span class="vr">calculatorTool</span>, <span class="vr">studentTool</span>],
+  <span class="prop">tool_choice</span>: <span class="str">"auto"</span>  <span class="cm">// Model decides if tools are needed!</span>
+});</code></pre>
+              </div>
+            </div>
+
+            <div class="card card-accent">
+              <div class="card-title"><span class="icon">⚖️</span> Two Possible Model Responses</div>
+              
+              <div class="card" style="padding: 8px; background: #FFFFFF; margin-bottom: 6px;">
+                <strong style="color: var(--primary-deep); font-size: 0.76rem;">Option A: Standard Text Response</strong>
+                <p style="font-size: 0.72rem; color: var(--text-body); margin: 2px 0;">If no tools are required (e.g. "Hello!"), the model populates <code>message.content</code>.</p>
+              </div>
+
+              <div class="card" style="padding: 8px; background: #FFFFFF;">
+                <strong style="color: #7C3AED; font-size: 0.76rem;">Option B: Tool Call Request</strong>
+                <p style="font-size: 0.72rem; color: var(--text-body); margin: 2px 0;">Model emits <code>message.tool_calls</code> containing function name and arguments:</p>
+                <pre style="background: #0F172A; color: #F8FAFC; padding: 6px; border-radius: 4px; font-size: 0.68rem; margin-top: 4px;"><code>{
+  "name": "calculate",
+  "arguments": "{"a": 100, "b": 200}"
+}</code></pre>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+
+      <section class="slide" id="slide-20">
+        <div class="slide-header">
+          <div class="slide-title-group">
+            <span class="slide-category"><span class="badge-section">Section 3</span> Practical Implementation</span>
+            <h2 class="slide-title">Executing the Tool &amp; Observing the Result</h2>
+            <p class="slide-subtitle">Parsing JSON arguments, executing the registered function, and capturing output</p>
+          </div>
+          <span class="slide-tag">TOOL EXECUTION</span>
+        </div>
+
+        <div class="slide-body">
+          <div class="grid-60-40">
+            <div class="card">
+              <div class="card-title"><span class="icon">⚡</span> Execution Logic in Node.js</div>
+              <div class="code-panel">
+                <div class="code-header"><span class="code-file">executeTool.js</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+                <pre><code><span class="kw">const</span> <span class="vr">message</span> = <span class="vr">response</span>.<span class="prop">choices</span>[<span class="num">0</span>].<span class="prop">message</span>;
+
+<span class="kw">if</span> (<span class="vr">message</span>.<span class="prop">tool_calls</span>) {
+  <span class="kw">for</span> (<span class="kw">const</span> <span class="vr">toolCall</span> <span class="kw">of</span> <span class="vr">message</span>.<span class="prop">tool_calls</span>) {
+    <span class="kw">const</span> <span class="vr">toolName</span> = <span class="vr">toolCall</span>.<span class="prop">function</span>.<span class="prop">name</span>;
+    <span class="kw">const</span> <span class="vr">toolFunction</span> = <span class="vr">toolFunctions</span>[<span class="vr">toolName</span>];
+
+    <span class="kw">if</span> (!<span class="vr">toolFunction</span>) {
+      <span class="kw">throw new</span> Error(<span class="str">`Unknown tool: ${toolName}`</span>);
+    }
+
+    <span class="cm">// Parse JSON string arguments</span>
+    <span class="kw">const</span> <span class="vr">args</span> = JSON.<span class="fn">parse</span>(<span class="vr">toolCall</span>.<span class="prop">function</span>.<span class="prop">arguments</span>);
+
+    <span class="cm">// Execute function and observe outcome</span>
+    <span class="kw">const</span> <span class="vr">result</span> = <span class="kw">await</span> <span class="fn">toolFunction</span>(<span class="vr">args</span>);
+    <span class="vr">console</span>.<span class="fn">log</span>(<span class="str">"Tool Result:"</span>, <span class="vr">result</span>); <span class="cm">// 300</span>
+  }
+}</code></pre>
+              </div>
+            </div>
+
+            <div class="card card-accent">
+              <div class="card-title"><span class="icon">🔄</span> Step-by-Step Execution Bridge</div>
+              <div class="diagram-container" style="gap: 6px; padding: 8px;">
+                <div class="flow-step">1. Model Requests <code>calculate</code></div>
+                <div class="flow-arrow">↓</div>
+                <div class="flow-step">2. Node.js Parses <code>{ a: 100, b: 200 }</code></div>
+                <div class="flow-arrow">↓</div>
+                <div class="flow-step tool">3. Node.js Runs <code>calculate(100, 200)</code></div>
+                <div class="flow-arrow">↓</div>
+                <div class="flow-step success">4. Result Generated = <code>300</code></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+
+      <section class="slide" id="slide-21">
+        <div class="slide-header">
+          <div class="slide-title-group">
+            <span class="slide-category"><span class="badge-section">Section 3</span> Practical Implementation</span>
+            <h2 class="slide-title">Returning the Tool Result to the LLM</h2>
+            <p class="slide-subtitle">Constructing the tool role message and calling Groq for final natural synthesis</p>
+          </div>
+          <span class="slide-tag">TOOL RESPONSE</span>
+        </div>
+
+        <div class="slide-body">
+          <div class="grid-60-40">
+            <div class="card">
+              <div class="card-title"><span class="icon">📬</span> Formatting the Tool Response Message</div>
+              <div class="code-panel">
+                <div class="code-header"><span class="code-file">returnResult.js</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+                <pre><code><span class="cm">// 1. Push model's tool call message into history</span>
+<span class="vr">messages</span>.<span class="fn">push</span>(<span class="vr">message</span>);
+
+<span class="cm">// 2. Push tool result with role: "tool" & matching tool_call_id</span>
+<span class="vr">messages</span>.<span class="fn">push</span>({
+  <span class="prop">role</span>: <span class="str">"tool"</span>,
+  <span class="prop">tool_call_id</span>: <span class="vr">toolCall</span>.<span class="prop">id</span>,
+  <span class="prop">name</span>: <span class="vr">toolCall</span>.<span class="prop">function</span>.<span class="prop">name</span>,
+  <span class="prop">content</span>: JSON.<span class="fn">stringify</span>(<span class="vr">result</span>)  <span class="cm">// Stringified output</span>
+});
+
+<span class="cm">// 3. Request final conversational answer from Groq</span>
+<span class="kw">const</span> <span class="vr">finalResponse</span> = <span class="kw">await</span> <span class="vr">groq</span>.<span class="prop">chat</span>.<span class="prop">completions</span>.<span class="fn">create</span>({
+  <span class="prop">model</span>: <span class="str">"openai/gpt-oss-120b"</span>,
+  <span class="prop">messages</span>
+});
+
+<span class="vr">console</span>.<span class="fn">log</span>(<span class="vr">finalResponse</span>.<span class="prop">choices</span>[<span class="num">0</span>].<span class="prop">message</span>.<span class="prop">content</span>);
+<span class="cm">// Output: "The total of 100 and 200 is 300."</span></code></pre>
+              </div>
+            </div>
+
+            <div class="card card-accent">
+              <div class="card-title"><span class="icon">🔑</span> Why the Tool Result Must Be Sent Back</div>
+              <ul class="bullet-list" style="font-size: 0.78rem;">
+                <li>The LLM needs the result in its context window to summarize and explain it to the human user.</li>
+                <li><code>tool_call_id</code> connects the result directly to the specific invocation requested by the model.</li>
+                <li><code>content</code> must be a string (use <code>JSON.stringify</code> for objects and numbers).</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+
+      <section class="slide" id="slide-22">
+        <div class="slide-header">
+          <div class="slide-title-group">
+            <span class="slide-category"><span class="badge-section">Section 3</span> Practical Implementation</span>
+            <h2 class="slide-title">The Complete Agent Loop Architecture</h2>
+            <p class="slide-subtitle">Unifying multi-step cycles, implementing step limits, and handling termination</p>
+          </div>
+          <span class="slide-tag">AGENT LOOP STATE</span>
+        </div>
+
+        <div class="slide-body">
+          <div class="grid-60-40">
+            <div class="card">
+              <div class="card-title"><span class="icon">🔄</span> Complete Multi-Step Flowchart</div>
+              <div class="diagram-container" style="gap: 5px; padding: 8px;">
+                <div class="flow-step">👤 User Request Received</div>
+                <div class="flow-arrow">↓</div>
+                <div class="flow-step accent">🧠 LLM Evaluates &amp; Decides</div>
+                <div class="flow-arrow">↓</div>
+                <div class="flow-step" style="border: 2px dashed var(--primary-blue);">❓ Tool Requested?</div>
+                <div class="grid-2col" style="width: 100%; gap: 8px; margin-top: 4px;">
+                  <div class="flow-step success" style="width: 100%;">No &rarr; Return Final Answer</div>
+                  <div class="flow-step tool" style="width: 100%;">Yes &rarr; Run Tool &rarr; Feed Back &rarr; Loop Again</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="card card-accent">
+              <div class="card-title"><span class="icon">🛑</span> Mandatory Guardrail: Step Limits</div>
+              <p class="card-desc">Production agents must always establish a strict maximum step limit:</p>
+              
+              <div class="code-panel">
+                <div class="code-header"><span class="code-file">stepGuard.js</span></div>
+                <pre><code><span class="kw">const</span> <span class="vr">MAX_STEPS</span> = <span class="num">3</span>;
+
+<span class="kw">for</span> (<span class="kw">let</span> <span class="vr">step</span> = <span class="num">0</span>; <span class="vr">step</span> &lt; <span class="vr">MAX_STEPS</span>; <span class="vr">step</span>++) {
+  <span class="cm">// Call Groq...</span>
+  <span class="kw">if</span> (!<span class="vr">message</span>.<span class="prop">tool_calls</span>?.<span class="prop">length</span>) {
+    <span class="kw">return</span> <span class="vr">res</span>.<span class="fn">json</span>({ <span class="prop">answer</span>: <span class="vr">message</span>.<span class="prop">content</span> });
+  }
+  <span class="cm">// Run tools...</span>
+}</code></pre>
+              </div>
+
+              <div class="alert-box alert-warning" style="margin-top: 6px;">
+                <div class="alert-title">Why MAX_STEPS is Mandatory</div>
+                <div class="alert-text">Prevents infinite loops if the model repeatedly re-requests failing tools, protecting server resources and API budgets.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+
+      <section class="slide" id="slide-23">
+        <div class="slide-header">
+          <div class="slide-title-group">
+            <span class="slide-category"><span class="badge-section">Section 3</span> Practical Implementation</span>
+            <h2 class="slide-title">Complete Tool-Using Agent Implementation</h2>
+            <p class="slide-subtitle">Production-ready Express server with live interactive simulator embedded in the slide</p>
+          </div>
+          <span class="slide-tag">PROJECT 1 DEMO</span>
+        </div>
+
+        <div class="slide-body">
+          <div class="grid-60-40">
+            <div class="card">
+              <div class="card-title"><span class="icon">💻</span> Complete server.js Source Code</div>
+              <div class="code-panel" style="max-height: 330px;">
+                <div class="code-header"><span class="code-file">server.js</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+                <pre><code><span class="fn">require</span>(<span class="str">"dotenv"</span>).<span class="fn">config</span>();
+<span class="kw">const</span> <span class="vr">express</span> = <span class="fn">require</span>(<span class="str">"express"</span>);
+<span class="kw">const</span> <span class="vr">Groq</span> = <span class="fn">require</span>(<span class="str">"groq-sdk"</span>);
+
+<span class="kw">const</span> <span class="vr">app</span> = <span class="fn">express</span>();
+<span class="vr">app</span>.<span class="fn">use</span>(<span class="vr">express</span>.<span class="fn">json</span>());
+
+<span class="kw">const</span> <span class="vr">groq</span> = <span class="kw">new</span> <span class="vr">Groq</span>({ <span class="prop">apiKey</span>: <span class="vr">process</span>.<span class="prop">env</span>.<span class="prop">GROQ_API_KEY</span> });
+
+<span class="cm">// Tool registry & schemas defined...</span>
+<span class="vr">app</span>.<span class="fn">post</span>(<span class="str">"/api/agent"</span>, <span class="kw">async</span> (<span class="vr">req</span>, <span class="vr">res</span>) => {
+  <span class="kw">try</span> {
+    <span class="kw">const</span> { <span class="prop">question</span> } = <span class="vr">req</span>.<span class="prop">body</span>;
+    <span class="kw">const</span> <span class="vr">messages</span> = [
+      { <span class="prop">role</span>: <span class="str">"system"</span>, <span class="prop">content</span>: <span class="str">"You are a helpful student assistant. Use tools when needed."</span> },
+      { <span class="prop">role</span>: <span class="str">"user"</span>, <span class="prop">content</span>: <span class="vr">question</span> }
+    ];
+
+    <span class="kw">const</span> <span class="vr">MAX_STEPS</span> = <span class="num">3</span>;
+    <span class="kw">for</span> (<span class="kw">let</span> <span class="vr">step</span> = <span class="num">0</span>; <span class="vr">step</span> &lt; <span class="vr">MAX_STEPS</span>; <span class="vr">step</span>++) {
+      <span class="kw">const</span> <span class="vr">response</span> = <span class="kw">await</span> <span class="vr">groq</span>.<span class="prop">chat</span>.<span class="prop">completions</span>.<span class="fn">create</span>({
+        <span class="prop">model</span>: <span class="str">"openai/gpt-oss-120b"</span>,
+        <span class="prop">messages</span>, <span class="prop">tools</span>, <span class="prop">tool_choice</span>: <span class="str">"auto"</span>
+      });
+      <span class="kw">const</span> <span class="vr">msg</span> = <span class="vr">response</span>.<span class="prop">choices</span>[<span class="num">0</span>].<span class="prop">message</span>;
+      <span class="vr">messages</span>.<span class="fn">push</span>(<span class="vr">msg</span>);
+
+      <span class="kw">if</span> (!<span class="vr">msg</span>.<span class="prop">tool_calls</span>?.<span class="prop">length</span>) {
+        <span class="kw">return</span> <span class="vr">res</span>.<span class="fn">json</span>({ <span class="prop">answer</span>: <span class="vr">msg</span>.<span class="prop">content</span> });
+      }
+
+      <span class="kw">for</span> (<span class="kw">const</span> <span class="vr">call</span> <span class="kw">of</span> <span class="vr">msg</span>.<span class="prop">tool_calls</span>) {
+        <span class="kw">const</span> <span class="vr">fn</span> = <span class="vr">toolFunctions</span>[<span class="vr">call</span>.<span class="prop">function</span>.<span class="prop">name</span>];
+        <span class="kw">const</span> <span class="vr">args</span> = JSON.<span class="fn">parse</span>(<span class="vr">call</span>.<span class="prop">function</span>.<span class="prop">arguments</span>);
+        <span class="kw">const</span> <span class="vr">result</span> = <span class="kw">await</span> <span class="fn">fn</span>(<span class="vr">args</span>);
+        <span class="vr">messages</span>.<span class="fn">push</span>({
+          <span class="prop">role</span>: <span class="str">"tool"</span>,
+          <span class="prop">tool_call_id</span>: <span class="vr">call</span>.<span class="prop">id</span>,
+          <span class="prop">name</span>: <span class="vr">call</span>.<span class="prop">function</span>.<span class="prop">name</span>,
+          <span class="prop">content</span>: JSON.<span class="fn">stringify</span>(<span class="vr">result</span>)
+        });
+      }
+    }
+  } <span class="kw">catch</span> (<span class="vr">err</span>) {
+    <span class="vr">res</span>.<span class="fn">status</span>(<span class="num">500</span>).<span class="fn">json</span>({ <span class="prop">error</span>: <span class="vr">err</span>.<span class="prop">message</span> });
+  }
+});
+<span class="vr">app</span>.<span class="fn">listen</span>(<span class="num">3000</span>, () => <span class="vr">console</span>.<span class="fn">log</span>(<span class="str">"Server ready"</span>));</code></pre>
+              </div>
+            </div>
+
+            <div class="card card-accent" style="display: flex; flex-direction: column;">
+              <div class="card-title"><span class="icon">⚡</span> Interactive Agent Simulator</div>
+              <p class="card-desc" style="font-size: 0.76rem;">Test how the agent decides between calculator, student search, or direct reply:</p>
+
+              <div class="sandbox-toolbar" style="margin-top: 4px;">
+                <input type="text" id="agentInput" class="form-input" placeholder="e.g. Add 150 and 350 OR Find student 101" value="Find details for student 101">
+                <button class="btn btn-primary btn-sm" id="btnRunAgent">Ask Agent</button>
+              </div>
+
+              <div class="sandbox-output" id="agentOutput" style="margin-top: 6px;">
+                <span class="sandbox-log-step">[Ready]</span> Click 'Ask Agent' or type a calculation / student lookup query above...
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+
+      <section class="slide" id="slide-24">
+        <div class="slide-header">
+          <div class="slide-title-group">
+            <span class="slide-category"><span class="badge-section">Section 4</span> Conversational Memory</span>
+            <h2 class="slide-title">Building a Conversational Agent</h2>
+            <p class="slide-subtitle">Project 2: Implementing cross-turn context memory using Node.js session tracking</p>
+          </div>
+          <span class="slide-tag">PROJECT 2 OVERVIEW</span>
+        </div>
+
+        <div class="slide-body">
+          <div class="grid-60-40">
+            <div class="card card-accent">
+              <div class="card-title"><span class="icon">💬</span> Multi-Turn Conversation Goal</div>
+              <p class="card-desc">
+                In standard stateless API calls, every request starts with zero memory of past turns. Our goal is to build an agent that remembers user facts across sequential messages.
+              </p>
+              
+              <div class="step-list" style="margin-top: 6px;">
+                <div class="step-item">
+                  <div class="step-num">1</div>
+                  <div class="step-content"><strong>User:</strong> "My name is Ali." &rarr; <strong>Agent:</strong> "Nice to meet you, Ali."</div>
+                </div>
+                <div class="step-item">
+                  <div class="step-num">2</div>
+                  <div class="step-content"><strong>User:</strong> "I am learning Node.js." &rarr; <strong>Agent:</strong> "That's great! Node.js is awesome."</div>
+                </div>
+                <div class="step-item">
+                  <div class="step-num">3</div>
+                  <div class="step-content"><strong>User:</strong> "What is my name and course?" &rarr; <strong>Agent:</strong> "Your name is Ali, and you are learning Node.js!"</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-title"><span class="icon">🔄</span> Session Lifecycle Architecture</div>
+              <div class="diagram-container" style="gap: 5px; padding: 6px;">
+                <div class="flow-step">👤 User Message + sessionId</div>
+                <div class="flow-arrow">↓</div>
+                <div class="flow-step accent">🗂️ Express Retrieves Session History</div>
+                <div class="flow-arrow">↓</div>
+                <div class="flow-step">📥 Append User Message &amp; Trim Window</div>
+                <div class="flow-arrow">↓</div>
+                <div class="flow-step tool">🧠 Send Context Array to Groq LLM</div>
+                <div class="flow-arrow">↓</div>
+                <div class="flow-step success">💾 Save Assistant Response to Session &amp; Return</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+
+      <section class="slide" id="slide-25">
+        <div class="slide-header">
+          <div class="slide-title-group">
+            <span class="slide-category"><span class="badge-section">Section 4</span> Conversational Memory</span>
+            <h2 class="slide-title">Implementing Session Memory in Node.js</h2>
+            <p class="slide-subtitle">Using JavaScript Map for key-value conversation caching and sliding window truncation</p>
+          </div>
+          <span class="slide-tag">SESSION MEMORY</span>
+        </div>
+
+        <div class="slide-body">
+          <div class="grid-60-40">
+            <div class="card">
+              <div class="card-title"><span class="icon">🗂️</span> The Session Storage Implementation</div>
+              <div class="code-panel">
+                <div class="code-header"><span class="code-file">sessionManager.js</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+                <pre><code><span class="cm">// Step 1: Create session storage map</span>
+<span class="kw">const</span> <span class="vr">sessions</span> = <span class="kw">new</span> <span class="vr">Map</span>();
+
+<span class="cm">// Step 2: Get or initialize session history</span>
+<span class="kw">function</span> <span class="fn">getSession</span>(<span class="vr">sessionId</span>) {
+  <span class="kw">if</span> (!<span class="vr">sessions</span>.<span class="fn">has</span>(<span class="vr">sessionId</span>)) {
+    <span class="vr">sessions</span>.<span class="fn">set</span>(<span class="vr">sessionId</span>, []);
+  }
+  <span class="kw">return</span> <span class="vr">sessions</span>.<span class="fn">get</span>(<span class="vr">sessionId</span>);
+}
+
+<span class="cm">// Step 3: Append user message</span>
+<span class="kw">const</span> <span class="vr">history</span> = <span class="fn">getSession</span>(<span class="str">"session-101"</span>);
+<span class="vr">history</span>.<span class="fn">push</span>({ <span class="prop">role</span>: <span class="str">"user"</span>, <span class="prop">content</span>: <span class="str">"I am learning Node.js"</span> });
+
+<span class="cm">// Step 4: Sliding window truncation (keep last 10 turns)</span>
+<span class="kw">const</span> <span class="vr">recentHistory</span> = <span class="vr">history</span>.<span class="fn">slice</span>(-<span class="num">10</span>);</code></pre>
+              </div>
+            </div>
+
+            <div class="card card-accent">
+              <div class="card-title"><span class="icon">🔍</span> Why a Map?</div>
+              <ul class="bullet-list" style="font-size: 0.78rem;">
+                <li><span class="icon">✓</span> <strong>O(1) Lookup:</strong> Instant retrieval by <code>sessionId</code>.</li>
+                <li><span class="icon">✓</span> <strong>Sliding Window:</strong> <code>.slice(-10)</code> prevents token bloat.</li>
+                <li><span class="icon">✓</span> <strong>Isolation:</strong> Each user has an independent conversation history.</li>
+              </ul>
+              <div class="alert-box alert-warning" style="margin-top: 8px;">
+                <div class="alert-title">Important Note</div>
+                <div class="alert-text">A message count limit (e.g. 10 messages) is a simple context strategy. In production with long prompts, measure actual token count!</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+
+      <section class="slide" id="slide-26">
+        <div class="slide-header">
+          <div class="slide-title-group">
+            <span class="slide-category"><span class="badge-section">Section 4</span> Conversational Memory</span>
+            <h2 class="slide-title">Complete Conversational Agent &amp; Final Recap</h2>
+            <p class="slide-subtitle">Full production server.js implementation with live interactive memory chat simulator</p>
+          </div>
+          <span class="slide-tag">PROJECT 2 DEMO</span>
+        </div>
+
+        <div class="slide-body">
+          <div class="grid-60-40">
+            <div class="card">
+              <div class="card-title"><span class="icon">💻</span> Conversational API Endpoint (POST /api/chat)</div>
+              <div class="code-panel" style="max-height: 220px;">
+                <div class="code-header"><span class="code-file">chatServer.js</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+                <pre><code><span class="vr">app</span>.<span class="fn">post</span>(<span class="str">"/api/chat"</span>, <span class="kw">async</span> (<span class="vr">req</span>, <span class="vr">res</span>) => {
+  <span class="kw">try</span> {
+    <span class="kw">const</span> { <span class="prop">sessionId</span>, <span class="prop">message</span> } = <span class="vr">req</span>.<span class="prop">body</span>;
+    <span class="kw">if</span> (!<span class="vr">sessionId</span> || !<span class="vr">message</span>) <span class="kw">return</span> <span class="vr">res</span>.<span class="fn">status</span>(<span class="num">400</span>).<span class="fn">json</span>({ <span class="prop">error</span>: <span class="str">"Missing fields"</span> });
+
+    <span class="kw">const</span> <span class="vr">history</span> = <span class="fn">getSession</span>(<span class="vr">sessionId</span>);
+    <span class="vr">history</span>.<span class="fn">push</span>({ <span class="prop">role</span>: <span class="str">"user"</span>, <span class="prop">content</span>: <span class="vr">message</span> });
+
+    <span class="kw">const</span> <span class="vr">response</span> = <span class="kw">await</span> <span class="vr">groq</span>.<span class="prop">chat</span>.<span class="prop">completions</span>.<span class="fn">create</span>({
+      <span class="prop">model</span>: <span class="str">"openai/gpt-oss-120b"</span>,
+      <span class="prop">messages</span>: [
+        { <span class="prop">role</span>: <span class="str">"system"</span>, <span class="prop">content</span>: <span class="str">"You are a friendly assistant with session memory."</span> },
+        ...<span class="vr">history</span>.<span class="fn">slice</span>(-<span class="num">10</span>)
+      ]
+    });
+
+    <span class="kw">const</span> <span class="vr">answer</span> = <span class="vr">response</span>.<span class="prop">choices</span>[<span class="num">0</span>].<span class="prop">message</span>.<span class="prop">content</span>;
+    <span class="vr">history</span>.<span class="fn">push</span>({ <span class="prop">role</span>: <span class="str">"assistant"</span>, <span class="prop">content</span>: <span class="vr">answer</span> });
+
+    <span class="vr">res</span>.<span class="fn">json</span>({ <span class="prop">sessionId</span>, <span class="prop">answer</span> });
+  } <span class="kw">catch</span> (<span class="vr">err</span>) {
+    <span class="vr">res</span>.<span class="fn">status</span>(<span class="num">500</span>).<span class="fn">json</span>({ <span class="prop">error</span>: <span class="vr">err</span>.<span class="prop">message</span> });
+  }
+});</code></pre>
+              </div>
+
+              <div class="alert-box alert-info" style="margin-top: 6px;">
+                <div class="alert-title">🎯 Day 1 Core Takeaways</div>
+                <div class="alert-text">
+                  1. <strong>Agents Reason, Applications Execute:</strong> LLMs emit tool calls; Node.js validates and runs them.<br>
+                  2. <strong>Memory is an App Responsibility:</strong> Models remember only what you re-inject into context.
+                </div>
+              </div>
+            </div>
+
+            <div class="card card-accent" style="display: flex; flex-direction: column;">
+              <div class="card-title" style="justify-content: space-between;">
+                <span><span class="icon">💬</span> Live Session Memory Sandbox</span>
+                <span class="badge badge-concept" id="sessionBadge">Session: session-101</span>
+              </div>
+
+              <div class="chat-window" id="chatWindow">
+                <div class="chat-bubble chat-assistant">
+                  Hello! I'm your session-aware AI agent. Tell me your name or what you're learning!
+                </div>
+              </div>
+
+              <div class="sandbox-toolbar" style="margin-top: 6px;">
+                <input type="text" id="chatInput" class="form-input" placeholder="e.g. My name is Ali / What is my name?" value="My name is Ali.">
+                <button class="btn btn-primary btn-sm" id="btnSendChat">Send</button>
+              </div>
+
+              <div style="margin-top: 6px;">
+                <span style="font-size: 0.68rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase;">Active Session Context Inspector:</span>
+                <div class="memory-inspector" id="memoryInspector">
+                  [1] assistant: "Hello! I'm your session-aware AI agent..."
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- Bottom Controls -->
+    <nav class="pres-controls">
+      <button class="control-btn" id="prevBtn" title="Previous Slide (← / PageUp)">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+      </button>
+
+      <div class="slide-select-container">
+        <select class="slide-select" id="slideSelect" title="Jump to Slide"></select>
+      </div>
+
+      <button class="control-btn" id="nextBtn" title="Next Slide (→ / PageDown / Space)">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+      </button>
+
+      <div class="shortcuts-pill">
+        <kbd>←</kbd> / <kbd>→</kbd>
+      </div>
+    </nav>
+
+    <!-- Table of Contents Drawer -->
+    <div class="toc-overlay" id="tocOverlay">
+      <div class="toc-drawer">
+        <div class="toc-header">
+          <div class="toc-title">Table of Contents (26 Slides)</div>
+          <button class="toc-close" id="tocClose" title="Close (Esc)">✕</button>
+        </div>
+        <ul class="toc-list" id="tocList"></ul>
+      </div>
+    </div>
+
+    <!-- Help Modal -->
+    <div class="modal-overlay" id="helpModal">
+      <div class="modal-card">
+        <div class="modal-header">
+          <div class="modal-title">Keyboard Navigation</div>
+          <button class="toc-close" id="helpClose" title="Close (Esc)">✕</button>
+        </div>
+        <div class="modal-body">
+          <div class="shortcut-row"><span>Next Slide</span><div><span class="shortcut-key">→</span> <span class="shortcut-key">Space</span></div></div>
+          <div class="shortcut-row"><span>Previous Slide</span><div><span class="shortcut-key">←</span> <span class="shortcut-key">PageUp</span></div></div>
+          <div class="shortcut-row"><span>First / Last Slide</span><div><span class="shortcut-key">Home</span> / <span class="shortcut-key">End</span></div></div>
+          <div class="shortcut-row"><span>Toggle Fullscreen</span><span class="shortcut-key">F</span></div>
+          <div class="shortcut-row"><span>Table of Contents</span><span class="shortcut-key">T</span></div>
+          <div class="shortcut-row"><span>Close Overlays</span><span class="shortcut-key">Esc</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div class="toast-notice" id="toastNotice">Notification</div>
+
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
