@@ -1,0 +1,1582 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JavaScript Fundamentals – Day 2: Advanced Data Structures &amp; Modern ES6</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="app-container">
+
+    <!-- Top Presentation Header -->
+    <header class="pres-header">
+      <div class="brand-section">
+        <span class="brand-badge">JavaScript Day 2</span>
+        <div class="pres-title">
+          JavaScript Fundamentals <span>• Advanced Arrays, Objects &amp; Modern ES6+</span>
+        </div>
+      </div>
+      <div class="header-center">
+        <div class="slide-counter-badge" id="slideCounter">1 / 26</div>
+      </div>
+      <div class="header-actions">
+        <button class="btn-header" id="fullscreenBtn" title="Toggle Fullscreen (F)">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path></svg>
+          Full
+        </button>
+        <button class="btn-header" id="tocBtn" title="Table of Contents (T)">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+          Index
+        </button>
+        <button class="btn-header" id="helpBtn" title="Keyboard Shortcuts (?)">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+          Help
+        </button>
+      </div>
+    </header>
+
+    <!-- Progress Bar -->
+    <div class="pres-progress-container">
+      <div class="pres-progress-bar" id="progressBar" style="width: 3.84%;"></div>
+    </div>
+
+    <!-- Main Slide Viewport -->
+    <main class="slide-viewport">
+
+      <section class="slide active" id="slide-1">
+        <div class="slide-header">
+          <div class="slide-title-group">
+            <span class="slide-category"><span class="badge-section">JavaScript Basics</span> Day 2 Core Curriculum</span>
+            <h2 class="slide-title">JavaScript Fundamentals &ndash; Day 2</h2>
+            <p class="slide-subtitle">Advanced Data Structures, Higher-Order Array Methods, Modern ES6+ &amp; Immutability</p>
+          </div>
+          <span class="slide-tag">DAY 2 &bull; ADVANCED JS</span>
+        </div>
+
+        <div class="slide-body">
+          <div class="grid-60-40">
+            <div class="card card-accent">
+              <div class="card-title"><span class="icon">🎯</span> What We Build &amp; Master Today</div>
+              <p class="card-desc">
+                Building on Day 1's variables and functions, today we transition into the exact JavaScript patterns that power modern React components, API handling, and GenAI backends.
+              </p>
+              <div class="grid-2col" style="gap: 10px; margin-top: 6px;">
+                <div class="card" style="padding: 10px; background: #F8FAFC;">
+                  <strong style="color: var(--primary-deep); font-size: 0.82rem;">1. Memory &amp; Iteration</strong>
+                  <span style="font-size: 0.74rem; color: var(--text-body);">Reference vs value semantics, for, for...of, and for...in loops.</span>
+                </div>
+                <div class="card" style="padding: 10px; background: #F8FAFC;">
+                  <strong style="color: var(--primary-deep); font-size: 0.82rem;">2. Functional Array Methods</strong>
+                  <span style="font-size: 0.74rem; color: var(--text-body);">Mastering forEach, map, filter, reduce, find, some, and every.</span>
+                </div>
+                <div class="card" style="padding: 10px; background: #F8FAFC;">
+                  <strong style="color: var(--primary-deep); font-size: 0.82rem;">3. Immutability &amp; Modern ES6</strong>
+                  <span style="font-size: 0.74rem; color: var(--text-body);">Destructuring, spread/rest, optional chaining, and nullish coalescing.</span>
+                </div>
+                <div class="card" style="padding: 10px; background: #F8FAFC;">
+                  <strong style="color: var(--primary-deep); font-size: 0.82rem;">4. Projects &amp; Question Banks</strong>
+                  <span style="font-size: 0.74rem; color: var(--text-body);">Interactive To-Do List, Data Transformation Pipeline, and Practice Banks.</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-title"><span class="icon">🚀</span> Fast Overview Roadmap</div>
+              <ul class="bullet-list" style="font-size: 0.78rem;">
+                <li><span class="icon">✓</span> <strong>Eliminated Duplication:</strong> Day 1 basic array/object syntax removed.</li>
+                <li><span class="icon">✓</span> <strong>Higher-Order Focus:</strong> Pure transformations vs in-place mutation.</li>
+                <li><span class="icon">✓</span> <strong>React Foundation:</strong> Immutability rules required for state updates.</li>
+                <li><span class="icon">✓</span> <strong>Question Banks:</strong> 12 curated challenges without answers.</li>
+              </ul>
+              <div class="alert-box alert-info" style="margin-top: 8px;">
+                <div class="alert-title">Preparation Goal</div>
+                <div class="alert-text">Mastering these 26 concepts guarantees complete confidence in React state management and asynchronous GenAI tool calling.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+
+      <section class="slide" id="slide-2">
+        <div class="slide-header">
+          <div class="slide-title-group">
+            <span class="slide-category"><span class="badge-section">Core Foundation</span> Memory Architecture</span>
+            <h2 class="slide-title">Reference vs Value in JavaScript</h2>
+            <p class="slide-subtitle">Understanding how primitives and objects behave in memory to prevent accidental mutations</p>
+          </div>
+          <span class="slide-tag">MEMORY MODEL</span>
+        </div>
+
+        <div class="slide-body">
+          <div class="grid-2col">
+            <div class="card">
+              <div class="card-title"><span class="icon">📌</span> Primitives: Copied by Value</div>
+              <p class="card-desc">
+                Numbers, strings, booleans, null, and undefined are stored directly in the execution stack. Copying creates an independent duplicate.
+              </p>
+              <div class="code-panel">
+                <div class="code-header"><span class="code-file">primitives.js</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+                <pre><code><span class="kw">let</span> <span class="vr">scoreA</span> = <span class="num">100</span>;
+<span class="kw">let</span> <span class="vr">scoreB</span> = <span class="vr">scoreA</span>; <span class="cm">// Independent copy created</span>
+
+<span class="vr">scoreB</span> = <span class="num">200</span>;
+
+<span class="vr">console</span>.<span class="fn">log</span>(<span class="vr">scoreA</span>); <span class="cm">// 100 (Unchanged!)</span>
+<span class="vr">console</span>.<span class="fn">log</span>(<span class="vr">scoreB</span>); <span class="cm">// 200</span></code></pre>
+              </div>
+              <div class="alert-box alert-success" style="margin-top: 8px;">
+                <div class="alert-title">Stack Storage</div>
+                <div class="alert-text">Primitive variables hold the actual value. Changing one variable never affects another.</div>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-title"><span class="icon">⚠️</span> Objects &amp; Arrays: Copied by Reference</div>
+              <p class="card-desc">
+                Objects and arrays are stored in the memory heap. The variable only stores a memory address (pointer).
+              </p>
+              <div class="code-panel">
+                <div class="code-header"><span class="code-file">references.js</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+                <pre><code><span class="kw">const</span> <span class="vr">userA</span> = { <span class="prop">name</span>: <span class="str">"Arun"</span>, <span class="prop">role</span>: <span class="str">"Member"</span> };
+<span class="kw">const</span> <span class="vr">userB</span> = <span class="vr">userA</span>; <span class="cm">// Copies POINTER, not the object!</span>
+
+<span class="vr">userB</span>.<span class="prop">role</span> = <span class="str">"Admin"</span>;
+
+<span class="vr">console</span>.<span class="fn">log</span>(<span class="vr">userA</span>.<span class="prop">role</span>); <span class="cm">// "Admin" (Accidentally mutated!)</span>
+<span class="vr">console</span>.<span class="fn">log</span>(<span class="vr">userA</span> === <span class="vr">userB</span>); <span class="cm">// true (Same memory address)</span></code></pre>
+              </div>
+              <div class="alert-box alert-warning" style="margin-top: 8px;">
+                <div class="alert-title">React State Rule</div>
+                <div class="alert-text">Never mutate objects directly! In React, direct mutation fails to trigger re-renders. Always create new copies using spread or immutable methods.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+
+      <section class="slide" id="slide-3">
+        <div class="slide-header">
+          <div class="slide-title-group">
+            <span class="slide-category"><span class="badge-section">Iteration</span> Loop Constructs</span>
+            <h2 class="slide-title">Loops in JavaScript: for, for...of &amp; for...in</h2>
+            <p class="slide-subtitle">Choosing the right loop for arrays, strings, and objects</p>
+          </div>
+          <span class="slide-tag">ITERATION</span>
+        </div>
+
+        <div class="slide-body">
+          <div class="grid-3col">
+            <div class="card">
+              <div class="card-title"><span class="icon">1️⃣</span> Standard for Loop</div>
+              <p class="card-desc">Classic counter-based loop. Ideal when you need precise index control or stepping.</p>
+              <div class="code-panel">
+                <div class="code-header"><span class="code-file">for.js</span></div>
+                <pre><code><span class="kw">const</span> <span class="vr">items</span> = [<span class="str">"A"</span>, <span class="str">"B"</span>, <span class="str">"C"</span>];
+
+<span class="kw">for</span> (<span class="kw">let</span> <span class="vr">i</span> = <span class="num">0</span>; <span class="vr">i</span> &lt; <span class="vr">items</span>.<span class="prop">length</span>; <span class="vr">i</span>++) {
+  <span class="vr">console</span>.<span class="fn">log</span>(<span class="vr">i</span>, <span class="vr">items</span>[<span class="vr">i</span>]);
+}</code></pre>
+              </div>
+              <span class="badge badge-concept" style="margin-top: 6px;">Index-based control</span>
+            </div>
+
+            <div class="card card-accent">
+              <div class="card-title"><span class="icon">2️⃣</span> for...of Loop (Values)</div>
+              <p class="card-desc">Iterates over VALUES of iterable collections (Arrays, Strings, Maps, Sets). Clean and readable.</p>
+              <div class="code-panel">
+                <div class="code-header"><span class="code-file">forOf.js</span></div>
+                <pre><code><span class="kw">const</span> <span class="vr">colors</span> = [<span class="str">"Red"</span>, <span class="str">"Blue"</span>];
+
+<span class="kw">for</span> (<span class="kw">const</span> <span class="vr">color</span> <span class="kw">of</span> <span class="vr">colors</span>) {
+  <span class="vr">console</span>.<span class="fn">log</span>(<span class="vr">color</span>);
+}
+<span class="cm">// Logs: "Red", "Blue"</span></code></pre>
+              </div>
+              <span class="badge badge-best-practice" style="margin-top: 6px;">Best for Array Values</span>
+            </div>
+
+            <div class="card">
+              <div class="card-title"><span class="icon">3️⃣</span> for...in Loop (Keys)</div>
+              <p class="card-desc">Iterates over enumerable property KEYS of an object. Do NOT use for arrays!</p>
+              <div class="code-panel">
+                <div class="code-header"><span class="code-file">forIn.js</span></div>
+                <pre><code><span class="kw">const</span> <span class="vr">user</span> = { <span class="prop">id</span>: <span class="num">1</span>, <span class="prop">city</span>: <span class="str">"Pune"</span> };
+
+<span class="kw">for</span> (<span class="kw">const</span> <span class="vr">key</span> <span class="kw">in</span> <span class="vr">user</span>) {
+  <span class="vr">console</span>.<span class="fn">log</span>(<span class="vr">key</span>, <span class="vr">user</span>[<span class="vr">key</span>]);
+}
+<span class="cm">// Logs: "id" 1, "city" "Pune"</span></code></pre>
+              </div>
+              <span class="badge badge-warning" style="margin-top: 6px;">For Object Keys Only</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+
+      <section class="slide" id="slide-4">
+        <div class="slide-header">
+          <div class="slide-title-group">
+            <span class="slide-category"><span class="badge-section">Higher-Order Methods</span> Side Effects vs Purity</span>
+            <h2 class="slide-title">forEach() vs map(): Side Effects vs Pure Transformation</h2>
+            <p class="slide-subtitle">Understanding return values, immutability, and why React renders with map()</p>
+          </div>
+          <span class="slide-tag">HIGHER ORDER</span>
+        </div>
+
+        <div class="slide-body">
+          <div class="grid-2col">
+            <div class="card">
+              <div class="card-title"><span class="icon">🔁</span> forEach(): Executes Side Effects</div>
+              <p class="card-desc">Runs a function for each item. Always returns <code>undefined</code>. Used for logging or mutations.</p>
+              <div class="code-panel">
+                <div class="code-header"><span class="code-file">forEach.js</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+                <pre><code><span class="kw">const</span> <span class="vr">prices</span> = [<span class="num">10</span>, <span class="num">20</span>, <span class="num">30</span>];
+
+<span class="kw">const</span> <span class="vr">result</span> = <span class="vr">prices</span>.<span class="fn">forEach</span>(<span class="vr">price</span> => {
+  <span class="vr">console</span>.<span class="fn">log</span>(<span class="str">`Price with tax: ${price * 1.18}`</span>);
+});
+
+<span class="vr">console</span>.<span class="fn">log</span>(<span class="vr">result</span>); <span class="cm">// undefined (Always!)</span></code></pre>
+              </div>
+              <div class="alert-box alert-info" style="margin-top: 6px;">
+                <div class="alert-title">No Return Value</div>
+                <div class="alert-text">Use <code>forEach</code> only when you do NOT need a new array.</div>
+              </div>
+            </div>
+
+            <div class="card card-accent">
+              <div class="card-title"><span class="icon">✨</span> map(): Returns a Brand New Array</div>
+              <p class="card-desc">Transforms every item using a callback. Returns a new array of the exact same length.</p>
+              <div class="code-panel">
+                <div class="code-header"><span class="code-file">map.js</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+                <pre><code><span class="kw">const</span> <span class="vr">prices</span> = [<span class="num">10</span>, <span class="num">20</span>, <span class="num">30</span>];
+
+<span class="kw">const</span> <span class="vr">doubled</span> = <span class="vr">prices</span>.<span class="fn">map</span>(<span class="vr">price</span> => <span class="vr">price</span> * <span class="num">2</span>);
+
+<span class="vr">console</span>.<span class="fn">log</span>(<span class="vr">doubled</span>); <span class="cm">// [20, 40, 60]</span>
+<span class="vr">console</span>.<span class="fn">log</span>(<span class="vr">prices</span>);  <span class="cm">// [10, 20, 30] (Original untouched)</span></code></pre>
+              </div>
+              <div class="alert-box alert-success" style="margin-top: 6px;">
+                <div class="alert-title">Essential for React</div>
+                <div class="alert-text">In React JSX, we render UI lists exclusively with <code>items.map(item => &lt;Card key={item.id} /&gt;)</code>.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+
+      <section class="slide" id="slide-5">
+        <div class="slide-header">
+          <div class="slide-title-group">
+            <span class="slide-category"><span class="badge-section">Array Filtering</span> Conditional Selection</span>
+            <h2 class="slide-title">filter(): Selecting Elements by Condition</h2>
+            <p class="slide-subtitle">Creating a sub-array containing only items that satisfy a predicate function</p>
+          </div>
+          <span class="slide-tag">ARRAY FILTER</span>
+        </div>
+
+        <div class="slide-body">
+          <div class="grid-60-40">
+            <div class="card">
+              <div class="card-title"><span class="icon">🔍</span> How filter() Works</div>
+              <p class="card-desc">
+                Calls a predicate function for every element. If the callback returns <code>true</code>, the item is kept; if <code>false</code>, it is discarded. The original array remains untouched.
+              </p>
+              <div class="code-panel">
+                <div class="code-header"><span class="code-file">filter.js</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+                <pre><code><span class="kw">const</span> <span class="vr">students</span> = [
+  { <span class="prop">name</span>: <span class="str">"Rahul"</span>, <span class="prop">score</span>: <span class="num">82</span>, <span class="prop">enrolled</span>: <span class="bool">true</span> },
+  { <span class="prop">name</span>: <span class="str">"Neha"</span>,  <span class="prop">score</span>: <span class="num">48</span>, <span class="prop">enrolled</span>: <span class="bool">false</span> },
+  { <span class="prop">name</span>: <span class="str">"Vikram"</span>,<span class="prop">score</span>: <span class="num">91</span>, <span class="prop">enrolled</span>: <span class="bool">true</span> }
+];
+
+<span class="cm">// Keep only enrolled students with passing score (>= 50)</span>
+<span class="kw">const</span> <span class="vr">passedEnrolled</span> = <span class="vr">students</span>.<span class="fn">filter</span>(<span class="vr">s</span> => <span class="vr">s</span>.<span class="prop">enrolled</span> &amp;&amp; <span class="vr">s</span>.<span class="prop">score</span> >= <span class="num">50</span>);
+
+<span class="vr">console</span>.<span class="fn">log</span>(<span class="vr">passedEnrolled</span>);
+<span class="cm">// Logs: [{ name: "Rahul", ... }, { name: "Vikram", ... }]</span></code></pre>
+              </div>
+            </div>
+
+            <div class="card card-accent">
+              <div class="card-title"><span class="icon">💡</span> React State Pattern: Deletion</div>
+              <p class="card-desc">
+                Because <code>filter()</code> is immutable, it is the standard way to delete an item from state in React!
+              </p>
+              <div class="code-panel">
+                <div class="code-header"><span class="code-file">deleteItem.js</span></div>
+                <pre><code><span class="cm">// Remove item with id 2</span>
+<span class="kw">const</span> <span class="vr">remaining</span> = <span class="vr">items</span>.<span class="fn">filter</span>(
+  <span class="vr">item</span> => <span class="vr">item</span>.<span class="prop">id</span> !== <span class="num">2</span>
+);</code></pre>
+              </div>
+              <ul class="bullet-list" style="font-size: 0.74rem; margin-top: 6px;">
+                <li><span class="icon">✓</span> Preserves original array.</li>
+                <li><span class="icon">✓</span> Returns empty array <code>[]</code> if no elements match.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+
+      <section class="slide" id="slide-6">
+        <div class="slide-header">
+          <div class="slide-title-group">
+            <span class="slide-category"><span class="badge-section">Aggregation</span> Universal Reducer</span>
+            <h2 class="slide-title">reduce(): Aggregating Data into Single Values</h2>
+            <p class="slide-subtitle">Accumulating numbers, combining objects, and computing complex metrics</p>
+          </div>
+          <span class="slide-tag">REDUCE PATTERN</span>
+        </div>
+
+        <div class="slide-body">
+          <div class="grid-60-40">
+            <div class="card">
+              <div class="card-title"><span class="icon">🧮</span> The Accumulator Pattern</div>
+              <p class="card-desc">
+                <code>reduce((acc, curr, index) => { ... }, initialValue)</code> iterates through each item, carrying forward an accumulator value.
+              </p>
+              <div class="code-panel">
+                <div class="code-header"><span class="code-file">reduce.js</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+                <pre><code><span class="kw">const</span> <span class="vr">cart</span> = [
+  { <span class="prop">item</span>: <span class="str">"Keyboard"</span>, <span class="prop">price</span>: <span class="num">1500</span>, <span class="prop">qty</span>: <span class="num">1</span> },
+  { <span class="prop">item</span>: <span class="str">"Mouse"</span>,    <span class="prop">price</span>: <span class="num">600</span>,  <span class="prop">qty</span>: <span class="num">2</span> },
+  { <span class="prop">item</span>: <span class="str">"Pad"</span>,      <span class="prop">price</span>: <span class="num">250</span>,  <span class="prop">qty</span>: <span class="num">1</span> }
+];
+
+<span class="cm">// Calculate grand total: sum of (price * qty)</span>
+<span class="kw">const</span> <span class="vr">totalCost</span> = <span class="vr">cart</span>.<span class="fn">reduce</span>((<span class="vr">acc</span>, <span class="vr">item</span>) => {
+  <span class="kw">return</span> <span class="vr">acc</span> + (<span class="vr">item</span>.<span class="prop">price</span> * <span class="vr">item</span>.<span class="prop">qty</span>);
+}, <span class="num">0</span>); <span class="cm">// Initial value = 0</span>
+
+<span class="vr">console</span>.<span class="fn">log</span>(<span class="str">`Grand Total: ₹${totalCost}`</span>); <span class="cm">// ₹2950</span></code></pre>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-title"><span class="icon">🔑</span> Crucial Parameters</div>
+              <div class="card" style="padding: 10px; margin-bottom: 8px; background: #F8FAFC;">
+                <strong style="color: var(--primary-deep); font-size: 0.80rem;">accumulator (acc)</strong>
+                <p style="font-size: 0.74rem; color: var(--text-body); margin: 0;">The running accumulated result returned from previous iteration.</p>
+              </div>
+              <div class="card" style="padding: 10px; margin-bottom: 8px; background: #F8FAFC;">
+                <strong style="color: var(--primary-deep); font-size: 0.80rem;">initialValue</strong>
+                <p style="font-size: 0.74rem; color: var(--text-body); margin: 0;">Always pass an explicit initial value (e.g. <code>0</code>, <code>{}</code>, <code>[]</code>) to avoid bugs on empty arrays!</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+
+      <section class="slide" id="slide-7">
+        <div class="slide-header">
+          <div class="slide-title-group">
+            <span class="slide-category"><span class="badge-section">Data Pipelines</span> Functional Composition</span>
+            <h2 class="slide-title">Method Chaining: filter() + map() + reduce()</h2>
+            <p class="slide-subtitle">Composing operations into readable, declarative data transformation pipelines</p>
+          </div>
+          <span class="slide-tag">PIPELINES</span>
+        </div>
+
+        <div class="slide-body">
+          <div class="grid-60-40">
+            <div class="card">
+              <div class="card-title"><span class="icon">🔗</span> Multi-Stage Processing Pipeline</div>
+              <p class="card-desc">
+                Because <code>filter()</code> and <code>map()</code> return brand new arrays, they can be chained directly in sequence without saving intermediate variables.
+              </p>
+              <div class="code-panel">
+                <div class="code-header"><span class="code-file">chaining.js</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+                <pre><code><span class="kw">const</span> <span class="vr">transactions</span> = [
+  { <span class="prop">id</span>: <span class="num">1</span>, <span class="prop">type</span>: <span class="str">"sale"</span>, <span class="prop">amount</span>: <span class="num">1200</span>, <span class="prop">taxRate</span>: <span class="num">0.18</span> },
+  { <span class="prop">id</span>: <span class="num">2</span>, <span class="prop">type</span>: <span class="str">"refund"</span>,<span class="prop">amount</span>: <span class="num">300</span>,  <span class="prop">taxRate</span>: <span class="num">0.18</span> },
+  { <span class="prop">id</span>: <span class="num">3</span>, <span class="prop">type</span>: <span class="str">"sale"</span>, <span class="prop">amount</span>: <span class="num">4500</span>, <span class="prop">taxRate</span>: <span class="num">0.18</span> }
+];
+
+<span class="cm">// 1. Filter sales -> 2. Calculate tax -> 3. Sum total tax</span>
+<span class="kw">const</span> <span class="vr">totalTaxCollected</span> = <span class="vr">transactions</span>
+  .<span class="fn">filter</span>(<span class="vr">t</span> => <span class="vr">t</span>.<span class="prop">type</span> === <span class="str">"sale"</span>)
+  .<span class="fn">map</span>(<span class="vr">t</span> => <span class="vr">t</span>.<span class="prop">amount</span> * <span class="vr">t</span>.<span class="prop">taxRate</span>)
+  .<span class="fn">reduce</span>((<span class="vr">sum</span>, <span class="vr">tax</span>) => <span class="vr">sum</span> + <span class="vr">tax</span>, <span class="num">0</span>);
+
+<span class="vr">console</span>.<span class="fn">log</span>(<span class="vr">totalTaxCollected</span>); <span class="cm">// 1026</span></code></pre>
+              </div>
+            </div>
+
+            <div class="card card-accent">
+              <div class="card-title"><span class="icon">📊</span> Pipeline Execution Flow</div>
+              <div class="step-list" style="margin-top: 6px;">
+                <div class="step-item">
+                  <div class="step-num">1</div>
+                  <div class="step-content"><strong>filter():</strong> Discards refunds, leaves only 2 sale records.</div>
+                </div>
+                <div class="step-item">
+                  <div class="step-num">2</div>
+                  <div class="step-content"><strong>map():</strong> Extracts tax amount <code>[216, 810]</code>.</div>
+                </div>
+                <div class="step-item">
+                  <div class="step-num">3</div>
+                  <div class="step-content"><strong>reduce():</strong> Sums array into final scalar <code>1026</code>.</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+
+      <section class="slide" id="slide-8">
+        <div class="slide-header">
+          <div class="slide-title-group">
+            <span class="slide-category"><span class="badge-section">Searching</span> Record Lookup</span>
+            <h2 class="slide-title">Searching Arrays: find() &amp; findIndex()</h2>
+            <p class="slide-subtitle">Locating specific items or their array indices by custom conditions</p>
+          </div>
+          <span class="slide-tag">ARRAY SEARCH</span>
+        </div>
+
+        <div class="slide-body">
+          <div class="grid-2col">
+            <div class="card">
+              <div class="card-title"><span class="icon">🔎</span> find(): Returns First Matching Item</div>
+              <p class="card-desc">Returns the FIRST element that satisfies the condition. Returns <code>undefined</code> if no match exists.</p>
+              <div class="code-panel">
+                <div class="code-header"><span class="code-file">find.js</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+                <pre><code><span class="kw">const</span> <span class="vr">users</span> = [
+  { <span class="prop">id</span>: <span class="num">101</span>, <span class="prop">name</span>: <span class="str">"Anita"</span>, <span class="prop">tier</span>: <span class="str">"Silver"</span> },
+  { <span class="prop">id</span>: <span class="num">102</span>, <span class="prop">name</span>: <span class="str">"Bala"</span>,  <span class="prop">tier</span>: <span class="str">"Gold"</span> },
+  { <span class="prop">id</span>: <span class="num">103</span>, <span class="prop">name</span>: <span class="str">"Charan"</span>,<span class="prop">tier</span>: <span class="str">"Gold"</span> }
+];
+
+<span class="cm">// Find user by ID</span>
+<span class="kw">const</span> <span class="vr">user</span> = <span class="vr">users</span>.<span class="fn">find</span>(<span class="vr">u</span> => <span class="vr">u</span>.<span class="prop">id</span> === <span class="num">102</span>);
+<span class="vr">console</span>.<span class="fn">log</span>(<span class="vr">user</span>); <span class="cm">// { id: 102, name: "Bala", tier: "Gold" }</span>
+
+<span class="cm">// No match</span>
+<span class="kw">const</span> <span class="vr">missing</span> = <span class="vr">users</span>.<span class="fn">find</span>(<span class="vr">u</span> => <span class="vr">u</span>.<span class="prop">id</span> === <span class="num">999</span>);
+<span class="vr">console</span>.<span class="fn">log</span>(<span class="vr">missing</span>); <span class="cm">// undefined</span></code></pre>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-title"><span class="icon">📍</span> findIndex(): Returns Matching Index</div>
+              <p class="card-desc">Returns the index of the first match. Returns <code>-1</code> if not found.</p>
+              <div class="code-panel">
+                <div class="code-header"><span class="code-file">findIndex.js</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+                <pre><code><span class="kw">const</span> <span class="vr">index</span> = <span class="vr">users</span>.<span class="fn">findIndex</span>(<span class="vr">u</span> => <span class="vr">u</span>.<span class="prop">id</span> === <span class="num">102</span>);
+<span class="vr">console</span>.<span class="fn">log</span>(<span class="vr">index</span>); <span class="cm">// 1</span>
+
+<span class="kw">if</span> (<span class="vr">index</span> !== -<span class="num">1</span>) {
+  <span class="vr">console</span>.<span class="fn">log</span>(<span class="str">`Record found at position ${index}`</span>);
+}</code></pre>
+              </div>
+              <div class="alert-box alert-info" style="margin-top: 8px;">
+                <div class="alert-title">Performance Tip</div>
+                <div class="alert-text">Both <code>find()</code> and <code>findIndex()</code> short-circuit as soon as a match is discovered, making them faster than <code>filter()[0]</code>.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+
+      <section class="slide" id="slide-9">
+        <div class="slide-header">
+          <div class="slide-title-group">
+            <span class="slide-category"><span class="badge-section">Validation</span> Predicate Checks</span>
+            <h2 class="slide-title">Testing Conditions: some() &amp; every()</h2>
+            <p class="slide-subtitle">Boolean array validation for access control, inventory, and form validation</p>
+          </div>
+          <span class="slide-tag">ARRAY VALIDATION</span>
+        </div>
+
+        <div class="slide-body">
+          <div class="grid-2col">
+            <div class="card">
+              <div class="card-title"><span class="icon">⚡</span> some(): At Least One Element Passes</div>
+              <p class="card-desc">Returns <code>true</code> if AT LEAST ONE item satisfies the condition. Short-circuits immediately on first truthy value.</p>
+              <div class="code-panel">
+                <div class="code-header"><span class="code-file">some.js</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+                <pre><code><span class="kw">const</span> <span class="vr">cart</span> = [
+  { <span class="prop">name</span>: <span class="str">"Book"</span>, <span class="prop">inStock</span>: <span class="bool">true</span> },
+  { <span class="prop">name</span>: <span class="str">"Phone"</span>, <span class="prop">inStock</span>: <span class="bool">false</span> },
+  { <span class="prop">name</span>: <span class="str">"Pen"</span>,  <span class="prop">inStock</span>: <span class="bool">true</span> }
+];
+
+<span class="cm">// Are any items out of stock?</span>
+<span class="kw">const</span> <span class="vr">hasOutOfStock</span> = <span class="vr">cart</span>.<span class="fn">some</span>(<span class="vr">item</span> => !<span class="vr">item</span>.<span class="prop">inStock</span>);
+<span class="vr">console</span>.<span class="fn">log</span>(<span class="vr">hasOutOfStock</span>); <span class="cm">// true</span></code></pre>
+              </div>
+            </div>
+
+            <div class="card card-accent">
+              <div class="card-title"><span class="icon">🛡️</span> every(): All Elements Must Pass</div>
+              <p class="card-desc">Returns <code>true</code> ONLY IF ALL items satisfy the condition. Short-circuits immediately on first falsy value.</p>
+              <div class="code-panel">
+                <div class="code-header"><span class="code-file">every.js</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+                <pre><code><span class="kw">const</span> <span class="vr">formFields</span> = [
+  { <span class="prop">field</span>: <span class="str">"email"</span>, <span class="prop">valid</span>: <span class="bool">true</span> },
+  { <span class="prop">field</span>: <span class="str">"password"</span>, <span class="prop">valid</span>: <span class="bool">true</span> },
+  { <span class="prop">field</span>: <span class="str">"terms"</span>, <span class="prop">valid</span>: <span class="bool">false</span> }
+];
+
+<span class="cm">// Can form be submitted?</span>
+<span class="kw">const</span> <span class="vr">isFormReady</span> = <span class="vr">formFields</span>.<span class="fn">every</span>(<span class="vr">f</span> => <span class="vr">f</span>.<span class="prop">valid</span>);
+<span class="vr">console</span>.<span class="fn">log</span>(<span class="vr">isFormReady</span>); <span class="cm">// false</span></code></pre>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+
+      <section class="slide" id="slide-10">
+        <div class="slide-header">
+          <div class="slide-title-group">
+            <span class="slide-category"><span class="badge-section">Primitive Search</span> Membership Checking</span>
+            <h2 class="slide-title">Element Lookup: includes() &amp; indexOf()</h2>
+            <p class="slide-subtitle">Fast primitive checks in arrays and strings without needing callback functions</p>
+          </div>
+          <span class="slide-tag">MEMBERSHIP</span>
+        </div>
+
+        <div class="slide-body">
+          <div class="grid-2col">
+            <div class="card card-accent">
+              <div class="card-title"><span class="icon">✅</span> includes(): Modern Boolean Membership</div>
+              <p class="card-desc">Returns simple <code>true</code> or <code>false</code>. Correctly identifies <code>NaN</code>.</p>
+              <div class="code-panel">
+                <div class="code-header"><span class="code-file">includes.js</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+                <pre><code><span class="kw">const</span> <span class="vr">roles</span> = [<span class="str">"admin"</span>, <span class="str">"editor"</span>, <span class="str">"viewer"</span>];
+
+<span class="vr">console</span>.<span class="fn">log</span>(<span class="vr">roles</span>.<span class="fn">includes</span>(<span class="str">"editor"</span>));  <span class="cm">// true</span>
+<span class="vr">console</span>.<span class="fn">log</span>(<span class="vr">roles</span>.<span class="fn">includes</span>(<span class="str">"manager"</span>)); <span class="cm">// false</span>
+
+<span class="cm">// Role permission guard</span>
+<span class="kw">function</span> <span class="fn">canPublish</span>(<span class="vr">userRole</span>) {
+  <span class="kw">return</span> [<span class="str">"admin"</span>, <span class="str">"editor"</span>].<span class="fn">includes</span>(<span class="vr">userRole</span>);
+}</code></pre>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-title"><span class="icon">🔢</span> indexOf(): Index Position Lookup</div>
+              <p class="card-desc">Returns the index position or <code>-1</code>. Older pattern replaced by <code>includes()</code> when only boolean check is needed.</p>
+              <div class="code-panel">
+                <div class="code-header"><span class="code-file">indexOf.js</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+                <pre><code><span class="kw">const</span> <span class="vr">cities</span> = [<span class="str">"Mumbai"</span>, <span class="str">"Delhi"</span>, <span class="str">"Bengaluru"</span>];
+
+<span class="vr">console</span>.<span class="fn">log</span>(<span class="vr">cities</span>.<span class="fn">indexOf</span>(<span class="str">"Delhi"</span>));   <span class="cm">// 1</span>
+<span class="vr">console</span>.<span class="fn">log</span>(<span class="vr">cities</span>.<span class="fn">indexOf</span>(<span class="str">"Chennai"</span>)); <span class="cm">// -1</span></code></pre>
+              </div>
+              <div class="alert-box alert-success" style="margin-top: 8px;">
+                <div class="alert-title">Clean Code Standard</div>
+                <div class="alert-text">Prefer <code>arr.includes(val)</code> instead of the legacy <code>arr.indexOf(val) !== -1</code>.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+
+      <section class="slide" id="slide-11">
+        <div class="slide-header">
+          <div class="slide-title-group">
+            <span class="slide-category"><span class="badge-section">State Safety</span> Pure vs Impure Operations</span>
+            <h2 class="slide-title">Array Immutability: slice() vs splice()</h2>
+            <p class="slide-subtitle">The critical distinction between creating copies and mutating existing memory in-place</p>
+          </div>
+          <span class="slide-tag">IMMUTABILITY</span>
+        </div>
+
+        <div class="slide-body">
+          <div class="grid-2col">
+            <div class="card card-accent">
+              <div class="card-title"><span class="icon">✨</span> slice(): Pure &amp; Non-Destructive</div>
+              <p class="card-desc">Extracts a portion of an array and returns a <strong>brand new array</strong>. The original array is never modified.</p>
+              <div class="code-panel">
+                <div class="code-header"><span class="code-file">slice.js</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+                <pre><code><span class="kw">const</span> <span class="vr">colors</span> = [<span class="str">"Red"</span>, <span class="str">"Green"</span>, <span class="str">"Blue"</span>, <span class="str">"Yellow"</span>];
+
+<span class="cm">// slice(start, endNonInclusive)</span>
+<span class="kw">const</span> <span class="vr">firstTwo</span> = <span class="vr">colors</span>.<span class="fn">slice</span>(<span class="num">0</span>, <span class="num">2</span>);
+
+<span class="vr">console</span>.<span class="fn">log</span>(<span class="vr">firstTwo</span>); <span class="cm">// ["Red", "Green"]</span>
+<span class="vr">console</span>.<span class="fn">log</span>(<span class="vr">colors</span>);   <span class="cm">// ["Red", "Green", "Blue", "Yellow"]</span></code></pre>
+              </div>
+              <span class="badge badge-best-practice" style="margin-top: 6px;">Safe for React State</span>
+            </div>
+
+            <div class="card">
+              <div class="card-title"><span class="icon">⚠️</span> splice(): Mutates Original Array In-Place</div>
+              <p class="card-desc">Modifies the original array directly by deleting, replacing, or inserting items. Returns deleted elements.</p>
+              <div class="code-panel">
+                <div class="code-header"><span class="code-file">splice.js</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+                <pre><code><span class="kw">const</span> <span class="vr">items</span> = [<span class="str">"A"</span>, <span class="str">"B"</span>, <span class="str">"C"</span>, <span class="str">"D"</span>];
+
+<span class="cm">// splice(startIndex, deleteCount, ...insertItems)</span>
+<span class="kw">const</span> <span class="vr">removed</span> = <span class="vr">items</span>.<span class="fn">splice</span>(<span class="num">1</span>, <span class="num">2</span>, <span class="str">"X"</span>);
+
+<span class="vr">console</span>.<span class="fn">log</span>(<span class="vr">removed</span>); <span class="cm">// ["B", "C"]</span>
+<span class="vr">console</span>.<span class="fn">log</span>(<span class="vr">items</span>);   <span class="cm">// ["A", "X", "D"] (MUTATED!)</span></code></pre>
+              </div>
+              <span class="badge badge-warning" style="margin-top: 6px;">Avoid in React State</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+
+      <section class="slide" id="slide-12">
+        <div class="slide-header">
+          <div class="slide-title-group">
+            <span class="slide-category"><span class="badge-section">Sorting</span> Custom Comparators</span>
+            <h2 class="slide-title">Sorting Mechanics: sort() &amp; reverse()</h2>
+            <p class="slide-subtitle">Avoiding lexicographical sorting bugs and writing comparator functions</p>
+          </div>
+          <span class="slide-tag">SORTING</span>
+        </div>
+
+        <div class="slide-body">
+          <div class="grid-2col">
+            <div class="card">
+              <div class="card-title"><span class="icon">🪤</span> The Default sort() Pitfall</div>
+              <p class="card-desc">Default <code>sort()</code> converts numbers into <strong>strings</strong> before comparing them alphabetically!</p>
+              <div class="code-panel">
+                <div class="code-header"><span class="code-file">pitfall.js</span></div>
+                <pre><code><span class="kw">const</span> <span class="vr">numbers</span> = [<span class="num">25</span>, <span class="num">8</span>, <span class="num">7</span>, <span class="num">100</span>];
+<span class="vr">numbers</span>.<span class="fn">sort</span>();
+
+<span class="vr">console</span>.<span class="fn">log</span>(<span class="vr">numbers</span>);
+<span class="cm">// Output: [100, 25, 7, 8]  (100 comes before 25 alphabetically!)</span></code></pre>
+              </div>
+              <div class="alert-box alert-danger" style="margin-top: 6px;">
+                <div class="alert-title">Alphabetical Bug</div>
+                <div class="alert-text"><code>"100" &lt; "25"</code> because character '1' precedes character '2'.</div>
+              </div>
+            </div>
+
+            <div class="card card-accent">
+              <div class="card-title"><span class="icon">✅</span> The Fix: Numeric Comparator Function</div>
+              <p class="card-desc">Always provide a comparator function <code>(a, b) => a - b</code>. Also remember: <code>sort()</code> mutates, so copy first!</p>
+              <div class="code-panel">
+                <div class="code-header"><span class="code-file">comparator.js</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+                <pre><code><span class="kw">const</span> <span class="vr">scores</span> = [<span class="num">25</span>, <span class="num">8</span>, <span class="num">7</span>, <span class="num">100</span>];
+
+<span class="cm">// Immutable Ascending: a - b</span>
+<span class="kw">const</span> <span class="vr">asc</span> = [...<span class="vr">scores</span>].<span class="fn">sort</span>((<span class="vr">a</span>, <span class="vr">b</span>) => <span class="vr">a</span> - <span class="vr">b</span>);
+<span class="vr">console</span>.<span class="fn">log</span>(<span class="vr">asc</span>); <span class="cm">// [7, 8, 25, 100]</span>
+
+<span class="cm">// Immutable Descending: b - a</span>
+<span class="kw">const</span> <span class="vr">desc</span> = [...<span class="vr">scores</span>].<span class="fn">sort</span>((<span class="vr">a</span>, <span class="vr">b</span>) => <span class="vr">b</span> - <span class="vr">a</span>);
+<span class="vr">console</span>.<span class="fn">log</span>(<span class="vr">desc</span>); <span class="cm">// [100, 25, 8, 7]</span></code></pre>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+
+      <section class="slide" id="slide-13">
+        <div class="slide-header">
+          <div class="slide-title-group">
+            <span class="slide-category"><span class="badge-section">Modern Objects</span> Dynamic Keys</span>
+            <h2 class="slide-title">Advanced Objects: Computed Property Names</h2>
+            <p class="slide-subtitle">Using bracket expressions to evaluate dynamic property keys in object literals</p>
+          </div>
+          <span class="slide-tag">COMPUTED KEYS</span>
+        </div>
+
+        <div class="slide-body">
+          <div class="grid-60-40">
+            <div class="card">
+              <div class="card-title"><span class="icon">🏷️</span> Dynamic Keys with [expression]</div>
+              <p class="card-desc">
+                In ES6, square brackets <code>[key]</code> inside an object literal compute the key from variables, expressions, or function returns.
+              </p>
+              <div class="code-panel">
+                <div class="code-header"><span class="code-file">computedKeys.js</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+                <pre><code><span class="kw">const</span> <span class="vr">dynamicField</span> = <span class="str">"favoriteCourse"</span>;
+<span class="kw">const</span> <span class="vr">idPrefix</span> = <span class="str">"user_"</span>;
+
+<span class="kw">const</span> <span class="vr">student</span> = {
+  <span class="prop">name</span>: <span class="str">"Kavya"</span>,
+  [<span class="vr">dynamicField</span>]: <span class="str">"Generative AI"</span>,
+  [<span class="str">`${idPrefix}id`</span>]: <span class="num">5042</span>
+};
+
+<span class="vr">console</span>.<span class="fn">log</span>(<span class="vr">student</span>);
+<span class="cm">// { name: "Kavya", favoriteCourse: "Generative AI", user_id: 5042 }</span></code></pre>
+              </div>
+            </div>
+
+            <div class="card card-accent">
+              <div class="card-title"><span class="icon">⚛️</span> Universal React Form Handler</div>
+              <p class="card-desc">
+                This exact syntax enables handling 20+ form inputs in a single reusable React state function!
+              </p>
+              <div class="code-panel">
+                <div class="code-header"><span class="code-file">handleChange.js</span></div>
+                <pre><code><span class="kw">function</span> <span class="fn">handleInput</span>(<span class="vr">field</span>, <span class="vr">value</span>) {
+  <span class="vr">setFormData</span>(<span class="vr">prev</span> => ({
+    ...<span class="vr">prev</span>,
+    [<span class="vr">field</span>]: <span class="vr">value</span>
+  }));
+}</code></pre>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+
+      <section class="slide" id="slide-14">
+        <div class="slide-header">
+          <div class="slide-title-group">
+            <span class="slide-category"><span class="badge-section">Object Composition</span> Merging &amp; Defaults</span>
+            <h2 class="slide-title">Object Merging: Object.assign() vs Spread</h2>
+            <p class="slide-subtitle">Combining multiple configuration objects and managing fallback defaults</p>
+          </div>
+          <span class="slide-tag">OBJECT MERGING</span>
+        </div>
+
+        <div class="slide-body">
+          <div class="grid-2col">
+            <div class="card">
+              <div class="card-title"><span class="icon">📦</span> Object.assign(): Method Approach</div>
+              <p class="card-desc">Copies own properties from source objects into a target object. Modifies target unless empty object <code>{}</code> is passed.</p>
+              <div class="code-panel">
+                <div class="code-header"><span class="code-file">assign.js</span></div>
+                <pre><code><span class="kw">const</span> <span class="vr">defaults</span> = { <span class="prop">theme</span>: <span class="str">"light"</span>, <span class="prop">fontSize</span>: <span class="num">14</span> };
+<span class="kw">const</span> <span class="vr">custom</span> = { <span class="prop">theme</span>: <span class="str">"dark"</span> };
+
+<span class="cm">// Safe merge: passes empty object as target</span>
+<span class="kw">const</span> <span class="vr">config</span> = Object.<span class="fn">assign</span>({}, <span class="vr">defaults</span>, <span class="vr">custom</span>);
+
+<span class="vr">console</span>.<span class="fn">log</span>(<span class="vr">config</span>);
+<span class="cm">// { theme: "dark", fontSize: 14 }</span></code></pre>
+              </div>
+            </div>
+
+            <div class="card card-accent">
+              <div class="card-title"><span class="icon">✨</span> Modern Object Spread: Preferred Standard</div>
+              <p class="card-desc">Concise, declarative, and guaranteed immutable. Later properties naturally override earlier ones.</p>
+              <div class="code-panel">
+                <div class="code-header"><span class="code-file">spreadMerge.js</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+                <pre><code><span class="kw">const</span> <span class="vr">baseUser</span> = { <span class="prop">role</span>: <span class="str">"Student"</span>, <span class="prop">status</span>: <span class="str">"Active"</span> };
+<span class="kw">const</span> <span class="vr">inputData</span> = { <span class="prop">name</span>: <span class="str">"Karthik"</span>, <span class="prop">role</span>: <span class="str">"Mentor"</span> };
+
+<span class="kw">const</span> <span class="vr">userProfile</span> = {
+  ...<span class="vr">baseUser</span>,
+  ...<span class="vr">inputData</span>,
+  <span class="prop">joinedAt</span>: <span class="str">"2026-11-25"</span>
+};
+
+<span class="vr">console</span>.<span class="fn">log</span>(<span class="vr">userProfile</span>);
+<span class="cm">// role becomes "Mentor" because inputData came second!</span></code></pre>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+
+      <section class="slide" id="slide-15">
+        <div class="slide-header">
+          <div class="slide-title-group">
+            <span class="slide-category"><span class="badge-section">State Protection</span> Immutability Utilities</span>
+            <h2 class="slide-title">Object Immutability: Object.freeze() vs Object.seal()</h2>
+            <p class="slide-subtitle">Protecting configuration objects and application state from unintended runtime modifications</p>
+          </div>
+          <span class="slide-tag">OBJECT PROTECTION</span>
+        </div>
+
+        <div class="slide-body">
+          <div class="grid-2col">
+            <div class="card">
+              <div class="card-title"><span class="icon">🔒</span> Object.freeze(): Full Lock</div>
+              <p class="card-desc">Completely freezes an object. Cannot add new properties, delete properties, or modify existing property values.</p>
+              <div class="code-panel">
+                <div class="code-header"><span class="code-file">freeze.js</span></div>
+                <pre><code><span class="kw">const</span> <span class="vr">CONFIG</span> = Object.<span class="fn">freeze</span>({
+  <span class="prop">API_URL</span>: <span class="str">"https://api.groq.com"</span>,
+  <span class="prop">MAX_TOKENS</span>: <span class="num">1024</span>
+});
+
+<span class="vr">CONFIG</span>.<span class="prop">MAX_TOKENS</span> = <span class="num">2048</span>; <span class="cm">// Silent fail (throws in strict mode)</span>
+<span class="vr">CONFIG</span>.<span class="prop">NEW_KEY</span> = <span class="bool">true</span>;    <span class="cm">// Cannot add!</span>
+
+<span class="vr">console</span>.<span class="fn">log</span>(<span class="vr">CONFIG</span>.<span class="prop">MAX_TOKENS</span>); <span class="cm">// 1024</span></code></pre>
+              </div>
+              <span class="badge badge-concept" style="margin-top: 6px;">Shallow Freeze: Nested objects remain mutable</span>
+            </div>
+
+            <div class="card">
+              <div class="card-title"><span class="icon">🛡️</span> Object.seal(): Fixed Schema</div>
+              <p class="card-desc">Prevents adding or removing properties, but <strong>allows modifying existing property values</strong>.</p>
+              <div class="code-panel">
+                <div class="code-header"><span class="code-file">seal.js</span></div>
+                <pre><code><span class="kw">const</span> <span class="vr">counter</span> = Object.<span class="fn">seal</span>({
+  <span class="prop">value</span>: <span class="num">10</span>,
+  <span class="prop">step</span>: <span class="num">1</span>
+});
+
+<span class="vr">counter</span>.<span class="prop">value</span> = <span class="num">15</span>; <span class="cm">// Allowed! Value updates</span>
+<span class="kw">delete</span> <span class="vr">counter</span>.<span class="prop">step</span>; <span class="cm">// Forbidden! Cannot delete</span>
+<span class="vr">counter</span>.<span class="prop">limit</span> = <span class="num">100</span>; <span class="cm">// Forbidden! Cannot add</span></code></pre>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+
+      <section class="slide" id="slide-16">
+        <div class="slide-header">
+          <div class="slide-title-group">
+            <span class="slide-category"><span class="badge-section">Modern ES6</span> Unpacking Syntax</span>
+            <h2 class="slide-title">Destructuring: Arrays and Objects</h2>
+            <p class="slide-subtitle">Unpacking values from arrays and properties from objects into distinct variables</p>
+          </div>
+          <span class="slide-tag">DESTRUCTURING</span>
+        </div>
+
+        <div class="slide-body">
+          <div class="grid-2col">
+            <div class="card card-accent">
+              <div class="card-title"><span class="icon">📦</span> Object Destructuring</div>
+              <p class="card-desc">Matches property names directly. Supports renaming and default fallback values.</p>
+              <div class="code-panel">
+                <div class="code-header"><span class="code-file">objectDestruct.js</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+                <pre><code><span class="kw">const</span> <span class="vr">student</span> = { <span class="prop">name</span>: <span class="str">"Divya"</span>, <span class="prop">age</span>: <span class="num">23</span>, <span class="prop">role</span>: <span class="str">"Leader"</span> };
+
+<span class="cm">// Unpack and rename role -> userRole</span>
+<span class="kw">const</span> { <span class="prop">name</span>, <span class="prop">age</span>, <span class="prop">role</span>: <span class="vr">userRole</span>, <span class="prop">batch</span> = <span class="num">2026</span> } = <span class="vr">student</span>;
+
+<span class="vr">console</span>.<span class="fn">log</span>(<span class="vr">name</span>);     <span class="cm">// "Divya"</span>
+<span class="vr">console</span>.<span class="fn">log</span>(<span class="vr">userRole</span>); <span class="cm">// "Leader"</span>
+<span class="vr">console</span>.<span class="fn">log</span>(<span class="vr">batch</span>);    <span class="cm">// 2026 (Used default)</span></code></pre>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-title"><span class="icon">📑</span> Array Destructuring</div>
+              <p class="card-desc">Unpacks items strictly by position/order. You can skip unwanted items with commas.</p>
+              <div class="code-panel">
+                <div class="code-header"><span class="code-file">arrayDestruct.js</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+                <pre><code><span class="kw">const</span> <span class="vr">scores</span> = [<span class="num">98</span>, <span class="num">85</span>, <span class="num">72</span>];
+
+<span class="cm">// Unpack first and third, skip second</span>
+<span class="kw">const</span> [<span class="vr">topScore</span>, , <span class="vr">thirdScore</span>] = <span class="vr">scores</span>;
+
+<span class="vr">console</span>.<span class="fn">log</span>(<span class="vr">topScore</span>);   <span class="cm">// 98</span>
+<span class="vr">console</span>.<span class="fn">log</span>(<span class="vr">thirdScore</span>); <span class="cm">// 72</span>
+
+<span class="cm">// React useState preview</span>
+<span class="kw">const</span> [<span class="vr">count</span>, <span class="vr">setCount</span>] = [<span class="num">0</span>, () => {}];</code></pre>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+
+      <section class="slide" id="slide-17">
+        <div class="slide-header">
+          <div class="slide-title-group">
+            <span class="slide-category"><span class="badge-section">Modern ES6</span> Parameters &amp; Props</span>
+            <h2 class="slide-title">Destructuring in Functions &amp; React Props</h2>
+            <p class="slide-subtitle">Unpacking parameters right at the function signature for clean, readable components</p>
+          </div>
+          <span class="slide-tag">PROPS PATTERN</span>
+        </div>
+
+        <div class="slide-body">
+          <div class="grid-2col">
+            <div class="card">
+              <div class="card-title"><span class="icon">📥</span> Function Parameter Destructuring</div>
+              <p class="card-desc">Instead of accepting an object and repeating <code>user.prop</code>, unpack directly in the signature:</p>
+              <div class="code-panel">
+                <div class="code-header"><span class="code-file">functionProps.js</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+                <pre><code><span class="cm">// Clean function signature</span>
+<span class="kw">function</span> <span class="fn">sendEmail</span>({ <span class="prop">to</span>, <span class="prop">subject</span>, <span class="prop">priority</span> = <span class="str">"normal"</span> }) {
+  <span class="vr">console</span>.<span class="fn">log</span>(<span class="str">`To: ${to} | Subject: ${subject} (${priority})`</span>);
+}
+
+<span class="fn">sendEmail</span>({
+  <span class="prop">to</span>: <span class="str">"student@haca.com"</span>,
+  <span class="prop">subject</span>: <span class="str">"Day 2 Lecture Notes"</span>
+});</code></pre>
+              </div>
+            </div>
+
+            <div class="card card-accent">
+              <div class="card-title"><span class="icon">⚛️</span> Direct React Component Preview</div>
+              <p class="card-desc">In React, components receive a single <code>props</code> object. Destructuring is universal:</p>
+              <div class="code-panel">
+                <div class="code-header"><span class="code-file">UserCard.jsx</span></div>
+                <pre><code><span class="cm">// Standard React Component</span>
+<span class="kw">function</span> <span class="fn">UserCard</span>({ <span class="prop">name</span>, <span class="prop">role</span>, <span class="prop">avatar</span> = <span class="str">"default.png"</span> }) {
+  <span class="kw">return</span> (
+    <span class="str">`&lt;div class="card"&gt;
+      &lt;h3&gt;${name}&lt;/h3&gt;
+      &lt;span&gt;${role}&lt;/span&gt;
+    &lt;/div&gt;`</span>
+  );
+}</code></pre>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+
+      <section class="slide" id="slide-18">
+        <div class="slide-header">
+          <div class="slide-title-group">
+            <span class="slide-category"><span class="badge-section">Modern ES6</span> Expansion &amp; Copying</span>
+            <h2 class="slide-title">The Spread Operator (...) in Arrays &amp; Objects</h2>
+            <p class="slide-subtitle">Expanding collections into individual items to create copies and merge data immutably</p>
+          </div>
+          <span class="slide-tag">SPREAD OPERATOR</span>
+        </div>
+
+        <div class="slide-body">
+          <div class="grid-2col">
+            <div class="card">
+              <div class="card-title"><span class="icon">📑</span> Spreading Arrays</div>
+              <p class="card-desc">Unpacks all elements into a new array. Combines lists without mutating either source.</p>
+              <div class="code-panel">
+                <div class="code-header"><span class="code-file">spreadArray.js</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+                <pre><code><span class="kw">const</span> <span class="vr">frontend</span> = [<span class="str">"HTML"</span>, <span class="str">"CSS"</span>, <span class="str">"JS"</span>];
+<span class="kw">const</span> <span class="vr">backend</span> = [<span class="str">"Node"</span>, <span class="str">"Express"</span>];
+
+<span class="cm">// Combine + add extra elements</span>
+<span class="kw">const</span> <span class="vr">fullstack</span> = [...<span class="vr">frontend</span>, <span class="str">"React"</span>, ...<span class="vr">backend</span>];
+
+<span class="vr">console</span>.<span class="fn">log</span>(<span class="vr">fullstack</span>);
+<span class="cm">// ["HTML", "CSS", "JS", "React", "Node", "Express"]</span></code></pre>
+              </div>
+            </div>
+
+            <div class="card card-accent">
+              <div class="card-title"><span class="icon">📦</span> Spreading Objects (Updating State)</div>
+              <p class="card-desc">Copies all key-value pairs into a new object and allows updating specific fields.</p>
+              <div class="code-panel">
+                <div class="code-header"><span class="code-file">spreadObject.js</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+                <pre><code><span class="kw">const</span> <span class="vr">task</span> = { <span class="prop">id</span>: <span class="num">1</span>, <span class="prop">title</span>: <span class="str">"Practice JS"</span>, <span class="prop">done</span>: <span class="bool">false</span> };
+
+<span class="cm">// Toggle done to true immutably</span>
+<span class="kw">const</span> <span class="vr">completedTask</span> = {
+  ...<span class="vr">task</span>,
+  <span class="prop">done</span>: <span class="bool">true</span>
+};
+
+<span class="vr">console</span>.<span class="fn">log</span>(<span class="vr">task</span>.<span class="prop">done</span>);          <span class="cm">// false (Original safe)</span>
+<span class="vr">console</span>.<span class="fn">log</span>(<span class="vr">completedTask</span>.<span class="prop">done</span>); <span class="cm">// true</span></code></pre>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+
+      <section class="slide" id="slide-19">
+        <div class="slide-header">
+          <div class="slide-title-group">
+            <span class="slide-category"><span class="badge-section">Modern ES6</span> Parameter Gathering</span>
+            <h2 class="slide-title">The Rest Operator (...) in Parameters &amp; Destructuring</h2>
+            <p class="slide-subtitle">Collecting remaining arguments into an array or separating sensitive fields</p>
+          </div>
+          <span class="slide-tag">REST OPERATOR</span>
+        </div>
+
+        <div class="slide-body">
+          <div class="grid-2col">
+            <div class="card">
+              <div class="card-title"><span class="icon">📥</span> Rest Parameters in Functions</div>
+              <p class="card-desc">Gathers unlimited function arguments into a genuine JavaScript array. Must be the last parameter.</p>
+              <div class="code-panel">
+                <div class="code-header"><span class="code-file">restParams.js</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+                <pre><code><span class="kw">function</span> <span class="fn">calculateTotal</span>(<span class="vr">discount</span>, ...<span class="vr">prices</span>) {
+  <span class="cm">// 'prices' is an authentic array!</span>
+  <span class="kw">const</span> <span class="vr">sum</span> = <span class="vr">prices</span>.<span class="fn">reduce</span>((<span class="vr">acc</span>, <span class="vr">p</span>) => <span class="vr">acc</span> + <span class="vr">p</span>, <span class="num">0</span>);
+  <span class="kw">return</span> <span class="vr">sum</span> - <span class="vr">discount</span>;
+}
+
+<span class="vr">console</span>.<span class="fn">log</span>(<span class="fn">calculateTotal</span>(<span class="num">50</span>, <span class="num">100</span>, <span class="num">200</span>, <span class="num">300</span>)); <span class="cm">// 550</span></code></pre>
+              </div>
+            </div>
+
+            <div class="card card-accent">
+              <div class="card-title"><span class="icon">🛡️</span> Rest in Destructuring (Excluding Keys)</div>
+              <p class="card-desc">Extracts specific properties and gathers the rest. Ideal for removing passwords or internal tokens.</p>
+              <div class="code-panel">
+                <div class="code-header"><span class="code-file">excludeKeys.js</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+                <pre><code><span class="kw">const</span> <span class="vr">account</span> = {
+  <span class="prop">id</span>: <span class="num">101</span>,
+  <span class="prop">name</span>: <span class="str">"Sanjay"</span>,
+  <span class="prop">passwordHash</span>: <span class="str">"secret99"</span>,
+  <span class="prop">role</span>: <span class="str">"Developer"</span>
+};
+
+<span class="cm">// Isolate sensitive passwordHash</span>
+<span class="kw">const</span> { <span class="prop">passwordHash</span>, ...<span class="vr">publicProfile</span> } = <span class="vr">account</span>;
+
+<span class="vr">console</span>.<span class="fn">log</span>(<span class="vr">publicProfile</span>);
+<span class="cm">// { id: 101, name: "Sanjay", role: "Developer" }</span></code></pre>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+
+      <section class="slide" id="slide-20">
+        <div class="slide-header">
+          <div class="slide-title-group">
+            <span class="slide-category"><span class="badge-section">Defensive Coding</span> Safe Traversal</span>
+            <h2 class="slide-title">Optional Chaining (?.): Safe Property Access</h2>
+            <p class="slide-subtitle">Safely navigating deeply nested API data structures without throwing TypeError crashes</p>
+          </div>
+          <span class="slide-tag">OPTIONAL CHAINING</span>
+        </div>
+
+        <div class="slide-body">
+          <div class="grid-2col">
+            <div class="card">
+              <div class="card-title"><span class="icon">💥</span> The Classic TypeError Crash</div>
+              <p class="card-desc">Accessing a nested property on <code>undefined</code> throws an unhandled exception that crashes the frontend or API handler.</p>
+              <div class="code-panel">
+                <div class="code-header"><span class="code-file">crash.js</span></div>
+                <pre><code><span class="kw">const</span> <span class="vr">user</span> = { <span class="prop">id</span>: <span class="num">1</span>, <span class="prop">name</span>: <span class="str">"Pooja"</span> };
+
+<span class="cm">// user.address is undefined!</span>
+<span class="cm">// user.address.city THROWS:</span>
+<span class="cm">// TypeError: Cannot read properties of undefined (reading 'city')</span></code></pre>
+              </div>
+              <div class="alert-box alert-danger" style="margin-top: 6px;">
+                <div class="alert-title">Production Bug</div>
+                <div class="alert-text">LLM responses and asynchronous JSON APIs frequently omit nested fields when data is optional.</div>
+              </div>
+            </div>
+
+            <div class="card card-accent">
+              <div class="card-title"><span class="icon">🛡️</span> The Solution: Optional Chaining (?.)</div>
+              <p class="card-desc">Short-circuits to <code>undefined</code> as soon as any segment is <code>null</code> or <code>undefined</code>.</p>
+              <div class="code-panel">
+                <div class="code-header"><span class="code-file">safeAccess.js</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+                <pre><code><span class="kw">const</span> <span class="vr">user</span> = { <span class="prop">id</span>: <span class="num">1</span>, <span class="prop">name</span>: <span class="str">"Pooja"</span> };
+
+<span class="cm">// Safe property access</span>
+<span class="kw">const</span> <span class="vr">city</span> = <span class="vr">user</span>?.<span class="prop">address</span>?.<span class="prop">city</span>;
+<span class="vr">console</span>.<span class="fn">log</span>(<span class="vr">city</span>); <span class="cm">// undefined (No error thrown!)</span>
+
+<span class="cm">// Safe array element &amp; method calls</span>
+<span class="kw">const</span> <span class="vr">firstSkill</span> = <span class="vr">user</span>?.<span class="prop">skills</span>?.[<span class="num">0</span>];
+<span class="kw">const</span> <span class="vr">greeting</span> = <span class="vr">user</span>?.<span class="prop">sayHello</span>?.();</code></pre>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+
+      <section class="slide" id="slide-21">
+        <div class="slide-header">
+          <div class="slide-title-group">
+            <span class="slide-category"><span class="badge-section">Defensive Coding</span> Default Fallbacks</span>
+            <h2 class="slide-title">Nullish Coalescing (??): Safe Default Values</h2>
+            <p class="slide-subtitle">Distinguishing null and undefined from falsy values like 0, empty string, and false</p>
+          </div>
+          <span class="slide-tag">NULLISH OPERATOR</span>
+        </div>
+
+        <div class="slide-body">
+          <div class="grid-2col">
+            <div class="card">
+              <div class="card-title"><span class="icon">⚠️</span> The Flaw with Logical OR (||)</div>
+              <p class="card-desc"><code>||</code> checks for ANY falsy value: <code>0</code>, <code>""</code>, <code>false</code>, <code>null</code>, <code>undefined</code>.</p>
+              <div class="code-panel">
+                <div class="code-header"><span class="code-file">orFlaw.js</span></div>
+                <pre><code><span class="kw">const</span> <span class="vr">userScore</span> = <span class="num">0</span>; <span class="cm">// Valid score of zero!</span>
+<span class="kw">const</span> <span class="vr">score</span> = <span class="vr">userScore</span> || <span class="num">50</span>;
+<span class="vr">console</span>.<span class="fn">log</span>(<span class="vr">score</span>); <span class="cm">// 50 (Bug! Overrode valid 0)</span>
+
+<span class="kw">const</span> <span class="vr">notifications</span> = <span class="bool">false</span>; <span class="cm">// Explicitly turned off</span>
+<span class="kw">const</span> <span class="vr">notify</span> = <span class="vr">notifications</span> || <span class="bool">true</span>;
+<span class="vr">console</span>.<span class="fn">log</span>(<span class="vr">notify</span>); <span class="cm">// true (Bug! Forced true)</span></code></pre>
+              </div>
+            </div>
+
+            <div class="card card-accent">
+              <div class="card-title"><span class="icon">🎯</span> Nullish Coalescing (??) Precision</div>
+              <p class="card-desc">Only falls back if the left-hand side is strictly <code>null</code> or <code>undefined</code>.</p>
+              <div class="code-panel">
+                <div class="code-header"><span class="code-file">nullish.js</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+                <pre><code><span class="kw">const</span> <span class="vr">userScore</span> = <span class="num">0</span>;
+<span class="kw">const</span> <span class="vr">score</span> = <span class="vr">userScore</span> ?? <span class="num">50</span>;
+<span class="vr">console</span>.<span class="fn">log</span>(<span class="vr">score</span>); <span class="cm">// 0 (Preserved correctly!)</span>
+
+<span class="kw">const</span> <span class="vr">bio</span> = <span class="kw">null</span>;
+<span class="kw">const</span> <span class="vr">userBio</span> = <span class="vr">bio</span> ?? <span class="str">"No bio provided."</span>;
+<span class="vr">console</span>.<span class="fn">log</span>(<span class="vr">userBio</span>); <span class="cm">// "No bio provided."</span></code></pre>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+
+      <section class="slide" id="slide-22">
+        <div class="slide-header">
+          <div class="slide-title-group">
+            <span class="slide-category"><span class="badge-section">Practical Project 1</span> State Architecture</span>
+            <h2 class="slide-title">Project 1: To-Do List Architecture &amp; State Model</h2>
+            <p class="slide-subtitle">Designing an interactive task management application using arrays, objects, and immutable methods</p>
+          </div>
+          <span class="slide-tag">PROJECT 1 ARCHITECTURE</span>
+        </div>
+
+        <div class="slide-body">
+          <div class="grid-60-40">
+            <div class="card card-accent">
+              <div class="card-title"><span class="icon">📋</span> Application State &amp; Method Mapping</div>
+              <div class="grid-2col" style="gap: 8px; margin-top: 4px;">
+                <div class="card" style="padding: 10px;">
+                  <strong style="color: var(--primary-deep); font-size: 0.82rem;">1. Add Task (push / spread)</strong>
+                  <span style="font-size: 0.74rem; color: var(--text-body);">Creates new object with timestamp ID: <code>[...tasks, newTask]</code></span>
+                </div>
+                <div class="card" style="padding: 10px;">
+                  <strong style="color: var(--primary-deep); font-size: 0.82rem;">2. Display (forEach / map)</strong>
+                  <span style="font-size: 0.74rem; color: var(--text-body);">Iterates over list to generate interactive DOM list elements.</span>
+                </div>
+                <div class="card" style="padding: 10px;">
+                  <strong style="color: var(--primary-deep); font-size: 0.82rem;">3. Toggle Complete (map + spread)</strong>
+                  <span style="font-size: 0.74rem; color: var(--text-body);">Maps through items; flips <code>completed: !t.completed</code>.</span>
+                </div>
+                <div class="card" style="padding: 10px;">
+                  <strong style="color: var(--primary-deep); font-size: 0.82rem;">4. Delete Task (filter)</strong>
+                  <span style="font-size: 0.74rem; color: var(--text-body);">Filters out matching ID: <code>tasks.filter(t => t.id !== id)</code>.</span>
+                </div>
+              </div>
+
+              <div class="code-panel" style="margin-top: 8px;">
+                <div class="code-header"><span class="code-file">Data Structure Model</span></div>
+                <pre><code><span class="kw">let</span> <span class="vr">tasks</span> = [
+  { <span class="prop">id</span>: <span class="num">1</span>, <span class="prop">title</span>: <span class="str">"Master Array Methods"</span>, <span class="prop">completed</span>: <span class="bool">true</span> },
+  { <span class="prop">id</span>: <span class="num">2</span>, <span class="prop">title</span>: <span class="str">"Build React To-Do List"</span>, <span class="prop">completed</span>: <span class="bool">false</span> }
+];</code></pre>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-title"><span class="icon">🎯</span> Learning Objectives</div>
+              <ul class="bullet-list" style="font-size: 0.78rem;">
+                <li><span class="icon">✓</span> Connect UI buttons to state functions.</li>
+                <li><span class="icon">✓</span> Execute immutable updates using modern ES6.</li>
+                <li><span class="icon">✓</span> Next slide embeds a full live interactive application!</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+
+      <section class="slide" id="slide-23">
+        <div class="slide-header">
+          <div class="slide-title-group">
+            <span class="slide-category"><span class="badge-section">Practical Project 1</span> Interactive Application</span>
+            <h2 class="slide-title">Project 1: Interactive To-Do List Application</h2>
+            <p class="slide-subtitle">Live working sandbox combining array push, map status toggle, and filter deletion</p>
+          </div>
+          <span class="slide-tag">LIVE APPLICATION</span>
+        </div>
+
+        <div class="slide-body">
+          <div class="grid-60-40">
+            <div class="card">
+              <div class="card-title"><span class="icon">💻</span> Production Logic</div>
+              <div class="code-panel" style="max-height: 330px;">
+                <div class="code-header"><span class="code-file">todoController.js</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+                <pre><code><span class="kw">let</span> <span class="vr">tasks</span> = [];
+
+<span class="kw">function</span> <span class="fn">addTask</span>(<span class="vr">title</span>) {
+  <span class="vr">tasks</span>.<span class="fn">push</span>({ <span class="prop">id</span>: Date.<span class="fn">now</span>(), <span class="prop">title</span>, <span class="prop">completed</span>: <span class="bool">false</span> });
+  <span class="fn">render</span>();
+}
+
+<span class="kw">function</span> <span class="fn">toggleTask</span>(<span class="vr">id</span>) {
+  <span class="vr">tasks</span> = <span class="vr">tasks</span>.<span class="fn">map</span>(<span class="vr">t</span> => 
+    <span class="vr">t</span>.<span class="prop">id</span> === <span class="vr">id</span> ? { ...<span class="vr">t</span>, <span class="prop">completed</span>: !<span class="vr">t</span>.<span class="prop">completed</span> } : <span class="vr">t</span>
+  );
+  <span class="fn">render</span>();
+}
+
+<span class="kw">function</span> <span class="fn">deleteTask</span>(<span class="vr">id</span>) {
+  <span class="vr">tasks</span> = <span class="vr">tasks</span>.<span class="fn">filter</span>(<span class="vr">t</span> => <span class="vr">t</span>.<span class="prop">id</span> !== <span class="vr">id</span>);
+  <span class="fn">render</span>();
+}</code></pre>
+              </div>
+            </div>
+
+            <div class="card card-accent" style="display: flex; flex-direction: column;">
+              <div class="card-title" style="justify-content: space-between;">
+                <span><span class="icon">⚡</span> Live Interactive App</span>
+                <span class="badge badge-concept" id="liveTaskCount">Total Tasks: 0</span>
+              </div>
+
+              <div class="todo-app-widget" style="margin-top: 6px; flex: 1; display: flex; flex-direction: column; gap: 8px;">
+                <div style="display: flex; gap: 8px;">
+                  <input type="text" id="liveTaskInput" class="form-input" placeholder="Enter task title..." style="flex: 1; padding: 7px 10px; border-radius: 6px; border: 1px solid var(--border-subtle); font-size: 0.80rem;">
+                  <button class="btn btn-primary" id="btnLiveAddTask" style="padding: 7px 12px; font-size: 0.78rem;">Add Task</button>
+                </div>
+                <ul class="todo-list" id="liveTaskList" style="flex: 1; max-height: 230px; overflow-y: auto; padding: 0; margin: 0; list-style: none;"></ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+
+      <section class="slide" id="slide-24">
+        <div class="slide-header">
+          <div class="slide-title-group">
+            <span class="slide-category"><span class="badge-section">Practical Project 2</span> Data Pipelines</span>
+            <h2 class="slide-title">Project 2: User Data Transformation Pipeline</h2>
+            <p class="slide-subtitle">Combining filter, map, reduce, and spread to transform raw API records into production reports</p>
+          </div>
+          <span class="slide-tag">PROJECT 2 SANDBOX</span>
+        </div>
+
+        <div class="slide-body">
+          <div class="grid-60-40">
+            <div class="card">
+              <div class="card-title"><span class="icon">⚙️</span> Full Transformation Script</div>
+              <div class="code-panel" style="max-height: 330px;">
+                <div class="code-header"><span class="code-file">transformPipeline.js</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+                <pre><code><span class="kw">const</span> <span class="vr">users</span> = [
+  { <span class="prop">id</span>: <span class="num">1</span>, <span class="prop">name</span>: <span class="str">"Ali"</span>,  <span class="prop">age</span>: <span class="num">22</span>, <span class="prop">active</span>: <span class="bool">true</span> },
+  { <span class="prop">id</span>: <span class="num">2</span>, <span class="prop">name</span>: <span class="str">"Sara"</span>, <span class="prop">age</span>: <span class="num">25</span>, <span class="prop">active</span>: <span class="bool">false</span> },
+  { <span class="prop">id</span>: <span class="num">3</span>, <span class="prop">name</span>: <span class="str">"John"</span>, <span class="prop">age</span>: <span class="num">28</span>, <span class="prop">active</span>: <span class="bool">true</span> },
+  { <span class="prop">id</span>: <span class="num">4</span>, <span class="prop">name</span>: <span class="str">"Maya"</span>, <span class="prop">age</span>: <span class="num">24</span>, <span class="prop">active</span>: <span class="bool">true</span> }
+];
+
+<span class="cm">// 1. Filter active users</span>
+<span class="kw">const</span> <span class="vr">activeUsers</span> = <span class="vr">users</span>.<span class="fn">filter</span>(({ <span class="prop">active</span> }) => <span class="prop">active</span>);
+
+<span class="cm">// 2. Map names &amp; reduce total age</span>
+<span class="kw">const</span> <span class="vr">names</span> = <span class="vr">activeUsers</span>.<span class="fn">map</span>(({ <span class="prop">name</span> }) => <span class="prop">name</span>);
+<span class="kw">const</span> <span class="vr">totalAge</span> = <span class="vr">activeUsers</span>.<span class="fn">reduce</span>((<span class="vr">sum</span>, { <span class="prop">age</span> }) => <span class="vr">sum</span> + <span class="vr">age</span>, <span class="num">0</span>);
+
+<span class="cm">// 3. Append role property using object spread</span>
+<span class="kw">const</span> <span class="vr">updatedUsers</span> = <span class="vr">activeUsers</span>.<span class="fn">map</span>(<span class="vr">u</span> => ({ ...<span class="vr">u</span>, <span class="prop">role</span>: <span class="str">"Member"</span> }));</code></pre>
+              </div>
+            </div>
+
+            <div class="card card-accent" style="display: flex; flex-direction: column;">
+              <div class="card-title" style="justify-content: space-between;">
+                <span><span class="icon">🚀</span> Live Sandbox Runner</span>
+                <button class="btn btn-primary btn-sm" id="btnRunUserPipeline">Execute Pipeline</button>
+              </div>
+              <div class="card-desc" style="font-size: 0.78rem; margin: 4px 0;">
+                Click to process user records and render pipeline output in real-time:
+              </div>
+              <div class="output-block" id="pipelineLiveOut" style="flex: 1; font-family: var(--font-mono); font-size: 0.74rem; padding: 12px; background: var(--bg-code); color: #E2E8F0; border-radius: 8px; overflow-y: auto; max-height: 240px; line-height: 1.45;">
+                Click 'Execute Pipeline' above to inspect filtered names, total age calculation, and spread transformation...
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+
+      <section class="slide" id="slide-25">
+        <div class="slide-header">
+          <div class="slide-title-group">
+            <span class="slide-category"><span class="badge-section badge-difficulty-simple">Practice Questions</span> Foundational Tier</span>
+            <h2 class="slide-title">Practice Questions: Simple Challenges</h2>
+            <p class="slide-subtitle">Solve these practical exercises using core Array and Object methods (Questions Only &ndash; Solve on your own!)</p>
+          </div>
+          <span class="slide-tag">QUESTIONS ONLY &bull; TIER 1</span>
+        </div>
+
+        <div class="slide-body">
+          <div class="questions-grid">
+            <!-- Question 1 -->
+            <div class="question-card">
+              <div class="question-card-header">
+                <span class="question-num">Q1</span>
+                <span class="badge-q-method">array.map()</span>
+              </div>
+              <h4 class="question-title">Uppercase Name Converter</h4>
+              <p class="question-desc">
+                Given an array of student names in lower case, write code using <code>.map()</code> to return a new array with all names converted to uppercase.
+              </p>
+              <pre class="question-code-sample"><code>const names = ["arun", "divya", "karthik"];
+// Expected: ["ARUN", "DIVYA", "KARTHIK"]</code></pre>
+            </div>
+
+            <!-- Question 2 -->
+            <div class="question-card">
+              <div class="question-card-header">
+                <span class="question-num">Q2</span>
+                <span class="badge-q-method">array.filter()</span>
+              </div>
+              <h4 class="question-title">Extract Passing Exam Scores</h4>
+              <p class="question-desc">
+                Given an array of student marks, write code using <code>.filter()</code> to extract only the marks that are 60 or above.
+              </p>
+              <pre class="question-code-sample"><code>const scores = [45, 82, 90, 33, 67, 58];
+// Expected: [82, 90, 67]</code></pre>
+            </div>
+
+            <!-- Question 3 -->
+            <div class="question-card">
+              <div class="question-card-header">
+                <span class="question-num">Q3</span>
+                <span class="badge-q-method">array.find()</span>
+              </div>
+              <h4 class="question-title">Find User Record by ID</h4>
+              <p class="question-desc">
+                Given an array of user objects, use <code>.find()</code> to locate and return the user object whose <code>id</code> equals <code>102</code>.
+              </p>
+              <pre class="question-code-sample"><code>const users = [
+  { id: 101, name: "Anita" },
+  { id: 102, name: "Bala" },
+  { id: 103, name: "Charan" }
+];
+// Target: { id: 102, name: "Bala" }</code></pre>
+            </div>
+
+            <!-- Question 4 -->
+            <div class="question-card">
+              <div class="question-card-header">
+                <span class="question-num">Q4</span>
+                <span class="badge-q-method">array.includes()</span>
+              </div>
+              <h4 class="question-title">Verify Allowed Role</h4>
+              <p class="question-desc">
+                Given an array of authorized permission roles, use <code>.includes()</code> to check whether the role <code>"manager"</code> is authorized.
+              </p>
+              <pre class="question-code-sample"><code>const allowedRoles = ["admin", "editor", "viewer"];
+// Expected boolean result: false</code></pre>
+            </div>
+
+            <!-- Question 5 -->
+            <div class="question-card">
+              <div class="question-card-header">
+                <span class="question-num">Q5</span>
+                <span class="badge-q-method">Object.keys/values</span>
+              </div>
+              <h4 class="question-title">Extract Keys and Values</h4>
+              <p class="question-desc">
+                Given a product object, extract an array containing all property names (keys), and a second array containing all property values.
+              </p>
+              <pre class="question-code-sample"><code>const product = { name: "Laptop", price: 54000, inStock: true };
+// Keys:   ["name", "price", "inStock"]
+// Values: ["Laptop", 54000, true]</code></pre>
+            </div>
+
+            <!-- Question 6 -->
+            <div class="question-card">
+              <div class="question-card-header">
+                <span class="question-num">Q6</span>
+                <span class="badge-q-method">array.slice()</span>
+              </div>
+              <h4 class="question-title">Extract Top 3 Colors Immutably</h4>
+              <p class="question-desc">
+                Given an array of colors, use <code>.slice()</code> to extract the first 3 colors into a new array without modifying the original array.
+              </p>
+              <pre class="question-code-sample"><code>const colors = ["Red", "Green", "Blue", "Yellow", "Purple"];
+// Expected: ["Red", "Green", "Blue"]</code></pre>
+            </div>
+          </div>
+        </div>
+      </section>
+
+
+      <section class="slide" id="slide-26">
+        <div class="slide-header">
+          <div class="slide-title-group">
+            <span class="slide-category"><span class="badge-section badge-difficulty-intermediate">Practice Questions</span> Intermediate Tier</span>
+            <h2 class="slide-title">Practice Questions: Intermediate Challenges</h2>
+            <p class="slide-subtitle">Solve these real-world data manipulation challenges using method chaining and aggregation (Questions Only)</p>
+          </div>
+          <span class="slide-tag">QUESTIONS ONLY &bull; TIER 2</span>
+        </div>
+
+        <div class="slide-body">
+          <div class="questions-grid">
+            <!-- Question 1 -->
+            <div class="question-card">
+              <div class="question-card-header">
+                <span class="question-num">Q1</span>
+                <span class="badge-q-method">filter() + map()</span>
+              </div>
+              <h4 class="question-title">Filter &amp; Extract Product Titles</h4>
+              <p class="question-desc">
+                Chain <code>.filter()</code> and <code>.map()</code> to return an array of titles for only the products in <code>"Electronics"</code> priced strictly under 1000.
+              </p>
+              <pre class="question-code-sample"><code>const catalog = [
+  { title: "Keyboard", price: 1200, category: "Electronics" },
+  { title: "Desk", price: 4500, category: "Furniture" },
+  { title: "Mouse", price: 800, category: "Electronics" }
+];
+// Expected: ["Mouse"]</code></pre>
+            </div>
+
+            <!-- Question 2 -->
+            <div class="question-card">
+              <div class="question-card-header">
+                <span class="question-num">Q2</span>
+                <span class="badge-q-method">array.reduce()</span>
+              </div>
+              <h4 class="question-title">Compute Cart Grand Total</h4>
+              <p class="question-desc">
+                Given an array of shopping cart items with <code>price</code> and <code>qty</code>, use <code>.reduce()</code> to calculate the grand total order amount.
+              </p>
+              <pre class="question-code-sample"><code>const cart = [
+  { item: "Book", qty: 2, price: 300 },
+  { item: "Pen",  qty: 5, price: 20 },
+  { item: "Bag",  qty: 1, price: 1500 }
+];
+// Expected: 2200</code></pre>
+            </div>
+
+            <!-- Question 3 -->
+            <div class="question-card">
+              <div class="question-card-header">
+                <span class="question-num">Q3</span>
+                <span class="badge-q-method">reduce() Grouping</span>
+              </div>
+              <h4 class="question-title">Action Frequency Map</h4>
+              <p class="question-desc">
+                Given an array of logged user actions, use <code>.reduce()</code> to create an object showing how many times each action occurred.
+              </p>
+              <pre class="question-code-sample"><code>const logs = ["login", "click", "click", "logout", "login", "click"];
+// Expected: { login: 2, click: 3, logout: 1 }</code></pre>
+            </div>
+
+            <!-- Question 4 -->
+            <div class="question-card">
+              <div class="question-card-header">
+                <span class="question-num">Q4</span>
+                <span class="badge-q-method">some() &amp; every()</span>
+              </div>
+              <h4 class="question-title">Cohort Audit Validation</h4>
+              <p class="question-desc">
+                Given an array of student objects with test scores: (a) Check if at least one student scored below 50. (b) Check if every student scored above 40.
+              </p>
+              <pre class="question-code-sample"><code>const cohort = [
+  { name: "John", score: 85 },
+  { name: "Sara", score: 92 },
+  { name: "Mike", score: 48 }
+];
+// (a) some() -> true | (b) every() -> true</code></pre>
+            </div>
+
+            <!-- Question 5 -->
+            <div class="question-card">
+              <div class="question-card-header">
+                <span class="question-num">Q5</span>
+                <span class="badge-q-method">slice() + sort()</span>
+              </div>
+              <h4 class="question-title">Immutable Salary Ranking</h4>
+              <p class="question-desc">
+                Given an array of employee objects, return a NEW array sorted in descending order of salary using a numeric comparator without mutating the original array.
+              </p>
+              <pre class="question-code-sample"><code>const staff = [
+  { name: "Kavya", salary: 75000 },
+  { name: "Dev", salary: 45000 },
+  { name: "Manoj", salary: 92000 }
+];
+// Manoj (92k), Kavya (75k), Dev (45k)</code></pre>
+            </div>
+
+            <!-- Question 6 -->
+            <div class="question-card">
+              <div class="question-card-header">
+                <span class="question-num">Q6</span>
+                <span class="badge-q-method">Object.entries()</span>
+              </div>
+              <h4 class="question-title">Batch Currency Multiplier</h4>
+              <p class="question-desc">
+                Given an exchange rate object relative to USD and a conversion factor of <code>83</code>, return a new object with all values multiplied by 83.
+              </p>
+              <pre class="question-code-sample"><code>const rates = { USD: 1, EUR: 0.92, GBP: 0.79 };
+// Expected (with INR factor 83):
+// { USD: 83, EUR: 76.36, GBP: 65.57 }</code></pre>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- Bottom Controls -->
+    <nav class="pres-controls">
+      <button class="control-btn" id="prevBtn" title="Previous Slide (← / PageUp)">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+      </button>
+
+      <div class="slide-select-container">
+        <select class="slide-select" id="slideSelect" title="Jump to Slide"></select>
+      </div>
+
+      <button class="control-btn" id="nextBtn" title="Next Slide (→ / PageDown / Space)">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+      </button>
+
+      <div class="shortcuts-pill">
+        <kbd>←</kbd> / <kbd>→</kbd>
+      </div>
+    </nav>
+
+    <!-- Table of Contents Drawer -->
+    <div class="toc-overlay" id="tocOverlay">
+      <div class="toc-drawer">
+        <div class="toc-header">
+          <div class="toc-title">Table of Contents (26 Slides)</div>
+          <button class="toc-close" id="tocClose" title="Close (Esc)">✕</button>
+        </div>
+        <ul class="toc-list" id="tocList"></ul>
+      </div>
+    </div>
+
+    <!-- Help Modal -->
+    <div class="modal-overlay" id="helpModal">
+      <div class="modal-card">
+        <div class="modal-header">
+          <div class="modal-title">Keyboard Navigation</div>
+          <button class="toc-close" id="helpClose" title="Close (Esc)">✕</button>
+        </div>
+        <div class="modal-body">
+          <div class="shortcut-row"><span>Next Slide</span><div><span class="shortcut-key">→</span> <span class="shortcut-key">Space</span></div></div>
+          <div class="shortcut-row"><span>Previous Slide</span><div><span class="shortcut-key">←</span> <span class="shortcut-key">PageUp</span></div></div>
+          <div class="shortcut-row"><span>First / Last Slide</span><div><span class="shortcut-key">Home</span> / <span class="shortcut-key">End</span></div></div>
+          <div class="shortcut-row"><span>Toggle Fullscreen</span><span class="shortcut-key">F</span></div>
+          <div class="shortcut-row"><span>Table of Contents</span><span class="shortcut-key">T</span></div>
+          <div class="shortcut-row"><span>Close Overlays</span><span class="shortcut-key">Esc</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div class="toast-notice" id="toastNotice">Notification</div>
+
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
