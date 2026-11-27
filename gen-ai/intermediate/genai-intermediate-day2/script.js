@@ -1,13 +1,13 @@
 /**
- * Intermediate AI/LLM – Day 2
+ * Intermediate AI/LLM – Day 2 (Simplified & Focused on RAG)
  * Agent Workflows, RAG Fundamentals & Document Processing
  * Interactive Presentation Engine & Simulation Sandboxes
- * Total Slides: 28
+ * Total Slides: 24
  */
 
 document.addEventListener('DOMContentLoaded', () => {
   // --- Presentation State ---
-  const totalSlides = 28;
+  const totalSlides = 24;
   let currentSlide = 1;
 
   // DOM Elements
@@ -28,36 +28,32 @@ document.addEventListener('DOMContentLoaded', () => {
   const helpModal = document.getElementById('helpModal');
   const toastNotice = document.getElementById('toastNotice');
 
-  // Exact 28 Slide Titles
+  // Exact 24 Simplified Slide Titles
   const slideTitles = [
-    "Introduction to Agent Workflows",
-    "Why Do We Need Agent Workflows?",
-    "Sequential Workflow (A → B → C)",
-    "Practical: Sequential Workflow in Node.js",
-    "Parallel Workflow",
-    "Practical: Promise.all() in Node.js",
-    "Sequential vs Parallel Workflow",
-    "Router Pattern",
-    "Practical: Build a Simple Router in Node.js",
-    "Human-in-the-Loop (HITL)",
-    "Practical: Human Approval Using Express",
-    "Agent Workflow Recap",
-    "What is RAG?",
-    "Why Do We Need RAG?",
+    "Introduction & Today's Roadmap",
+    "What is an Agent Workflow?",
+    "Sequential vs Parallel Workflows",
+    "The Router Pattern & Human-in-the-Loop",
+    "What is RAG? (The Open-Book Exam)",
+    "Why LLMs Need RAG",
     "What is Hallucination?",
-    "RAG Architecture: Retrieval, Augmentation, Generation",
-    "How Does RAG Work? (Employee Policy Walkthrough)",
-    "RAG Architecture: Document Processing vs Question Answering",
-    "RAG vs Fine-Tuning",
+    "The 3 Steps of RAG: Retrieve → Augment → Generate",
+    "Real-World Example: Employee Leave Policy",
+    "The Two Halves of RAG: Ingestion vs Question Answering",
+    "RAG vs Fine-Tuning Made Simple",
+    "Why RAG is the #1 Skill in Enterprise AI",
     "What is Document Processing?",
-    "Node.js Document Processing Libraries",
-    "Practical: Load PDF, TXT, DOCX and CSV",
-    "Document Cleaning",
-    "Text Splitting / Chunking",
-    "Chunk Size and Chunk Overlap",
-    "Practical: Build a Text Chunking Function",
-    "Metadata in RAG",
-    "Mini Project: RAG Document Processor Pipeline"
+    "The Ingestion Pipeline: Load → Clean → Chunk → Tag",
+    "Step 1: Loading Documents in Node.js",
+    "Step 2: Cleaning the Text",
+    "Step 3: What is Text Chunking?",
+    "Step 4: Chunk Size & Chunk Overlap",
+    "Practical: Writing a Simple Chunking Function",
+    "Interactive Tool: Live Chunk & Overlap Visualizer",
+    "Step 5: Adding Metadata to Chunks",
+    "Putting It All Together: Complete Document Processor",
+    "Mini Project: Run the Document Processor Live!",
+    "Summary & What's Coming Next"
   ];
 
   // Initialize Dropdown & Table of Contents
@@ -334,167 +330,7 @@ document.addEventListener('DOMContentLoaded', () => {
   };
 
   // =========================================================================
-  // SIMULATOR 1: ROUTER PATTERN (Slide 9)
-  // =========================================================================
-  const simRouterInput = document.getElementById('simRouterInput');
-  const btnRunRouter = document.getElementById('btnRunRouter');
-  const simRouterOutput = document.getElementById('simRouterOutput');
-
-  window.setRouterSample = function(text) {
-    if (simRouterInput) {
-      simRouterInput.value = text;
-      runRouterSimulation();
-    }
-  };
-
-  function runRouterSimulation() {
-    if (!simRouterInput || !simRouterOutput) return;
-    const text = simRouterInput.value.trim();
-    if (!text) {
-      simRouterOutput.innerHTML = '<span style="color: #DC2626;">Please enter a query to test the router.</span>';
-      return;
-    }
-
-    simRouterOutput.innerHTML = '<span style="color: var(--primary-blue);">Routing query through classification gate...</span>';
-
-    setTimeout(() => {
-      const lower = text.toLowerCase();
-      let route = 'general';
-      let confidence = '92.4%';
-      let handler = 'handleGeneralInquiry';
-      let badgeClass = 'badge-warning';
-      let responseText = '';
-
-      if (/refund|invoice|charge|bill|stripe|subscription|credit/i.test(lower)) {
-        route = 'billing';
-        confidence = '98.7%';
-        handler = 'handleBillingSupport';
-        badgeClass = 'badge-agent';
-        responseText = 'Billing Handler dispatched: Authenticated Stripe account, pulled customer invoice #INV-9281, and initiated automated refund authorization check.';
-      } else if (/error|bug|500|api|database|fail|crash|connection|query/i.test(lower)) {
-        route = 'technical';
-        confidence = '97.2%';
-        handler = 'handleTechnicalSupport';
-        badgeClass = 'badge-tool';
-        responseText = 'Technical Support Handler dispatched: Inspected PostgreSQL connection pool logs, parsed ECONNREFUSED socket state, and generated DB restart script.';
-      } else {
-        route = 'general';
-        confidence = '91.5%';
-        handler = 'handleGeneralInquiry';
-        badgeClass = 'badge-warning';
-        responseText = 'General Inquiries Handler dispatched: Retrieved public knowledge base FAQ regarding business hours, office locations, and service tiers.';
-      }
-
-      simRouterOutput.innerHTML = `
-        <div style="display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid #E2E8F0; padding-bottom: 4px;">
-          <div>
-            <span class="badge ${badgeClass}" style="text-transform: uppercase;">Route: ${route}</span>
-            <span style="font-size: 0.70rem; color: #64748B; margin-left: 6px;">Handler: <code>${handler}()</code></span>
-          </div>
-          <span style="font-size: 0.70rem; font-weight: 700; color: #059669;">Confidence: ${confidence}</span>
-        </div>
-        <div style="font-size: 0.73rem; color: #1E293B; margin-top: 4px; line-height: 1.4;">
-          ${responseText}
-        </div>
-      `;
-    }, 250);
-  }
-
-  if (btnRunRouter) btnRunRouter.addEventListener('click', runRouterSimulation);
-
-  // =========================================================================
-  // SIMULATOR 2: HUMAN-IN-THE-LOOP (HITL) (Slide 11)
-  // =========================================================================
-  const simExpenseItem = document.getElementById('simExpenseItem');
-  const simExpenseAmount = document.getElementById('simExpenseAmount');
-  const btnSubmitExpense = document.getElementById('btnSubmitExpense');
-  const simExpenseOutput = document.getElementById('simExpenseOutput');
-  const simManagerActions = document.getElementById('simManagerActions');
-  const btnApproveExpense = document.getElementById('btnApproveExpense');
-  const btnRejectExpense = document.getElementById('btnRejectExpense');
-
-  let currentExpense = null;
-
-  window.setExpenseSample = function(item, amount) {
-    if (simExpenseItem) simExpenseItem.value = item;
-    if (simExpenseAmount) simExpenseAmount.value = amount;
-    submitExpenseSimulation();
-  };
-
-  function submitExpenseSimulation() {
-    if (!simExpenseItem || !simExpenseAmount || !simExpenseOutput) return;
-    const item = simExpenseItem.value.trim() || 'Miscellaneous Item';
-    const amount = parseFloat(simExpenseAmount.value) || 0;
-    const expenseId = 'exp_' + Math.floor(1000 + Math.random() * 9000);
-
-    const isHighRisk = amount > 500;
-    const status = isHighRisk ? 'PENDING_HUMAN_APPROVAL' : 'AUTO_APPROVED';
-
-    currentExpense = { id: expenseId, item, amount, status };
-
-    if (!isHighRisk) {
-      if (simManagerActions) simManagerActions.style.display = 'none';
-      simExpenseOutput.innerHTML = `
-        <div style="display: flex; align-items: center; justify-content: space-between;">
-          <strong style="color: #059669;">[${expenseId}] AUTO_APPROVED</strong>
-          <span style="font-size: 0.70rem; color: #64748B;">Amount: $${amount.toFixed(2)}</span>
-        </div>
-        <div style="font-size: 0.72rem; color: #1E293B; margin-top: 4px;">
-          Expense for "${item}" is &le; $500 threshold. System automatically approved and dispatched payment voucher.
-        </div>
-      `;
-    } else {
-      if (simManagerActions) simManagerActions.style.display = 'flex';
-      simExpenseOutput.innerHTML = `
-        <div style="display: flex; align-items: center; justify-content: space-between;">
-          <strong style="color: #D97706;">[${expenseId}] PENDING_HUMAN_APPROVAL</strong>
-          <span style="font-size: 0.70rem; font-weight: 700; color: #B45309;">Amount: $${amount.toFixed(2)} (&gt; $500 Gate)</span>
-        </div>
-        <div style="font-size: 0.72rem; color: #1E293B; margin-top: 4px;">
-          High-value transaction for "${item}" requires supervisory authorization. Execution paused at approval gate.
-        </div>
-      `;
-    }
-  }
-
-  if (btnSubmitExpense) btnSubmitExpense.addEventListener('click', submitExpenseSimulation);
-
-  if (btnApproveExpense) {
-    btnApproveExpense.addEventListener('click', () => {
-      if (!currentExpense) return;
-      currentExpense.status = 'APPROVED_BY_MANAGER';
-      if (simManagerActions) simManagerActions.style.display = 'none';
-      simExpenseOutput.innerHTML = `
-        <div style="display: flex; align-items: center; justify-content: space-between;">
-          <strong style="color: #059669;">[${currentExpense.id}] APPROVED_BY_MANAGER</strong>
-          <span style="font-size: 0.70rem; color: #059669;">Manual Override OK</span>
-        </div>
-        <div style="font-size: 0.72rem; color: #1E293B; margin-top: 4px;">
-          Manager approved $${currentExpense.amount.toFixed(2)} for "${currentExpense.item}". Workflow resumed and funds disbursed.
-        </div>
-      `;
-    });
-  }
-
-  if (btnRejectExpense) {
-    btnRejectExpense.addEventListener('click', () => {
-      if (!currentExpense) return;
-      currentExpense.status = 'REJECTED_BY_MANAGER';
-      if (simManagerActions) simManagerActions.style.display = 'none';
-      simExpenseOutput.innerHTML = `
-        <div style="display: flex; align-items: center; justify-content: space-between;">
-          <strong style="color: #DC2626;">[${currentExpense.id}] REJECTED_BY_MANAGER</strong>
-          <span style="font-size: 0.70rem; color: #DC2626;">Action Blocked</span>
-        </div>
-        <div style="font-size: 0.72rem; color: #1E293B; margin-top: 4px;">
-          Manager declined expense for "${currentExpense.item}". Transaction aborted and notification emailed to employee.
-        </div>
-      `;
-    });
-  }
-
-  // =========================================================================
-  // SIMULATOR 3: CHUNKING & OVERLAP VISUALIZER (Slide 26)
+  // SIMULATOR 1: CHUNKING & OVERLAP VISUALIZER (Slide 20)
   // =========================================================================
   const simChunkInputText = document.getElementById('simChunkInputText');
   const simSliderChunkSize = document.getElementById('simSliderChunkSize');
@@ -507,16 +343,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function updateChunkSliders() {
     if (simSliderChunkSize && lblChunkSize) {
-      lblChunkSize.textContent = simSliderChunkSize.value;
+      lblChunkSize.textContent = `${simSliderChunkSize.value} chars`;
     }
     if (simSliderChunkOverlap && lblChunkOverlap) {
-      // Ensure overlap is always strictly less than chunk size
-      const maxOverlap = Math.floor(parseInt(simSliderChunkSize.value, 10) * 0.5);
+      // Ensure overlap is strictly less than half of chunk size
+      const maxOverlap = Math.floor(parseInt(simSliderChunkSize.value, 10) * 0.45);
       simSliderChunkOverlap.max = maxOverlap;
       if (parseInt(simSliderChunkOverlap.value, 10) > maxOverlap) {
         simSliderChunkOverlap.value = maxOverlap;
       }
-      lblChunkOverlap.textContent = simSliderChunkOverlap.value;
+      lblChunkOverlap.textContent = `${simSliderChunkOverlap.value} chars`;
     }
   }
 
@@ -563,7 +399,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     if (simChunkMetrics) {
-      simChunkMetrics.textContent = `Total Chunks: ${rawChunks.length} | Step Size: ${step} chars`;
+      simChunkMetrics.textContent = `Total Index Cards: ${rawChunks.length} | Advance Step: ${step} chars`;
     }
 
     simChunkResults.innerHTML = '';
@@ -576,17 +412,17 @@ document.addEventListener('DOMContentLoaded', () => {
       if (idx > 0 && overlap > 0) {
         const overlapText = c.text.substring(0, overlap);
         const restText = c.text.substring(overlap);
-        displayText = `<mark class="chunk-overlap-highlight" title="Overlapping from Chunk ${idx}">[Overlap: ${escapeHtml(overlapText)}]</mark>${escapeHtml(restText)}`;
+        displayText = `<mark class="chunk-overlap-highlight" title="Overlapping from Card ${idx}">[Overlap: ${escapeHtml(overlapText)}]</mark>${escapeHtml(restText)}`;
       } else {
         displayText = escapeHtml(displayText);
       }
 
       div.innerHTML = `
         <div style="display: flex; justify-content: space-between; font-size: 0.68rem; color: #64748B; margin-bottom: 2px;">
-          <strong>Chunk ${c.index} (Chars ${c.start} &rarr; ${c.end})</strong>
+          <strong>Card #${c.index} (Chars ${c.start} &rarr; ${c.end})</strong>
           <span>${c.text.length} chars</span>
         </div>
-        <div style="font-size: 0.70rem; line-height: 1.4;">${displayText}</div>
+        <div style="font-size: 0.72rem; line-height: 1.45;">${displayText}</div>
       `;
       simChunkResults.appendChild(div);
     });
@@ -599,7 +435,7 @@ document.addEventListener('DOMContentLoaded', () => {
   if (btnRunChunking) btnRunChunking.addEventListener('click', runChunkSimulation);
 
   // =========================================================================
-  // SIMULATOR 4: DOCUMENT PROCESSOR PIPELINE (Slide 28)
+  // SIMULATOR 2: DOCUMENT PROCESSOR PIPELINE RUNNER (Slide 23)
   // =========================================================================
   const simDocSelect = document.getElementById('simDocSelect');
   const btnRunPipeline = document.getElementById('btnRunPipeline');
@@ -621,9 +457,9 @@ document.addEventListener('DOMContentLoaded', () => {
       rawText: "Q: How do I reset my API key? A: Navigate to Settings > API Keys and click Generate New Secret.\\r\\nQ: What are webhook retry intervals? A: Retries occur exponentially at 5s, 30s, and 5m before dead-letter archiving."
     },
     tech: {
-      source: "Cloud_Architecture_Spec.docx",
+      source: "Engineering_Handbook.txt",
       dept: "Engineering",
-      rawText: "Microservice Ingestion Architecture: Text extractors run as worker tasks with 512MB RAM allocations. All extracted text is sanitized before invoking the chunking service. Vector embeddings are produced in batches of 64 chunks."
+      rawText: "Deployment Guidelines: All microservices must pass unit tests before triggering staging deployments. Database schema migrations must run in backward-compatible mode during active business hours."
     }
   };
 
@@ -660,21 +496,21 @@ document.addEventListener('DOMContentLoaded', () => {
     // Step 1: Load
     setTimeout(() => {
       setBadgeState(stepLoad, true, false);
-      simPipelineOutput.innerHTML = `<span>[1/4] Loaded buffer for <code>${docData.source}</code> (${docData.rawText.length} raw bytes)...</span>`;
+      simPipelineOutput.innerHTML = `<span>[1/4] Loaded file <code>${docData.source}</code> (${docData.rawText.length} raw characters)...</span>`;
 
       // Step 2: Clean
       setTimeout(() => {
         setBadgeState(stepLoad, false, true);
         setBadgeState(stepClean, true, false);
         const cleaned = docData.rawText.replace(/\\r\\n/g, ' ').replace(/\s{2,}/g, ' ');
-        simPipelineOutput.innerHTML = `<span>[2/4] Sanitized text: removed control characters & normalized whitespace (${cleaned.length} clean chars)...</span>`;
+        simPipelineOutput.innerHTML = `<span>[2/4] Cleaned text: normalized whitespace and linebreaks (${cleaned.length} clean chars)...</span>`;
 
         // Step 3: Chunk
         setTimeout(() => {
           setBadgeState(stepClean, false, true);
           setBadgeState(stepChunk, true, false);
 
-          const chunkSize = 180;
+          const chunkSize = 160;
           const overlap = 30;
           const step = chunkSize - overlap;
           const chunks = [];
@@ -687,7 +523,7 @@ document.addEventListener('DOMContentLoaded', () => {
             start += step;
           }
 
-          simPipelineOutput.innerHTML = `<span>[3/4] Chunked into ${chunks.length} segments with ${overlap}-char overlap...</span>`;
+          simPipelineOutput.innerHTML = `<span>[3/4] Cut into ${chunks.length} index cards with ${overlap}-char overlap...</span>`;
 
           // Step 4: Tag Metadata
           setTimeout(() => {
@@ -697,18 +533,15 @@ document.addEventListener('DOMContentLoaded', () => {
             const docId = docData.source.replace(/\.[^/.]+$/, "").toLowerCase();
             const chunkObjects = chunks.map((chunk, i) => ({
               chunkId: `${docId}_chk_${String(i).padStart(3, '0')}`,
-              docId: docId,
               source: docData.source,
-              chunkIndex: i,
-              charCount: chunk.length,
               department: docData.dept,
-              text: chunk,
-              createdAt: new Date().toISOString()
+              chunkIndex: i,
+              text: chunk
             }));
 
             simPipelineOutput.innerHTML = `
               <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
-                <strong style="color: #059669; font-size: 0.74rem;">Pipeline Completed: ${chunkObjects.length} Chunks Produced</strong>
+                <strong style="color: #059669; font-size: 0.74rem;">Ready for Search: ${chunkObjects.length} Tagged Chunks</strong>
                 <button class="btn-copy" onclick="copyPipelineJSON()" style="padding: 2px 8px; font-size: 0.65rem;">Copy Output JSON</button>
               </div>
               <pre id="pipelineJsonData" style="font-family: var(--font-mono); font-size: 0.68rem; color: #1E293B; background: #F8FAFC; padding: 8px; border-radius: 4px; overflow-x: auto; max-height: 80px;">${JSON.stringify(chunkObjects, null, 2)}</pre>
